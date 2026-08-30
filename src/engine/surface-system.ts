@@ -17,7 +17,7 @@ interface SurfaceRecipe {
   specularIntensity: number;
   microNormalStrength: number;
   textureScale: [number, number];
-  pattern: 'none' | 'directional' | 'grain' | 'orange-peel' | 'fibrous';
+  pattern: 'none' | 'directional' | 'grain' | 'orange-peel' | 'fibrous' | 'hex-weave';
 }
 
 export interface SurfaceReport {
@@ -69,6 +69,7 @@ export const SURFACE_LIBRARY: Readonly<Record<SurfaceFinishIR, SurfaceRecipe>> =
   wood: recipe({ roughness: 0.7, metalness: 0, clearcoat: 0.12, clearcoatRoughness: 0.58, sheen: 0.08, microNormalStrength: 0.34, textureScale: [7, 22], pattern: 'fibrous' }),
   skin: recipe({ roughness: 0.46, metalness: 0, clearcoat: 0.07, clearcoatRoughness: 0.66, ior: 1.4, sheen: 0.24, sheenRoughness: 0.72, specularIntensity: 0.58, microNormalStrength: 0.2, textureScale: [32, 32], pattern: 'orange-peel' }),
   fabric: recipe({ roughness: 0.86, metalness: 0, clearcoat: 0, sheen: 0.44, sheenRoughness: 0.82, specularIntensity: 0.48, microNormalStrength: 0.48, textureScale: [18, 28], pattern: 'fibrous' }),
+  'hex-knit': recipe({ roughness: 0.72, metalness: 0, clearcoat: 0.08, clearcoatRoughness: 0.58, sheen: 0.5, sheenRoughness: 0.72, specularIntensity: 0.62, microNormalStrength: 0.68, textureScale: [34, 42], pattern: 'hex-weave' }),
   hair: recipe({ roughness: 0.62, metalness: 0, clearcoat: 0.06, clearcoatRoughness: 0.5, anisotropy: 0.82, sheen: 0.52, sheenRoughness: 0.68, specularIntensity: 0.72, microNormalStrength: 0.34, textureScale: [22, 5], pattern: 'directional' }),
   semiconductor: recipe({ roughness: 0.26, metalness: 0.16, clearcoat: 0.3, clearcoatRoughness: 0.25, iridescence: 0.08, microNormalStrength: 0.1, textureScale: [16, 16], pattern: 'grain' }),
 };
@@ -112,6 +113,10 @@ function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pa
   if (pattern === 'directional') return Math.sin(x * 2.3 + broad * 0.8) * 0.68 + noise * 0.18;
   if (pattern === 'orange-peel') return noise * 0.52 + Math.sin((x + broad) * 0.82) * Math.sin((y - broad) * 0.77) * 0.3;
   if (pattern === 'fibrous') return Math.sin(x * 0.95 + Math.sin(y * 0.19) * 1.5) * 0.42 + noise * 0.28 + broad * 0.18;
+  if (pattern === 'hex-weave') {
+    const cell = (Math.cos(x * 0.72) + Math.cos(x * 0.36 + y * 0.624) + Math.cos(x * 0.36 - y * 0.624)) / 3;
+    return Math.pow(Math.max(-1, Math.min(1, cell)) * 0.5 + 0.5, 1.7) * 1.35 - 0.55 + noise * 0.1;
+  }
   if (pattern === 'grain') return noise * 0.58 + broad * 0.26;
   return 0;
 }

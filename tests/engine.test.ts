@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
+import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { buildCharacter, deriveBodyTopology } from '../src/engine/character';
+import { buildCharacter, deriveBodyTopology, poseCharacterPoint } from '../src/engine/character';
 import { buildOrnateKnife, createOrnateKnifeIR } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
@@ -12,7 +13,7 @@ import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateQuality } from '../src/engine/quality';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC } from '../src/types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from '../src/types';
 
 async function loadPack() {
   const bytes = new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk'));
@@ -42,6 +43,54 @@ describe('OHPK human pipeline', () => {
     expect(result.spec.muscle).toBeGreaterThan(DEFAULT_SPEC.muscle);
     expect(result.spec.genderBlend).toBe(0.1);
     expect(result.spec.suitColor).toBe('#17191f');
+  });
+
+  it('builds a reference-derived web hero as named editable meshes', async () => {
+    const pack = await loadPack();
+    const build = buildCharacter(pack, WEB_HERO_SPEC, 'beauty');
+    expect(build.root.getObjectByName('mask_shell')).toBeTruthy();
+    expect(build.root.getObjectByName('eye_lens_left')).toBeTruthy();
+    expect(build.root.getObjectByName('eye_lens_right')).toBeTruthy();
+    expect(build.root.getObjectByName('chest_spider_body')).toBeTruthy();
+    expect(build.metrics.namedDetailParts).toBeGreaterThanOrEqual(100);
+    expect(build.metrics.renderedTriangles).toBeGreaterThan(build.metrics.triangles + 10_000);
+    expect(build.metrics.surfaces.finishes).toEqual(expect.arrayContaining([
+      'hex-knit', 'optical-glass', 'molded-polymer', 'soft-touch-polymer',
+    ]));
+    const evidence = build.root.userData.characterIR.evidence as { inferredParts: string[]; posePolicy: string };
+    expect(evidence.inferredParts).toEqual(expect.arrayContaining(['rear_mask_seam', 'rear_emblem']));
+    expect(evidence.posePolicy).toContain('reference-action-estimate');
+    expect(WEB_HERO_SPEC.pose).toBe('reference-action');
+    const topology = analyzeTopology(build.root);
+    expect(topology.boundaryEdges, JSON.stringify(topology.details.filter((item) => !item.watertight))).toBe(0);
+    expect(topology.nonManifoldEdges, JSON.stringify(topology.details.filter((item) => !item.watertight))).toBe(0);
+    expect(topology.degenerateTriangles).toBe(0);
+    expect(topology.watertightMeshes).toBe(topology.meshes);
+  });
+
+  it('recognizes a web hero instruction without a dedicated 3D model', () => {
+    const result = applyPrompt('슬림한 남성 스파이더맨을 적청 웹 슈트 게임 에셋으로', DEFAULT_SPEC);
+    expect(result.spec).toMatchObject({
+      outfit: 'web-hero',
+      hairStyle: 'none',
+      suitColor: '#6b0017',
+      accentColor: '#031b3f',
+      pose: 'reference-action',
+    });
+  });
+
+  it('estimates the supplied forward-hand and staggered-knee action without breaking topology', () => {
+    const height = 1.78;
+    const wrist = new THREE.Vector3(-0.56, height * 0.6, 0);
+    const posedWrist = poseCharacterPoint(wrist, height, 'reference-action');
+    expect(posedWrist.z).toBeGreaterThan(height * 0.35);
+    expect(Math.abs(posedWrist.x)).toBeLessThan(Math.abs(wrist.x));
+
+    const leftKnee = poseCharacterPoint(new THREE.Vector3(-0.16, height * 0.29, 0), height, 'reference-action');
+    const rightKnee = poseCharacterPoint(new THREE.Vector3(0.16, height * 0.29, 0), height, 'reference-action');
+    expect(leftKnee.z).toBeGreaterThan(0);
+    expect(rightKnee.z).toBeLessThan(0);
+    expect(Math.abs(rightKnee.x)).toBeLessThan(0.16);
   });
 
   it('does not hide incomplete single-view evidence behind a high morph score', async () => {

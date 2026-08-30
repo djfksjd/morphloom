@@ -25,7 +25,8 @@
         "accentColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
         "hairColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
         "hairStyle": { "enum": ["crop", "bob", "buzz", "none"] },
-        "outfit": { "enum": ["second-skin", "field", "studio"] }
+        "outfit": { "enum": ["second-skin", "field", "studio", "web-hero"] },
+        "pose": { "enum": ["neutral", "reference-action"], "default": "neutral" }
       }
     }
   }

@@ -1,15 +1,25 @@
+import { readFileSync } from 'node:fs';
+import { inflateRawSync } from 'node:zlib';
 import { buildOrnateKnife } from '../src/engine/knife';
 import { buildProduct } from '../src/engine/product';
+import { buildCharacter } from '../src/engine/character';
+import { parseOhpk } from '../src/engine/ohpk';
 import { analyzeTopology } from '../src/engine/topology';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { evaluateReferenceSet, type ReferenceView } from '../src/engine/reference-set';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC } from '../src/types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, WEB_HERO_SPEC } from '../src/types';
 
 const knife = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
 const topology = analyzeTopology(knife.root);
+const humanPack = await parseOhpk(
+  new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk')),
+  async (payload) => new Uint8Array(inflateRawSync(payload)),
+);
+const webHero = buildCharacter(humanPack, WEB_HERO_SPEC, 'beauty');
+const webHeroTopology = analyzeTopology(webHero.root);
 const spiderManSingleView: ReferenceView = {
   id: 'spiderman-front-regression',
   assetKind: 'human',
@@ -95,6 +105,20 @@ const result = {
       missingViews: spiderManEvidence.missingRequiredRoles,
       blocked: !spiderManEvidence.ready,
       visualFidelityClaimAllowed: false,
+      characterBuild: {
+        skinVertices: webHero.metrics.vertices,
+        renderedTriangles: webHero.metrics.renderedTriangles,
+        namedDetailParts: webHero.metrics.namedDetailParts,
+        watertightParts: `${webHeroTopology.watertightMeshes}/${webHeroTopology.meshes}`,
+        boundaryEdges: webHeroTopology.boundaryEdges,
+        nonManifoldEdges: webHeroTopology.nonManifoldEdges,
+        degenerateTriangles: webHeroTopology.degenerateTriangles,
+        finishes: webHero.metrics.surfaces.finishes,
+        pose: WEB_HERO_SPEC.pose,
+        inferredDetailParts: webHero.metrics.inferredDetailParts,
+      },
+      gamePrevisBaseReady: true,
+      productionLikenessReady: false,
     },
   },
   comparisonBaseline: {

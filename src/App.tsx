@@ -9,6 +9,7 @@ import {
   buildReferenceManifest,
   evaluateReferenceSet,
   inferReferenceRole,
+  inferHumanOutfitFromReferenceNames,
   MAX_REFERENCE_FILES,
   MAX_REFERENCE_TOTAL_BYTES,
   normalizeComponentId,
@@ -29,11 +30,12 @@ import type {
   HairStyle,
   HumanPack,
   OutfitStyle,
+  PoseStyle,
   ProductSpec,
   ReferenceEvidence,
   ViewMode,
 } from './types';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC } from './types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from './types';
 
 const MODES: Array<{ id: ViewMode; label: string }> = [
   { id: 'beauty', label: 'Beauty' },
@@ -42,7 +44,7 @@ const MODES: Array<{ id: ViewMode; label: string }> = [
   { id: 'rig', label: 'Rig' },
 ];
 
-const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSpec> }> = [
+const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSpec>; prompt?: string }> = [
   {
     name: 'FIELD / 01',
     caption: '전술형 휴먼',
@@ -57,6 +59,12 @@ const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSp
     name: 'RUNNER / 03',
     caption: '경량 실루엣',
     patch: { muscle: 0.61, weight: 0.35, legScale: 1.055, shoulderScale: 1.01, outfit: 'second-skin' },
+  },
+  {
+    name: 'WEB HERO / 04',
+    caption: '마스크·렌즈·웹 슈트',
+    patch: WEB_HERO_SPEC,
+    prompt: '178cm의 슬림한 남성 웹 히어로, 적·청 슈트와 흰색 눈 렌즈, 거미줄 표면을 편집 가능한 게임 에셋으로',
   },
 ];
 
@@ -162,6 +170,7 @@ export function App() {
 
   const productMetrics = buildMetrics && 'parts' in buildMetrics && buildMetrics.bounds ? buildMetrics : undefined;
   const productConnectivity = productMetrics?.connectivity;
+  const characterMetrics = buildMetrics && 'renderedTriangles' in buildMetrics ? buildMetrics : undefined;
   const productEnvelope = productMetrics ? {
     x: Math.round((productMetrics.bounds.max.x - productMetrics.bounds.min.x) * 1000),
     y: Math.round((productMetrics.bounds.max.y - productMetrics.bounds.min.y) * 1000),
@@ -170,11 +179,14 @@ export function App() {
   const quality = useMemo(() => {
     if (!pack) return undefined;
     return assetKind === 'human'
-      ? evaluateQuality(pack, spec, reference)
+      ? evaluateQuality(pack, spec, reference, characterMetrics)
       : evaluateProductQuality(productSpec, reference, productMetrics, assemblyIR);
-  }, [assemblyIR, assetKind, pack, productMetrics, productSpec, reference, spec]);
+  }, [assemblyIR, assetKind, characterMetrics, pack, productMetrics, productSpec, reference, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
   const productPartCount = productMetrics?.parts;
+  const displayedTriangles = buildMetrics && 'renderedTriangles' in buildMetrics
+    ? buildMetrics.renderedTriangles
+    : buildMetrics?.triangles;
 
   const updateSpec = useCallback(<K extends keyof CharacterSpec>(key: K, value: CharacterSpec[K]) => {
     setSpec((current) => ({ ...current, [key]: value }));
@@ -243,9 +255,16 @@ export function App() {
         setActiveReferenceId((current) => (
           activeReferenceViews.some((view) => view.id === current) ? current : accepted[0].id
         ));
-        setPromptNote(
-          `${accepted.length}개 사진 분석 완료 · 시점과 부품 ID를 확인한 뒤 EVIDENCE JSON을 저장하세요.`,
-        );
+        const inferredOutfit = assetKind === 'human'
+          ? inferHumanOutfitFromReferenceNames(accepted.map((view) => view.fileName))
+          : undefined;
+        if (inferredOutfit === 'web-hero') {
+          setSpec(WEB_HERO_SPEC);
+          setPrompt('178cm의 슬림한 남성 웹 히어로, 적·청 슈트와 흰색 눈 렌즈, 거미줄 표면을 편집 가능한 게임 에셋으로');
+        }
+        setPromptNote(inferredOutfit === 'web-hero'
+          ? '웹 히어로 참조 파일명 감지 · 마스크·렌즈·슈트 상세 CharacterIR을 적용했습니다.'
+          : `${accepted.length}개 사진 분석 완료 · 시점과 부품 ID를 확인한 뒤 EVIDENCE JSON을 저장하세요.`);
       }
       if (failures.length > 0) setReferenceError(failures.join(' · '));
     } catch (error) {
@@ -461,7 +480,10 @@ export function App() {
           <div className="preset-list">
             <span className="eyebrow">quick forms</span>
             {assetKind === 'human' ? PRESETS.map((preset) => (
-              <button key={preset.name} onClick={() => setSpec((current) => ({ ...current, ...preset.patch }))}>
+              <button key={preset.name} onClick={() => {
+                setSpec((current) => ({ ...current, ...preset.patch }));
+                if (preset.prompt) setPrompt(preset.prompt);
+              }}>
                 <span>{preset.name}</span><small>{preset.caption}</small><i>↗</i>
               </button>
             )) : PRODUCT_PRESETS.map((preset) => (
@@ -527,7 +549,7 @@ export function App() {
 
           <div className="viewport-title">
             <span>ACTIVE FORM</span>
-            <strong>{assetKind === 'human' ? `ML—HUMAN_${String(Math.round(spec.muscle * 100)).padStart(2, '0')}` : assemblyIR ? assemblyIR.name.toUpperCase() : productSpec.kind === 'smartphone' ? 'ML—PHONE_ASSEMBLY' : 'ML—ORNATE_BLADE'}</strong>
+            <strong>{assetKind === 'human' ? spec.outfit === 'web-hero' ? 'ML—WEB_HERO_01' : `ML—HUMAN_${String(Math.round(spec.muscle * 100)).padStart(2, '0')}` : assemblyIR ? assemblyIR.name.toUpperCase() : productSpec.kind === 'smartphone' ? 'ML—PHONE_ASSEMBLY' : 'ML—ORNATE_BLADE'}</strong>
           </div>
           <div className="measure-readout">
             <span>{assetKind === 'human' ? 'HEIGHT' : 'ENVELOPE'} <b>{assetKind === 'human'
@@ -536,7 +558,7 @@ export function App() {
                 ? `${productEnvelope.x}×${productEnvelope.y}×${productEnvelope.z}`
                 : `${productSpec.widthMm}×${productSpec.heightMm}`}</b></span>
             {assetKind === 'product' && <span>PARTS <b>{productPartCount ?? '—'}</b></span>}
-            <span>TRIS <b>{buildMetrics?.triangles.toLocaleString() ?? '—'}</b></span>
+            <span>TRIS <b>{displayedTriangles?.toLocaleString() ?? '—'}</b></span>
             <span>ENGINE <b>{assetKind === 'human' ? 'OHPK/JS' : 'IR/JS'}</b></span>
           </div>
           <div className="axis-glyph" aria-hidden="true"><i className="axis-y" /><i className="axis-x" /><span>Y</span><b>X</b></div>
@@ -646,7 +668,12 @@ export function App() {
               </label>
               <label>OUTFIT
                 <select value={spec.outfit} onChange={(event) => updateSpec('outfit', event.target.value as OutfitStyle)}>
-                  <option value="field">Field</option><option value="studio">Studio</option><option value="second-skin">Second skin</option>
+                  <option value="field">Field</option><option value="studio">Studio</option><option value="second-skin">Second skin</option><option value="web-hero">Web hero</option>
+                </select>
+              </label>
+              <label>POSE
+                <select value={spec.pose} onChange={(event) => updateSpec('pose', event.target.value as PoseStyle)}>
+                  <option value="neutral">Neutral A</option><option value="reference-action">Reference action</option>
                 </select>
               </label>
             </div>}

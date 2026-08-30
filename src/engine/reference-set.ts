@@ -1,4 +1,4 @@
-import type { AssetKind, ReferenceEvidence } from '../types';
+import type { AssetKind, OutfitStyle, ReferenceEvidence } from '../types';
 
 export const MAX_REFERENCE_FILES = 24;
 export const MAX_REFERENCE_TOTAL_BYTES = 96 * 1024 * 1024;
@@ -109,6 +109,13 @@ export function inferReferenceRole(fileName: string, index = 0): ReferenceRole {
     ['component', /component|module|part|board|pcb|camera|battery|부품|모듈|기판|카메라|배터리/],
   ];
   return patterns.find(([, pattern]) => pattern.test(name))?.[0] ?? (index === 0 ? 'front' : 'component');
+}
+
+export function inferHumanOutfitFromReferenceNames(fileNames: string[]): OutfitStyle | undefined {
+  const joined = fileNames.map((name) => name.normalize('NFKC').toLowerCase()).join(' ');
+  return /spider[-_\s]?man|스파이더맨|web[-_\s]?hero|superhero[-_\s]?mask/.test(joined)
+    ? 'web-hero'
+    : undefined;
 }
 
 export function evaluateReferenceSet(views: ReferenceView[], assetKind: AssetKind): ReferenceCoverageReport {

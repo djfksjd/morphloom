@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildReferenceManifest,
   evaluateReferenceSet,
+  inferHumanOutfitFromReferenceNames,
   inferReferenceRole,
   normalizeComponentId,
   type ReferenceRole,
@@ -43,6 +44,11 @@ describe('multi-view evidence set', () => {
     expect(normalizeComponentId('Main Camera / OIS')).toBe('main_camera_ois');
     expect(normalizeComponentId('  battery__pack  ')).toBe('battery_pack');
     expect(normalizeComponentId('카메라')).toBe('');
+  });
+
+  it('selects the bounded web-hero preset only from matching human reference names', () => {
+    expect(inferHumanOutfitFromReferenceNames(['spider-man_front.jpg'])).toBe('web-hero');
+    expect(inferHumanOutfitFromReferenceNames(['portrait_front.jpg'])).toBeUndefined();
   });
 
   it('requires six product views and identified component evidence', () => {

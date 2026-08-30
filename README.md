@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-11%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-23%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -26,6 +26,7 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 에셋 | 검증된 결과 |
 |---|---:|
 | 사실적 인체 베이스 | 14,517 skin vertices · 38개 거시/치수 모프 |
+| 단일 사진 웹 히어로 | 48,156 tris · 139개 명명 상세 · 참조 액션 포즈 · `hex-knit`/렌즈/웹 PBR 분리 |
 | 스마트폰 분해도 | 164개 독립 부품 · 142,480 tris · 카메라 부품 39개 · watertight 220/220 메시 |
 | 스마트폰 배선 | 개별 도체 28/28 연결 · 필수 포트 56/56 · 부유 끝 0 |
 | 스마트폰 표면 | PBR finish 13종 · micro-normal 219/220 · 이방성 반사 재질 111개 |
@@ -85,6 +86,7 @@ npm run dev
 - `BLADE / 02` — 가변 두께 검신과 장식을 가진 단검
 - `COOLER / 03` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
 - `HUMAN` — CC0 인체 토폴로지와 로컬 모프
+- `WEB HERO / 04` — 마스크·렌즈·웹 슈트·참조 액션 포즈 단일 사진 회귀 사례
 
 검증 명령:
 
@@ -108,7 +110,7 @@ npm run build
 
 ## 반사각을 결정하는 PBR 미세 표면
 
-`surface-system.ts`는 단순한 색상 이름 대신 표면의 빛 반응을 컴파일합니다. 현재 19개 finish를 제공합니다.
+`surface-system.ts`는 단순한 색상 이름 대신 표면의 빛 반응을 컴파일합니다. 현재 20개 finish를 제공합니다.
 
 | Finish | 반사 특성 |
 |---|---|
@@ -120,6 +122,7 @@ npm run build
 | `machined-copper` | 방향성 절삭결 · 구리 금속 반사 |
 | `rubber`, `leather`, `wood` | 재질별 sheen과 비금속 미세결 |
 | `skin`, `fabric`, `hair` | 피부 미세결, 직물 섬유, 모발 방향성 반사 |
+| `hex-knit` | 육각 직조 높이장·거칠기 변화·sheen을 결합한 슈트 각도 반사 |
 
 - 64×64 절차적 normal/roughness map은 고정 seed로 생성되어 실행마다 동일합니다.
 - 카메라 베젤·사파이어 창·내부 렌즈·플래시·LiDAR는 자동 이름 추정이 아니라 명시적 표면값을 사용합니다.
@@ -179,9 +182,19 @@ Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론
 
 ## 스파이더맨 단일 사진 정직성 테스트
 
-[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 인물 모드에 입력했습니다. 입력 상태는 `FIT 92`였지만 정면 1개만 있어 증거 완성도는 `43/100`, 필수 시점은 `1/4`로 차단됐습니다. 총 빌드 점수 `78/100`은 일반 인체 베이스의 토폴로지·재질·내보내기 가능 여부이지, 스파이더맨 유사도 점수가 아닙니다.
+[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 고정 회귀 자료로 사용했습니다. 파일명 근거로 `WEB HERO / 04`를 선택하며, 전진한 양손·비대칭 팔 높이·상체 전경·엇갈린 무릎을 `reference-action` 포즈로 기록합니다. 보이는 마스크, 좌우 광학 렌즈, 방사형 웹, 적·청 패널, 가슴 문양은 139개의 이름 있는 편집 단위로 생성되고, 파란 슈트에는 각도에 따라 반사가 달라지는 `hex-knit` 미세 노멀/거칠기 맵을 적용합니다.
 
-**결론: 현재 출력은 스파이더맨 에셋으로 불합격입니다.** 일반 인체 베이스만 생성되며 마스크 눈 렌즈, 거미줄 슈트 무늬, 참조 체형, 포즈와 재질 투영은 재구성되지 않습니다. 최소 정면·후면·좌·우 4시점, 마스크·눈·슈트 표면 근접 사진, 평면 무늬 자료가 필요합니다.
+| 같은 시점에서 확인한 항목 | 현재 판정 |
+|---|---|
+| 적색 마스크와 큰 백색 렌즈 | 재구성됨 · 렌즈 IOR/clearcoat 분리 |
+| 적색 중앙 패널·청색 측면 패널 | 재구성됨 · 정점색 기반 편집 가능 |
+| 마스크/흉부 웹과 가슴 문양 | 독립 폐쇄 메시로 재구성됨 |
+| 전진한 손과 비대칭 다리 | 단일 시점 추정 포즈로 재구성됨 |
+| 육각 직조 질감 | 절차적 `hex-knit` PBR로 추정 |
+| 정확한 손가락 제스처·피부 웨이트 | 아직 생산 기준 미달 |
+| 후면 패턴·실제 봉제선·정확한 원단 피치 | 사진에 없어 `inferred` |
+
+**결론:** 게임 프리비즈와 후편집 베이스로는 이전의 일반 인체 출력보다 분명히 고도화됐지만, 한 장만으로 동일 인물·정확한 손가락·후면까지 자동 복원하는 완성품은 아닙니다. 실무 납품 전 검수를 작게 만들려면 정면·후면·좌·우, 손 근접, 마스크·원단 매크로 사진과 실제 키를 추가해야 합니다. UI의 `89/100`은 토폴로지·재질·내보내기 빌드 점수이며 사진 유사도 점수로 오해하면 안 됩니다.
 
 ## 현재 한계
 
@@ -200,7 +213,8 @@ src/engine/reference-set.ts      다중 시점·부품 사진 증거 매니페�
 src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
 src/engine/product.ts            스마트폰 164부품 예제
 src/engine/knife.ts              장식 단검 IR 예제
-src/engine/character.ts          CC0 인체 메시와 모프
+src/engine/character.ts          CC0 인체 메시·모프·참조 포즈 변형
+src/engine/web-hero.ts           마스크·렌즈·웹·가슴 문양 편집 단위
 src/engine/topology.ts           메시 무결성 검사
 schemas/                         에이전트용 JSON 계약
 benchmarks/                      재현 가능한 수치와 비교 정책

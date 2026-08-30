@@ -4,4 +4,6 @@
 
 It does not convert triangle count into a beauty score. Reference fidelity needs the same admitted images and camera calibration. The img2threejs Talon exhibit currently remains stronger in photo-traced silhouette and photo-projected ruby finish; Morphloom is stronger in reusable JSON operations, part granularity, and automatic topology evidence.
 
+The Spider-Man single-image case therefore records two separate results: the compiled asset can pass closed-topology and editable-part gates while the one-view likeness gate remains blocked. `gamePrevisBaseReady` must never be presented as `productionLikenessReady`.
+
 When a new baseline is added, store its public URL, version, visible metrics, and the date observed. Never copy a proprietary asset into this directory.

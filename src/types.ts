@@ -1,5 +1,6 @@
 export type HairStyle = 'crop' | 'bob' | 'buzz' | 'none';
-export type OutfitStyle = 'second-skin' | 'field' | 'studio';
+export type OutfitStyle = 'second-skin' | 'field' | 'studio' | 'web-hero';
+export type PoseStyle = 'neutral' | 'reference-action';
 export type ViewMode = 'beauty' | 'clay' | 'wireframe' | 'rig';
 export type AssetKind = 'human' | 'product';
 
@@ -31,6 +32,7 @@ export interface CharacterSpec {
   hairColor: string;
   hairStyle: HairStyle;
   outfit: OutfitStyle;
+  pose: PoseStyle;
 }
 
 export interface MorphTarget {
@@ -107,6 +109,25 @@ export const DEFAULT_SPEC: CharacterSpec = {
   hairColor: '#181513',
   hairStyle: 'crop',
   outfit: 'field',
+  pose: 'neutral',
+};
+
+export const WEB_HERO_SPEC: CharacterSpec = {
+  ...DEFAULT_SPEC,
+  heightCm: 178,
+  weight: 0.42,
+  muscle: 0.7,
+  ageYears: 26,
+  genderBlend: 0,
+  shoulderScale: 1.15,
+  legScale: 1.025,
+  headScale: 0.98,
+  skinTone: '#6b0017',
+  suitColor: '#6b0017',
+  accentColor: '#031b3f',
+  hairStyle: 'none',
+  outfit: 'web-hero',
+  pose: 'reference-action',
 };
 
 export const DEFAULT_PRODUCT_SPEC: ProductSpec = {

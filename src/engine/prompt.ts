@@ -66,6 +66,7 @@ export function applyPrompt(input: string, current: CharacterSpec): PromptResult
   }
 
   const outfitRules: Array<[RegExp, OutfitStyle, string, string]> = [
+    [/스파이더맨|spider[-\s]?man|web[-\s]?hero|거미\s*(?:영웅|슈트)/, 'web-hero', '웹 히어로 분리 슈트', '#6b0017'],
     [/갑옷|armor|전투복/, 'field', '전술 필드 슈트', '#262c36'],
     [/스튜디오|studio|motion capture|모션캡처/, 'studio', '스튜디오 캡처 슈트', '#d7d7cf'],
     [/바디수트|body suit|second skin/, 'second-skin', '세컨드 스킨', '#20252d'],
@@ -74,9 +75,25 @@ export function applyPrompt(input: string, current: CharacterSpec): PromptResult
     if (rule.test(prompt)) {
       spec.outfit = outfit;
       spec.suitColor = color;
+      if (outfit === 'web-hero') {
+        spec.accentColor = '#031b3f';
+        spec.hairStyle = 'none';
+        spec.genderBlend = Math.min(spec.genderBlend, 0.12);
+        spec.muscle = Math.max(spec.muscle, 0.68);
+        spec.shoulderScale = Math.max(spec.shoulderScale, 1.08);
+        spec.pose = 'reference-action';
+      }
       changes.push(label);
       break;
     }
+  }
+
+  if (/중립|a[-\s]?pose|neutral/.test(prompt)) {
+    spec.pose = 'neutral';
+    changes.push('중립 A 포즈');
+  } else if (/참조\s*포즈|액션\s*포즈|웅크|crouch|action pose|web shooting|웹\s*슈팅/.test(prompt)) {
+    spec.pose = 'reference-action';
+    changes.push('참조 액션 포즈');
   }
 
   if (/파란|blue/.test(prompt)) {

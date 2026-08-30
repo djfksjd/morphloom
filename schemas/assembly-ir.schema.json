@@ -37,7 +37,7 @@
       "required": ["color"],
       "properties": {
         "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
-        "surface": { "enum": ["raw", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hair", "semiconductor"] },
+        "surface": { "enum": ["raw", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hex-knit", "hair", "semiconductor"] },
         "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
         "metalness": { "type": "number", "minimum": 0, "maximum": 1 },
         "transmission": { "type": "number", "minimum": 0, "maximum": 1 },

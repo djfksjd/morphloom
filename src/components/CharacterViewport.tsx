@@ -107,7 +107,7 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.08;
+      renderer.toneMappingExposure = 1;
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -130,7 +130,7 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       pmrem.dispose();
       scene.environment = environment;
 
-      const key = new THREE.DirectionalLight('#fff5e8', 4.2);
+      const key = new THREE.DirectionalLight('#fff5e8', 2.65);
       key.position.set(2.6, 4.4, 3.2);
       key.castShadow = true;
       key.shadow.mapSize.set(2048, 2048);
@@ -139,17 +139,17 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       key.shadow.camera.top = 3;
       key.shadow.camera.bottom = -1;
       scene.add(key);
-      const edge = new THREE.DirectionalLight('#6d86ff', 2.4);
+      const edge = new THREE.DirectionalLight('#6d86ff', 1.35);
       edge.position.set(-3.5, 2.2, -2.4);
       scene.add(edge);
-      const fill = new THREE.HemisphereLight('#f1f4ff', '#4d4f4c', 1.9);
+      const fill = new THREE.HemisphereLight('#f1f4ff', '#4d4f4c', 1.05);
       scene.add(fill);
-      const reflectionStrip = new THREE.RectAreaLight('#eef4ff', 7.5, 0.24, 2.4);
+      const reflectionStrip = new THREE.RectAreaLight('#eef4ff', 4.4, 0.24, 2.4);
       reflectionStrip.name = 'reflection_strip_key';
       reflectionStrip.position.set(1.5, 1.9, 2.2);
       reflectionStrip.lookAt(0, 0.8, 0);
       scene.add(reflectionStrip);
-      const warmStrip = new THREE.RectAreaLight('#ffd8b5', 4.2, 0.18, 1.6);
+      const warmStrip = new THREE.RectAreaLight('#ffd8b5', 2.45, 0.18, 1.6);
       warmStrip.name = 'reflection_strip_edge';
       warmStrip.position.set(-1.4, 1.1, -1.7);
       warmStrip.lookAt(0, 0.75, 0);
@@ -252,9 +252,9 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       if (assetKind === 'human') {
         runtime.controls.target.set(0, build.metrics.heightMeters * 0.52, 0);
         runtime.camera.position.set(
-          build.metrics.heightMeters * 1.22,
+          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 0.68 : 1.22),
           build.metrics.heightMeters * 0.66,
-          build.metrics.heightMeters * 2.05,
+          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 2.15 : 2.05),
         );
       } else {
         const center = build.metrics.bounds.getCenter(new THREE.Vector3());

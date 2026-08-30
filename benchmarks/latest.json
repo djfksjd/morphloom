@@ -29,6 +29,10 @@
       "cameraParts": 39,
       "logicParts": 37,
       "individualConductors": 28,
+      "watertightParts": "220/220",
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
       "surfaces": {
         "physicalMaterials": 220,
         "authoredMaterials": 220,
@@ -55,6 +59,10 @@
       "components": 24,
       "renderedParts": 67,
       "triangles": 124664,
+      "watertightParts": "153/153",
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
       "surfaces": {
         "physicalMaterials": 153,
         "authoredMaterials": 153,
@@ -73,6 +81,30 @@
       "portOutsideDistanceMaxMm": 4.470348362317633e-7,
       "endpointErrorMaxMm": 0.000004998623339826834,
       "inferredHiddenGeometry": true
+    },
+    "spiderManSingleImageHonestyGate": {
+      "source": "https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg",
+      "sourceResolution": "960×1280",
+      "inputFit": 92,
+      "evidenceScore": 43,
+      "requiredViews": "1/4",
+      "missingViews": ["rear", "left", "right"],
+      "blocked": true,
+      "visualFidelityClaimAllowed": false,
+      "characterBuild": {
+        "skinVertices": 14517,
+        "renderedTriangles": 48156,
+        "namedDetailParts": 139,
+        "watertightParts": "173/173",
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "finishes": ["hex-knit", "molded-polymer", "optical-glass", "soft-touch-polymer"],
+        "pose": "reference-action",
+        "inferredDetailParts": 3
+      },
+      "gamePrevisBaseReady": true,
+      "productionLikenessReady": false
     }
   },
   "comparisonBaseline": {

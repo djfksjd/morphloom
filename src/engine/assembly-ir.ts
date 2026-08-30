@@ -48,6 +48,7 @@ export type SurfaceFinishIR =
   | 'wood'
   | 'skin'
   | 'fabric'
+  | 'hex-knit'
   | 'hair'
   | 'semiconductor';
 

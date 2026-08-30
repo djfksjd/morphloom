@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-11%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-23%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -26,6 +26,7 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Asset | Current result |
 |---|---:|
 | Realistic human base | 14,517 skin vertices · 38 macro/measurement morphs |
+| Single-image web hero | 48,156 tris · 139 named details · reference action pose · separate `hex-knit`/lens/web PBR |
 | Smartphone exploded view | 164 independent parts · 142,480 tris · 39 camera parts · 220/220 watertight meshes |
 | Smartphone wiring | 28/28 individual conductors · 56/56 required ports · 0 dangling ends |
 | Smartphone surfaces | 13 PBR finishes · micro-normal on 219/220 materials · 111 anisotropic materials |
@@ -85,6 +86,7 @@ Open the printed local URL and try:
 - `BLADE / 02` — ornate dagger with a variable-thickness blade
 - `COOLER / 03` — image-derived electrical-connectivity regression asset
 - `HUMAN` — CC0 human topology and local morphs
+- `WEB HERO / 04` — mask, lenses, web suit, and reference-action single-image regression asset
 
 Verification:
 
@@ -108,7 +110,7 @@ Each conductor is an independently selectable closed mesh. The compiler measures
 
 ## PBR micro-surfaces that control reflection angle
 
-`surface-system.ts` compiles light response rather than stopping at a color label. Nineteen finishes are currently available.
+`surface-system.ts` compiles light response rather than stopping at a color label. Twenty finishes are currently available.
 
 | Finish | Reflection behavior |
 |---|---|
@@ -120,6 +122,7 @@ Each conductor is an independently selectable closed mesh. The compiler measures
 | `machined-copper` | directional cutting grain and copper metal response |
 | `rubber`, `leather`, `wood` | material-specific sheen and dielectric grain |
 | `skin`, `fabric`, `hair` | skin microtexture, textile fibres, and directional hair highlights |
+| `hex-knit` | hexagonal weave height, roughness variation, and sheen for angle-dependent suit response |
 
 - Deterministic 64×64 procedural normal/roughness maps use fixed seeds and require no copyrighted texture pack.
 - Camera bezels, sapphire windows, internal lenses, flash, and LiDAR use explicit surface values rather than name inference.
@@ -179,9 +182,19 @@ Morphloom is stronger in **part granularity, reusable IR, electrical semantics, 
 
 ## Spider-Man single-image honesty test
 
-We supplied one [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg) (ManoSolo13241324, CC BY-SA 4.0) in human mode. The image itself scored `FIT 92`, but one front view produced only `43/100` evidence completeness and `1/4` required views, so the fidelity gate blocked it. The `78/100` aggregate build score describes the generic base's topology, materials, and export readiness; it is not a Spider-Man likeness score.
+One [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg) (ManoSolo13241324, CC BY-SA 4.0) is now a fixed regression reference. Filename evidence selects `WEB HERO / 04`; forward hands, asymmetric arm height, upper-body lean, and staggered knees are recorded as a `reference-action` estimate. The visible mask, optical lenses, radial webbing, red/blue panels, and chest mark compile into 139 named edit units. Blue suit regions use procedural `hex-knit` micro-normal and roughness maps for angle-dependent response.
 
-**Verdict: the current output fails as a Spider-Man asset.** It produces a generic editable human base and does not reconstruct the mask eye lenses, web suit pattern, reference body shape, pose, or projected material. At minimum it needs front, rear, left, and right views plus close-ups of the mask, eyes, suit surface, and a flat pattern reference.
+| Same-view observation | Current verdict |
+|---|---|
+| Red mask and large white lenses | reconstructed with separate lens IOR/clearcoat |
+| Red center and blue side panels | reconstructed as editable vertex colors |
+| Mask/chest webbing and chest mark | reconstructed as independent closed meshes |
+| Forward hands and asymmetric legs | reconstructed as a single-view pose estimate |
+| Hexagonal textile response | inferred procedural `hex-knit` PBR |
+| Exact finger gesture and production skin weights | not yet production grade |
+| Rear pattern, real seams, exact textile pitch | absent from the photo and marked `inferred` |
+
+**Verdict:** this is a clear improvement over the old generic body and is usable for game previs or as an editable base, but one image does not yield a finished identity-accurate character. Add front/rear/left/right views, hand close-ups, mask/textile macro shots, and measured height to minimize production review. The UI's `89/100` is a topology/material/export build score, not a photo-likeness score.
 
 ## Current limits
 
@@ -200,7 +213,8 @@ src/engine/reference-set.ts      multi-view and component evidence manifest
 src/engine/cooling-assembly.ts   supplied-image regression asset
 src/engine/product.ts            164-part smartphone example
 src/engine/knife.ts              ornate knife IR example
-src/engine/character.ts          CC0 human mesh and morphs
+src/engine/character.ts          CC0 human mesh, morphs, reference pose deformation
+src/engine/web-hero.ts           editable mask, lenses, webbing, and chest mark
 src/engine/topology.ts           mesh integrity analysis
 schemas/                         JSON contracts for agents
 benchmarks/                      reproducible metrics and comparison policy

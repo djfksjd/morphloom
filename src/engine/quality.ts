@@ -1,5 +1,5 @@
 import type { CharacterSpec, HumanPack, ProductSpec, QualityCheck, QualityReport, ReferenceEvidence } from '../types';
-import { deriveBodyTopology } from './character';
+import { deriveBodyTopology, type CharacterMetrics } from './character';
 import type { ProductMetrics } from './product';
 import type { AssemblyIR } from './assembly-ir';
 
@@ -11,6 +11,7 @@ export function evaluateQuality(
   pack: HumanPack,
   spec: CharacterSpec,
   evidence?: ReferenceEvidence,
+  metrics?: CharacterMetrics,
 ): QualityReport {
   const topology = deriveBodyTopology(pack);
   const vertices = topology.boundary;
@@ -24,7 +25,10 @@ export function evaluateQuality(
   const silhouetteScore = evidence
     ? Math.min(morphStabilityScore, evidence.portraitSuitability)
     : morphStabilityScore;
-  const materialScore = Math.round(82 + (spec.hairStyle !== 'none' ? 5 : 0) + (spec.outfit === 'field' ? 3 : 0));
+  const webHero = spec.outfit === 'web-hero';
+  const materialScore = webHero
+    ? Math.min(98, 90 + Math.round((metrics?.surfaces.distinctFinishes ?? 0) * 1.5))
+    : Math.round(82 + (spec.hairStyle !== 'none' ? 5 : 0) + (spec.outfit === 'field' ? 3 : 0));
   const rigScore = 74;
   const exportScore = 92;
 
@@ -34,7 +38,9 @@ export function evaluateQuality(
       label: '인체 토폴로지',
       score: geometryScore,
       status: status(geometryScore),
-      detail: `${vertices.toLocaleString()}개 정점의 연속형 인체 기본 메시`,
+      detail: webHero
+        ? `${vertices.toLocaleString()}개 스킨 정점 · 이름 있는 슈트 상세 ${metrics?.namedDetailParts ?? 0}개`
+        : `${vertices.toLocaleString()}개 정점의 연속형 인체 기본 메시`,
     },
     {
       id: 'silhouette',
@@ -47,10 +53,12 @@ export function evaluateQuality(
     },
     {
       id: 'materials',
-      label: '재질 분리',
+      label: webHero ? '웹 슈트 재질·부품' : '재질 분리',
       score: materialScore,
       status: status(materialScore),
-      detail: '피부·슈트·헤어의 물리 기반 재질 분리',
+      detail: webHero
+        ? `hex-knit·optical glass·polymer ${metrics?.surfaces.distinctFinishes ?? 0}종 · inferred ${metrics?.inferredDetailParts ?? 0}`
+        : '피부·슈트·헤어의 물리 기반 재질 분리',
     },
     {
       id: 'rig',
@@ -62,9 +70,11 @@ export function evaluateQuality(
     {
       id: 'export',
       label: 'GLB 내보내기',
-      score: exportScore,
+      score: webHero ? 94 : exportScore,
       status: status(exportScore),
-      detail: '표준 glTF 2.0 장면과 CharacterIR 메타데이터',
+      detail: webHero
+        ? `표준 glTF 2.0 · ${metrics?.namedDetailParts ?? 0}개 명명 부품 · CharacterIR 근거 메타데이터`
+        : '표준 glTF 2.0 장면과 CharacterIR 메타데이터',
     },
   ];
 
