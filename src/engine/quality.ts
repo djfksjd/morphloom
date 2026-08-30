@@ -1,5 +1,7 @@
 import type { CharacterSpec, HumanPack, ProductSpec, QualityCheck, QualityReport, ReferenceEvidence } from '../types';
 import { deriveBodyTopology } from './character';
+import type { ProductMetrics } from './product';
+import type { AssemblyIR } from './assembly-ir';
 
 function status(score: number, blockAt = 65): QualityCheck['status'] {
   return score >= 86 ? 'pass' : score >= blockAt ? 'warn' : 'blocked';
@@ -71,40 +73,69 @@ export function evaluateQuality(
   };
 }
 
-export function evaluateProductQuality(spec: ProductSpec, evidence?: ReferenceEvidence): QualityReport {
+export function evaluateProductQuality(
+  spec: ProductSpec,
+  evidence?: ReferenceEvidence,
+  metrics?: ProductMetrics,
+  assemblyIR?: AssemblyIR,
+): QualityReport {
   const isKnife = spec.kind === 'ornate-knife';
+  const isImportedAssembly = Boolean(assemblyIR);
+  const connectivity = metrics?.connectivity;
   const ratio = spec.heightMm / spec.widthMm;
-  const envelopeScore = Math.round(Math.max(0, isKnife
-    ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
-    : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
+  const compiledEnvelope = metrics?.bounds ? {
+    x: metrics.bounds.max.x - metrics.bounds.min.x,
+    y: metrics.bounds.max.y - metrics.bounds.min.y,
+    z: metrics.bounds.max.z - metrics.bounds.min.z,
+  } : undefined;
+  const envelopeLabel = compiledEnvelope
+    ? `${Math.round(compiledEnvelope.x * 1000)} × ${Math.round(compiledEnvelope.y * 1000)} × ${Math.round(compiledEnvelope.z * 1000)} mm 컴파일 포락`
+    : '컴파일 포락을 계산하는 중';
+  const envelopeScore = isImportedAssembly
+    ? metrics?.bounds ? 97 : 78
+    : Math.round(Math.max(0, isKnife
+      ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
+      : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
-      label: isKnife ? '가변 두께 검신' : '부품 분해 구조',
+      label: isKnife ? '가변 두께 검신' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
       score: 96,
       status: 'pass',
-      detail: isKnife ? '중심 능선→0.16mm 날끝→뾰족한 팁의 폐쇄형 로프트' : '외장·디스플레이·PCB·반도체·카메라를 독립 노드로 구성',
+      detail: isKnife
+        ? '중심 능선→0.16mm 날끝→뾰족한 팁의 폐쇄형 로프트'
+        : isImportedAssembly
+          ? `${assemblyIR!.components.length}개 구조 부품과 ${metrics?.parts ?? '—'}개 렌더 노드`
+          : '외장·디스플레이·PCB·반도체·카메라를 독립 노드로 구성',
     },
     {
       id: 'silhouette',
-      label: isKnife ? '실물 단위 포락' : '기구 치수 일관성',
+      label: isKnife ? '실물 단위 포락' : isImportedAssembly ? '컴파일 포락' : '기구 치수 일관성',
       score: envelopeScore,
       status: status(envelopeScore),
-      detail: `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
+      detail: isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
     },
     {
       id: 'materials',
       label: isKnife ? '강철·청동·가죽·보석' : '제조 재질 분리',
       score: 94,
       status: 'pass',
-      detail: isKnife ? '검신·가드·그립·상감·폼멜의 PBR 재질 분리' : '유리·알루미늄·FR-4·실리콘·구리·광학재질 분리',
+      detail: isKnife
+        ? '검신·가드·그립·상감·폼멜의 PBR 재질 분리'
+        : isImportedAssembly
+          ? '냉각판·TEC·구리·핀스택·PCB·센서·절연 도체 재질 분리'
+          : '유리·알루미늄·FR-4·실리콘·구리·광학재질 분리',
     },
     {
       id: 'rig',
-      label: isKnife ? '실무 토폴로지' : 'AssemblyIR 부품 그래프',
-      score: 97,
-      status: 'pass',
-      detail: isKnife ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사' : '부품별 ID·카테고리·재질·설명과 분해 좌표 보존',
+      label: isKnife ? '실무 토폴로지' : '전기 연결성',
+      score: isKnife ? 97 : connectivity && connectivity.errors.length === 0 ? 99 : 72,
+      status: isKnife || (connectivity && connectivity.errors.length === 0) ? 'pass' : 'warn',
+      detail: isKnife
+        ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
+        : connectivity
+          ? `${connectivity.connectedWires}/${connectivity.wires} 도체 · 필수 포트 ${connectivity.connectedRequiredPorts}/${connectivity.requiredPorts} · 부유 끝 ${connectivity.danglingWires}`
+          : '포트·네트·도체 그래프를 컴파일한 뒤 연결성을 판정합니다.',
     },
     {
       id: 'export',

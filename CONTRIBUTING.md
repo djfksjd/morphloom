@@ -1,6 +1,6 @@
 # Contributing
 
-Keep changes vendor-neutral: Codex and Claude must compile the same IR. New geometry operations need bounded inputs, a topology test, and a documented unit convention.
+Keep changes vendor-neutral: Codex and Claude must compile the same IR. New geometry operations need bounded inputs, a topology test, and a documented unit convention. New electronic examples must use port-to-port conductors and include a failure test for dangling or incompatible wiring.
 
 Before opening a change:
 

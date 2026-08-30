@@ -19,7 +19,7 @@ export interface AssemblyMaterialIR {
 export interface AssemblyComponentIR {
   id: string;
   name: string;
-  category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical';
+  category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical' | 'interconnect';
   materialName: string;
   detail: string;
   geometry: AssemblyGeometryIR;
@@ -29,10 +29,49 @@ export interface AssemblyComponentIR {
   material: AssemblyMaterialIR;
 }
 
+export type ElectricalSignalIR = 'power' | 'ground' | 'data' | 'rf' | 'audio' | 'sensor' | 'control';
+
+export interface ElectricalPortIR {
+  id: string;
+  componentId: string;
+  pin: string;
+  signal: ElectricalSignalIR;
+  /** Position in the owning component's local coordinate system, in millimetres. */
+  position: [number, number, number];
+  /** Outward lead direction in the owning component's local coordinate system. */
+  direction?: [number, number, number];
+  required?: boolean;
+  maxConnections?: number;
+}
+
+export interface ElectricalWireIR {
+  id: string;
+  name: string;
+  net: string;
+  signal: ElectricalSignalIR;
+  from: string;
+  to: string;
+  /** Intermediate assembly-local routing points in millimetres. Endpoints come from ports. */
+  waypoints?: Array<[number, number, number]>;
+  diameter: number;
+  color: string;
+  materialName?: string;
+  shielded?: boolean;
+}
+
+export interface ElectricalHarnessIR {
+  ports: ElectricalPortIR[];
+  wires: ElectricalWireIR[];
+  endpointToleranceMm?: number;
+  /** Maximum distance a declared port may sit outside its owning component bounds. */
+  portToleranceMm?: number;
+}
+
 export interface AssemblyIR {
   schema: 'morphloom.assembly/0.1';
   name: string;
   units: 'mm';
   components: AssemblyComponentIR[];
+  electrical?: ElectricalHarnessIR;
   metadata?: Record<string, string | number | boolean>;
 }

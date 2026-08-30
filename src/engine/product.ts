@@ -2,11 +2,13 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { ProductSpec, ViewMode } from '../types';
 import { buildOrnateKnife } from './knife';
+import { compileElectricalHarness, type ConnectivityReport } from './connectivity';
+import type { ElectricalHarnessIR, ElectricalPortIR, ElectricalSignalIR, ElectricalWireIR } from './assembly-ir';
 
 export interface ProductPartInfo {
   id: string;
   name: string;
-  category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical';
+  category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical' | 'interconnect';
   material: string;
   detail: string;
 }
@@ -18,6 +20,7 @@ export interface ProductMetrics {
   bounds: THREE.Box3;
   parts: number;
   categories: number;
+  connectivity?: ConnectivityReport;
 }
 
 export interface ProductBuild {
@@ -46,13 +49,15 @@ const mm = (value: number) => value / 1000;
 
 function physicalMaterial(options: PartOptions, mode: ViewMode): THREE.MeshPhysicalMaterial {
   const clay = mode === 'clay';
+  const ghost = mode === 'rig' && (options.category === 'enclosure' || options.category === 'display');
   return new THREE.MeshPhysicalMaterial({
     color: clay ? '#c5c6c3' : options.color,
     roughness: clay ? 0.82 : (options.roughness ?? 0.5),
     metalness: clay ? 0 : (options.metalness ?? 0.05),
     transmission: mode === 'beauty' ? (options.transmission ?? 0) : 0,
-    transparent: Boolean(options.transmission),
-    opacity: options.transmission ? Math.max(0.24, 1 - options.transmission * 0.7) : 1,
+    transparent: ghost || Boolean(options.transmission),
+    opacity: ghost ? 0.1 : options.transmission ? Math.max(0.24, 1 - options.transmission * 0.7) : 1,
+    depthWrite: !ghost,
     thickness: options.transmission ? mm(1) : 0,
     clearcoat: mode === 'beauty' ? 0.18 : 0,
     clearcoatRoughness: 0.4,
@@ -101,6 +106,34 @@ function addCylinderPart(
   const mesh = new THREE.Mesh(geometry, physicalMaterial({ ...options, size: [1, 1, 1] }, mode));
   mesh.name = options.id;
   mesh.rotation.x = Math.PI / 2;
+  mesh.position.set(...options.position);
+  mesh.castShadow = true;
+  mesh.userData.part = {
+    id: options.id,
+    name: options.name,
+    category: options.category,
+    material: options.material,
+    detail: options.detail,
+  } satisfies ProductPartInfo;
+  root.add(mesh);
+  parts.push(mesh.userData.part as ProductPartInfo);
+  return mesh;
+}
+
+function addTorusPart(
+  root: THREE.Group,
+  parts: ProductPartInfo[],
+  mode: ViewMode,
+  options: Omit<PartOptions, 'size'> & { radiusMm: number; tubeMm: number; radialSegments?: number; tubularSegments?: number },
+): THREE.Mesh {
+  const geometry = new THREE.TorusGeometry(
+    mm(options.radiusMm),
+    mm(options.tubeMm),
+    options.radialSegments ?? 14,
+    options.tubularSegments ?? 64,
+  );
+  const mesh = new THREE.Mesh(geometry, physicalMaterial({ ...options, size: [1, 1, 1] }, mode));
+  mesh.name = options.id;
   mesh.position.set(...options.position);
   mesh.castShadow = true;
   mesh.userData.part = {
@@ -167,6 +200,292 @@ function createChip(
   });
 }
 
+function createExteriorCameraSystem(
+  root: THREE.Group,
+  parts: ProductPartInfo[],
+  mode: ViewMode,
+  rearZ: number,
+): void {
+  const islandZ = rearZ - mm(1.05);
+  addPart(root, parts, mode, {
+    id: 'camera_island', name: '정밀 카메라 아일랜드', category: 'enclosure', material: 'CNC 알루미늄/무광 유리',
+    detail: '세 개의 광학 모듈·플래시·ToF·마이크를 개별 개구로 고정하는 후면 구조물',
+    size: [mm(45), mm(55), mm(1.5)], position: [mm(-10.8), mm(52.8), islandZ],
+    color: '#22262b', roughness: 0.24, metalness: 0.58, radius: mm(7.2),
+  });
+
+  const cameraCovers: Array<[string, string, number, number]> = [
+    ['wide', '광각', -21.5, 63],
+    ['ultrawide', '초광각', 0, 63],
+    ['tele', '망원', -21.5, 42],
+  ];
+  for (const [id, label, x, y] of cameraCovers) {
+    addTorusPart(root, parts, mode, {
+      id: `${id}_outer_bezel`, name: `${label} 티타늄 외부 베젤`, category: 'camera', material: 'PVD 티타늄',
+      detail: '충격으로부터 렌즈 윈도를 보호하는 미세 동심 가공 금속 링', radiusMm: 7.25, tubeMm: 1.05,
+      position: [mm(x), mm(y), islandZ - mm(1.05)], color: '#9aa3aa', roughness: 0.22, metalness: 0.94,
+    });
+    addCylinderPart(root, parts, mode, {
+      id: `${id}_sapphire_window`, name: `${label} 사파이어 윈도`, category: 'camera', material: '사파이어/AR 코팅',
+      detail: '다층 반사 방지 코팅을 적용한 외부 보호 광학창', radiusMm: 6.35, depthMm: 0.72,
+      position: [mm(x), mm(y), islandZ - mm(1.32)], color: '#193448', roughness: 0.055, transmission: 0.5,
+    });
+    addTorusPart(root, parts, mode, {
+      id: `${id}_inner_bezel`, name: `${label} 내부 차광 링`, category: 'camera', material: '흑색 양극산화 알루미늄',
+      detail: '고스트와 플레어를 억제하는 내부 배럴 차광 구조', radiusMm: 4.15, tubeMm: 0.62,
+      position: [mm(x), mm(y), islandZ - mm(1.76)], color: '#11171b', roughness: 0.18, metalness: 0.68,
+    });
+    addCylinderPart(root, parts, mode, {
+      id: `${id}_visible_aperture`, name: `${label} 가시 조리개`, category: 'camera', material: '광학 흑색 코팅',
+      detail: '외부에서 관찰되는 유효 입사동과 1차 렌즈 반사층', radiusMm: 2.55, depthMm: 0.38,
+      position: [mm(x), mm(y), islandZ - mm(1.94)], color: id === 'tele' ? '#17283a' : '#0b1822', roughness: 0.08, metalness: 0.08,
+    });
+  }
+
+  addTorusPart(root, parts, mode, {
+    id: 'flash_retaining_ring', name: 'True-tone 플래시 링', category: 'camera', material: '스테인리스 스틸',
+    detail: '플래시 확산판을 카메라 아일랜드에 고정하는 링', radiusMm: 4.35, tubeMm: 0.55,
+    position: [mm(0), mm(43), islandZ - mm(1.05)], color: '#c7b98f', roughness: 0.3, metalness: 0.76,
+  });
+  addCylinderPart(root, parts, mode, {
+    id: 'flash_diffuser', name: '듀얼톤 플래시 확산판', category: 'camera', material: '광학 실리콘/형광체',
+    detail: '색온도가 다른 LED를 혼합하는 미세 확산 구조', radiusMm: 3.65, depthMm: 0.58,
+    position: [0, mm(43), islandZ - mm(1.34)], color: '#f0e4b7', roughness: 0.22, transmission: 0.25, emissive: '#c8ae72',
+  });
+  addCylinderPart(root, parts, mode, {
+    id: 'lidar_cover_window', name: 'ToF/LiDAR 외부 윈도', category: 'camera', material: 'IR 투과 유리',
+    detail: '근적외선 송수신을 위한 저반사 외부 커버', radiusMm: 3.25, depthMm: 0.5,
+    position: [mm(0), mm(52), islandZ - mm(1.3)], color: '#162a31', roughness: 0.1, transmission: 0.34,
+  });
+  addCylinderPart(root, parts, mode, {
+    id: 'rear_microphone_port', name: '후면 마이크 포트', category: 'audio', material: '스테인리스 메시',
+    detail: '영상 촬영 지향성 오디오용 방진·방수 음향 포트', radiusMm: 0.9, depthMm: 0.46,
+    position: [mm(8.5), mm(45.5), islandZ - mm(1.28)], color: '#090b0d', roughness: 0.52, metalness: 0.35,
+  });
+}
+
+function createExteriorShellDetails(
+  root: THREE.Group,
+  parts: ProductPartInfo[],
+  mode: ViewMode,
+  width: number,
+  height: number,
+  depth: number,
+  frontZ: number,
+  frameColor: string,
+): void {
+  const railZ = frontZ + mm(0.46);
+  const railColor = '#171b20';
+  const rails: Array<[string, [number, number, number], [number, number, number]]> = [
+    ['front_bezel_left', [mm(1.7), height * 0.91, mm(0.52)], [-width * 0.472, 0, railZ]],
+    ['front_bezel_right', [mm(1.7), height * 0.91, mm(0.52)], [width * 0.472, 0, railZ]],
+    ['front_bezel_top', [width * 0.9, mm(1.8), mm(0.52)], [0, height * 0.465, railZ]],
+    ['front_bezel_bottom', [width * 0.9, mm(2.2), mm(0.52)], [0, -height * 0.463, railZ]],
+  ];
+  for (const [id, size, position] of rails) {
+    addPart(root, parts, mode, {
+      id, name: `전면 베젤 ${id.split('_').at(-1)}`, category: 'display', material: '광학 흑색 폴리머',
+      detail: '디스플레이 비활성 경계를 가리는 초박형 전면 베젤', size, position,
+      color: railColor, roughness: 0.28, radius: mm(0.7),
+    });
+  }
+  addPart(root, parts, mode, {
+    id: 'front_sensor_island', name: '전면 센서 아일랜드', category: 'display', material: 'IR 투과 유리',
+    detail: '셀피 카메라·근접 센서·조도 센서를 수용하는 전면 개구', size: [mm(20), mm(5.2), mm(0.58)],
+    position: [0, height * 0.423, railZ + mm(0.12)], color: '#080d13', roughness: 0.08, radius: mm(2.6),
+  });
+  addTorusPart(root, parts, mode, {
+    id: 'selfie_camera_bezel', name: '전면 카메라 베젤', category: 'camera', material: '흑색 알루미늄',
+    detail: '전면 카메라 렌즈의 미세 차광 링', radiusMm: 1.65, tubeMm: 0.32,
+    position: [mm(5.1), height * 0.423, railZ + mm(0.46)], color: '#1a242c', roughness: 0.2, metalness: 0.54,
+  });
+  addCylinderPart(root, parts, mode, {
+    id: 'selfie_camera_window', name: '전면 카메라 광학창', category: 'camera', material: 'AR 코팅 유리',
+    detail: '전면 카메라의 반사 방지 보호 윈도', radiusMm: 1.3, depthMm: 0.34,
+    position: [mm(5.1), height * 0.423, railZ + mm(0.54)], color: '#16324a', roughness: 0.06, transmission: 0.44,
+  });
+  addPart(root, parts, mode, {
+    id: 'front_earpiece_grille', name: '전면 수화부 메시', category: 'audio', material: '레이저 천공 스테인리스',
+    detail: '방진 메시와 미세 음향 슬롯을 포함한 수화부 출구', size: [mm(9.5), mm(0.75), mm(0.42)],
+    position: [mm(-2.8), height * 0.423, railZ + mm(0.5)], color: '#3b4248', roughness: 0.46, metalness: 0.62, radius: mm(0.3),
+  });
+
+  const sideX = width * 0.505;
+  const buttons: Array<[string, string, number, number]> = [
+    ['power_button', '측면 전원 버튼', sideX, 31],
+    ['volume_up_button', '볼륨 증가 버튼', -sideX, 35],
+    ['volume_down_button', '볼륨 감소 버튼', -sideX, 20],
+    ['action_button', '기능 버튼', -sideX, 51],
+  ];
+  for (const [id, name, x, y] of buttons) {
+    addPart(root, parts, mode, {
+      id, name, category: 'mechanical', material: '양극산화 알루미늄',
+      detail: '프레임과 독립된 클릭 돔·실링 구조를 가진 외부 조작 버튼', size: [mm(1.35), mm(id === 'action_button' ? 7 : 11), depth * 0.52],
+      position: [x, mm(y), 0], color: frameColor, roughness: 0.25, metalness: 0.82, radius: mm(0.55),
+    });
+  }
+  addPart(root, parts, mode, {
+    id: 'sim_tray', name: 'SIM 트레이', category: 'mechanical', material: '알루미늄/LCP 실링',
+    detail: '이젝트 핀 홀과 방수 가스켓을 갖는 측면 트레이', size: [mm(1.05), mm(19), depth * 0.6],
+    position: [sideX, mm(-22), 0], color: frameColor, roughness: 0.27, metalness: 0.78, radius: mm(0.45),
+  });
+
+  for (let breakIndex = 0; breakIndex < 8; breakIndex += 1) {
+    const right = breakIndex % 2 === 0;
+    addPart(root, parts, mode, {
+      id: `antenna_break_${breakIndex + 1}`, name: `안테나 절연선 ${breakIndex + 1}`, category: 'radio', material: 'RF 투과 폴리머',
+      detail: '금속 프레임의 안테나 구간을 전기적으로 분리하는 사출 절연부', size: [mm(1.5), mm(2.1), depth * 0.96],
+      position: [right ? sideX : -sideX, mm(67 - Math.floor(breakIndex / 2) * 44), 0], color: '#70777b', roughness: 0.38, radius: mm(0.25),
+    });
+  }
+
+  addPart(root, parts, mode, {
+    id: 'usb_c_throat', name: 'USB-C 외부 개구', category: 'enclosure', material: '흑색 LCP/스테인리스',
+    detail: '프레임 하단의 실제 케이블 삽입 개구와 금속 실드', size: [mm(10.2), mm(2.2), mm(3.5)],
+    position: [0, -height * 0.501, 0], color: '#11161a', roughness: 0.32, metalness: 0.45, radius: mm(1.05),
+  });
+  for (let hole = 0; hole < 12; hole += 1) {
+    const leftBank = hole < 6;
+    addPart(root, parts, mode, {
+      id: `bottom_acoustic_port_${hole + 1}`, name: `하단 음향 포트 ${hole + 1}`, category: 'audio', material: '스테인리스 메시',
+      detail: leftBank ? '마이크와 기압 센서용 미세 음향 개구' : '하단 스피커 챔버의 음향 출구',
+      size: [mm(1.25), mm(1.05), mm(1.65)],
+      position: [mm((leftBank ? -18 : 11) + (hole % 6) * 2.8), -height * 0.501, 0],
+      color: '#111417', roughness: 0.55, metalness: 0.36, radius: mm(0.42),
+    });
+  }
+}
+
+function createSmartphoneHarness(): ElectricalHarnessIR {
+  const ports: ElectricalPortIR[] = [];
+  const wires: ElectricalWireIR[] = [];
+  const addPort = (
+    componentId: string,
+    pin: string,
+    signal: ElectricalSignalIR,
+    position: [number, number, number],
+    direction: [number, number, number] = [0, 0, 1],
+  ) => {
+    const id = `${componentId}_${pin}`;
+    ports.push({ id, componentId, pin, signal, position, direction, required: true, maxConnections: 1 });
+    return id;
+  };
+  const addWire = (
+    id: string,
+    name: string,
+    net: string,
+    signal: ElectricalSignalIR,
+    from: string,
+    to: string,
+    color: string,
+    diameter = 0.46,
+    shielded = false,
+  ) => wires.push({ id, name, net, signal, from, to, color, diameter, shielded });
+
+  const cellPositive = addPort('battery', 'cell_pos', 'power', [-13, 36, 2.1], [0, 1, 0]);
+  const cellNegative = addPort('battery', 'cell_neg', 'ground', [13, 36, 2.1], [0, 1, 0]);
+  const bmsCellPositive = addPort('battery_bms', 'cell_pos_in', 'power', [-12, -3.6, 0.6], [0, -1, 0]);
+  const bmsCellNegative = addPort('battery_bms', 'cell_neg_in', 'ground', [12, -3.6, 0.6], [0, -1, 0]);
+  const bmsVbat = addPort('battery_bms', 'vbat_out', 'power', [-12, 3.6, 0.6], [0, 1, 0]);
+  const bmsGround = addPort('battery_bms', 'system_gnd', 'ground', [12, 3.6, 0.6], [0, 1, 0]);
+  const pmicVbat = addPort('pmic', 'vbat_in', 'power', [-3, -3.9, 0.5], [0, -1, 0]);
+  const pmicGround = addPort('pmic', 'system_gnd', 'ground', [3, -3.9, 0.5], [0, -1, 0]);
+  addWire('wire_cell_positive', '배터리 셀 양극', 'VBAT_CELL_POS', 'power', cellPositive, bmsCellPositive, '#df4f3f', 0.72);
+  addWire('wire_cell_negative', '배터리 셀 음극', 'VBAT_CELL_NEG', 'ground', cellNegative, bmsCellNegative, '#20252d', 0.72);
+  addWire('wire_bms_vbat', 'BMS 시스템 전원', 'VBAT_SYS', 'power', bmsVbat, pmicVbat, '#e45442', 0.66);
+  addWire('wire_bms_ground', 'BMS 시스템 접지', 'GND_SYS', 'ground', bmsGround, pmicGround, '#252a31', 0.66);
+
+  const connectorPins = (
+    connector: number,
+    definitions: Array<[string, ElectricalSignalIR]>,
+  ) => definitions.map(([pin, signal], index) => {
+    const spacing = definitions.length > 1 ? 7.2 / (definitions.length - 1) : 0;
+    return addPort(
+      `board_connector_${connector}`,
+      pin,
+      signal,
+      [-3.6 + index * spacing, -1.2, 0.65],
+      [0, -1, 0],
+    );
+  });
+
+  const usbPins: Array<[string, ElectricalSignalIR]> = [['vbus', 'power'], ['gnd', 'ground'], ['dp', 'data'], ['dn', 'data']];
+  const usbPorts = usbPins.map(([pin, signal], index) => addPort('usb_c_port', pin, signal, [-3 + index * 2, 3.8, 1.7], [0, 1, 0]));
+  const boardUsbPorts = connectorPins(1, usbPins);
+  usbPins.forEach(([pin, signal], index) => addWire(
+    `wire_usb_${pin}`,
+    `USB-C ${pin.toUpperCase()} 도체`,
+    `USB_${pin.toUpperCase()}`,
+    signal,
+    usbPorts[index],
+    boardUsbPorts[index],
+    signal === 'power' ? '#e84f3a' : signal === 'ground' ? '#24272c' : index % 2 ? '#66a9df' : '#e6c654',
+    signal === 'data' ? 0.34 : 0.48,
+    signal === 'data',
+  ));
+
+  const cameraSources: Array<[string, string]> = [
+    ['wide_camera_housing', 'wide'],
+    ['ultrawide_camera_housing', 'ultrawide'],
+    ['tele_camera_housing', 'tele'],
+    ['lidar', 'lidar'],
+  ];
+  const cameraBoardGroups = [
+    connectorPins(2, [['wide_data', 'data'], ['wide_vdd', 'power'], ['ultra_data', 'data'], ['ultra_vdd', 'power']]),
+    connectorPins(3, [['tele_data', 'data'], ['tele_vdd', 'power'], ['lidar_data', 'data'], ['lidar_vdd', 'power']]),
+  ].flat();
+  cameraSources.forEach(([componentId, label], index) => {
+    const terminalY = componentId === 'lidar' ? -1.05 : -7.8;
+    const dataPort = addPort(componentId, 'mipi_data', 'data', [-2.1, terminalY, 2.5], [0, -1, 0]);
+    const powerPort = addPort(componentId, 'vdd', 'power', [2.1, terminalY, 2.5], [0, -1, 0]);
+    addWire(`wire_${label}_data`, `${label} 고속 데이터`, `${label.toUpperCase()}_MIPI`, 'data', dataPort, cameraBoardGroups[index * 2], '#67aee3', 0.31, true);
+    addWire(`wire_${label}_power`, `${label} 모듈 전원`, `${label.toUpperCase()}_VDD`, 'power', powerPort, cameraBoardGroups[index * 2 + 1], '#d85c49', 0.36);
+  });
+
+  const auxiliaryDefinitions: Array<{
+    componentId: string;
+    label: string;
+    pins: Array<[string, ElectricalSignalIR, string, string]>;
+    position: [number, number, number];
+    direction: [number, number, number];
+  }> = [
+    { componentId: 'taptic_motor', label: 'TAPTIC', pins: [['ctrl', 'control', 'CTRL', '#c49bea'], ['gnd', 'ground', 'GND', '#252a31']], position: [0, 5.9, 2], direction: [0, 1, 0] },
+    { componentId: 'bottom_speaker', label: 'SPK', pins: [['pos', 'audio', 'POS', '#e7b74d'], ['neg', 'audio', 'NEG', '#a9772f']], position: [0, 7.6, 2.2], direction: [0, 1, 0] },
+    { componentId: 'earpiece', label: 'EAR', pins: [['pos', 'audio', 'POS', '#e7b74d'], ['neg', 'audio', 'NEG', '#a9772f']], position: [0, -2.7, 1.3], direction: [0, -1, 0] },
+    { componentId: 'wireless_coil', label: 'QI', pins: [['pos', 'power', 'POS', '#c06c35'], ['neg', 'power', 'NEG', '#734329']], position: [0, 0.4, 0], direction: [0, 0, 1] },
+    { componentId: 'nfc_antenna', label: 'NFC', pins: [['rf', 'rf', 'RF', '#69c1a8'], ['gnd', 'ground', 'GND', '#252a31']], position: [0, 23.2, 0.2], direction: [0, 1, 0] },
+    { componentId: 'display_oled', label: 'DISPLAY', pins: [['data', 'data', 'DATA', '#67aee3'], ['vdd', 'power', 'VDD', '#d85c49']], position: [0, -76.8, 0.2], direction: [0, -1, 0] },
+  ];
+  const boardAuxPorts = connectorPins(4, auxiliaryDefinitions.flatMap(({ label, pins }) => (
+    pins.map(([pin, signal]) => [`${label.toLowerCase()}_${pin}`, signal] as [string, ElectricalSignalIR])
+  )));
+  let boardAuxIndex = 0;
+  for (const definition of auxiliaryDefinitions) {
+    definition.pins.forEach(([pin, signal, netSuffix, color], pinIndex) => {
+      const localPosition: [number, number, number] = [
+        definition.position[0] + (pinIndex === 0 ? -1.1 : 1.1),
+        definition.position[1],
+        definition.position[2],
+      ];
+      const source = addPort(definition.componentId, pin, signal, localPosition, definition.direction);
+      addWire(
+        `wire_${definition.label.toLowerCase()}_${pin}`,
+        `${definition.label} ${pin.toUpperCase()} 도체`,
+        `${definition.label}_${netSuffix}`,
+        signal,
+        source,
+        boardAuxPorts[boardAuxIndex],
+        color,
+        signal === 'data' || signal === 'rf' ? 0.31 : 0.38,
+        signal === 'data' || signal === 'rf',
+      );
+      boardAuxIndex += 1;
+    });
+  }
+
+  return { ports, wires, endpointToleranceMm: 0.05, portToleranceMm: 0.25 };
+}
+
 export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   if (spec.kind === 'ornate-knife') return buildOrnateKnife(spec, mode);
   const root = new THREE.Group();
@@ -176,13 +495,13 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   const h = mm(spec.heightMm);
   const d = mm(spec.depthMm);
   const e = spec.explode;
-
-  root.userData.assemblyIR = { version: '0.1', kind: 'smartphone', spec: structuredClone(spec) };
+  const rearZ = -d * 0.45 - e * mm(18);
+  const frontZ = d * 0.48 + e * mm(32);
 
   addPart(root, parts, mode, {
     id: 'rear_glass', name: '후면 강화유리', category: 'enclosure', material: '세라믹 강화유리',
     detail: '무선충전 투과 영역과 카메라 개구를 갖는 후면 패널', size: [w * 0.96, h * 0.978, mm(0.72)],
-    position: [0, 0, -d * 0.45 - e * mm(18)], color: spec.glassColor, roughness: 0.16, transmission: 0.08,
+    position: [0, 0, rearZ], color: spec.glassColor, roughness: 0.16, transmission: 0.08,
     radius: mm(spec.cornerRadiusMm * 0.78),
   });
   addPart(root, parts, mode, {
@@ -191,6 +510,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
     position: [0, 0, -e * mm(4)], color: spec.frameColor, roughness: 0.28, metalness: 0.78,
     radius: mm(spec.cornerRadiusMm),
   });
+  createExteriorCameraSystem(root, parts, mode, rearZ);
 
   const boardZ = e * mm(1.5);
   addPart(root, parts, mode, {
@@ -300,14 +620,6 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
     position: [0, mm(-75), e * mm(5)], color: '#a5a8a7', roughness: 0.25, metalness: 0.88, radius: mm(1.5),
   });
 
-  for (let flex = 0; flex < 5; flex += 1) {
-    addPart(root, parts, mode, {
-      id: `flex_${flex + 1}`, name: `연성 회로 케이블 ${flex + 1}`, category: 'logic', material: '폴리이미드/구리',
-      detail: '모듈 간 전원·고속 신호를 전달하는 FPC', size: [mm(4 + flex * 1.4), mm(23 - flex * 2.2), mm(0.18)],
-      position: [mm(-22 + flex * 11), mm(8 - flex * 5), e * mm(12.8 + flex * 0.35)], color: '#bd7432', roughness: 0.48, metalness: 0.24, radius: mm(1),
-    });
-  }
-
   const screwPoints: Array<[number, number]> = [
     [-30, 70], [30, 70], [-31, 28], [31, 28], [-31, -22], [31, -22], [-29, -68], [29, -68], [-12, -72], [12, -72],
   ];
@@ -337,8 +649,19 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addPart(root, parts, mode, {
     id: 'cover_glass', name: '전면 커버 글라스', category: 'display', material: '강화 알루미노실리케이트',
     detail: '올레포빅 코팅과 곡면 가장자리를 갖는 최외곽 보호 유리', size: [w * 0.978, h * 0.985, mm(0.72)],
-    position: [0, 0, d * 0.48 + e * mm(32)], color: '#a8bdd1', roughness: 0.08, transmission: 0.62, radius: mm(spec.cornerRadiusMm * 0.9),
+    position: [0, 0, frontZ], color: '#a8bdd1', roughness: 0.08, transmission: 0.62, radius: mm(spec.cornerRadiusMm * 0.9),
   });
+  createExteriorShellDetails(root, parts, mode, w, h, d, frontZ, spec.frameColor);
+
+  const electrical = createSmartphoneHarness();
+  const connectivity = compileElectricalHarness(root, parts, electrical, mode);
+  root.userData.assemblyIR = {
+    schema: 'morphloom.assembly/0.1',
+    kind: 'smartphone',
+    units: 'mm',
+    spec: structuredClone(spec),
+    electrical: structuredClone(electrical),
+  };
 
   root.rotation.x = -0.04;
   root.rotation.y = -0.08;
@@ -363,6 +686,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
       bounds,
       parts: parts.length,
       categories: new Set(parts.map((part) => part.category)).size,
+      connectivity,
     },
   };
 }

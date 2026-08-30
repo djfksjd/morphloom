@@ -3,6 +3,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import type { ViewMode } from '../types';
 import type { ProductBuild, ProductPartInfo } from './product';
 import type { AssemblyComponentIR, AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
+import { compileElectricalHarness, validateElectricalHarness } from './connectivity';
 
 const mm = (value: number) => value / 1000;
 
@@ -43,6 +44,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     inspect(component.rotation, `${component.id}.rotation`);
     inspect(component.scale, `${component.id}.scale`);
   }
+  if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
 }
 
 function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
@@ -238,13 +240,15 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
 function compileMaterial(component: AssemblyComponentIR, mode: ViewMode): THREE.MeshPhysicalMaterial {
   const source = component.material;
   const transmission = mode === 'beauty' ? (source.transmission ?? 0) : 0;
+  const ghost = mode === 'rig' && (component.category === 'enclosure' || component.category === 'display');
   return new THREE.MeshPhysicalMaterial({
     color: mode === 'clay' ? '#c5c6c3' : source.color,
     roughness: mode === 'clay' ? 0.82 : (source.roughness ?? 0.48),
     metalness: mode === 'clay' ? 0 : (source.metalness ?? 0.05),
     transmission,
-    transparent: transmission > 0,
-    opacity: transmission > 0 ? Math.max(0.28, 1 - transmission * 0.68) : 1,
+    transparent: ghost || transmission > 0,
+    opacity: ghost ? 0.1 : transmission > 0 ? Math.max(0.28, 1 - transmission * 0.68) : 1,
+    depthWrite: !ghost,
     thickness: transmission > 0 ? mm(1.2) : 0,
     clearcoat: mode === 'beauty' ? 0.16 : 0,
     clearcoatRoughness: 0.38,
@@ -279,6 +283,9 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     parts.push(info);
     root.add(mesh);
   }
+  const connectivity = ir.electrical
+    ? compileElectricalHarness(root, parts, ir.electrical, mode)
+    : undefined;
   let vertices = 0;
   let triangles = 0;
   root.traverse((object) => {
@@ -300,6 +307,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       bounds,
       parts: parts.length,
       categories: new Set(parts.map((part) => part.category)).size,
+      connectivity,
     },
   };
 }

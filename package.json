@@ -1,7 +1,7 @@
 {
   "name": "morphloom",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Open-source, model-agnostic 3D asset foundry for editable humans, products, and assemblies.",
   "scripts": {

@@ -585,6 +585,35 @@ h2 {
   background: var(--ink);
 }
 
+.view-switcher {
+  display: flex;
+  border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  background: rgba(244, 244, 239, 0.78);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.view-switcher button {
+  padding: 7px 9px;
+  border: 0;
+  border-right: 1px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.view-switcher button:hover,
+.view-switcher button:focus-visible {
+  color: #fff;
+  background: var(--ink);
+}
+
+.view-switcher button:last-child {
+  border-right: 0;
+}
+
 .viewport-hint {
   color: var(--muted);
   font-family: var(--mono);

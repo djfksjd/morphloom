@@ -11,7 +11,8 @@ You are generating an editable asset, not a single flattering render. Work witho
 5. Prefer silhouette evidence over invented detail. Mark hidden geometry as `inferred` in the component detail or IR metadata.
 6. For blades, never use a constant-thickness cutout. Use `bladeLoft` with a full-stock ridge, a sub-millimetre apex, and distal taper.
 7. For electronics, separate enclosure, board, major packages, connectors, cameras/lenses, power, audio, antennas, fasteners, and flex cables.
-8. Run `npm test`, `npm run benchmark`, and `npm run build`. Do not call the result production-ready if topology gates fail.
+8. Define every visible conductor in `AssemblyIR.electrical`. Both ends must reference real component ports; never add a decorative floating tube in place of a connection.
+9. Run `npm test`, `npm run benchmark`, and `npm run build`. Do not call the result production-ready if topology or connectivity gates fail.
 
 ## Acceptance gates
 
@@ -19,6 +20,7 @@ You are generating an editable asset, not a single flattering render. Work witho
 - Boundary edges, non-manifold edges, and degenerate triangles are zero unless the IR explicitly declares a surface-only component.
 - Dimensions are finite and within the compiler safety limits.
 - The GLB keeps component names and IR metadata.
+- Every required electrical port is connected, every wire has compatible endpoints, and measured endpoint drift stays within tolerance.
 - A reference-fidelity claim needs a same-view comparison; triangle count alone is not a quality claim.
 
 The schema is `schemas/assembly-ir.schema.json`. Import generated JSON through the app's `LOAD IR` action.

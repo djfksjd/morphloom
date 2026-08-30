@@ -1,10 +1,10 @@
-import type { ReferenceEvidence } from '../types';
+import type { AssetKind, ReferenceEvidence } from '../types';
 
 function componentToHex(value: number): string {
   return Math.round(value).toString(16).padStart(2, '0');
 }
 
-export async function analyzeReference(file: File): Promise<{ evidence: ReferenceEvidence; url: string }> {
+export async function analyzeReference(file: File, assetKind: AssetKind = 'human'): Promise<{ evidence: ReferenceEvidence; url: string }> {
   if (!file.type.startsWith('image/')) throw new Error('PNG, JPEG 또는 WebP 이미지를 선택해주세요.');
   if (file.size > 16 * 1024 * 1024) throw new Error('참고 이미지는 16MB 이하여야 합니다.');
 
@@ -37,14 +37,22 @@ export async function analyzeReference(file: File): Promise<{ evidence: Referenc
   blue /= Math.max(weight, 1);
   const brightness = (red * 0.2126 + green * 0.7152 + blue * 0.0722) / 255;
   const ratio = image.width / image.height;
-  const ratioScore = ratio >= 0.45 && ratio <= 0.9 ? 1 : ratio >= 0.3 && ratio <= 1.2 ? 0.7 : 0.38;
+  const ratioScore = assetKind === 'human'
+    ? ratio >= 0.45 && ratio <= 0.9 ? 1 : ratio >= 0.3 && ratio <= 1.2 ? 0.7 : 0.38
+    : ratio >= 0.65 && ratio <= 1.85 ? 1 : ratio >= 0.4 && ratio <= 2.4 ? 0.72 : 0.4;
   const resolutionScore = Math.min(1, Math.min(image.width, image.height) / 1200);
   const portraitSuitability = Math.round((ratioScore * 0.62 + resolutionScore * 0.38) * 100);
   const notes: string[] = [];
-  if (resolutionScore < 0.55) notes.push('더 큰 이미지를 사용하면 얼굴과 재질 검수가 정확해집니다.');
-  if (ratioScore < 0.7) notes.push('전신 정면 또는 3/4 구도의 세로 사진이 가장 좋습니다.');
+  if (resolutionScore < 0.55) notes.push(assetKind === 'human'
+    ? '더 큰 이미지를 사용하면 얼굴과 재질 검수가 정확해집니다.'
+    : '더 큰 이미지를 사용하면 부품 라벨·단자·재질 검수가 정확해집니다.');
+  if (ratioScore < 0.7) notes.push(assetKind === 'human'
+    ? '전신 정면 또는 3/4 구도의 세로 사진이 가장 좋습니다.'
+    : '제품 전체가 잘리지 않은 정면·측면 또는 분해도 이미지를 권장합니다.');
   if (brightness < 0.2 || brightness > 0.86) notes.push('노출이 균일한 사진을 권장합니다.');
-  if (notes.length === 0) notes.push('로컬 분석 기준으로 적합한 참고 이미지입니다.');
+  if (notes.length === 0) notes.push(assetKind === 'human'
+    ? '로컬 분석 기준으로 적합한 인물 참고 이미지입니다.'
+    : '로컬 분석 기준으로 적합한 제품 참고 이미지입니다. 치수와 다중 시점을 함께 주면 정확도가 올라갑니다.');
 
   return {
     url,

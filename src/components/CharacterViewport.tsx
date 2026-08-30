@@ -18,6 +18,7 @@ import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from 
 export interface ViewportHandle {
   exportGlb: () => Promise<void>;
   capturePng: () => Promise<void>;
+  setView: (view: 'iso' | 'top' | 'rear') => void;
 }
 
 interface CharacterViewportProps {
@@ -256,7 +257,7 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
 
       Object.assign(window, {
         __MORPHLOOM__: {
-          version: '0.1.0',
+          version: '0.2.0',
           vertices: build.metrics.vertices,
           triangles: build.metrics.triangles,
           heightMeters: build.metrics.heightMeters,
@@ -268,6 +269,27 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
     }, [assemblyIR, assetKind, mode, onBuilt, pack, productSpec, spec]);
 
     useImperativeHandle(ref, () => ({
+      setView(view) {
+        const runtime = runtimeRef.current;
+        const build = buildRef.current;
+        if (!runtime || !build) return;
+        const bounds = build.metrics.bounds;
+        const center = bounds.getCenter(new THREE.Vector3());
+        const size = bounds.getSize(new THREE.Vector3());
+        const extent = Math.max(size.x, size.y, size.z);
+        const distance = extent * 2.45;
+        runtime.controls.target.copy(center);
+        runtime.camera.up.set(0, 1, 0);
+        if (view === 'top') {
+          runtime.camera.position.copy(center).add(new THREE.Vector3(0, 0, distance));
+        } else if (view === 'rear') {
+          runtime.camera.position.copy(center).add(new THREE.Vector3(0, 0, -distance));
+        } else {
+          runtime.camera.position.copy(center).add(new THREE.Vector3(extent * 1.92, extent * 0.44, extent * 1.24));
+        }
+        runtime.camera.lookAt(center);
+        runtime.controls.update();
+      },
       async exportGlb() {
         const build = buildRef.current;
         if (!build) throw new Error('Character is not ready.');

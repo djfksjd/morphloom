@@ -12,11 +12,34 @@
       "editableSharedIR": true
     },
     "smartphone": {
-      "triangles": 42384,
-      "vertices": 114278,
-      "parts": 90,
-      "cameraParts": 22,
-      "logicParts": 42
+      "triangles": 142480,
+      "vertices": 212988,
+      "parts": 164,
+      "cameraParts": 39,
+      "logicParts": 37,
+      "individualConductors": 28,
+      "connectivity": {
+        "ports": "56/56",
+        "wires": "28/28",
+        "danglingWires": 0,
+        "openRequiredPorts": 0,
+        "portsOnComponents": "56/56",
+        "portOutsideDistanceMaxMm": 0.2193170808759815,
+        "endpointErrorMaxMm": 0.000003735632898865457
+      }
+    },
+    "imageDerivedCoolingAssembly": {
+      "sourceResolution": "2038×1268",
+      "components": 24,
+      "renderedParts": 67,
+      "triangles": 124664,
+      "wires": "43/43",
+      "requiredPorts": "86/86",
+      "danglingWires": 0,
+      "portsOnComponents": "86/86",
+      "portOutsideDistanceMaxMm": 4.470348362317633e-7,
+      "endpointErrorMaxMm": 0.000004998623339826834,
+      "inferredHiddenGeometry": true
     }
   },
   "comparisonBaseline": {

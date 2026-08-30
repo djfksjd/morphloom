@@ -3,6 +3,7 @@ import type { CharacterBuild } from './engine/character';
 import type { ProductBuild, ProductPartInfo } from './engine/product';
 import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
+import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
 import { analyzeReference } from './engine/reference';
 import { loadHumanPack } from './engine/ohpk';
 import { applyProductPrompt, applyPrompt } from './engine/prompt';
@@ -46,9 +47,10 @@ const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSp
   },
 ];
 
-const PRODUCT_PRESETS: Array<{ name: string; caption: string; spec: ProductSpec; prompt: string }> = [
-  { name: 'PHONE / 01', caption: '90부품 분해도', spec: DEFAULT_PRODUCT_SPEC, prompt: '76.7×159.9×8.25mm 실버 스마트폰을 부품별 분해도로' },
+const PRODUCT_PRESETS: Array<{ name: string; caption: string; spec: ProductSpec; prompt: string; assemblyIR?: AssemblyIR }> = [
+  { name: 'PHONE / 01', caption: '164부품·28도체', spec: DEFAULT_PRODUCT_SPEC, prompt: '76.7×159.9×8.25mm 실버 스마트폰을 부품별 분해도로' },
   { name: 'BLADE / 02', caption: '장식 단검', spec: DEFAULT_KNIFE_SPEC, prompt: '장식 단검: 뾰족한 양날 검신, 혈조, 가드, 가죽 손잡이와 보석 폼멜' },
+  { name: 'COOLER / 03', caption: '이미지 파생 배선 검증', spec: DEFAULT_PRODUCT_SPEC, prompt: '첨부 분해도를 근거로 TEC 냉각 장치와 모든 전선을 포트에 연결', assemblyIR: COOLING_ASSEMBLY_IR },
 ];
 
 function AppIcon() {
@@ -102,13 +104,20 @@ export function App() {
     if (referenceUrl) URL.revokeObjectURL(referenceUrl);
   }, [referenceUrl]);
 
+  const productMetrics = buildMetrics && 'parts' in buildMetrics && buildMetrics.bounds ? buildMetrics : undefined;
+  const productConnectivity = productMetrics?.connectivity;
+  const productEnvelope = productMetrics ? {
+    x: Math.round((productMetrics.bounds.max.x - productMetrics.bounds.min.x) * 1000),
+    y: Math.round((productMetrics.bounds.max.y - productMetrics.bounds.min.y) * 1000),
+    z: Math.round((productMetrics.bounds.max.z - productMetrics.bounds.min.z) * 1000),
+  } : undefined;
   const quality = useMemo(() => {
     if (!pack) return undefined;
     return assetKind === 'human'
       ? evaluateQuality(pack, spec, reference)
-      : evaluateProductQuality(productSpec, reference);
-  }, [assetKind, pack, productSpec, reference, spec]);
-  const productPartCount = buildMetrics && 'parts' in buildMetrics ? buildMetrics.parts : undefined;
+      : evaluateProductQuality(productSpec, reference, productMetrics, assemblyIR);
+  }, [assemblyIR, assetKind, pack, productMetrics, productSpec, reference, spec]);
+  const productPartCount = productMetrics?.parts;
 
   const updateSpec = useCallback(<K extends keyof CharacterSpec>(key: K, value: CharacterSpec[K]) => {
     setSpec((current) => ({ ...current, [key]: value }));
@@ -126,16 +135,19 @@ export function App() {
     if (!file) return;
     setReferenceError(undefined);
     try {
-      const analyzed = await analyzeReference(file);
+      const analyzed = await analyzeReference(file, assetKind);
       setReferenceUrl((oldUrl) => {
         if (oldUrl) URL.revokeObjectURL(oldUrl);
         return analyzed.url;
       });
       setReference(analyzed.evidence);
+      setPromptNote(assetKind === 'product'
+        ? '제품 이미지 분석 완료 · Codex/Claude가 AssemblyIR을 작성한 뒤 LOAD IR로 컴파일합니다.'
+        : '인물 이미지 분석 완료 · Codex/Claude가 CharacterIR을 작성한 뒤 로컬 메시로 컴파일합니다.');
     } catch (error) {
       setReferenceError(error instanceof Error ? error.message : '이미지를 분석하지 못했습니다.');
     }
-  }, []);
+  }, [assetKind]);
 
   const runPrompt = () => {
     if (assetKind === 'product') {
@@ -173,7 +185,7 @@ export function App() {
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
           <span className="brand-name">MORPHLOOM</span>
-          <span className="brand-edition">Asset Foundry / α01</span>
+          <span className="brand-edition">Asset Foundry / α02</span>
         </div>
         <div className="topbar-status">
           <span><i className="pulse-dot" /> LOCAL MESH</span>
@@ -266,7 +278,7 @@ export function App() {
                 <span>{preset.name}</span><small>{preset.caption}</small><i>↗</i>
               </button>
             )) : PRODUCT_PRESETS.map((preset) => (
-              <button key={preset.name} onClick={() => { setProductSpec(preset.spec); setAssemblyIR(undefined); setPrompt(preset.prompt); setSelectedPart(undefined); }}>
+              <button key={preset.name} onClick={() => { setProductSpec(preset.spec); setAssemblyIR(preset.assemblyIR); setPrompt(preset.prompt); setSelectedPart(undefined); }}>
                 <span>{preset.name}</span><small>{preset.caption}</small><i>↗</i>
               </button>
             ))}
@@ -293,10 +305,17 @@ export function App() {
                     className={mode === item.id ? 'active' : ''}
                     onClick={() => setMode(item.id)}
                   >
-                    {assetKind === 'product' && item.id === 'rig' ? 'Parts' : item.label}
+                    {assetKind === 'product' && item.id === 'rig' ? 'X-Ray' : item.label}
                   </button>
                 ))}
               </div>
+              {assetKind === 'product' && (
+                <div className="view-switcher" role="group" aria-label="고정 카메라 시점">
+                  <button onClick={() => viewportRef.current?.setView('iso')}>ISO</button>
+                  <button onClick={() => viewportRef.current?.setView('top')}>TOP</button>
+                  <button onClick={() => viewportRef.current?.setView('rear')}>REAR</button>
+                </div>
+              )}
             </div>
             <span className="viewport-hint">DRAG TO ORBIT · SCROLL TO DOLLY</span>
           </div>
@@ -324,7 +343,11 @@ export function App() {
             <strong>{assetKind === 'human' ? `ML—HUMAN_${String(Math.round(spec.muscle * 100)).padStart(2, '0')}` : assemblyIR ? assemblyIR.name.toUpperCase() : productSpec.kind === 'smartphone' ? 'ML—PHONE_ASSEMBLY' : 'ML—ORNATE_BLADE'}</strong>
           </div>
           <div className="measure-readout">
-            <span>{assetKind === 'human' ? 'HEIGHT' : 'ENVELOPE'} <b>{assetKind === 'human' ? `${spec.heightCm} cm` : `${productSpec.widthMm}×${productSpec.heightMm}`}</b></span>
+            <span>{assetKind === 'human' ? 'HEIGHT' : 'ENVELOPE'} <b>{assetKind === 'human'
+              ? `${spec.heightCm} cm`
+              : assemblyIR && productEnvelope
+                ? `${productEnvelope.x}×${productEnvelope.y}×${productEnvelope.z}`
+                : `${productSpec.widthMm}×${productSpec.heightMm}`}</b></span>
             {assetKind === 'product' && <span>PARTS <b>{productPartCount ?? '—'}</b></span>}
             <span>TRIS <b>{buildMetrics?.triangles.toLocaleString() ?? '—'}</b></span>
             <span>ENGINE <b>{assetKind === 'human' ? 'OHPK/JS' : 'IR/JS'}</b></span>
@@ -373,6 +396,21 @@ export function App() {
             <ParameterControl label="어깨" value={spec.shoulderScale} min={0.9} max={1.16} step={0.01} onChange={(value) => updateSpec('shoulderScale', value)} />
             <ParameterControl label="다리 비율" value={spec.legScale} min={0.94} max={1.08} step={0.005} onChange={(value) => updateSpec('legScale', value)} />
             <ParameterControl label="머리 비율" value={spec.headScale} min={0.92} max={1.08} step={0.005} onChange={(value) => updateSpec('headScale', value)} />
+          </div> : assemblyIR ? <div className="parameter-section product-controls">
+            <div className="subheading-row">
+              <span className="eyebrow">assembly ir inspector</span>
+              <span className="local-badge">READ ONLY</span>
+            </div>
+            <div className="assembly-summary">
+              <span><b>{assemblyIR.components.length}</b> source parts</span>
+              <span><b>{productConnectivity?.wires ?? 0}</b> conductors</span>
+              <span><b>{productConnectivity?.requiredPorts ?? 0}</b> ports</span>
+            </div>
+            <div className="selected-part-card imported-ir-card">
+              <b>{assemblyIR.name}</b>
+              <small>{assemblyIR.units.toUpperCase()} · {assemblyIR.schema}</small>
+              <p>{String(assemblyIR.metadata?.evidencePolicy ?? '에이전트가 기록한 근거와 추정값을 보존합니다.')}</p>
+            </div>
           </div> : <div className="parameter-section product-controls">
             <div className="subheading-row">
               <span className="eyebrow">assembly controls</span>
@@ -388,7 +426,7 @@ export function App() {
             </div>
           </div>}
 
-          <div className="material-section">
+          {(assetKind === 'human' || !assemblyIR) && <div className="material-section">
             <span className="eyebrow">surface system</span>
             <div className="color-controls">
               {assetKind === 'human' ? <>
@@ -415,7 +453,7 @@ export function App() {
                 </select>
               </label>
             </div>}
-          </div>
+          </div>}
 
           <div className="export-actions">
             <button

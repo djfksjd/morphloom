@@ -5,7 +5,10 @@ import { buildCharacter, deriveBodyTopology } from '../src/engine/character';
 import { buildOrnateKnife, createOrnateKnifeIR } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
+import { compileAssemblyIR } from '../src/engine/assembly-compiler';
+import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { analyzeTopology } from '../src/engine/topology';
+import { validateElectricalHarness } from '../src/engine/connectivity';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC } from '../src/types';
 
@@ -40,10 +43,53 @@ describe('OHPK human pipeline', () => {
 describe('AssemblyIR product pipeline', () => {
   it('builds a detailed phone as independently named parts', () => {
     const build = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
-    expect(build.metrics.parts).toBeGreaterThanOrEqual(90);
-    expect(build.parts.filter((part) => part.category === 'camera').length).toBeGreaterThanOrEqual(20);
-    expect(build.parts.some((part) => part.id === 'soc')).toBe(true);
-    expect(build.parts.some((part) => part.id === 'smd_24')).toBe(true);
+    expect(build.metrics.parts).toBeGreaterThanOrEqual(160);
+    expect(build.parts.filter((part) => part.category === 'camera').length).toBeGreaterThanOrEqual(35);
+    expect(build.parts.filter((part) => part.category === 'interconnect')).toHaveLength(28);
+    for (const id of [
+      'soc', 'smd_24', 'camera_island', 'wide_outer_bezel', 'wide_sapphire_window',
+      'flash_diffuser', 'selfie_camera_window', 'power_button', 'sim_tray',
+      'usb_c_throat', 'bottom_acoustic_port_12',
+    ]) expect(build.parts.some((part) => part.id === id), id).toBe(true);
+    expect(build.metrics.connectivity).toMatchObject({
+      ports: 56,
+      requiredPorts: 56,
+      connectedRequiredPorts: 56,
+      wires: 28,
+      connectedWires: 28,
+      danglingWires: 0,
+      openRequiredPorts: 0,
+      overloadedPorts: 0,
+      offComponentPorts: 0,
+      errors: [],
+    });
+    expect(build.metrics.connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
+  });
+
+  it('rejects a conductor with a missing physical endpoint', () => {
+    expect(() => validateElectricalHarness({
+      ports: [{
+        id: 'source_vdd', componentId: 'source', pin: 'VDD', signal: 'power',
+        position: [0, 0, 0], required: true,
+      }],
+      wires: [{
+        id: 'floating_wire', name: 'Floating wire', net: 'VBUS', signal: 'power',
+        from: 'source_vdd', to: 'missing_sink', diameter: 0.4, color: '#ff0000',
+      }],
+    }, new Set(['source']))).toThrow(/missing destination port/);
+  });
+
+  it('compiles the supplied exploded electronics image into a connected assembly regression case', () => {
+    const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+    const connectivity = build.metrics.connectivity;
+    expect(COOLING_ASSEMBLY_IR.metadata).toMatchObject({ sourceWidth: 2038, sourceHeight: 1268 });
+    expect(COOLING_ASSEMBLY_IR.components.length).toBeGreaterThanOrEqual(24);
+    expect(connectivity?.wires).toBeGreaterThanOrEqual(35);
+    expect(connectivity?.connectedWires).toBe(connectivity?.wires);
+    expect(connectivity?.connectedRequiredPorts).toBe(connectivity?.requiredPorts);
+    expect(connectivity?.danglingWires).toBe(0);
+    expect(connectivity?.openRequiredPorts).toBe(0);
+    expect(connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
   });
 
   it('compiles the ornate knife from the public generic AssemblyIR', () => {
