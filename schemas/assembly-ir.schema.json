@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/djfksjd/morphloom/schemas/assembly-ir.schema.json",
+  "title": "Morphloom AssemblyIR 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "name", "units", "components"],
+  "properties": {
+    "schema": { "const": "morphloom.assembly/0.1" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "units": { "const": "mm" },
+    "metadata": { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean"] } },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 500,
+      "items": { "$ref": "#/$defs/component" }
+    }
+  },
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "vec2": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color"],
+      "properties": {
+        "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "metalness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "transmission": { "type": "number", "minimum": 0, "maximum": 1 },
+        "emissive": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "category", "materialName", "detail", "geometry", "material"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "category": { "enum": ["enclosure", "display", "logic", "power", "camera", "audio", "radio", "mechanical"] },
+        "materialName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "detail": { "type": "string", "maxLength": 500 },
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotation": { "$ref": "#/$defs/vec3" },
+        "scale": { "$ref": "#/$defs/vec3" },
+        "material": { "$ref": "#/$defs/material" },
+        "geometry": {
+          "oneOf": [
+            { "$ref": "#/$defs/roundedBox" },
+            { "$ref": "#/$defs/cylinder" },
+            { "$ref": "#/$defs/sphere" },
+            { "$ref": "#/$defs/torus" },
+            { "$ref": "#/$defs/extrude" },
+            { "$ref": "#/$defs/lathe" },
+            { "$ref": "#/$defs/tube" },
+            { "$ref": "#/$defs/bladeLoft" }
+          ]
+        }
+      }
+    },
+    "roundedBox": {
+      "type": "object", "required": ["op", "size", "radius"], "additionalProperties": false,
+      "properties": { "op": { "const": "roundedBox" }, "size": { "$ref": "#/$defs/vec3" }, "radius": { "type": "number", "minimum": 0 }, "segments": { "type": "integer", "minimum": 3, "maximum": 512 } }
+    },
+    "cylinder": {
+      "type": "object", "required": ["op", "radiusTop", "radiusBottom", "depth"], "additionalProperties": false,
+      "properties": { "op": { "const": "cylinder" }, "radiusTop": { "type": "number", "minimum": 0 }, "radiusBottom": { "type": "number", "minimum": 0 }, "depth": { "type": "number", "exclusiveMinimum": 0 }, "radialSegments": { "type": "integer", "minimum": 3, "maximum": 512 } }
+    },
+    "sphere": {
+      "type": "object", "required": ["op", "radius"], "additionalProperties": false,
+      "properties": { "op": { "const": "sphere" }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "widthSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "heightSegments": { "type": "integer", "minimum": 3, "maximum": 512 } }
+    },
+    "torus": {
+      "type": "object", "required": ["op", "radius", "tube"], "additionalProperties": false,
+      "properties": { "op": { "const": "torus" }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "tube": { "type": "number", "exclusiveMinimum": 0 }, "radialSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "tubularSegments": { "type": "integer", "minimum": 3, "maximum": 512 } }
+    },
+    "extrude": {
+      "type": "object", "required": ["op", "points", "depth"], "additionalProperties": false,
+      "properties": { "op": { "const": "extrude" }, "points": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } }, "depth": { "type": "number", "exclusiveMinimum": 0 }, "bevelSize": { "type": "number", "minimum": 0 }, "bevelThickness": { "type": "number", "minimum": 0 }, "bevelSegments": { "type": "integer", "minimum": 1, "maximum": 512 } }
+    },
+    "lathe": {
+      "type": "object", "required": ["op", "profile"], "additionalProperties": false,
+      "properties": { "op": { "const": "lathe" }, "profile": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } }, "segments": { "type": "integer", "minimum": 3, "maximum": 512 } }
+    },
+    "tube": {
+      "type": "object", "required": ["op", "points", "radius"], "additionalProperties": false,
+      "properties": { "op": { "const": "tube" }, "points": { "type": "array", "minItems": 2, "maxItems": 4096, "items": { "$ref": "#/$defs/vec3" } }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "tubularSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "radialSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "closed": { "type": "boolean" } }
+    },
+    "bladeLoft": {
+      "type": "object", "required": ["op", "sections", "thickness", "apexThickness"], "additionalProperties": false,
+      "properties": { "op": { "const": "bladeLoft" }, "sections": { "type": "array", "minItems": 3, "maxItems": 512, "items": { "$ref": "#/$defs/vec2" } }, "thickness": { "type": "number", "exclusiveMinimum": 0 }, "apexThickness": { "type": "number", "exclusiveMinimum": 0 }, "grindCurve": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "number", "minimum": 0, "maximum": 1 } } }
+    }
+  }
+}

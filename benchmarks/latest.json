@@ -1,0 +1,31 @@
+{
+  "morphloom": {
+    "ornateKnife": {
+      "triangles": 18930,
+      "vertices": 14323,
+      "parts": 16,
+      "watertightParts": "16/16",
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "variableThicknessBlade": true,
+      "editableSharedIR": true
+    },
+    "smartphone": {
+      "triangles": 42384,
+      "vertices": 114278,
+      "parts": 90,
+      "cameraParts": 22,
+      "logicParts": 42
+    }
+  },
+  "comparisonBaseline": {
+    "name": "img2threejs Talon Knife Doppler Ruby v1.4.4",
+    "triangles": 25000,
+    "parts": 5,
+    "variableThicknessBlade": true,
+    "tracedReferenceSilhouette": true,
+    "projectedReferenceTexture": true,
+    "source": "https://img2threejs.io/#/x/talon-doppler-ruby"
+  }
+}

@@ -1,0 +1,16 @@
+Morphloom
+Copyright 2026 Morphloom contributors
+
+This product includes a TypeScript implementation of the OHPK v1 reader and
+body/helper topology separation behaviour derived from OxiHuman, Copyright
+2026 COOLJAPAN OU (Team KitaSan), licensed under Apache License 2.0.
+Upstream: https://github.com/cool-japan/oxihuman
+
+The bundled oxihuman-core-v1.ohpk asset is derived from MakeHuman data and is
+distributed under CC0-1.0. Its exact upstream commit, hashes, target list, and
+pack provenance are recorded in:
+public/assets/oxihuman-core-v1.provenance.json
+
+The img2threejs Talon Knife exhibit is used only as a documented comparison
+baseline. No showcase texture or model asset is redistributed by Morphloom.
+Baseline: https://img2threejs.io/#/x/talon-doppler-ruby

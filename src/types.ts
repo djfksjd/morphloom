@@ -1,0 +1,136 @@
+export type HairStyle = 'crop' | 'bob' | 'buzz' | 'none';
+export type OutfitStyle = 'second-skin' | 'field' | 'studio';
+export type ViewMode = 'beauty' | 'clay' | 'wireframe' | 'rig';
+export type AssetKind = 'human' | 'product';
+
+export interface ProductSpec {
+  kind: 'smartphone' | 'ornate-knife';
+  widthMm: number;
+  heightMm: number;
+  depthMm: number;
+  cornerRadiusMm: number;
+  explode: number;
+  frameColor: string;
+  glassColor: string;
+  boardColor: string;
+  batteryColor: string;
+}
+
+export interface CharacterSpec {
+  heightCm: number;
+  weight: number;
+  muscle: number;
+  ageYears: number;
+  genderBlend: number;
+  shoulderScale: number;
+  legScale: number;
+  headScale: number;
+  skinTone: string;
+  suitColor: string;
+  accentColor: string;
+  hairColor: string;
+  hairStyle: HairStyle;
+  outfit: OutfitStyle;
+}
+
+export interface MorphTarget {
+  name: string;
+  category: string;
+  scale: number;
+  quantizationError: number;
+  indices: Uint32Array;
+  deltas: Int16Array;
+}
+
+export interface OhpkManifest {
+  name: string;
+  version: string;
+  license: string;
+  provenance?: {
+    upstream_repo?: string;
+    upstream_commit?: string;
+  };
+  age_floor_years?: number;
+  categories?: string[];
+  target_names?: string[];
+}
+
+export interface HumanPack {
+  manifest: OhpkManifest;
+  positions: Float32Array;
+  indices: Uint32Array;
+  uvs?: Float32Array;
+  helperMetadata?: Uint8Array;
+  targets: MorphTarget[];
+  quantizationError: number;
+}
+
+export interface ReferenceEvidence {
+  fileName: string;
+  width: number;
+  height: number;
+  averageColor: string;
+  brightness: number;
+  portraitSuitability: number;
+  notes: string[];
+}
+
+export type QualityStatus = 'pass' | 'warn' | 'blocked';
+
+export interface QualityCheck {
+  id: 'geometry' | 'silhouette' | 'materials' | 'rig' | 'export';
+  label: string;
+  score: number;
+  status: QualityStatus;
+  detail: string;
+}
+
+export interface QualityReport {
+  total: number;
+  checks: QualityCheck[];
+  triangles: number;
+  vertices: number;
+}
+
+export const DEFAULT_SPEC: CharacterSpec = {
+  heightCm: 178,
+  weight: 0.52,
+  muscle: 0.58,
+  ageYears: 29,
+  genderBlend: 0.32,
+  shoulderScale: 1.04,
+  legScale: 1,
+  headScale: 1,
+  skinTone: '#b97858',
+  suitColor: '#20252d',
+  accentColor: '#335cff',
+  hairColor: '#181513',
+  hairStyle: 'crop',
+  outfit: 'field',
+};
+
+export const DEFAULT_PRODUCT_SPEC: ProductSpec = {
+  kind: 'smartphone',
+  widthMm: 76.7,
+  heightMm: 159.9,
+  depthMm: 8.25,
+  cornerRadiusMm: 11.2,
+  explode: 0.72,
+  frameColor: '#b8bab9',
+  glassColor: '#0f141b',
+  boardColor: '#164c3a',
+  batteryColor: '#292c31',
+};
+
+export const DEFAULT_KNIFE_SPEC: ProductSpec = {
+  kind: 'ornate-knife',
+  widthMm: 96,
+  heightMm: 438,
+  depthMm: 22,
+  cornerRadiusMm: 3,
+  explode: 0.18,
+  frameColor: '#aeb5bd',
+  glassColor: '#20437b',
+  boardColor: '#5c241b',
+  batteryColor: '#b79343',
+};
