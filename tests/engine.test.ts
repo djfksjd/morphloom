@@ -9,6 +9,7 @@ import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
+import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC } from '../src/types';
 
@@ -29,6 +30,9 @@ describe('OHPK human pipeline', () => {
     const build = buildCharacter(pack, DEFAULT_SPEC, 'beauty');
     expect(build.metrics.vertices).toBe(topology.boundary);
     expect(build.metrics.heightMeters).toBeCloseTo(1.78, 2);
+    expect(build.body.geometry.groups).toHaveLength(0);
+    expect(build.metrics.surfaces.finishes).toEqual(expect.arrayContaining(['skin', 'hair']));
+    expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(2);
   });
 
   it('turns Korean agent directions into deterministic CharacterIR changes', () => {
@@ -46,6 +50,9 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.metrics.parts).toBeGreaterThanOrEqual(160);
     expect(build.parts.filter((part) => part.category === 'camera').length).toBeGreaterThanOrEqual(35);
     expect(build.parts.filter((part) => part.category === 'interconnect')).toHaveLength(28);
+    expect(build.metrics.surfaces.distinctFinishes).toBeGreaterThanOrEqual(12);
+    expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(200);
+    expect(build.metrics.surfaces.anisotropicMaterials).toBeGreaterThanOrEqual(100);
     for (const id of [
       'soc', 'smd_24', 'camera_island', 'wide_outer_bezel', 'wide_sapphire_window',
       'flash_diffuser', 'selfie_camera_window', 'power_button', 'sim_tray',
@@ -90,6 +97,8 @@ describe('AssemblyIR product pipeline', () => {
     expect(connectivity?.danglingWires).toBe(0);
     expect(connectivity?.openRequiredPorts).toBe(0);
     expect(connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
+    expect(build.metrics.surfaces.distinctFinishes).toBeGreaterThanOrEqual(8);
+    expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(150);
   });
 
   it('compiles the ornate knife from the public generic AssemblyIR', () => {
@@ -100,6 +109,13 @@ describe('AssemblyIR product pipeline', () => {
     const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     expect(build.metrics.parts).toBeGreaterThanOrEqual(15);
     expect(build.metrics.heightMeters).toBeGreaterThan(0.4);
+    expect(build.metrics.surfaces.finishes).toEqual(expect.arrayContaining(['polished-metal', 'leather', 'wood', 'sapphire']));
+  });
+
+  it('rejects unsafe physical material values before allocating a mesh', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    ir.components[0].material.ior = 3.2;
+    expect(() => compileAssemblyIR(ir, 'beauty')).toThrow(/Unsafe ior/);
   });
 
   it('keeps every knife component closed and manifold', () => {
@@ -116,5 +132,32 @@ describe('AssemblyIR product pipeline', () => {
     expect(knife.spec.kind).toBe('ornate-knife');
     const phone = applyProductPrompt('스마트폰 부품 분해도로 바꿔줘', knife.spec);
     expect(phone.spec.kind).toBe('smartphone');
+  });
+});
+
+describe('PBR micro-surface system', () => {
+  it('creates angle-dependent brushed metal with deterministic export metadata', () => {
+    const first = createSurfaceMaterial({ color: '#aeb1b4', surface: 'brushed-metal' }, {
+      mode: 'beauty', category: 'mechanical', materialName: 'brushed aluminium',
+    });
+    const second = createSurfaceMaterial({ color: '#aeb1b4', surface: 'brushed-metal' }, {
+      mode: 'beauty', category: 'mechanical', materialName: 'brushed aluminium',
+    });
+    expect(first.anisotropy).toBeGreaterThan(0.7);
+    expect(first.normalMap).toBeTruthy();
+    expect(first.roughnessMap).toBeTruthy();
+    expect(first.normalMap).toBe(second.normalMap);
+    expect(first.userData.morphloomSurface).toMatchObject({ finish: 'brushed-metal', procedural: true });
+  });
+
+  it('uses optical IOR, transmission, clearcoat, and micro-normal for sapphire', () => {
+    const sapphire = createSurfaceMaterial({ color: '#17344c', surface: 'sapphire' }, {
+      mode: 'beauty', category: 'camera', materialName: 'AR sapphire lens window',
+    });
+    expect(sapphire.ior).toBeCloseTo(1.76, 2);
+    expect(sapphire.transmission).toBeGreaterThan(0.5);
+    expect(sapphire.clearcoat).toBe(1);
+    expect(sapphire.iridescence).toBeGreaterThan(0.2);
+    expect(sapphire.normalMap).toBeTruthy();
   });
 });

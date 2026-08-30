@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-8%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-11%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -19,7 +19,7 @@
 
 Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽어 공통 `CharacterIR` 또는 `AssemblyIR`을 작성하고, 브라우저의 결정론적 Three.js 엔진이 실제 메시를 컴파일하는 방식입니다. 결과물은 단일 렌더가 아니라 **부품 이름·실물 단위·재질·토폴로지·전기 연결 정보를 가진 편집 가능한 GLB**입니다.
 
-> 현재 상태는 `v0.2 alpha`입니다. 제품 시각화, 게임 프리비즈, 후편집 가능한 베이스 메시를 목표로 합니다. 제조 승인 CAD, 인물 스캔, 회로 설계 검증을 대체한다고 주장하지 않습니다.
+> 현재 상태는 `v0.3 alpha`입니다. 제품 시각화, 게임 프리비즈, 후편집 가능한 베이스 메시를 목표로 합니다. 제조 승인 CAD, 인물 스캔, 회로 설계 검증을 대체한다고 주장하지 않습니다.
 
 ## 핵심 결과
 
@@ -28,6 +28,7 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 사실적 인체 베이스 | 14,517 skin vertices · 38개 거시/치수 모프 |
 | 스마트폰 분해도 | 164개 독립 부품 · 142,480 tris · 카메라 부품 39개 |
 | 스마트폰 배선 | 개별 도체 28/28 연결 · 필수 포트 56/56 · 부유 끝 0 |
+| 스마트폰 표면 | PBR finish 13종 · micro-normal 219/220 · 이방성 반사 재질 111개 |
 | 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
 | 첨부 이미지 파생 냉각 장치 | 24개 원본 부품 → 67개 렌더 부품 · 개별 도체 43/43 · 필수 포트 86/86 |
 | 출력 | GLB · PNG · CharacterIR/AssemblyIR JSON |
@@ -103,6 +104,28 @@ npm run build
 
 각 도체는 독립적으로 선택 가능한 폐쇄형 메시입니다. 컴파일러가 전선의 시작·끝 캡 중심과 단자 좌표를 다시 측정하며, 허용 오차를 넘으면 빌드를 실패시킵니다.
 
+## 반사각을 결정하는 PBR 미세 표면
+
+`surface-system.ts`는 단순한 색상 이름 대신 표면의 빛 반응을 컴파일합니다. 현재 19개 finish를 제공합니다.
+
+| Finish | 반사 특성 |
+|---|---|
+| `brushed-metal` | 방향성 가공결 · 높은 anisotropy · 미세 roughness 변화 |
+| `anodized-metal` | 산화 피막 clearcoat · 입자형 micro-normal |
+| `sapphire` | IOR 1.76 · AR iridescence · 얇은 보호창 transmission |
+| `optical-glass` | IOR 1.52 · 저거칠기 · 투과/코팅 반사 |
+| `pcb-soldermask` | 솔더마스크 orange-peel · 낮은 금속성 · 얇은 clearcoat |
+| `machined-copper` | 방향성 절삭결 · 구리 금속 반사 |
+| `rubber`, `leather`, `wood` | 재질별 sheen과 비금속 미세결 |
+| `skin`, `fabric`, `hair` | 피부 미세결, 직물 섬유, 모발 방향성 반사 |
+
+- 64×64 절차적 normal/roughness map은 고정 seed로 생성되어 실행마다 동일합니다.
+- 카메라 베젤·사파이어 창·내부 렌즈·플래시·LiDAR는 자동 이름 추정이 아니라 명시적 표면값을 사용합니다.
+- 표면 메타데이터는 material `userData`에 기록되어 GLB에서 finish와 PBR 수치를 추적할 수 있습니다.
+- `Beauty`는 PBR 표면을, `Clay`는 형상을, `X-Ray`는 내부 구조를 점검하는 용도입니다.
+
+현재 값은 물리적으로 타당한 프리셋이지 실제 시편을 고니오리플렉토미터로 측정한 BRDF 데이터는 아닙니다. 특정 제품과 정확히 맞추려면 교차편광 사진, 다중 조명 촬영 또는 제조사 재질 데이터가 추가로 필요합니다.
+
 ## Codex 하나로 이미지 → 에셋
 
 1. 저장소를 Codex에서 열고 정면·후면·측면 또는 분해 이미지를 첨부합니다.
@@ -162,6 +185,7 @@ Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론
 ```text
 src/engine/assembly-compiler.ts  공통 형상 IR 컴파일러
 src/engine/connectivity.ts       포트·네트·개별 도체와 연결성 검사
+src/engine/surface-system.ts     PBR finish·micro-normal·roughness·이방성 반사
 src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
 src/engine/product.ts            스마트폰 164부품 예제
 src/engine/knife.ts              장식 단검 IR 예제

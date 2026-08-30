@@ -856,6 +856,35 @@ h2 {
   line-height: 1.45;
 }
 
+.surface-audit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 9px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.surface-audit span {
+  padding: 7px 3px;
+  border-right: 1px solid var(--hairline);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.surface-audit span:last-child {
+  border-right: 0;
+}
+
+.surface-audit b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ink);
+  font-size: 8px;
+}
+
 .assembly-summary {
   margin-top: 9px;
   display: grid;

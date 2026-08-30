@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-8%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-11%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -19,7 +19,7 @@
 
 Morphloom uses a multimodal coding agent to translate reference images and requirements into a shared `CharacterIR` or `AssemblyIR`. A deterministic Three.js engine then compiles real geometry locally. The output is not a single flattering render: it is an **editable GLB with named components, real units, materials, topology evidence, and electrical connectivity**.
 
-> Status: `v0.2 alpha`. The target is product visualization, game previs, and editable base meshes. Morphloom does not claim to replace manufacturing CAD, human scanning, or electrical design verification.
+> Status: `v0.3 alpha`. The target is product visualization, game previs, and editable base meshes. Morphloom does not claim to replace manufacturing CAD, human scanning, or electrical design verification.
 
 ## Verified results
 
@@ -28,6 +28,7 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Realistic human base | 14,517 skin vertices · 38 macro/measurement morphs |
 | Smartphone exploded view | 164 independent parts · 142,480 tris · 39 camera parts |
 | Smartphone wiring | 28/28 individual conductors · 56/56 required ports · 0 dangling ends |
+| Smartphone surfaces | 13 PBR finishes · micro-normal on 219/220 materials · 111 anisotropic materials |
 | Ornate knife | 16 parts · 18,930 tris · 16/16 watertight |
 | Image-derived cooling assembly | 24 source components → 67 rendered parts · 43/43 conductors · 86/86 required ports |
 | Output | GLB · PNG · CharacterIR/AssemblyIR JSON |
@@ -103,6 +104,28 @@ Wires are not decorative curves. `AssemblyIR.electrical` preserves:
 
 Each conductor is an independently selectable closed mesh. The compiler measures the start/end cap centers against the referenced terminals and fails the build when tolerance is exceeded.
 
+## PBR micro-surfaces that control reflection angle
+
+`surface-system.ts` compiles light response rather than stopping at a color label. Nineteen finishes are currently available.
+
+| Finish | Reflection behavior |
+|---|---|
+| `brushed-metal` | directional machining grain, high anisotropy, local roughness variation |
+| `anodized-metal` | oxide-film clearcoat and granular micro-normal |
+| `sapphire` | IOR 1.76, AR iridescence, thin-window transmission |
+| `optical-glass` | IOR 1.52, low roughness, transmission and coating response |
+| `pcb-soldermask` | solder-mask orange peel, low metalness, thin clearcoat |
+| `machined-copper` | directional cutting grain and copper metal response |
+| `rubber`, `leather`, `wood` | material-specific sheen and dielectric grain |
+| `skin`, `fabric`, `hair` | skin microtexture, textile fibres, and directional hair highlights |
+
+- Deterministic 64×64 procedural normal/roughness maps use fixed seeds and require no copyrighted texture pack.
+- Camera bezels, sapphire windows, internal lenses, flash, and LiDAR use explicit surface values rather than name inference.
+- Material `userData` retains finish and PBR values for traceability in exported GLB files.
+- Use `Beauty` for material response, `Clay` for form, and `X-Ray` for internal structure.
+
+These are physically plausible presets, not BRDF measurements from a gonioreflectometer. Exact product matching still needs cross-polarized reference photography, multi-light capture, or manufacturer material data.
+
 ## Image to asset with Codex alone
 
 1. Open this repository in Codex and attach front, rear, side, or exploded views.
@@ -162,6 +185,7 @@ Morphloom is stronger in **part granularity, reusable IR, electrical semantics, 
 ```text
 src/engine/assembly-compiler.ts  shared geometry IR compiler
 src/engine/connectivity.ts       ports, nets, conductors, connectivity gates
+src/engine/surface-system.ts     PBR finishes, micro-normal, roughness, anisotropy
 src/engine/cooling-assembly.ts   supplied-image regression asset
 src/engine/product.ts            164-part smartphone example
 src/engine/knife.ts              ornate knife IR example

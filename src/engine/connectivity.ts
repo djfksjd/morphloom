@@ -6,6 +6,7 @@ import type {
   ElectricalWireIR,
 } from './assembly-ir';
 import type { ProductPartInfo } from './product';
+import { createSurfaceMaterial } from './surface-system';
 
 const mm = (value: number) => value / 1000;
 const SAFE_ID = /^[a-zA-Z0-9_-]{1,80}$/;
@@ -266,14 +267,14 @@ export function compileElectricalHarness(
       endCap.distanceTo(points[points.length - 1]),
     ) * 1000;
     report.endpointErrorMaxMm = Math.max(report.endpointErrorMaxMm, endpointErrorMm);
-    const material = new THREE.MeshPhysicalMaterial({
-      color: mode === 'clay' ? '#c5c6c3' : wire.color,
-      roughness: mode === 'clay' ? 0.82 : 0.42,
-      metalness: mode === 'clay' ? 0 : 0.08,
-      clearcoat: mode === 'beauty' ? 0.28 : 0,
-      clearcoatRoughness: 0.34,
-      wireframe: mode === 'wireframe',
-    });
+    const materialName = wire.materialName ?? (wire.shielded ? '차폐 구리/불소수지' : '구리/PFA 절연');
+    const material = createSurfaceMaterial({
+      color: wire.color,
+      surface: 'rubber',
+      roughness: 0.58,
+      microNormalStrength: 0.22,
+      textureScale: [28, 4],
+    }, { mode, category: 'interconnect', materialName });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = wire.id;
     mesh.castShadow = true;
@@ -281,17 +282,15 @@ export function compileElectricalHarness(
       id: wire.id,
       name: wire.name,
       category: 'interconnect',
-      material: wire.materialName ?? (wire.shielded ? '차폐 구리/불소수지' : '구리/PFA 절연'),
+      material: materialName,
+      surface: 'rubber',
       detail: `${wire.net} · ${wire.signal.toUpperCase()} · ${wire.from} → ${wire.to} · 단자 스냅 검증`,
     };
     mesh.userData.part = info;
     mesh.userData.connection = structuredClone(wire);
-    const terminalMaterial = new THREE.MeshPhysicalMaterial({
-      color: mode === 'clay' ? '#c5c6c3' : '#d2b76f',
-      roughness: 0.3,
-      metalness: mode === 'clay' ? 0 : 0.72,
-      wireframe: mode === 'wireframe',
-    });
+    const terminalMaterial = createSurfaceMaterial({
+      color: '#d2b76f', surface: 'polished-metal', roughness: 0.22, metalness: 0.88,
+    }, { mode, category: 'interconnect', materialName: '금도금 구리 단자' });
     for (const [terminalIndex, point] of [points[0], points[points.length - 1]].entries()) {
       const terminal = new THREE.Mesh(
         new THREE.SphereGeometry(mm(wire.diameter) * 0.78, 14, 8),

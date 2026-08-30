@@ -11,5 +11,6 @@ For an image-to-asset request:
 5. For electronics, give every conductor explicit `from` and `to` ports and leave no required port open.
 6. Run the topology, connectivity, benchmark, and production build commands.
 7. Compare from the admitted camera views and report any criterion where the baseline is still stronger.
+8. Use explicit AssemblyIR `material.surface` finishes for hero parts. Author roughness, micro-normal, clearcoat, IOR/transmission, and anisotropy according to the visible material evidence.
 
 No Meshy, Tripo, dedicated 3D generator, or external 3D MCP is required or permitted by the default pipeline.

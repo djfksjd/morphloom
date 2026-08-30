@@ -185,7 +185,7 @@ export function App() {
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
           <span className="brand-name">MORPHLOOM</span>
-          <span className="brand-edition">Asset Foundry / α02</span>
+          <span className="brand-edition">Asset Foundry / α03</span>
         </div>
         <div className="topbar-status">
           <span><i className="pulse-dot" /> LOCAL MESH</span>
@@ -380,8 +380,17 @@ export function App() {
             <div className="selected-part-card">
               <span className="eyebrow">selected component</span>
               <b>{selectedPart.name}</b>
-              <small>{selectedPart.category.toUpperCase()} · {selectedPart.material}</small>
+              <small>{selectedPart.category.toUpperCase()} · {selectedPart.material} · {selectedPart.surface.toUpperCase()}</small>
               <p>{selectedPart.detail}</p>
+            </div>
+          )}
+
+          {assetKind === 'product' && productMetrics && (
+            <div className="surface-audit" aria-label="PBR 표면 검사 결과">
+              <span><b>{productMetrics.surfaces.distinctFinishes}</b> finishes</span>
+              <span><b>{productMetrics.surfaces.microNormalMaterials}</b> micro normal</span>
+              <span><b>{productMetrics.surfaces.anisotropicMaterials}</b> anisotropic</span>
+              <span><b>{productMetrics.surfaces.transmissionMaterials}</b> optical</span>
             </div>
           )}
 

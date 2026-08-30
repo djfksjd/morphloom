@@ -37,9 +37,27 @@
       "required": ["color"],
       "properties": {
         "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "surface": { "enum": ["raw", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hair", "semiconductor"] },
         "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
         "metalness": { "type": "number", "minimum": 0, "maximum": 1 },
         "transmission": { "type": "number", "minimum": 0, "maximum": 1 },
+        "clearcoat": { "type": "number", "minimum": 0, "maximum": 1 },
+        "clearcoatRoughness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ior": { "type": "number", "minimum": 1, "maximum": 2.5 },
+        "iridescence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "anisotropy": { "type": "number", "minimum": 0, "maximum": 1 },
+        "anisotropyRotation": { "type": "number", "minimum": -6.2832, "maximum": 6.2832 },
+        "sheen": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sheenRoughness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "specularIntensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "microNormalStrength": { "type": "number", "minimum": 0, "maximum": 1 },
+        "textureScale": {
+          "type": "array",
+          "prefixItems": [{ "type": "number", "exclusiveMinimum": 0, "maximum": 1024 }, { "type": "number", "exclusiveMinimum": 0, "maximum": 1024 }],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "thicknessMm": { "type": "number", "minimum": 0, "maximum": 100 },
         "emissive": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
       }
     },

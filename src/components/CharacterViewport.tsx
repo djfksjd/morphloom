@@ -51,7 +51,7 @@ function disposeObject(object: THREE.Object3D): void {
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
       for (const value of Object.values(material)) {
-        if (value instanceof THREE.Texture) value.dispose();
+        if (value instanceof THREE.Texture && !value.userData.morphloomShared) value.dispose();
       }
       material.dispose();
     }
@@ -144,6 +144,16 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       scene.add(edge);
       const fill = new THREE.HemisphereLight('#f1f4ff', '#4d4f4c', 1.9);
       scene.add(fill);
+      const reflectionStrip = new THREE.RectAreaLight('#eef4ff', 7.5, 0.24, 2.4);
+      reflectionStrip.name = 'reflection_strip_key';
+      reflectionStrip.position.set(1.5, 1.9, 2.2);
+      reflectionStrip.lookAt(0, 0.8, 0);
+      scene.add(reflectionStrip);
+      const warmStrip = new THREE.RectAreaLight('#ffd8b5', 4.2, 0.18, 1.6);
+      warmStrip.name = 'reflection_strip_edge';
+      warmStrip.position.set(-1.4, 1.1, -1.7);
+      warmStrip.lookAt(0, 0.75, 0);
+      scene.add(warmStrip);
 
       const floor = new THREE.Mesh(
         new THREE.CircleGeometry(2.55, 96),
@@ -257,7 +267,7 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
 
       Object.assign(window, {
         __MORPHLOOM__: {
-          version: '0.2.0',
+          version: '0.3.0',
           vertices: build.metrics.vertices,
           triangles: build.metrics.triangles,
           heightMeters: build.metrics.heightMeters,

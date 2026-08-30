@@ -82,6 +82,7 @@ export function evaluateProductQuality(
   const isKnife = spec.kind === 'ornate-knife';
   const isImportedAssembly = Boolean(assemblyIR);
   const connectivity = metrics?.connectivity;
+  const surfaces = metrics?.surfaces;
   const ratio = spec.heightMm / spec.widthMm;
   const compiledEnvelope = metrics?.bounds ? {
     x: metrics.bounds.max.x - metrics.bounds.min.x,
@@ -96,6 +97,12 @@ export function evaluateProductQuality(
     : Math.round(Math.max(0, isKnife
       ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
       : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
+  const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
+    ? surfaces.microNormalMaterials / surfaces.authoredMaterials
+    : 0;
+  const surfaceScore = surfaces
+    ? Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
+    : 76;
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
@@ -117,14 +124,12 @@ export function evaluateProductQuality(
     },
     {
       id: 'materials',
-      label: isKnife ? '강철·청동·가죽·보석' : '제조 재질 분리',
-      score: 94,
-      status: 'pass',
-      detail: isKnife
-        ? '검신·가드·그립·상감·폼멜의 PBR 재질 분리'
-        : isImportedAssembly
-          ? '냉각판·TEC·구리·핀스택·PCB·센서·절연 도체 재질 분리'
-          : '유리·알루미늄·FR-4·실리콘·구리·광학재질 분리',
+      label: isKnife ? '강철·청동·가죽·보석 표면' : 'PBR 미세 표면',
+      score: surfaceScore,
+      status: status(surfaceScore),
+      detail: surfaces
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 이방성 ${surfaces.anisotropicMaterials}`
+        : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {
       id: 'rig',

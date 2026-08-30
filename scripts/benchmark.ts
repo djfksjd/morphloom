@@ -21,6 +21,7 @@ const result = {
       boundaryEdges: topology.boundaryEdges,
       nonManifoldEdges: topology.nonManifoldEdges,
       degenerateTriangles: topology.degenerateTriangles,
+      surfaces: knife.metrics.surfaces,
       variableThicknessBlade: true,
       editableSharedIR: true,
     },
@@ -31,6 +32,7 @@ const result = {
       cameraParts: phone.parts.filter((part) => part.category === 'camera').length,
       logicParts: phone.parts.filter((part) => part.category === 'logic').length,
       individualConductors: phone.parts.filter((part) => part.category === 'interconnect').length,
+      surfaces: phone.metrics.surfaces,
       connectivity: phone.metrics.connectivity && {
         ports: `${phone.metrics.connectivity.connectedRequiredPorts}/${phone.metrics.connectivity.requiredPorts}`,
         wires: `${phone.metrics.connectivity.connectedWires}/${phone.metrics.connectivity.wires}`,
@@ -46,6 +48,7 @@ const result = {
       components: COOLING_ASSEMBLY_IR.components.length,
       renderedParts: cooling.metrics.parts,
       triangles: cooling.metrics.triangles,
+      surfaces: cooling.metrics.surfaces,
       wires: `${cooling.metrics.connectivity?.connectedWires}/${cooling.metrics.connectivity?.wires}`,
       requiredPorts: `${cooling.metrics.connectivity?.connectedRequiredPorts}/${cooling.metrics.connectivity?.requiredPorts}`,
       danglingWires: cooling.metrics.connectivity?.danglingWires,

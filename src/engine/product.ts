@@ -3,13 +3,15 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import type { ProductSpec, ViewMode } from '../types';
 import { buildOrnateKnife } from './knife';
 import { compileElectricalHarness, type ConnectivityReport } from './connectivity';
-import type { ElectricalHarnessIR, ElectricalPortIR, ElectricalSignalIR, ElectricalWireIR } from './assembly-ir';
+import type { AssemblyMaterialIR, ElectricalHarnessIR, ElectricalPortIR, ElectricalSignalIR, ElectricalWireIR } from './assembly-ir';
+import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 
 export interface ProductPartInfo {
   id: string;
   name: string;
   category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical' | 'interconnect';
   material: string;
+  surface: string;
   detail: string;
 }
 
@@ -21,6 +23,7 @@ export interface ProductMetrics {
   parts: number;
   categories: number;
   connectivity?: ConnectivityReport;
+  surfaces: SurfaceReport;
 }
 
 export interface ProductBuild {
@@ -29,7 +32,7 @@ export interface ProductBuild {
   parts: ProductPartInfo[];
 }
 
-interface PartOptions {
+interface PartOptions extends AssemblyMaterialIR {
   id: string;
   name: string;
   category: ProductPartInfo['category'];
@@ -37,34 +40,13 @@ interface PartOptions {
   detail: string;
   size: [number, number, number];
   position: [number, number, number];
-  color: string;
-  roughness?: number;
-  metalness?: number;
-  transmission?: number;
   radius?: number;
-  emissive?: string;
 }
 
 const mm = (value: number) => value / 1000;
 
 function physicalMaterial(options: PartOptions, mode: ViewMode): THREE.MeshPhysicalMaterial {
-  const clay = mode === 'clay';
-  const ghost = mode === 'rig' && (options.category === 'enclosure' || options.category === 'display');
-  return new THREE.MeshPhysicalMaterial({
-    color: clay ? '#c5c6c3' : options.color,
-    roughness: clay ? 0.82 : (options.roughness ?? 0.5),
-    metalness: clay ? 0 : (options.metalness ?? 0.05),
-    transmission: mode === 'beauty' ? (options.transmission ?? 0) : 0,
-    transparent: ghost || Boolean(options.transmission),
-    opacity: ghost ? 0.1 : options.transmission ? Math.max(0.24, 1 - options.transmission * 0.7) : 1,
-    depthWrite: !ghost,
-    thickness: options.transmission ? mm(1) : 0,
-    clearcoat: mode === 'beauty' ? 0.18 : 0,
-    clearcoatRoughness: 0.4,
-    emissive: options.emissive ?? '#000000',
-    emissiveIntensity: options.emissive ? 0.35 : 0,
-    wireframe: mode === 'wireframe',
-  });
+  return createSurfaceMaterial(options, { mode, category: options.category, materialName: `${options.material} ${options.id}` });
 }
 
 function addPart(root: THREE.Group, parts: ProductPartInfo[], mode: ViewMode, options: PartOptions): THREE.Mesh {
@@ -83,6 +65,7 @@ function addPart(root: THREE.Group, parts: ProductPartInfo[], mode: ViewMode, op
     name: options.name,
     category: options.category,
     material: options.material,
+    surface: inferSurfaceFinish(`${options.material} ${options.id}`, options.surface),
     detail: options.detail,
   } satisfies ProductPartInfo;
   root.add(mesh);
@@ -113,6 +96,7 @@ function addCylinderPart(
     name: options.name,
     category: options.category,
     material: options.material,
+    surface: inferSurfaceFinish(`${options.material} ${options.id}`, options.surface),
     detail: options.detail,
   } satisfies ProductPartInfo;
   root.add(mesh);
@@ -141,6 +125,7 @@ function addTorusPart(
     name: options.name,
     category: options.category,
     material: options.material,
+    surface: inferSurfaceFinish(`${options.material} ${options.id}`, options.surface),
     detail: options.detail,
   } satisfies ProductPartInfo;
   root.add(mesh);
@@ -162,19 +147,20 @@ function createCameraModule(
   addPart(root, parts, mode, {
     id: `${id}_housing`, name: `${label} 카메라 하우징`, category: 'camera', material: '알루미늄/폴리머',
     detail: '렌즈 배럴과 OIS 구동계를 고정하는 독립 모듈', size: [mm(15.4), mm(15.4), mm(4.8)],
-    position: [x, y, z + explode * mm(8)], color: '#24272a', roughness: 0.38, metalness: 0.42, radius: mm(2.2),
+    position: [x, y, z + explode * mm(8)], color: '#24272a', surface: 'anodized-metal', roughness: 0.38, metalness: 0.72, radius: mm(2.2),
   });
   addCylinderPart(root, parts, mode, {
     id: `${id}_sensor`, name: `${label} CMOS 이미지 센서`, category: 'camera', material: '실리콘/세라믹',
     detail: '광신호를 전기신호로 변환하는 적층형 센서 패키지', radiusMm: 4.7, depthMm: 0.65,
-    position: [x, y, z + mm(3.1) + explode * mm(13)], color: '#17455a', roughness: 0.2, metalness: 0.16,
+    position: [x, y, z + mm(3.1) + explode * mm(13)], color: '#17455a', surface: 'semiconductor', roughness: 0.2, metalness: 0.16,
   });
   for (let layer = 0; layer < 5; layer += 1) {
     addCylinderPart(root, parts, mode, {
       id: `${id}_lens_${layer + 1}`, name: `${label} 렌즈 ${layer + 1}`, category: 'camera', material: '광학 유리',
       detail: `다군 렌즈 스택의 ${layer + 1}번째 광학 요소`, radiusMm: 5.4 - layer * 0.28, depthMm: 0.55,
       position: [x, y, z + mm(4.2 + layer * 0.72) + explode * mm(17 + layer * 3.2)],
-      color: layer % 2 ? '#315e73' : '#142936', roughness: 0.08, metalness: 0.05, transmission: 0.38,
+      color: layer % 2 ? '#315e73' : '#142936', surface: 'optical-glass', roughness: 0.045, metalness: 0, transmission: 0.52,
+      ior: 1.56, iridescence: 0.18, thicknessMm: 0.55,
     });
   }
 }
@@ -211,7 +197,7 @@ function createExteriorCameraSystem(
     id: 'camera_island', name: '정밀 카메라 아일랜드', category: 'enclosure', material: 'CNC 알루미늄/무광 유리',
     detail: '세 개의 광학 모듈·플래시·ToF·마이크를 개별 개구로 고정하는 후면 구조물',
     size: [mm(45), mm(55), mm(1.5)], position: [mm(-10.8), mm(52.8), islandZ],
-    color: '#22262b', roughness: 0.24, metalness: 0.58, radius: mm(7.2),
+    color: '#22262b', surface: 'anodized-metal', roughness: 0.24, metalness: 0.78, radius: mm(7.2),
   });
 
   const cameraCovers: Array<[string, string, number, number]> = [
@@ -223,17 +209,17 @@ function createExteriorCameraSystem(
     addTorusPart(root, parts, mode, {
       id: `${id}_outer_bezel`, name: `${label} 티타늄 외부 베젤`, category: 'camera', material: 'PVD 티타늄',
       detail: '충격으로부터 렌즈 윈도를 보호하는 미세 동심 가공 금속 링', radiusMm: 7.25, tubeMm: 1.05,
-      position: [mm(x), mm(y), islandZ - mm(1.05)], color: '#9aa3aa', roughness: 0.22, metalness: 0.94,
+      position: [mm(x), mm(y), islandZ - mm(1.05)], color: '#9aa3aa', surface: 'polished-metal', roughness: 0.16, metalness: 0.96, anisotropy: 0.42,
     });
     addCylinderPart(root, parts, mode, {
       id: `${id}_sapphire_window`, name: `${label} 사파이어 윈도`, category: 'camera', material: '사파이어/AR 코팅',
       detail: '다층 반사 방지 코팅을 적용한 외부 보호 광학창', radiusMm: 6.35, depthMm: 0.72,
-      position: [mm(x), mm(y), islandZ - mm(1.32)], color: '#193448', roughness: 0.055, transmission: 0.5,
+      position: [mm(x), mm(y), islandZ - mm(1.32)], color: '#193448', surface: 'sapphire', roughness: 0.025, transmission: 0.56, ior: 1.76, thicknessMm: 0.72,
     });
     addTorusPart(root, parts, mode, {
       id: `${id}_inner_bezel`, name: `${label} 내부 차광 링`, category: 'camera', material: '흑색 양극산화 알루미늄',
       detail: '고스트와 플레어를 억제하는 내부 배럴 차광 구조', radiusMm: 4.15, tubeMm: 0.62,
-      position: [mm(x), mm(y), islandZ - mm(1.76)], color: '#11171b', roughness: 0.18, metalness: 0.68,
+      position: [mm(x), mm(y), islandZ - mm(1.76)], color: '#11171b', surface: 'anodized-metal', roughness: 0.18, metalness: 0.72,
     });
     addCylinderPart(root, parts, mode, {
       id: `${id}_visible_aperture`, name: `${label} 가시 조리개`, category: 'camera', material: '광학 흑색 코팅',
@@ -250,12 +236,12 @@ function createExteriorCameraSystem(
   addCylinderPart(root, parts, mode, {
     id: 'flash_diffuser', name: '듀얼톤 플래시 확산판', category: 'camera', material: '광학 실리콘/형광체',
     detail: '색온도가 다른 LED를 혼합하는 미세 확산 구조', radiusMm: 3.65, depthMm: 0.58,
-    position: [0, mm(43), islandZ - mm(1.34)], color: '#f0e4b7', roughness: 0.22, transmission: 0.25, emissive: '#c8ae72',
+    position: [0, mm(43), islandZ - mm(1.34)], color: '#f0e4b7', surface: 'optical-glass', roughness: 0.22, transmission: 0.25, emissive: '#c8ae72',
   });
   addCylinderPart(root, parts, mode, {
     id: 'lidar_cover_window', name: 'ToF/LiDAR 외부 윈도', category: 'camera', material: 'IR 투과 유리',
     detail: '근적외선 송수신을 위한 저반사 외부 커버', radiusMm: 3.25, depthMm: 0.5,
-    position: [mm(0), mm(52), islandZ - mm(1.3)], color: '#162a31', roughness: 0.1, transmission: 0.34,
+    position: [mm(0), mm(52), islandZ - mm(1.3)], color: '#162a31', surface: 'optical-glass', roughness: 0.07, transmission: 0.4, ior: 1.52,
   });
   addCylinderPart(root, parts, mode, {
     id: 'rear_microphone_port', name: '후면 마이크 포트', category: 'audio', material: '스테인리스 메시',
@@ -302,7 +288,7 @@ function createExteriorShellDetails(
   addCylinderPart(root, parts, mode, {
     id: 'selfie_camera_window', name: '전면 카메라 광학창', category: 'camera', material: 'AR 코팅 유리',
     detail: '전면 카메라의 반사 방지 보호 윈도', radiusMm: 1.3, depthMm: 0.34,
-    position: [mm(5.1), height * 0.423, railZ + mm(0.54)], color: '#16324a', roughness: 0.06, transmission: 0.44,
+    position: [mm(5.1), height * 0.423, railZ + mm(0.54)], color: '#16324a', surface: 'sapphire', roughness: 0.035, transmission: 0.48, ior: 1.76,
   });
   addPart(root, parts, mode, {
     id: 'front_earpiece_grille', name: '전면 수화부 메시', category: 'audio', material: '레이저 천공 스테인리스',
@@ -501,13 +487,13 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addPart(root, parts, mode, {
     id: 'rear_glass', name: '후면 강화유리', category: 'enclosure', material: '세라믹 강화유리',
     detail: '무선충전 투과 영역과 카메라 개구를 갖는 후면 패널', size: [w * 0.96, h * 0.978, mm(0.72)],
-    position: [0, 0, rearZ], color: spec.glassColor, roughness: 0.16, transmission: 0.08,
+    position: [0, 0, rearZ], color: spec.glassColor, surface: 'ceramic-glass', roughness: 0.16, transmission: 0.08,
     radius: mm(spec.cornerRadiusMm * 0.78),
   });
   addPart(root, parts, mode, {
     id: 'mid_frame', name: '구조용 미드프레임', category: 'enclosure', material: '재생 알루미늄',
     detail: '전체 부품의 기준면과 낙하 충격 경로를 제공하는 CNC 프레임', size: [w, h, mm(2.05)],
-    position: [0, 0, -e * mm(4)], color: spec.frameColor, roughness: 0.28, metalness: 0.78,
+    position: [0, 0, -e * mm(4)], color: spec.frameColor, surface: 'anodized-metal', roughness: 0.28, metalness: 0.84,
     radius: mm(spec.cornerRadiusMm),
   });
   createExteriorCameraSystem(root, parts, mode, rearZ);
@@ -516,7 +502,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addPart(root, parts, mode, {
     id: 'logic_board', name: '다층 메인 로직 보드', category: 'logic', material: 'FR-4/구리 10층',
     detail: 'SoC·메모리·전력관리·RF 회로가 실장되는 고밀도 다층 PCB', size: [mm(59), mm(51), mm(0.82)],
-    position: [0, mm(47), boardZ], color: spec.boardColor, roughness: 0.5, metalness: 0.12, radius: mm(4),
+    position: [0, mm(47), boardZ], color: spec.boardColor, surface: 'pcb-soldermask', roughness: 0.42, metalness: 0.1, radius: mm(4),
   });
   createChip(root, parts, mode, 'soc', '애플리케이션 프로세서 SoC', -12, 52, 13.5, 13.5, boardZ, e);
   createChip(root, parts, mode, 'dram', 'LPDDR 메모리', 4, 52, 10.5, 13, boardZ, e);
@@ -570,7 +556,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addPart(root, parts, mode, {
     id: 'battery', name: '리튬이온 배터리 셀', category: 'power', material: 'Li-ion 파우치/흑연',
     detail: '고밀도 파우치 셀 · 보호회로와 접착 풀탭을 별도 구성', size: [mm(60), mm(72), mm(3.9)],
-    position: [0, mm(-17), e * mm(5.4)], color: spec.batteryColor, roughness: 0.58, metalness: 0.18, radius: mm(4.2),
+    position: [0, mm(-17), e * mm(5.4)], color: spec.batteryColor, surface: 'soft-touch-polymer', roughness: 0.62, metalness: 0.12, radius: mm(4.2),
   });
   addPart(root, parts, mode, {
     id: 'battery_bms', name: '배터리 보호회로 BMS', category: 'power', material: 'FR-4/니켈',
@@ -585,7 +571,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addCylinderPart(root, parts, mode, {
     id: 'lidar', name: 'ToF 깊이 센서', category: 'camera', material: '광학 유리/VCSEL',
     detail: '비행시간 방식 깊이 측정 모듈', radiusMm: 4.2, depthMm: 2.1,
-    position: [mm(0), mm(43), cameraZ + e * mm(3)], color: '#182b33', roughness: 0.14, transmission: 0.22,
+    position: [mm(0), mm(43), cameraZ + e * mm(3)], color: '#182b33', surface: 'semiconductor', roughness: 0.14, transmission: 0.22,
   });
 
   addPart(root, parts, mode, {
@@ -649,7 +635,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   addPart(root, parts, mode, {
     id: 'cover_glass', name: '전면 커버 글라스', category: 'display', material: '강화 알루미노실리케이트',
     detail: '올레포빅 코팅과 곡면 가장자리를 갖는 최외곽 보호 유리', size: [w * 0.978, h * 0.985, mm(0.72)],
-    position: [0, 0, frontZ], color: '#a8bdd1', roughness: 0.08, transmission: 0.62, radius: mm(spec.cornerRadiusMm * 0.9),
+    position: [0, 0, frontZ], color: '#a8bdd1', surface: 'ceramic-glass', roughness: 0.055, transmission: 0.62, ior: 1.52, thicknessMm: 0.72, radius: mm(spec.cornerRadiusMm * 0.9),
   });
   createExteriorShellDetails(root, parts, mode, w, h, d, frontZ, spec.frameColor);
 
@@ -676,6 +662,8 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
     triangles += index ? index.count / 3 : (position?.count ?? 0) / 3;
   });
   const bounds = new THREE.Box3().setFromObject(root);
+  const surfaces = inspectSurfaceSystem(root);
+  root.userData.surfaceSystem = structuredClone(surfaces);
   return {
     root,
     parts,
@@ -687,6 +675,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
       parts: parts.length,
       categories: new Set(parts.map((part) => part.category)).size,
       connectivity,
+      surfaces,
     },
   };
 }

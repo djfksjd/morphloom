@@ -8,6 +8,17 @@
       "boundaryEdges": 0,
       "nonManifoldEdges": 0,
       "degenerateTriangles": 0,
+      "surfaces": {
+        "physicalMaterials": 16,
+        "authoredMaterials": 16,
+        "microNormalMaterials": 16,
+        "roughnessMappedMaterials": 16,
+        "anisotropicMaterials": 13,
+        "clearcoatMaterials": 16,
+        "transmissionMaterials": 1,
+        "distinctFinishes": 6,
+        "finishes": ["anodized-metal", "brushed-metal", "leather", "polished-metal", "sapphire", "wood"]
+      },
       "variableThicknessBlade": true,
       "editableSharedIR": true
     },
@@ -18,6 +29,17 @@
       "cameraParts": 39,
       "logicParts": 37,
       "individualConductors": 28,
+      "surfaces": {
+        "physicalMaterials": 220,
+        "authoredMaterials": 220,
+        "microNormalMaterials": 219,
+        "roughnessMappedMaterials": 219,
+        "anisotropicMaterials": 111,
+        "clearcoatMaterials": 192,
+        "transmissionMaterials": 57,
+        "distinctFinishes": 13,
+        "finishes": ["anodized-metal", "brushed-metal", "ceramic-glass", "machined-copper", "molded-polymer", "optical-glass", "pcb-soldermask", "polished-metal", "raw", "rubber", "sapphire", "semiconductor", "soft-touch-polymer"]
+      },
       "connectivity": {
         "ports": "56/56",
         "wires": "28/28",
@@ -33,6 +55,17 @@
       "components": 24,
       "renderedParts": 67,
       "triangles": 124664,
+      "surfaces": {
+        "physicalMaterials": 153,
+        "authoredMaterials": 153,
+        "microNormalMaterials": 153,
+        "roughnessMappedMaterials": 153,
+        "anisotropicMaterials": 99,
+        "clearcoatMaterials": 105,
+        "transmissionMaterials": 2,
+        "distinctFinishes": 9,
+        "finishes": ["brushed-metal", "ceramic-glass", "machined-copper", "molded-polymer", "optical-glass", "pcb-soldermask", "polished-metal", "rubber", "semiconductor"]
+      },
       "wires": "43/43",
       "requiredPorts": "86/86",
       "danglingWires": 0,

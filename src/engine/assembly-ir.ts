@@ -10,11 +10,46 @@ export type AssemblyGeometryIR =
 
 export interface AssemblyMaterialIR {
   color: string;
+  /** Physically based micro-surface recipe; scalar values below may override it. */
+  surface?: SurfaceFinishIR;
   roughness?: number;
   metalness?: number;
   transmission?: number;
+  clearcoat?: number;
+  clearcoatRoughness?: number;
+  ior?: number;
+  iridescence?: number;
+  anisotropy?: number;
+  anisotropyRotation?: number;
+  sheen?: number;
+  sheenRoughness?: number;
+  specularIntensity?: number;
+  microNormalStrength?: number;
+  textureScale?: [number, number];
+  thicknessMm?: number;
   emissive?: string;
 }
+
+export type SurfaceFinishIR =
+  | 'raw'
+  | 'brushed-metal'
+  | 'bead-blasted-metal'
+  | 'anodized-metal'
+  | 'polished-metal'
+  | 'machined-copper'
+  | 'ceramic-glass'
+  | 'optical-glass'
+  | 'sapphire'
+  | 'pcb-soldermask'
+  | 'molded-polymer'
+  | 'soft-touch-polymer'
+  | 'rubber'
+  | 'leather'
+  | 'wood'
+  | 'skin'
+  | 'fabric'
+  | 'hair'
+  | 'semiconductor';
 
 export interface AssemblyComponentIR {
   id: string;

@@ -4,7 +4,7 @@ import type { AssemblyComponentIR, AssemblyIR } from './assembly-ir';
 import { compileAssemblyIR } from './assembly-compiler';
 import type { ProductBuild } from './product';
 
-const metal = (color: string, roughness = 0.25) => ({ color, roughness, metalness: 0.88 });
+const metal = (color: string, roughness = 0.25, surface: 'brushed-metal' | 'polished-metal' | 'anodized-metal' = 'brushed-metal') => ({ color, roughness, metalness: 0.88, surface });
 
 export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
   const components: AssemblyComponentIR[] = [];
@@ -18,19 +18,19 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
       apexThickness: 0.16,
       grindCurve: [0.025, 0.58, 1, 0.58, 0.025],
     },
-    position: [0, 18, 0], material: metal(spec.frameColor, 0.2),
+    position: [0, 18, 0], material: { ...metal(spec.frameColor, 0.16, 'polished-metal'), anisotropy: 0.58, microNormalStrength: 0.12 },
   });
   components.push({
     id: 'fuller_front', name: '전면 혈조 인레이', category: 'mechanical', materialName: '산화강',
     detail: '칼날 강성을 유지하며 시각적 중심선을 형성하는 장식 혈조',
     geometry: { op: 'extrude', points: [[-3.5, 34], [-5.2, 170], [-3, 270], [0, 292], [3, 270], [5.2, 170], [3.5, 34]], depth: 0.5, bevelSize: 0.35, bevelThickness: 0.25, bevelSegments: 2 },
-    position: [0, 18, 3.15], material: metal('#25344d', 0.32),
+    position: [0, 18, 3.15], material: metal('#25344d', 0.32, 'anodized-metal'),
   });
   components.push({
     id: 'fuller_back', name: '후면 혈조 인레이', category: 'mechanical', materialName: '산화강',
     detail: '전면과 대칭인 후면 장식 혈조',
     geometry: { op: 'extrude', points: [[-3.5, 34], [-5.2, 170], [-3, 270], [0, 292], [3, 270], [5.2, 170], [3.5, 34]], depth: 0.5, bevelSize: 0.35, bevelThickness: 0.25, bevelSegments: 2 },
-    position: [0, 18, -3.15], material: metal('#25344d', 0.32),
+    position: [0, 18, -3.15], material: metal('#25344d', 0.32, 'anodized-metal'),
   });
   components.push({
     id: 'cross_guard', name: '문양 크로스가드', category: 'mechanical', materialName: '청동 합금',
@@ -54,7 +54,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
     id: 'grip_core', name: '풀탱 그립 코어', category: 'mechanical', materialName: '월넛/강철 탱',
     detail: '손잡이 내부 탱과 목재 코어를 표현하는 회전체 메시',
     geometry: { op: 'lathe', profile: [[0, -2], [14, -2], [16, -8], [15, -25], [13, -63], [14, -85], [11, -94], [0, -94]], segments: 64 },
-    material: { color: spec.boardColor, roughness: 0.72, metalness: 0.03 },
+    material: { color: spec.boardColor, surface: 'wood', roughness: 0.72, metalness: 0.03, textureScale: [6, 24] },
   });
   for (const [index, y] of [-5, -28, -52, -76, -92].entries()) {
     components.push({
@@ -75,7 +75,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
     id: 'grip_wrap', name: '나선형 가죽 래핑', category: 'mechanical', materialName: '천연 가죽',
     detail: '연속 곡선 스윕으로 구성된 실제 입체 손잡이 감기',
     geometry: { op: 'tube', points: helixPoints, radius: 1.25, tubularSegments: 176, radialSegments: 9 },
-    material: { color: '#2b1712', roughness: 0.86, metalness: 0 },
+    material: { color: '#2b1712', surface: 'leather', roughness: 0.86, metalness: 0, textureScale: [9, 20] },
   });
   components.push({
     id: 'pommel', name: '장식 폼멜', category: 'mechanical', materialName: '청동 합금',
@@ -87,7 +87,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
     id: 'pommel_gem', name: '폼멜 보석', category: 'mechanical', materialName: '청색 사파이어',
     detail: '반투명 물리 재질의 독립 보석 장식',
     geometry: { op: 'sphere', radius: 7.5, widthSegments: 48, heightSegments: 24 },
-    position: [0, -112, 15], scale: [1, 1.25, 0.42], material: { color: spec.glassColor, roughness: 0.08, metalness: 0.05, transmission: 0.55 },
+    position: [0, -112, 15], scale: [1, 1.25, 0.42], material: { color: spec.glassColor, surface: 'sapphire', roughness: 0.025, metalness: 0, transmission: 0.58, ior: 1.76 },
   });
   const engravingPoints: Array<[number, number, number]> = [
     [-7, 82, 3.35], [-12, 112, 3.35], [-5, 143, 3.35], [-10, 175, 3.35], [-3, 208, 3.35],
@@ -96,7 +96,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
     id: 'blade_engraving', name: '검신 룬 각인', category: 'mechanical', materialName: '금 상감',
     detail: '칼날 표면을 따라 흐르는 곡선 스윕 금속 상감 장식',
     geometry: { op: 'tube', points: engravingPoints, radius: 0.72, tubularSegments: 72, radialSegments: 8 },
-    material: metal('#d3ad52', 0.2),
+    material: metal('#d3ad52', 0.14, 'polished-metal'),
   });
   return {
     schema: 'morphloom.assembly/0.1',

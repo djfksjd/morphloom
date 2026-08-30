@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { CharacterSpec, HumanPack, ViewMode } from '../types';
 import { morphPositions } from './morph';
+import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 
 export interface CharacterMetrics {
   vertices: number;
@@ -10,6 +11,7 @@ export interface CharacterMetrics {
   headCenter: THREE.Vector3;
   headRadius: number;
   frontZ: number;
+  surfaces: SurfaceReport;
 }
 
 export interface CharacterBuild {
@@ -182,39 +184,19 @@ function buildVertexColors(positions: Float32Array, spec: CharacterSpec): Float3
   return colors;
 }
 
-function createHair(metrics: CharacterMetrics, spec: CharacterSpec): THREE.Group {
+function createHair(metrics: Pick<CharacterMetrics, 'headRadius' | 'headCenter'>, spec: CharacterSpec): THREE.Group {
   const group = new THREE.Group();
   group.name = 'hair';
   if (spec.hairStyle === 'none') return group;
 
   const radius = metrics.headRadius * (spec.hairStyle === 'bob' ? 1.08 : 1.015);
-  const textureSize = 48;
-  const textureData = new Uint8Array(textureSize * textureSize * 4);
-  for (let y = 0; y < textureSize; y += 1) {
-    for (let x = 0; x < textureSize; x += 1) {
-      const index = (y * textureSize + x) * 4;
-      const strand = 72 + ((x * 17 + y * 31 + (x * y) % 29) % 56);
-      textureData[index] = strand;
-      textureData[index + 1] = strand;
-      textureData[index + 2] = strand;
-      textureData[index + 3] = 255;
-    }
-  }
-  const hairGrain = new THREE.DataTexture(textureData, textureSize, textureSize, THREE.RGBAFormat);
-  hairGrain.wrapS = THREE.RepeatWrapping;
-  hairGrain.wrapT = THREE.RepeatWrapping;
-  hairGrain.repeat.set(7, 4);
-  hairGrain.needsUpdate = true;
-  const material = new THREE.MeshPhysicalMaterial({
+  const material = createSurfaceMaterial({
     color: spec.hairColor,
-    roughness: 0.7,
-    sheen: 0.34,
-    sheenColor: new THREE.Color(spec.hairColor).offsetHSL(0, 0, 0.12),
-    sheenRoughness: 0.86,
-    bumpMap: hairGrain,
-    bumpScale: 0.0035,
-    side: THREE.DoubleSide,
-  });
+    surface: 'hair',
+    roughness: 0.66,
+    textureScale: [24, 5],
+  }, { mode: 'beauty', category: 'human', materialName: '머리카락 섬유' });
+  material.side = THREE.DoubleSide;
 
   const thetaLength = spec.hairStyle === 'bob' ? Math.PI * 0.62 : Math.PI * 0.49;
   const cap = new THREE.Mesh(
@@ -260,7 +242,7 @@ function cylinderBetween(a: THREE.Vector3, b: THREE.Vector3, radius: number, mat
   return mesh;
 }
 
-function createRig(metrics: CharacterMetrics): THREE.Group {
+function createRig(metrics: Pick<CharacterMetrics, 'heightMeters'>): THREE.Group {
   const rig = new THREE.Group();
   rig.name = 'humanoid_rig_preview';
   const h = metrics.heightMeters;
@@ -334,7 +316,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   const headSize = headBounds.getSize(new THREE.Vector3());
   const headCenter = headBounds.getCenter(new THREE.Vector3());
   const headRadius = Math.max(headSize.x * 0.5, headSize.z * 0.53);
-  const metrics: CharacterMetrics = {
+  const metrics = {
     vertices: positions.length / 3,
     triangles: topology.indices.length / 3,
     heightMeters: size.y,
@@ -342,21 +324,13 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     headCenter,
     headRadius,
     frontZ: bounds.max.z,
-  };
+  } as Omit<CharacterMetrics, 'surfaces'>;
 
-  const material = new THREE.MeshPhysicalMaterial({
-    color: mode === 'clay' ? '#c5c6c3' : '#ffffff',
-    vertexColors: mode !== 'clay',
-    roughness: mode === 'clay' ? 0.86 : 0.58,
-    metalness: 0.02,
-    clearcoat: mode === 'beauty' ? 0.08 : 0,
-    clearcoatRoughness: 0.7,
-    sheen: mode === 'beauty' ? 0.16 : 0,
-    sheenColor: new THREE.Color(spec.skinTone),
-    sheenRoughness: 0.76,
-    wireframe: mode === 'wireframe',
-  });
-  const body = new THREE.Mesh(geometry, material);
+  const bodyMaterial = createSurfaceMaterial({
+    color: '#ffffff', surface: 'skin', roughness: 0.56, sheen: 0.17, microNormalStrength: 0.13,
+  }, { mode, category: 'human', materialName: '연속형 피부/의상 베이스' });
+  bodyMaterial.vertexColors = mode !== 'clay';
+  const body = new THREE.Mesh(geometry, bodyMaterial);
   body.name = 'morphloom_human_body';
   body.castShadow = true;
   body.receiveShadow = true;
@@ -370,5 +344,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   rig.visible = mode === 'rig';
   root.add(rig);
 
-  return { root, body, rig, metrics };
+  const completeMetrics: CharacterMetrics = { ...metrics, surfaces: inspectSurfaceSystem(root) };
+  root.userData.surfaceSystem = completeMetrics.surfaces;
+  return { root, body, rig, metrics: completeMetrics };
 }

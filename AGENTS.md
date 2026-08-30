@@ -13,6 +13,7 @@ You are generating an editable asset, not a single flattering render. Work witho
 7. For electronics, separate enclosure, board, major packages, connectors, cameras/lenses, power, audio, antennas, fasteners, and flex cables.
 8. Define every visible conductor in `AssemblyIR.electrical`. Both ends must reference real component ports; never add a decorative floating tube in place of a connection.
 9. Run `npm test`, `npm run benchmark`, and `npm run build`. Do not call the result production-ready if topology or connectivity gates fail.
+10. Assign an explicit `material.surface` finish to visually important parts. Use name inference only for secondary parts, and distinguish optical IOR/transmission, clearcoat, anisotropy, and micro-normal where they change reflections.
 
 ## Acceptance gates
 
@@ -22,5 +23,6 @@ You are generating an editable asset, not a single flattering render. Work witho
 - The GLB keeps component names and IR metadata.
 - Every required electrical port is connected, every wire has compatible endpoints, and measured endpoint drift stays within tolerance.
 - A reference-fidelity claim needs a same-view comparison; triangle count alone is not a quality claim.
+- Every hero material must have a plausible roughness response. Directionally machined metal needs anisotropy; optical windows need explicit IOR; texture scale or hidden surface properties must be marked inferred when they were not measured.
 
 The schema is `schemas/assembly-ir.schema.json`. Import generated JSON through the app's `LOAD IR` action.

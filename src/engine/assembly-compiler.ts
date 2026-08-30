@@ -4,6 +4,7 @@ import type { ViewMode } from '../types';
 import type { ProductBuild, ProductPartInfo } from './product';
 import type { AssemblyComponentIR, AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
 import { compileElectricalHarness, validateElectricalHarness } from './connectivity';
+import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from './surface-system';
 
 const mm = (value: number) => value / 1000;
 
@@ -18,6 +19,12 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   }
   const ids = new Set<string>();
   const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'bladeLoft']);
+  const allowedSurfaces = new Set([
+    'raw', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
+    'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
+    'molded-polymer', 'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin',
+    'fabric', 'hair', 'semiconductor',
+  ]);
   const inspect = (node: unknown, key = ''): void => {
     if (typeof node === 'number') {
       if (!Number.isFinite(node) || Math.abs(node) > 1_000_000) throw new Error(`Unsafe numeric value at ${key}.`);
@@ -43,6 +50,23 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     inspect(component.position, `${component.id}.position`);
     inspect(component.rotation, `${component.id}.rotation`);
     inspect(component.scale, `${component.id}.scale`);
+    inspect(component.material, `${component.id}.material`);
+    if (component.material.surface && !allowedSurfaces.has(component.material.surface)) {
+      throw new Error(`Unsupported surface finish in ${component.id}.`);
+    }
+    for (const key of ['roughness', 'metalness', 'transmission', 'clearcoat', 'clearcoatRoughness', 'iridescence', 'anisotropy', 'sheen', 'sheenRoughness', 'specularIntensity', 'microNormalStrength'] as const) {
+      const value = component.material[key];
+      if (value !== undefined && (value < 0 || value > 1)) throw new Error(`Unsafe ${key} in ${component.id}.`);
+    }
+    if (component.material.ior !== undefined && (component.material.ior < 1 || component.material.ior > 2.5)) {
+      throw new Error(`Unsafe ior in ${component.id}.`);
+    }
+    if (component.material.textureScale?.some((value) => value <= 0 || value > 1024)) {
+      throw new Error(`Unsafe textureScale in ${component.id}.`);
+    }
+    if (component.material.thicknessMm !== undefined && (component.material.thicknessMm < 0 || component.material.thicknessMm > 100)) {
+      throw new Error(`Unsafe thicknessMm in ${component.id}.`);
+    }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
 }
@@ -237,25 +261,24 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
   }
 }
 
-function compileMaterial(component: AssemblyComponentIR, mode: ViewMode): THREE.MeshPhysicalMaterial {
-  const source = component.material;
-  const transmission = mode === 'beauty' ? (source.transmission ?? 0) : 0;
-  const ghost = mode === 'rig' && (component.category === 'enclosure' || component.category === 'display');
-  return new THREE.MeshPhysicalMaterial({
-    color: mode === 'clay' ? '#c5c6c3' : source.color,
-    roughness: mode === 'clay' ? 0.82 : (source.roughness ?? 0.48),
-    metalness: mode === 'clay' ? 0 : (source.metalness ?? 0.05),
-    transmission,
-    transparent: ghost || transmission > 0,
-    opacity: ghost ? 0.1 : transmission > 0 ? Math.max(0.28, 1 - transmission * 0.68) : 1,
-    depthWrite: !ghost,
-    thickness: transmission > 0 ? mm(1.2) : 0,
-    clearcoat: mode === 'beauty' ? 0.16 : 0,
-    clearcoatRoughness: 0.38,
-    emissive: source.emissive ?? '#000000',
-    emissiveIntensity: source.emissive ? 0.35 : 0,
-    wireframe: mode === 'wireframe',
-  });
+function ensurePrimaryUv(geometry: THREE.BufferGeometry): void {
+  if (geometry.hasAttribute('uv')) return;
+  const position = geometry.getAttribute('position');
+  geometry.computeBoundingBox();
+  const bounds = geometry.boundingBox;
+  if (!position || !bounds) return;
+  const size = bounds.getSize(new THREE.Vector3());
+  const axes: Array<{ axis: 'x' | 'y' | 'z'; size: number }> = ([
+    { axis: 'x', size: size.x }, { axis: 'y', size: size.y }, { axis: 'z', size: size.z },
+  ] as Array<{ axis: 'x' | 'y' | 'z'; size: number }>).sort((a, b) => b.size - a.size);
+  const [uAxis, vAxis] = axes;
+  const uv = new Float32Array(position.count * 2);
+  for (let index = 0; index < position.count; index += 1) {
+    const point = new THREE.Vector3().fromBufferAttribute(position, index);
+    uv[index * 2] = uAxis.size > 1e-9 ? (point[uAxis.axis] - bounds.min[uAxis.axis]) / uAxis.size : 0;
+    uv[index * 2 + 1] = vAxis.size > 1e-9 ? (point[vAxis.axis] - bounds.min[vAxis.axis]) / vAxis.size : 0;
+  }
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
 
 export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild {
@@ -265,7 +288,13 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   root.userData.assemblyIR = structuredClone(ir);
   const parts: ProductPartInfo[] = [];
   for (const component of ir.components) {
-    const mesh = new THREE.Mesh(compileGeometry(component.geometry), compileMaterial(component, mode));
+    const geometry = compileGeometry(component.geometry);
+    ensurePrimaryUv(geometry);
+    const mesh = new THREE.Mesh(geometry, createSurfaceMaterial(component.material, {
+      mode,
+      category: component.category,
+      materialName: `${component.materialName} ${component.id}`,
+    }));
     mesh.name = component.id;
     if (component.position) mesh.position.set(...component.position.map(mm) as [number, number, number]);
     if (component.rotation) mesh.rotation.set(...component.rotation);
@@ -277,6 +306,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       name: component.name,
       category: component.category,
       material: component.materialName,
+      surface: inferSurfaceFinish(`${component.materialName} ${component.id}`, component.material.surface),
       detail: component.detail,
     };
     mesh.userData.part = info;
@@ -297,6 +327,8 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   });
   const bounds = new THREE.Box3().setFromObject(root);
   const heightMeters = bounds.getSize(new THREE.Vector3()).y;
+  const surfaces = inspectSurfaceSystem(root);
+  root.userData.surfaceSystem = structuredClone(surfaces);
   return {
     root,
     parts,
@@ -308,6 +340,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       parts: parts.length,
       categories: new Set(parts.map((part) => part.category)).size,
       connectivity,
+      surfaces,
     },
   };
 }
