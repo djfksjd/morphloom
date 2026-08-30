@@ -26,11 +26,11 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 에셋 | 검증된 결과 |
 |---|---:|
 | 사실적 인체 베이스 | 14,517 skin vertices · 38개 거시/치수 모프 |
-| 스마트폰 분해도 | 164개 독립 부품 · 142,480 tris · 카메라 부품 39개 |
+| 스마트폰 분해도 | 164개 독립 부품 · 142,480 tris · 카메라 부품 39개 · watertight 220/220 메시 |
 | 스마트폰 배선 | 개별 도체 28/28 연결 · 필수 포트 56/56 · 부유 끝 0 |
 | 스마트폰 표면 | PBR finish 13종 · micro-normal 219/220 · 이방성 반사 재질 111개 |
 | 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
-| 첨부 이미지 파생 냉각 장치 | 24개 원본 부품 → 67개 렌더 부품 · 개별 도체 43/43 · 필수 포트 86/86 |
+| 첨부 이미지 파생 냉각 장치 | 24개 원본 부품 → 67개 렌더 부품 · watertight 153/153 메시 · 개별 도체 43/43 · 필수 포트 86/86 |
 | 출력 | GLB · PNG · CharacterIR/AssemblyIR JSON |
 
 ## 사진을 넣으면 바로 3D가 만들어지나요?
@@ -47,7 +47,9 @@ CharacterIR / AssemblyIR
 GLB + PNG + IR
 ```
 
-- 웹 화면에 이미지를 드롭하면 파일은 로컬에서 해상도·구도·노출을 검사합니다.
+- 웹 화면에는 최대 24장·총 96MB의 사진을 함께 넣을 수 있습니다. 파일은 로컬에서 해상도·구도·노출을 검사합니다.
+- 정면·후면·좌·우·상·하단 촬영 현황을 표시하고, 분해도·부품·재질·치수 사진을 역할별로 분류합니다.
+- 같은 부품의 근접 사진에는 ASCII `component_id`를 지정합니다. `SAVE EVIDENCE`는 파일명과 역할을 `morphloom.evidence/0.1` JSON으로 내보내며 이미지 원본이나 로컬 URL은 포함하지 않습니다.
 - 브라우저 자체가 몰래 외부 LLM을 호출하지는 않습니다. 이미지 이해와 IR 작성은 저장소를 연 **Codex 또는 Claude**가 담당합니다.
 - 만들어진 IR을 `LOAD IR`로 열면 실제 메시가 컴파일되고, 실패한 토폴로지·빈 포트·떠 있는 전선은 품질 게이트에서 차단됩니다.
 - OpenAI의 공식 API도 텍스트·이미지 입력과 JSON 출력을 지원하지만, Morphloom 기본 경로는 별도 API 키 없이 현재 코딩 에이전트를 사용합니다. [OpenAI 공식 문서](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
@@ -140,6 +142,8 @@ AGENTS.md를 따르고 첨부 이미지를 AssemblyIR로 만들어줘.
 
 4. 생성된 IR을 화면의 `LOAD IR`로 열어 부품 선택·분해·회전 후 GLB를 내보냅니다.
 
+여러 사진을 사용하는 제품은 먼저 웹 화면에서 6면·분해도·부품 사진을 추가하고 역할과 `component_id`를 지정한 뒤 `SAVE EVIDENCE`를 실행합니다. 생성된 `morphloom-evidence.json`과 원본 사진들을 같은 파일명으로 에이전트에 전달하면 반복 촬영된 부품이 하나의 AssemblyIR 노드로 병합됩니다. 누락 시점, ID 없는 부품 사진, 낮은 입력 품질은 `EVIDENCE` 단계를 `BLOCKED`로 유지합니다.
+
 ## Claude 하나로 사용
 
 `CLAUDE.md`가 같은 공급자 중립 계약을 제공합니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.1`을 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
@@ -173,6 +177,12 @@ AGENTS.md를 따르고 첨부 이미지를 AssemblyIR로 만들어줘.
 
 Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론, 자동 토폴로지 증거**에서 더 강합니다. Talon 데모는 **특정 사진과의 실루엣·표면 일치**에서 더 강합니다. 모든 시각 품질에서 이미 우월하다고 과장하지 않습니다.
 
+## 스파이더맨 단일 사진 정직성 테스트
+
+[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 인물 모드에 입력했습니다. 입력 상태는 `FIT 92`였지만 정면 1개만 있어 증거 완성도는 `43/100`, 필수 시점은 `1/4`로 차단됐습니다. 총 빌드 점수 `78/100`은 일반 인체 베이스의 토폴로지·재질·내보내기 가능 여부이지, 스파이더맨 유사도 점수가 아닙니다.
+
+**결론: 현재 출력은 스파이더맨 에셋으로 불합격입니다.** 일반 인체 베이스만 생성되며 마스크 눈 렌즈, 거미줄 슈트 무늬, 참조 체형, 포즈와 재질 투영은 재구성되지 않습니다. 최소 정면·후면·좌·우 4시점, 마스크·눈·슈트 표면 근접 사진, 평면 무늬 자료가 필요합니다.
+
 ## 현재 한계
 
 - 한 장의 사진만으로 숨은 부품, 정확한 두께, 공차, 핀 배열을 측정할 수 없습니다.
@@ -186,6 +196,7 @@ Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론
 src/engine/assembly-compiler.ts  공통 형상 IR 컴파일러
 src/engine/connectivity.ts       포트·네트·개별 도체와 연결성 검사
 src/engine/surface-system.ts     PBR finish·micro-normal·roughness·이방성 반사
+src/engine/reference-set.ts      다중 시점·부품 사진 증거 매니페스트
 src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
 src/engine/product.ts            스마트폰 164부품 예제
 src/engine/knife.ts              장식 단검 IR 예제

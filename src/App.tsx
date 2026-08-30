@@ -5,6 +5,19 @@ import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
 import { analyzeReference } from './engine/reference';
+import {
+  buildReferenceManifest,
+  evaluateReferenceSet,
+  inferReferenceRole,
+  MAX_REFERENCE_FILES,
+  MAX_REFERENCE_TOTAL_BYTES,
+  normalizeComponentId,
+  REFERENCE_ROLE_LABELS,
+  REFERENCE_ROLES,
+  referenceIdentity,
+  type ReferenceRole,
+  type ReferenceView,
+} from './engine/reference-set';
 import { loadHumanPack } from './engine/ohpk';
 import { applyProductPrompt, applyPrompt } from './engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
@@ -65,6 +78,16 @@ function StatusMark({ status }: { status: 'pass' | 'warn' | 'blocked' }) {
   return <span className={`status-mark status-${status}`} aria-label={status} />;
 }
 
+function downloadJson(payload: unknown, fileName: string): void {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = fileName;
+  anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export function App() {
   const [pack, setPack] = useState<HumanPack>();
   const [packError, setPackError] = useState<string>();
@@ -75,16 +98,20 @@ export function App() {
   const [mode, setMode] = useState<ViewMode>('beauty');
   const [prompt, setPrompt] = useState('76.7×159.9×8.25mm 실버 스마트폰을 부품별 분해도로');
   const [promptNote, setPromptNote] = useState('공통 IR은 로컬 엔진에서만 실행됩니다.');
-  const [referenceUrl, setReferenceUrl] = useState<string>();
-  const [reference, setReference] = useState<ReferenceEvidence>();
+  const [referenceViews, setReferenceViews] = useState<ReferenceView[]>([]);
+  const [activeReferenceId, setActiveReferenceId] = useState<string>();
   const [referenceError, setReferenceError] = useState<string>();
   const [isDragging, setIsDragging] = useState(false);
+  const [isProcessingReferences, setIsProcessingReferences] = useState(false);
   const [buildMetrics, setBuildMetrics] = useState<CharacterBuild['metrics'] | ProductBuild['metrics']>();
   const [selectedPart, setSelectedPart] = useState<ProductPartInfo>();
   const [busyAction, setBusyAction] = useState<string>();
   const viewportRef = useRef<ViewportHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
+  const referenceViewsRef = useRef<ReferenceView[]>([]);
+  const processingReferencesRef = useRef(false);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     let active = true;
@@ -100,9 +127,38 @@ export function App() {
     };
   }, []);
 
-  useEffect(() => () => {
-    if (referenceUrl) URL.revokeObjectURL(referenceUrl);
-  }, [referenceUrl]);
+  useEffect(() => {
+    referenceViewsRef.current = referenceViews;
+  }, [referenceViews]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      referenceViewsRef.current.forEach((view) => URL.revokeObjectURL(view.url));
+    };
+  }, []);
+
+  const activeReferenceViews = useMemo(
+    () => referenceViews.filter((view) => view.assetKind === assetKind),
+    [assetKind, referenceViews],
+  );
+  const activeReference = activeReferenceViews.find((view) => view.id === activeReferenceId) ?? activeReferenceViews[0];
+  const referenceCoverage = useMemo(
+    () => evaluateReferenceSet(activeReferenceViews, assetKind),
+    [activeReferenceViews, assetKind],
+  );
+  const reference = useMemo<ReferenceEvidence | undefined>(() => {
+    if (!activeReference) return undefined;
+    return {
+      ...activeReference.evidence,
+      fileName: activeReferenceViews.length > 1 ? `${activeReferenceViews.length}개 증거 이미지` : activeReference.fileName,
+      portraitSuitability: referenceCoverage.score,
+      notes: referenceCoverage.warnings.length > 0
+        ? referenceCoverage.warnings
+        : ['다중 시점과 부품 식별 기준을 충족했습니다.'],
+    };
+  }, [activeReference, activeReferenceViews.length, referenceCoverage]);
 
   const productMetrics = buildMetrics && 'parts' in buildMetrics && buildMetrics.bounds ? buildMetrics : undefined;
   const productConnectivity = productMetrics?.connectivity;
@@ -117,6 +173,7 @@ export function App() {
       ? evaluateQuality(pack, spec, reference)
       : evaluateProductQuality(productSpec, reference, productMetrics, assemblyIR);
   }, [assemblyIR, assetKind, pack, productMetrics, productSpec, reference, spec]);
+  const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
   const productPartCount = productMetrics?.parts;
 
   const updateSpec = useCallback(<K extends keyof CharacterSpec>(key: K, value: CharacterSpec[K]) => {
@@ -131,23 +188,95 @@ export function App() {
     setBuildMetrics(build.metrics);
   }, []);
 
-  const processFile = useCallback(async (file?: File) => {
-    if (!file) return;
+  const processFiles = useCallback(async (source: FileList | File[]) => {
+    const files = Array.from(source);
+    if (files.length === 0 || processingReferencesRef.current) return;
     setReferenceError(undefined);
-    try {
-      const analyzed = await analyzeReference(file, assetKind);
-      setReferenceUrl((oldUrl) => {
-        if (oldUrl) URL.revokeObjectURL(oldUrl);
-        return analyzed.url;
-      });
-      setReference(analyzed.evidence);
-      setPromptNote(assetKind === 'product'
-        ? '제품 이미지 분석 완료 · Codex/Claude가 AssemblyIR을 작성한 뒤 LOAD IR로 컴파일합니다.'
-        : '인물 이미지 분석 완료 · Codex/Claude가 CharacterIR을 작성한 뒤 로컬 메시로 컴파일합니다.');
-    } catch (error) {
-      setReferenceError(error instanceof Error ? error.message : '이미지를 분석하지 못했습니다.');
+    const known = new Set(activeReferenceViews.map((view) => `${view.fileName}:${view.fileSize}:${view.lastModified}`));
+    const uniqueFiles = files.filter((file) => !known.has(referenceIdentity(file)));
+    if (uniqueFiles.length === 0) {
+      setReferenceError('이미 추가된 사진입니다.');
+      return;
     }
-  }, [assetKind]);
+    if (referenceViews.length + uniqueFiles.length > MAX_REFERENCE_FILES) {
+      setReferenceError(`증거 이미지는 최대 ${MAX_REFERENCE_FILES}개까지 추가할 수 있습니다.`);
+      return;
+    }
+    const totalBytes = referenceViews.reduce((sum, view) => sum + view.fileSize, 0)
+      + uniqueFiles.reduce((sum, file) => sum + file.size, 0);
+    if (totalBytes > MAX_REFERENCE_TOTAL_BYTES) {
+      setReferenceError('전체 증거 이미지 용량은 최대 96MB입니다.');
+      return;
+    }
+    processingReferencesRef.current = true;
+    setIsProcessingReferences(true);
+    const accepted: ReferenceView[] = [];
+    const failures: string[] = [];
+    try {
+      for (let start = 0; start < uniqueFiles.length; start += 2) {
+        const batch = uniqueFiles.slice(start, start + 2);
+        const results = await Promise.allSettled(batch.map(async (file, offset) => {
+          const analyzed = await analyzeReference(file, assetKind);
+          return {
+            id: crypto.randomUUID(),
+            assetKind,
+            url: analyzed.url,
+            fileName: file.name,
+            fileSize: file.size,
+            mimeType: file.type,
+            lastModified: file.lastModified,
+            role: inferReferenceRole(file.name, referenceViews.length + start + offset),
+            evidence: analyzed.evidence,
+          } satisfies ReferenceView;
+        }));
+        results.forEach((result, index) => {
+          if (result.status === 'fulfilled') accepted.push(result.value);
+          else failures.push(`${batch[index].name}: ${result.reason instanceof Error ? result.reason.message : '분석 실패'}`);
+        });
+      }
+      if (!mountedRef.current) {
+        accepted.forEach((view) => URL.revokeObjectURL(view.url));
+        return;
+      }
+      if (accepted.length > 0) {
+        setReferenceViews((current) => [...current, ...accepted]);
+        setActiveReferenceId((current) => (
+          activeReferenceViews.some((view) => view.id === current) ? current : accepted[0].id
+        ));
+        setPromptNote(
+          `${accepted.length}개 사진 분석 완료 · 시점과 부품 ID를 확인한 뒤 EVIDENCE JSON을 저장하세요.`,
+        );
+      }
+      if (failures.length > 0) setReferenceError(failures.join(' · '));
+    } catch (error) {
+      accepted.forEach((view) => URL.revokeObjectURL(view.url));
+      if (mountedRef.current) {
+        setReferenceError(error instanceof Error ? error.message : '참고 이미지 분석을 완료하지 못했습니다.');
+      }
+    } finally {
+      processingReferencesRef.current = false;
+      if (mountedRef.current) setIsProcessingReferences(false);
+    }
+  }, [activeReferenceViews, assetKind, referenceViews]);
+
+  const updateReferenceView = useCallback((id: string, patch: Partial<Pick<ReferenceView, 'role' | 'componentId'>>) => {
+    setReferenceViews((current) => current.map((view) => view.id === id ? { ...view, ...patch } : view));
+  }, []);
+
+  const removeReferenceView = useCallback((id: string) => {
+    const removed = referenceViewsRef.current.find((view) => view.id === id);
+    if (removed) URL.revokeObjectURL(removed.url);
+    setReferenceViews((current) => current.filter((view) => view.id !== id));
+    setActiveReferenceId((current) => current === id ? undefined : current);
+  }, []);
+
+  const saveEvidenceManifest = useCallback(() => {
+    if (activeReferenceViews.length === 0) return;
+    downloadJson(buildReferenceManifest(activeReferenceViews, assetKind), 'morphloom-evidence.json');
+    setPromptNote(referenceCoverage.ready
+      ? 'EVIDENCE JSON 저장 완료 · 이미지 파일들과 함께 Codex/Claude에 전달하세요.'
+      : `EVIDENCE JSON 저장 완료 · ${referenceCoverage.warnings[0] ?? '누락 증거를 확인하세요.'}`);
+  }, [activeReferenceViews, assetKind, referenceCoverage]);
 
   const runPrompt = () => {
     if (assetKind === 'product') {
@@ -205,7 +334,7 @@ export function App() {
           </div>
 
           <button
-            className={`reference-drop ${isDragging ? 'is-dragging' : ''} ${referenceUrl ? 'has-image' : ''}`}
+            className={`reference-drop ${isDragging ? 'is-dragging' : ''} ${activeReference ? 'has-image' : ''}`}
             onClick={() => fileInputRef.current?.click()}
             onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }}
             onDragOver={(event) => event.preventDefault()}
@@ -213,19 +342,20 @@ export function App() {
             onDrop={(event) => {
               event.preventDefault();
               setIsDragging(false);
-              void processFile(event.dataTransfer.files[0]);
+              void processFiles(event.dataTransfer.files);
             }}
           >
-            {referenceUrl ? (
+            {activeReference ? (
               <>
-                <img src={referenceUrl} alt="업로드된 3D 에셋 참고 자료" />
-                <span className="replace-label">이미지 교체</span>
+                <img src={activeReference.url} alt={`${REFERENCE_ROLE_LABELS[activeReference.role]} 참고 자료`} />
+                <span className="reference-role-label">{REFERENCE_ROLE_LABELS[activeReference.role]}</span>
+                <span className="replace-label">+ 사진 추가</span>
               </>
             ) : (
               <span className="drop-copy">
-                <b>{assetKind === 'human' ? '인물 레퍼런스를 놓으세요' : '제품 레퍼런스를 놓으세요'}</b>
-                <small>{assetKind === 'human' ? '정면 또는 3/4 전신' : '정면·측면·분해도 권장'} · PNG/JPEG/WebP · 최대 16MB</small>
-                <em>Browse image</em>
+                <b>{assetKind === 'human' ? '인물 사진 묶음을 놓으세요' : '제품 증거 사진을 모두 놓으세요'}</b>
+                <small>{assetKind === 'human' ? '정면·후면·좌우측' : '6면·분해도·부품·재질'} · 파일당 16MB · 최대 24장</small>
+                <em>{isProcessingReferences ? 'Analyzing…' : 'Browse images'}</em>
               </span>
             )}
           </button>
@@ -233,21 +363,78 @@ export function App() {
             ref={fileInputRef}
             className="visually-hidden"
             type="file"
+            multiple
             accept="image/png,image/jpeg,image/webp"
-            onChange={(event) => void processFile(event.target.files?.[0])}
+            onChange={(event) => {
+              if (event.target.files) void processFiles(event.target.files);
+              event.target.value = '';
+            }}
           />
 
           {referenceError && <p className="inline-error">{referenceError}</p>}
-          {reference && (
-            <div className="evidence-card">
-              <div className="evidence-score">
-                <strong>{reference.portraitSuitability}</strong>
-                <span>INPUT<br />FIT</span>
+          {activeReferenceViews.length > 0 && (
+            <div className="evidence-set">
+              <div className="evidence-coverage" aria-label="필수 시점 촬영 현황">
+                {referenceCoverage.requiredRoles.map((role) => (
+                  <span
+                    className={referenceCoverage.presentRequiredRoles.includes(role) ? 'is-present' : ''}
+                    key={role}
+                    title={REFERENCE_ROLE_LABELS[role]}
+                  >
+                    {role.slice(0, 2).toUpperCase()}
+                  </span>
+                ))}
               </div>
-              <div>
-                <b>{reference.fileName}</b>
-                <p>{reference.width} × {reference.height} · 평균색 {reference.averageColor}</p>
-                <small>{reference.notes[0]}</small>
+
+              <div className="reference-filmstrip">
+                {activeReferenceViews.map((view, index) => {
+                  const needsComponentId = view.role === 'component' || view.role === 'material' || view.role === 'measurement';
+                  const normalizedId = normalizeComponentId(view.componentId ?? '');
+                  return (
+                    <article className={`reference-view ${activeReference?.id === view.id ? 'is-active' : ''}`} key={view.id}>
+                      <button
+                        className="reference-thumb"
+                        onClick={() => setActiveReferenceId(view.id)}
+                        aria-label={`${index + 1}번 ${REFERENCE_ROLE_LABELS[view.role]} 사진 보기`}
+                      >
+                        <img src={view.url} alt="" />
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                      </button>
+                      <div className="reference-view-fields">
+                        <select
+                          value={view.role}
+                          aria-label={`${index + 1}번 사진 역할`}
+                          onChange={(event) => updateReferenceView(view.id, { role: event.target.value as ReferenceRole })}
+                        >
+                          {REFERENCE_ROLES.map((role) => <option value={role} key={role}>{REFERENCE_ROLE_LABELS[role]}</option>)}
+                        </select>
+                        {needsComponentId ? (
+                          <input
+                            value={view.componentId ?? ''}
+                            className={view.role === 'component' && !normalizedId ? 'is-invalid' : ''}
+                            placeholder="component_id"
+                            maxLength={80}
+                            aria-label={`${index + 1}번 사진 부품 ID`}
+                            onChange={(event) => updateReferenceView(view.id, { componentId: normalizeComponentId(event.target.value) })}
+                          />
+                        ) : <small>{view.evidence.width}×{view.evidence.height} · FIT {view.evidence.portraitSuitability}</small>}
+                      </div>
+                      <button className="remove-reference" onClick={() => removeReferenceView(view.id)} aria-label={`${index + 1}번 사진 삭제`}>×</button>
+                    </article>
+                  );
+                })}
+              </div>
+
+              <div className="evidence-summary">
+                <div className="evidence-score">
+                  <strong>{referenceCoverage.score}</strong>
+                  <span>EVIDENCE<br />FIT</span>
+                </div>
+                <div>
+                  <b>{referenceCoverage.presentRequiredRoles.length}/{referenceCoverage.requiredRoles.length} 필수 시점 · {activeReferenceViews.length}장</b>
+                  <small>{referenceCoverage.ready ? '병합 준비 완료' : referenceCoverage.warnings[0]}</small>
+                </div>
+                <button onClick={saveEvidenceManifest}>SAVE<br />EVIDENCE</button>
               </div>
             </div>
           )}
@@ -361,8 +548,9 @@ export function App() {
               <span className="eyebrow">03 / build quality</span>
               <h2>Quality gate</h2>
             </div>
-            <div className="quality-total">
+            <div className={`quality-total ${qualityBlocked ? 'has-blocker' : ''}`}>
               <strong>{quality?.total ?? '—'}</strong><span>/100</span>
+              {qualityBlocked && <em>BLOCKED</em>}
             </div>
           </div>
 
@@ -501,11 +689,7 @@ export function App() {
               const payload = assetKind === 'human'
                 ? { schema: 'morphloom.character/0.1', spec }
                 : assemblyIR ?? { schema: 'morphloom.assembly/0.1', kind: productSpec.kind, spec: productSpec };
-              const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const anchor = document.createElement('a');
-              anchor.href = url; anchor.download = assetKind === 'human' ? 'character-ir.json' : 'assembly-ir.json'; anchor.click();
-              window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+              downloadJson(payload, assetKind === 'human' ? 'character-ir.json' : 'assembly-ir.json');
             }}>SAVE IR</button>
           </div>
         </aside>
@@ -514,14 +698,14 @@ export function App() {
       <footer className="pipeline-footer">
         <span className="eyebrow">deterministic pipeline</span>
         {(assetKind === 'human' ? [
-          ['01', 'EVIDENCE', reference ? 'pass' : 'wait'],
+          ['01', 'EVIDENCE', referenceCoverage.ready ? 'pass' : reference ? 'blocked' : 'wait'],
           ['02', 'CHARACTER IR', 'pass'],
           ['03', 'MORPH', pack ? 'pass' : 'run'],
           ['04', 'MATERIAL', pack ? 'pass' : 'wait'],
           ['05', 'RIG', 'warn'],
           ['06', 'EXPORT', pack ? 'ready' : 'wait'],
         ] : [
-          ['01', 'EVIDENCE', reference ? 'pass' : 'wait'],
+          ['01', 'EVIDENCE', referenceCoverage.ready ? 'pass' : reference ? 'blocked' : 'wait'],
           ['02', 'ASSEMBLY IR', 'pass'],
           ['03', 'COMPILE', pack ? 'pass' : 'run'],
           ['04', 'TOPOLOGY', pack ? 'pass' : 'wait'],

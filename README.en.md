@@ -26,11 +26,11 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Asset | Current result |
 |---|---:|
 | Realistic human base | 14,517 skin vertices · 38 macro/measurement morphs |
-| Smartphone exploded view | 164 independent parts · 142,480 tris · 39 camera parts |
+| Smartphone exploded view | 164 independent parts · 142,480 tris · 39 camera parts · 220/220 watertight meshes |
 | Smartphone wiring | 28/28 individual conductors · 56/56 required ports · 0 dangling ends |
 | Smartphone surfaces | 13 PBR finishes · micro-normal on 219/220 materials · 111 anisotropic materials |
 | Ornate knife | 16 parts · 18,930 tris · 16/16 watertight |
-| Image-derived cooling assembly | 24 source components → 67 rendered parts · 43/43 conductors · 86/86 required ports |
+| Image-derived cooling assembly | 24 source components → 67 rendered parts · 153/153 watertight meshes · 43/43 conductors · 86/86 required ports |
 | Output | GLB · PNG · CharacterIR/AssemblyIR JSON |
 
 ## Does dropping in an image immediately create 3D?
@@ -47,7 +47,9 @@ images + known dimensions
       GLB + PNG + IR
 ```
 
-- Dropping an image into the web UI performs local resolution, composition, and exposure checks.
+- The web UI accepts up to 24 images and 96 MB per evidence set, then checks resolution, composition, and exposure locally.
+- It tracks front, rear, left, right, top, and bottom coverage and classifies exploded, component, material, and measurement photographs.
+- Close-ups of the same part share a stable ASCII `component_id`. `SAVE EVIDENCE` exports file names and roles as `morphloom.evidence/0.1` JSON without embedding source pixels or local blob URLs.
 - The browser does not silently call a remote LLM. Image understanding and IR authoring are performed by **Codex or Claude** working in the repository.
 - Load the resulting IR through `LOAD IR`; the compiler rejects invalid topology, missing ports, incompatible signals, and floating conductors.
 - OpenAI's API officially supports text/image inputs and JSON output, but the default Morphloom workflow uses the current coding agent and needs no separate API key. [Official OpenAI documentation](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
@@ -140,6 +142,8 @@ Mark hidden geometry as inferred, then pass npm test, benchmark, and build.
 
 4. Load the generated IR in the app, inspect components, and export GLB.
 
+For a multi-photo product, first add the six exterior views plus exploded and component photographs in the web UI. Assign roles and `component_id` values, then choose `SAVE EVIDENCE`. Give the resulting `morphloom-evidence.json` and the original images—with matching file names—to the agent. Repeated views of a component are then merged into one AssemblyIR node. Missing views, unidentified component images, and low-quality inputs keep the `EVIDENCE` stage `BLOCKED`.
+
 ## Using Claude alone
 
 `CLAUDE.md` carries the same vendor-neutral contract. Both agents produce `morphloom.assembly/0.1` or `morphloom.character/0.1`, so changing the agent does not change the mesh engine.
@@ -173,6 +177,12 @@ The user-selected [Talon Knife · Doppler Ruby](https://img2threejs.io/#/x/talon
 
 Morphloom is stronger in **part granularity, reusable IR, electrical semantics, and automatic topology evidence**. The Talon exhibit remains stronger in **silhouette and surface matching to its specific photo**. We do not claim universal visual superiority.
 
+## Spider-Man single-image honesty test
+
+We supplied one [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg) (ManoSolo13241324, CC BY-SA 4.0) in human mode. The image itself scored `FIT 92`, but one front view produced only `43/100` evidence completeness and `1/4` required views, so the fidelity gate blocked it. The `78/100` aggregate build score describes the generic base's topology, materials, and export readiness; it is not a Spider-Man likeness score.
+
+**Verdict: the current output fails as a Spider-Man asset.** It produces a generic editable human base and does not reconstruct the mask eye lenses, web suit pattern, reference body shape, pose, or projected material. At minimum it needs front, rear, left, and right views plus close-ups of the mask, eyes, suit surface, and a flat pattern reference.
+
 ## Current limits
 
 - One image cannot reveal hidden components, exact thickness, tolerances, or pinout.
@@ -186,6 +196,7 @@ Morphloom is stronger in **part granularity, reusable IR, electrical semantics, 
 src/engine/assembly-compiler.ts  shared geometry IR compiler
 src/engine/connectivity.ts       ports, nets, conductors, connectivity gates
 src/engine/surface-system.ts     PBR finishes, micro-normal, roughness, anisotropy
+src/engine/reference-set.ts      multi-view and component evidence manifest
 src/engine/cooling-assembly.ts   supplied-image regression asset
 src/engine/product.ts            164-part smartphone example
 src/engine/knife.ts              ornate knife IR example

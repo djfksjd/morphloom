@@ -20,7 +20,10 @@ export function evaluateQuality(
   );
   const silhouettePenalty =
     Math.abs(spec.shoulderScale - 1) * 30 + Math.abs(spec.legScale - 1) * 45 + Math.abs(spec.headScale - 1) * 35;
-  const silhouetteScore = Math.round(Math.max(0, 96 - silhouettePenalty));
+  const morphStabilityScore = Math.round(Math.max(0, 96 - silhouettePenalty));
+  const silhouetteScore = evidence
+    ? Math.min(morphStabilityScore, evidence.portraitSuitability)
+    : morphStabilityScore;
   const materialScore = Math.round(82 + (spec.hairStyle !== 'none' ? 5 : 0) + (spec.outfit === 'field' ? 3 : 0));
   const rigScore = 74;
   const exportScore = 92;
@@ -35,10 +38,12 @@ export function evaluateQuality(
     },
     {
       id: 'silhouette',
-      label: '실루엣 안정성',
+      label: evidence ? '참조 증거 완성도' : '실루엣 안정성',
       score: silhouetteScore,
       status: status(silhouetteScore),
-      detail: '모프 범위와 신체 비율의 안전 구간 검사',
+      detail: evidence
+        ? `${evidence.fileName} · ${evidence.notes[0]}`
+        : '모프 범위와 신체 비율의 안전 구간 검사',
     },
     {
       id: 'materials',
@@ -64,9 +69,8 @@ export function evaluateQuality(
   ];
 
   const base = checks.reduce((sum, check) => sum + check.score, 0) / checks.length;
-  const referenceAdjustment = evidence ? (evidence.portraitSuitability - 70) * 0.08 : 0;
   return {
-    total: Math.round(Math.max(0, Math.min(100, base + referenceAdjustment))),
+    total: Math.round(Math.max(0, Math.min(100, base))),
     checks,
     triangles,
     vertices,
@@ -98,6 +102,9 @@ export function evaluateProductQuality(
     : Math.round(Math.max(0, isKnife
       ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
       : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
+  const referenceFidelityScore = evidence
+    ? Math.min(envelopeScore, evidence.portraitSuitability)
+    : envelopeScore;
   const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
@@ -119,10 +126,12 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: isKnife ? '실물 단위 포락' : isImportedAssembly ? '컴파일 포락' : '기구 치수 일관성',
-      score: envelopeScore,
-      status: status(envelopeScore),
-      detail: isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isImportedAssembly ? '컴파일 포락' : '기구 치수 일관성',
+      score: referenceFidelityScore,
+      status: status(referenceFidelityScore),
+      detail: evidence
+        ? `${evidence.fileName} · ${evidence.notes[0]}`
+        : isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
     },
     {
       id: 'materials',
@@ -153,9 +162,8 @@ export function evaluateProductQuality(
     },
   ];
   const base = checks.reduce((sum, check) => sum + check.score, 0) / checks.length;
-  const referenceAdjustment = evidence ? (evidence.portraitSuitability - 70) * 0.025 : 0;
   return {
-    total: Math.round(Math.max(0, Math.min(100, base + referenceAdjustment))),
+    total: Math.round(Math.max(0, Math.min(100, base))),
     checks,
     triangles: 0,
     vertices: 0,

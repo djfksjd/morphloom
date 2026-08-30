@@ -11,6 +11,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
+import { evaluateQuality } from '../src/engine/quality';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC } from '../src/types';
 
 async function loadPack() {
@@ -41,6 +42,21 @@ describe('OHPK human pipeline', () => {
     expect(result.spec.muscle).toBeGreaterThan(DEFAULT_SPEC.muscle);
     expect(result.spec.genderBlend).toBe(0.1);
     expect(result.spec.suitColor).toBe('#17191f');
+  });
+
+  it('does not hide incomplete single-view evidence behind a high morph score', async () => {
+    const pack = await loadPack();
+    const report = evaluateQuality(pack, DEFAULT_SPEC, {
+      fileName: 'single-view character',
+      width: 960,
+      height: 1280,
+      averageColor: '#555555',
+      brightness: 0.5,
+      portraitSuitability: 43,
+      notes: ['후면·좌우측 시점이 누락되었습니다.'],
+    });
+    const evidenceCheck = report.checks.find((check) => check.id === 'silhouette');
+    expect(evidenceCheck).toMatchObject({ label: '참조 증거 완성도', score: 43, status: 'blocked' });
   });
 });
 

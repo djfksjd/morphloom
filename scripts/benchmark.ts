@@ -3,12 +3,33 @@ import { buildProduct } from '../src/engine/product';
 import { analyzeTopology } from '../src/engine/topology';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { evaluateReferenceSet, type ReferenceView } from '../src/engine/reference-set';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC } from '../src/types';
 
 const knife = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
 const topology = analyzeTopology(knife.root);
+const spiderManSingleView: ReferenceView = {
+  id: 'spiderman-front-regression',
+  assetKind: 'human',
+  url: 'benchmark-source-not-embedded',
+  fileName: 'spiderman-front.jpg',
+  fileSize: 291_588,
+  mimeType: 'image/jpeg',
+  lastModified: 0,
+  role: 'front',
+  evidence: {
+    fileName: 'spiderman-front.jpg',
+    width: 960,
+    height: 1280,
+    averageColor: '#716f70',
+    brightness: 0.44,
+    portraitSuitability: 92,
+    notes: ['Single front/three-quarter view; rear and side evidence is absent.'],
+  },
+};
+const spiderManEvidence = evaluateReferenceSet([spiderManSingleView], 'human');
 
 const result = {
   generatedAt: new Date().toISOString(),
@@ -64,6 +85,16 @@ const result = {
       portOutsideDistanceMaxMm: cooling.metrics.connectivity?.portOutsideDistanceMaxMm,
       endpointErrorMaxMm: cooling.metrics.connectivity?.endpointErrorMaxMm,
       inferredHiddenGeometry: true,
+    },
+    spiderManSingleImageHonestyGate: {
+      source: 'https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg',
+      sourceResolution: '960×1280',
+      inputFit: spiderManSingleView.evidence.portraitSuitability,
+      evidenceScore: spiderManEvidence.score,
+      requiredViews: `${spiderManEvidence.presentRequiredRoles.length}/${spiderManEvidence.requiredRoles.length}`,
+      missingViews: spiderManEvidence.missingRequiredRoles,
+      blocked: !spiderManEvidence.ready,
+      visualFidelityClaimAllowed: false,
     },
   },
   comparisonBaseline: {
