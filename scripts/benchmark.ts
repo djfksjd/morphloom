@@ -7,12 +7,14 @@ import { parseOhpk } from '../src/engine/ohpk';
 import { analyzeTopology } from '../src/engine/topology';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { evaluateReferenceSet, type ReferenceView } from '../src/engine/reference-set';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, WEB_HERO_SPEC } from '../src/types';
 
 const knife = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+const fold8 = compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty');
 const topology = analyzeTopology(knife.root);
 const humanPack = await parseOhpk(
   new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk')),
@@ -107,6 +109,28 @@ const result = {
       outstandingBenchChecks: cooling.metrics.connectivity?.outstandingBenchChecks,
       engineeringEvidence: cooling.metrics.engineering,
       inferredHiddenGeometry: true,
+    },
+    galaxyZFold8Exterior: {
+      source: GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.sourceOfficialProduct,
+      foldState: GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.foldState,
+      officialUnfoldedMm: `${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialWidthMm}×${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialHeightMm}×${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialUnfoldedDepthMm}`,
+      officialFoldedMm: `${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialFoldedWidthMm}×${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialHeightMm}×${GALAXY_Z_FOLD8_EXTERIOR_IR.metadata?.officialFoldedDepthMm}`,
+      components: GALAXY_Z_FOLD8_EXTERIOR_IR.components.length,
+      renderedParts: fold8.metrics.parts,
+      triangles: fold8.metrics.triangles,
+      compiledEnvelopeMm: {
+        x: Number(((fold8.metrics.bounds.max.x - fold8.metrics.bounds.min.x) * 1000).toFixed(3)),
+        y: Number(((fold8.metrics.bounds.max.y - fold8.metrics.bounds.min.y) * 1000).toFixed(3)),
+        z: Number(((fold8.metrics.bounds.max.z - fold8.metrics.bounds.min.z) * 1000).toFixed(3)),
+      },
+      cameraParts: fold8.parts.filter((part) => part.category === 'camera').length,
+      watertightParts: `${fold8.metrics.topology.watertightMeshes}/${fold8.metrics.topology.meshes}`,
+      boundaryEdges: fold8.metrics.topology.boundaryEdges,
+      nonManifoldEdges: fold8.metrics.topology.nonManifoldEdges,
+      degenerateTriangles: fold8.metrics.topology.degenerateTriangles,
+      surfaces: fold8.metrics.surfaces,
+      engineeringEvidence: fold8.metrics.engineering,
+      internalElectronicsIncluded: false,
     },
     spiderManSingleImageHonestyGate: {
       source: 'https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg',

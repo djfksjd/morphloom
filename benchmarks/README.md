@@ -8,4 +8,6 @@ A digitally connected harness is not automatically production-ready. Any `bench-
 
 The Spider-Man single-image case therefore records two separate results: the compiled asset can pass closed-topology and editable-part gates while the one-view likeness gate remains blocked. `gamePrevisBaseReady` must never be presented as `productionLikenessReady`.
 
+The Galaxy Z Fold8 exterior case records Samsung's published folded and unfolded envelopes separately from the compiled camera-bump envelope. Official dimensions, screen ratios, camera count, and material families are `datasheet`; unpublished ring diameters, button protrusion, port pitch, and crease response remain `estimated` or `inferred`. Its exterior-only scope must not be reported as an internal engineering model.
+
 When a new baseline is added, store its public URL, version, visible metrics, and the date observed. Never copy a proprietary asset into this directory.

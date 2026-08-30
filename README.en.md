@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-30%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-31%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -89,6 +89,7 @@ Open the printed local URL and try:
 - `PHONE / 01` — 164-part smartphone with 28 individual conductors
 - `BLADE / 02` — ornate dagger with a variable-thickness blade
 - `COOLER / 03` — image-derived electrical-connectivity regression asset
+- `FOLD8 / 04` — Galaxy Z Fold8 Graphite exterior grounded in official dimensions and multi-angle imagery
 - `HUMAN` — CC0 human topology and local morphs
 - `WEB HERO / 04` — mask, lenses, web suit, and reference-action single-image regression asset
 
@@ -113,6 +114,12 @@ Wires are not decorative curves. `AssemblyIR.electrical` preserves:
 Each conductor is an independently selectable closed mesh. The compiler measures the start/end cap centers against the referenced terminals and fails the build when tolerance is exceeded. Moving parts update only affected conductors and dispose replaced geometry; idle frames allocate nothing. Digital graph validity and physical continuity remain separate states.
 
 `SAVE NETLIST` derives an assembler-facing connection table from the same AssemblyIR, keeping product/component/port/conductor counts, physical pin labels, gauges, verification states, passive nodes, and bench checks in one source of truth.
+
+## Galaxy Z Fold8 exterior preset
+
+`FOLD8 / 04` builds the unfolded exterior of the 2026 Galaxy Z Fold8 in Graphite. The official envelope is `161.4 × 123.9 × 4.5 mm` unfolded and `81.9 × 123.9 × 9.7 mm` folded. It intentionally excludes internal electronics and hinge gearing.
+
+Overall dimensions, displays, materials, and camera specifications come from [Samsung's official product page](https://www.samsung.com/us/smartphones/galaxy-z-fold8/) and [official launch material](https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living). Unpublished camera-ring diameters, button protrusion, and port pitch remain marked `estimated` or `inferred`. Official imagery is retained as source URLs rather than redistributed in the repository.
 
 ## PBR micro-surfaces that control reflection angle
 

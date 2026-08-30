@@ -8,6 +8,7 @@ import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
@@ -246,6 +247,43 @@ describe('AssemblyIR product pipeline', () => {
     });
   });
 
+  it('builds the official-dimension Galaxy Z Fold8 exterior as editable named parts', () => {
+    const build = compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty');
+    const size = build.metrics.bounds.getSize(new THREE.Vector3()).multiplyScalar(1000);
+    expect(GALAXY_Z_FOLD8_EXTERIOR_IR.metadata).toMatchObject({
+      scope: 'exterior-only',
+      model: 'Galaxy Z Fold8',
+      officialWidthMm: 161.4,
+      officialHeightMm: 123.9,
+      officialUnfoldedDepthMm: 4.5,
+      officialFoldedWidthMm: 81.9,
+      officialFoldedDepthMm: 9.7,
+      internalElectronicsIncluded: false,
+    });
+    expect(GALAXY_Z_FOLD8_EXTERIOR_IR.components).toHaveLength(48);
+    expect(size.x).toBeGreaterThanOrEqual(161.35);
+    expect(size.x).toBeLessThan(161.8);
+    expect(size.y).toBeCloseTo(123.9, 0);
+    expect(size.z).toBeGreaterThan(6);
+    for (const id of [
+      'left_armor_frame', 'right_armor_frame', 'flex_hinge_barrel',
+      'main_flexible_display', 'cover_display', 'rear_graphite_glass',
+      'rear_camera_island', 'ultrawide_camera_sapphire_window',
+      'wide_camera_sapphire_window', 'rear_flash_diffuser', 'usb_c_opening',
+    ]) expect(build.root.getObjectByName(id), id).toBeTruthy();
+    expect(build.metrics.connectivity).toBeUndefined();
+    expect(build.metrics.engineering).toMatchObject({
+      scope: 'exterior-only',
+      electricalApplicable: false,
+      digitalReady: true,
+      productionReady: false,
+    });
+    expect(build.metrics.surfaces.finishes).toEqual(expect.arrayContaining([
+      'anodized-metal', 'brushed-metal', 'ceramic-glass', 'optical-glass', 'sapphire',
+    ]));
+    expect(build.metrics.topology.pass).toBe(true);
+  });
+
   it('keeps every conductor attached when an electronic component moves without rebuilding idle wires', () => {
     const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
     const tec = build.root.getObjectByName('tec');
@@ -296,9 +334,10 @@ describe('AssemblyIR product pipeline', () => {
     expect(() => validateElectricalHarness({ ports: {} as never, wires: [] }, new Set())).toThrow(/connectivity failed/i);
   });
 
-  it('keeps the detailed phone and image-derived cooling assembly closed and manifold', () => {
+  it('keeps the detailed phone, Fold8 exterior, and image-derived cooling assembly closed and manifold', () => {
     for (const build of [
       buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty'),
+      compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty'),
       compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty'),
     ]) {
       const report = analyzeTopology(build.root);

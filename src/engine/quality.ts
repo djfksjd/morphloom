@@ -103,6 +103,7 @@ export function evaluateProductQuality(
 ): QualityReport {
   const isKnife = spec.kind === 'ornate-knife';
   const isImportedAssembly = Boolean(assemblyIR);
+  const isExteriorOnly = assemblyIR?.metadata?.scope === 'exterior-only';
   const connectivity = metrics?.connectivity;
   const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
@@ -138,7 +139,7 @@ export function evaluateProductQuality(
       + connectivity.specifiedGaugeWires / connectivity.wires
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
-  const connectivityScore = isKnife
+  const connectivityScore = isKnife || isExteriorOnly
     ? 97
     : connectivity?.errors.length
       ? Math.max(0, 72 - connectivity.errors.length * 8)
@@ -148,7 +149,7 @@ export function evaluateProductQuality(
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
-      label: isKnife ? '가변 두께 검신' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
+      label: isKnife ? '가변 두께 검신' : isExteriorOnly ? '외관 부품 구조' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
@@ -177,11 +178,13 @@ export function evaluateProductQuality(
     },
     {
       id: 'rig',
-      label: isKnife ? '실무 토폴로지' : '전기 연결·실물 검수',
+      label: isKnife ? '실무 토폴로지' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
-      status: isKnife ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
+      status: isKnife || isExteriorOnly ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
+        : isExteriorOnly
+          ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity
           ? `${connectivity.connectedWires}/${connectivity.wires} 도체 · 물리 핀 ${connectivity.documentedPhysicalPins}/${connectivity.ports} · AWG ${connectivity.specifiedGaugeWires}/${connectivity.wires} · 벤치 대기 ${connectivity.outstandingBenchChecks}`
           : '포트·네트·도체 그래프를 컴파일한 뒤 연결성을 판정합니다.',

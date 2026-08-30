@@ -4,6 +4,7 @@ import type { ProductBuild, ProductPartInfo } from './engine/product';
 import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
+import { GALAXY_Z_FOLD8_EXTERIOR_IR } from './engine/galaxy-fold8-exterior';
 import { analyzeReference } from './engine/reference';
 import {
   buildReferenceManifest,
@@ -74,6 +75,7 @@ const PRODUCT_PRESETS: Array<{ name: string; caption: string; spec: ProductSpec;
   { name: 'PHONE / 01', caption: '164부품·28도체', spec: DEFAULT_PRODUCT_SPEC, prompt: '76.7×159.9×8.25mm 실버 스마트폰을 부품별 분해도로' },
   { name: 'BLADE / 02', caption: '장식 단검', spec: DEFAULT_KNIFE_SPEC, prompt: '장식 단검: 뾰족한 양날 검신, 혈조, 가드, 가죽 손잡이와 보석 폼멜' },
   { name: 'COOLER / 03', caption: `${COOLING_ASSEMBLY_IR.components.length}부품·${COOLING_ASSEMBLY_IR.electrical?.wires.length ?? 0}도체`, spec: DEFAULT_PRODUCT_SPEC, prompt: '첨부 분해도를 근거로 TEC 냉각 장치와 모든 전선을 포트에 연결', assemblyIR: COOLING_ASSEMBLY_IR },
+  { name: 'FOLD8 / 04', caption: `${GALAXY_Z_FOLD8_EXTERIOR_IR.components.length}부품·공식 치수`, spec: DEFAULT_PRODUCT_SPEC, prompt: '공식 161.4×123.9×4.5mm Galaxy Z Fold8 Graphite 외관을 펼침 상태로', assemblyIR: GALAXY_Z_FOLD8_EXTERIOR_IR },
 ];
 
 function AppIcon() {
@@ -622,13 +624,23 @@ export function App() {
           {assetKind === 'product' && productEngineering && (
             <div className="selected-part-card engineering-read-card">
               <span className="eyebrow">engineering evidence audit</span>
-              <b>{productEngineering.digitalReady ? 'DIGITAL CONNECTED' : 'DIGITAL BLOCKED'} · {productEngineering.productionReady ? 'BENCH RELEASED' : 'PHYSICAL QA REQUIRED'}</b>
-              <small>PIN {Math.round(productEngineering.physicalPinCoverage * 100)}% · AWG {Math.round(productEngineering.conductorGaugeCoverage * 100)}% · VERIFY {Math.round(productEngineering.conductorVerificationCoverage * 100)}%</small>
+              <b>{productEngineering.electricalApplicable
+                ? `${productEngineering.digitalReady ? 'DIGITAL CONNECTED' : 'DIGITAL BLOCKED'} · ${productEngineering.productionReady ? 'BENCH RELEASED' : 'PHYSICAL QA REQUIRED'}`
+                : `${productEngineering.digitalReady ? 'EXTERIOR COMPILED' : 'EVIDENCE BLOCKED'} · ${productEngineering.productionReady ? 'SOURCE RELEASED' : 'SOURCE QA REQUIRED'}`}</b>
+              <small>{productEngineering.electricalApplicable
+                ? `PIN ${Math.round(productEngineering.physicalPinCoverage * 100)}% · AWG ${Math.round(productEngineering.conductorGaugeCoverage * 100)}% · VERIFY ${Math.round(productEngineering.conductorVerificationCoverage * 100)}%`
+                : 'EXTERIOR SCOPE · INTERNAL ELECTRICAL EXCLUDED'}</small>
               <p>실측/데이터시트 {productEngineering.componentEvidence.measured + productEngineering.componentEvidence.datasheet} · 추정 {productEngineering.componentEvidence.estimated} · 숨은 형상 {productEngineering.componentEvidence.inferred} · 벤치 대기 {productEngineering.outstandingBenchChecks}</p>
               <div className="semantic-tags">
-                <span>{productEngineering.passiveNodes} passive nodes</span>
-                <span>{productEngineering.benchRequiredWires} polarity checks</span>
-                <span>live anchors {productConnectivity?.liveAnchors ? 'on' : 'off'}</span>
+                {productEngineering.electricalApplicable ? <>
+                  <span>{productEngineering.passiveNodes} passive nodes</span>
+                  <span>{productEngineering.benchRequiredWires} polarity checks</span>
+                  <span>live anchors {productConnectivity?.liveAnchors ? 'on' : 'off'}</span>
+                </> : <>
+                  <span>exterior only</span>
+                  <span>{productEngineering.componentEvidence.datasheet} datasheet</span>
+                  <span>{productEngineering.componentEvidence.estimated} image-scaled</span>
+                </>}
               </div>
             </div>
           )}

@@ -2,6 +2,8 @@ import type { AssemblyIR, EvidenceStatusIR } from './assembly-ir';
 import type { ConnectivityReport } from './connectivity';
 
 export interface EngineeringAuditReport {
+  scope: 'full-assembly' | 'exterior-only';
+  electricalApplicable: boolean;
   components: number;
   componentEvidence: Record<EvidenceStatusIR | 'undocumented', number>;
   componentEvidenceCoverage: number;
@@ -28,6 +30,8 @@ export function inspectEngineeringEvidence(
   assembly: AssemblyIR,
   connectivity?: ConnectivityReport,
 ): EngineeringAuditReport {
+  const scope = assembly.metadata?.scope === 'exterior-only' ? 'exterior-only' : 'full-assembly';
+  const electricalApplicable = Boolean(assembly.electrical);
   const componentEvidence: EngineeringAuditReport['componentEvidence'] = {
     measured: 0,
     datasheet: 0,
@@ -56,13 +60,15 @@ export function inspectEngineeringEvidence(
   const outstandingBenchChecks = connectivity?.outstandingBenchChecks
     ?? assembly.electrical?.benchChecks?.filter((check) => check.status !== 'passed').length
     ?? 0;
-  const digitalReady = connectivity !== undefined
-    && connectivity.errors.length === 0
-    && connectivity.connectedWires === connectivity.wires
-    && connectivity.connectedRequiredPorts === connectivity.requiredPorts
-    && physicalPinCoverage === 1
-    && conductorGaugeCoverage === 1
-    && conductorVerificationCoverage === 1;
+  const digitalReady = electricalApplicable
+    ? connectivity !== undefined
+      && connectivity.errors.length === 0
+      && connectivity.connectedWires === connectivity.wires
+      && connectivity.connectedRequiredPorts === connectivity.requiredPorts
+      && physicalPinCoverage === 1
+      && conductorGaugeCoverage === 1
+      && conductorVerificationCoverage === 1
+    : scope === 'exterior-only' && evidenceCoverage === 1;
   const productionReady = digitalReady
     && evidenceScore >= 90
     && componentEvidence.inferred === 0
@@ -71,6 +77,8 @@ export function inspectEngineeringEvidence(
     && (connectivity?.inferredWires ?? 0) === 0;
 
   return {
+    scope,
+    electricalApplicable,
     components: assembly.components.length,
     componentEvidence,
     componentEvidenceCoverage: evidenceCoverage,

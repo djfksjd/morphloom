@@ -276,7 +276,9 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
         const size = build.metrics.bounds.getSize(new THREE.Vector3());
         const extent = Math.max(size.x, size.y, size.z);
         runtime.controls.target.copy(center);
-        runtime.camera.position.copy(center).add(new THREE.Vector3(extent * 1.92, extent * 0.44, extent * 1.24));
+        runtime.camera.position.copy(center).add(assemblyIR?.metadata?.scope === 'exterior-only'
+          ? new THREE.Vector3(extent * -0.62, extent * 0.34, extent * -2.48)
+          : new THREE.Vector3(extent * 1.92, extent * 0.44, extent * 1.24));
       }
       runtime.controls.update();
 
@@ -304,7 +306,8 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
         const size = bounds.getSize(new THREE.Vector3());
         const extent = Math.max(size.x, size.y, size.z);
         const referenceFront = assetKind === 'human' && spec.pose === 'reference-action' && view === 'front';
-        const distance = extent * (referenceFront ? 2.32 : 2.45);
+        const exteriorOnly = assetKind === 'product' && assemblyIR?.metadata?.scope === 'exterior-only';
+        const distance = extent * (referenceFront ? 2.32 : exteriorOnly ? 2.78 : 2.45);
         runtime.controls.target.copy(center);
         runtime.camera.up.set(0, 1, 0);
         runtime.camera.fov = referenceFront ? 40 : 31;
@@ -316,7 +319,9 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
         } else if (view === 'rear') {
           runtime.camera.position.copy(center).add(new THREE.Vector3(0, 0, -distance));
         } else {
-          runtime.camera.position.copy(center).add(new THREE.Vector3(extent * 1.92, extent * 0.44, extent * 1.24));
+          runtime.camera.position.copy(center).add(exteriorOnly
+            ? new THREE.Vector3(extent * -0.62, extent * 0.34, extent * -2.48)
+            : new THREE.Vector3(extent * 1.92, extent * 0.44, extent * 1.24));
         }
         runtime.camera.lookAt(center);
         runtime.controls.update();

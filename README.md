@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-30%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-31%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -89,6 +89,7 @@ npm run dev
 - `PHONE / 01` — 스마트폰 164부품·28개 도체 분해도
 - `BLADE / 02` — 가변 두께 검신과 장식을 가진 단검
 - `COOLER / 03` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
+- `FOLD8 / 04` — 삼성 공식 치수와 다각도 사진 기반 Galaxy Z Fold8 Graphite 외관
 - `HUMAN` — CC0 인체 토폴로지와 로컬 모프
 - `WEB HERO / 04` — 마스크·렌즈·웹 슈트·참조 액션 포즈 단일 사진 회귀 사례
 
@@ -113,6 +114,12 @@ npm run build
 각 도체는 독립적으로 선택 가능한 폐쇄형 메시입니다. 컴파일러가 전선의 시작·끝 캡 중심과 단자 좌표를 다시 측정하며, 허용 오차를 넘으면 빌드를 실패시킵니다. 부품이 움직이면 해당 전선만 다시 만들고 이전 geometry를 즉시 해제하며, 움직임이 없으면 재생성하지 않습니다. 3D 연결 성공과 실물 도통 성공은 별도 상태입니다.
 
 `SAVE NETLIST`는 같은 AssemblyIR에서 조립자용 연결표를 생성합니다. 따라서 제품명·부품 수·포트 수·도체 수·실제 핀명·AWG·검증 상태·수동 노드·벤치 체크가 3D와 항상 같은 원본을 사용합니다.
+
+## Galaxy Z Fold8 외관 프리셋
+
+`FOLD8 / 04`는 2026 Galaxy Z Fold8 일반형 Graphite의 펼침 외관을 생성합니다. 공식 포락은 펼침 `161.4 × 123.9 × 4.5 mm`, 접힘 `81.9 × 123.9 × 9.7 mm`입니다. 외관만 포함하며 내부 전자부품과 힌지 기어는 의도적으로 제외합니다.
+
+전체 치수·화면·재질·카메라 사양은 [삼성 공식 제품 페이지](https://www.samsung.com/us/smartphones/galaxy-z-fold8/)와 [공식 발표 자료](https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living)를 사용했습니다. 공개되지 않은 카메라 링 직경, 버튼 돌출, 포트 피치는 `estimated` 또는 `inferred`로 남습니다. 공식 사진은 근거 URL로만 기록하고 저장소에 재배포하지 않습니다.
 
 ## 반사각을 결정하는 PBR 미세 표면
 
