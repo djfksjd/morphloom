@@ -6,6 +6,7 @@ import type { AssemblyComponentIR, AssemblyGeometryIR, AssemblyIR } from './asse
 import { compileElectricalHarness, validateElectricalHarness } from './connectivity';
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from './surface-system';
 import { analyzeTopology } from './topology';
+import { inspectEngineeringEvidence } from './engineering-audit';
 
 const mm = (value: number) => value / 1000;
 
@@ -26,6 +27,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     'molded-polymer', 'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin',
     'fabric', 'hair', 'semiconductor',
   ]);
+  const allowedEvidence = new Set(['measured', 'datasheet', 'estimated', 'inferred']);
   const inspect = (node: unknown, key = ''): void => {
     if (typeof node === 'number') {
       if (!Number.isFinite(node) || Math.abs(node) > 1_000_000) throw new Error(`Unsafe numeric value at ${key}.`);
@@ -47,6 +49,11 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(component.id) || ids.has(component.id)) throw new Error(`Invalid or duplicate component id: ${component.id}`);
     ids.add(component.id);
     if (!component.geometry || !allowedOps.has(component.geometry.op)) throw new Error(`Unsupported geometry op in ${component.id}.`);
+    if (typeof component.name !== 'string' || component.name.length < 1 || component.name.length > 120
+      || typeof component.materialName !== 'string' || component.materialName.length < 1 || component.materialName.length > 120
+      || typeof component.detail !== 'string' || component.detail.length > 500) {
+      throw new Error(`Invalid component text metadata in ${component.id}.`);
+    }
     inspect(component.geometry, `${component.id}.geometry`);
     if (component.geometry.op === 'roundedBox') {
       const minDimension = Math.min(...component.geometry.size);
@@ -58,6 +65,9 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     inspect(component.position, `${component.id}.position`);
     inspect(component.rotation, `${component.id}.rotation`);
     inspect(component.scale, `${component.id}.scale`);
+    if (!component.material || typeof component.material !== 'object' || !/^#[0-9a-fA-F]{6}$/.test(component.material.color)) {
+      throw new Error(`Invalid material in ${component.id}.`);
+    }
     inspect(component.material, `${component.id}.material`);
     if (component.material.surface && !allowedSurfaces.has(component.material.surface)) {
       throw new Error(`Unsupported surface finish in ${component.id}.`);
@@ -74,6 +84,17 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     }
     if (component.material.thicknessMm !== undefined && (component.material.thicknessMm < 0 || component.material.thicknessMm > 100)) {
       throw new Error(`Unsafe thicknessMm in ${component.id}.`);
+    }
+    if (component.evidence) {
+      if (!allowedEvidence.has(component.evidence.status)) throw new Error(`Unsupported evidence status in ${component.id}.`);
+      if (component.evidence.source !== undefined && (typeof component.evidence.source !== 'string' || component.evidence.source.length > 500)) {
+        throw new Error(`Invalid evidence source in ${component.id}.`);
+      }
+      if (component.evidence.notes !== undefined && (!Array.isArray(component.evidence.notes)
+        || component.evidence.notes.length > 32
+        || component.evidence.notes.some((note) => typeof note !== 'string' || note.length > 500))) {
+        throw new Error(`Invalid evidence notes in ${component.id}.`);
+      }
     }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
@@ -339,8 +360,10 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const heightMeters = bounds.getSize(new THREE.Vector3()).y;
   const surfaces = inspectSurfaceSystem(root);
   const topology = analyzeTopology(root);
+  const engineering = inspectEngineeringEvidence(ir, connectivity);
   root.userData.surfaceSystem = structuredClone(surfaces);
   root.userData.topology = structuredClone(topology);
+  root.userData.engineeringAudit = structuredClone(engineering);
   return {
     root,
     parts,
@@ -354,6 +377,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       connectivity,
       surfaces,
       topology,
+      engineering,
     },
   };
 }

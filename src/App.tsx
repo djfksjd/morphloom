@@ -23,6 +23,7 @@ import { loadHumanPack } from './engine/ohpk';
 import { applyProductPrompt, applyPrompt } from './engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
+import { buildPhysicalNetlist } from './engine/netlist';
 import { CharacterViewport, type ViewportHandle } from './components/CharacterViewport';
 import { ParameterControl } from './components/ParameterControl';
 import type {
@@ -72,7 +73,7 @@ const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSp
 const PRODUCT_PRESETS: Array<{ name: string; caption: string; spec: ProductSpec; prompt: string; assemblyIR?: AssemblyIR }> = [
   { name: 'PHONE / 01', caption: '164부품·28도체', spec: DEFAULT_PRODUCT_SPEC, prompt: '76.7×159.9×8.25mm 실버 스마트폰을 부품별 분해도로' },
   { name: 'BLADE / 02', caption: '장식 단검', spec: DEFAULT_KNIFE_SPEC, prompt: '장식 단검: 뾰족한 양날 검신, 혈조, 가드, 가죽 손잡이와 보석 폼멜' },
-  { name: 'COOLER / 03', caption: '이미지 파생 배선 검증', spec: DEFAULT_PRODUCT_SPEC, prompt: '첨부 분해도를 근거로 TEC 냉각 장치와 모든 전선을 포트에 연결', assemblyIR: COOLING_ASSEMBLY_IR },
+  { name: 'COOLER / 03', caption: `${COOLING_ASSEMBLY_IR.components.length}부품·${COOLING_ASSEMBLY_IR.electrical?.wires.length ?? 0}도체`, spec: DEFAULT_PRODUCT_SPEC, prompt: '첨부 분해도를 근거로 TEC 냉각 장치와 모든 전선을 포트에 연결', assemblyIR: COOLING_ASSEMBLY_IR },
 ];
 
 function AppIcon() {
@@ -171,6 +172,7 @@ export function App() {
 
   const productMetrics = buildMetrics && 'parts' in buildMetrics && buildMetrics.bounds ? buildMetrics : undefined;
   const productConnectivity = productMetrics?.connectivity;
+  const productEngineering = productMetrics?.engineering;
   const characterMetrics = buildMetrics && 'renderedTriangles' in buildMetrics ? buildMetrics : undefined;
   const productEnvelope = productMetrics ? {
     x: Math.round((productMetrics.bounds.max.x - productMetrics.bounds.min.x) * 1000),
@@ -617,6 +619,20 @@ export function App() {
             </div>
           )}
 
+          {assetKind === 'product' && productEngineering && (
+            <div className="selected-part-card engineering-read-card">
+              <span className="eyebrow">engineering evidence audit</span>
+              <b>{productEngineering.digitalReady ? 'DIGITAL CONNECTED' : 'DIGITAL BLOCKED'} · {productEngineering.productionReady ? 'BENCH RELEASED' : 'PHYSICAL QA REQUIRED'}</b>
+              <small>PIN {Math.round(productEngineering.physicalPinCoverage * 100)}% · AWG {Math.round(productEngineering.conductorGaugeCoverage * 100)}% · VERIFY {Math.round(productEngineering.conductorVerificationCoverage * 100)}%</small>
+              <p>실측/데이터시트 {productEngineering.componentEvidence.measured + productEngineering.componentEvidence.datasheet} · 추정 {productEngineering.componentEvidence.estimated} · 숨은 형상 {productEngineering.componentEvidence.inferred} · 벤치 대기 {productEngineering.outstandingBenchChecks}</p>
+              <div className="semantic-tags">
+                <span>{productEngineering.passiveNodes} passive nodes</span>
+                <span>{productEngineering.benchRequiredWires} polarity checks</span>
+                <span>live anchors {productConnectivity?.liveAnchors ? 'on' : 'off'}</span>
+              </div>
+            </div>
+          )}
+
           {assetKind === 'human' ? <div className="parameter-section">
             <div className="subheading-row">
               <span className="eyebrow">morph controls</span>
@@ -641,7 +657,7 @@ export function App() {
             <div className="assembly-summary">
               <span><b>{assemblyIR.components.length}</b> source parts</span>
               <span><b>{productConnectivity?.wires ?? 0}</b> conductors</span>
-              <span><b>{productConnectivity?.requiredPorts ?? 0}</b> ports</span>
+              <span><b>{productConnectivity?.documentedPhysicalPins ?? 0}</b> physical pins</span>
             </div>
             <div className="selected-part-card imported-ir-card">
               <b>{assemblyIR.name}</b>
@@ -740,6 +756,10 @@ export function App() {
                 : assemblyIR ?? { schema: 'morphloom.assembly/0.1', kind: productSpec.kind, spec: productSpec };
               downloadJson(payload, assetKind === 'human' ? 'character-ir.json' : 'assembly-ir.json');
             }}>SAVE IR</button>
+            {assetKind === 'product' && assemblyIR?.electrical && <button onClick={() => {
+              downloadJson(buildPhysicalNetlist(assemblyIR), 'morphloom-physical-netlist.json');
+              setPromptNote('물리 핀·AWG·검증 상태·벤치 체크가 포함된 NETLIST JSON을 저장했습니다.');
+            }}>SAVE NETLIST</button>}
           </div>
         </aside>
       </section>

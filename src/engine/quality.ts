@@ -104,6 +104,7 @@ export function evaluateProductQuality(
   const isKnife = spec.kind === 'ornate-knife';
   const isImportedAssembly = Boolean(assemblyIR);
   const connectivity = metrics?.connectivity;
+  const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
   const topology = metrics?.topology;
   const ratio = spec.heightMm / spec.widthMm;
@@ -116,7 +117,7 @@ export function evaluateProductQuality(
     ? `${Math.round(compiledEnvelope.x * 1000)} × ${Math.round(compiledEnvelope.y * 1000)} × ${Math.round(compiledEnvelope.z * 1000)} mm 컴파일 포락`
     : '컴파일 포락을 계산하는 중';
   const envelopeScore = isImportedAssembly
-    ? metrics?.bounds ? 97 : 78
+    ? engineering?.evidenceScore ?? (metrics?.bounds ? 64 : 52)
     : Math.round(Math.max(0, isKnife
       ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
       : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
@@ -132,6 +133,18 @@ export function evaluateProductQuality(
   const topologyScore = topology
     ? topology.pass ? 100 : Math.max(0, 100 - topology.boundaryEdges - topology.nonManifoldEdges * 2 - topology.degenerateTriangles)
     : 64;
+  const connectionDocumentation = connectivity && connectivity.wires > 0 && connectivity.ports > 0
+    ? (connectivity.documentedPhysicalPins / connectivity.ports
+      + connectivity.specifiedGaugeWires / connectivity.wires
+      + connectivity.documentedVerificationWires / connectivity.wires) / 3
+    : 0;
+  const connectivityScore = isKnife
+    ? 97
+    : connectivity?.errors.length
+      ? Math.max(0, 72 - connectivity.errors.length * 8)
+      : connectivity
+        ? Math.round(Math.min(connectivity.productionReady ? 99 : 89, 78 + connectionDocumentation * 16))
+        : 52;
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
@@ -144,12 +157,14 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isImportedAssembly ? '컴파일 포락' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isImportedAssembly ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
         ? `${evidence.fileName} · ${evidence.notes[0]}`
-        : isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
+        : isImportedAssembly && engineering
+          ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
+          : isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
     },
     {
       id: 'materials',
@@ -162,13 +177,13 @@ export function evaluateProductQuality(
     },
     {
       id: 'rig',
-      label: isKnife ? '실무 토폴로지' : '전기 연결성',
-      score: isKnife ? 97 : connectivity && connectivity.errors.length === 0 ? 99 : 72,
-      status: isKnife || (connectivity && connectivity.errors.length === 0) ? 'pass' : 'warn',
+      label: isKnife ? '실무 토폴로지' : '전기 연결·실물 검수',
+      score: connectivityScore,
+      status: isKnife ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
         : connectivity
-          ? `${connectivity.connectedWires}/${connectivity.wires} 도체 · 필수 포트 ${connectivity.connectedRequiredPorts}/${connectivity.requiredPorts} · 부유 끝 ${connectivity.danglingWires}`
+          ? `${connectivity.connectedWires}/${connectivity.wires} 도체 · 물리 핀 ${connectivity.documentedPhysicalPins}/${connectivity.ports} · AWG ${connectivity.specifiedGaugeWires}/${connectivity.wires} · 벤치 대기 ${connectivity.outstandingBenchChecks}`
           : '포트·네트·도체 그래프를 컴파일한 뒤 연결성을 판정합니다.',
     },
     {
@@ -180,8 +195,9 @@ export function evaluateProductQuality(
     },
   ];
   const base = checks.reduce((sum, check) => sum + check.score, 0) / checks.length;
+  const hasBlockingCheck = checks.some((check) => check.status === 'blocked');
   return {
-    total: Math.round(Math.max(0, Math.min(100, base))),
+    total: Math.round(Math.max(0, Math.min(hasBlockingCheck ? 59 : 100, base))),
     checks,
     triangles: 0,
     vertices: 0,

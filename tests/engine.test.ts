@@ -11,8 +11,9 @@ import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
+import { buildPhysicalNetlist } from '../src/engine/netlist';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
-import { evaluateQuality } from '../src/engine/quality';
+import { evaluateProductQuality, evaluateQuality } from '../src/engine/quality';
 import {
   getPoseJoints,
   poseLandmarkRms,
@@ -219,16 +220,80 @@ describe('AssemblyIR product pipeline', () => {
     const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
     const connectivity = build.metrics.connectivity;
     expect(COOLING_ASSEMBLY_IR.metadata).toMatchObject({ sourceWidth: 2038, sourceHeight: 1268 });
-    expect(COOLING_ASSEMBLY_IR.components.length).toBeGreaterThanOrEqual(24);
-    expect(connectivity?.wires).toBeGreaterThanOrEqual(35);
+    expect(COOLING_ASSEMBLY_IR.components.length).toBe(97);
+    expect(connectivity?.wires).toBe(75);
+    expect(connectivity?.ports).toBe(150);
     expect(connectivity?.connectedWires).toBe(connectivity?.wires);
     expect(connectivity?.connectedRequiredPorts).toBe(connectivity?.requiredPorts);
     expect(connectivity?.danglingWires).toBe(0);
     expect(connectivity?.openRequiredPorts).toBe(0);
+    expect(connectivity?.documentedPhysicalPins).toBe(150);
+    expect(connectivity?.specifiedGaugeWires).toBe(75);
+    expect(connectivity?.documentedVerificationWires).toBe(75);
+    expect(connectivity?.benchRequiredWires).toBe(6);
+    expect(connectivity?.outstandingBenchChecks).toBe(5);
+    expect(connectivity?.liveAnchors).toBe(true);
+    expect(connectivity?.productionReady).toBe(false);
     expect(connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
     expect(build.metrics.surfaces.distinctFinishes).toBeGreaterThanOrEqual(8);
     expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(150);
     expect(build.metrics.topology.pass).toBe(true);
+    expect(build.metrics.engineering).toMatchObject({
+      digitalReady: true,
+      productionReady: false,
+      passiveNodes: 7,
+      outstandingBenchChecks: 5,
+    });
+  });
+
+  it('keeps every conductor attached when an electronic component moves without rebuilding idle wires', () => {
+    const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+    const tec = build.root.getObjectByName('tec');
+    const wire = build.root.getObjectByName('w_tec_pos_a') as THREE.Mesh;
+    const terminal = build.root.getObjectByName('w_tec_pos_a_terminal_2') as THREE.Mesh;
+    const update = build.root.userData.updateElectricalHarness as (() => void) | undefined;
+    expect(tec).toBeTruthy();
+    expect(wire).toBeTruthy();
+    expect(terminal).toBeTruthy();
+    expect(update).toBeTypeOf('function');
+    const initialTerminalX = terminal.position.x;
+    let disposed = false;
+    wire.geometry.addEventListener('dispose', () => { disposed = true; });
+    tec!.position.x += 0.01;
+    update!();
+    expect(terminal.position.x - initialTerminalX).toBeCloseTo(0.01, 6);
+    expect(disposed).toBe(true);
+    const settledGeometry = wire.geometry;
+    update!();
+    expect(wire.geometry).toBe(settledGeometry);
+  });
+
+  it('blocks a production-readiness score while hidden geometry and bench checks remain', () => {
+    const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+    const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics, COOLING_ASSEMBLY_IR);
+    expect(report.total).toBeLessThanOrEqual(59);
+    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'blocked' });
+    expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({ status: 'warn' });
+  });
+
+  it('exports the assembler netlist from the same AssemblyIR without stale counts', () => {
+    const netlist = buildPhysicalNetlist(COOLING_ASSEMBLY_IR);
+    expect(netlist.summary).toEqual({
+      components: 97,
+      ports: 150,
+      connections: 75,
+      physicalPinLabels: 150,
+      gauges: 75,
+      verificationRecords: 75,
+      pendingBenchChecks: 5,
+    });
+    expect(netlist.connections[0].from.physicalPin).toBeTruthy();
+    expect(netlist.connections.filter((connection) => connection.verification === 'bench-required')).toHaveLength(6);
+    expect(netlist.passiveNodes).toHaveLength(7);
+  });
+
+  it('rejects malformed imported harness collections with a bounded validation error', () => {
+    expect(() => validateElectricalHarness({ ports: {} as never, wires: [] }, new Set())).toThrow(/connectivity failed/i);
   });
 
   it('keeps the detailed phone and image-derived cooling assembly closed and manifold', () => {

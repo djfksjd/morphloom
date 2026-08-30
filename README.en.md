@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-26%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-30%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -31,8 +31,8 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Smartphone wiring | 28/28 individual conductors · 56/56 required ports · 0 dangling ends |
 | Smartphone surfaces | 13 PBR finishes · micro-normal on 219/220 materials · 111 anisotropic materials |
 | Ornate knife | 16 parts · 18,930 tris · 16/16 watertight |
-| Image-derived cooling assembly | 24 source components → 67 rendered parts · 153/153 watertight meshes · 43/43 conductors · 86/86 required ports |
-| Output | GLB · PNG · CharacterIR/AssemblyIR JSON |
+| Image-derived cooling assembly | 97 source components → 172 rendered parts · 322/322 watertight meshes · 75/75 conductors · 150/150 physical ports |
+| Output | GLB · PNG · CharacterIR/AssemblyIR · physical Netlist JSON |
 
 ## Does dropping in an image immediately create 3D?
 
@@ -58,21 +58,24 @@ images + known dimensions
 
 ### Supplied-image regression check
 
-The user-supplied 2038×1268 exploded electronics image is now a regression case. The `COOLER / 03` preset reconstructs the visible cold plate, contact pad, TEC1-12706, copper base, AXP90 fins and heatpipes, 92 mm fan, ESP32-S3, ADC, MUX, sensors, power monitor, and driver.
+The user-supplied 2038×1268 exploded electronics image and the `new-chat` engineering view are now regression inputs. `COOLER / 03` reconstructs dual TEC branches with independent monitors, MOSFET stages and thermal fuses, an open shared fan, eight NTC points, ADC/MUX/passives, and a harness carrying physical pin labels and conductor gauge. UI counts are derived directly from AssemblyIR so stale display numbers cannot diverge from the model.
 
 | Gate | Result |
 |---|---:|
 | Source resolution | 2038×1268 |
-| Structural components | 24 |
-| Rendered parts | 67 |
-| Triangles | 124,664 |
-| Individual conductors | 43/43 connected |
-| Required electrical ports | 86/86 connected |
+| Structural components | 97 |
+| Rendered parts | 172 |
+| Triangles | 272,560 |
+| Individual conductors | 75/75 connected |
+| Required electrical ports | 150/150 connected |
 | Dangling wires / open required ports | 0 / 0 |
-| Ports located on owning components | 86/86 |
+| Ports located on owning components | 150/150 |
+| Physical labels / gauges / verification records | 150/150 · 75/75 · 75/75 |
+| Wire endpoints during exploded motion | live anchored · no idle rebuild |
+| Physical bench gate | 6 polarity conductors · 5 required checks pending |
 | Maximum terminal-center error | below 0.0001 mm |
 
-Hidden undersides, exact fasteners, PCB traces, and real routing cannot be measured from one exploded view and are marked `inferred`. The source image is not redistributed because its reuse rights are unknown.
+Digital connectivity and topology pass, but hidden undersides, exact fasteners, PCB traces, and real routing cannot be measured from one exploded view and remain `inferred`. `productionReady` therefore stays `false` until continuity, polarity, and fail-safe checks pass. The source image is not redistributed because its reuse rights are unknown.
 
 ## Quick start
 
@@ -101,13 +104,15 @@ npm run build
 
 Wires are not decorative curves. `AssemblyIR.electrical` preserves:
 
-- ports with owning component and pin names;
+- ports with owning component, logical pin, and assembler-visible pad/connector labels;
 - `power`, `ground`, `data`, `rf`, `audio`, `sensor`, and `control` classes;
-- one `wire` per conductor with endpoint ports, net, diameter, color, and shielding;
+- one `wire` per conductor with endpoint ports, net, diameter, color, shielding, gauge, and `datasheet/design/bench-required` evidence;
 - exact terminal positions derived from component-local coordinates and checked against owning-component bounds;
 - validation for missing required ports, invalid references, signal mismatch, overload, and endpoint drift.
 
-Each conductor is an independently selectable closed mesh. The compiler measures the start/end cap centers against the referenced terminals and fails the build when tolerance is exceeded.
+Each conductor is an independently selectable closed mesh. The compiler measures the start/end cap centers against the referenced terminals and fails the build when tolerance is exceeded. Moving parts update only affected conductors and dispose replaced geometry; idle frames allocate nothing. Digital graph validity and physical continuity remain separate states.
+
+`SAVE NETLIST` derives an assembler-facing connection table from the same AssemblyIR, keeping product/component/port/conductor counts, physical pin labels, gauges, verification states, passive nodes, and bench checks in one source of truth.
 
 ## PBR micro-surfaces that control reflection angle
 
@@ -202,7 +207,7 @@ One [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikime
 ## Current limits
 
 - One image cannot reveal hidden components, exact thickness, tolerances, or pinout.
-- Wiring validation currently checks geometry, ports, and signal classes; it is not SPICE simulation or PCB ERC.
+- Wiring validation checks geometry, ports, physical labels, gauges, and evidence states; it is not SPICE simulation, PCB ERC, or a physical continuity test.
 - Humans are at the editable realistic-base stage. Identity likeness, production skin weights, facial rigs, and cloth simulation remain future gates.
 - Photo de-lighting, calibrated multi-view fitting, UV atlas/baking, LODs, collision meshes, and Blender/Unity/Unreal round trips remain planned.
 

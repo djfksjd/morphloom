@@ -10,6 +10,8 @@ import { createSurfaceMaterial } from './surface-system';
 
 const mm = (value: number) => value / 1000;
 const SAFE_ID = /^[a-zA-Z0-9_-]{1,80}$/;
+const ELECTRICAL_SIGNALS = new Set(['power', 'ground', 'data', 'rf', 'audio', 'sensor', 'control']);
+const VERIFICATION_STATES = new Set(['datasheet', 'design', 'bench-required', 'bench-verified', 'inferred']);
 
 export interface ConnectivityReport {
   ports: number;
@@ -23,6 +25,15 @@ export interface ConnectivityReport {
   offComponentPorts: number;
   portOutsideDistanceMaxMm: number;
   endpointErrorMaxMm: number;
+  documentedPhysicalPins: number;
+  specifiedGaugeWires: number;
+  documentedVerificationWires: number;
+  benchRequiredWires: number;
+  benchVerifiedWires: number;
+  inferredWires: number;
+  outstandingBenchChecks: number;
+  liveAnchors: boolean;
+  productionReady: boolean;
   errors: string[];
 }
 
@@ -45,6 +56,9 @@ export function inspectElectricalHarness(
   const ports = new Map<string, ElectricalPortIR>();
   const connections = new Map<string, number>();
   const wireIds = new Set<string>();
+  let documentedPhysicalPins = 0;
+  const portList = Array.isArray(harness.ports) ? harness.ports : [];
+  const wireList = Array.isArray(harness.wires) ? harness.wires : [];
 
   if (!Array.isArray(harness.ports) || harness.ports.length > 2_000) {
     errors.push('Electrical harness must contain at most 2,000 ports.');
@@ -53,12 +67,24 @@ export function inspectElectricalHarness(
     errors.push('Electrical harness must contain at most 2,000 wires.');
   }
 
-  for (const port of harness.ports ?? []) {
+  for (const port of portList) {
+    if (!port || typeof port !== 'object') {
+      errors.push('Electrical harness contains an invalid port record.');
+      continue;
+    }
     if (!SAFE_ID.test(port.id) || ports.has(port.id)) errors.push(`Invalid or duplicate port id: ${port.id}`);
     if (!componentIds.has(port.componentId)) errors.push(`Port ${port.id} references missing component ${port.componentId}.`);
     if (!finiteVec3(port.position)) errors.push(`Port ${port.id} has an unsafe position.`);
     if (port.direction && !finiteVec3(port.direction)) errors.push(`Port ${port.id} has an unsafe direction.`);
     if (!port.pin || port.pin.length > 80) errors.push(`Port ${port.id} has an invalid pin label.`);
+    if (!ELECTRICAL_SIGNALS.has(port.signal)) errors.push(`Port ${port.id} has an invalid signal class.`);
+    if (port.physicalPin !== undefined) {
+      if (typeof port.physicalPin !== 'string' || port.physicalPin.trim().length < 1 || port.physicalPin.length > 120) {
+        errors.push(`Port ${port.id} has an invalid physical pin label.`);
+      } else {
+        documentedPhysicalPins += 1;
+      }
+    }
     const maxConnections = port.maxConnections ?? 1;
     if (!Number.isInteger(maxConnections) || maxConnections < 1 || maxConnections > 64) {
       errors.push(`Port ${port.id} has an invalid maxConnections value.`);
@@ -68,14 +94,39 @@ export function inspectElectricalHarness(
   }
 
   let connectedWires = 0;
-  for (const wire of harness.wires ?? []) {
+  let specifiedGaugeWires = 0;
+  let documentedVerificationWires = 0;
+  let benchRequiredWires = 0;
+  let benchVerifiedWires = 0;
+  let inferredWires = 0;
+  for (const wire of wireList) {
+    if (!wire || typeof wire !== 'object') {
+      errors.push('Electrical harness contains an invalid wire record.');
+      continue;
+    }
     if (!SAFE_ID.test(wire.id) || wireIds.has(wire.id)) errors.push(`Invalid or duplicate wire id: ${wire.id}`);
     wireIds.add(wire.id);
+    if (!wire.name || wire.name.length > 120) errors.push(`Wire ${wire.id} has an invalid name.`);
     if (!SAFE_ID.test(wire.net)) errors.push(`Wire ${wire.id} has an invalid net id.`);
+    if (!ELECTRICAL_SIGNALS.has(wire.signal)) errors.push(`Wire ${wire.id} has an invalid signal class.`);
     if (!Number.isFinite(wire.diameter) || wire.diameter <= 0 || wire.diameter > 20) {
       errors.push(`Wire ${wire.id} has an unsafe diameter.`);
     }
     if (!/^#[0-9a-fA-F]{6}$/.test(wire.color)) errors.push(`Wire ${wire.id} has an invalid color.`);
+    if (wire.gauge !== undefined) {
+      if (typeof wire.gauge !== 'string' || wire.gauge.length > 32 || !/^(?:\d{1,2}(?:\.\d+)?AWG|\d+(?:\.\d+)?mm2)$/i.test(wire.gauge)) {
+        errors.push(`Wire ${wire.id} has an invalid conductor gauge.`);
+      } else {
+        specifiedGaugeWires += 1;
+      }
+    }
+    if (wire.verification === 'bench-required') benchRequiredWires += 1;
+    else if (wire.verification === 'bench-verified') benchVerifiedWires += 1;
+    else if (wire.verification === 'inferred') inferredWires += 1;
+    else if (wire.verification !== undefined && !VERIFICATION_STATES.has(wire.verification)) {
+      errors.push(`Wire ${wire.id} has an invalid verification state.`);
+    }
+    if (wire.verification !== undefined && VERIFICATION_STATES.has(wire.verification)) documentedVerificationWires += 1;
     if (wire.from === wire.to) errors.push(`Wire ${wire.id} cannot connect a port to itself.`);
     if (wire.waypoints && (wire.waypoints.length > 128 || wire.waypoints.some((point) => !finiteVec3(point)))) {
       errors.push(`Wire ${wire.id} has unsafe waypoints.`);
@@ -110,19 +161,55 @@ export function inspectElectricalHarness(
       errors.push(`Port ${port.id} exceeds its connection limit.`);
     }
   }
+  if (harness.verificationScope !== undefined && (typeof harness.verificationScope !== 'string' || harness.verificationScope.length > 500)) {
+    errors.push('Electrical harness has an invalid verification scope.');
+  }
+  const passiveNodes = Array.isArray(harness.passiveNodes) ? harness.passiveNodes : [];
+  if (harness.passiveNodes !== undefined && !Array.isArray(harness.passiveNodes)) errors.push('Electrical passiveNodes must be an array.');
+  if (passiveNodes.length > 256) errors.push('Electrical harness must contain at most 256 passive nodes.');
+  for (const node of passiveNodes) {
+    if (!node || typeof node !== 'object'
+      || typeof node.ref !== 'string' || node.ref.length < 1 || node.ref.length > 120
+      || typeof node.node !== 'string' || node.node.length < 1 || node.node.length > 500
+      || typeof node.detail !== 'string' || node.detail.length > 500
+      || !VERIFICATION_STATES.has(node.verification)) {
+      errors.push('Electrical harness contains an invalid passive node.');
+    }
+  }
+  const benchChecks = Array.isArray(harness.benchChecks) ? harness.benchChecks : [];
+  if (harness.benchChecks !== undefined && !Array.isArray(harness.benchChecks)) errors.push('Electrical benchChecks must be an array.');
+  if (benchChecks.length > 128) errors.push('Electrical harness must contain at most 128 bench checks.');
+  const benchIds = new Set<string>();
+  for (const check of benchChecks) {
+    if (!check || typeof check !== 'object' || !SAFE_ID.test(check.id) || benchIds.has(check.id) || !check.instruction || check.instruction.length > 500 || !['required', 'passed', 'failed'].includes(check.status)) {
+      errors.push('Electrical harness contains an invalid bench check.');
+      continue;
+    }
+    benchIds.add(check.id);
+  }
+  const outstandingBenchChecks = benchChecks.filter((check) => check.status !== 'passed').length;
 
   return {
     ports: ports.size,
     requiredPorts,
     connectedRequiredPorts,
-    wires: harness.wires?.length ?? 0,
+    wires: wireList.length,
     connectedWires,
-    danglingWires: (harness.wires?.length ?? 0) - connectedWires,
+    danglingWires: wireList.length - connectedWires,
     openRequiredPorts: requiredPorts - connectedRequiredPorts,
     overloadedPorts,
     offComponentPorts: 0,
     portOutsideDistanceMaxMm: 0,
     endpointErrorMaxMm: 0,
+    documentedPhysicalPins,
+    specifiedGaugeWires,
+    documentedVerificationWires,
+    benchRequiredWires,
+    benchVerifiedWires,
+    inferredWires,
+    outstandingBenchChecks,
+    liveAnchors: false,
+    productionReady: errors.length === 0 && benchRequiredWires === 0 && inferredWires === 0 && outstandingBenchChecks === 0,
     errors,
   };
 }
@@ -142,10 +229,12 @@ function resolvePortPosition(root: THREE.Group, component: THREE.Object3D, port:
   return root.worldToLocal(world);
 }
 
-function resolvePortDirection(component: THREE.Object3D, port: ElectricalPortIR): THREE.Vector3 {
+function resolvePortDirection(root: THREE.Group, component: THREE.Object3D, port: ElectricalPortIR): THREE.Vector3 {
   const direction = new THREE.Vector3(...(port.direction ?? [0, 0, 1]));
   if (direction.lengthSq() < 1e-10) direction.set(0, 0, 1);
-  direction.normalize().applyQuaternion(component.getWorldQuaternion(new THREE.Quaternion()));
+  const componentWorld = component.getWorldQuaternion(new THREE.Quaternion());
+  const rootWorldInverse = root.getWorldQuaternion(new THREE.Quaternion()).invert();
+  direction.normalize().applyQuaternion(componentWorld).applyQuaternion(rootWorldInverse);
   return direction.normalize();
 }
 
@@ -201,8 +290,8 @@ function routeWire(
   const start = resolvePortPosition(root, fromComponent, from);
   const end = resolvePortPosition(root, toComponent, to);
   const lead = Math.max(mm(wire.diameter * 3), 0.0014);
-  const startLead = start.clone().addScaledVector(resolvePortDirection(fromComponent, from), lead);
-  const endLead = end.clone().addScaledVector(resolvePortDirection(toComponent, to), lead);
+  const startLead = start.clone().addScaledVector(resolvePortDirection(root, fromComponent, from), lead);
+  const endLead = end.clone().addScaledVector(resolvePortDirection(root, toComponent, to), lead);
   const waypointVectors = (wire.waypoints ?? []).map((point) => new THREE.Vector3(...point.map(mm) as [number, number, number]));
   if (waypointVectors.length === 0) {
     const lane = (routeIndex % 11) - 5;
@@ -232,6 +321,18 @@ export function compileElectricalHarness(
   });
   const report = validateElectricalHarness(harness, new Set(components.keys()));
   const ports = new Map(harness.ports.map((port) => [port.id, port]));
+  const harnessRoot = new THREE.Group();
+  harnessRoot.name = 'electrical_harness';
+  const liveRecords: Array<{
+    wire: ElectricalWireIR;
+    routeIndex: number;
+    mesh: THREE.Mesh;
+    terminals: [THREE.Mesh, THREE.Mesh];
+    lastStart: THREE.Vector3;
+    lastStartLead: THREE.Vector3;
+    lastEndLead: THREE.Vector3;
+    lastEnd: THREE.Vector3;
+  }> = [];
 
   const portToleranceMm = harness.portToleranceMm ?? 0.25;
   for (const port of harness.ports) {
@@ -284,13 +385,21 @@ export function compileElectricalHarness(
       category: 'interconnect',
       material: materialName,
       surface: 'rubber',
-      detail: `${wire.net} · ${wire.signal.toUpperCase()} · ${wire.from} → ${wire.to} · 단자 스냅 검증`,
+      detail: [
+        wire.net,
+        wire.signal.toUpperCase(),
+        wire.gauge,
+        `${wire.from} → ${wire.to}`,
+        `3D 단자 스냅`,
+        wire.verification ? `근거 ${wire.verification}` : undefined,
+      ].filter(Boolean).join(' · '),
     };
     mesh.userData.part = info;
-    mesh.userData.connection = structuredClone(wire);
+    mesh.userData.connection = { ...structuredClone(wire), endpointSnapped: true, liveAnchors: true };
     const terminalMaterial = createSurfaceMaterial({
       color: '#d2b76f', surface: 'polished-metal', roughness: 0.22, metalness: 0.88,
     }, { mode, category: 'interconnect', materialName: '금도금 구리 단자' });
+    const terminals: THREE.Mesh[] = [];
     for (const [terminalIndex, point] of [points[0], points[points.length - 1]].entries()) {
       const terminal = new THREE.Mesh(
         new THREE.SphereGeometry(mm(wire.diameter) * 0.78, 14, 8),
@@ -299,11 +408,23 @@ export function compileElectricalHarness(
       terminal.name = `${wire.id}_terminal_${terminalIndex + 1}`;
       terminal.position.copy(point);
       terminal.userData.part = info;
-      mesh.add(terminal);
+      terminal.userData.connection = mesh.userData.connection;
+      harnessRoot.add(terminal);
+      terminals.push(terminal);
     }
     terminalMaterial.dispose();
     parts.push(info);
-    root.add(mesh);
+    harnessRoot.add(mesh);
+    liveRecords.push({
+      wire,
+      routeIndex: wireIndex,
+      mesh,
+      terminals: terminals as [THREE.Mesh, THREE.Mesh],
+      lastStart: points[0].clone(),
+      lastStartLead: points[1].clone(),
+      lastEndLead: points[points.length - 2].clone(),
+      lastEnd: points[points.length - 1].clone(),
+    });
   }
 
   const tolerance = harness.endpointToleranceMm ?? 0.05;
@@ -311,7 +432,79 @@ export function compileElectricalHarness(
     throw new Error(`Electrical geometry missed a terminal by ${report.endpointErrorMaxMm.toFixed(4)} mm (limit ${tolerance} mm).`);
   }
 
+  root.add(harnessRoot);
+  const wiredComponents = [...new Set(harness.ports.map((port) => components.get(port.componentId)!))];
+  const transformSnapshots = new Map<THREE.Object3D, Float64Array>();
+  const captureTransform = (component: THREE.Object3D, target: Float64Array): void => {
+    target[0] = component.position.x;
+    target[1] = component.position.y;
+    target[2] = component.position.z;
+    target[3] = component.quaternion.x;
+    target[4] = component.quaternion.y;
+    target[5] = component.quaternion.z;
+    target[6] = component.quaternion.w;
+    target[7] = component.scale.x;
+    target[8] = component.scale.y;
+    target[9] = component.scale.z;
+  };
+  for (const component of wiredComponents) {
+    const snapshot = new Float64Array(10);
+    captureTransform(component, snapshot);
+    transformSnapshots.set(component, snapshot);
+  }
+  const consumeTransformChanges = (): boolean => {
+    let changed = false;
+    for (const component of wiredComponents) {
+      const previous = transformSnapshots.get(component)!;
+      const componentChanged = Math.abs(component.position.x - previous[0]) > 1e-12
+        || Math.abs(component.position.y - previous[1]) > 1e-12
+        || Math.abs(component.position.z - previous[2]) > 1e-12
+        || Math.abs(component.quaternion.x - previous[3]) > 1e-12
+        || Math.abs(component.quaternion.y - previous[4]) > 1e-12
+        || Math.abs(component.quaternion.z - previous[5]) > 1e-12
+        || Math.abs(component.quaternion.w - previous[6]) > 1e-12
+        || Math.abs(component.scale.x - previous[7]) > 1e-12
+        || Math.abs(component.scale.y - previous[8]) > 1e-12
+        || Math.abs(component.scale.z - previous[9]) > 1e-12;
+      if (!componentChanged) continue;
+      captureTransform(component, previous);
+      changed = true;
+    }
+    return changed;
+  };
+  const updateElectricalHarness = (): void => {
+    if (!consumeTransformChanges()) return;
+    root.updateMatrixWorld(true);
+    for (const record of liveRecords) {
+      const points = routeWire(root, components, ports, record.wire, record.routeIndex);
+      const start = points[0];
+      const startLead = points[1];
+      const endLead = points[points.length - 2];
+      const end = points[points.length - 1];
+      if (record.lastStart.distanceToSquared(start) < 1e-14
+        && record.lastStartLead.distanceToSquared(startLead) < 1e-14
+        && record.lastEndLead.distanceToSquared(endLead) < 1e-14
+        && record.lastEnd.distanceToSquared(end) < 1e-14) continue;
+      const replacement = createCappedTube(points, mm(record.wire.diameter) * 0.5);
+      record.mesh.geometry.dispose();
+      record.mesh.geometry = replacement;
+      record.terminals[0].position.copy(start);
+      record.terminals[1].position.copy(end);
+      record.lastStart.copy(start);
+      record.lastStartLead.copy(startLead);
+      record.lastEndLead.copy(endLead);
+      record.lastEnd.copy(end);
+    }
+  };
+
+  report.liveAnchors = true;
+  report.productionReady = report.errors.length === 0
+    && report.benchRequiredWires === 0
+    && report.inferredWires === 0
+    && report.outstandingBenchChecks === 0;
+  harnessRoot.userData.electricalRuntime = { liveAnchors: true, conductors: liveRecords.length };
   root.userData.electrical = structuredClone(harness);
+  root.userData.updateElectricalHarness = updateElectricalHarness;
   root.userData.connectivity = report;
   return report;
 }

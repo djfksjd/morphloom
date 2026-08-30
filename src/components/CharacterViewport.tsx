@@ -184,6 +184,8 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       const animate = () => {
         controls.update();
         measurement.rotation.y += 0.0007;
+        const harnessUpdater = buildRef.current?.root.userData.updateElectricalHarness;
+        if (typeof harnessUpdater === 'function') harnessUpdater();
         renderer.render(scene, camera);
         const runtime = runtimeRef.current;
         if (runtime) runtime.frame = requestAnimationFrame(animate);

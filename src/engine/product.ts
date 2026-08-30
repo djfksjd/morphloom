@@ -6,6 +6,7 @@ import { compileElectricalHarness, type ConnectivityReport } from './connectivit
 import type { AssemblyMaterialIR, ElectricalHarnessIR, ElectricalPortIR, ElectricalSignalIR, ElectricalWireIR } from './assembly-ir';
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { analyzeTopology, type MeshTopologyReport } from './topology';
+import type { EngineeringAuditReport } from './engineering-audit';
 
 export interface ProductPartInfo {
   id: string;
@@ -26,6 +27,7 @@ export interface ProductMetrics {
   connectivity?: ConnectivityReport;
   surfaces: SurfaceReport;
   topology: MeshTopologyReport;
+  engineering?: EngineeringAuditReport;
 }
 
 export interface ProductBuild {
@@ -353,9 +355,10 @@ function createSmartphoneHarness(): ElectricalHarnessIR {
     signal: ElectricalSignalIR,
     position: [number, number, number],
     direction: [number, number, number] = [0, 0, 1],
+    physicalPin = pin,
   ) => {
     const id = `${componentId}_${pin}`;
-    ports.push({ id, componentId, pin, signal, position, direction, required: true, maxConnections: 1 });
+    ports.push({ id, componentId, pin, physicalPin, signal, position, direction, required: true, maxConnections: 1 });
     return id;
   };
   const addWire = (
@@ -368,7 +371,11 @@ function createSmartphoneHarness(): ElectricalHarnessIR {
     color: string,
     diameter = 0.46,
     shielded = false,
-  ) => wires.push({ id, name, net, signal, from, to, color, diameter, shielded });
+  ) => wires.push({
+    id, name, net, signal, from, to, color, diameter, shielded,
+    gauge: diameter >= 0.65 ? '22AWG' : diameter >= 0.42 ? '26AWG' : '30AWG',
+    verification: 'design',
+  });
 
   const cellPositive = addPort('battery', 'cell_pos', 'power', [-13, 36, 2.1], [0, 1, 0]);
   const cellNegative = addPort('battery', 'cell_neg', 'ground', [13, 36, 2.1], [0, 1, 0]);
@@ -471,7 +478,17 @@ function createSmartphoneHarness(): ElectricalHarnessIR {
     });
   }
 
-  return { ports, wires, endpointToleranceMm: 0.05, portToleranceMm: 0.25 };
+  return {
+    ports,
+    wires,
+    endpointToleranceMm: 0.05,
+    portToleranceMm: 0.25,
+    verificationScope: 'digital port graph and 3D endpoint anchoring; production continuity requires a physical fixture test',
+    benchChecks: [
+      { id: 'phone_power_short', instruction: '전원 인가 전 VBAT와 GND 사이 단락을 검사합니다.', status: 'required' },
+      { id: 'phone_flex_continuity', instruction: '카메라·디스플레이·오디오 FPC의 핀 연속성을 검사합니다.', status: 'required' },
+    ],
+  };
 }
 
 export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {

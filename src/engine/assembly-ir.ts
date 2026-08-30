@@ -52,6 +52,15 @@ export type SurfaceFinishIR =
   | 'hair'
   | 'semiconductor';
 
+export type EvidenceStatusIR = 'measured' | 'datasheet' | 'estimated' | 'inferred';
+
+export interface ComponentEvidenceIR {
+  /** Strongest evidence supporting the dimensions and identity of this edit unit. */
+  status: EvidenceStatusIR;
+  source?: string;
+  notes?: string[];
+}
+
 export interface AssemblyComponentIR {
   id: string;
   name: string;
@@ -63,6 +72,7 @@ export interface AssemblyComponentIR {
   rotation?: [number, number, number];
   scale?: [number, number, number];
   material: AssemblyMaterialIR;
+  evidence?: ComponentEvidenceIR;
 }
 
 export type ElectricalSignalIR = 'power' | 'ground' | 'data' | 'rf' | 'audio' | 'sensor' | 'control';
@@ -71,6 +81,8 @@ export interface ElectricalPortIR {
   id: string;
   componentId: string;
   pin: string;
+  /** Connector/pad label visible to an assembler, for example J1-21 or VIN+. */
+  physicalPin?: string;
   signal: ElectricalSignalIR;
   /** Position in the owning component's local coordinate system, in millimetres. */
   position: [number, number, number];
@@ -93,6 +105,23 @@ export interface ElectricalWireIR {
   color: string;
   materialName?: string;
   shielded?: boolean;
+  /** Human-readable conductor size such as 16AWG or 0.25mm2. */
+  gauge?: string;
+  /** What has actually established this connection; never imply a bench test from graph validation. */
+  verification?: 'datasheet' | 'design' | 'bench-required' | 'bench-verified' | 'inferred';
+}
+
+export interface PassiveNodeIR {
+  ref: string;
+  node: string;
+  detail: string;
+  verification: 'datasheet' | 'design' | 'bench-required' | 'bench-verified' | 'inferred';
+}
+
+export interface BenchCheckIR {
+  id: string;
+  instruction: string;
+  status: 'required' | 'passed' | 'failed';
 }
 
 export interface ElectricalHarnessIR {
@@ -101,6 +130,9 @@ export interface ElectricalHarnessIR {
   endpointToleranceMm?: number;
   /** Maximum distance a declared port may sit outside its owning component bounds. */
   portToleranceMm?: number;
+  verificationScope?: string;
+  passiveNodes?: PassiveNodeIR[];
+  benchChecks?: BenchCheckIR[];
 }
 
 export interface AssemblyIR {
