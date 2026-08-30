@@ -13,6 +13,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
+import { fitPerspectiveCameraToBounds } from '../src/engine/camera-framing';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from '../src/engine/quality';
 import {
@@ -419,5 +420,26 @@ describe('PBR micro-surface system', () => {
     expect(sapphire.clearcoat).toBe(1);
     expect(sapphire.iridescence).toBeGreaterThan(0.2);
     expect(sapphire.normalMap).toBeTruthy();
+  });
+});
+
+describe('result viewer camera framing', () => {
+  it('moves a wide product farther away when the viewport becomes narrow', () => {
+    const bounds = new THREE.Box3(
+      new THREE.Vector3(-0.0807, -0.06195, -0.0035),
+      new THREE.Vector3(0.0807, 0.06195, 0.0035),
+    );
+    const common = {
+      bounds,
+      direction: new THREE.Vector3(0, 0, 1),
+      up: new THREE.Vector3(0, 1, 0),
+      verticalFovDegrees: 31,
+      padding: 1.32,
+    };
+    const wide = fitPerspectiveCameraToBounds({ ...common, aspect: 1.8 });
+    const narrow = fitPerspectiveCameraToBounds({ ...common, aspect: 0.65 });
+    expect(narrow.distance).toBeGreaterThan(wide.distance);
+    expect(narrow.center.toArray()).toEqual([0, 0, 0]);
+    expect(Number.isFinite(narrow.distance)).toBe(true);
   });
 });

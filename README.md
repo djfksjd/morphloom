@@ -48,10 +48,10 @@ CharacterIR / AssemblyIR
 GLB + PNG + IR
 ```
 
-- 웹 화면에는 최대 24장·총 96MB의 사진을 함께 넣을 수 있습니다. 파일은 로컬에서 해상도·구도·노출을 검사합니다.
-- 정면·후면·좌·우·상·하단 촬영 현황을 표시하고, 분해도·부품·재질·치수 사진을 역할별로 분류합니다.
-- 같은 부품의 근접 사진에는 ASCII `component_id`를 지정합니다. `SAVE EVIDENCE`는 파일명과 역할을 `morphloom.evidence/0.1` JSON으로 내보내며 이미지 원본이나 로컬 URL은 포함하지 않습니다.
-- 브라우저 자체가 몰래 외부 LLM을 호출하지는 않습니다. 이미지 이해와 IR 작성은 저장소를 연 **Codex 또는 Claude**가 담당합니다.
+- 사진과 자연어 요구사항은 웹 폼이 아니라 저장소를 연 **Codex 또는 Claude의 개발/CLI 대화**에 직접 전달합니다.
+- 에이전트는 정면·후면·좌·우·상·하단, 분해도, 부품, 재질, 치수 근거를 읽고 `CharacterIR` 또는 `AssemblyIR`을 작성합니다.
+- 로컬 웹은 생성 명령을 받지 않는 결과 전용 뷰어입니다. 모델 선택, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, 부품 검사와 내보내기만 제공합니다.
+- 별도 API 키나 브라우저 내부 LLM 호출은 필요하지 않습니다. `OPEN RESULT`는 CLI가 만든 AssemblyIR JSON을 검수할 때만 사용합니다.
 - `CharacterIR 0.2`는 LLM의 시각 판단을 단순 문장으로 버리지 않습니다. 체형·복부·가슴·둔부·전방 머리·무게중심·손동작을 수치 제어값으로 보존하고, 화면 좌우와 해부학적 좌우를 별도로 기록합니다.
 - 만들어진 IR을 `LOAD IR`로 열면 실제 메시가 컴파일되고, 실패한 토폴로지·빈 포트·떠 있는 전선은 품질 게이트에서 차단됩니다.
 - OpenAI의 공식 API도 텍스트·이미지 입력과 JSON 출력을 지원하지만, Morphloom 기본 경로는 별도 API 키 없이 현재 코딩 에이전트를 사용합니다. [OpenAI 공식 문서](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
@@ -84,14 +84,13 @@ npm ci
 npm run dev
 ```
 
-브라우저에서 표시된 로컬 주소를 엽니다.
+브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Galaxy Z Fold8 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
 
-- `PHONE / 01` — 스마트폰 164부품·28개 도체 분해도
-- `BLADE / 02` — 가변 두께 검신과 장식을 가진 단검
-- `COOLER / 03` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
-- `FOLD8 / 04` — 삼성 공식 치수와 다각도 사진 기반 Galaxy Z Fold8 Graphite 외관
-- `HUMAN` — CC0 인체 토폴로지와 로컬 모프
-- `WEB HERO / 04` — 마스크·렌즈·웹 슈트·참조 액션 포즈 단일 사진 회귀 사례
+- `Galaxy Z Fold8` — 삼성 공식 치수와 다각도 사진 기반 Graphite 외관
+- `TEC Cooling Assembly` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
+- `Phone Assembly` — 스마트폰 164부품·28개 도체 분해도
+- `Ornate Blade` — 가변 두께 검신과 장식을 가진 단검
+- `Web Hero / Field Human` — CC0 인체 토폴로지와 로컬 모프
 
 검증 명령:
 
@@ -151,14 +150,14 @@ npm run build
 3. 다음처럼 요청합니다.
 
 ```text
-AGENTS.md를 따르고 첨부 이미지를 AssemblyIR로 만들어줘.
+첨부 이미지를 편집 가능한 AssemblyIR로 만들어줘.
 보이는 모든 정비 가능 부품을 분리하고, 전선마다 from/to 포트를 지정해.
 보이지 않는 형상은 inferred로 표시하고 npm test, benchmark, build를 통과시켜.
 ```
 
-4. 생성된 IR을 화면의 `LOAD IR`로 열어 부품 선택·분해·회전 후 GLB를 내보냅니다.
+4. 생성된 IR을 화면의 `OPEN RESULT`로 열어 부품 선택·회전 후 GLB를 내보냅니다.
 
-여러 사진을 사용하는 제품은 먼저 웹 화면에서 6면·분해도·부품 사진을 추가하고 역할과 `component_id`를 지정한 뒤 `SAVE EVIDENCE`를 실행합니다. 생성된 `morphloom-evidence.json`과 원본 사진들을 같은 파일명으로 에이전트에 전달하면 반복 촬영된 부품이 하나의 AssemblyIR 노드로 병합됩니다. 누락 시점, ID 없는 부품 사진, 낮은 입력 품질은 `EVIDENCE` 단계를 `BLOCKED`로 유지합니다.
+여러 사진을 사용하는 제품은 6면·분해도·부품·재질 사진을 파일명과 함께 Codex/Claude 대화에 전달합니다. 에이전트가 같은 부품의 반복 사진에 안정적인 ASCII `component_id`를 부여하고 하나의 AssemblyIR 노드로 병합합니다. 웹 화면은 이 근거를 수정하지 않고 결과와 품질 상태만 보여줍니다.
 
 ## Claude 하나로 사용
 

@@ -48,10 +48,10 @@ images + known dimensions
       GLB + PNG + IR
 ```
 
-- The web UI accepts up to 24 images and 96 MB per evidence set, then checks resolution, composition, and exposure locally.
-- It tracks front, rear, left, right, top, and bottom coverage and classifies exploded, component, material, and measurement photographs.
-- Close-ups of the same part share a stable ASCII `component_id`. `SAVE EVIDENCE` exports file names and roles as `morphloom.evidence/0.1` JSON without embedding source pixels or local blob URLs.
-- The browser does not silently call a remote LLM. Image understanding and IR authoring are performed by **Codex or Claude** working in the repository.
+- Give images and natural-language requirements directly to **Codex or Claude in the development/CLI conversation**, not to a browser form.
+- The agent reads the exterior views, exploded views, components, materials, and measurements, then authors `CharacterIR` or `AssemblyIR`.
+- The local web app is a result-only viewer: asset selection, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, component inspection, and export.
+- No separate API key or hidden browser LLM call is required. `OPEN RESULT` exists only to inspect an AssemblyIR JSON produced from the CLI workflow.
 - `CharacterIR 0.2` keeps the agent's visual judgment as data instead of discarding it as prose: body type, abdomen, chest, glutes, forward head, balance, and hand gesture become editable controls, with screen-side and anatomical-side mappings stored separately.
 - Load the resulting IR through `LOAD IR`; the compiler rejects invalid topology, missing ports, incompatible signals, and floating conductors.
 - OpenAI's API officially supports text/image inputs and JSON output, but the default Morphloom workflow uses the current coding agent and needs no separate API key. [Official OpenAI documentation](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
@@ -84,14 +84,13 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL and try:
+Open the printed local URL. It starts with the Galaxy Z Fold8 result and contains no image-upload or prompt fields.
 
-- `PHONE / 01` — 164-part smartphone with 28 individual conductors
-- `BLADE / 02` — ornate dagger with a variable-thickness blade
-- `COOLER / 03` — image-derived electrical-connectivity regression asset
-- `FOLD8 / 04` — Galaxy Z Fold8 Graphite exterior grounded in official dimensions and multi-angle imagery
-- `HUMAN` — CC0 human topology and local morphs
-- `WEB HERO / 04` — mask, lenses, web suit, and reference-action single-image regression asset
+- `Galaxy Z Fold8` — Graphite exterior grounded in official dimensions and imagery
+- `TEC Cooling Assembly` — image-derived electrical-connectivity regression asset
+- `Phone Assembly` — 164-part smartphone with 28 individual conductors
+- `Ornate Blade` — ornate dagger with a variable-thickness blade
+- `Web Hero / Field Human` — CC0 human topology and local morphs
 
 Verification:
 
@@ -151,14 +150,14 @@ These are physically plausible presets, not BRDF measurements from a gonioreflec
 3. Ask:
 
 ```text
-Follow AGENTS.md and turn the attached images into AssemblyIR.
+Turn the attached images into an editable AssemblyIR.
 Separate every visible serviceable part and give every conductor from/to ports.
 Mark hidden geometry as inferred, then pass npm test, benchmark, and build.
 ```
 
-4. Load the generated IR in the app, inspect components, and export GLB.
+4. Open the generated IR with `OPEN RESULT`, inspect components, and export GLB.
 
-For a multi-photo product, first add the six exterior views plus exploded and component photographs in the web UI. Assign roles and `component_id` values, then choose `SAVE EVIDENCE`. Give the resulting `morphloom-evidence.json` and the original images—with matching file names—to the agent. Repeated views of a component are then merged into one AssemblyIR node. Missing views, unidentified component images, and low-quality inputs keep the `EVIDENCE` stage `BLOCKED`.
+For a multi-photo product, give the six exterior views plus exploded, component, and material photographs—with useful file names—to the Codex or Claude conversation. The agent assigns stable ASCII `component_id` values and merges repeated views into one AssemblyIR node. The web app does not edit that evidence; it only presents the compiled result and quality status.
 
 ## Using Claude alone
 
