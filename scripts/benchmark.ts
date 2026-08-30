@@ -115,6 +115,7 @@ const result = {
         degenerateTriangles: webHeroTopology.degenerateTriangles,
         finishes: webHero.metrics.surfaces.finishes,
         pose: WEB_HERO_SPEC.pose,
+        poseLandmarkRmsMm: Number((webHero.metrics.poseLandmarkRmsMeters * 1000).toFixed(2)),
         inferredDetailParts: webHero.metrics.inferredDetailParts,
       },
       gamePrevisBaseReady: true,

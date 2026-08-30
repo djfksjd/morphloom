@@ -1070,6 +1070,31 @@ h2 {
   line-height: 1.45;
 }
 
+.semantic-read-card {
+  border-left-color: #8a1734;
+  background: linear-gradient(115deg, rgba(138, 23, 52, 0.09), rgba(7, 59, 112, 0.09));
+}
+
+.semantic-read-card small {
+  color: #8a1734;
+}
+
+.semantic-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.semantic-tags span {
+  padding: 3px 5px;
+  border: 1px solid rgba(7, 59, 112, 0.24);
+  background: rgba(255, 255, 255, 0.56);
+  color: #073b70;
+  font-family: var(--mono);
+  font-size: 6.5px;
+}
+
 .surface-audit {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

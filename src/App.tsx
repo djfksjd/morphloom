@@ -22,6 +22,7 @@ import {
 import { loadHumanPack } from './engine/ohpk';
 import { applyProductPrompt, applyPrompt } from './engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
+import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { CharacterViewport, type ViewportHandle } from './components/CharacterViewport';
 import { ParameterControl } from './components/ParameterControl';
 import type {
@@ -64,7 +65,7 @@ const PRESETS: Array<{ name: string; caption: string; patch: Partial<CharacterSp
     name: 'WEB HERO / 04',
     caption: '마스크·렌즈·웹 슈트',
     patch: WEB_HERO_SPEC,
-    prompt: '178cm의 슬림한 남성 웹 히어로, 적·청 슈트와 흰색 눈 렌즈, 거미줄 표면을 편집 가능한 게임 에셋으로',
+    prompt: '일반인이 스파이더맨을 코스튬한 슬림 소프트 체형. 배와 가슴은 살짝 나오고 엉덩이는 작음. 약한 거북목, 무게중심은 뒤. 오른발은 앞, 왼발은 뒤에서 굽힘. 오른손은 왼손보다 더 앞이고 조금 높으며 양손은 거미줄을 쏘는 모양.',
   },
 ];
 
@@ -260,7 +261,7 @@ export function App() {
           : undefined;
         if (inferredOutfit === 'web-hero') {
           setSpec(WEB_HERO_SPEC);
-          setPrompt('178cm의 슬림한 남성 웹 히어로, 적·청 슈트와 흰색 눈 렌즈, 거미줄 표면을 편집 가능한 게임 에셋으로');
+          setPrompt('일반인이 스파이더맨을 코스튬한 슬림 소프트 체형. 배와 가슴은 살짝 나오고 엉덩이는 작음. 약한 거북목, 무게중심은 뒤. 오른발은 앞, 왼발은 뒤에서 굽힘. 오른손은 왼손보다 더 앞이고 조금 높으며 양손은 거미줄을 쏘는 모양.');
         }
         setPromptNote(inferredOutfit === 'web-hero'
           ? '웹 히어로 참조 파일명 감지 · 마스크·렌즈·슈트 상세 CharacterIR을 적용했습니다.'
@@ -518,13 +519,12 @@ export function App() {
                   </button>
                 ))}
               </div>
-              {assetKind === 'product' && (
-                <div className="view-switcher" role="group" aria-label="고정 카메라 시점">
-                  <button onClick={() => viewportRef.current?.setView('iso')}>ISO</button>
-                  <button onClick={() => viewportRef.current?.setView('top')}>TOP</button>
-                  <button onClick={() => viewportRef.current?.setView('rear')}>REAR</button>
-                </div>
-              )}
+              <div className="view-switcher" role="group" aria-label="고정 카메라 시점">
+                {assetKind === 'human' && <button onClick={() => viewportRef.current?.setView('front')}>FRONT</button>}
+                <button onClick={() => viewportRef.current?.setView('iso')}>ISO</button>
+                {assetKind === 'product' && <button onClick={() => viewportRef.current?.setView('top')}>TOP</button>}
+                <button onClick={() => viewportRef.current?.setView('rear')}>REAR</button>
+              </div>
             </div>
             <span className="viewport-hint">DRAG TO ORBIT · SCROLL TO DOLLY</span>
           </div>
@@ -537,6 +537,7 @@ export function App() {
               spec={spec}
               productSpec={productSpec}
               assemblyIR={assemblyIR}
+              referenceImageUrl={activeReference?.url}
               mode={mode}
               onBuilt={handleBuilt}
               onPartSelected={setSelectedPart}
@@ -586,6 +587,18 @@ export function App() {
             )) ?? <div className="quality-skeleton" />}
           </div>
 
+          {assetKind === 'human' && spec.outfit === 'web-hero' && (
+            <div className="selected-part-card semantic-read-card">
+              <span className="eyebrow">agent visual interpretation</span>
+              <b>일반인 코스프레 · 슬림 소프트</b>
+              <small>ANATOMICAL RIGHT = VIEWER LEFT · HIDDEN DEPTH = INFERRED</small>
+              <p>{WEB_HERO_VISUAL_INTERPRETATION.observations.slice(1, 6).map((item) => item.label).join(' · ')}</p>
+              <div className="semantic-tags">
+                <span>오른손 더 앞/위</span><span>왼발 뒤 굽힘</span><span>웹 슈팅 손</span>
+              </div>
+            </div>
+          )}
+
           {assetKind === 'product' && selectedPart && (
             <div className="selected-part-card">
               <span className="eyebrow">selected component</span>
@@ -615,6 +628,11 @@ export function App() {
             <ParameterControl label="어깨" value={spec.shoulderScale} min={0.9} max={1.16} step={0.01} onChange={(value) => updateSpec('shoulderScale', value)} />
             <ParameterControl label="다리 비율" value={spec.legScale} min={0.94} max={1.08} step={0.005} onChange={(value) => updateSpec('legScale', value)} />
             <ParameterControl label="머리 비율" value={spec.headScale} min={0.92} max={1.08} step={0.005} onChange={(value) => updateSpec('headScale', value)} />
+            <ParameterControl label="복부 돌출" value={spec.abdominalProjection} min={0} max={0.7} step={0.01} onChange={(value) => updateSpec('abdominalProjection', value)} />
+            <ParameterControl label="가슴 연조직" value={spec.chestSoftness} min={0} max={0.7} step={0.01} onChange={(value) => updateSpec('chestSoftness', value)} />
+            <ParameterControl label="둔부 비율" value={spec.gluteScale} min={0.75} max={1.2} step={0.01} onChange={(value) => updateSpec('gluteScale', value)} />
+            <ParameterControl label="전방 머리" value={spec.forwardHead} min={0} max={0.7} step={0.01} onChange={(value) => updateSpec('forwardHead', value)} />
+            <ParameterControl label="후방 무게중심" value={spec.rearBalance} min={0} max={0.7} step={0.01} onChange={(value) => updateSpec('rearBalance', value)} />
           </div> : assemblyIR ? <div className="parameter-section product-controls">
             <div className="subheading-row">
               <span className="eyebrow">assembly ir inspector</span>
@@ -714,7 +732,11 @@ export function App() {
             />
             <button onClick={() => {
               const payload = assetKind === 'human'
-                ? { schema: 'morphloom.character/0.1', spec }
+                ? {
+                    schema: 'morphloom.character/0.2',
+                    spec,
+                    interpretation: spec.outfit === 'web-hero' ? WEB_HERO_VISUAL_INTERPRETATION : undefined,
+                  }
                 : assemblyIR ?? { schema: 'morphloom.assembly/0.1', kind: productSpec.kind, spec: productSpec };
               downloadJson(payload, assetKind === 'human' ? 'character-ir.json' : 'assembly-ir.json');
             }}>SAVE IR</button>

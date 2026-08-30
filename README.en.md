@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-23%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-26%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -52,6 +52,7 @@ images + known dimensions
 - It tracks front, rear, left, right, top, and bottom coverage and classifies exploded, component, material, and measurement photographs.
 - Close-ups of the same part share a stable ASCII `component_id`. `SAVE EVIDENCE` exports file names and roles as `morphloom.evidence/0.1` JSON without embedding source pixels or local blob URLs.
 - The browser does not silently call a remote LLM. Image understanding and IR authoring are performed by **Codex or Claude** working in the repository.
+- `CharacterIR 0.2` keeps the agent's visual judgment as data instead of discarding it as prose: body type, abdomen, chest, glutes, forward head, balance, and hand gesture become editable controls, with screen-side and anatomical-side mappings stored separately.
 - Load the resulting IR through `LOAD IR`; the compiler rejects invalid topology, missing ports, incompatible signals, and floating conductors.
 - OpenAI's API officially supports text/image inputs and JSON output, but the default Morphloom workflow uses the current coding agent and needs no separate API key. [Official OpenAI documentation](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
 
@@ -149,7 +150,7 @@ For a multi-photo product, first add the six exterior views plus exploded and co
 
 ## Using Claude alone
 
-`CLAUDE.md` carries the same vendor-neutral contract. Both agents produce `morphloom.assembly/0.1` or `morphloom.character/0.1`, so changing the agent does not change the mesh engine.
+`CLAUDE.md` carries the same vendor-neutral contract. Both agents produce `morphloom.assembly/0.1` or `morphloom.character/0.2`, so changing the agent does not change the mesh engine.
 
 ## Geometry operations
 
@@ -182,19 +183,21 @@ Morphloom is stronger in **part granularity, reusable IR, electrical semantics, 
 
 ## Spider-Man single-image honesty test
 
-One [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg) (ManoSolo13241324, CC BY-SA 4.0) is now a fixed regression reference. Filename evidence selects `WEB HERO / 04`; forward hands, asymmetric arm height, upper-body lean, and staggered knees are recorded as a `reference-action` estimate. The visible mask, optical lenses, radial webbing, red/blue panels, and chest mark compile into 139 named edit units. Blue suit regions use procedural `hex-knit` micro-normal and roughness maps for angle-dependent response.
+One [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg) (ManoSolo13241324, CC BY-SA 4.0) is a fixed regression reference. `ReferencePoseIR` stores 17 measured 2D joints separately from inferred depth. The `CharacterIR 0.2` agent interpretation retains **ordinary-person cosplay, a slim-soft build, slight abdomen/chest volume, small glutes, mild forward head, rear-biased balance, leading right hand, and web-shooting hands**, each with confidence and evidence status. It explicitly maps viewer-left to anatomical right so hands and feet cannot silently swap sides. Limbs use bone-segment rotation and length correction, while locally uploaded front-view red/blue suit lighting is projected into editable mesh vertex colours. Rear surfaces keep authored inferred materials instead of copying unseen pixels. The visible mask, optical lenses, radial webbing, panels, and chest mark compile into 139 named edit units. The suit uses procedural `hex-knit` albedo, micro-normal, and roughness maps for angle-dependent response.
 
 | Same-view observation | Current verdict |
 |---|---|
 | Red mask and large white lenses | reconstructed with separate lens IOR/clearcoat |
 | Red center and blue side panels | reconstructed as editable vertex colors |
 | Mask/chest webbing and chest mark | reconstructed as independent closed meshes |
-| Forward hands and asymmetric legs | reconstructed as a single-view pose estimate |
+| Forward hands and asymmetric legs | right-hand lead, right-leg advance, and grounded rear-left support reconstructed |
+| 17 pose landmarks | approximately 18.5 mm target RMS · depth marked `inferred` |
+| Uploaded front surface | red/blue families projected to vertex colour · background/rear copying rejected |
 | Hexagonal textile response | inferred procedural `hex-knit` PBR |
 | Exact finger gesture and production skin weights | not yet production grade |
 | Rear pattern, real seams, exact textile pitch | absent from the photo and marked `inferred` |
 
-**Verdict:** this is a clear improvement over the old generic body and is usable for game previs or as an editable base, but one image does not yield a finished identity-accurate character. Add front/rear/left/right views, hand close-ups, mask/textile macro shots, and measured height to minimize production review. The UI's `89/100` is a topology/material/export build score, not a photo-likeness score.
+**Verdict:** this is a clear improvement over the old generic body and is usable for game previs or as an editable base, but one image does not yield a finished identity-accurate character. Add front/rear/left/right views, hand close-ups, mask/textile macro shots, and measured height to minimize production review. With one view or without a same-view comparison, the UI total is capped at `59/100` and marked `BLOCKED`; triangle or material counts cannot pass photo likeness.
 
 ## Current limits
 
@@ -214,6 +217,8 @@ src/engine/cooling-assembly.ts   supplied-image regression asset
 src/engine/product.ts            164-part smartphone example
 src/engine/knife.ts              ornate knife IR example
 src/engine/character.ts          CC0 human mesh, morphs, reference pose deformation
+src/engine/reference-pose.ts     measured joints, inferred depth, agent visual interpretation
+src/engine/reference-projection.ts local front-suit colour projection
 src/engine/web-hero.ts           editable mask, lenses, webbing, and chest mark
 src/engine/topology.ts           mesh integrity analysis
 schemas/                         JSON contracts for agents

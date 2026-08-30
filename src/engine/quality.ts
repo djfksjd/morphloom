@@ -22,14 +22,17 @@ export function evaluateQuality(
   const silhouettePenalty =
     Math.abs(spec.shoulderScale - 1) * 30 + Math.abs(spec.legScale - 1) * 45 + Math.abs(spec.headScale - 1) * 35;
   const morphStabilityScore = Math.round(Math.max(0, 96 - silhouettePenalty));
+  const webHero = spec.outfit === 'web-hero';
   const silhouetteScore = evidence
     ? Math.min(morphStabilityScore, evidence.portraitSuitability)
-    : morphStabilityScore;
-  const webHero = spec.outfit === 'web-hero';
+    : webHero ? 35 : morphStabilityScore;
   const materialScore = webHero
     ? Math.min(98, 90 + Math.round((metrics?.surfaces.distinctFinishes ?? 0) * 1.5))
     : Math.round(82 + (spec.hairStyle !== 'none' ? 5 : 0) + (spec.outfit === 'field' ? 3 : 0));
-  const rigScore = 74;
+  const poseErrorMm = (metrics?.poseLandmarkRmsMeters ?? Number.POSITIVE_INFINITY) * 1000;
+  const rigScore = webHero
+    ? Number.isFinite(poseErrorMm) ? Math.round(Math.max(0, 100 - poseErrorMm * 1.6)) : 0
+    : 74;
   const exportScore = 92;
 
   const checks: QualityCheck[] = [
@@ -44,12 +47,14 @@ export function evaluateQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : '실루엣 안정성',
+      label: webHero ? '동일 시점 참조 충실도' : evidence ? '참조 증거 완성도' : '실루엣 안정성',
       score: silhouetteScore,
       status: status(silhouetteScore),
       detail: evidence
         ? `${evidence.fileName} · ${evidence.notes[0]}`
-        : '모프 범위와 신체 비율의 안전 구간 검사',
+        : webHero
+          ? 'LLM 체형·자세 해석 적용 · 단일 사진이라 후면·손 깊이의 동일 시점 비교는 아직 BLOCKED'
+          : '모프 범위와 신체 비율의 안전 구간 검사',
     },
     {
       id: 'materials',
@@ -62,10 +67,12 @@ export function evaluateQuality(
     },
     {
       id: 'rig',
-      label: '게임 리그',
+      label: webHero ? '랜드마크 포즈 오차' : '게임 리그',
       score: rigScore,
-      status: 'warn',
-      detail: '17개 관절 프리뷰 완료 · 스킨 웨이트 연결 예정',
+      status: webHero ? status(rigScore, 72) : 'warn',
+      detail: webHero
+        ? `17개 관절 목표 RMS ${Number.isFinite(poseErrorMm) ? poseErrorMm.toFixed(1) : '—'} mm · 오른손=화면 왼쪽 · 숨은 깊이는 inferred`
+        : '17개 관절 프리뷰 완료 · 스킨 웨이트 연결 예정',
     },
     {
       id: 'export',
@@ -79,8 +86,9 @@ export function evaluateQuality(
   ];
 
   const base = checks.reduce((sum, check) => sum + check.score, 0) / checks.length;
+  const hasBlockingCheck = checks.some((check) => check.status === 'blocked');
   return {
-    total: Math.round(Math.max(0, Math.min(100, base))),
+    total: Math.round(Math.max(0, Math.min(hasBlockingCheck ? 59 : 100, base))),
     checks,
     triangles,
     vertices,

@@ -42,6 +42,35 @@ export function applyPrompt(input: string, current: CharacterSpec): PromptResult
     spec.weight = Math.min(0.92, spec.weight + 0.18);
     changes.push('체격 증가');
   }
+  if (/일반인.*(?:코스프레|코스튬)|ordinary person.*cosplay/.test(prompt)) {
+    spec.muscle = Math.min(spec.muscle, 0.5);
+    spec.weight = Math.max(spec.weight, 0.45);
+    changes.push('일반인 슬림 소프트 체형');
+  }
+  if (/똥배|배(?:가|는|도|와)?\s*(?:살짝|약간)?\s*(?:나오|돌출)|복부.*(?:나오|돌출)|slight belly|potbelly/.test(prompt)) {
+    spec.abdominalProjection = Math.max(spec.abdominalProjection, 0.38);
+    changes.push('약한 복부 돌출');
+  }
+  if (/가슴.*(?:살짝|약간|조금).*(?:있|나오|나옴|돌출)|mild chest|soft chest/.test(prompt)) {
+    spec.chestSoftness = Math.max(spec.chestSoftness, 0.3);
+    changes.push('약한 가슴 연조직 볼륨');
+  }
+  if (/엉덩이.*작|작은\s*엉덩이|small glutes|small butt/.test(prompt)) {
+    spec.gluteScale = Math.min(spec.gluteScale, 0.86);
+    changes.push('작은 둔부 볼륨');
+  }
+  if (/거북목|머리.*앞|목.*앞|forward head/.test(prompt)) {
+    spec.forwardHead = Math.max(spec.forwardHead, 0.32);
+    changes.push('약한 전방 머리 자세');
+  }
+  if (/중심.*뒤|무게중심.*뒤|rear[-\s]?biased|weight.*rear/.test(prompt)) {
+    spec.rearBalance = Math.max(spec.rearBalance, 0.35);
+    changes.push('뒤쪽 무게중심');
+  }
+  if (/거미줄.*(?:손|쏘)|웹.*(?:손|슈팅)|web[-\s]?shooting/.test(prompt)) {
+    spec.handGesture = 'web-shooting';
+    changes.push('웹 슈팅 손동작');
+  }
   if (/여성|woman|female/.test(prompt)) {
     spec.genderBlend = 0.9;
     changes.push('사용자 지정 여성형 모프');
@@ -66,7 +95,7 @@ export function applyPrompt(input: string, current: CharacterSpec): PromptResult
   }
 
   const outfitRules: Array<[RegExp, OutfitStyle, string, string]> = [
-    [/스파이더맨|spider[-\s]?man|web[-\s]?hero|거미\s*(?:영웅|슈트)/, 'web-hero', '웹 히어로 분리 슈트', '#6b0017'],
+    [/스파이더맨|spider[-\s]?man|web[-\s]?hero|거미\s*(?:영웅|슈트)/, 'web-hero', '웹 히어로 분리 슈트', '#8a1734'],
     [/갑옷|armor|전투복/, 'field', '전술 필드 슈트', '#262c36'],
     [/스튜디오|studio|motion capture|모션캡처/, 'studio', '스튜디오 캡처 슈트', '#d7d7cf'],
     [/바디수트|body suit|second skin/, 'second-skin', '세컨드 스킨', '#20252d'],
@@ -76,12 +105,13 @@ export function applyPrompt(input: string, current: CharacterSpec): PromptResult
       spec.outfit = outfit;
       spec.suitColor = color;
       if (outfit === 'web-hero') {
-        spec.accentColor = '#031b3f';
+        spec.accentColor = '#073b70';
         spec.hairStyle = 'none';
         spec.genderBlend = Math.min(spec.genderBlend, 0.12);
-        spec.muscle = Math.max(spec.muscle, 0.68);
-        spec.shoulderScale = Math.max(spec.shoulderScale, 1.08);
+        spec.muscle = Math.min(spec.muscle, 0.58);
+        spec.shoulderScale = Math.min(spec.shoulderScale, 1.02);
         spec.pose = 'reference-action';
+        spec.handGesture = 'web-shooting';
       }
       changes.push(label);
       break;

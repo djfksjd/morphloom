@@ -121,13 +121,15 @@ function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pa
   return 0;
 }
 
-const textureCache = new Map<string, { normal: THREE.DataTexture; roughness: THREE.DataTexture }>();
+const textureCache = new Map<string, { albedo: THREE.DataTexture; normal: THREE.DataTexture; roughness: THREE.DataTexture }>();
+const MAX_SHARED_SURFACE_MAPS = 96;
 
 function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]) {
   const key = `${finish}:${scale[0]}:${scale[1]}`;
   const cached = textureCache.get(key);
   if (cached) return cached;
   const size = 64;
+  const albedoData = new Uint8Array(size * size * 4);
   const normalData = new Uint8Array(size * size * 4);
   const roughnessData = new Uint8Array(size * size * 4);
   const seed = [...finish].reduce((sum, char) => sum + char.charCodeAt(0), 0);
@@ -147,11 +149,15 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
       const variation = heightAt(x, y, seed + 31, pattern);
       const value = Math.round(THREE.MathUtils.clamp(0.9 + variation * 0.095, 0.76, 1) * 255);
       roughnessData.set([value, value, value, 255], offset);
+      const fibreContrast = pattern === 'hex-weave' ? 0.19 : 0.055;
+      const albedo = Math.round(THREE.MathUtils.clamp(0.86 + variation * fibreContrast, 0.58, 1) * 255);
+      albedoData.set([albedo, albedo, albedo, 255], offset);
     }
   }
+  const shared = textureCache.size < MAX_SHARED_SURFACE_MAPS;
   const setup = (texture: THREE.DataTexture, suffix: string) => {
     texture.name = `morphloom_${finish}_${suffix}`;
-    texture.userData.morphloomShared = true;
+    texture.userData.morphloomShared = shared;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(scale[0], scale[1]);
     texture.colorSpace = THREE.NoColorSpace;
@@ -162,10 +168,13 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
   };
   const normal = new THREE.DataTexture(normalData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
   const roughness = new THREE.DataTexture(roughnessData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
+  const albedo = new THREE.DataTexture(albedoData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
   setup(normal, 'micro_normal');
   setup(roughness, 'roughness');
-  const maps = { normal, roughness };
-  textureCache.set(key, maps);
+  setup(albedo, 'albedo');
+  albedo.colorSpace = THREE.SRGBColorSpace;
+  const maps = { albedo, normal, roughness };
+  if (shared) textureCache.set(key, maps);
   return maps;
 }
 
@@ -214,6 +223,7 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     material.normalMap = maps.normal;
     material.normalScale.set(microNormalStrength, microNormalStrength);
     material.roughnessMap = maps.roughness;
+    if (finish === 'hex-knit') material.map = maps.albedo;
   }
   material.name = `${context.materialName} [${finish}]`;
   material.userData.morphloomSurface = {

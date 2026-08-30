@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-23%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-26%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -52,6 +52,7 @@ GLB + PNG + IR
 - 정면·후면·좌·우·상·하단 촬영 현황을 표시하고, 분해도·부품·재질·치수 사진을 역할별로 분류합니다.
 - 같은 부품의 근접 사진에는 ASCII `component_id`를 지정합니다. `SAVE EVIDENCE`는 파일명과 역할을 `morphloom.evidence/0.1` JSON으로 내보내며 이미지 원본이나 로컬 URL은 포함하지 않습니다.
 - 브라우저 자체가 몰래 외부 LLM을 호출하지는 않습니다. 이미지 이해와 IR 작성은 저장소를 연 **Codex 또는 Claude**가 담당합니다.
+- `CharacterIR 0.2`는 LLM의 시각 판단을 단순 문장으로 버리지 않습니다. 체형·복부·가슴·둔부·전방 머리·무게중심·손동작을 수치 제어값으로 보존하고, 화면 좌우와 해부학적 좌우를 별도로 기록합니다.
 - 만들어진 IR을 `LOAD IR`로 열면 실제 메시가 컴파일되고, 실패한 토폴로지·빈 포트·떠 있는 전선은 품질 게이트에서 차단됩니다.
 - OpenAI의 공식 API도 텍스트·이미지 입력과 JSON 출력을 지원하지만, Morphloom 기본 경로는 별도 API 키 없이 현재 코딩 에이전트를 사용합니다. [OpenAI 공식 문서](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
 
@@ -149,7 +150,7 @@ AGENTS.md를 따르고 첨부 이미지를 AssemblyIR로 만들어줘.
 
 ## Claude 하나로 사용
 
-`CLAUDE.md`가 같은 공급자 중립 계약을 제공합니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.1`을 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
+`CLAUDE.md`가 같은 공급자 중립 계약을 제공합니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.2`를 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
 
 ## 지원 형상 연산
 
@@ -182,19 +183,21 @@ Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론
 
 ## 스파이더맨 단일 사진 정직성 테스트
 
-[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 고정 회귀 자료로 사용했습니다. 파일명 근거로 `WEB HERO / 04`를 선택하며, 전진한 양손·비대칭 팔 높이·상체 전경·엇갈린 무릎을 `reference-action` 포즈로 기록합니다. 보이는 마스크, 좌우 광학 렌즈, 방사형 웹, 적·청 패널, 가슴 문양은 139개의 이름 있는 편집 단위로 생성되고, 파란 슈트에는 각도에 따라 반사가 달라지는 `hex-knit` 미세 노멀/거칠기 맵을 적용합니다.
+[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 고정 회귀 자료로 사용했습니다. `ReferencePoseIR`에는 사진에서 직접 찍은 17개 2D 관절과 별도로 추정한 깊이를 기록합니다. `CharacterIR 0.2`의 에이전트 시각 해석에는 **일반인 코스프레, 슬림 소프트 체형, 약한 복부·가슴 볼륨, 작은 둔부, 약한 거북목, 뒤쪽 무게중심, 오른손 선행, 웹 슈팅 손동작**을 신뢰도와 함께 보존합니다. 화면 왼쪽을 인물의 해부학적 오른쪽으로 명시해 손·발 좌우가 뒤집히는 오류도 차단합니다. 팔·다리는 뼈 구간 회전/길이 보정으로 변형하며, 업로드 사진의 전면 적·청 패널 명암을 메시 정점색으로 로컬 투영합니다. 후면은 사진을 복사하지 않고 기존 추정 재질로 남깁니다. 보이는 마스크, 좌우 광학 렌즈, 방사형 웹, 적·청 패널, 가슴 문양은 139개의 이름 있는 편집 단위로 생성되고, 슈트에는 각도에 따라 반사가 달라지는 `hex-knit` albedo/micro-normal/roughness 맵을 적용합니다.
 
 | 같은 시점에서 확인한 항목 | 현재 판정 |
 |---|---|
 | 적색 마스크와 큰 백색 렌즈 | 재구성됨 · 렌즈 IOR/clearcoat 분리 |
 | 적색 중앙 패널·청색 측면 패널 | 재구성됨 · 정점색 기반 편집 가능 |
 | 마스크/흉부 웹과 가슴 문양 | 독립 폐쇄 메시로 재구성됨 |
-| 전진한 손과 비대칭 다리 | 단일 시점 추정 포즈로 재구성됨 |
+| 전진한 손과 비대칭 다리 | 오른손 선행·오른발 전진·왼발 후방 지지 포즈로 재구성됨 |
+| 17개 포즈 랜드마크 | 목표점 RMS 약 18.5 mm · 깊이는 `inferred` |
+| 업로드 사진 전면 표면 | 적·청 계열만 정점색 투영 · 배경/후면 복사 차단 |
 | 육각 직조 질감 | 절차적 `hex-knit` PBR로 추정 |
 | 정확한 손가락 제스처·피부 웨이트 | 아직 생산 기준 미달 |
 | 후면 패턴·실제 봉제선·정확한 원단 피치 | 사진에 없어 `inferred` |
 
-**결론:** 게임 프리비즈와 후편집 베이스로는 이전의 일반 인체 출력보다 분명히 고도화됐지만, 한 장만으로 동일 인물·정확한 손가락·후면까지 자동 복원하는 완성품은 아닙니다. 실무 납품 전 검수를 작게 만들려면 정면·후면·좌·우, 손 근접, 마스크·원단 매크로 사진과 실제 키를 추가해야 합니다. UI의 `89/100`은 토폴로지·재질·내보내기 빌드 점수이며 사진 유사도 점수로 오해하면 안 됩니다.
+**결론:** 게임 프리비즈와 후편집 베이스로는 이전의 일반 인체 출력보다 분명히 고도화됐지만, 한 장만으로 동일 인물·정확한 손가락·후면까지 자동 복원하는 완성품은 아닙니다. 실무 납품 전 검수를 작게 만들려면 정면·후면·좌·우, 손 근접, 마스크·원단 매크로 사진과 실제 키를 추가해야 합니다. 한 장만 있거나 동일 시점 비교가 없으면 UI 총점은 최대 `59/100`으로 제한되고 `BLOCKED`를 표시합니다. 삼각형 수나 재질 수만으로 사진 유사도를 통과시키지 않습니다.
 
 ## 현재 한계
 
@@ -214,6 +217,8 @@ src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
 src/engine/product.ts            스마트폰 164부품 예제
 src/engine/knife.ts              장식 단검 IR 예제
 src/engine/character.ts          CC0 인체 메시·모프·참조 포즈 변형
+src/engine/reference-pose.ts     2D 실측 관절·추정 깊이·뼈 구간 변형
+src/engine/reference-projection.ts 업로드 사진의 전면 슈트 정점색 투영
 src/engine/web-hero.ts           마스크·렌즈·웹·가슴 문양 편집 단위
 src/engine/topology.ts           메시 무결성 검사
 schemas/                         에이전트용 JSON 계약

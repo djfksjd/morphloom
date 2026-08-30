@@ -14,11 +14,12 @@ import { buildProduct, type ProductBuild, type ProductPartInfo } from '../engine
 import type { AssemblyIR } from '../engine/assembly-ir';
 import { compileAssemblyIR } from '../engine/assembly-compiler';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
+import { applyReferenceColorProjection } from '../engine/reference-projection';
 
 export interface ViewportHandle {
   exportGlb: () => Promise<void>;
   capturePng: () => Promise<void>;
-  setView: (view: 'iso' | 'top' | 'rear') => void;
+  setView: (view: 'front' | 'iso' | 'top' | 'rear') => void;
 }
 
 interface CharacterViewportProps {
@@ -27,6 +28,7 @@ interface CharacterViewportProps {
   spec: CharacterSpec;
   productSpec: ProductSpec;
   assemblyIR?: AssemblyIR;
+  referenceImageUrl?: string;
   mode: ViewMode;
   onBuilt?: (build: CharacterBuild | ProductBuild) => void;
   onPartSelected?: (part?: ProductPartInfo) => void;
@@ -89,7 +91,7 @@ function createMeasurementField(height: number): THREE.Group {
 }
 
 export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportProps>(
-  function CharacterViewport({ assetKind, pack, spec, productSpec, assemblyIR, mode, onBuilt, onPartSelected }, ref) {
+  function CharacterViewport({ assetKind, pack, spec, productSpec, assemblyIR, referenceImageUrl, mode, onBuilt, onPartSelected }, ref) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const runtimeRef = useRef<Runtime | undefined>(undefined);
     const buildRef = useRef<CharacterBuild | ProductBuild | undefined>(undefined);
@@ -229,6 +231,7 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
     useEffect(() => {
       const runtime = runtimeRef.current;
       if (!runtime) return;
+      const projectionController = new AbortController();
       disposeObject(runtime.root);
       disposeObject(runtime.measurement);
       runtime.root.clear();
@@ -248,13 +251,23 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       }
       buildRef.current = build;
       onBuilt?.(build);
+      if (assetKind === 'human' && spec.outfit === 'web-hero' && referenceImageUrl && 'body' in build) {
+        void applyReferenceColorProjection(build, referenceImageUrl, projectionController.signal)
+          .catch((error: unknown) => {
+            if (!(error instanceof DOMException && error.name === 'AbortError')) {
+              console.error('Reference colour projection failed.', error);
+            }
+          });
+      }
 
       if (assetKind === 'human') {
-        runtime.controls.target.set(0, build.metrics.heightMeters * 0.52, 0);
+        runtime.controls.target.set(0, build.metrics.heightMeters * 0.54, build.metrics.heightMeters * 0.035);
+        runtime.camera.fov = spec.pose === 'reference-action' ? 40 : 31;
+        runtime.camera.updateProjectionMatrix();
         runtime.camera.position.set(
-          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 0.68 : 1.22),
+          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 0.015 : 1.22),
           build.metrics.heightMeters * 0.66,
-          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 2.15 : 2.05),
+          build.metrics.heightMeters * (spec.pose === 'reference-action' ? 1.65 : 2.05),
         );
       } else {
         const center = build.metrics.bounds.getCenter(new THREE.Vector3());
@@ -276,7 +289,8 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
           parts: 'parts' in build.metrics ? build.metrics.parts : undefined,
         },
       });
-    }, [assemblyIR, assetKind, mode, onBuilt, pack, productSpec, spec]);
+      return () => projectionController.abort();
+    }, [assemblyIR, assetKind, mode, onBuilt, pack, productSpec, referenceImageUrl, spec]);
 
     useImperativeHandle(ref, () => ({
       setView(view) {
@@ -287,10 +301,15 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
         const center = bounds.getCenter(new THREE.Vector3());
         const size = bounds.getSize(new THREE.Vector3());
         const extent = Math.max(size.x, size.y, size.z);
-        const distance = extent * 2.45;
+        const referenceFront = assetKind === 'human' && spec.pose === 'reference-action' && view === 'front';
+        const distance = extent * (referenceFront ? 2.32 : 2.45);
         runtime.controls.target.copy(center);
         runtime.camera.up.set(0, 1, 0);
-        if (view === 'top') {
+        runtime.camera.fov = referenceFront ? 40 : 31;
+        runtime.camera.updateProjectionMatrix();
+        if (view === 'front') {
+          runtime.camera.position.copy(center).add(new THREE.Vector3(0, extent * 0.025, distance));
+        } else if (view === 'top') {
           runtime.camera.position.copy(center).add(new THREE.Vector3(0, 0, distance));
         } else if (view === 'rear') {
           runtime.camera.position.copy(center).add(new THREE.Vector3(0, 0, -distance));

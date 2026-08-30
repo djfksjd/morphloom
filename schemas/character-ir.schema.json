@@ -1,16 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/djfksjd/morphloom/schemas/character-ir.schema.json",
-  "title": "Morphloom CharacterIR 0.1",
+  "title": "Morphloom CharacterIR 0.2",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "spec"],
   "properties": {
-    "schema": { "const": "morphloom.character/0.1" },
+    "schema": { "const": "morphloom.character/0.2" },
     "spec": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["heightCm", "weight", "muscle", "ageYears", "genderBlend", "shoulderScale", "legScale", "headScale", "skinTone", "suitColor", "accentColor", "hairColor", "hairStyle", "outfit"],
+      "required": ["heightCm", "weight", "muscle", "ageYears", "genderBlend", "shoulderScale", "legScale", "headScale", "skinTone", "suitColor", "accentColor", "hairColor", "hairStyle", "outfit", "pose", "abdominalProjection", "chestSoftness", "gluteScale", "forwardHead", "rearBalance", "handGesture"],
       "properties": {
         "heightCm": { "type": "number", "minimum": 120, "maximum": 230 },
         "weight": { "type": "number", "minimum": 0, "maximum": 1 },
@@ -26,7 +26,47 @@
         "hairColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
         "hairStyle": { "enum": ["crop", "bob", "buzz", "none"] },
         "outfit": { "enum": ["second-skin", "field", "studio", "web-hero"] },
-        "pose": { "enum": ["neutral", "reference-action"], "default": "neutral" }
+        "pose": { "enum": ["neutral", "reference-action"], "default": "neutral" },
+        "abdominalProjection": { "type": "number", "minimum": 0, "maximum": 1 },
+        "chestSoftness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "gluteScale": { "type": "number", "minimum": 0.7, "maximum": 1.3 },
+        "forwardHead": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rearBalance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "handGesture": { "enum": ["relaxed", "web-shooting"] }
+      }
+    },
+    "interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "subjectContext", "anatomicalScreenMapping", "observations"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "const": "agent-visual-judgment" },
+        "subjectContext": { "type": "string", "minLength": 1 },
+        "anatomicalScreenMapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["anatomicalRight", "anatomicalLeft"],
+          "properties": {
+            "anatomicalRight": { "const": "viewer-left" },
+            "anatomicalLeft": { "const": "viewer-right" }
+          }
+        },
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "evidence", "confidence"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "label": { "type": "string", "minLength": 1 },
+              "evidence": { "enum": ["visible", "inferred"] },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        }
       }
     }
   }

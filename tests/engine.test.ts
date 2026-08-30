@@ -13,6 +13,12 @@ import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateQuality } from '../src/engine/quality';
+import {
+  getPoseJoints,
+  poseLandmarkRms,
+  WEB_HERO_REFERENCE_POSE,
+  WEB_HERO_VISUAL_INTERPRETATION,
+} from '../src/engine/reference-pose';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from '../src/types';
 
 async function loadPack() {
@@ -73,10 +79,30 @@ describe('OHPK human pipeline', () => {
     expect(result.spec).toMatchObject({
       outfit: 'web-hero',
       hairStyle: 'none',
-      suitColor: '#6b0017',
-      accentColor: '#031b3f',
+      suitColor: '#8a1734',
+      accentColor: '#073b70',
       pose: 'reference-action',
     });
+  });
+
+  it('turns an agent visual reading into explicit soft-body and posture controls', () => {
+    const result = applyPrompt(
+      '일반인이 스파이더맨을 코스튬함. 슬림형 똥배이고 가슴도 살짝 나옴. 엉덩이는 작고 약간 거북목. 무게중심은 뒤. 양손은 거미줄 쏘는 손 모양.',
+      DEFAULT_SPEC,
+    );
+    expect(result.spec).toMatchObject({
+      outfit: 'web-hero',
+      abdominalProjection: 0.38,
+      chestSoftness: 0.3,
+      gluteScale: 0.86,
+      forwardHead: 0.32,
+      rearBalance: 0.35,
+      handGesture: 'web-shooting',
+    });
+    expect(result.changes).toEqual(expect.arrayContaining([
+      '약한 복부 돌출', '약한 가슴 연조직 볼륨', '작은 둔부 볼륨',
+      '약한 전방 머리 자세', '뒤쪽 무게중심', '웹 슈팅 손동작',
+    ]));
   });
 
   it('estimates the supplied forward-hand and staggered-knee action without breaking topology', () => {
@@ -90,7 +116,34 @@ describe('OHPK human pipeline', () => {
     const rightKnee = poseCharacterPoint(new THREE.Vector3(0.16, height * 0.29, 0), height, 'reference-action');
     expect(leftKnee.z).toBeGreaterThan(0);
     expect(rightKnee.z).toBeLessThan(0);
-    expect(Math.abs(rightKnee.x)).toBeLessThan(0.16);
+    expect(rightKnee.x).toBeGreaterThan(0);
+    const joints = getPoseJoints(height, 'reference-action');
+    expect(joints.wristL.z).toBeGreaterThan(joints.elbowL.z);
+    expect(joints.wristR.z).toBeGreaterThan(joints.elbowR.z);
+    expect(joints.ankleL.z).toBeGreaterThan(joints.hipL.z);
+    expect(joints.ankleR.y).toBeCloseTo(joints.ankleL.y, 1);
+    expect(joints.ankleR.z).toBeLessThan(joints.hipR.z);
+    expect(WEB_HERO_VISUAL_INTERPRETATION.anatomicalScreenMapping).toEqual({
+      anatomicalRight: 'viewer-left',
+      anatomicalLeft: 'viewer-right',
+    });
+    // Anatomical right is viewer-left, represented by the negative-X L screen
+    // joint in this projection coordinate system.
+    expect(joints.wristL.z).toBeGreaterThan(joints.wristR.z);
+    expect(joints.wristL.y).toBeGreaterThan(joints.wristR.y);
+    expect(WEB_HERO_REFERENCE_POSE.sourcePixels).toEqual([960, 1280]);
+    expect(poseLandmarkRms(height, 'reference-action')).toBeLessThan(0.04);
+  });
+
+  it('preserves agent observation provenance inside the editable character', async () => {
+    const pack = await loadPack();
+    const build = buildCharacter(pack, WEB_HERO_SPEC, 'beauty');
+    expect(build.root.userData.characterIR.visualInterpretation).toMatchObject({
+      source: 'agent-visual-judgment',
+      subjectContext: 'ordinary-person-in-web-hero-cosplay',
+      anatomicalScreenMapping: { anatomicalRight: 'viewer-left' },
+    });
+    expect(build.root.userData.characterIR.visualInterpretation.observations).toHaveLength(10);
   });
 
   it('does not hide incomplete single-view evidence behind a high morph score', async () => {
@@ -106,6 +159,16 @@ describe('OHPK human pipeline', () => {
     });
     const evidenceCheck = report.checks.find((check) => check.id === 'silhouette');
     expect(evidenceCheck).toMatchObject({ label: '참조 증거 완성도', score: 43, status: 'blocked' });
+  });
+
+  it('keeps a web-hero likeness score blocked until same-view evidence exists', async () => {
+    const pack = await loadPack();
+    const build = buildCharacter(pack, WEB_HERO_SPEC, 'beauty');
+    const report = evaluateQuality(pack, WEB_HERO_SPEC, undefined, build.metrics);
+    expect(report.total).toBeLessThanOrEqual(59);
+    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({
+      label: '동일 시점 참조 충실도', status: 'blocked', score: 35,
+    });
   });
 });
 

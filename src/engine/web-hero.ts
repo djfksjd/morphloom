@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import type { PoseStyle, ViewMode } from '../types';
 import { createSurfaceMaterial } from './surface-system';
+import { deformPointByReferencePose, getPoseJoints } from './reference-pose';
 
 export interface WebHeroDimensions {
   heightMeters: number;
   bounds: THREE.Box3;
   headCenter: THREE.Vector3;
   headRadius: number;
+  headSize: THREE.Vector3;
   torsoFrontZ: number;
 }
 
@@ -102,6 +104,24 @@ function eyeGeometry(radius: number, inset: number): THREE.ExtrudeGeometry {
   });
 }
 
+function fittedMaskGeometry(halfHead: THREE.Vector3): THREE.SphereGeometry {
+  const geometry = new THREE.SphereGeometry(1, 72, 52);
+  const positions = geometry.getAttribute('position');
+  for (let index = 0; index < positions.count; index += 1) {
+    const normalizedY = positions.getY(index);
+    const jaw = THREE.MathUtils.lerp(0.72, 1, THREE.MathUtils.smoothstep(normalizedY, -0.92, -0.08));
+    positions.setXYZ(
+      index,
+      positions.getX(index) * halfHead.x * jaw,
+      normalizedY * halfHead.y,
+      positions.getZ(index) * halfHead.z * THREE.MathUtils.lerp(0.83, 1, jaw),
+    );
+  }
+  positions.needsUpdate = true;
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 function createMask(
   metrics: WebHeroDimensions,
   mode: ViewMode,
@@ -116,18 +136,18 @@ function createMask(
   const faceSystem = new THREE.Group();
   faceSystem.name = 'mask_face_fitted_system';
   group.add(faceSystem);
-  const radius = metrics.headRadius;
+  const radius = Math.max(metrics.headSize.x, metrics.headSize.y) * 0.5;
+  const halfHead = metrics.headSize.clone().multiplyScalar(0.515);
   const mask = markPart(
-    new THREE.Mesh(new THREE.SphereGeometry(1, 72, 52), redFabric),
+    new THREE.Mesh(fittedMaskGeometry(halfHead), redFabric),
     'mask_shell',
     '전면 풀헤트 웹 마스크',
     '사진에서 확인된 적색 섬유 마스크; 후면 이음선은 추정',
   );
-  mask.position.copy(metrics.headCenter).add(new THREE.Vector3(0, radius * 0.03, -radius * 0.015));
-  mask.scale.set(radius * 0.69, radius * 0.78, radius * 0.8);
+  mask.position.copy(metrics.headCenter);
   faceSystem.add(mask);
 
-  const faceZ = metrics.headCenter.z + radius * 0.67;
+  const faceZ = metrics.headCenter.z + halfHead.z * 0.985;
   for (const side of [-1, 1] as const) {
     const bezel = markPart(
       new THREE.Mesh(eyeGeometry(radius * 0.82, 1), bezelMaterial),
@@ -135,27 +155,27 @@ function createMask(
       `${side < 0 ? '좌' : '우'}측 눈 렌즈 베젤`,
       '검은 프레임과 상단이 넓은 날카로운 실루엣',
     );
-    bezel.scale.set(side, 0.9, 0.9);
-    bezel.position.set(metrics.headCenter.x, metrics.headCenter.y + radius * 0.05, faceZ);
+    bezel.scale.set(side, 1.08, 1);
+    bezel.position.set(metrics.headCenter.x + side * halfHead.x * 0.065, metrics.headCenter.y + halfHead.y * 0.035, faceZ);
     faceSystem.add(bezel);
 
     const lens = markPart(
-      new THREE.Mesh(eyeGeometry(radius * 0.82, 0.78), lensMaterial),
+      new THREE.Mesh(eyeGeometry(radius * 0.82, 0.76), lensMaterial),
       `eye_lens_${side < 0 ? 'left' : 'right'}`,
       `${side < 0 ? '좌' : '우'}측 백색 광학 렌즈`,
       '사진의 흰색 메시 렌즈; 정확한 IOR·메시 피치는 추정',
     );
-    lens.scale.set(side, 0.9, 0.9);
-    lens.position.set(metrics.headCenter.x, metrics.headCenter.y + radius * 0.05, faceZ + radius * 0.045);
+    lens.scale.set(side, 1.08, 1);
+    lens.position.set(metrics.headCenter.x + side * halfHead.x * 0.065, metrics.headCenter.y + halfHead.y * 0.035, faceZ + radius * 0.018);
     faceSystem.add(lens);
   }
 
-  const webRadius = Math.max(0.0008, metrics.heightMeters * 0.00055);
-  const webCenter = new THREE.Vector3(metrics.headCenter.x, metrics.headCenter.y - radius * 0.02, faceZ + radius * 0.025);
+  const webRadius = Math.max(0.00055, metrics.heightMeters * 0.00036);
+  const webCenter = new THREE.Vector3(metrics.headCenter.x, metrics.headCenter.y - halfHead.y * 0.02, faceZ + radius * 0.022);
   for (const [ringIndex, scale] of [0.24, 0.44, 0.66].entries()) {
     addPolyline(
       faceSystem,
-      ellipsePoints(webCenter, radius * scale * 0.72, radius * scale, 18),
+      ellipsePoints(webCenter, halfHead.x * scale * 0.9, halfHead.y * scale, 18),
       webRadius,
       webMaterial,
       `mask_web_ring_${ringIndex + 1}`,
@@ -167,8 +187,8 @@ function createMask(
     addPolyline(faceSystem, [
       webCenter,
       new THREE.Vector3(
-        webCenter.x + Math.cos(angle) * radius * 0.5,
-        webCenter.y + Math.sin(angle) * radius * 0.67,
+        webCenter.x + Math.cos(angle) * halfHead.x * 0.76,
+        webCenter.y + Math.sin(angle) * halfHead.y * 0.78,
         webCenter.z,
       ),
     ], webRadius, webMaterial, `mask_web_ray_${ray + 1}`, '마스크 중앙에서 퍼지는 봉제');
@@ -180,13 +200,14 @@ function createMask(
     '마스크 넥 실링 링',
     '마스크와 슈트 경계를 보존하는 분리 이음선',
   );
-  neckSeam.position.set(0, metrics.heightMeters * 0.835, metrics.heightMeters * 0.025);
+  neckSeam.position.copy(getPoseJoints(metrics.heightMeters, pose).neck);
+  neckSeam.rotation.x = Math.PI / 2;
   group.add(neckSeam);
 
   if (pose === 'reference-action') {
     for (const child of faceSystem.children) child.position.sub(metrics.headCenter);
     faceSystem.position.copy(metrics.headCenter);
-    faceSystem.rotation.z = -0.12;
+    faceSystem.rotation.z = 0.025;
   }
 
   group.userData.mode = mode;
@@ -197,21 +218,27 @@ function createTorsoWeb(
   metrics: WebHeroDimensions,
   webMaterial: THREE.MeshPhysicalMaterial,
   emblemMaterial: THREE.MeshPhysicalMaterial,
+  pose: PoseStyle,
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = 'web_hero_torso_detail';
   const height = metrics.heightMeters;
-  const frontZ = metrics.torsoFrontZ;
-  const radius = Math.max(0.00075, height * 0.00048);
-  const center = new THREE.Vector3(0, height * 0.705, frontZ + height * 0.008);
+  const radius = Math.max(0.00052, height * 0.0003);
+  const surfaceOffset = Math.max(height * 0.005, metrics.torsoFrontZ - height * 0.045);
+  const onTorso = (x: number, y: number, z = surfaceOffset) => deformPointByReferencePose(
+    new THREE.Vector3(x, y, z),
+    height,
+    pose,
+  );
+  const center = onTorso(0, height * 0.72);
 
   const endpoints = [
-    new THREE.Vector3(-height * 0.085, height * 0.805, center.z),
-    new THREE.Vector3(0, height * 0.83, center.z),
-    new THREE.Vector3(height * 0.085, height * 0.805, center.z),
-    new THREE.Vector3(height * 0.078, height * 0.605, center.z),
-    new THREE.Vector3(0, height * 0.565, center.z),
-    new THREE.Vector3(-height * 0.078, height * 0.605, center.z),
+    onTorso(-height * 0.085, height * 0.805),
+    onTorso(0, height * 0.825),
+    onTorso(height * 0.085, height * 0.805),
+    onTorso(height * 0.078, height * 0.605),
+    onTorso(0, height * 0.575),
+    onTorso(-height * 0.078, height * 0.605),
   ];
   endpoints.forEach((endpoint, index) => {
     addPolyline(group, [center, endpoint], radius, webMaterial, `torso_web_ray_${index + 1}`, '전면 가슴 방사형 웹 심');
@@ -219,7 +246,8 @@ function createTorsoWeb(
   for (const [ringIndex, scale] of [0.36, 0.68, 1].entries()) {
     addPolyline(
       group,
-      ellipsePoints(center, height * 0.075 * scale, height * 0.1 * scale, 16),
+      ellipsePoints(new THREE.Vector3(0, height * 0.72, surfaceOffset), height * 0.075 * scale, height * 0.1 * scale, 16)
+        .map((point) => onTorso(point.x, point.y, point.z)),
       radius,
       webMaterial,
       `torso_web_ring_${ringIndex + 1}`,
@@ -227,7 +255,7 @@ function createTorsoWeb(
     );
   }
 
-  const emblemCenter = new THREE.Vector3(0, height * 0.675, center.z + height * 0.006);
+  const emblemCenter = onTorso(0, height * 0.72, surfaceOffset + height * 0.006);
   const emblemBody = markPart(
     new THREE.Mesh(new THREE.SphereGeometry(height * 0.008, 24, 16), emblemMaterial),
     'chest_spider_body',
@@ -257,11 +285,11 @@ export function createWebHeroDetails(metrics: WebHeroDimensions, mode: ViewMode,
   group.name = 'web_hero_editable_details';
 
   const redFabric = createSurfaceMaterial({
-    color: '#6b0017', surface: 'hex-knit', roughness: 0.69, sheen: 0.48,
-    clearcoat: 0.07, clearcoatRoughness: 0.6, microNormalStrength: 0.7, textureScale: [38, 46],
+    color: '#8a1734', surface: 'hex-knit', roughness: 0.67, sheen: 0.52,
+    clearcoat: 0.07, clearcoatRoughness: 0.6, microNormalStrength: 0.82, textureScale: [42, 54],
   }, { mode, category: 'human', materialName: '적색 헥사곤 슈트 섬유' });
   const webMaterial = createSurfaceMaterial({
-    color: '#4a0b18', surface: 'soft-touch-polymer', roughness: 0.62,
+    color: '#4b1624', surface: 'soft-touch-polymer', roughness: 0.64,
     clearcoat: 0.1, microNormalStrength: 0.18, textureScale: [20, 20],
   }, { mode, category: 'human', materialName: '웹 슈트 검은 라인' });
   const bezelMaterial = createSurfaceMaterial({
@@ -280,7 +308,7 @@ export function createWebHeroDetails(metrics: WebHeroDimensions, mode: ViewMode,
 
   group.add(
     createMask(metrics, mode, pose, redFabric, webMaterial, bezelMaterial, lensMaterial),
-    createTorsoWeb(metrics, webMaterial, emblemMaterial),
+    createTorsoWeb(metrics, webMaterial, emblemMaterial, pose),
   );
   const parts: THREE.Mesh[] = [];
   group.traverse((object) => {

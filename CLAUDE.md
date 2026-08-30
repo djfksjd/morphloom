@@ -1,6 +1,6 @@
 # Claude instructions for Morphloom
 
-Follow the same vendor-neutral contract as `AGENTS.md`. Produce only `morphloom.character/0.1` or `morphloom.assembly/0.1`; do not introduce a Claude-specific format.
+Follow the same vendor-neutral contract as `AGENTS.md`. Produce only `morphloom.character/0.2` or `morphloom.assembly/0.1`; do not introduce a Claude-specific format.
 
 For an image-to-asset request:
 

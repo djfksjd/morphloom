@@ -1,8 +1,15 @@
 import * as THREE from 'three';
-import type { CharacterSpec, HumanPack, PoseStyle, ViewMode } from '../types';
+import type { CharacterSpec, HandGesture, HumanPack, PoseStyle, ViewMode } from '../types';
 import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { createWebHeroDetails } from './web-hero';
+import {
+  deformPointByReferencePose,
+  getPoseJoints,
+  poseLandmarkRms,
+  WEB_HERO_REFERENCE_POSE,
+  WEB_HERO_VISUAL_INTERPRETATION,
+} from './reference-pose';
 
 export interface CharacterMetrics {
   vertices: number;
@@ -11,8 +18,10 @@ export interface CharacterMetrics {
   bounds: THREE.Box3;
   headCenter: THREE.Vector3;
   headRadius: number;
+  headSize: THREE.Vector3;
   frontZ: number;
   torsoFrontZ: number;
+  poseLandmarkRmsMeters: number;
   surfaces: SurfaceReport;
   renderedVertices: number;
   renderedTriangles: number;
@@ -93,55 +102,16 @@ function mixHex(a: string, b: string, amount: number): THREE.Color {
   return new THREE.Color(a).lerp(new THREE.Color(b), amount);
 }
 
-function smoothstep(min: number, max: number, value: number): number {
-  const normalized = THREE.MathUtils.clamp((value - min) / Math.max(0.000_001, max - min), 0, 1);
-  return normalized * normalized * (3 - 2 * normalized);
-}
-
 /**
- * A deterministic, topology-preserving pose estimate for the supplied
- * front-three-quarter reference. It bends the existing editable body instead
- * of replacing it with a baked render or a second disconnected mesh.
+ * Public compatibility wrapper for the deterministic landmark skinning path.
  */
-export function poseCharacterPoint(source: THREE.Vector3, height: number, pose: PoseStyle): THREE.Vector3 {
-  const point = source.clone();
-  if (pose !== 'reference-action') return point;
-
-  const y01 = THREE.MathUtils.clamp(point.y / Math.max(height, 0.001), 0, 1);
-  const side = point.x < 0 ? -1 : 1;
-  const armHeight = smoothstep(0.44, 0.56, y01) * (1 - smoothstep(0.79, 0.86, y01));
-  const armReach = smoothstep(height * 0.085, height * 0.19, Math.abs(point.x));
-  const arm = armHeight * armReach;
-  const hand = arm * smoothstep(height * 0.18, height * 0.285, Math.abs(point.x));
-
-  // Both hands project toward the camera like the source web-shooting action.
-  // The asymmetric lift avoids a mirrored mannequin pose.
-  point.z += height * (0.12 * arm + 0.3 * hand);
-  point.y += height * hand * (side < 0 ? 0.095 : 0.055);
-  point.x *= 1 - arm * 0.12 - hand * (side < 0 ? 0.38 : 0.16);
-
-  // Subtle upper-body lean inferred from the visible shoulder/waist axis.
-  const upperLean = smoothstep(0.5, 0.9, y01) * (1 - arm * 0.38);
-  point.z += height * 0.034 * upperLean;
-
-  const headTilt = smoothstep(0.81, 0.89, y01) * -0.12;
-  if (headTilt !== 0) {
-    const pivotY = height * 0.835;
-    const dx = point.x;
-    const dy = point.y - pivotY;
-    const cosine = Math.cos(headTilt);
-    const sine = Math.sin(headTilt);
-    point.x = dx * cosine - dy * sine;
-    point.y = pivotY + dx * sine + dy * cosine;
-  }
-
-  // One knee advances and the other recedes. The falloff returns to zero at
-  // hip/ankle, so the skin remains continuous and the sole stays grounded.
-  const leg = 1 - smoothstep(0.5, 0.58, y01);
-  const knee = Math.pow(Math.max(0, 1 - Math.abs(y01 - 0.29) / 0.25), 1.55) * leg;
-  point.z += height * knee * (side < 0 ? 0.105 : -0.068);
-  point.x += height * knee * (side < 0 ? -0.025 : -0.045);
-  return point;
+export function poseCharacterPoint(
+  source: THREE.Vector3,
+  height: number,
+  pose: PoseStyle,
+  handGesture: HandGesture = 'relaxed',
+): THREE.Vector3 {
+  return deformPointByReferencePose(source, height, pose, handGesture);
 }
 
 function transformBody(pack: HumanPack, spec: CharacterSpec, boundary: number): Float32Array {
@@ -178,7 +148,16 @@ function transformBody(pack: HumanPack, spec: CharacterSpec, boundary: number): 
 
     if (spec.outfit === 'web-hero' && y01 > 0.64 && y01 < 0.82 && Math.abs(x) < rawSize.x * 0.24 && z > 0) {
       const chestBand = Math.sin(((y01 - 0.64) / 0.18) * Math.PI);
-      z *= 1 - chestBand * 0.43;
+      z *= 1 - chestBand * (0.2 - spec.chestSoftness * 0.08);
+      z += rawSize.z * chestBand * spec.chestSoftness * 0.035;
+    }
+    if (y01 > 0.5 && y01 < 0.69 && Math.abs(x) < rawSize.x * 0.25 && z > 0) {
+      const abdomenBand = Math.sin(((y01 - 0.5) / 0.19) * Math.PI);
+      z += rawSize.z * abdomenBand * spec.abdominalProjection * 0.14;
+    }
+    if (y01 > 0.45 && y01 < 0.62 && z < 0) {
+      const gluteBand = Math.sin(((y01 - 0.45) / 0.17) * Math.PI);
+      z *= 1 - gluteBand * (1 - spec.gluteScale) * 0.48;
     }
     if (spec.outfit === 'web-hero' && y01 > 0.4 && y01 < 0.64) {
       const hipBand = Math.sin(((y01 - 0.4) / 0.24) * Math.PI);
@@ -211,7 +190,12 @@ function transformBody(pack: HumanPack, spec: CharacterSpec, boundary: number): 
     out[index + 2] *= finalScale;
     if (spec.pose === 'reference-action') {
       point.set(out[index], out[index + 1], out[index + 2]);
-      const posed = poseCharacterPoint(point, spec.heightCm / 100, spec.pose);
+      const posed = poseCharacterPoint(point, spec.heightCm / 100, spec.pose, spec.handGesture);
+      const posedY01 = posed.y / Math.max(spec.heightCm / 100, 0.001);
+      const upperBodyWeight = THREE.MathUtils.smoothstep(posedY01, 0.43, 0.82);
+      posed.z -= spec.heightCm / 100 * spec.rearBalance * 0.022 * upperBodyWeight;
+      const headWeight = THREE.MathUtils.smoothstep(posedY01, 0.8, 0.94);
+      posed.z += spec.heightCm / 100 * spec.forwardHead * 0.032 * headWeight;
       out[index] = posed.x;
       out[index + 1] = posed.y;
       out[index + 2] = posed.z;
@@ -338,30 +322,7 @@ function createRig(metrics: Pick<CharacterMetrics, 'heightMeters'>, pose: PoseSt
   const rig = new THREE.Group();
   rig.name = 'humanoid_rig_preview';
   const h = metrics.heightMeters;
-  const shoulder = h * 0.15;
-  const hip = h * 0.09;
-  const points: Record<string, THREE.Vector3> = {
-    hips: new THREE.Vector3(0, h * 0.52, 0),
-    spine: new THREE.Vector3(0, h * 0.68, 0),
-    chest: new THREE.Vector3(0, h * 0.77, 0),
-    neck: new THREE.Vector3(0, h * 0.84, 0),
-    head: new THREE.Vector3(0, h * 0.93, 0),
-    shoulderL: new THREE.Vector3(-shoulder, h * 0.78, 0),
-    shoulderR: new THREE.Vector3(shoulder, h * 0.78, 0),
-    elbowL: new THREE.Vector3(-h * 0.25, h * 0.64, 0),
-    elbowR: new THREE.Vector3(h * 0.25, h * 0.64, 0),
-    wristL: new THREE.Vector3(-h * 0.31, h * 0.5, 0),
-    wristR: new THREE.Vector3(h * 0.31, h * 0.5, 0),
-    hipL: new THREE.Vector3(-hip, h * 0.5, 0),
-    hipR: new THREE.Vector3(hip, h * 0.5, 0),
-    kneeL: new THREE.Vector3(-hip, h * 0.27, 0),
-    kneeR: new THREE.Vector3(hip, h * 0.27, 0),
-    ankleL: new THREE.Vector3(-hip, h * 0.055, 0),
-    ankleR: new THREE.Vector3(hip, h * 0.055, 0),
-  };
-  for (const [name, position] of Object.entries(points)) {
-    points[name] = poseCharacterPoint(position, h, pose);
-  }
+  const points: Record<string, THREE.Vector3> = getPoseJoints(h, pose);
   const links: Array<[string, string]> = [
     ['hips', 'spine'], ['spine', 'chest'], ['chest', 'neck'], ['neck', 'head'],
     ['chest', 'shoulderL'], ['shoulderL', 'elbowL'], ['elbowL', 'wristL'],
@@ -399,15 +360,20 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   geometry.computeBoundingSphere();
 
   const bounds = geometry.boundingBox?.clone() ?? new THREE.Box3();
-  const size = bounds.getSize(new THREE.Vector3());
   const headBounds = new THREE.Box3();
-  const headFloor = bounds.min.y + size.y * 0.845;
+  const canonicalHeight = spec.heightCm / 100;
+  const headAnchor = getPoseJoints(canonicalHeight, spec.pose).head;
+  const headFloor = canonicalHeight * 0.84;
+  const headRadiusLimit = canonicalHeight * 0.09;
   const point = new THREE.Vector3();
   for (let index = 0; index < positions.length; index += 3) {
     if (positions[index + 1] < headFloor) continue;
     point.set(positions[index], positions[index + 1], positions[index + 2]);
+    const radialDistance = Math.hypot(point.x - headAnchor.x, point.z - headAnchor.z);
+    if (radialDistance > headRadiusLimit) continue;
     headBounds.expandByPoint(point);
   }
+  if (headBounds.isEmpty()) throw new Error('Character head bounds could not be derived from the posed body.');
   const headSize = headBounds.getSize(new THREE.Vector3());
   const headCenter = headBounds.getCenter(new THREE.Vector3());
   const headRadius = Math.max(headSize.x * 0.5, headSize.z * 0.53);
@@ -421,18 +387,20 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   const metrics = {
     vertices: positions.length / 3,
     triangles: topology.indices.length / 3,
-    heightMeters: size.y,
+    heightMeters: spec.heightCm / 100,
     bounds,
     headCenter,
     headRadius,
+    headSize,
     frontZ: bounds.max.z,
     torsoFrontZ,
+    poseLandmarkRmsMeters: poseLandmarkRms(spec.heightCm / 100, spec.pose),
   } as Omit<CharacterMetrics, 'surfaces'>;
 
   const webHero = spec.outfit === 'web-hero';
   const bodyMaterial = createSurfaceMaterial(webHero ? {
-    color: '#858990', surface: 'hex-knit', roughness: 0.72, sheen: 0.5,
-    clearcoat: 0.08, clearcoatRoughness: 0.58, microNormalStrength: 0.68, textureScale: [34, 42],
+    color: '#ffffff', surface: 'hex-knit', roughness: 0.67, sheen: 0.54,
+    clearcoat: 0.07, clearcoatRoughness: 0.61, microNormalStrength: 0.82, textureScale: [42, 54],
   } : {
     color: '#ffffff', surface: 'skin', roughness: 0.56, sheen: 0.17, microNormalStrength: 0.13,
   }, { mode, category: 'human', materialName: webHero ? '웹 히어로 편집형 패브릭 슈트' : '연속형 피부/의상 베이스' });
@@ -444,7 +412,13 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
 
   const root = new THREE.Group();
   root.name = 'morphloom_character';
-  root.userData.characterIR = { version: '0.1', spec: structuredClone(spec) };
+  root.userData.characterIR = {
+    version: '0.2',
+    spec: structuredClone(spec),
+    referencePose: spec.pose === 'reference-action' ? structuredClone(WEB_HERO_REFERENCE_POSE) : undefined,
+    visualInterpretation: spec.outfit === 'web-hero' ? structuredClone(WEB_HERO_VISUAL_INTERPRETATION) : undefined,
+    poseLandmarkRmsMeters: metrics.poseLandmarkRmsMeters,
+  };
   root.add(body);
   if (mode === 'beauty' && !webHero) root.add(createHair(metrics, spec));
   const heroDetails = webHero ? createWebHeroDetails(metrics, mode, spec.pose) : undefined;

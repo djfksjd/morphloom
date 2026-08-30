@@ -1,6 +1,7 @@
 export type HairStyle = 'crop' | 'bob' | 'buzz' | 'none';
 export type OutfitStyle = 'second-skin' | 'field' | 'studio' | 'web-hero';
 export type PoseStyle = 'neutral' | 'reference-action';
+export type HandGesture = 'relaxed' | 'web-shooting';
 export type ViewMode = 'beauty' | 'clay' | 'wireframe' | 'rig';
 export type AssetKind = 'human' | 'product';
 
@@ -33,6 +34,12 @@ export interface CharacterSpec {
   hairStyle: HairStyle;
   outfit: OutfitStyle;
   pose: PoseStyle;
+  abdominalProjection: number;
+  chestSoftness: number;
+  gluteScale: number;
+  forwardHead: number;
+  rearBalance: number;
+  handGesture: HandGesture;
 }
 
 export interface MorphTarget {
@@ -110,24 +117,36 @@ export const DEFAULT_SPEC: CharacterSpec = {
   hairStyle: 'crop',
   outfit: 'field',
   pose: 'neutral',
+  abdominalProjection: 0.12,
+  chestSoftness: 0.12,
+  gluteScale: 1,
+  forwardHead: 0,
+  rearBalance: 0,
+  handGesture: 'relaxed',
 };
 
 export const WEB_HERO_SPEC: CharacterSpec = {
   ...DEFAULT_SPEC,
   heightCm: 178,
-  weight: 0.42,
-  muscle: 0.7,
+  weight: 0.48,
+  muscle: 0.5,
   ageYears: 26,
   genderBlend: 0,
-  shoulderScale: 1.15,
+  shoulderScale: 1.02,
   legScale: 1.025,
   headScale: 0.98,
-  skinTone: '#6b0017',
-  suitColor: '#6b0017',
-  accentColor: '#031b3f',
+  skinTone: '#8a1734',
+  suitColor: '#8a1734',
+  accentColor: '#073b70',
   hairStyle: 'none',
   outfit: 'web-hero',
   pose: 'reference-action',
+  abdominalProjection: 0.38,
+  chestSoftness: 0.3,
+  gluteScale: 0.86,
+  forwardHead: 0.32,
+  rearBalance: 0.35,
+  handGesture: 'web-shooting',
 };
 
 export const DEFAULT_PRODUCT_SPEC: ProductSpec = {
