@@ -11,6 +11,7 @@ const OFFICIAL_PRESS_URL = 'https://news.samsung.com/global/samsung-galaxy-z-fol
 const OFFICIAL_GRAPHITE_IMAGE = 'https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-colors-viewer-initial-graphite.jpg';
 const OFFICIAL_CAMERA_IMAGE = 'https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-camera-spec.jpg';
 const OFFICIAL_UNFOLDED_IMAGE = 'https://images.samsung.com/us/smartphones/galaxy-z-fold8/images/galaxy-z-fold8-features-display-unfolded.png';
+const OFFICIAL_ACCESSORY_DRAWING = 'https://developer.samsung.com/Mobile/file/bdb2f328-8620-449f-8703-0421e381079f';
 
 const WIDTH_MM = 161.4;
 const HEIGHT_MM = 123.9;
@@ -222,7 +223,7 @@ add({
   materialName: 'Gorilla Glass Victus 2',
   detail: '카메라가 배치된 좌측 후면 판 · 공식 Victus 2 재질, Graphite 표면',
   geometry: { op: 'extrude', points: roundedRectPoints(77.1, 120.25, 2.35, 8), depth: 0.42, bevelSize: 0.08, bevelThickness: 0.04, bevelSegments: 2 },
-  position: [-HALF_CENTER_X_MM, 0, -2.13],
+  position: [HALF_CENTER_X_MM, 0, -2.13],
   material: graphiteGlass,
   evidence: evidence('datasheet', OFFICIAL_PRODUCT_URL, ['후면 Gorilla Glass Victus 2와 Graphite 색상은 공식 사양']),
 });
@@ -234,7 +235,7 @@ add({
   materialName: 'Gorilla Glass Ceramic 3/OLED',
   detail: '공식 5.5인치·10:16 비율에서 계산한 74.05×118.48mm 활성영역',
   geometry: { op: 'extrude', points: roundedRectPoints(74.05, 118.48, 2.5, 10), depth: 0.4, bevelSize: 0.06, bevelThickness: 0.035, bevelSegments: 2 },
-  position: [HALF_CENTER_X_MM, 0, -2.13],
+  position: [-HALF_CENTER_X_MM, 0, -2.13],
   material: displayGlass,
   evidence: evidence('datasheet', OFFICIAL_PRODUCT_URL, [
     '대각선 5.5인치, 1,248×1,972, 10:16 공식 사양',
@@ -249,7 +250,7 @@ add({
   materialName: '광학 유리/흑색 차광 코팅',
   detail: '공식 10MP F2.2·85° 커버 화면 카메라의 펀치홀 외관',
   geometry: { op: 'cylinder', radiusTop: 1.68, radiusBottom: 1.68, depth: 0.42, radialSegments: 48 },
-  position: [HALF_CENTER_X_MM, 54.1, -2.38],
+  position: [-HALF_CENTER_X_MM, 54.1, -2.38],
   rotation: [Math.PI / 2, 0, 0],
   material: {
     color: '#050709', surface: 'sapphire', roughness: 0.04, transmission: 0.4,
@@ -265,12 +266,12 @@ add({
   materialName: 'Graphite CNC 알루미늄',
   detail: '50MP 초광각·50MP 광각·플래시를 세로로 고정하는 외부 하우징',
   geometry: { op: 'extrude', points: roundedRectPoints(18.8, 51.2, 7.2, 10), depth: 1.25, bevelSize: 0.22, bevelThickness: 0.12, bevelSegments: 3 },
-  position: [-64.3, 20.8, -2.82],
+  position: [64.3, 20.8, -2.82],
   material: {
     color: '#55565d', surface: 'anodized-metal', roughness: 0.26, metalness: 0.84,
     clearcoat: 0.5, clearcoatRoughness: 0.19, anisotropy: 0.48, microNormalStrength: 0.12, textureScale: [65, 9],
   },
-  evidence: evidence('estimated', OFFICIAL_CAMERA_IMAGE, ['듀얼 카메라 구성은 공식 사양, 아일랜드 외곽 치수와 위치는 이미지 비례 추정']),
+  evidence: evidence('estimated', OFFICIAL_ACCESSORY_DRAWING, ['듀얼 카메라 구성과 후면 방향은 공식 사양·액세서리 도면, 아일랜드 외곽 치수는 이미지 비례 추정']),
 });
 
 for (const [id, label, y, fov] of [
@@ -284,7 +285,7 @@ for (const [id, label, y, fov] of [
     materialName: 'PVD 알루미늄',
     detail: `${label} 렌즈창의 충격 보호 동심 링`,
     geometry: { op: 'torus', radius: 6.35, tube: 0.72, radialSegments: 18, tubularSegments: 72 },
-    position: [-64.3, y, -3.58],
+    position: [64.3, y, -3.58],
     material: {
       color: '#8b8c92', surface: 'polished-metal', roughness: 0.15, metalness: 0.96,
       anisotropy: 0.58, clearcoat: 0.55, clearcoatRoughness: 0.11, microNormalStrength: 0.08,
@@ -298,7 +299,7 @@ for (const [id, label, y, fov] of [
     materialName: 'AR 코팅 사파이어',
     detail: `${label} ${fov} 외부 광학창 · 센서와 내부 렌즈 스택은 외관 범위에서 제외`,
     geometry: { op: 'cylinder', radiusTop: 5.62, radiusBottom: 5.62, depth: 0.5, radialSegments: 64 },
-    position: [-64.3, y, -3.73],
+    position: [64.3, y, -3.73],
     rotation: [Math.PI / 2, 0, 0],
     material: {
       color: '#101c27', surface: 'sapphire', roughness: 0.025, metalness: 0.02,
@@ -314,7 +315,7 @@ for (const [id, label, y, fov] of [
     materialName: '광학 흑색 코팅',
     detail: '외부에서 관찰되는 1차 렌즈와 차광 배럴',
     geometry: { op: 'cylinder', radiusTop: 2.55, radiusBottom: 2.55, depth: 0.16, radialSegments: 56 },
-    position: [-64.3, y, -4.01],
+    position: [64.3, y, -4.01],
     rotation: [Math.PI / 2, 0, 0],
     material: {
       color: '#05090d', surface: 'optical-glass', roughness: 0.055, transmission: 0.16,
@@ -331,7 +332,7 @@ add({
   materialName: '폴리시드 알루미늄',
   detail: '듀얼 카메라 하단의 원형 플래시 고정 링',
   geometry: { op: 'torus', radius: 2.62, tube: 0.38, radialSegments: 14, tubularSegments: 56 },
-  position: [-64.3, 3.7, -3.54],
+  position: [64.3, 3.7, -3.54],
   material: { color: '#bab4a7', surface: 'polished-metal', roughness: 0.2, metalness: 0.8, clearcoat: 0.52 },
   evidence: evidence('estimated', OFFICIAL_CAMERA_IMAGE, ['플래시 위치와 직경을 공식 사진에서 비례 추정']),
 });
@@ -343,7 +344,7 @@ add({
   materialName: '형광체 광학 실리콘',
   detail: '촬영용 LED의 미세 확산 커버',
   geometry: { op: 'cylinder', radiusTop: 2.18, radiusBottom: 2.18, depth: 0.34, radialSegments: 48 },
-  position: [-64.3, 3.7, -3.66],
+  position: [64.3, 3.7, -3.66],
   rotation: [Math.PI / 2, 0, 0],
   material: {
     color: '#eee2b5', surface: 'optical-glass', roughness: 0.26, transmission: 0.23,
@@ -477,6 +478,14 @@ export const GALAXY_Z_FOLD8_EXTERIOR_IR: AssemblyIR = {
     sourceGraphiteImage: OFFICIAL_GRAPHITE_IMAGE,
     sourceCameraImage: OFFICIAL_CAMERA_IMAGE,
     sourceUnfoldedImage: OFFICIAL_UNFOLDED_IMAGE,
+    sourceAccessoryDrawing: OFFICIAL_ACCESSORY_DRAWING,
+    nfcCenterFromRightMm: 34,
+    nfcCenterFromTopMm: 34,
+    wirelessCoilDiameterMm: 41,
+    wirelessCoilCenterFromRightMm: 41.5,
+    wirelessCoilCenterFromTopMm: 80.9,
+    accessoryMagnetCenterBelowDeviceCenterMm: 18.95,
+    accessoryMagnetCenterFromDeviceEdgeMm: 40.44,
     evidencePolicy: '공식 치수·디스플레이·재질·카메라 사양은 datasheet, 공개되지 않은 개구·단차·곡률은 estimated/inferred로 보존합니다.',
     internalElectronicsIncluded: false,
     redistributionNote: '삼성 공식 사진은 모델링 근거 URL로만 기록하며 저장소에 재배포하지 않습니다.',

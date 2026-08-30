@@ -119,7 +119,7 @@ npm run build
 
 `FOLD8 / 04`는 2026 Galaxy Z Fold8 일반형 Graphite의 펼침 외관을 생성합니다. 공식 포락은 펼침 `161.4 × 123.9 × 4.5 mm`, 접힘 `81.9 × 123.9 × 9.7 mm`입니다. 외관만 포함하며 내부 전자부품과 힌지 기어는 의도적으로 제외합니다.
 
-전체 치수·화면·재질·카메라 사양은 [삼성 공식 제품 페이지](https://www.samsung.com/us/smartphones/galaxy-z-fold8/)와 [공식 발표 자료](https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living)를 사용했습니다. 공개되지 않은 카메라 링 직경, 버튼 돌출, 포트 피치는 `estimated` 또는 `inferred`로 남습니다. 공식 사진은 근거 URL로만 기록하고 저장소에 재배포하지 않습니다.
+전체 치수·화면·재질·카메라 사양은 [삼성 공식 제품 페이지](https://www.samsung.com/us/smartphones/galaxy-z-fold8/)와 [공식 발표 자료](https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living)를 사용했습니다. [삼성 액세서리 제조용 주요 부품 배치 도면](https://developer.samsung.com/mobile/accessories.html)의 카메라 방향, 포트 구성, NFC 중심과 Ø41 무선충전 코일 위치도 메타데이터에 보존합니다. 공개되지 않은 카메라 링 직경, 버튼 돌출, 포트 피치는 `estimated` 또는 `inferred`로 남습니다. 공식 사진은 근거 URL로만 기록하고 저장소에 재배포하지 않습니다.
 
 ## 반사각을 결정하는 PBR 미세 표면
 

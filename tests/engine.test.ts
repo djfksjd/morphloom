@@ -258,6 +258,11 @@ describe('AssemblyIR product pipeline', () => {
       officialUnfoldedDepthMm: 4.5,
       officialFoldedWidthMm: 81.9,
       officialFoldedDepthMm: 9.7,
+      nfcCenterFromRightMm: 34,
+      nfcCenterFromTopMm: 34,
+      wirelessCoilDiameterMm: 41,
+      wirelessCoilCenterFromRightMm: 41.5,
+      wirelessCoilCenterFromTopMm: 80.9,
       internalElectronicsIncluded: false,
     });
     expect(GALAXY_Z_FOLD8_EXTERIOR_IR.components).toHaveLength(48);
@@ -271,6 +276,8 @@ describe('AssemblyIR product pipeline', () => {
       'rear_camera_island', 'ultrawide_camera_sapphire_window',
       'wide_camera_sapphire_window', 'rear_flash_diffuser', 'usb_c_opening',
     ]) expect(build.root.getObjectByName(id), id).toBeTruthy();
+    expect(build.root.getObjectByName('rear_camera_island')!.position.x).toBeGreaterThan(0);
+    expect(build.root.getObjectByName('cover_display')!.position.x).toBeLessThan(0);
     expect(build.metrics.connectivity).toBeUndefined();
     expect(build.metrics.engineering).toMatchObject({
       scope: 'exterior-only',
