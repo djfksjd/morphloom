@@ -120,10 +120,10 @@ function createCoolingHarness(): ElectricalHarnessIR {
 }
 
 const components: AssemblyComponentIR[] = [
-  box('cold_plate', 'AL6061 냉각판', 'mechanical', 'AL6061 알루미늄', '이미지 표기 280×180×5 mm 냉각판', [280, 5, 180], [0, 118, 0], '#aeb9c0', 5, 0.82),
-  box('contact_pad', 'TP-3 접촉패드', 'mechanical', '열전도 실리콘', '이미지 표기 1.0 mm 열 인터페이스 패드', [150, 1, 100], [0, 94, 0], '#6d9f9b', 1),
+  box('cold_plate', 'AL6061 냉각판', 'mechanical', 'AL6061 알루미늄', '이미지 표기 280×180×5 mm 냉각판', [280, 5, 180], [0, 118, 0], '#aeb9c0', 2.2, 0.82),
+  box('contact_pad', 'TP-3 접촉패드', 'mechanical', '열전도 실리콘', '이미지 표기 1.0 mm 열 인터페이스 패드', [150, 1, 100], [0, 94, 0], '#6d9f9b', 0.42),
   box('tec', 'TEC1-12706 펠티어 모듈', 'power', '알루미나/비스무트 텔루라이드', '12 V 6 A 열전 모듈 · 내부 소자는 inferred', [40, 4, 40], [0, 76, 0], '#e5e3dd', 1),
-  box('copper_base', 'C1100 구리 베이스', 'mechanical', 'C1100 무산소동', 'AXP90 접촉 베이스 형상은 이미지에서 추정', [140, 3, 110], [0, 61, 0], '#b86637', 2, 0.88),
+  box('copper_base', 'C1100 구리 베이스', 'mechanical', 'C1100 무산소동', 'AXP90 접촉 베이스 형상은 이미지에서 추정', [140, 3, 110], [0, 61, 0], '#b86637', 1.35, 0.88),
   box('heatsink_fins', 'AXP90 핀스택', 'mechanical', '알루미늄/구리', '4×Ø6 heatpipe 표기의 저형 핀스택', [132, 24, 108], [0, 38, 0], '#a9ada9', 3, 0.76),
   {
     id: 'fan', name: 'TL-9015 PWM 팬', category: 'mechanical', materialName: 'PBT/유리섬유',
@@ -131,7 +131,7 @@ const components: AssemblyComponentIR[] = [
     geometry: { op: 'cylinder', radiusTop: 46, radiusBottom: 46, depth: 15, radialSegments: 64 },
     position: [0, 10, 0], material: material('#343c42', 0.12, 0.62),
   },
-  box('service_frame', 'ASA 서비스 프레임', 'enclosure', 'ASA', 'M3 인서트를 갖는 정비용 외곽 프레임', [310, 12, 205], [0, -24, 0], '#38434a', 8),
+  box('service_frame', 'ASA 서비스 프레임', 'enclosure', 'ASA', 'M3 인서트를 갖는 정비용 외곽 프레임', [310, 12, 205], [0, -24, 0], '#38434a', 5.5),
   box('power_board', '전원·퓨즈·5V 벅 보드', 'power', 'FR-4/구리', '12 V 10 A 입력, 퓨즈, 5 V 벅 변환', [66, 14, 34], [-112, 26, 88], '#253f37', 3),
   box('esp32', 'ESP32-S3 N16R8 제어 코어', 'logic', 'FR-4/실리콘', '이미지 표기의 주 제어 모듈', [48, 10, 30], [112, 34, 84], '#21463b', 3),
   box('ads1115', 'ADS1115 16-bit ADC', 'logic', 'FR-4/실리콘', 'I²C 0x48 고해상도 ADC', [30, 8, 24], [-92, 50, 72], '#255044', 2),

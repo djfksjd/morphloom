@@ -5,6 +5,7 @@ import { buildOrnateKnife } from './knife';
 import { compileElectricalHarness, type ConnectivityReport } from './connectivity';
 import type { AssemblyMaterialIR, ElectricalHarnessIR, ElectricalPortIR, ElectricalSignalIR, ElectricalWireIR } from './assembly-ir';
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
+import { analyzeTopology, type MeshTopologyReport } from './topology';
 
 export interface ProductPartInfo {
   id: string;
@@ -24,6 +25,7 @@ export interface ProductMetrics {
   categories: number;
   connectivity?: ConnectivityReport;
   surfaces: SurfaceReport;
+  topology: MeshTopologyReport;
 }
 
 export interface ProductBuild {
@@ -663,7 +665,9 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
   });
   const bounds = new THREE.Box3().setFromObject(root);
   const surfaces = inspectSurfaceSystem(root);
+  const topology = analyzeTopology(root);
   root.userData.surfaceSystem = structuredClone(surfaces);
+  root.userData.topology = structuredClone(topology);
   return {
     root,
     parts,
@@ -676,6 +680,7 @@ export function buildProduct(spec: ProductSpec, mode: ViewMode): ProductBuild {
       categories: new Set(parts.map((part) => part.category)).size,
       connectivity,
       surfaces,
+      topology,
     },
   };
 }

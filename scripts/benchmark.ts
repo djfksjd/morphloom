@@ -7,8 +7,8 @@ import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC } from '../src/types';
 
 const knife = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
-const topology = analyzeTopology(knife.root);
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+const topology = analyzeTopology(knife.root);
 
 const result = {
   generatedAt: new Date().toISOString(),
@@ -32,6 +32,10 @@ const result = {
       cameraParts: phone.parts.filter((part) => part.category === 'camera').length,
       logicParts: phone.parts.filter((part) => part.category === 'logic').length,
       individualConductors: phone.parts.filter((part) => part.category === 'interconnect').length,
+      watertightParts: `${phone.metrics.topology.watertightMeshes}/${phone.metrics.topology.meshes}`,
+      boundaryEdges: phone.metrics.topology.boundaryEdges,
+      nonManifoldEdges: phone.metrics.topology.nonManifoldEdges,
+      degenerateTriangles: phone.metrics.topology.degenerateTriangles,
       surfaces: phone.metrics.surfaces,
       connectivity: phone.metrics.connectivity && {
         ports: `${phone.metrics.connectivity.connectedRequiredPorts}/${phone.metrics.connectivity.requiredPorts}`,
@@ -48,6 +52,10 @@ const result = {
       components: COOLING_ASSEMBLY_IR.components.length,
       renderedParts: cooling.metrics.parts,
       triangles: cooling.metrics.triangles,
+      watertightParts: `${cooling.metrics.topology.watertightMeshes}/${cooling.metrics.topology.meshes}`,
+      boundaryEdges: cooling.metrics.topology.boundaryEdges,
+      nonManifoldEdges: cooling.metrics.topology.nonManifoldEdges,
+      degenerateTriangles: cooling.metrics.topology.degenerateTriangles,
       surfaces: cooling.metrics.surfaces,
       wires: `${cooling.metrics.connectivity?.connectedWires}/${cooling.metrics.connectivity?.wires}`,
       requiredPorts: `${cooling.metrics.connectivity?.connectedRequiredPorts}/${cooling.metrics.connectivity?.requiredPorts}`,

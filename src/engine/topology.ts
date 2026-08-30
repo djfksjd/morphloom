@@ -1,6 +1,11 @@
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
+// A triangle's absolute area depends on whether the asset is a phone chip or a
+// building panel. Compare its area with its own longest edge so topology checks
+// stay meaningful across millimetre-scale and metre-scale geometry.
+const RELATIVE_DEGENERACY_EPSILON = 1e-12;
+
 export interface MeshTopologyReport {
   meshes: number;
   watertightMeshes: number;
@@ -50,6 +55,10 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     const a = new THREE.Vector3();
     const b = new THREE.Vector3();
     const c = new THREE.Vector3();
+    const ab = new THREE.Vector3();
+    const ac = new THREE.Vector3();
+    const bc = new THREE.Vector3();
+    const cross = new THREE.Vector3();
     for (let offset = 0; offset < index.count; offset += 3) {
       const ia = index.getX(offset);
       const ib = index.getX(offset + 1);
@@ -58,7 +67,14 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
       a.fromBufferAttribute(position, ia);
       b.fromBufferAttribute(position, ib);
       c.fromBufferAttribute(position, ic);
-      if (b.clone().sub(a).cross(c.clone().sub(a)).lengthSq() < 1e-18) meshDegenerate += 1;
+      ab.subVectors(b, a);
+      ac.subVectors(c, a);
+      bc.subVectors(c, b);
+      const maxEdgeSq = Math.max(ab.lengthSq(), ac.lengthSq(), bc.lengthSq());
+      const crossSq = cross.crossVectors(ab, ac).lengthSq();
+      if (maxEdgeSq === 0 || crossSq <= maxEdgeSq * maxEdgeSq * RELATIVE_DEGENERACY_EPSILON) {
+        meshDegenerate += 1;
+      }
       for (const [from, to] of [[ia, ib], [ib, ic], [ic, ia]]) {
         const key = edgeKey(from, to);
         edges.set(key, (edges.get(key) ?? 0) + 1);

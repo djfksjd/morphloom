@@ -71,6 +71,7 @@ describe('AssemblyIR product pipeline', () => {
       errors: [],
     });
     expect(build.metrics.connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
+    expect(build.metrics.topology.pass).toBe(true);
   });
 
   it('rejects a conductor with a missing physical endpoint', () => {
@@ -99,6 +100,26 @@ describe('AssemblyIR product pipeline', () => {
     expect(connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
     expect(build.metrics.surfaces.distinctFinishes).toBeGreaterThanOrEqual(8);
     expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(150);
+    expect(build.metrics.topology.pass).toBe(true);
+  });
+
+  it('keeps the detailed phone and image-derived cooling assembly closed and manifold', () => {
+    for (const build of [
+      buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty'),
+      compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty'),
+    ]) {
+      const report = analyzeTopology(build.root);
+      expect(report.boundaryEdges).toBe(0);
+      expect(report.nonManifoldEdges).toBe(0);
+      expect(report.degenerateTriangles).toBe(0);
+      expect(report.watertightMeshes).toBe(report.meshes);
+    }
+  });
+
+  it('rejects rounded boxes whose bevel would collapse a thin component', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    ir.components[0].geometry = { op: 'roundedBox', size: [100, 2, 40], radius: 1.5 };
+    expect(() => compileAssemblyIR(ir, 'beauty')).toThrow(/safe half-dimension limit/);
   });
 
   it('compiles the ornate knife from the public generic AssemblyIR', () => {

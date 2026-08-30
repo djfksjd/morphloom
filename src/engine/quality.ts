@@ -83,6 +83,7 @@ export function evaluateProductQuality(
   const isImportedAssembly = Boolean(assemblyIR);
   const connectivity = metrics?.connectivity;
   const surfaces = metrics?.surfaces;
+  const topology = metrics?.topology;
   const ratio = spec.heightMm / spec.widthMm;
   const compiledEnvelope = metrics?.bounds ? {
     x: metrics.bounds.max.x - metrics.bounds.min.x,
@@ -103,17 +104,18 @@ export function evaluateProductQuality(
   const surfaceScore = surfaces
     ? Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
     : 76;
+  const topologyScore = topology
+    ? topology.pass ? 100 : Math.max(0, 100 - topology.boundaryEdges - topology.nonManifoldEdges * 2 - topology.degenerateTriangles)
+    : 64;
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
       label: isKnife ? '가변 두께 검신' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
-      score: 96,
-      status: 'pass',
-      detail: isKnife
-        ? '중심 능선→0.16mm 날끝→뾰족한 팁의 폐쇄형 로프트'
-        : isImportedAssembly
-          ? `${assemblyIR!.components.length}개 구조 부품과 ${metrics?.parts ?? '—'}개 렌더 노드`
-          : '외장·디스플레이·PCB·반도체·카메라를 독립 노드로 구성',
+      score: topologyScore,
+      status: topology?.pass ? 'pass' : 'blocked',
+      detail: topology
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`
+        : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {
       id: 'silhouette',

@@ -5,6 +5,7 @@ import type { ProductBuild, ProductPartInfo } from './product';
 import type { AssemblyComponentIR, AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
 import { compileElectricalHarness, validateElectricalHarness } from './connectivity';
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from './surface-system';
+import { analyzeTopology } from './topology';
 
 const mm = (value: number) => value / 1000;
 
@@ -47,6 +48,13 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     ids.add(component.id);
     if (!component.geometry || !allowedOps.has(component.geometry.op)) throw new Error(`Unsupported geometry op in ${component.id}.`);
     inspect(component.geometry, `${component.id}.geometry`);
+    if (component.geometry.op === 'roundedBox') {
+      const minDimension = Math.min(...component.geometry.size);
+      if (minDimension <= 0) throw new Error(`Rounded box dimensions must be positive in ${component.id}.`);
+      if (component.geometry.radius < 0 || component.geometry.radius > minDimension * 0.49) {
+        throw new Error(`Rounded box radius exceeds the safe half-dimension limit in ${component.id}.`);
+      }
+    }
     inspect(component.position, `${component.id}.position`);
     inspect(component.rotation, `${component.id}.rotation`);
     inspect(component.scale, `${component.id}.scale`);
@@ -74,10 +82,12 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
 function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
   switch (geometry.op) {
     case 'roundedBox':
-      return new RoundedBoxGeometry(
-        mm(geometry.size[0]), mm(geometry.size[1]), mm(geometry.size[2]),
-        geometry.segments ?? 4, mm(geometry.radius),
-      );
+      return geometry.radius > 0
+        ? new RoundedBoxGeometry(
+          mm(geometry.size[0]), mm(geometry.size[1]), mm(geometry.size[2]),
+          geometry.segments ?? 4, mm(geometry.radius),
+        )
+        : new THREE.BoxGeometry(mm(geometry.size[0]), mm(geometry.size[1]), mm(geometry.size[2]));
     case 'cylinder':
       return new THREE.CylinderGeometry(
         mm(geometry.radiusTop), mm(geometry.radiusBottom), mm(geometry.depth),
@@ -328,7 +338,9 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const bounds = new THREE.Box3().setFromObject(root);
   const heightMeters = bounds.getSize(new THREE.Vector3()).y;
   const surfaces = inspectSurfaceSystem(root);
+  const topology = analyzeTopology(root);
   root.userData.surfaceSystem = structuredClone(surfaces);
+  root.userData.topology = structuredClone(topology);
   return {
     root,
     parts,
@@ -341,6 +353,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       categories: new Set(parts.map((part) => part.category)).size,
       connectivity,
       surfaces,
+      topology,
     },
   };
 }
