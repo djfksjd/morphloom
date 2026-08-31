@@ -278,6 +278,8 @@ export const POOR_COYOTES_CABIN_IR: AssemblyIR = {
     license: 'No known restrictions on U.S. Government HABS materials',
     measuredLengthMm: LENGTH_MM,
     measuredWidthMm: WIDTH_MM,
+    planFootprintVerified: true,
+    planFootprintAudit: 'source-plan-vs-plan-view-shell',
     measuredWestSideMm: WIDTH_MM,
     measuredEastSideMm: 4114.8,
     estimatedWallTopMm: WALL_TOP_MM,

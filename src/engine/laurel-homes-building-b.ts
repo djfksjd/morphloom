@@ -9,11 +9,16 @@ import type {
 const SOURCE_PDF = 'https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf';
 
 // HABS OH-2468-A documents Building B as 139 ft long and 46 ft 4 in deep.
-// The rear wing projects 17 ft 6 in and is 27 ft wide.
+// The first-floor sheet reads as a long residential bar with two recessed
+// courts, end wings and a 27 ft central entrance wing projecting 17 ft 6 in.
 const LENGTH_MM = 42_367.2;
 const MAIN_DEPTH_MM = 14_122.4;
-const REAR_WING_PROJECTION_MM = 5_334;
-const REAR_WING_WIDTH_MM = 8_229.6;
+const MAIN_BAR_DEPTH_MM = 7_600;
+const CENTER_WING_PROJECTION_MM = 5_334;
+const CENTER_WING_WIDTH_MM = 8_229.6;
+const SIDE_WING_WIDTH_MM = 10_250;
+const ENTRANCE_PROJECTION_MM = 1_500;
+const ENTRANCE_WIDTH_MM = 3_000;
 const SLAB_THICKNESS_MM = 220;
 const WALL_HEIGHT_MM = 2_700;
 const EXTERIOR_WALL_MM = 305;
@@ -96,67 +101,135 @@ function box(
   });
 }
 
-box(
-  'main_floor_slab', 'Main residential floor slab', 'enclosure',
-  [LENGTH_MM, SLAB_THICKNESS_MM, MAIN_DEPTH_MM], [0, -SLAB_THICKNESS_MM / 2, 0],
-  'Reinforced concrete', concrete, measuredEnvelope,
-  'Measured 139 ft × 46 ft 4 in principal floor plate.', 28,
-);
+const northEdgeZ = MAIN_DEPTH_MM / 2;
+const mainBarSouthZ = northEdgeZ - MAIN_BAR_DEPTH_MM;
+const mainBarCenterZ = (northEdgeZ + mainBarSouthZ) / 2;
+const sideWingDepth = mainBarSouthZ + MAIN_DEPTH_MM / 2;
+const sideWingCenterZ = mainBarSouthZ - sideWingDepth / 2;
+const sideWingCenterX = LENGTH_MM / 2 - SIDE_WING_WIDTH_MM / 2;
+const centerWingCenterZ = mainBarSouthZ - CENTER_WING_PROJECTION_MM / 2;
+const centerWingSouthZ = mainBarSouthZ - CENTER_WING_PROJECTION_MM;
+const entranceCenterZ = centerWingSouthZ - ENTRANCE_PROJECTION_MM / 2;
+const entranceSouthZ = centerWingSouthZ - ENTRANCE_PROJECTION_MM;
 
-const rearWingCenterZ = -(MAIN_DEPTH_MM / 2 + REAR_WING_PROJECTION_MM / 2);
-box(
-  'rear_wing_floor_slab', 'Rear center-wing floor slab', 'enclosure',
-  [REAR_WING_WIDTH_MM, SLAB_THICKNESS_MM, REAR_WING_PROJECTION_MM],
-  [0, -SLAB_THICKNESS_MM / 2, rearWingCenterZ],
+// Separate slabs preserve the two open courts. The old single rectangle hid
+// both voids and made the plan read as a generic apartment block.
+box('north_bar_floor_slab', 'North residential bar floor slab', 'enclosure',
+  [LENGTH_MM, SLAB_THICKNESS_MM, MAIN_BAR_DEPTH_MM], [0, -SLAB_THICKNESS_MM / 2, mainBarCenterZ],
   'Reinforced concrete', concrete, measuredEnvelope,
-  'Measured 27 ft wide rear wing projecting 17 ft 6 in.', 28,
-);
-
-// The long elevations are constructed as sill, head and masonry piers so the
-// HABS window rhythm remains inspectable instead of being painted onto a box.
+  'Measured 139 ft principal bar, segmented from the HABS first-floor outline.', 28);
 for (const side of [-1, 1] as const) {
-  const sideName = side > 0 ? 'north' : 'south';
-  const z = side * MAIN_DEPTH_MM / 2;
-  box(`${sideName}_sill_wall`, `${sideName} continuous brick sill`, 'enclosure',
-    [LENGTH_MM, 760, EXTERIOR_WALL_MM], [0, 380, z], 'Common-bond brick', brick, scaledPlan,
-    'Continuous masonry below the repeated apartment windows.');
-  box(`${sideName}_head_wall`, `${sideName} continuous brick head`, 'enclosure',
-    [LENGTH_MM, 560, EXTERIOR_WALL_MM], [0, WALL_HEIGHT_MM - 280, z], 'Common-bond brick', brick, inferredVertical,
-    'Cutaway-height masonry band above the plan-derived window rhythm.');
-  for (let index = 0; index <= 18; index += 1) {
-    const x = -LENGTH_MM / 2 + index * (LENGTH_MM / 18);
-    box(`${sideName}_masonry_pier_${index + 1}`, `${sideName} masonry pier ${index + 1}`, 'enclosure',
-      [360, WALL_HEIGHT_MM - 1_320, EXTERIOR_WALL_MM], [x, 760 + (WALL_HEIGHT_MM - 1_320) / 2, z],
-      'Common-bond brick', brick, scaledPlan, 'Plan-scaled masonry pier between façade openings.', 10);
-    if (index < 18) {
-      const nextX = x + LENGTH_MM / 36;
-      box(`${sideName}_window_${index + 1}`, `${sideName} apartment window ${index + 1}`, 'display',
-        [1_420, 1_250, 18], [nextX, 1_520, z - side * (EXTERIOR_WALL_MM / 2 + 2)],
-        'Steel sash with glazing', glass, scaledPlan, 'Independent glazing panel aligned to a HABS façade opening.', 6);
-      box(`${sideName}_window_frame_${index + 1}`, `${sideName} steel window rail ${index + 1}`, 'mechanical',
-        [1_520, 64, 52], [nextX, 1_520, z - side * (EXTERIOR_WALL_MM / 2 + 18)],
+  const name = side < 0 ? 'west' : 'east';
+  box(`${name}_wing_floor_slab`, `${name} return-wing floor slab`, 'enclosure',
+    [SIDE_WING_WIDTH_MM, SLAB_THICKNESS_MM, sideWingDepth],
+    [side * sideWingCenterX, -SLAB_THICKNESS_MM / 2, sideWingCenterZ],
+    'Reinforced concrete', concrete, scaledPlan,
+    'Plan-scaled end wing forming one side of the pair of open courts.', 28);
+}
+box('center_entry_wing_floor_slab', 'Central entrance-wing floor slab', 'enclosure',
+  [CENTER_WING_WIDTH_MM, SLAB_THICKNESS_MM, CENTER_WING_PROJECTION_MM],
+  [0, -SLAB_THICKNESS_MM / 2, centerWingCenterZ],
+  'Reinforced concrete', concrete, measuredEnvelope,
+  'Measured 27 ft central wing projecting 17 ft 6 in between two open courts.', 28);
+box('entrance_vestibule_floor_slab', 'Projecting entrance vestibule floor', 'enclosure',
+  [ENTRANCE_WIDTH_MM, SLAB_THICKNESS_MM, ENTRANCE_PROJECTION_MM],
+  [0, -SLAB_THICKNESS_MM / 2, entranceCenterZ],
+  'Reinforced concrete', concrete, scaledPlan,
+  'Plan-scaled entrance bay projecting from the bottom of the central wing.', 24);
+
+function addWindowedFacade(
+  id: string,
+  label: string,
+  length: number,
+  centerX: number,
+  z: number,
+  facing: -1 | 1,
+  openingCount: number,
+): void {
+  box(`${id}_sill_wall`, `${label} brick sill`, 'enclosure',
+    [length, 760, EXTERIOR_WALL_MM], [centerX, 380, z], 'Common-bond brick', brick, scaledPlan,
+    'Masonry sill below the plan-scaled façade openings.');
+  box(`${id}_head_wall`, `${label} brick head`, 'enclosure',
+    [length, 560, EXTERIOR_WALL_MM], [centerX, WALL_HEIGHT_MM - 280, z], 'Common-bond brick', brick, inferredVertical,
+    'Cutaway-height masonry band above the plan-scaled façade openings.');
+  const bay = length / openingCount;
+  const windowWidth = Math.min(1_420, bay * 0.68);
+  for (let index = 0; index <= openingCount; index += 1) {
+    const x = centerX - length / 2 + index * bay;
+    box(`${id}_masonry_pier_${index + 1}`, `${label} masonry pier ${index + 1}`, 'enclosure',
+      [Math.min(360, bay * 0.2), WALL_HEIGHT_MM - 1_320, EXTERIOR_WALL_MM],
+      [x, 760 + (WALL_HEIGHT_MM - 1_320) / 2, z], 'Common-bond brick', brick, scaledPlan,
+      'Plan-scaled masonry pier between façade openings.', 10);
+    if (index < openingCount) {
+      const windowX = x + bay / 2;
+      box(`${id}_window_${index + 1}`, `${label} window ${index + 1}`, 'display',
+        [windowWidth, 1_250, 18], [windowX, 1_520, z - facing * (EXTERIOR_WALL_MM / 2 + 2)],
+        'Steel sash with glazing', glass, scaledPlan,
+        'Independent glazing panel aligned to a HABS façade opening.', 6);
+      box(`${id}_window_frame_${index + 1}`, `${label} steel window rail ${index + 1}`, 'mechanical',
+        [windowWidth + 100, 64, 52], [windowX, 1_520, z - facing * (EXTERIOR_WALL_MM / 2 + 18)],
         'Painted steel sash', steel, scaledPlan, 'Named steel sash rail for the apartment window.', 8);
     }
   }
 }
 
+addWindowedFacade('north', 'North principal façade', LENGTH_MM, 0, northEdgeZ, 1, 18);
+addWindowedFacade('west_south', 'West wing south façade', SIDE_WING_WIDTH_MM, -sideWingCenterX,
+  -MAIN_DEPTH_MM / 2, -1, 5);
+addWindowedFacade('east_south', 'East wing south façade', SIDE_WING_WIDTH_MM, sideWingCenterX,
+  -MAIN_DEPTH_MM / 2, -1, 5);
+
+const courtFacadeLength = (LENGTH_MM - SIDE_WING_WIDTH_MM * 2 - CENTER_WING_WIDTH_MM) / 2;
+const courtFacadeCenter = CENTER_WING_WIDTH_MM / 2 + courtFacadeLength / 2;
+addWindowedFacade('west_court_north', 'West court north façade', courtFacadeLength, -courtFacadeCenter,
+  mainBarSouthZ, -1, 4);
+addWindowedFacade('east_court_north', 'East court north façade', courtFacadeLength, courtFacadeCenter,
+  mainBarSouthZ, -1, 4);
+
 for (const side of [-1, 1] as const) {
-  const sideName = side > 0 ? 'east' : 'west';
-  box(`${sideName}_end_wall`, `${sideName} brick end wall`, 'enclosure',
-    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, MAIN_DEPTH_MM], [side * LENGTH_MM / 2, WALL_HEIGHT_MM / 2, 0],
-    'Common-bond brick', brick, measuredEnvelope, 'Measured end façade of the principal bar.', 16);
+  const name = side < 0 ? 'west' : 'east';
+  box(`${name}_outer_end_wall`, `${name} exterior end wall`, 'enclosure',
+    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, MAIN_DEPTH_MM],
+    [side * LENGTH_MM / 2, WALL_HEIGHT_MM / 2, 0], 'Common-bond brick', brick, measuredEnvelope,
+    'Measured 46 ft 4 in exterior side façade.', 16);
+  box(`${name}_court_side_wall`, `${name} court return wall`, 'enclosure',
+    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, sideWingDepth],
+    [side * (LENGTH_MM / 2 - SIDE_WING_WIDTH_MM), WALL_HEIGHT_MM / 2, sideWingCenterZ],
+    'Common-bond brick', brick, scaledPlan,
+    'Plan-scaled inner return wall preserving the open court void.', 16);
+  box(`center_wing_${name}_wall`, `Central wing ${name} court wall`, 'enclosure',
+    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, CENTER_WING_PROJECTION_MM],
+    [side * CENTER_WING_WIDTH_MM / 2, WALL_HEIGHT_MM / 2, centerWingCenterZ],
+    'Common-bond brick', brick, measuredEnvelope,
+    'Measured side wall of the central entrance wing.', 16);
 }
 
-box('rear_wing_end_wall', 'Rear wing end wall', 'enclosure',
-  [REAR_WING_WIDTH_MM, WALL_HEIGHT_MM, EXTERIOR_WALL_MM],
-  [0, WALL_HEIGHT_MM / 2, -(MAIN_DEPTH_MM / 2 + REAR_WING_PROJECTION_MM)],
-  'Common-bond brick', brick, measuredEnvelope, 'Measured rear face of the 27 ft center wing.', 16);
+// The center rear wall is split around the vestibule connection; the
+// vestibule itself carries the public entrance farther south.
+const centerRearSideWidth = (CENTER_WING_WIDTH_MM - ENTRANCE_WIDTH_MM) / 2;
 for (const side of [-1, 1] as const) {
-  box(`rear_wing_${side < 0 ? 'west' : 'east'}_wall`, `${side < 0 ? 'West' : 'East'} rear-wing wall`, 'enclosure',
-    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, REAR_WING_PROJECTION_MM],
-    [side * REAR_WING_WIDTH_MM / 2, WALL_HEIGHT_MM / 2, rearWingCenterZ],
-    'Common-bond brick', brick, measuredEnvelope, 'Measured side wall of the projecting center wing.', 16);
+  box(`center_wing_rear_${side < 0 ? 'west' : 'east'}_wall`, `Central wing rear wall ${side < 0 ? 'west' : 'east'}`, 'enclosure',
+    [centerRearSideWidth, WALL_HEIGHT_MM, EXTERIOR_WALL_MM],
+    [side * (ENTRANCE_WIDTH_MM / 2 + centerRearSideWidth / 2), WALL_HEIGHT_MM / 2, centerWingSouthZ],
+    'Common-bond brick', brick, measuredEnvelope,
+    'Rear wall segment beside the projecting entrance vestibule.', 14);
+  box(`entrance_${side < 0 ? 'west' : 'east'}_side_wall`, `Entrance vestibule ${side < 0 ? 'west' : 'east'} wall`, 'enclosure',
+    [EXTERIOR_WALL_MM, WALL_HEIGHT_MM, ENTRANCE_PROJECTION_MM],
+    [side * ENTRANCE_WIDTH_MM / 2, WALL_HEIGHT_MM / 2, entranceCenterZ],
+    'Common-bond brick', brick, scaledPlan,
+    'Plan-scaled side wall of the projecting public entrance.', 12);
 }
+box('entrance_front_head', 'Entrance masonry head', 'enclosure',
+  [ENTRANCE_WIDTH_MM, 500, EXTERIOR_WALL_MM], [0, WALL_HEIGHT_MM - 250, entranceSouthZ],
+  'Common-bond brick', brick, inferredVertical, 'Header spanning the public double-door opening.', 12);
+for (const side of [-1, 1] as const) {
+  box(`entrance_door_${side < 0 ? 'west' : 'east'}`, `Entrance glazed door ${side < 0 ? 'west' : 'east'}`, 'mechanical',
+    [1_360, 2_150, 52], [side * 710, 1_075, entranceSouthZ - EXTERIOR_WALL_MM / 2],
+    'Steel-framed glazing', glass, scaledPlan, 'Public entrance leaf at the projecting vestibule.', 10);
+}
+box('entrance_canopy', 'Entrance canopy', 'mechanical',
+  [3_650, 120, 1_050], [0, 2_480, entranceSouthZ - 430],
+  'Painted steel', steel, inferredVertical, 'Protective canopy marking the projecting public entrance.', 18);
 
 type UnitDefinition = {
   id: number;
@@ -168,21 +241,21 @@ type UnitDefinition = {
   planType: 'A' | 'B' | 'C' | 'D' | 'E';
 };
 
-const barWidths = [9_300, 9_600, 9_600, 9_300];
-const barCenters = [-16_260, -6_810, 2_790, 12_240];
+const barWidths = [9_400, 9_600, 9_600, 9_400];
+const barCenters = [-15_900, -5_300, 5_300, 15_900];
 const units: UnitDefinition[] = [
   ...barWidths.map((width, index) => ({
-    id: index + 1, centerX: barCenters[index], centerZ: 3_860, width, depth: 5_900,
+    id: index + 1, centerX: barCenters[index], centerZ: 3_420, width, depth: 6_300,
     side: 'north' as const, planType: (['A', 'B', 'B', 'A'] as const)[index],
   })),
   {
-    id: 5, centerX: 0, centerZ: rearWingCenterZ, width: 7_800, depth: 4_900,
+    id: 5, centerX: 0, centerZ: centerWingCenterZ, width: 7_800, depth: 4_900,
     side: 'south' as const, planType: 'C' as const,
   },
-  ...barWidths.map((width, index) => ({
-    id: index + 6, centerX: barCenters[index], centerZ: -3_860, width, depth: 5_900,
-    side: 'south' as const, planType: (['D', 'E', 'E', 'D'] as const)[index],
-  })),
+  { id: 6, centerX: -18_480, centerZ: sideWingCenterZ, width: 4_650, depth: 5_950, side: 'south', planType: 'D' },
+  { id: 7, centerX: -13_640, centerZ: sideWingCenterZ, width: 4_650, depth: 5_950, side: 'south', planType: 'E' },
+  { id: 8, centerX: 13_640, centerZ: sideWingCenterZ, width: 4_650, depth: 5_950, side: 'south', planType: 'E' },
+  { id: 9, centerX: 18_480, centerZ: sideWingCenterZ, width: 4_650, depth: 5_950, side: 'south', planType: 'D' },
 ];
 
 function roomFloor(
@@ -333,8 +406,14 @@ export const LAUREL_HOMES_BUILDING_B_IR: AssemblyIR = {
     documentedPlanTypesPerFloor: 5,
     measuredLengthMm: LENGTH_MM,
     measuredMainDepthMm: MAIN_DEPTH_MM,
-    measuredRearWingProjectionMm: REAR_WING_PROJECTION_MM,
-    measuredRearWingWidthMm: REAR_WING_WIDTH_MM,
+    planFootprintVerified: true,
+    planFootprintAudit: 'source-plan-vs-plan-view-segmented-slab',
+    footprintForm: 'u-courtyard-with-projecting-entry',
+    courtyardVoids: 2,
+    measuredCenterWingProjectionMm: CENTER_WING_PROJECTION_MM,
+    measuredCenterWingWidthMm: CENTER_WING_WIDTH_MM,
+    planScaledEntranceProjectionMm: ENTRANCE_PROJECTION_MM,
+    planScaledEntranceWidthMm: ENTRANCE_WIDTH_MM,
     estimatedCutawayWallHeightMm: WALL_HEIGHT_MM,
     ceilingAndRoofIncluded: false,
     structureAndMepReady: false,

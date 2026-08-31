@@ -4,6 +4,8 @@ Follow the same vendor-neutral contract as `AGENTS.md`. Produce only `morphloom.
 
 For an image-to-asset request:
 
+Read `skills/morphloom-asset-foundry/SKILL.md` and its asset-specific reference first. A short user request already includes the default detail, material, evidence, and validation contract; do not require the user to rewrite it as a long prompt.
+
 1. List visible evidence and unknown geometry.
 2. Build a part tree before writing geometry.
 3. Express the asset with the operations in `schemas/assembly-ir.schema.json`.

@@ -90,7 +90,7 @@ def render_model(ir: dict) -> None:
             continue
         is_glass = component["material"].get("surface") == "optical-glass"
         component_id = component["id"]
-        if component_id in {"main_floor_slab", "rear_wing_floor_slab"}:
+        if component_id.endswith("_floor_slab"):
             layer = 0
         elif component_id.startswith("unit_") and component_id.endswith("_floor"):
             layer = 1

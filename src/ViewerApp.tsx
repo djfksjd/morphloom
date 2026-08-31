@@ -11,6 +11,12 @@ import { loadHumanPack } from './engine/ohpk';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { buildPhysicalNetlist } from './engine/netlist';
+import {
+  formatMeasurement,
+  type MeasurementMode,
+  type MeasurementResult,
+  type MeasurementUnit,
+} from './engine/measurement';
 import { ResultViewport, type ViewportHandle } from './components/ResultViewport';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from './types';
@@ -107,6 +113,11 @@ export function ViewerApp() {
   const [selectedPart, setSelectedPart] = useState<ProductPartInfo>();
   const [busyAction, setBusyAction] = useState<string>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
+  const [measurementEnabled, setMeasurementEnabled] = useState(false);
+  const [measurementMode, setMeasurementMode] = useState<MeasurementMode>('distance');
+  const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>('mm');
+  const [measurementResult, setMeasurementResult] = useState<MeasurementResult>();
+  const [measurementPoints, setMeasurementPoints] = useState<0 | 1 | 2>(0);
   const viewportRef = useRef<ViewportHandle>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
 
@@ -146,6 +157,17 @@ export function ViewerApp() {
     setBuildMetrics(build.metrics);
   }, []);
 
+  const handleMeasurementChange = useCallback((result: MeasurementResult | undefined, points: 0 | 1 | 2) => {
+    setMeasurementResult(result);
+    setMeasurementPoints(points);
+  }, []);
+
+  const clearMeasurement = useCallback(() => {
+    viewportRef.current?.clearMeasurement();
+    setMeasurementResult(undefined);
+    setMeasurementPoints(0);
+  }, []);
+
   const selectAsset = (id: string) => {
     const next = VIEWER_ASSETS.find((item) => item.id === id);
     if (!next) return;
@@ -153,6 +175,9 @@ export function ViewerApp() {
     setAssetKind(next.kind);
     setSelectedPart(undefined);
     setMode('beauty');
+    setMeasurementEnabled(false);
+    setMeasurementResult(undefined);
+    setMeasurementPoints(0);
     if (next.kind === 'human') {
       setSpec(next.spec);
       setAssemblyIR(undefined);
@@ -175,6 +200,16 @@ export function ViewerApp() {
   const activeName = assetKind === 'human'
     ? spec.outfit === 'web-hero' ? 'ML—WEB_HERO_01' : 'ML—HUMAN_BASE'
     : assemblyIR ? assemblyIR.name.toUpperCase() : productSpec.kind === 'smartphone' ? 'ML—PHONE_ASSEMBLY' : 'ML—ORNATE_BLADE';
+  const primaryMeasurement = measurementResult
+    ? measurementMode === 'height' ? measurementResult.heightMeters : measurementResult.distanceMeters
+    : undefined;
+  const measurementPrompt = !measurementEnabled
+    ? '실측 도구 꺼짐'
+    : measurementPoints === 0
+      ? '모델 표면의 첫 점을 선택하세요'
+      : measurementPoints === 1
+        ? '두 번째 점을 선택하세요'
+        : '완료 · 다음 점을 누르면 새 측정';
 
   return (
     <main className="app-shell viewer-shell">
@@ -221,6 +256,44 @@ export function ViewerApp() {
             <span className="viewport-hint">AUTO FIT · DRAG TO ORBIT · SCROLL TO DOLLY</span>
           </div>
 
+          {assetKind === 'product' && (
+            <div className={`cad-measure-toolbar${measurementEnabled ? ' is-active' : ''}`} aria-label="CAD 실측 도구">
+              <button
+                className="measure-toggle"
+                aria-pressed={measurementEnabled}
+                onClick={() => {
+                  const next = !measurementEnabled;
+                  setMeasurementEnabled(next);
+                  if (!next) clearMeasurement();
+                }}
+              >
+                <i /> 실측
+              </button>
+              <div className="measure-mode-switch" role="group" aria-label="측정 종류">
+                <button className={measurementMode === 'distance' ? 'active' : ''} onClick={() => setMeasurementMode('distance')}>거리</button>
+                <button className={measurementMode === 'height' ? 'active' : ''} onClick={() => setMeasurementMode('height')}>높이</button>
+              </div>
+              <label className="measure-unit-select">
+                <span>UNIT</span>
+                <select value={measurementUnit} onChange={(event) => setMeasurementUnit(event.target.value as MeasurementUnit)}>
+                  <option value="mm">mm</option>
+                  <option value="cm">cm</option>
+                  <option value="m">m</option>
+                </select>
+              </label>
+              <button className="measure-clear" onClick={clearMeasurement} disabled={measurementPoints === 0}>초기화</button>
+              <span className="measure-prompt"><b>SNAP · SURFACE</b>{measurementPrompt}</span>
+              {measurementResult && primaryMeasurement !== undefined && (
+                <div className="measure-live-result" aria-live="polite">
+                  <span><b>{measurementMode === 'height' ? 'HEIGHT' : 'DISTANCE'}</b>{formatMeasurement(primaryMeasurement, measurementUnit)}</span>
+                  <span>ΔX <b>{formatMeasurement(measurementResult.deltaMeters.x, measurementUnit)}</b></span>
+                  <span>ΔY <b>{formatMeasurement(measurementResult.deltaMeters.y, measurementUnit)}</b></span>
+                  <span>ΔZ <b>{formatMeasurement(measurementResult.deltaMeters.z, measurementUnit)}</b></span>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="viewfinder-corners" aria-hidden="true"><i /><i /><i /><i /></div>
           {pack ? (
             <ResultViewport
@@ -231,8 +304,11 @@ export function ViewerApp() {
               productSpec={productSpec}
               assemblyIR={assemblyIR}
               mode={mode}
+              measurementEnabled={measurementEnabled}
+              measurementMode={measurementMode}
               onBuilt={handleBuilt}
               onPartSelected={setSelectedPart}
+              onMeasurementChange={handleMeasurementChange}
             />
           ) : (
             <div className="viewport-loading">

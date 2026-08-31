@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-35%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-40%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -33,7 +33,7 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
 | 첨부 이미지 파생 냉각 장치 | 97개 원본 부품 → 172개 렌더 부품 · watertight 322/322 메시 · 개별 도체 75/75 · 물리 포트 150/150 |
 | HABS 건물 실측도면 | 17′4″ × 13′10″ 셸 · 116개 명명 부재 · 108,432 tris · watertight 116/116 메시 |
-| HABS 공동주택 전체 기준층 | 4층·36세대 기록 → 9세대 기준층 · 3개 계단실 · 45개 명명 공간 · 305개 부재 · 179,340 tris |
+| HABS 공동주택 전체 기준층 | 4층·36세대 기록 → 9세대 기준층 · 2개 중정 빈 공간 · 돌출 출입구 · 326개 부재 · 191,688 tris |
 | 출력 | GLB · PNG · CharacterIR/AssemblyIR · 물리 Netlist JSON |
 
 ## 사진을 넣으면 바로 3D가 만들어지나요?
@@ -52,7 +52,7 @@ GLB + PNG + IR
 
 - 사진과 자연어 요구사항은 웹 폼이 아니라 저장소를 연 **Codex 또는 Claude의 개발/CLI 대화**에 직접 전달합니다.
 - 에이전트는 정면·후면·좌·우·상·하단, 분해도, 부품, 재질, 치수 근거를 읽고 `CharacterIR` 또는 `AssemblyIR`을 작성합니다.
-- 로컬 웹은 생성 명령을 받지 않는 결과 전용 뷰어입니다. 모델 선택, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, 부품 검사와 내보내기만 제공합니다.
+- 로컬 웹은 생성 명령을 받지 않는 결과 전용 뷰어입니다. 모델 선택, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, 부품 검사, 두 점 실측과 내보내기를 제공합니다.
 - 별도 API 키나 브라우저 내부 LLM 호출은 필요하지 않습니다. `OPEN RESULT`는 CLI가 만든 AssemblyIR JSON을 검수할 때만 사용합니다.
 - `CharacterIR 0.2`는 LLM의 시각 판단을 단순 문장으로 버리지 않습니다. 체형·복부·가슴·둔부·전방 머리·무게중심·손동작을 수치 제어값으로 보존하고, 화면 좌우와 해부학적 좌우를 별도로 기록합니다.
 - 만들어진 IR을 `LOAD IR`로 열면 실제 메시가 컴파일되고, 실패한 토폴로지·빈 포트·떠 있는 전선은 품질 게이트에서 차단됩니다.
@@ -83,7 +83,7 @@ GLB + PNG + IR
 
 미국 의회도서관의 공개 HABS 자료인 [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet)를 건축 셸 회귀 사례로 사용합니다. 도면과 기록에 명시된 외곽 `17′4″ × 13′10″`, 창 `2′0″ × 2′9″`, 문 `2′6″ × 5′11″`는 `measured/datasheet`로 보존하고, 도면에 없는 벽 높이·지붕 경사는 `estimated`로 분리합니다. 현재 결과는 116개 명명 부재, 108,432 tris, 경계·비매니폴드·퇴화 삼각형 0이며 건축 셸은 통과하지만 구조해석·기초·MEP·현장 시공 검증은 포함하지 않습니다.
 
-단순 주택보다 복잡한 검증에는 [Laurel Homes Historic District, Building B · HABS OH-2468-A](https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf)의 실제 공동주택 도면을 사용합니다. 기록상 건물은 4층·36세대이며 한 층에 9세대와 3개 계단실이 있습니다. Morphloom 프리셋은 `139′ × 46′4″` 본체와 `27′ × 17′6″` 후면 날개를 실측값으로 유지하고, 각 세대의 거실·침실·주방·욕실·통로 45개 공간, 외벽·창호·칸막이·발코니·66개 계단 디딤판을 독립 부재로 만듭니다. 결과는 305개 부재, 179,340 tris, watertight 305/305이며 천장을 제거한 기준층 컷어웨이로 위에서 내부를 가리지 않습니다. 판독 가능한 외곽·평면 근거 231개와 도면에 없는 높이·세부 형상 추정 74개를 분리 기록합니다.
+단순 주택보다 복잡한 검증에는 [Laurel Homes Historic District, Building B · HABS OH-2468-A](https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf)의 실제 공동주택 도면을 사용합니다. 기록상 건물은 4층·36세대이며 한 층에 9세대와 3개 계단실이 있습니다. Morphloom 프리셋은 `139′ × 46′4″` 외곽과 `27′ × 17′6″` 중앙 날개를 실측값으로 유지합니다. 바닥을 하나의 직사각형으로 채우지 않고 북측 바·양쪽 반환 날개·중앙 날개·돌출 현관의 5개 슬래브로 분리해 도면의 두 중정 빈 공간과 하단 출입구를 실제 기하로 보존합니다. 각 세대의 거실·침실·주방·욕실·통로 45개 공간, 외벽·창호·칸막이·발코니·66개 계단 디딤판도 독립 부재입니다. 결과는 326개 부재, 191,688 tris, watertight 326/326이며, 도면 근거 247개와 높이·세부 형상 추정 79개를 분리 기록합니다. `planFootprintVerified` 회귀 게이트가 꺼지거나 중정 슬래브 분할이 사라지면 품질 점수가 자동으로 `BLOCKED`됩니다.
 
 이 결과는 **실제 도면을 편집 가능한 공간 모델로 옮길 수 있는지 확인하는 건축 시각화 회귀 사례**입니다. 아직 BIM 객체·구조 계산·배관/전기·법규·시공 허용오차를 포함하는 준공 모델은 아닙니다.
 
@@ -95,6 +95,15 @@ npm run dev
 ```
 
 브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Laurel Homes 공동주택 기준층 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
+
+### 로컬 뷰어에서 실측
+
+1. `실측`을 켜고 `거리` 또는 `높이`를 선택합니다.
+2. 모델 표면의 시작점과 끝점을 차례로 누릅니다.
+3. 주값과 부호가 있는 `ΔX/ΔY/ΔZ`를 확인하고 단위를 `mm`, `cm`, `m`로 바꿉니다.
+4. 세 번째 점을 누르면 새 측정이 시작되고 `초기화`로 지울 수 있습니다.
+
+동작은 Fusion의 [Inspect > Measure](https://help.autodesk.com/view/fusion360/ENU/?contextId=DESIGN-INSPECT-MEASURE-CMD)처럼 두 점 선택과 좌표 차이를 한 화면에 보여주도록 구성했습니다. 값은 컴파일된 3D 모델의 표면 좌표이며 현장 측량값이나 시공 인증값은 아닙니다.
 
 - `Laurel Homes Apartments` — 실제 4층·36세대 HABS 도면에서 재구성한 9세대 기준층 컷어웨이
 - `Galaxy Z Fold8` — 삼성 공식 치수와 다각도 사진 기반 Graphite 외관
@@ -157,23 +166,19 @@ npm run build
 
 ## Codex 하나로 이미지 → 에셋
 
-1. 저장소를 Codex에서 열고 정면·후면·측면 또는 분해 이미지를 첨부합니다.
-2. 실제로 아는 전체 치수와 부품 목록을 함께 제공합니다.
-3. 다음처럼 요청합니다.
+저장소에는 [`morphloom-asset-foundry`](./skills/morphloom-asset-foundry/SKILL.md) 스킬이 포함됩니다. 이 스킬은 짧은 요청을 도면 외곽·빈 공간·돌출부, 실측/추정 근거, 이름 있는 부품, PBR 미세 표면, 토폴로지와 동일 시점 비교 계약으로 자동 확장합니다. 따라서 기본 요청은 다음 한 줄이면 됩니다.
 
 ```text
-첨부 이미지를 편집 가능한 AssemblyIR로 만들어줘.
-보이는 모든 정비 가능 부품을 분리하고, 전선마다 from/to 포트를 지정해.
-보이지 않는 형상은 inferred로 표시하고 npm test, benchmark, build를 통과시켜.
+이 사진(또는 도면)으로 편집 가능한 3D 에셋 만들어줘.
 ```
 
-4. 생성된 IR을 화면의 `OPEN RESULT`로 열어 부품 선택·회전 후 GLB를 내보냅니다.
+스킬 내부의 건축·제품·인체별 규칙이 일반적인 디테일 요구를 대신합니다. 실제 치수·다각도 사진·분해도·재질 근접 사진이 있으면 함께 주는 것이 좋지만, 누락된 정보는 자동으로 `estimated/inferred`로 분리됩니다. `generation-policy.ts`의 짧은 요청 확장기와 IR 상세 감사가 스킬 계약을 코드에서도 검사합니다.
 
 여러 사진을 사용하는 제품은 6면·분해도·부품·재질 사진을 파일명과 함께 Codex/Claude 대화에 전달합니다. 에이전트가 같은 부품의 반복 사진에 안정적인 ASCII `component_id`를 부여하고 하나의 AssemblyIR 노드로 병합합니다. 웹 화면은 이 근거를 수정하지 않고 결과와 품질 상태만 보여줍니다.
 
 ## Claude 하나로 사용
 
-`CLAUDE.md`가 같은 공급자 중립 계약을 제공합니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.2`를 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
+`CLAUDE.md`가 같은 스킬과 공급자 중립 계약을 읽도록 구성되어 있습니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.2`를 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
 
 ## 지원 형상 연산
 

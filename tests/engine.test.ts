@@ -16,6 +16,8 @@ import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../src/engine/camera-framing';
+import { calculateMeasurement, formatMeasurement, valueInUnit } from '../src/engine/measurement';
+import { auditAssemblyDetail, expandGenerationBrief } from '../src/engine/generation-policy';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from '../src/engine/quality';
 import {
@@ -189,12 +191,19 @@ describe('AssemblyIR product pipeline', () => {
       documentedStairwells: 3,
       measuredLengthMm: 42367.2,
       measuredMainDepthMm: 14122.4,
+      footprintForm: 'u-courtyard-with-projecting-entry',
+      courtyardVoids: 2,
     });
     expect(build.parts.length).toBeGreaterThan(180);
     expect(build.parts.filter((part) => /^unit_\d+_(living|bedroom|kitchen|bath|passage)_floor$/.test(part.id))).toHaveLength(45);
     expect(build.parts.filter((part) => /_step_/.test(part.id))).toHaveLength(66);
-    expect(build.parts.filter((part) => /^(north|south)_window_\d+$/.test(part.id))).toHaveLength(36);
-    expect(build.root.getObjectByName('rear_wing_floor_slab')).toBeTruthy();
+    expect(build.parts.filter((part) => /_window_\d+$/.test(part.id))).toHaveLength(36);
+    expect(build.root.getObjectByName('north_bar_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('west_wing_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('east_wing_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('center_entry_wing_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('entrance_vestibule_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('entrance_door_west')).toBeTruthy();
     expect(build.root.getObjectByName('stair_2_landing')).toBeTruthy();
     expect(build.root.getObjectByName('unit_9_bath_floor')).toBeTruthy();
     expect(build.metrics.topology).toMatchObject({
@@ -501,5 +510,58 @@ describe('result viewer camera framing', () => {
     expect(narrow.distance).toBeGreaterThan(wide.distance);
     expect(narrow.center.toArray()).toEqual([0, 0, 0]);
     expect(Number.isFinite(narrow.distance)).toBe(true);
+  });
+});
+
+describe('CAD-style surface measurement', () => {
+  it('reports spatial distance, vertical height, and signed XYZ deltas in model meters', () => {
+    const result = calculateMeasurement(
+      { x: 1, y: 2, z: 3 },
+      { x: 4, y: 6, z: 15 },
+    );
+    expect(result.deltaMeters).toEqual({ x: 3, y: 4, z: 12 });
+    expect(result.distanceMeters).toBe(13);
+    expect(result.heightMeters).toBe(4);
+  });
+
+  it('converts the same result to millimetres, centimetres, and metres', () => {
+    expect(valueInUnit(1.234, 'mm')).toBeCloseTo(1234, 8);
+    expect(valueInUnit(1.234, 'cm')).toBeCloseTo(123.4, 8);
+    expect(valueInUnit(1.234, 'm')).toBeCloseTo(1.234, 8);
+    expect(formatMeasurement(1.234, 'mm')).toBe('1,234.0 mm');
+    expect(formatMeasurement(1.234, 'cm')).toBe('123.40 cm');
+    expect(formatMeasurement(1.234, 'm')).toBe('1.234 m');
+  });
+
+  it('rejects invalid coordinates instead of showing a false measurement', () => {
+    expect(() => calculateMeasurement(
+      { x: 0, y: 0, z: 0 },
+      { x: Number.NaN, y: 1, z: 2 },
+    )).toThrow(/finite coordinates/);
+  });
+});
+
+describe('short-prompt generation contract', () => {
+  it('expands a minimal drawing request into footprint, material, and validation requirements', () => {
+    const brief = expandGenerationBrief('이 건축 도면으로 3D 만들어줘');
+    expect(brief.domain).toBe('architecture');
+    expect(brief.requiredChecks).toEqual(expect.arrayContaining([
+      'drawing-orientation', 'footprint-voids', 'projection-and-entrance',
+      'pbr-micro-surface', 'watertight-topology', 'reference-comparison',
+    ]));
+    expect(brief.agentPrompt).toContain('Never fill a visible void');
+    expect(brief.agentPrompt).toContain('estimated or inferred');
+  });
+
+  it('passes the corrected plan footprint and blocks an unverified replacement', () => {
+    const passed = auditAssemblyDetail(LAUREL_HOMES_BUILDING_B_IR);
+    expect(passed).toMatchObject({ pass: true, footprintVerified: true, evidenceCoverage: 1 });
+    const unverified = {
+      ...LAUREL_HOMES_BUILDING_B_IR,
+      metadata: { ...LAUREL_HOMES_BUILDING_B_IR.metadata, planFootprintVerified: false },
+    };
+    const blocked = auditAssemblyDetail(unverified);
+    expect(blocked.pass).toBe(false);
+    expect(blocked.blockers).toContain('plan footprint not verified');
   });
 });

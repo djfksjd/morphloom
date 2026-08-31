@@ -2,6 +2,7 @@ import type { CharacterSpec, HumanPack, ProductSpec, QualityCheck, QualityReport
 import { deriveBodyTopology, type CharacterMetrics } from './character';
 import type { ProductMetrics } from './product';
 import type { AssemblyIR } from './assembly-ir';
+import { auditAssemblyDetail } from './generation-policy';
 
 function status(score: number, blockAt = 65): QualityCheck['status'] {
   return score >= 86 ? 'pass' : score >= blockAt ? 'warn' : 'blocked';
@@ -109,6 +110,7 @@ export function evaluateProductQuality(
   const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
   const topology = metrics?.topology;
+  const detailAudit = assemblyIR ? auditAssemblyDetail(assemblyIR) : undefined;
   const ratio = spec.heightMm / spec.widthMm;
   const compiledEnvelope = metrics?.bounds ? {
     x: metrics.bounds.max.x - metrics.bounds.min.x,
@@ -123,9 +125,12 @@ export function evaluateProductQuality(
     : Math.round(Math.max(0, isKnife
       ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
       : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
-  const referenceFidelityScore = evidence
+  const baseReferenceFidelityScore = evidence
     ? Math.min(envelopeScore, evidence.portraitSuitability)
     : envelopeScore;
+  const referenceFidelityScore = isArchitectural && detailAudit && !detailAudit.pass
+    ? Math.min(59, baseReferenceFidelityScore)
+    : baseReferenceFidelityScore;
   const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
@@ -140,8 +145,10 @@ export function evaluateProductQuality(
       + connectivity.specifiedGaugeWires / connectivity.wires
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
-  const connectivityScore = isKnife || isExteriorOnly || isArchitectural
-    ? 97
+  const connectivityScore = isArchitectural
+    ? detailAudit?.pass ? 97 : 50
+    : isKnife || isExteriorOnly
+      ? 97
     : connectivity?.errors.length
       ? Math.max(0, 72 - connectivity.errors.length * 8)
       : connectivity
@@ -164,6 +171,8 @@ export function evaluateProductQuality(
       status: status(referenceFidelityScore),
       detail: evidence
         ? `${evidence.fileName} · ${evidence.notes[0]}`
+        : isArchitectural && detailAudit
+          ? `도면 외곽 ${detailAudit.footprintVerified ? '검증됨' : '미검증'} · 근거 ${Math.round(detailAudit.evidenceCoverage * 100)}% · ${detailAudit.blockers.length ? detailAudit.blockers.join(' · ') : '빈 공간·돌출부 회귀 통과'}`
         : isImportedAssembly && engineering
           ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
           : isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
@@ -174,18 +183,22 @@ export function evaluateProductQuality(
       score: surfaceScore,
       status: status(surfaceScore),
       detail: surfaces
-        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 이방성 ${surfaces.anisotropicMaterials}`
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
         : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {
       id: 'rig',
       label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
-      status: isKnife || isExteriorOnly || isArchitectural ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
+      status: isArchitectural
+        ? detailAudit?.pass ? 'pass' : 'blocked'
+        : isKnife || isExteriorOnly ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
         : isArchitectural
-          ? '도면 기반 벽체·개구부·지붕·지지부재 셸 · 구조해석과 MEP는 범위에서 제외'
+          ? detailAudit?.pass
+            ? '도면 외곽·중정/빈 공간·돌출 출입구 검증 통과 · 구조해석과 MEP는 범위에서 제외'
+            : `도면 형상 검증 BLOCKED · ${detailAudit?.blockers.join(' · ') ?? '감사 정보 없음'}`
         : isExteriorOnly
           ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity
