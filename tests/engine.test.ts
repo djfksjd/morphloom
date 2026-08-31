@@ -552,12 +552,27 @@ describe('short-prompt generation contract', () => {
   it('expands a minimal drawing request into footprint, material, and validation requirements', () => {
     const brief = expandGenerationBrief('이 건축 도면으로 3D 만들어줘');
     expect(brief.domain).toBe('architecture');
+    expect(brief.domains).toEqual(['architecture']);
+    expect(brief.completionPolicy).toBe('all-evidence-supported-blockers-pass');
+    expect(brief.reviewModes).toEqual(expect.arrayContaining([
+      'source-camera', 'orthographic', 'clay', 'grazing-light', 'wire', 'x-ray',
+    ]));
     expect(brief.requiredChecks).toEqual(expect.arrayContaining([
       'drawing-orientation', 'footprint-voids', 'projection-and-entrance',
-      'pbr-micro-surface', 'watertight-topology', 'reference-comparison',
+      'visible-feature-ledger', 'spatial-relationship-constraints',
+      'pbr-micro-surface', 'watertight-topology', 'reference-comparison', 'autonomous-refinement-loop',
     ]));
     expect(brief.agentPrompt).toContain('Never fill a visible void');
     expect(brief.agentPrompt).toContain('estimated or inferred');
+  });
+
+  it('applies human and product gates together for a held device', () => {
+    const brief = expandGenerationBrief('사람이 스마트폰을 들고 있는 사진으로 게임 캐릭터를 만들어줘');
+    expect(brief.domain).toBe('human');
+    expect(brief.domains).toEqual(['human', 'product']);
+    expect(brief.requiredChecks).toEqual(expect.arrayContaining([
+      'anatomical-sanity', 'face-hand-foot-closeups', 'exterior-side-completeness', 'component-interfaces',
+    ]));
   });
 
   it('passes the corrected plan footprint and blocks an unverified replacement', () => {

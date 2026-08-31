@@ -185,7 +185,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 }
 .cad-measure-toolbar button, .cad-measure-toolbar select { border-radius: 0; font-family: var(--mono); cursor: pointer; }
 .measure-toggle {
-  min-width: 72px;
+  min-width: 92px;
   padding: 0 12px;
   border: 0;
   border-right: 1px solid rgba(255,255,255,0.19);
@@ -197,9 +197,33 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 .measure-toggle i { width: 7px; height: 7px; margin-right: 6px; display: inline-block; border: 1px solid #70d6e8; border-radius: 50%; }
 .cad-measure-toolbar.is-active .measure-toggle { color: #071719; background: #70d6e8; }
 .cad-measure-toolbar.is-active .measure-toggle i { border-color: #071719; background: #071719; box-shadow: 0 0 0 3px rgba(7,23,25,0.12); }
+.measure-progress {
+  min-width: 122px;
+  padding: 0 10px;
+  display: grid;
+  grid-template-columns: 38px 1fr 38px;
+  align-items: center;
+  border-right: 1px solid rgba(255,255,255,0.19);
+}
+.measure-progress > span { display: grid; grid-template-columns: 16px 1fr; align-items: center; color: #6e7b7c; }
+.measure-progress b {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #506062;
+  border-radius: 50%;
+  font-size: 7px;
+}
+.measure-progress small { margin-left: 4px; font-size: 5.5px; white-space: nowrap; }
+.measure-progress > i { height: 1px; background: #405052; }
+.measure-progress > span.is-current b { border-color: #70d6e8; color: #70d6e8; box-shadow: 0 0 0 3px rgba(112,214,232,0.1); }
+.measure-progress > span.is-complete { color: #fff; }
+.measure-progress > span.is-complete b { border-color: #70d6e8; color: #071719; background: #70d6e8; }
+.measure-progress:has(.is-complete:last-child) > i { background: #70d6e8; }
 .measure-mode-switch { display: flex; border-right: 1px solid rgba(255,255,255,0.19); }
 .measure-mode-switch button {
-  min-width: 48px;
+  min-width: 58px;
   padding: 0 10px;
   border: 0;
   border-right: 1px solid rgba(255,255,255,0.12);
@@ -209,6 +233,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 }
 .measure-mode-switch button:last-child { border-right: 0; }
 .measure-mode-switch button.active { color: #fff; box-shadow: inset 0 -2px #70d6e8; }
+.cad-measure-toolbar button:disabled, .cad-measure-toolbar select:disabled { cursor: default; opacity: 0.34; }
 .measure-unit-select { min-width: 82px; padding-left: 9px; display: flex; align-items: center; gap: 7px; border-right: 1px solid rgba(255,255,255,0.19); }
 .measure-unit-select span { color: #718081; font-size: 6px; letter-spacing: 0.12em; }
 .measure-unit-select select { height: 26px; padding: 0 18px 0 6px; border: 1px solid rgba(255,255,255,0.24); color: #fff; background: #1d2729; font-size: 8px; }
@@ -292,6 +317,35 @@ h2 { margin: 0; font-size: 24px; font-weight: 610; letter-spacing: -0.04em; }
 .viewer-note { margin-bottom: 12px; padding: 10px 11px; border: 1px solid rgba(49,88,255,0.38); background: rgba(49,88,255,0.055); }
 .viewer-note span { color: var(--blue); font-family: var(--mono); font-size: 7px; letter-spacing: 0.1em; }
 .viewer-note p { margin: 5px 0 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+
+.measurement-console {
+  margin-bottom: 13px;
+  border: 1px solid rgba(23,24,21,0.34);
+  background: #e8eae5;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.measurement-console.is-active { border-color: rgba(4,183,214,0.68); background: linear-gradient(120deg, rgba(4,183,214,0.07), rgba(255,255,255,0.38)); }
+.measurement-console header { min-height: 42px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--hairline); }
+.measurement-console header div { display: grid; gap: 3px; }
+.measurement-console header span, .measurement-console header em { color: var(--muted); font-family: var(--mono); font-size: 6px; font-style: normal; letter-spacing: 0.08em; }
+.measurement-console header b { font-size: 10px; }
+.measurement-console header em { padding: 3px 5px; border: 1px solid currentColor; }
+.measurement-console.is-active header em { color: #007f98; }
+.measurement-primary { padding: 10px; display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--hairline); }
+.measurement-primary span { color: var(--muted); font-size: 8px; }
+.measurement-primary strong { color: #007f98; font-family: var(--mono); font-size: 20px; font-weight: 560; letter-spacing: -0.05em; }
+.measurement-deltas { display: grid; grid-template-columns: repeat(3,1fr); }
+.measurement-deltas span { padding: 7px 8px; border-right: 1px solid var(--hairline); color: var(--muted); font-family: var(--mono); font-size: 6px; }
+.measurement-deltas span:last-child { border-right: 0; }
+.measurement-deltas b { display: block; margin-top: 3px; color: var(--ink); font-size: 8px; }
+.measurement-console > p { margin: 0; padding: 7px 10px; border-top: 1px solid var(--hairline); color: var(--muted); font-size: 7px; line-height: 1.4; }
+.measurement-empty { padding: 10px; display: grid; gap: 7px; }
+.measurement-empty p, .measurement-empty small { margin: 0; }
+.measurement-empty p { font-size: 9px; }
+.measurement-empty small { color: var(--muted); font-family: var(--mono); font-size: 6px; line-height: 1.45; }
+.measurement-caliper { height: 18px; display: grid; grid-template-columns: 18px 1fr 18px; align-items: center; }
+.measurement-caliper i { width: 18px; height: 18px; display: grid; place-items: center; border: 1px solid #04b7d6; border-radius: 50%; color: #007f98; font-family: var(--mono); font-size: 7px; font-style: normal; }
+.measurement-caliper span { height: 1px; background: repeating-linear-gradient(90deg, #04b7d6 0 7px, transparent 7px 11px); }
 
 .quality-list { border-top: 1px solid var(--ink); }
 .quality-row { min-height: 46px; display: grid; grid-template-columns: 14px minmax(0,1fr) 28px; align-items: center; border-bottom: 1px solid var(--hairline); }
@@ -378,12 +432,33 @@ h2 { margin: 0; font-size: 24px; font-weight: 610; letter-spacing: -0.04em; }
   .brand-name { padding: 0 10px; font-size: 13px; }
   .topbar-status a { padding: 0 10px; font-size: 7px; }
   .viewport-toolbar { left: 10px; right: 10px; }
-  .cad-measure-toolbar { top: 56px; left: 10px; right: 10px; min-height: 34px; }
-  .measure-toggle { min-width: 60px; padding-inline: 8px; }
-  .measure-mode-switch button { min-width: 41px; padding-inline: 7px; }
-  .measure-unit-select { min-width: 70px; }
-  .measure-clear { display: none; }
-  .measure-live-result span:first-child { min-width: 90px; font-size: 9px; }
+  .cad-measure-toolbar {
+    top: 56px;
+    left: 10px;
+    right: 10px;
+    min-height: 68px;
+    display: grid;
+    grid-template-columns: 76px 72px minmax(0,1fr);
+    grid-template-areas:
+      "toggle progress mode"
+      "unit clear prompt"
+      "result result result";
+  }
+  .measure-toggle { grid-area: toggle; min-width: 0; padding-inline: 7px; font-size: 7px; }
+  .measure-progress { grid-area: progress; min-width: 0; padding-inline: 6px; grid-template-columns: 20px 1fr 20px; }
+  .measure-progress > span { display: block; }
+  .measure-progress small { display: none; }
+  .measure-mode-switch { grid-area: mode; border-right: 0; }
+  .measure-mode-switch button { min-width: 0; flex: 1; padding-inline: 4px; font-size: 7px; }
+  .measure-unit-select { grid-area: unit; min-width: 0; padding-left: 6px; border-top: 1px solid rgba(255,255,255,0.12); }
+  .measure-unit-select span { display: none; }
+  .measure-unit-select select { width: 60px; height: 24px; }
+  .measure-clear { grid-area: clear; display: block; border-top: 1px solid rgba(255,255,255,0.12); }
+  .measure-prompt { grid-area: prompt; min-width: 0; padding: 5px 7px; display: grid; border-top: 1px solid rgba(255,255,255,0.12); overflow: hidden; }
+  .measure-prompt b { display: none; }
+  .measure-live-result { grid-area: result; margin-left: 0; border-top: 1px solid rgba(255,255,255,0.19); border-left: 0; }
+  .measure-live-result span:first-child { width: 100%; min-width: 0; font-size: 9px; }
+  .viewfinder-corners { inset: 138px 18px 100px; }
   .mode-switcher button, .view-switcher button { padding: 7px 7px; font-size: 7px; }
   .viewport-title { left: 15px; bottom: 74px; max-width: calc(100% - 30px); }
   .measure-readout { right: 12px; }

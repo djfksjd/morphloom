@@ -1,12 +1,16 @@
 import type { AssemblyIR, SurfaceFinishIR } from './assembly-ir';
 
 export type AssetDomain = 'architecture' | 'product' | 'human' | 'unknown';
+export type ReviewMode = 'source-camera' | 'orthographic' | 'clay' | 'grazing-light' | 'wire' | 'x-ray';
 
 export interface ExpandedGenerationBrief {
   domain: AssetDomain;
+  domains: AssetDomain[];
   sourceRequest: string;
   agentPrompt: string;
   requiredChecks: string[];
+  reviewModes: ReviewMode[];
+  completionPolicy: 'all-evidence-supported-blockers-pass';
 }
 
 export interface AssemblyDetailAudit {
@@ -27,53 +31,76 @@ const MICRO_SURFACE_FINISHES = new Set<SurfaceFinishIR>([
 ]);
 
 export function inferAssetDomain(request: string): AssetDomain {
+  return inferAssetDomains(request)[0] ?? 'unknown';
+}
+
+export function inferAssetDomains(request: string): AssetDomain[] {
   const normalized = request.toLowerCase();
-  if (/도면|평면도|입면도|건물|건축|아파트|원룸|floor\s*plan|building|architecture|cad/.test(normalized)) return 'architecture';
-  if (/사람|인체|캐릭터|포즈|얼굴|코스튬|human|character|person|pose/.test(normalized)) return 'human';
-  if (/제품|부품|전자|회로|핸드폰|스마트폰|칼|에셋|product|assembly|phone|device|asset/.test(normalized)) return 'product';
-  return 'unknown';
+  const domains: AssetDomain[] = [];
+  if (/도면|평면도|입면도|건물|건축|아파트|원룸|floor\s*plan|building|architecture|cad/.test(normalized)) domains.push('architecture');
+  if (/사람|인체|캐릭터|포즈|얼굴|코스튬|human|character|person|pose/.test(normalized)) domains.push('human');
+  if (/제품|부품|전자|회로|핸드폰|스마트폰|칼|에셋|product|assembly|phone|device|asset/.test(normalized)) domains.push('product');
+  return domains.length > 0 ? domains : ['unknown'];
 }
 
 const COMMON_CHECKS = [
   'evidence-provenance',
+  'signature-feature-manifest',
+  'visible-feature-ledger',
+  'spatial-relationship-constraints',
+  'intended-use-detail-threshold',
   'real-unit-envelope',
   'semantic-part-tree',
   'pbr-micro-surface',
   'watertight-topology',
   'reference-comparison',
+  'camera-calibration',
+  'multi-mode-review',
+  'export-reopen-parity',
+  'autonomous-refinement-loop',
+];
+
+const REVIEW_MODES: ReviewMode[] = [
+  'source-camera', 'orthographic', 'clay', 'grazing-light', 'wire', 'x-ray',
 ];
 
 export function expandGenerationBrief(request: string): ExpandedGenerationBrief {
   const sourceRequest = request.trim();
   if (!sourceRequest) throw new Error('Generation request cannot be empty.');
-  const domain = inferAssetDomain(sourceRequest);
-  const domainChecks = domain === 'architecture'
-    ? ['drawing-orientation', 'footprint-voids', 'projection-and-entrance', 'room-and-opening-layout', 'two-point-measurement']
-    : domain === 'product'
-      ? ['multi-view-alignment', 'component-interfaces', 'fasteners-and-seams', 'connector-and-wire-continuity']
-      : domain === 'human'
-        ? ['anatomical-side-mapping', 'pose-landmarks', 'single-view-depth-disclosure', 'game-topology-and-rig-scope']
-        : ['asset-domain-classification'];
-  const requiredChecks = [...domainChecks, ...COMMON_CHECKS];
-  const domainInstruction = domain === 'architecture'
-    ? 'Treat the drawing outline, courtyards/voids, returns, projections, entrances, wall openings, and measured dimensions as first-class geometry. Never fill a visible void with a convenience slab.'
-    : domain === 'product'
-      ? 'Decompose the object into independently named manufacturable parts, interfaces, fasteners, seams, connectors, and conductors. Preserve electrical semantics when present.'
-      : domain === 'human'
-        ? 'Separate visible pose and silhouette evidence from inferred depth. Preserve anatomical left/right mapping, body proportions, garment layers, and material response.'
-        : 'Classify the asset before choosing geometry, evidence, and validation rules.';
+  const domains = inferAssetDomains(sourceRequest);
+  const domain = domains[0];
+  const checksByDomain: Record<AssetDomain, string[]> = {
+    architecture: ['drawing-orientation', 'footprint-voids', 'projection-and-entrance', 'opening-and-circulation-schedule', 'vertical-evidence-boundary', 'two-point-measurement'],
+    product: ['multi-view-alignment', 'exterior-side-completeness', 'manufacturing-datums', 'edge-highlight-continuity', 'component-interfaces', 'fasteners-and-seams', 'connector-pin-and-wire-continuity'],
+    human: ['style-mode', 'anatomical-side-mapping', 'pose-landmarks', 'anatomical-sanity', 'face-hand-foot-closeups', 'garment-layer-intersections', 'single-view-depth-disclosure', 'game-topology-and-rig-scope'],
+    unknown: ['asset-domain-classification'],
+  };
+  const requiredChecks = [...new Set([...domains.flatMap((item) => checksByDomain[item]), ...COMMON_CHECKS])];
+  const instructionsByDomain: Record<AssetDomain, string> = {
+    architecture: 'Treat the drawing outline, courtyards/voids, returns, projections, entrances, wall openings, circulation, and measured dimensions as first-class geometry. Never fill a visible void with a convenience slab.',
+    product: 'Decompose the object into independently named manufacturable parts, interfaces, fasteners, seams, optical stacks, connectors, and conductors. Preserve electrical semantics when present.',
+    human: 'Separate visible pose and silhouette evidence from inferred depth. Preserve style intent, anatomical left/right mapping, body proportions, face/hands/feet, garment layers, and material response.',
+    unknown: 'Classify the asset before choosing geometry, evidence, and validation rules.',
+  };
+  const domainInstruction = domains.map((item) => instructionsByDomain[item]).join(' ');
 
   return {
     domain,
+    domains,
     sourceRequest,
     requiredChecks,
+    reviewModes: [...REVIEW_MODES],
+    completionPolicy: 'all-evidence-supported-blockers-pass',
     agentPrompt: [
       `User request: ${sourceRequest}`,
       domainInstruction,
       'Expand this short request into an editable Morphloom IR without asking the user to restate ordinary quality expectations.',
+      'Before geometry, derive an internal completion contract: intended use, evidence map, signature-feature ids, negative spaces, spatial relationships, physical material zones, editable/function boundaries, and the proof view for every important feature.',
       'Use real units when evidence exists; mark every unsupported dimension or hidden surface as estimated or inferred.',
       'Assign a physical surface finish per material, including roughness, metalness, clearcoat/transmission/IOR where applicable, anisotropy for directional materials, and deterministic micro-normal/roughness detail.',
-      `Before delivery, run these gates: ${requiredChecks.join(', ')}. A failed evidence, footprint, topology, or reference gate must stay visible and cannot be hidden behind triangle or part counts.`,
+      `Render and inspect these review modes as needed: ${REVIEW_MODES.join(', ')}. Always compare the source camera first; use the diagnostic views to expose form, surface, topology, and hidden relationships.`,
+      `Before delivery, run these gates: ${requiredChecks.join(', ')}. Treat the first compiling draft as a checkpoint. Correct the highest-impact failed gate in the IR, rebuild, and repeat until every evidence-supported blocker passes.`,
+      'Never hide a failed evidence, silhouette, relationship, topology, or reference gate behind camera choice, attractive materials, triangle count, or part count. If missing evidence is the only remaining blocker, keep the readiness claim limited and name the exact missing evidence instead of inventing detail.',
     ].join('\n'),
   };
 }

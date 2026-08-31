@@ -113,11 +113,12 @@ export function ViewerApp() {
   const [selectedPart, setSelectedPart] = useState<ProductPartInfo>();
   const [busyAction, setBusyAction] = useState<string>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
-  const [measurementEnabled, setMeasurementEnabled] = useState(false);
+  const [measurementEnabled, setMeasurementEnabled] = useState(true);
   const [measurementMode, setMeasurementMode] = useState<MeasurementMode>('distance');
-  const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>('mm');
+  const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>('m');
   const [measurementResult, setMeasurementResult] = useState<MeasurementResult>();
   const [measurementPoints, setMeasurementPoints] = useState<0 | 1 | 2>(0);
+  const [measurementMissed, setMeasurementMissed] = useState(false);
   const viewportRef = useRef<ViewportHandle>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
 
@@ -160,13 +161,35 @@ export function ViewerApp() {
   const handleMeasurementChange = useCallback((result: MeasurementResult | undefined, points: 0 | 1 | 2) => {
     setMeasurementResult(result);
     setMeasurementPoints(points);
+    setMeasurementMissed(false);
   }, []);
 
   const clearMeasurement = useCallback(() => {
     viewportRef.current?.clearMeasurement();
     setMeasurementResult(undefined);
     setMeasurementPoints(0);
+    setMeasurementMissed(false);
   }, []);
+
+  const toggleMeasurement = useCallback(() => {
+    const next = !measurementEnabled;
+    setMeasurementEnabled(next);
+    if (!next) clearMeasurement();
+  }, [clearMeasurement, measurementEnabled]);
+
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement) return;
+      if (event.key === 'Escape' && measurementEnabled) {
+        clearMeasurement();
+        return;
+      }
+      if (event.key.toLowerCase() === 'm' && assetKind === 'product') toggleMeasurement();
+    };
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, [assetKind, clearMeasurement, measurementEnabled, toggleMeasurement]);
 
   const selectAsset = (id: string) => {
     const next = VIEWER_ASSETS.find((item) => item.id === id);
@@ -175,9 +198,11 @@ export function ViewerApp() {
     setAssetKind(next.kind);
     setSelectedPart(undefined);
     setMode('beauty');
-    setMeasurementEnabled(false);
+    setMeasurementEnabled(next.kind === 'product');
+    setMeasurementUnit(next.kind === 'product' && next.assemblyIR?.metadata?.assetKind === 'building' ? 'm' : 'mm');
     setMeasurementResult(undefined);
     setMeasurementPoints(0);
+    setMeasurementMissed(false);
     if (next.kind === 'human') {
       setSpec(next.spec);
       setAssemblyIR(undefined);
@@ -204,12 +229,14 @@ export function ViewerApp() {
     ? measurementMode === 'height' ? measurementResult.heightMeters : measurementResult.distanceMeters
     : undefined;
   const measurementPrompt = !measurementEnabled
-    ? '실측 도구 꺼짐'
+    ? '실측 시작을 눌러 켜세요'
+    : measurementMissed
+      ? '표면이 선택되지 않았습니다 · 모델 위를 다시 선택하세요'
     : measurementPoints === 0
-      ? '모델 표면의 첫 점을 선택하세요'
+      ? '표면에서 A점을 선택하세요'
       : measurementPoints === 1
-        ? '두 번째 점을 선택하세요'
-        : '완료 · 다음 점을 누르면 새 측정';
+        ? '표면에서 B점을 선택하세요'
+        : '완료 · 다음 선택은 새 A점';
 
   return (
     <main className="app-shell viewer-shell">
@@ -261,34 +288,34 @@ export function ViewerApp() {
               <button
                 className="measure-toggle"
                 aria-pressed={measurementEnabled}
-                onClick={() => {
-                  const next = !measurementEnabled;
-                  setMeasurementEnabled(next);
-                  if (!next) clearMeasurement();
-                }}
+                aria-label={measurementEnabled ? '실측 도구 끄기' : '실측 도구 켜기'}
+                title="실측 켜기/끄기 (M)"
+                onClick={toggleMeasurement}
               >
-                <i /> 실측
+                <i /> {measurementEnabled ? '실측 켜짐' : '실측 시작'}
               </button>
+              <div className="measure-progress" aria-label={`실측 진행 ${measurementPoints}/2점`}>
+                <span className={measurementPoints >= 1 ? 'is-complete' : measurementEnabled ? 'is-current' : ''}><b>A</b><small>시작점</small></span>
+                <i />
+                <span className={measurementPoints >= 2 ? 'is-complete' : measurementPoints === 1 ? 'is-current' : ''}><b>B</b><small>끝점</small></span>
+              </div>
               <div className="measure-mode-switch" role="group" aria-label="측정 종류">
-                <button className={measurementMode === 'distance' ? 'active' : ''} onClick={() => setMeasurementMode('distance')}>거리</button>
-                <button className={measurementMode === 'height' ? 'active' : ''} onClick={() => setMeasurementMode('height')}>높이</button>
+                <button aria-pressed={measurementMode === 'distance'} disabled={!measurementEnabled} className={measurementMode === 'distance' ? 'active' : ''} onClick={() => setMeasurementMode('distance')}>직선거리</button>
+                <button aria-pressed={measurementMode === 'height'} disabled={!measurementEnabled} className={measurementMode === 'height' ? 'active' : ''} onClick={() => setMeasurementMode('height')}>수직높이</button>
               </div>
               <label className="measure-unit-select">
                 <span>UNIT</span>
-                <select value={measurementUnit} onChange={(event) => setMeasurementUnit(event.target.value as MeasurementUnit)}>
+                <select disabled={!measurementEnabled} value={measurementUnit} onChange={(event) => setMeasurementUnit(event.target.value as MeasurementUnit)}>
                   <option value="mm">mm</option>
                   <option value="cm">cm</option>
                   <option value="m">m</option>
                 </select>
               </label>
-              <button className="measure-clear" onClick={clearMeasurement} disabled={measurementPoints === 0}>초기화</button>
-              <span className="measure-prompt"><b>SNAP · SURFACE</b>{measurementPrompt}</span>
+              <button className="measure-clear" title="측정 지우기 (Esc)" onClick={clearMeasurement} disabled={!measurementEnabled || measurementPoints === 0}>지우기</button>
+              <span className="measure-prompt"><b>SURFACE PICK · 2 POINT</b>{measurementPrompt}</span>
               {measurementResult && primaryMeasurement !== undefined && (
-                <div className="measure-live-result" aria-live="polite">
+                <div className="measure-live-result">
                   <span><b>{measurementMode === 'height' ? 'HEIGHT' : 'DISTANCE'}</b>{formatMeasurement(primaryMeasurement, measurementUnit)}</span>
-                  <span>ΔX <b>{formatMeasurement(measurementResult.deltaMeters.x, measurementUnit)}</b></span>
-                  <span>ΔY <b>{formatMeasurement(measurementResult.deltaMeters.y, measurementUnit)}</b></span>
-                  <span>ΔZ <b>{formatMeasurement(measurementResult.deltaMeters.z, measurementUnit)}</b></span>
                 </div>
               )}
             </div>
@@ -306,9 +333,11 @@ export function ViewerApp() {
               mode={mode}
               measurementEnabled={measurementEnabled}
               measurementMode={measurementMode}
+              measurementUnit={measurementUnit}
               onBuilt={handleBuilt}
               onPartSelected={setSelectedPart}
               onMeasurementChange={handleMeasurementChange}
+              onMeasurementMiss={() => setMeasurementMissed(true)}
             />
           ) : (
             <div className="viewport-loading">
@@ -352,6 +381,35 @@ export function ViewerApp() {
           </div>
 
           <div className="viewer-note"><span>CLI → IR → VIEWER</span><p>{viewerNote}</p></div>
+
+          {assetKind === 'product' && (
+            <section className={`measurement-console${measurementEnabled ? ' is-active' : ''}`} aria-label="실측 결과" aria-live="polite">
+              <header>
+                <div><span>02 / SURFACE MEASURE</span><b>두 점 실측</b></div>
+                <em>{measurementEnabled ? `${measurementPoints}/2 POINTS` : 'OFF'}</em>
+              </header>
+              {measurementResult && primaryMeasurement !== undefined ? (
+                <>
+                  <div className="measurement-primary">
+                    <span>{measurementMode === 'height' ? '수직 높이' : '3D 직선거리'}</span>
+                    <strong>{formatMeasurement(primaryMeasurement, measurementUnit)}</strong>
+                  </div>
+                  <div className="measurement-deltas">
+                    <span>ΔX<b>{formatMeasurement(measurementResult.deltaMeters.x, measurementUnit)}</b></span>
+                    <span>ΔY<b>{formatMeasurement(measurementResult.deltaMeters.y, measurementUnit)}</b></span>
+                    <span>ΔZ<b>{formatMeasurement(measurementResult.deltaMeters.z, measurementUnit)}</b></span>
+                  </div>
+                  <p>A·B 표면 좌표 기준 · 다음 표면을 선택하면 새 측정이 시작됩니다.</p>
+                </>
+              ) : (
+                <div className="measurement-empty">
+                  <div className="measurement-caliper" aria-hidden="true"><i>A</i><span /><i>B</i></div>
+                  <p>{measurementPrompt}</p>
+                  <small>모델을 드래그하면 회전 · 클릭하면 점 선택 · M 켜기/끄기 · Esc 지우기</small>
+                </div>
+              )}
+            </section>
+          )}
 
           <div className="quality-list">
             {quality?.checks.map((check) => (
@@ -453,6 +511,8 @@ export function ViewerApp() {
                     setAssetKind('product');
                     setActiveAssetId('imported');
                     setSelectedPart(undefined);
+                    setMeasurementEnabled(true);
+                    setMeasurementUnit(value.metadata?.assetKind === 'building' ? 'm' : 'mm');
                     setViewerNote(`AssemblyIR 결과 로드 · ${value.components.length}개 부품`);
                   } catch (error) {
                     setViewerNote(error instanceof Error ? error.message : 'AssemblyIR을 읽지 못했습니다.');

@@ -11,8 +11,10 @@ import { compileAssemblyIR } from '../engine/assembly-compiler';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../engine/camera-framing';
 import {
   calculateMeasurement,
+  formatMeasurement,
   type MeasurementMode,
   type MeasurementResult,
+  type MeasurementUnit,
 } from '../engine/measurement';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 
@@ -34,9 +36,11 @@ interface ResultViewportProps {
   mode: ViewMode;
   measurementEnabled?: boolean;
   measurementMode?: MeasurementMode;
+  measurementUnit?: MeasurementUnit;
   onBuilt?: (build: CharacterBuild | ProductBuild) => void;
   onPartSelected?: (part?: ProductPartInfo) => void;
   onMeasurementChange?: (result: MeasurementResult | undefined, points: 0 | 1 | 2) => void;
+  onMeasurementMiss?: () => void;
 }
 
 interface Runtime {
@@ -78,6 +82,7 @@ function drawMeasurementAnnotation(
   runtime: Runtime,
   points: THREE.Vector3[],
   mode: MeasurementMode,
+  unit: MeasurementUnit,
   markerRadius: number,
 ): void {
   clearGroup(runtime.annotation);
@@ -88,6 +93,9 @@ function drawMeasurementAnnotation(
     marker.position.copy(point);
     marker.renderOrder = 1_003;
     runtime.annotation.add(marker);
+    const pointLabel = annotationLabel(index === 0 ? 'A' : 'B', markerRadius * 4.2, '#081416', '#70d6e8');
+    pointLabel.position.copy(point).add(new THREE.Vector3(0, markerRadius * 2.2, 0));
+    runtime.annotation.add(pointLabel);
   }
   markerMaterial.dispose();
   if (points.length !== 2) return;
@@ -106,11 +114,49 @@ function drawMeasurementAnnotation(
   } else {
     runtime.annotation.add(annotationLine(points, '#04b7d6'));
   }
+
+  const result = calculateMeasurement(points[0], points[1]);
+  const primary = mode === 'height' ? result.heightMeters : result.distanceMeters;
+  const labelPosition = mode === 'height'
+    ? new THREE.Vector3(points[0].x, (points[0].y + points[1].y) / 2, points[0].z)
+    : points[0].clone().lerp(points[1], 0.5);
+  const valueLabel = annotationLabel(formatMeasurement(primary, unit), markerRadius * 10.5, '#081416', '#ffffff');
+  valueLabel.position.copy(labelPosition).add(new THREE.Vector3(0, markerRadius * 2.1, 0));
+  runtime.annotation.add(valueLabel);
+}
+
+function annotationLabel(
+  text: string,
+  width: number,
+  background: string,
+  foreground: string,
+): THREE.Sprite {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 128;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('Measurement label canvas is unavailable.');
+  context.fillStyle = background;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = '#70d6e8';
+  context.lineWidth = 8;
+  context.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
+  context.fillStyle = foreground;
+  context.font = '600 54px IBM Plex Mono, monospace';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText(text, canvas.width / 2, canvas.height / 2 + 2);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false, transparent: true }));
+  sprite.scale.set(width, width / 4, 1);
+  sprite.renderOrder = 1_004;
+  return sprite;
 }
 
 function disposeObject(object: THREE.Object3D): void {
   object.traverse((child) => {
-    if (!(child instanceof THREE.Mesh || child instanceof THREE.Line)) return;
+    if (!(child instanceof THREE.Mesh || child instanceof THREE.Line || child instanceof THREE.Sprite)) return;
     child.geometry?.dispose();
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
@@ -213,19 +259,22 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     mode,
     measurementEnabled = false,
     measurementMode = 'distance',
+    measurementUnit = 'mm',
     onBuilt,
     onPartSelected,
     onMeasurementChange,
+    onMeasurementMiss,
   }, ref) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const runtimeRef = useRef<Runtime | undefined>(undefined);
     const buildRef = useRef<CharacterBuild | ProductBuild | undefined>(undefined);
     const configRef = useRef({ assetKind, assemblyIR, spec });
     configRef.current = { assetKind, assemblyIR, spec };
-    const interactionRef = useRef({ measurementEnabled, measurementMode, onMeasurementChange, onPartSelected });
-    interactionRef.current = { measurementEnabled, measurementMode, onMeasurementChange, onPartSelected };
+    const interactionRef = useRef({ measurementEnabled, measurementMode, measurementUnit, onMeasurementChange, onMeasurementMiss, onPartSelected });
+    interactionRef.current = { measurementEnabled, measurementMode, measurementUnit, onMeasurementChange, onMeasurementMiss, onPartSelected };
     const measurementPointsRef = useRef<THREE.Vector3[]>([]);
     const markerRadiusRef = useRef(0.01);
+    const assetIdentityRef = useRef<{ assetKind: AssetKind; assemblyIR?: AssemblyIR; productSpec: ProductSpec; spec: CharacterSpec } | undefined>(undefined);
 
     const resetMeasurement = (): void => {
       measurementPointsRef.current = [];
@@ -323,7 +372,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
 
       const animate = () => {
         controls.update();
-        measurement.rotation.y += 0.0007;
+        if (configRef.current.assetKind === 'human') measurement.rotation.y += 0.0007;
         const harnessUpdater = buildRef.current?.root.userData.updateElectricalHarness;
         if (typeof harnessUpdater === 'function') harnessUpdater();
         renderer.render(scene, camera);
@@ -334,11 +383,17 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const pointer = new THREE.Vector2();
       const raycaster = new THREE.Raycaster();
       let pointerDown = new THREE.Vector2();
+      let activePointerId: number | undefined;
       const rememberPointer = (event: PointerEvent) => {
+        if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        activePointerId = event.pointerId;
         pointerDown = new THREE.Vector2(event.clientX, event.clientY);
       };
       const selectPart = (event: PointerEvent) => {
-        if (pointerDown.distanceTo(new THREE.Vector2(event.clientX, event.clientY)) > 4) return;
+        if (!event.isPrimary || activePointerId !== event.pointerId) return;
+        activePointerId = undefined;
+        const clickTolerance = event.pointerType === 'touch' ? 14 : 6;
+        if (pointerDown.distanceTo(new THREE.Vector2(event.clientX, event.clientY)) > clickTolerance) return;
         if (configRef.current.assetKind !== 'product') return;
         const rect = canvas.getBoundingClientRect();
         pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -348,11 +403,17 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const interaction = interactionRef.current;
         if (interaction.measurementEnabled) {
           const surfaceHit = intersections.find((item) => item.object instanceof THREE.Mesh);
-          if (!surfaceHit) return;
+          if (!surfaceHit) {
+            interaction.onMeasurementMiss?.();
+            return;
+          }
+          let partObject: THREE.Object3D | null = surfaceHit.object;
+          while (partObject && !partObject.userData.part) partObject = partObject.parent;
+          interaction.onPartSelected?.(partObject?.userData.part as ProductPartInfo | undefined);
           if (measurementPointsRef.current.length >= 2) measurementPointsRef.current = [];
           measurementPointsRef.current.push(surfaceHit.point.clone());
           const points = measurementPointsRef.current;
-          drawMeasurementAnnotation(runtime, points, interaction.measurementMode, markerRadiusRef.current);
+          drawMeasurementAnnotation(runtime, points, interaction.measurementMode, interaction.measurementUnit, markerRadiusRef.current);
           if (points.length === 2) {
             interaction.onMeasurementChange?.(calculateMeasurement(points[0], points[1]), 2);
           } else {
@@ -363,8 +424,12 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const partHit = intersections.find((item) => item.object.userData.part);
         interaction.onPartSelected?.(partHit?.object.userData.part as ProductPartInfo | undefined);
       };
+      const cancelPointer = (event: PointerEvent) => {
+        if (activePointerId === event.pointerId) activePointerId = undefined;
+      };
       canvas.addEventListener('pointerdown', rememberPointer);
       canvas.addEventListener('pointerup', selectPart);
+      canvas.addEventListener('pointercancel', cancelPointer);
 
       return () => {
         cancelAnimationFrame(runtime.frame);
@@ -375,6 +440,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         renderer.dispose();
         canvas.removeEventListener('pointerdown', rememberPointer);
         canvas.removeEventListener('pointerup', selectPart);
+        canvas.removeEventListener('pointercancel', cancelPointer);
         runtimeRef.current = undefined;
       };
     }, []);
@@ -382,11 +448,21 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     useEffect(() => {
       const runtime = runtimeRef.current;
       if (!runtime) return;
+      const previousIdentity = assetIdentityRef.current;
+      const preserveMeasurement = previousIdentity !== undefined
+        && previousIdentity.assetKind === assetKind
+        && previousIdentity.assemblyIR === assemblyIR
+        && previousIdentity.productSpec === productSpec
+        && previousIdentity.spec === spec;
+      assetIdentityRef.current = { assetKind, assemblyIR, productSpec, spec };
       clearGroup(runtime.root);
       clearGroup(runtime.measurement);
       clearGroup(runtime.annotation);
-      measurementPointsRef.current = [];
-      interactionRef.current.onMeasurementChange?.(undefined, 0);
+      runtime.measurement.rotation.set(0, 0, 0);
+      if (!preserveMeasurement) {
+        measurementPointsRef.current = [];
+        interactionRef.current.onMeasurementChange?.(undefined, 0);
+      }
 
       const build = assetKind === 'human'
         ? buildCharacter(pack, spec, mode)
@@ -395,15 +471,22 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       if (assetKind === 'human') {
         runtime.measurement.add(createMeasurementField(build.metrics.heightMeters));
       } else {
-        const frame = new THREE.Box3Helper(build.metrics.bounds, '#335cff');
+        const frame = new THREE.Box3Helper(build.metrics.bounds, '#657477');
         frame.name = 'assembly_bounds';
+        const frameMaterial = frame.material as THREE.LineBasicMaterial;
+        frameMaterial.transparent = true;
+        frameMaterial.opacity = 0.34;
         runtime.measurement.add(frame);
       }
+      runtime.measurement.visible = assetKind === 'human' || measurementEnabled;
       buildRef.current = build;
       const size = build.metrics.bounds.getSize(new THREE.Vector3());
       markerRadiusRef.current = Math.max(0.004, Math.min(0.12, size.length() * 0.004));
       onBuilt?.(build);
       frameBuild(runtime, build, assetKind, assemblyIR, spec);
+      if (preserveMeasurement && measurementEnabled && measurementPointsRef.current.length > 0) {
+        drawMeasurementAnnotation(runtime, measurementPointsRef.current, measurementMode, measurementUnit, markerRadiusRef.current);
+      }
 
       Object.assign(window, {
         __MORPHLOOM__: {
@@ -423,13 +506,15 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const runtime = runtimeRef.current;
       if (!runtime) return;
       if (!measurementEnabled) {
+        runtime.measurement.visible = assetKind === 'human';
         resetMeasurement();
         return;
       }
-      drawMeasurementAnnotation(runtime, measurementPointsRef.current, measurementMode, markerRadiusRef.current);
+      runtime.measurement.visible = true;
+      drawMeasurementAnnotation(runtime, measurementPointsRef.current, measurementMode, measurementUnit, markerRadiusRef.current);
       const points = measurementPointsRef.current;
       if (points.length === 2) onMeasurementChange?.(calculateMeasurement(points[0], points[1]), 2);
-    }, [measurementEnabled, measurementMode, onMeasurementChange]);
+    }, [measurementEnabled, measurementMode, measurementUnit, onMeasurementChange]);
 
     useImperativeHandle(ref, () => ({
       setView(view) {
@@ -464,6 +549,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       },
     }), [assemblyIR, assetKind, spec]);
 
-    return <canvas ref={canvasRef} className={`character-canvas${measurementEnabled ? ' is-measuring' : ''}`} aria-label="3D 결과 미리보기" />;
+    return <canvas
+      ref={canvasRef}
+      className={`character-canvas${measurementEnabled ? ' is-measuring' : ''}`}
+      aria-label={measurementEnabled ? '3D 결과 실측 화면. 모델 표면에서 두 점을 선택하세요.' : '3D 결과 미리보기'}
+    />;
   },
 );

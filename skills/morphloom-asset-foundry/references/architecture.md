@@ -1,5 +1,9 @@
 # Architecture from drawings
 
+Read plans together with sections, elevations, schedules, and written dimensions when available. Drawing dimensions and annotations outrank pixel-scaled guesses; pixel geometry outranks generic architectural priors.
+
+For a building photograph without a plan, calibrate the visible camera and model visible massing/façades first. Mark footprint, roof, rear, and hidden sides inferred and never set `planFootprintVerified`. This photo branch may produce a detailed visible-façade asset but not a measured building model.
+
 ## Footprint first
 
 1. Rotate and crop the drawing so labels and dimensions establish the intended orientation.
@@ -10,13 +14,33 @@
 
 Record `planFootprintVerified: true` only after comparing the source plan and a plan-view render. Record known void and projection counts plus the directional relationship between projections in metadata. Add a regression test for each signature form feature: named slabs, expected void count, and signed or relative coordinates proving that opposite-side projections did not collapse onto the same facade.
 
+## Architectural completeness manifest
+
+Before compiling, account for every source-visible item in these groups:
+
+- footprint boundary, setbacks, recesses, courts, wings, entrance projections, overhangs, and level changes;
+- exterior and interior walls with actual openings rather than painted door/window textures;
+- circulation: entrances, corridors, stairs, landings, lifts, ramps, and egress relationships;
+- room/zone boundaries and repeated unit types without filling intentional shared or exterior voids;
+- façade rhythm: bays, piers, glazing, frames, sills, heads, balconies, rails, and material transitions;
+- sections/elevations: storey height, slab thickness, roof/parapet form, foundation/site relation, and vertical alignment.
+
+If only a plan exists, vertical construction remains estimated. Do not let a detailed floor plan imply surveyed heights, structure, MEP, code compliance, or as-built tolerances.
+
+For evidence-bearing façades, maintain an opening schedule by façade and level: type, count, center position, width/height, sill/head, reveal depth, and proof view. Reconcile plans, elevations, and sections to shared level datums and wall/slab coordinates. When interiors are in scope, validate a circulation graph: entrances reach intended occupied zones, doors create real wall apertures, and stairs/lifts connect declared levels. Unreachable rooms or floating landings block delivery.
+
 ## Dimensions and viewer inspection
 
 - Keep drawing dimensions in their source units and convert once into AssemblyIR millimetres.
 - Distinguish documented dimensions from image-scaled estimates and assumed vertical values.
 - Provide two-point surface measurement for distance and vertical height. Show signed ΔX, ΔY, and ΔZ and allow mm, cm, and m display without changing model geometry.
+- Keep the measurement tool enabled and discoverable in architectural review. Two surface picks must produce visible A/B markers, a dimension line, numeric result, and a clear reset/new-measurement path.
 - Browser measurement reports the compiled model coordinates; it is not a site survey or construction certification.
+
+Before delivery, smoke-test the actual viewer: reload a building/product result and confirm measurement is on; two valid surface picks show `2/2`, A/B markers, a line, and a non-zero result; changing Beauty/Clay preserves the measurement; Escape resets to `0/2`; a blank pick gives miss feedback without changing the value; M toggles off/on; and the controls/results remain usable at both wide and narrow viewer widths.
 
 ## Architectural materials
 
 Separate masonry, concrete, plaster, glazing, metal sash, timber, tile, and room finishes. Give each a distinct PBR response and readable plan-view colour while retaining realistic grazing-angle reflection.
+
+Review the source-aligned plan first, then at least one section-like or elevated view that exposes wall height and openings. Use Clay to catch filled voids and floating rooms; use X-Ray to catch circulation and containment errors.

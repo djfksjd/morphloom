@@ -98,10 +98,10 @@ Open the printed local URL. It starts with the Laurel Homes apartment-floor resu
 
 ### Measure in the local viewer
 
-1. Enable `실측` (Measure) and choose distance or height.
-2. Click a start and end point on model surfaces.
-3. Read the primary result plus signed `ΔX/ΔY/ΔZ`, switching among `mm`, `cm`, and `m` without changing geometry.
-4. A third click starts a new measurement; `초기화` clears it.
+1. Measurement starts enabled; buildings default to `m` and products to `mm`.
+2. Pick surface point `A`, then point `B`, and verify the in-scene markers, connecting line, and dimension label.
+3. Choose 3D distance or vertical height, then read the primary result and signed `ΔX/ΔY/ΔZ` in `mm`, `cm`, or `m`.
+4. The result survives Beauty/Clay/Wire/X-Ray changes. A third pick starts over, `Esc` clears, and `M` toggles the tool.
 
 The interaction follows the two-point and coordinate-delta pattern of Fusion's [Inspect > Measure](https://help.autodesk.com/view/fusion360/ENU/?contextId=DESIGN-INSPECT-MEASURE-CMD). Values come from compiled model coordinates; they are not a site survey or construction certification.
 
@@ -166,7 +166,7 @@ These are physically plausible presets, not BRDF measurements from a gonioreflec
 
 ## Image to asset with Codex alone
 
-The repository includes the [`morphloom-asset-foundry`](./skills/morphloom-asset-foundry/SKILL.md) skill. It expands a short request into footprint/negative-space checks, evidence boundaries, semantic parts, PBR micro-surfaces, topology, and same-view comparison. The default request can therefore be one line:
+The repository includes the [`morphloom-asset-foundry`](./skills/morphloom-asset-foundry/SKILL.md) skill. Even a short request defaults to a **high-detail editable review asset** and expands into footprint/negative-space checks, a complete visible-feature ledger, relationship constraints, evidence boundaries, semantic parts, PBR micro-surfaces, topology, and same-view comparison. The first compile is a checkpoint: the workflow fixes the highest-impact mismatch and re-runs its proof views until every evidence-supported blocking gate passes. The default request can therefore be one line:
 
 ```text
 Turn this image (or drawing) into an editable 3D asset.
