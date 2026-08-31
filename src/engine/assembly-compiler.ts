@@ -97,6 +97,11 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         break;
       case 'extrude':
         if (component.geometry.points.length < 3 || component.geometry.depth <= 0) throw new Error(`Extrude profile is invalid in ${component.id}.`);
+        if (component.geometry.holes?.some((loop) => loop.length < 3)) throw new Error(`Extrude hole loop is invalid in ${component.id}.`);
+        if (component.geometry.ovalHoles?.some((hole) => hole.radii.some((radius) => radius <= 0)
+          || (hole.segments !== undefined && (hole.segments < 8 || hole.segments > 256)))) {
+          throw new Error(`Extrude oval hole is invalid in ${component.id}.`);
+        }
         if (((component.geometry.bevelSize ?? 0) > 0 || (component.geometry.bevelThickness ?? 0) > 0)
           && (component.geometry.bevelSegments ?? 3) < 1) throw new Error(`Extrude bevel segments are invalid in ${component.id}.`);
         break;
@@ -202,6 +207,25 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
       shape.moveTo(mm(first[0]), mm(first[1]));
       for (const point of rest) shape.lineTo(mm(point[0]), mm(point[1]));
       shape.closePath();
+      const holeLoops = [...(geometry.holes ?? [])];
+      for (const oval of geometry.ovalHoles ?? []) {
+        const segments = oval.segments ?? 32;
+        holeLoops.push(Array.from({ length: segments }, (_, index) => {
+          const angle = (index / segments) * Math.PI * 2;
+          return [
+            oval.center[0] + Math.cos(angle) * oval.radii[0],
+            oval.center[1] + Math.sin(angle) * oval.radii[1],
+          ] as [number, number];
+        }));
+      }
+      for (const loop of holeLoops) {
+        const path = new THREE.Path();
+        const [holeFirst, ...holeRest] = loop;
+        path.moveTo(mm(holeFirst[0]), mm(holeFirst[1]));
+        for (const point of holeRest) path.lineTo(mm(point[0]), mm(point[1]));
+        path.closePath();
+        shape.holes.push(path);
+      }
       const depth = mm(geometry.depth);
       const result = new THREE.ExtrudeGeometry(shape, {
         depth,

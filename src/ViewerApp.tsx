@@ -13,6 +13,7 @@ import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { buildPhysicalNetlist } from './engine/netlist';
 import { createOrnateKnifeIR } from './engine/knife';
+import { TALON_REFERENCE_BENCHMARK_IR } from './engine/talon-reference-benchmark';
 import { editAssemblyLayout, isLayoutEditable } from './engine/layout-edit';
 import {
   formatMeasurement,
@@ -71,6 +72,10 @@ type LocalJob = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'talon-reference', label: 'Talon Ruby — Same Reference', caption: 'real silhouette · true openings · estimated depth', kind: 'product',
+    spec: DEFAULT_KNIFE_SPEC, assemblyIR: TALON_REFERENCE_BENCHMARK_IR,
+  },
   {
     id: 'moderncat-concept', label: 'ModernCat Concept Residence', caption: 'Pinterest panel · concept evidence blocked', kind: 'product',
     spec: DEFAULT_PRODUCT_SPEC, assemblyIR: MODERNCAT_CONCEPT_RESIDENCE_IR,

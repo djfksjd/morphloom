@@ -1,0 +1,45 @@
+{
+  "schema": "morphloom.same-reference-benchmark/0.1",
+  "generatedAt": "2026-09-01",
+  "reference": {
+    "name": "Talon Knife Doppler Ruby broadside",
+    "url": "https://img2threejs.io/references/talon-doppler-ruby.webp",
+    "inputs": 1,
+    "evidenceBoundary": "Single broadside image; thickness and unseen surfaces are estimates for both reconstructions."
+  },
+  "img2threejs": {
+    "observedUrl": "https://img2threejs.io/#/demo/talon-doppler-ruby?capture=1",
+    "observedStrengths": [
+      "projected source appearance",
+      "traced broadside silhouette",
+      "variable-thickness blade",
+      "three blade openings and a closed finger ring"
+    ],
+    "visiblePartCount": 5,
+    "photoFidelityVerdict": "winner"
+  },
+  "morphloom": {
+    "fixture": "TALON_REFERENCE_BENCHMARK_IR",
+    "namedParts": 26,
+    "triangles": 16700,
+    "watertightMeshes": 26,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0,
+    "degenerateTriangles": 0,
+    "realThroughOpenings": 4,
+    "overallEnvelopeMm": [240.955, 83.982, 9.715],
+    "glbRoundTrip": {
+      "status": "pass",
+      "sizeKb": 698.6,
+      "boundsDriftMm": 0,
+      "namedNodesPercent": 100,
+      "fingerprint": "8a4dd3da06aaae14"
+    },
+    "deliveryAssetVerdict": "winner"
+  },
+  "verdict": {
+    "sameViewPhotorealism": "img2threejs",
+    "editableSemiProfessionalDelivery": "morphloom",
+    "reason": "Morphloom now preserves more independently editable hardware and proves closed topology plus GLB round-trip. img2threejs still matches the admitted photograph more closely because it projects source pixels; Morphloom must not claim a visual win on this case yet."
+  }
+}

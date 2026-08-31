@@ -12,6 +12,7 @@ import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior'
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
+import { TALON_REFERENCE_BENCHMARK_IR } from '../src/engine/talon-reference-benchmark';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
@@ -202,6 +203,28 @@ describe('OHPK human pipeline', () => {
 });
 
 describe('AssemblyIR product pipeline', () => {
+  it('compiles traced profiles with multiple real through-holes for the same-reference Talon benchmark', () => {
+    validateAssemblyIR(TALON_REFERENCE_BENCHMARK_IR);
+    const core = TALON_REFERENCE_BENCHMARK_IR.components.find((component) => component.id === 'continuous_steel_body');
+    expect(core?.geometry.op).toBe('extrude');
+    if (core?.geometry.op !== 'extrude') throw new Error('Talon core must remain an extruded profile.');
+    expect(core.geometry.holes).toHaveLength(4);
+    const build = compileAssemblyIR(TALON_REFERENCE_BENCHMARK_IR, 'beauty');
+    expect(build.parts.length).toBeGreaterThanOrEqual(24);
+    expect(build.root.getObjectByName('continuous_steel_body')).toBeTruthy();
+    expect(build.root.getObjectByName('ring_lip_front')).toBeTruthy();
+    expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(240);
+    expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeLessThan(242);
+  });
+
+  it('rejects malformed through-hole descriptors before Three.js allocation', () => {
+    const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    const core = invalid.components.find((component) => component.id === 'continuous_steel_body');
+    if (!core || core.geometry.op !== 'extrude') throw new Error('Missing benchmark core.');
+    core.geometry.ovalHoles = [{ center: [0, 0], radii: [0, 4], segments: 7 }];
+    expect(() => validateAssemblyIR(invalid)).toThrow(/oval hole is invalid/);
+  });
+
   it('compiles a complete nine-apartment HABS floor with rooms, stairs and façade openings', () => {
     const build = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
     expect(LAUREL_HOMES_BUILDING_B_IR.metadata).toMatchObject({

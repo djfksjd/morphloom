@@ -134,7 +134,25 @@
     },
     "extrude": {
       "type": "object", "required": ["op", "points", "depth"], "additionalProperties": false,
-      "properties": { "op": { "const": "extrude" }, "points": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } }, "depth": { "type": "number", "exclusiveMinimum": 0 }, "bevelSize": { "type": "number", "minimum": 0 }, "bevelThickness": { "type": "number", "minimum": 0 }, "bevelSegments": { "type": "integer", "minimum": 1, "maximum": 512 } }
+      "properties": {
+        "op": { "const": "extrude" },
+        "points": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } },
+        "depth": { "type": "number", "exclusiveMinimum": 0 },
+        "holes": { "type": "array", "maxItems": 128, "items": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } } },
+        "ovalHoles": {
+          "type": "array", "maxItems": 128,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["center", "radii"],
+            "properties": {
+              "center": { "$ref": "#/$defs/vec2" }, "radii": { "$ref": "#/$defs/vec2" },
+              "segments": { "type": "integer", "minimum": 8, "maximum": 256 }
+            }
+          }
+        },
+        "bevelSize": { "type": "number", "minimum": 0 },
+        "bevelThickness": { "type": "number", "minimum": 0 },
+        "bevelSegments": { "type": "integer", "minimum": 1, "maximum": 512 }
+      }
     },
     "lathe": {
       "type": "object", "required": ["op", "profile"], "additionalProperties": false,

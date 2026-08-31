@@ -6,7 +6,18 @@ export type AssemblyGeometryIR =
   | { op: 'cylinder'; radiusTop: number; radiusBottom: number; depth: number; radialSegments?: number }
   | { op: 'sphere'; radius: number; widthSegments?: number; heightSegments?: number }
   | { op: 'torus'; radius: number; tube: number; radialSegments?: number; tubularSegments?: number }
-  | { op: 'extrude'; points: Array<[number, number]>; depth: number; bevelSize?: number; bevelThickness?: number; bevelSegments?: number }
+  | {
+    op: 'extrude';
+    points: Array<[number, number]>;
+    depth: number;
+    /** Closed polygon loops removed from the profile by Three.js' tessellator. */
+    holes?: Array<Array<[number, number]>>;
+    /** Compact circular/elliptical through-holes expanded deterministically at compile time. */
+    ovalHoles?: Array<{ center: [number, number]; radii: [number, number]; segments?: number }>;
+    bevelSize?: number;
+    bevelThickness?: number;
+    bevelSegments?: number;
+  }
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
   | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean }
   | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }

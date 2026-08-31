@@ -16,7 +16,8 @@ baseline. No showcase texture or model asset is redistributed by Morphloom.
 Baseline: https://img2threejs.io/#/x/talon-doppler-ruby
 
 Portions of the visual-hull space carving, foreground-normalized interior
-comparison, and deterministic material comparison are adapted from
+comparison, deterministic material comparison, and extruded-profile hole
+authoring are adapted from
 img2threejs, Copyright 2026 hoainho, licensed under Apache License 2.0.
 Morphloom converted and modified those implementations for bounded in-browser
 TypeScript execution, typed-array geometry, and its evidence/quality pipeline.

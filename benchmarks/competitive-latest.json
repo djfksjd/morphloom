@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-08-31T22:36:36.960Z",
+  "generatedAt": "2026-08-31T22:58:04.320Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "competitor": {
     "repository": "https://github.com/img2threejs/img2threejs",

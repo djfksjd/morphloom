@@ -121,6 +121,8 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
+동일한 Talon 사진으로도 실제 비교했습니다. Morphloom은 이제 비대칭 외곽과 여러 관통 홀을 가진 프로파일을 폐쇄형 메시로 만들며, 해당 사례는 26개 편집 부품·경계 0·비매니폴드 0·GLB 포락 오차 0.000 mm를 확인했습니다. 다만 원본 픽셀을 투영하는 img2threejs가 정면 사진 재현에서는 아직 더 좋습니다. Morphloom의 현재 우위는 사진 복사가 아니라 준실무 편집·검수·납품입니다.
+
 ## 현재 한계
 
 - 한 장의 사진만으로 숨은 형상, 정확한 두께와 후면을 측정할 수 없습니다.

@@ -15,3 +15,5 @@ The Spider-Man single-image case therefore records two separate results: the com
 The Galaxy Z Fold8 exterior case records Samsung's published folded and unfolded envelopes separately from the compiled camera-bump envelope. Official dimensions, screen ratios, camera count, material families, and accessory-placement drawing values are `datasheet`; unpublished ring diameters, button protrusion, port pitch, and crease response remain `estimated` or `inferred`. Its exterior-only scope must not be reported as an internal engineering model.
 
 When a new baseline is added, store its public URL, version, visible metrics, and the date observed. Never copy a proprietary asset into this directory.
+
+`talon-same-reference-latest.json` is the first real same-input render case. It keeps the public URL and measured delivery facts only; the third-party reference bitmap and competitor render are not redistributed. The result deliberately separates photographic likeness from editable delivery quality.
