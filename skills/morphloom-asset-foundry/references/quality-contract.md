@@ -11,6 +11,7 @@ Before building geometry, derive a compact contract from the request and evidenc
 - **Signature-feature manifest:** the silhouette breaks, proportions, openings, seams, controls, decorations, material boundaries, pose landmarks, or spatial forms whose omission would make the result feel like a generic substitute.
 - **Relationship constraints:** left/right and front/rear mapping, ordering, attachment, containment, symmetry/asymmetry, projection direction, port endpoints, and negative-space boundaries.
 - **Proof views:** the source camera plus only the orthographic or diagnostic views needed to expose those features and relationships.
+- **Acceptance:** a numeric threshold for each feature, required proof views per pass, hard gates, and bounded iteration/token ceilings. Save this as `morphloom.fidelity/0.1` and attach it to `AssemblyIR.fidelity`.
 
 If use is unspecified, default to a high-detail editable review asset judged at the source's native resolved distance. Do not silently downgrade to preview quality. Silhouette, negative space, high-contrast details, repeated patterns, and functional features are never discarded merely because they fall below a general feature-size threshold.
 
@@ -49,6 +50,8 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 
 ## Review and self-correction loop
 
+Lock the pass order as `blockout → structure → form → material → surface → lighting → interaction → optimization`. Do not skip or reorder passes. Each review must name the calibrated source view, comparison artifact, proof modes, feature scores, hard-gate failures, defect tags, and observed token use.
+
 Review in this order because later polish cannot repair earlier interpretation errors:
 
 1. **Source interpretation:** orientation, anatomical/coordinate side, scale, projection direction, and evidence labels.
@@ -63,7 +66,7 @@ The export score must come from the bytes that will actually be delivered. Expor
 
 Compile the same locked IR twice and compare structural/material fingerprints. A mismatch blocks reproducibility until the nondeterministic source is identified. Benchmarks must report model-ready and delivery-ready separately; browser GLB round-trip proof is required for the latter.
 
-For each failed gate, correct the IR rather than compensating with the camera or renderer, regenerate the affected proof views, and rerun the gate. Use explicit tolerances for contour/landmark reprojection, feature counts, and dimensional deviation when the evidence supports them. A pass requires no evidence-supported blocker, no unresolved visible-feature row, and no obvious signature mismatch at the intended viewing distance. Missing evidence may downgrade hidden geometry, exact dimensions, internals, or readiness claims; it does not excuse lower detail in visible regions. When a blocker cannot be resolved without missing evidence, deliver only the appropriate editable-base claim and list the exact missing view, measurement, datasheet, survey, or physical test.
+For each failed gate, correct the IR rather than compensating with the camera or renderer, regenerate the affected proof views, and rerun the gate. Use explicit tolerances for contour/landmark reprojection, feature counts, and dimensional deviation when the evidence supports them. A pass requires every relevant feature to clear its own threshold; a high average never hides one failed critical feature. Revert to the best recorded review when a correction regresses. If the same defect survives twice, refine the specification instead of repeating the same edit. If improvement remains below the plateau threshold, or the per-pass/total iteration or token budget is exhausted, stop and request the smallest missing evidence or user decision. Missing evidence may downgrade hidden geometry, exact dimensions, internals, or readiness claims; it does not excuse lower detail in visible regions. When a blocker cannot be resolved without missing evidence, deliver only the appropriate editable-base claim and list the exact missing view, measurement, datasheet, survey, or physical test.
 
 ## Required delivery evidence
 

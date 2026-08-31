@@ -30,6 +30,7 @@ import {
 } from './components/ResultViewport';
 import { ViewportErrorBoundary } from './components/ViewportErrorBoundary';
 import { bytesLabel, type DeliveryAudit, type LocalBuildTelemetry } from './engine/delivery-validation';
+import { auditFidelityContract } from './engine/fidelity-pipeline';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from './types';
 
@@ -243,6 +244,9 @@ export function ViewerApp() {
       : evaluateProductQuality(productSpec, undefined, productMetrics, assemblyIR, deliveryAudit);
   }, [assemblyIR, assetKind, characterMetrics, deliveryAudit, pack, productMetrics, productSpec, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
+  const fidelityAudit = useMemo(() => assemblyIR?.fidelity
+    ? auditFidelityContract(assemblyIR.fidelity, assemblyIR)
+    : undefined, [assemblyIR]);
   const productPartCount = productMetrics?.parts;
   const architecturalResult = assemblyIR?.metadata?.assetKind === 'building';
   const activePreset = VIEWER_ASSETS.find((asset) => asset.id === activeAssetId);
@@ -657,6 +661,17 @@ export function ViewerApp() {
           )}
 
           <div className="viewer-note"><span>CLI → IR → VIEWER</span><p>{viewerNote}</p></div>
+
+          {assemblyIR?.fidelity && fidelityAudit && (
+            <div className={`selected-part-card fidelity-contract-card${fidelityAudit.pass ? ' is-ready' : ' is-blocked'}`}>
+              <span className="eyebrow">locked fidelity contract</span>
+              <b>{fidelityAudit.pass ? '8-PASS REVIEW READY' : 'FIDELITY CONTRACT BLOCKED'}</b>
+              <small>{assemblyIR.fidelity.details.length} DETAILS · {assemblyIR.fidelity.materialRegions.length} MATERIAL REGIONS · {assemblyIR.fidelity.cameras.length} CALIBRATED VIEWS</small>
+              <p>{fidelityAudit.pass
+                ? `부품 매핑 ${Math.round(fidelityAudit.componentCoverage * 100)}% · 특징별 합격선 ${Math.round(assemblyIR.fidelity.targetFidelity * 100)}% · 최대 ${assemblyIR.fidelity.maxTotalIterations}회`
+                : fidelityAudit.blockers.slice(0, 3).join(' · ')}</p>
+            </div>
+          )}
 
           {assetKind === 'product' && (
             <section className={`measurement-console${measurementEnabled ? ' is-active' : ''}`} aria-label="실측 결과" aria-live="polite">

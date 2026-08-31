@@ -1,3 +1,5 @@
+import type { FidelityContract } from './fidelity-pipeline';
+
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
   | { op: 'cylinder'; radiusTop: number; radiusBottom: number; depth: number; radialSegments?: number }
@@ -155,5 +157,7 @@ export interface AssemblyIR {
   units: 'mm';
   components: AssemblyComponentIR[];
   electrical?: ElectricalHarnessIR;
+  /** Optional locked detail-and-proof contract used by semi-professional delivery gates. */
+  fidelity?: FidelityContract;
   metadata?: Record<string, string | number | boolean>;
 }

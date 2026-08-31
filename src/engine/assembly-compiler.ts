@@ -7,6 +7,7 @@ import { compileElectricalHarness, validateElectricalHarness } from './connectiv
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from './surface-system';
 import { analyzeTopology } from './topology';
 import { inspectEngineeringEvidence } from './engineering-audit';
+import { auditFidelityContract } from './fidelity-pipeline';
 
 const mm = (value: number) => value / 1000;
 
@@ -31,7 +32,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   let inspectedNodes = 0;
   const inspect = (node: unknown, key = '', depth = 0): void => {
     inspectedNodes += 1;
-    if (inspectedNodes > 50_000) throw new Error('AssemblyIR is too complex to inspect safely.');
+    if (inspectedNodes > 200_000) throw new Error('AssemblyIR is too complex to inspect safely.');
     if (depth > 16) throw new Error(`AssemblyIR nesting is too deep at ${key}.`);
     if (typeof node === 'number') {
       if (!Number.isFinite(node) || Math.abs(node) > 1_000_000) throw new Error(`Unsafe numeric value at ${key}.`);
@@ -60,6 +61,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     }
   };
   inspect(candidate.metadata, 'metadata');
+  inspect(candidate.fidelity, 'fidelity');
   for (const component of candidate.components as AssemblyComponentIR[]) {
     if (!component || typeof component !== 'object') throw new Error('AssemblyIR component is invalid.');
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(component.id) || ids.has(component.id)) throw new Error(`Invalid or duplicate component id: ${component.id}`);
@@ -164,6 +166,10 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
+  if (candidate.fidelity) {
+    const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
+    if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
+  }
 }
 
 function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
@@ -480,6 +486,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   root.userData.surfaceSystem = structuredClone(surfaces);
   root.userData.topology = structuredClone(topology);
   root.userData.engineeringAudit = structuredClone(engineering);
+  if (ir.fidelity) root.userData.fidelityContract = structuredClone(ir.fidelity);
   return {
     root,
     parts,

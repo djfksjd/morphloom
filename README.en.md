@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-64%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-78%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,6 +101,7 @@ Product and architecture accuracy improves with measured drawings and datasheets
 ```bash
 npm test
 npm run quality:gate
+npm run benchmark:competitive
 npm run build
 ```
 
@@ -114,7 +115,9 @@ Current locked benchmark:
 
 This does not mean every generated asset is a finished deliverable. Model completeness and source confidence are separate. The ornate blade and verified architectural shell are positive release cases. The concept residence, cooling assembly, and single-view character are technical passes that are correctly blocked for insufficient evidence.
 
-Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md)
+Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
+
+Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
 ## Current limits
 

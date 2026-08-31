@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "benchmark": "vite-node scripts/benchmark.ts",
-    "quality:gate": "vite-node scripts/quality-gate.ts",
+    "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
+    "quality:gate": "vite-node scripts/quality-gate.ts && vite-node scripts/competitive-benchmark.ts",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {

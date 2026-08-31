@@ -644,10 +644,14 @@ describe('short-prompt generation contract', () => {
     expect(brief.requiredChecks).toEqual(expect.arrayContaining([
       'drawing-orientation', 'footprint-voids', 'projection-and-entrance',
       'visible-feature-ledger', 'spatial-relationship-constraints',
-      'pbr-micro-surface', 'watertight-topology', 'reference-comparison', 'autonomous-refinement-loop',
+      'strict-detail-inventory', 'locked-fidelity-passes', 'per-feature-acceptance',
+      'pbr-micro-surface', 'watertight-topology', 'reference-comparison', 'interior-reference-difference',
+      'autonomous-refinement-loop', 'bounded-cost-stop-policy', 'attachment-integrity',
     ]));
     expect(brief.agentPrompt).toContain('Never fill a visible void');
     expect(brief.agentPrompt).toContain('estimated or inferred');
+    expect(brief.agentPrompt).toContain('blockout → structure → form → material → surface → lighting → interaction → optimization');
+    expect(brief.agentPrompt).toContain('average score cannot hide a missing critical feature');
   });
 
   it('applies human and product gates together for a held device', () => {

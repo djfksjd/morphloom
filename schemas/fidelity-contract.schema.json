@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/djfksjd/morphloom/schemas/fidelity-contract.schema.json",
+  "title": "Morphloom Fidelity Contract 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "assetName", "domain", "complexity", "targetFidelity", "maxIterationsPerPass", "maxTotalIterations", "tokenBudget", "details", "cameras", "materialRegions", "hardGates", "passes"],
+  "properties": {
+    "schema": { "const": "morphloom.fidelity/0.1" },
+    "assetName": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "domain": { "enum": ["architecture", "product", "human", "unknown"] },
+    "complexity": { "enum": ["simple", "moderate", "complex", "ultra-complex"] },
+    "targetFidelity": { "type": "number", "minimum": 0.7, "maximum": 1 },
+    "maxIterationsPerPass": { "type": "integer", "minimum": 1, "maximum": 12 },
+    "maxTotalIterations": { "type": "integer", "minimum": 8, "maximum": 128 },
+    "tokenBudget": { "type": "integer", "minimum": 0, "maximum": 10000000 },
+    "details": { "type": "array", "minItems": 3, "maxItems": 2048, "items": { "$ref": "#/$defs/detail" } },
+    "cameras": { "type": "array", "maxItems": 24, "items": { "$ref": "#/$defs/camera" } },
+    "materialRegions": { "type": "array", "maxItems": 512, "items": { "$ref": "#/$defs/materialRegion" } },
+    "hardGates": { "type": "array", "minItems": 6, "maxItems": 64, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 160 } },
+    "passes": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "prefixItems": [
+        { "$ref": "#/$defs/blockoutPass" }, { "$ref": "#/$defs/structurePass" },
+        { "$ref": "#/$defs/formPass" }, { "$ref": "#/$defs/materialPass" },
+        { "$ref": "#/$defs/surfacePass" }, { "$ref": "#/$defs/lightingPass" },
+        { "$ref": "#/$defs/interactionPass" }, { "$ref": "#/$defs/optimizationPass" }
+      ]
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,96}$" },
+    "kind": { "enum": ["silhouette", "proportion", "negative-space", "component", "interface", "material", "micro-surface", "marking", "pose", "topology"] },
+    "view": { "enum": ["source-camera", "orthographic", "clay", "grazing-light", "wire", "x-ray"] },
+    "surface": { "enum": ["raw", "concrete", "plaster", "stone", "coated-metal", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hex-knit", "hair", "semiconductor"] },
+    "detail": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "label", "kind", "importance", "componentIds", "evidenceRef", "confidence", "threshold", "proofViews"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "kind": { "$ref": "#/$defs/kind" }, "importance": { "enum": ["critical", "major", "minor"] },
+        "componentIds": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "evidenceRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }, "threshold": { "type": "number", "minimum": 0.5, "maximum": 1 },
+        "proofViews": { "type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": { "$ref": "#/$defs/view" } },
+        "notes": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 500 } }
+      }
+    },
+    "camera": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "sourceViewId", "projection", "anchorCount", "reprojectionErrorPx"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "sourceViewId": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "projection": { "enum": ["perspective", "orthographic"] }, "anchorCount": { "type": "integer", "minimum": 3, "maximum": 512 },
+        "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 4 }
+      }
+    },
+    "materialRegion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "componentId", "evidenceRef", "expectedSurface", "confidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "componentId": { "$ref": "#/$defs/id" },
+        "evidenceRef": { "type": "string", "minLength": 1, "maxLength": 500 }, "expectedSurface": { "$ref": "#/$defs/surface" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "pass": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "minimumFidelity", "requiredKinds", "requiredProofViews"],
+      "properties": {
+        "id": { "type": "string" }, "minimumFidelity": { "type": "number", "minimum": 0.7, "maximum": 1 },
+        "requiredKinds": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/kind" } },
+        "requiredProofViews": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/view" } }
+      }
+    },
+    "blockoutPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "blockout" } } }] },
+    "structurePass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "structure" } } }] },
+    "formPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "form" } } }] },
+    "materialPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "material" } } }] },
+    "surfacePass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "surface" } } }] },
+    "lightingPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "lighting" } } }] },
+    "interactionPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "interaction" } } }] },
+    "optimizationPass": { "allOf": [{ "$ref": "#/$defs/pass" }, { "properties": { "id": { "const": "optimization" } } }] }
+  }
+}

@@ -1,5 +1,6 @@
 import type { AssemblyIR, SurfaceFinishIR } from './assembly-ir';
 import type { SemiProfessionalProfile, SemiProfessionalReadinessReport } from './evidence-readiness';
+import { auditFidelityContract } from './fidelity-pipeline';
 
 export type AssetDomain = 'architecture' | 'product' | 'human' | 'unknown';
 export type ReviewMode = 'source-camera' | 'orthographic' | 'clay' | 'grazing-light' | 'wire' | 'x-ray';
@@ -30,6 +31,9 @@ export interface AssemblyDetailAudit {
   finiteTransformCoverage: number;
   duplicateComponentIds: string[];
   footprintVerified: boolean | undefined;
+  fidelityContractPass: boolean | undefined;
+  fidelityBlockers: string[];
+  fidelityWarnings: string[];
 }
 
 const MICRO_SURFACE_FINISHES = new Set<SurfaceFinishIR>([
@@ -57,6 +61,9 @@ const COMMON_CHECKS = [
   'evidence-provenance',
   'signature-feature-manifest',
   'visible-feature-ledger',
+  'strict-detail-inventory',
+  'locked-fidelity-passes',
+  'per-feature-acceptance',
   'spatial-relationship-constraints',
   'intended-use-detail-threshold',
   'real-unit-envelope',
@@ -64,10 +71,13 @@ const COMMON_CHECKS = [
   'pbr-micro-surface',
   'watertight-topology',
   'reference-comparison',
+  'interior-reference-difference',
   'camera-calibration',
   'multi-mode-review',
   'export-reopen-parity',
   'autonomous-refinement-loop',
+  'bounded-cost-stop-policy',
+  'attachment-integrity',
 ];
 
 const REVIEW_MODES: ReviewMode[] = [
@@ -139,12 +149,13 @@ export function expandGenerationBrief(
       'The target is a semi-professional editable asset with minimal review, not a one-photo generation demo and not manufacturing/as-built certification.',
       readinessInstruction,
       'Expand the request into an editable Morphloom IR without asking the user to restate ordinary quality expectations.',
-      'Before geometry, derive an internal completion contract: intended use, evidence map, signature-feature ids, negative spaces, spatial relationships, physical material zones, editable/function boundaries, and the proof view for every important feature.',
+      'Before geometry, create and lock a Fidelity Contract: intended use, calibrated source cameras, a strict detail inventory, evidence map, signature-feature ids, negative spaces, spatial relationships, physical material zones, editable/function boundaries, and the proof view plus numeric acceptance threshold for every important feature.',
       'Use real units when evidence exists; mark every unsupported dimension or hidden surface as estimated or inferred.',
       'Persist the Evidence Pack profile, score, buildReady/deliveryReady state, and unresolved capabilities in AssemblyIR metadata so the compiled quality gate cannot lose the evidence decision.',
       'Assign a physical surface finish per material, including roughness, metalness, clearcoat/transmission/IOR where applicable, anisotropy for directional materials, and deterministic micro-normal/roughness detail.',
-      `Render and inspect these review modes as needed: ${REVIEW_MODES.join(', ')}. Always compare the source camera first; use the diagnostic views to expose form, surface, topology, and hidden relationships.`,
-      `Before delivery, run these gates: ${requiredChecks.join(', ')}. Treat the first compiling draft as a checkpoint. Correct the highest-impact failed gate in the IR, rebuild, and repeat until every evidence-supported blocker passes.`,
+      `Render and inspect these review modes as needed: ${REVIEW_MODES.join(', ')}. Calibrate the source camera from at least three anchors, compare that view first, and produce an interior/reference difference artifact rather than judging an attractive free camera. Use diagnostic views to expose form, surface, topology, attachments, and hidden relationships.`,
+      'Use the locked pass order blockout → structure → form → material → surface → lighting → interaction → optimization. A pass advances only when every relevant feature clears its own threshold and every hard gate passes; an average score cannot hide a missing critical feature.',
+      `Before delivery, run these gates: ${requiredChecks.join(', ')}. Treat the first compiling draft as a checkpoint. Correct the highest-impact failed gate in the IR, rebuild, and repeat until every evidence-supported blocker passes. Revert a regressing correction, refine the specification when a defect survives twice, request evidence when progress plateaus, and stop at the declared iteration/token ceiling.`,
       'Never hide a failed evidence, silhouette, relationship, topology, or reference gate behind camera choice, attractive materials, triangle count, or part count. If missing evidence is the only remaining blocker, keep the readiness claim limited and name the exact missing evidence instead of inventing detail.',
     ].join('\n'),
   };
@@ -185,6 +196,8 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
   const isArchitecture = ir.metadata?.assetKind === 'building';
   const targetsSemiProfessional = ir.metadata?.qualityTarget === 'semi-professional-editable';
   const footprintVerified = isArchitecture ? ir.metadata?.planFootprintVerified === true : undefined;
+  const fidelityAudit = ir.fidelity ? auditFidelityContract(ir.fidelity, ir) : undefined;
+  const fidelityContractRequired = ir.metadata?.fidelityContractRequired === true;
 
   if (evidenceCoverage < 1) blockers.push(`component evidence ${Math.round(evidenceCoverage * 100)}%`);
   if (duplicateComponentIds.length > 0) blockers.push(`duplicate component ids: ${[...new Set(duplicateComponentIds)].join(', ')}`);
@@ -196,6 +209,9 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
     const unresolved = String(ir.metadata?.evidenceUnresolvedCapabilities ?? '').trim();
     blockers.push(`evidence pack not delivery-ready${unresolved ? `: ${unresolved}` : ''}`);
   }
+  if (fidelityAudit && !fidelityAudit.pass) blockers.push(...fidelityAudit.blockers.map((item) => `fidelity: ${item}`));
+  if (!ir.fidelity && fidelityContractRequired) blockers.push('locked fidelity contract is required');
+  else if (!ir.fidelity && targetsSemiProfessional) warnings.push('locked fidelity contract is not attached');
 
   if (isArchitecture) {
     if (!footprintVerified) blockers.push('plan footprint not verified');
@@ -252,5 +268,8 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
     finiteTransformCoverage,
     duplicateComponentIds: [...new Set(duplicateComponentIds)],
     footprintVerified,
+    fidelityContractPass: fidelityAudit?.pass,
+    fidelityBlockers: fidelityAudit?.blockers ?? [],
+    fidelityWarnings: fidelityAudit?.warnings ?? [],
   };
 }

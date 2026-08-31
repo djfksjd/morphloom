@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-64%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-78%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,6 +101,7 @@ OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX�
 ```bash
 npm test
 npm run quality:gate
+npm run benchmark:competitive
 npm run build
 ```
 
@@ -114,7 +115,9 @@ npm run build
 
 100%는 모든 결과물이 완성품이라는 뜻이 아닙니다. 모델 완성도와 출처 신뢰도를 분리합니다. 장식 단검과 검증된 건축 셸은 승인 사례이며, 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과했지만 근거 부족을 정확히 차단한 사례입니다.
 
-상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md)
+Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격선을 잠그고, 8단계 검수에서 회귀·반복 결함·비용 상한을 실제로 차단합니다.
+
+상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
 ## 현재 한계
 

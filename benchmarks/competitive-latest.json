@@ -1,0 +1,151 @@
+{
+  "schema": "morphloom.competitive-benchmark/0.1",
+  "generatedAt": "2026-08-31T19:00:49.201Z",
+  "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
+  "competitor": {
+    "repository": "https://github.com/img2threejs/img2threejs",
+    "commit": "9fbd0ca5bbcc3b13bebe712745d6784d33db0b85",
+    "testedRuntime": "Python 3.12.13",
+    "observedTestResult": {
+      "tests": 1083,
+      "passed": 1045,
+      "skipped": 38,
+      "failed": 0,
+      "testFiles": 85
+    }
+  },
+  "morphloom": {
+    "contractAudit": {
+      "pass": true,
+      "blockers": [],
+      "warnings": [],
+      "detailCoverage": 1,
+      "componentCoverage": 1,
+      "materialCoverage": 1,
+      "criticalFeatures": 4
+    },
+    "deliveryAudit": {
+      "pass": true,
+      "blockers": []
+    },
+    "pixelComparison": {
+      "method": "pixel-frame-v1",
+      "referenceFingerprint": "15a8fff1",
+      "renderFingerprint": "15a8fff1",
+      "silhouetteIoU": 1,
+      "interiorSimilarity": 1,
+      "score": 1,
+      "foregroundPixels": {
+        "reference": 22,
+        "render": 22,
+        "intersection": 22,
+        "union": 22
+      },
+      "regions": [],
+      "fixture": "deterministic gate-path fixture; not a perceptual knife ranking"
+    },
+    "passes": [
+      {
+        "pass": "blockout",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.99
+      },
+      {
+        "pass": "structure",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "form",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "material",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "surface",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "lighting",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "interaction",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.99
+      },
+      {
+        "pass": "optimization",
+        "accepted": true,
+        "action": "complete",
+        "effectiveScore": 0.99
+      }
+    ],
+    "compiledAsset": {
+      "parts": 16,
+      "triangles": 18930,
+      "topologyPass": true,
+      "fidelityContractPersisted": true
+    }
+  },
+  "capabilityMatrix": [
+    {
+      "capability": "strict detail inventory",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "locked staged passes",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "per-feature thresholds",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "calibrated source-camera proof",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "bounded correction and cost ceiling",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "architecture and measured assemblies",
+      "img2threejs": "roadmap",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "electrical connectivity audit",
+      "img2threejs": "not documented",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "GLB and DCC delivery validation",
+      "img2threejs": "Three.js factory focus",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "same-reference perceptual winner",
+      "img2threejs": "not established here",
+      "morphloom": "not established here"
+    }
+  ]
+}
