@@ -407,7 +407,12 @@ export function compileElectricalHarness(
       );
       terminal.name = `${wire.id}_terminal_${terminalIndex + 1}`;
       terminal.position.copy(point);
-      terminal.userData.part = info;
+      terminal.userData.part = {
+        ...info,
+        id: terminal.name,
+        name: `${wire.name} · ${terminalIndex === 0 ? 'source' : 'destination'} terminal`,
+        detail: `${info.detail} · endpoint ${terminalIndex + 1}`,
+      } satisfies ProductPartInfo;
       terminal.userData.connection = mesh.userData.connection;
       harnessRoot.add(terminal);
       terminals.push(terminal);

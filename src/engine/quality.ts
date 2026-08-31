@@ -3,6 +3,7 @@ import { deriveBodyTopology, type CharacterMetrics } from './character';
 import type { ProductMetrics } from './product';
 import type { AssemblyIR } from './assembly-ir';
 import { auditAssemblyDetail } from './generation-policy';
+import type { DeliveryAudit } from './delivery-validation';
 
 function status(score: number, blockAt = 65): QualityCheck['status'] {
   return score >= 86 ? 'pass' : score >= blockAt ? 'warn' : 'blocked';
@@ -13,6 +14,7 @@ export function evaluateQuality(
   spec: CharacterSpec,
   evidence?: ReferenceEvidence,
   metrics?: CharacterMetrics,
+  deliveryAudit?: DeliveryAudit,
 ): QualityReport {
   const topology = deriveBodyTopology(pack);
   const vertices = topology.boundary;
@@ -34,7 +36,10 @@ export function evaluateQuality(
   const rigScore = webHero
     ? Number.isFinite(poseErrorMm) ? Math.round(Math.max(0, 100 - poseErrorMm * 1.6)) : 0
     : 74;
-  const exportScore = 92;
+  const exportScore = deliveryAudit?.score ?? 65;
+  const exportStatus: QualityCheck['status'] = !deliveryAudit || deliveryAudit.status === 'running'
+    ? 'warn'
+    : deliveryAudit.status;
 
   const checks: QualityCheck[] = [
     {
@@ -63,7 +68,7 @@ export function evaluateQuality(
       score: materialScore,
       status: status(materialScore),
       detail: webHero
-        ? `hex-knit·optical glass·polymer ${metrics?.surfaces.distinctFinishes ?? 0}종 · inferred ${metrics?.inferredDetailParts ?? 0}`
+        ? `hex-knit·optical glass·polymer ${metrics?.surfaces.distinctFinishes ?? 0}종 · 주름 ${metrics?.garmentWrinkles?.affectedVertices ?? 0} verts / max ${metrics?.garmentWrinkles?.maximumDisplacementMm.toFixed(2) ?? '—'} mm · inferred ${metrics?.inferredDetailParts ?? 0}`
         : '피부·슈트·헤어의 물리 기반 재질 분리',
     },
     {
@@ -77,12 +82,14 @@ export function evaluateQuality(
     },
     {
       id: 'export',
-      label: 'GLB 내보내기',
-      score: webHero ? 94 : exportScore,
-      status: status(exportScore),
-      detail: webHero
-        ? `표준 glTF 2.0 · ${metrics?.namedDetailParts ?? 0}개 명명 부품 · CharacterIR 근거 메타데이터`
-        : '표준 glTF 2.0 장면과 CharacterIR 메타데이터',
+      label: 'GLB 왕복 호환성',
+      score: exportScore,
+      status: exportStatus,
+      detail: deliveryAudit
+        ? deliveryAudit.status === 'blocked'
+          ? `재열기 실패 · ${deliveryAudit.blockers.join(' · ')}`
+          : `${deliveryAudit.source?.meshes ?? 0}개 메시 재열기 · 이름 ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm`
+        : 'GLB를 다시 열어 노드·삼각형·단위·포락을 검증하는 중',
     },
   ];
 
@@ -101,6 +108,7 @@ export function evaluateProductQuality(
   evidence?: ReferenceEvidence,
   metrics?: ProductMetrics,
   assemblyIR?: AssemblyIR,
+  deliveryAudit?: DeliveryAudit,
 ): QualityReport {
   const isKnife = spec.kind === 'ornate-knife';
   const isImportedAssembly = Boolean(assemblyIR);
@@ -125,9 +133,10 @@ export function evaluateProductQuality(
     : Math.round(Math.max(0, isKnife
       ? 98 - Math.abs(ratio - 4.56) * 9 - Math.abs(spec.depthMm - 22) * 0.7
       : 98 - Math.abs(ratio - 2.085) * 34 - Math.abs(spec.depthMm - 8.25) * 1.8));
+  const missingReconstructionEvidence = !assemblyIR && !isKnife && !evidence;
   const baseReferenceFidelityScore = evidence
     ? Math.min(envelopeScore, evidence.portraitSuitability)
-    : envelopeScore;
+    : missingReconstructionEvidence ? 45 : envelopeScore;
   const referenceFidelityScore = isArchitectural && detailAudit && !detailAudit.pass
     ? Math.min(59, baseReferenceFidelityScore)
     : baseReferenceFidelityScore;
@@ -154,6 +163,10 @@ export function evaluateProductQuality(
       : connectivity
         ? Math.round(Math.min(connectivity.productionReady ? 99 : 89, 78 + connectionDocumentation * 16))
         : 52;
+  const exportScore = deliveryAudit?.score ?? 65;
+  const exportStatus: QualityCheck['status'] = !deliveryAudit || deliveryAudit.status === 'running'
+    ? 'warn'
+    : deliveryAudit.status;
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
@@ -166,7 +179,7 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '실측 도면 근거' : isImportedAssembly ? '부품 근거 완성도' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '실측 도면 근거' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
@@ -175,7 +188,10 @@ export function evaluateProductQuality(
           ? `도면 외곽 ${detailAudit.footprintVerified ? '검증됨' : '미검증'} · 근거 ${Math.round(detailAudit.evidenceCoverage * 100)}% · ${detailAudit.blockers.length ? detailAudit.blockers.join(' · ') : '빈 공간·돌출부 회귀 통과'}`
         : isImportedAssembly && engineering
           ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
-          : isImportedAssembly ? envelopeLabel : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 기준 포락 검사`,
+        : isImportedAssembly ? envelopeLabel
+          : missingReconstructionEvidence
+            ? '절차형 내부 부품 데모 · 고객 도면/데이터시트/분해 근거가 없어 실물 일치 판정 BLOCKED'
+            : `${spec.widthMm} × ${spec.heightMm} × ${spec.depthMm} mm 디자인 의도 포락 검사`,
     },
     {
       id: 'materials',
@@ -207,10 +223,14 @@ export function evaluateProductQuality(
     },
     {
       id: 'export',
-      label: 'GLB/BOM 내보내기',
-      score: 95,
-      status: 'pass',
-      detail: 'glTF 노드 이름과 AssemblyIR 메타데이터 동시 보존',
+      label: 'GLB 왕복·플랫폼 호환성',
+      score: exportScore,
+      status: exportStatus,
+      detail: deliveryAudit
+        ? deliveryAudit.status === 'blocked'
+          ? `재열기 실패 · ${deliveryAudit.blockers.join(' · ')}`
+          : `${deliveryAudit.source?.meshes ?? 0}개 메시 · ${deliveryAudit.source?.triangles.toLocaleString() ?? '—'} tris · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm · ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% 명명 노드`
+        : '실제 GLB를 메모리에서 다시 열어 Blender·Unity·Unreal 공통 glTF 구조를 검증하는 중',
     },
   ];
   const base = checks.reduce((sum, check) => sum + check.score, 0) / checks.length;

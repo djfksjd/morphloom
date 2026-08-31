@@ -121,8 +121,21 @@ function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pa
   return 0;
 }
 
-const textureCache = new Map<string, { albedo: THREE.DataTexture; normal: THREE.DataTexture; roughness: THREE.DataTexture }>();
+const textureCache = new Map<string, { albedo: THREE.Texture; normal: THREE.Texture; roughness: THREE.Texture }>();
 const MAX_SHARED_SURFACE_MAPS = 96;
+
+function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
+  if (typeof document !== 'undefined') {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Surface texture canvas is unavailable.');
+    context.putImageData(new ImageData(new Uint8ClampedArray(data), size, size), 0, 0);
+    return new THREE.CanvasTexture(canvas);
+  }
+  return new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
+}
 
 function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]) {
   const key = `${finish}:${scale[0]}:${scale[1]}`;
@@ -131,7 +144,10 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
   const size = 64;
   const albedoData = new Uint8Array(size * size * 4);
   const normalData = new Uint8Array(size * size * 4);
-  const roughnessData = new Uint8Array(size * size * 4);
+  // glTF stores roughness in G and metalness in B of one shared texture.
+  // Keeping those channels in one texture avoids GLTFExporter merging one
+  // texture per material and preserves each material's scalar metalness.
+  const metallicRoughnessData = new Uint8Array(size * size * 4);
   const seed = [...finish].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const pattern = SURFACE_LIBRARY[finish].pattern;
   for (let y = 0; y < size; y += 1) {
@@ -148,14 +164,14 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
       normalData[offset + 3] = 255;
       const variation = heightAt(x, y, seed + 31, pattern);
       const value = Math.round(THREE.MathUtils.clamp(0.9 + variation * 0.095, 0.76, 1) * 255);
-      roughnessData.set([value, value, value, 255], offset);
+      metallicRoughnessData.set([255, value, 255, 255], offset);
       const fibreContrast = pattern === 'hex-weave' ? 0.19 : 0.055;
       const albedo = Math.round(THREE.MathUtils.clamp(0.86 + variation * fibreContrast, 0.58, 1) * 255);
       albedoData.set([albedo, albedo, albedo, 255], offset);
     }
   }
   const shared = textureCache.size < MAX_SHARED_SURFACE_MAPS;
-  const setup = (texture: THREE.DataTexture, suffix: string) => {
+  const setup = (texture: THREE.Texture, suffix: string) => {
     texture.name = `morphloom_${finish}_${suffix}`;
     texture.userData.morphloomShared = shared;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -166,11 +182,11 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
     texture.generateMipmaps = true;
     texture.needsUpdate = true;
   };
-  const normal = new THREE.DataTexture(normalData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
-  const roughness = new THREE.DataTexture(roughnessData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
-  const albedo = new THREE.DataTexture(albedoData, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
+  const normal = exportSafeTexture(normalData, size);
+  const roughness = exportSafeTexture(metallicRoughnessData, size);
+  const albedo = exportSafeTexture(albedoData, size);
   setup(normal, 'micro_normal');
-  setup(roughness, 'roughness');
+  setup(roughness, 'metallic_roughness');
   setup(albedo, 'albedo');
   albedo.colorSpace = THREE.SRGBColorSpace;
   const maps = { albedo, normal, roughness };
@@ -223,6 +239,7 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     material.normalMap = maps.normal;
     material.normalScale.set(microNormalStrength, microNormalStrength);
     material.roughnessMap = maps.roughness;
+    material.metalnessMap = maps.roughness;
     if (finish === 'hex-knit') material.map = maps.albedo;
   }
   material.name = `${context.materialName} [${finish}]`;

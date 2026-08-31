@@ -3,6 +3,7 @@ import type { CharacterSpec, HandGesture, HumanPack, PoseStyle, ViewMode } from 
 import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { createWebHeroDetails } from './web-hero';
+import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkleReport } from './cloth-wrinkles';
 import {
   deformPointByReferencePose,
   getPoseJoints,
@@ -27,6 +28,7 @@ export interface CharacterMetrics {
   renderedTriangles: number;
   namedDetailParts: number;
   inferredDetailParts: number;
+  garmentWrinkles?: ClothWrinkleReport;
 }
 
 export interface CharacterBuild {
@@ -356,6 +358,9 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   if (pack.uvs) geometry.setAttribute('uv', new THREE.BufferAttribute(pack.uvs.slice(0, topology.boundary * 2), 2));
   geometry.setIndex(new THREE.BufferAttribute(topology.indices.slice(), 1));
   geometry.computeVertexNormals();
+  const garmentWrinkles = spec.outfit === 'web-hero'
+    ? applyPoseDrivenClothWrinkles(geometry, spec.heightCm / 100, spec.pose)
+    : undefined;
   geometry.computeBoundingBox();
   geometry.computeBoundingSphere();
 
@@ -417,6 +422,8 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     spec: structuredClone(spec),
     referencePose: spec.pose === 'reference-action' ? structuredClone(WEB_HERO_REFERENCE_POSE) : undefined,
     visualInterpretation: spec.outfit === 'web-hero' ? structuredClone(WEB_HERO_VISUAL_INTERPRETATION) : undefined,
+    clothWrinkleEvidence: spec.outfit === 'web-hero' ? structuredClone(CLOTH_WRINKLE_EVIDENCE) : undefined,
+    garmentWrinkles,
     poseLandmarkRmsMeters: metrics.poseLandmarkRmsMeters,
   };
   root.add(body);
@@ -445,6 +452,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     renderedTriangles: Math.round(renderedTriangles),
     namedDetailParts: heroDetails?.namedParts ?? 0,
     inferredDetailParts: heroDetails?.inferredParts.length ?? 0,
+    garmentWrinkles,
   };
   root.userData.surfaceSystem = completeMetrics.surfaces;
   return { root, body, rig, metrics: completeMetrics };

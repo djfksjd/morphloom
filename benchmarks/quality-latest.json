@@ -1,0 +1,118 @@
+{
+  "schema": "morphloom.quality-benchmark/0.2",
+  "generatedAt": "2026-08-31T15:35:44.459Z",
+  "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
+  "counts": {
+    "lockedCases": 4,
+    "releaseIntended": 2,
+    "expectedRejections": 2
+  },
+  "requiredRates": {
+    "overall": 1,
+    "technical": 1,
+    "decision": 1,
+    "modelRelease": 1,
+    "deliveryRelease": 1,
+    "rejectionSafety": 1
+  },
+  "rates": {
+    "overall": 1,
+    "technical": 1,
+    "decision": 1,
+    "modelRelease": 1,
+    "deliveryRelease": 1,
+    "rejectionSafety": 1
+  },
+  "cases": [
+    {
+      "id": "ornate-knife-product-visualization",
+      "domain": "product",
+      "topologyPass": true,
+      "evidenceScore": 90,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "84a214bcfbb6ed45",
+      "repeatedFingerprint": "84a214bcfbb6ed45",
+      "inputFingerprint": "ef286dacb55aa8ab",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "release",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": true,
+      "deliveryReady": true,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 98,
+      "blockers": []
+    },
+    {
+      "id": "laurel-homes-architectural-review",
+      "domain": "architecture",
+      "topologyPass": true,
+      "evidenceScore": 87,
+      "surfaceCoverage": 0.40498442367601245,
+      "domainChecksPass": true,
+      "firstFingerprint": "0c7d66c30a07c138",
+      "repeatedFingerprint": "0c7d66c30a07c138",
+      "inputFingerprint": "949498dfb4498bfe",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "release",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": true,
+      "deliveryReady": true,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 88,
+      "blockers": []
+    },
+    {
+      "id": "cooling-service-assembly",
+      "domain": "service-assembly",
+      "topologyPass": true,
+      "evidenceScore": 52,
+      "surfaceCoverage": 0.9285714285714286,
+      "domainChecksPass": true,
+      "firstFingerprint": "836692ac9190a847",
+      "repeatedFingerprint": "836692ac9190a847",
+      "inputFingerprint": "6ec786e11cffc829",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "block",
+      "expectedBlockerPrefix": "evidence",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": false,
+      "deliveryReady": false,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 59,
+      "blockers": [
+        "evidence 52/85"
+      ]
+    },
+    {
+      "id": "single-view-character-previs",
+      "domain": "character",
+      "topologyPass": true,
+      "evidenceScore": 35,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "62dea3ed84c01e88",
+      "repeatedFingerprint": "62dea3ed84c01e88",
+      "inputFingerprint": "893bfeb29526d310",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "block",
+      "expectedBlockerPrefix": "evidence",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": false,
+      "deliveryReady": false,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 59,
+      "blockers": [
+        "evidence 35/85"
+      ]
+    }
+  ]
+}

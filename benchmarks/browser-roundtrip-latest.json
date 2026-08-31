@@ -1,0 +1,76 @@
+{
+  "schema": "morphloom.browser-roundtrip/0.2",
+  "observedAt": "2026-08-31T13:47:00Z",
+  "environment": "local Chromium via Playwright CLI, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
+  "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
+  "console": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "assets": [
+    {
+      "id": "laurel-homes-architectural-review",
+      "status": "pass",
+      "sceneFingerprint": "0c7d66c30a07c138",
+      "inputFingerprint": "949498dfb4498bfe",
+      "glbDisplaySize": "18.22 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": true,
+      "scope": "architectural-shell-only"
+    },
+    {
+      "id": "galaxy-fold8-exterior",
+      "status": "pass",
+      "sceneFingerprint": "4738bda241c7cde5",
+      "glbDisplaySize": "2.23 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "exterior-only; unpublished evidence gated"
+    },
+    {
+      "id": "cooling-service-assembly",
+      "status": "pass",
+      "sceneFingerprint": "98362b3d9ead8212",
+      "inputFingerprint": "6ec786e11cffc829",
+      "glbDisplaySize": "12.85 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "digital assembly; bench and hidden-geometry gates blocked"
+    },
+    {
+      "id": "procedural-phone-assembly",
+      "status": "pass",
+      "sceneFingerprint": "def260fc0b231d64",
+      "glbDisplaySize": "7.77 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "procedural demo without customer evidence"
+    },
+    {
+      "id": "ornate-knife-product-visualization",
+      "status": "pass",
+      "sceneFingerprint": "84a214bcfbb6ed45",
+      "inputFingerprint": "ef286dacb55aa8ab",
+      "glbDisplaySize": "696.6 KB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": true,
+      "scope": "explicit-dimension design intent"
+    },
+    {
+      "id": "single-view-character-previs",
+      "status": "pass",
+      "sceneFingerprint": "724117832ec257be",
+      "inputFingerprint": "893bfeb29526d310",
+      "glbDisplaySize": "1.99 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "single-view likeness evidence blocked"
+    }
+  ]
+}

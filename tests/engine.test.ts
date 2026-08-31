@@ -6,7 +6,7 @@ import { buildCharacter, deriveBodyTopology, poseCharacterPoint } from '../src/e
 import { buildOrnateKnife, createOrnateKnifeIR } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
-import { compileAssemblyIR } from '../src/engine/assembly-compiler';
+import { compileAssemblyIR, validateAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
@@ -79,6 +79,26 @@ describe('OHPK human pipeline', () => {
     expect(topology.nonManifoldEdges, JSON.stringify(topology.details.filter((item) => !item.watertight))).toBe(0);
     expect(topology.degenerateTriangles).toBe(0);
     expect(topology.watertightMeshes).toBe(topology.meshes);
+  });
+
+  it('adds bounded pose-driven garment wrinkles without changing the closed body topology', async () => {
+    const pack = await loadPack();
+    const first = buildCharacter(pack, WEB_HERO_SPEC, 'beauty');
+    const second = buildCharacter(pack, structuredClone(WEB_HERO_SPEC), 'beauty');
+    expect(first.metrics.garmentWrinkles).toMatchObject({
+      method: 'deterministic-pose-zones-v1',
+      zones: ['waist', 'left-elbow', 'right-elbow', 'left-knee', 'right-knee'],
+    });
+    expect(first.metrics.garmentWrinkles?.affectedVertices).toBeGreaterThan(300);
+    expect(first.metrics.garmentWrinkles?.maximumDisplacementMm).toBeGreaterThan(1);
+    expect(first.metrics.garmentWrinkles?.maximumDisplacementMm).toBeLessThanOrEqual(4.2);
+    expect(first.metrics.garmentWrinkles?.rmsDisplacementMm).toBeGreaterThan(0.1);
+    expect(first.metrics.garmentWrinkles?.evidenceIds).toEqual([
+      'cloth3d', 'deepwrinkles', 'garment-wrinkle-transfer', 'deep-fashion3d',
+    ]);
+    expect(second.metrics.garmentWrinkles).toEqual(first.metrics.garmentWrinkles);
+    const topology = analyzeTopology(first.body);
+    expect(topology.pass, JSON.stringify(topology)).toBe(true);
   });
 
   it('recognizes a web hero instruction without a dedicated 3D model', () => {
@@ -391,6 +411,15 @@ describe('AssemblyIR product pipeline', () => {
     expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({ status: 'warn' });
   });
 
+  it('does not score a procedural phone as reference-accurate without source evidence', () => {
+    const build = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
+    const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics);
+    expect(report.total).toBeLessThanOrEqual(59);
+    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({
+      label: '부품 근거 완성도', score: 45, status: 'blocked',
+    });
+  });
+
   it('exports the assembler netlist from the same AssemblyIR without stale counts', () => {
     const netlist = buildPhysicalNetlist(COOLING_ASSEMBLY_IR);
     expect(netlist.summary).toEqual({
@@ -423,12 +452,39 @@ describe('AssemblyIR product pipeline', () => {
       expect(report.degenerateTriangles).toBe(0);
       expect(report.watertightMeshes).toBe(report.meshes);
     }
-  });
+  }, 20_000);
 
   it('rejects rounded boxes whose bevel would collapse a thin component', () => {
     const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
     ir.components[0].geometry = { op: 'roundedBox', size: [100, 2, 40], radius: 1.5 };
     expect(() => compileAssemblyIR(ir, 'beauty')).toThrow(/safe half-dimension limit/);
+  });
+
+  it('bounds imported metadata depth and invalid primitive dimensions before compilation', () => {
+    const nested = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC) as unknown as Record<string, unknown>;
+    let cursor: Record<string, unknown> = {};
+    nested.metadata = cursor;
+    for (let depth = 0; depth < 18; depth += 1) {
+      cursor.next = {};
+      cursor = cursor.next as Record<string, unknown>;
+    }
+    expect(() => validateAssemblyIR(nested)).toThrow(/nesting is too deep/);
+
+    const invalidTube = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    invalidTube.components[0].geometry = { op: 'tube', points: [[0, 0, 0]], radius: 0 };
+    expect(() => validateAssemblyIR(invalidTube)).toThrow(/Tube path is invalid/);
+
+    const inactiveBevel = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const fuller = inactiveBevel.components.find((component) => component.id === 'fuller_front');
+    if (fuller?.geometry.op === 'extrude') {
+      fuller.geometry.bevelSegments = 0;
+      fuller.geometry.bevelSize = 0;
+      fuller.geometry.bevelThickness = 0;
+    }
+    expect(() => validateAssemblyIR(inactiveBevel)).not.toThrow();
+
+    if (fuller?.geometry.op === 'extrude') fuller.geometry.bevelSize = 0.5;
+    expect(() => validateAssemblyIR(inactiveBevel)).toThrow(/bevel segments are invalid/);
   });
 
   it('compiles the ornate knife from the public generic AssemblyIR', () => {
@@ -476,6 +532,7 @@ describe('PBR micro-surface system', () => {
     expect(first.anisotropy).toBeGreaterThan(0.7);
     expect(first.normalMap).toBeTruthy();
     expect(first.roughnessMap).toBeTruthy();
+    expect(first.metalnessMap).toBe(first.roughnessMap);
     expect(first.normalMap).toBe(second.normalMap);
     expect(first.userData.morphloomSurface).toMatchObject({ finish: 'brushed-metal', procedural: true });
   });

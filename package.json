@@ -11,9 +11,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "benchmark": "vite-node scripts/benchmark.ts",
+    "quality:gate": "vite-node scripts/quality-gate.ts",
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
+    "fflate": "^0.8.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "three": "^0.179.1"

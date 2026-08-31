@@ -59,15 +59,24 @@ Review in this order because later polish cannot repair earlier interpretation e
 6. **Surface response:** material boundaries, grazing highlights, texture scale, transparency, and micro-detail.
 7. **Topology and export:** closed/manifold expectations, edit-unit names, transforms, bounds, and GLB/IR consistency. Reopen the GLB and compare part/material counts, units, transforms, and bounds with the IR.
 
+The export score must come from the bytes that will actually be delivered. Export the beauty asset to binary glTF, reopen those bytes with an independent glTF loader, and compare mesh count, triangle count, named-node coverage, finite transforms, and bounds drift. A hard-coded export score or a successful download click is not evidence. Block delivery on count drift, non-finite transforms, less than 95% named-node coverage, or more than 0.1 mm bounds drift. Record the output byte size and structural fingerprint.
+
+Compile the same locked IR twice and compare structural/material fingerprints. A mismatch blocks reproducibility until the nondeterministic source is identified. Benchmarks must report model-ready and delivery-ready separately; browser GLB round-trip proof is required for the latter.
+
 For each failed gate, correct the IR rather than compensating with the camera or renderer, regenerate the affected proof views, and rerun the gate. Use explicit tolerances for contour/landmark reprojection, feature counts, and dimensional deviation when the evidence supports them. A pass requires no evidence-supported blocker, no unresolved visible-feature row, and no obvious signature mismatch at the intended viewing distance. Missing evidence may downgrade hidden geometry, exact dimensions, internals, or readiness claims; it does not excuse lower detail in visible regions. When a blocker cannot be resolved without missing evidence, deliver only the appropriate editable-base claim and list the exact missing view, measurement, datasheet, survey, or physical test.
 
 ## Required delivery evidence
 
 - Editable source IR and compiled GLB.
+- A self-contained asset pack containing GLB, source IR, quality report, evidence boundary, preview, and measured local build/storage telemetry.
 - Same-view source comparison or overlay for visual inputs.
 - Exterior completeness views for every modeled side, clearly labeling evidence-free sides as inferred, plus diagnostic close-ups or X-Ray views for relevant hidden relationships.
 - Machine-readable topology, surface-coverage, evidence, and domain-specific gate results.
 - A concise boundary statement separating passed qualities from evidence-limited qualities.
+
+GLB is the authoritative interchange for Blender, Unity, and Unreal. OBJ/STL exports are mesh references for DCC/CAD import and must never be described as parametric STEP/BREP manufacturing CAD. Figma receives a 2D SVG inspection/reference sheet; do not imply that Figma has received the editable 3D asset.
+
+The local viewer must not upload customer evidence. Imported IR is memory-only, size-bounded, explicitly clearable, and automatically expires. LLM cost is reported only when provider usage is actually present; otherwise label it unobserved instead of inventing a price. Compile time, round-trip time, GLB bytes, geometry bytes, texture bytes, and estimated render memory are measured locally.
 
 ## Stop conditions
 

@@ -2,266 +2,142 @@
 
 # MORPHLOOM
 
-### 이미지와 언어를 편집 가능한 3D 에셋으로 직조하는 로컬 오픈소스
-
-**Codex 또는 Claude 하나만 사용합니다. Meshy·Tripo·전용 3D 생성 모델·외부 3D MCP는 필요하지 않습니다.**
+### Codex 또는 Claude로 만드는 편집 가능한 로컬 3D 에셋
 
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-40%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-61%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
-![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
+![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
 </div>
 
----
+Morphloom은 사진, 도면, 실측값, 데이터시트와 자연어 설명을 `CharacterIR` 또는 `AssemblyIR`로 정리한 뒤 Three.js 메시로 컴파일합니다.
 
-Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽어 공통 `CharacterIR` 또는 `AssemblyIR`을 작성하고, 브라우저의 결정론적 Three.js 엔진이 실제 메시를 컴파일하는 방식입니다. 결과물은 단일 렌더가 아니라 **부품 이름·실물 단위·재질·토폴로지·전기 연결 정보를 가진 편집 가능한 GLB**입니다.
+Meshy 같은 전용 3D 생성 모델 없이 **Codex 또는 Claude 하나**로 작업하며, 결과는 브라우저에서 검수하고 여러 3D 형식으로 저장합니다.
 
-> 현재 상태는 `v0.4 alpha`입니다. 충분한 복합 근거에서 검수를 최소화한 준실무 편집 에셋을 목표로 합니다. 제조 승인 CAD, 인물 스캔, 회로 설계 검증을 대체한다고 주장하지 않습니다.
+> 현재 버전은 `v0.4 alpha`입니다. 준실무 편집 베이스를 목표로 하며 제조 승인 CAD, 인물 스캔, 회로 안전 검증을 대체하지 않습니다.
 
-## 핵심 결과
-
-| 에셋 | 검증된 결과 |
-|---|---:|
-| 사실적 인체 베이스 | 14,517 skin vertices · 38개 거시/치수 모프 |
-| 단일 사진 웹 히어로 | 48,156 tris · 139개 명명 상세 · 참조 액션 포즈 · `hex-knit`/렌즈/웹 PBR 분리 |
-| 스마트폰 분해도 | 164개 독립 부품 · 142,480 tris · 카메라 부품 39개 · watertight 220/220 메시 |
-| 스마트폰 배선 | 개별 도체 28/28 연결 · 필수 포트 56/56 · 부유 끝 0 |
-| 스마트폰 표면 | PBR finish 13종 · micro-normal 219/220 · 이방성 반사 재질 111개 |
-| 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
-| 첨부 이미지 파생 냉각 장치 | 97개 원본 부품 → 172개 렌더 부품 · watertight 322/322 메시 · 개별 도체 75/75 · 물리 포트 150/150 |
-| HABS 건물 실측도면 | 17′4″ × 13′10″ 셸 · 116개 명명 부재 · 108,432 tris · watertight 116/116 메시 |
-| HABS 공동주택 전체 기준층 | 4층·36세대 기록 → 9세대 기준층 · U자 후퇴 공간 1개 · 반대편 중앙 날개 · 321개 부재 · 188,748 tris |
-| 출력 | GLB · PNG · CharacterIR/AssemblyIR · 물리 Netlist JSON |
-
-## 사진을 넣으면 바로 3D가 만들어지나요?
-
-정확히는 두 단계입니다.
+## 작동 방식
 
 ```text
-사진 + 실제 치수
-      ↓  Codex 또는 Claude가 시각 근거를 판독
-CharacterIR / AssemblyIR
-      ↓  Morphloom 로컬 컴파일러
-메시 + 재질 + 부품 트리 + 배선 + 품질 게이트
-      ↓
-GLB + PNG + IR
+사진 · 도면 · 치수 · 데이터시트 · 자연어
+                    ↓ Codex / Claude
+         CharacterIR / AssemblyIR
+                    ↓ Morphloom
+      3D 메시 · PBR 재질 · 부품 · 배선
+                    ↓
+        로컬 검수 · 실측 · 내보내기
 ```
 
-- 사진과 자연어 요구사항은 웹 폼이 아니라 저장소를 연 **Codex 또는 Claude의 개발/CLI 대화**에 직접 전달합니다.
-- 에이전트는 사진 수를 세지 않고 설계도·치수·데이터시트·스캔·기존 CAD·사진이 해결하는 형상, 깊이, 스케일, 재질과 부품 관계를 판독해 `CharacterIR` 또는 `AssemblyIR`을 작성합니다.
-- 로컬 웹은 생성 명령을 받지 않는 결과 전용 뷰어입니다. 모델 선택, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, 부품 검사, 두 점 실측과 내보내기를 제공합니다.
-- 별도 API 키나 브라우저 내부 LLM 호출은 필요하지 않습니다. `OPEN RESULT`는 CLI가 만든 AssemblyIR JSON을 검수할 때만 사용합니다.
-- `CharacterIR 0.2`는 LLM의 시각 판단을 단순 문장으로 버리지 않습니다. 체형·복부·가슴·둔부·전방 머리·무게중심·손동작을 수치 제어값으로 보존하고, 화면 좌우와 해부학적 좌우를 별도로 기록합니다.
-- 만들어진 IR을 `LOAD IR`로 열면 실제 메시가 컴파일되고, 실패한 토폴로지·빈 포트·떠 있는 전선은 품질 게이트에서 차단됩니다.
-- OpenAI의 공식 API도 텍스트·이미지 입력과 JSON 출력을 지원하지만, Morphloom 기본 경로는 별도 API 키 없이 현재 코딩 에이전트를 사용합니다. [OpenAI 공식 문서](https://developers.openai.com/api/reference/cli/resources/responses/methods/create)
+- 생성 지시는 Codex/Claude 개발 대화에서 자연어로 입력합니다.
+- 로컬 웹은 생성 폼이 아니라 **결과 검수 전용 화면**입니다.
+- 자료 개수는 고정하지 않습니다. 필요한 형상·크기·재질을 설명할 근거가 충분하면 됩니다.
+- 근거가 부족한 부분은 임의로 통과시키지 않고 `estimated` 또는 `inferred`로 남깁니다.
 
-### 이번 첨부 이미지 점검
+## 빠른 시작
 
-사용자가 제공한 2038×1268 전자 냉각 어셈블리 이미지와 `new-chat`의 엔지니어링 뷰를 실제 회귀 사례로 사용했습니다. `COOLER / 03`은 듀얼 TEC·독립 전력 감시·MOSFET·열퓨즈, 개방형 공용 팬, 8점 NTC, ADC/MUX/수동소자, 실제 핀명과 AWG를 가진 하네스로 재구성됩니다. 화면 숫자는 AssemblyIR에서 직접 계산하므로 문서와 모델이 따로 어긋나지 않습니다.
-
-| 판정 항목 | 결과 |
-|---|---:|
-| 원본 해상도 | 2038×1268 |
-| 구조 부품 | 97 |
-| 렌더 부품 | 172 |
-| 삼각형 | 272,560 |
-| 개별 도체 | 75/75 연결 |
-| 필수 전기 포트 | 150/150 연결 |
-| 떠 있는 전선 / 열린 필수 포트 | 0 / 0 |
-| 실제 부품 위 포트 | 150/150 |
-| 물리 핀명 / 선재 규격 / 검증 근거 | 150/150 · 75/75 · 75/75 |
-| 동적 분해 시 전선 끝점 | live anchor · 정지 시 메시 재생성 없음 |
-| 실물 벤치 게이트 | 극성 도체 6개 · 필수 검사 5개 대기 |
-| 단자 중심 최대 오차 | 0.0001 mm 미만 |
-
-디지털 연결·토폴로지 검사는 통과하지만, 보이지 않는 바닥면, 정확한 체결 구조, 실제 PCB 패턴과 배선 경로는 사진 한 장으로 측정할 수 없어 `inferred`로 남습니다. 따라서 실물 도통·극성·안전정지 검사가 끝날 때까지 `productionReady`는 `false`이며 품질 화면도 이를 숨기지 않습니다. 원본 이미지는 권리가 불명확해 저장소에 재배포하지 않습니다.
-
-### 건물 실측도면 회귀 테스트
-
-미국 의회도서관의 공개 HABS 자료인 [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet)를 건축 셸 회귀 사례로 사용합니다. 도면과 기록에 명시된 외곽 `17′4″ × 13′10″`, 창 `2′0″ × 2′9″`, 문 `2′6″ × 5′11″`는 `measured/datasheet`로 보존하고, 도면에 없는 벽 높이·지붕 경사는 `estimated`로 분리합니다. 현재 결과는 116개 명명 부재, 108,432 tris, 경계·비매니폴드·퇴화 삼각형 0이며 건축 셸은 통과하지만 구조해석·기초·MEP·현장 시공 검증은 포함하지 않습니다.
-
-단순 주택보다 복잡한 검증에는 [Laurel Homes Historic District, Building B · HABS OH-2468-A](https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf)의 실제 공동주택 도면을 사용합니다. 기록상 건물은 4층·36세대이며 한 층에 9세대와 3개 계단실이 있습니다. Morphloom 프리셋은 `139′ × 46′4″` 외곽과 `27′ × 17′6″` 중앙 날개를 실측값으로 유지합니다. 바닥을 하나의 직사각형으로 채우지 않고 남측 연결 바·북측 양쪽 끝 날개·반대편인 남측 중앙 날개의 4개 슬래브로 나눠, 도면의 큰 U자 후퇴 공간과 돌출 출입구를 실제 기하로 보존합니다. 각 세대의 거실·침실·주방·욕실·통로 45개 공간, 외벽·창호·칸막이·발코니·66개 계단 디딤판도 독립 부재입니다. 결과는 321개 부재, 188,748 tris, watertight 321/321이며, 도면 근거 242개와 높이·세부 형상 추정 79개를 분리 기록합니다. `planFootprintVerified`가 꺼지거나, 슬래브 분할이 사라지거나, 양쪽 끝 날개와 중앙 날개가 같은 방향에 놓이면 품질 점수가 자동으로 `BLOCKED`됩니다.
-
-이 결과는 **실제 도면을 편집 가능한 공간 모델로 옮길 수 있는지 확인하는 건축 시각화 회귀 사례**입니다. 아직 BIM 객체·구조 계산·배관/전기·법규·시공 허용오차를 포함하는 준공 모델은 아닙니다.
-
-## 30초 실행
+필요 환경: Node.js 20.19 이상
 
 ```bash
-npm ci
+npm install
 npm run dev
 ```
 
-브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Laurel Homes 공동주택 기준층 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
+브라우저에서 [http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다.
 
-### 로컬 뷰어에서 실측
+Codex/Claude 요청 예시:
 
-1. 결과를 열면 `실측 켜짐`이 기본값이며 건물은 `m`, 제품은 `mm`로 시작합니다.
-2. 모델 표면의 시작점 `A`와 끝점 `B`를 차례로 누르고, 화면 위 마커·연결선·치수 라벨을 확인합니다.
-3. `직선거리` 또는 `수직높이`를 고른 뒤 주값과 부호가 있는 `ΔX/ΔY/ΔZ`를 `mm`, `cm`, `m`로 전환해 확인합니다.
-4. Beauty/Clay/Wire/X-Ray를 오가도 측정은 유지됩니다. 세 번째 점은 새 측정을 시작하고 `Esc`는 지우며 `M`은 도구를 켜고 끕니다.
+```text
+이 제품 도면과 사진을 근거로 AssemblyIR을 만들어줘.
+실측값은 measured, 추정값은 estimated로 구분하고
+부품 이름, PBR 표면, 배선 연결, 토폴로지를 검증해줘.
+```
 
-동작은 Fusion의 [Inspect > Measure](https://help.autodesk.com/view/fusion360/ENU/?contextId=DESIGN-INSPECT-MEASURE-CMD)처럼 두 점 선택과 좌표 차이를 한 화면에 보여주도록 구성했습니다. 값은 컴파일된 3D 모델의 표면 좌표이며 현장 측량값이나 시공 인증값은 아닙니다.
+## 로컬 뷰어 기능
 
-- `Laurel Homes Apartments` — 실제 4층·36세대 HABS 도면에서 재구성한 9세대 기준층 컷어웨이
-- `Galaxy Z Fold8` — 삼성 공식 치수와 다각도 사진 기반 Graphite 외관
-- `HABS Measured Cabin` — 공개 실측도면 기반 건축 셸·개구부 회귀 사례
-- `TEC Cooling Assembly` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
-- `Phone Assembly` — 스마트폰 164부품·28개 도체 분해도
-- `Ornate Blade` — 가변 두께 검신과 장식을 가진 단검
-- `Web Hero / Field Human` — CC0 인체 토폴로지와 로컬 모프
+- Beauty · Clay · Wire · X-Ray
+- 정면 · 등각 · 평면 · 후면 보기
+- 드래그 회전과 휠 확대
+- 제품 및 이름 있는 캐릭터 부품 선택·확대
+- 두 점 거리와 수직 높이 측정 (`mm`, `cm`, `m`)
+- GLB 재열기와 포락·삼각형·명명 노드 비교
+- 품질 차단 사유와 근거 범위 표시
+- 로컬 작업 취소·재시도와 결과 저장
 
-검증 명령:
+## 내보내기
+
+| 형식 | 주요 용도 |
+|---|---|
+| GLB | Blender · Unity · Unreal · Godot · 웹 |
+| OBJ | Maya · 3ds Max · Cinema 4D 등 범용 메시 |
+| PLY | Blender · MeshLab · CloudCompare |
+| USDZ | Apple AR Quick Look · Reality Composer |
+| STL | Fusion 360과 3D 프린팅용 메시 참조 |
+| SVG | Figma용 2D 부품·포락 검수 시트 |
+| PNG | 현재 뷰포트 캡처 |
+| ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
+
+OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다.
+
+## 현재 제공되는 예제
+
+| 영역 | 예제 |
+|---|---|
+| 제품 | 164부품 스마트폰 · Galaxy Z Fold8 외관 · 장식 단검 |
+| 전자 조립 | 75개 도체와 150개 물리 포트를 가진 TEC 냉각 어셈블리 |
+| 건축 | HABS 실측 캐빈 · 9세대 공동주택 기준층 |
+| 캐릭터 | 14,517정점 인체 베이스 · 포즈 기반 Web Hero |
+
+제품·건축은 실측과 설계 근거가 충분할수록 정확도가 높아집니다. 캐릭터는 현재 게임 프리비즈와 후편집 베이스 단계입니다.
+
+## 품질 게이트
 
 ```bash
 npm test
-npm run benchmark
+npm run quality:gate
 npm run build
 ```
 
-## 전선이 실제로 연결됐다는 의미
+현재 잠금 벤치마크:
 
-전선은 화면에 보이는 곡선만이 아닙니다. `AssemblyIR.electrical`은 다음 정보를 보존합니다.
+- 전체 합격률: **100% (4/4)**
+- 기술 무결성: **100% (4/4)**
+- 승인·차단 판단 정확도: **100% (4/4)**
+- 납품 대상 모델·브라우저 GLB: **100% (2/2)**
+- 근거 부족 안전 차단: **100% (2/2)**
 
-- 소유 부품, 논리 핀과 조립자가 읽는 실제 패드/커넥터명을 가진 `port`
-- `power`, `ground`, `data`, `rf`, `audio`, `sensor`, `control` 신호 분류
-- 양 끝 포트, 네트, 직경, 색, 차폐, AWG와 `datasheet/design/bench-required` 근거를 가진 개별 `wire`
-- 부품 로컬 좌표에서 계산되는 정확한 단자 위치와 소유 부품 경계 검사
-- 필수 포트 미연결, 존재하지 않는 포트 참조, 신호 불일치, 포트 과부하, 단자 이탈 자동 검사
+100%는 모든 결과물이 완성품이라는 뜻이 아닙니다. 장식 단검과 건축 셸은 승인 사례이며, 냉각 어셈블리와 단일 사진 캐릭터는 기술 검사를 통과했지만 근거 부족을 정확히 차단한 사례입니다.
 
-각 도체는 독립적으로 선택 가능한 폐쇄형 메시입니다. 컴파일러가 전선의 시작·끝 캡 중심과 단자 좌표를 다시 측정하며, 허용 오차를 넘으면 빌드를 실패시킵니다. 부품이 움직이면 해당 전선만 다시 만들고 이전 geometry를 즉시 해제하며, 움직임이 없으면 재생성하지 않습니다. 3D 연결 성공과 실물 도통 성공은 별도 상태입니다.
-
-`SAVE NETLIST`는 같은 AssemblyIR에서 조립자용 연결표를 생성합니다. 따라서 제품명·부품 수·포트 수·도체 수·실제 핀명·AWG·검증 상태·수동 노드·벤치 체크가 3D와 항상 같은 원본을 사용합니다.
-
-## Galaxy Z Fold8 외관 프리셋
-
-`FOLD8 / 04`는 2026 Galaxy Z Fold8 일반형 Graphite의 펼침 외관을 생성합니다. 공식 포락은 펼침 `161.4 × 123.9 × 4.5 mm`, 접힘 `81.9 × 123.9 × 9.7 mm`입니다. 외관만 포함하며 내부 전자부품과 힌지 기어는 의도적으로 제외합니다.
-
-전체 치수·화면·재질·카메라 사양은 [삼성 공식 제품 페이지](https://www.samsung.com/us/smartphones/galaxy-z-fold8/)와 [공식 발표 자료](https://news.samsung.com/global/samsung-galaxy-z-fold8-ultra-fold8-and-flip8foldables-perfected-for-every-way-of-living)를 사용했습니다. [삼성 액세서리 제조용 주요 부품 배치 도면](https://developer.samsung.com/mobile/accessories.html)의 카메라 방향, 포트 구성, NFC 중심과 Ø41 무선충전 코일 위치도 메타데이터에 보존합니다. 공개되지 않은 카메라 링 직경, 버튼 돌출, 포트 피치는 `estimated` 또는 `inferred`로 남습니다. 공식 사진은 근거 URL로만 기록하고 저장소에 재배포하지 않습니다.
-
-## 반사각을 결정하는 PBR 미세 표면
-
-`surface-system.ts`는 단순한 색상 이름 대신 표면의 빛 반응을 컴파일합니다. 현재 20개 finish를 제공합니다.
-
-| Finish | 반사 특성 |
-|---|---|
-| `brushed-metal` | 방향성 가공결 · 높은 anisotropy · 미세 roughness 변화 |
-| `anodized-metal` | 산화 피막 clearcoat · 입자형 micro-normal |
-| `sapphire` | IOR 1.76 · AR iridescence · 얇은 보호창 transmission |
-| `optical-glass` | IOR 1.52 · 저거칠기 · 투과/코팅 반사 |
-| `pcb-soldermask` | 솔더마스크 orange-peel · 낮은 금속성 · 얇은 clearcoat |
-| `machined-copper` | 방향성 절삭결 · 구리 금속 반사 |
-| `rubber`, `leather`, `wood` | 재질별 sheen과 비금속 미세결 |
-| `skin`, `fabric`, `hair` | 피부 미세결, 직물 섬유, 모발 방향성 반사 |
-| `hex-knit` | 육각 직조 높이장·거칠기 변화·sheen을 결합한 슈트 각도 반사 |
-
-- 64×64 절차적 normal/roughness map은 고정 seed로 생성되어 실행마다 동일합니다.
-- 카메라 베젤·사파이어 창·내부 렌즈·플래시·LiDAR는 자동 이름 추정이 아니라 명시적 표면값을 사용합니다.
-- 표면 메타데이터는 material `userData`에 기록되어 GLB에서 finish와 PBR 수치를 추적할 수 있습니다.
-- `Beauty`는 PBR 표면을, `Clay`는 형상을, `X-Ray`는 내부 구조를 점검하는 용도입니다.
-
-현재 값은 물리적으로 타당한 프리셋이지 실제 시편을 고니오리플렉토미터로 측정한 BRDF 데이터는 아닙니다. 특정 제품과 정확히 맞추려면 교차편광 사진, 다중 조명 촬영 또는 제조사 재질 데이터가 추가로 필요합니다.
-
-## Codex 하나로 이미지 → 에셋
-
-저장소에는 [`morphloom-asset-foundry`](./skills/morphloom-asset-foundry/SKILL.md) 스킬이 포함됩니다. 이 스킬은 짧은 요청도 **편집 가능한 고품질 검수 에셋**으로 해석하고, 도면 외곽·빈 공간·돌출부, 화면에 보이는 특징 전수 목록, 부품 관계, 실측/추정 근거, PBR 미세 표면, 토폴로지와 동일 시점 비교 계약으로 자동 확장합니다. 첫 컴파일은 완료가 아니라 검수 체크포인트이며, 근거로 확인 가능한 필수 항목이 모두 통과할 때까지 가장 큰 오차부터 자동 수정·재검증합니다. 따라서 기본 요청은 다음 한 줄이면 됩니다.
-
-```text
-이 사진(또는 도면)으로 편집 가능한 3D 에셋 만들어줘.
-```
-
-스킬 내부의 건축·제품·인체별 규칙이 일반적인 디테일 요구를 대신합니다. 입력은 특정 형식이나 장수가 아니라 **만들 수 있는 근거의 충분성**으로 평가됩니다. 치수가 있는 정투상 설계도 한 장이 여러 시점 사진을 대체할 수 있고, BOM·부품 도면이 분해도를 대체할 수 있습니다. 누락된 정보는 `estimated/inferred`로 분리되며, 핵심 속성이 해결되지 않으면 저품질 결과를 생성하지 않고 필요한 근거만 구체적으로 반환합니다.
-
-`Evidence Pack 0.2`는 파일 개수가 아니라 `shape/depth/scale/surface/interfaces`와 도메인별 내부·배치·포즈 속성의 해결 여부를 기록합니다. `buildReady`는 검수 초벌 컴파일만 허용하고, 모든 필수 속성·치수 충돌·카메라 또는 정투상 근거가 통과한 `deliveryReady`에서만 준실무 납품 후보가 됩니다. 같은 부품의 반복 근거는 안정적인 ASCII `component_id`로 하나의 AssemblyIR 노드에 병합합니다.
-
-## Claude 하나로 사용
-
-`CLAUDE.md`가 같은 스킬과 공급자 중립 계약을 읽도록 구성되어 있습니다. Codex와 Claude 모두 `morphloom.assembly/0.1` 또는 `morphloom.character/0.2`를 사용하므로 에이전트를 바꿔도 메시 엔진은 바뀌지 않습니다.
-
-## 지원 형상 연산
-
-| 연산 | 용도 |
-|---|---|
-| `roundedBox` | 프레임, 칩, 배터리, 외장 |
-| `cylinder`, `sphere`, `torus` | 렌즈, 패스너, 링, 보석 |
-| `extrude` | 측정된 2D 윤곽 판재와 장식 |
-| `lathe` | 손잡이, 폼멜, 회전체 |
-| `tube` | 케이블, 각인, 히트파이프, 나선 래핑 |
-| `bladeLoft` | 길이별 폭·횡단 프로파일을 갖는 가변 두께 칼날 |
-
-모든 AssemblyIR 입력은 mm입니다. 외부 IR은 최대 500개 부품, 2,000개 포트, 2,000개 전선과 제한된 세그먼트·수치 범위로 검증합니다.
-
-## img2threejs 직접 비교
-
-사용자가 지정한 [Talon Knife · Doppler Ruby](https://img2threejs.io/#/x/talon-doppler-ruby)를 공개 기준으로 사용했습니다.
-
-| 항목 | Morphloom Ornate Knife | img2threejs Talon |
-|---|---:|---:|
-| 삼각형 | 18,930 | 약 25,000 |
-| 상위 편집 부품 | 16 | 5 |
-| 가변 두께 칼날 | 예 | 예 |
-| 자동 매니폴드 검사 | 16/16 통과 | 공개 화면에 수치 없음 |
-| 공통 JSON 형상·전기 IR | 예 | 데모별 TypeScript |
-| 사진 추적 실루엣 | 에이전트 입력에 따라 달라짐 | 예, 이 데모의 강점 |
-| 사진 투영 마감 | 예정 | 예, 이 데모의 강점 |
-
-Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론, 자동 토폴로지 증거**에서 더 강합니다. Talon 데모는 **특정 사진과의 실루엣·표면 일치**에서 더 강합니다. 모든 시각 품질에서 이미 우월하다고 과장하지 않습니다.
-
-## 스파이더맨 단일 사진 정직성 테스트
-
-[Wikimedia Commons의 960×1280 코스프레 사진](https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg)(ManoSolo13241324, CC BY-SA 4.0) 한 장을 고정 회귀 자료로 사용했습니다. `ReferencePoseIR`에는 사진에서 직접 찍은 17개 2D 관절과 별도로 추정한 깊이를 기록합니다. `CharacterIR 0.2`의 에이전트 시각 해석에는 **일반인 코스프레, 슬림 소프트 체형, 약한 복부·가슴 볼륨, 작은 둔부, 약한 거북목, 뒤쪽 무게중심, 오른손 선행, 웹 슈팅 손동작**을 신뢰도와 함께 보존합니다. 화면 왼쪽을 인물의 해부학적 오른쪽으로 명시해 손·발 좌우가 뒤집히는 오류도 차단합니다. 팔·다리는 뼈 구간 회전/길이 보정으로 변형하며, 업로드 사진의 전면 적·청 패널 명암을 메시 정점색으로 로컬 투영합니다. 후면은 사진을 복사하지 않고 기존 추정 재질로 남깁니다. 보이는 마스크, 좌우 광학 렌즈, 방사형 웹, 적·청 패널, 가슴 문양은 139개의 이름 있는 편집 단위로 생성되고, 슈트에는 각도에 따라 반사가 달라지는 `hex-knit` albedo/micro-normal/roughness 맵을 적용합니다.
-
-| 같은 시점에서 확인한 항목 | 현재 판정 |
-|---|---|
-| 적색 마스크와 큰 백색 렌즈 | 재구성됨 · 렌즈 IOR/clearcoat 분리 |
-| 적색 중앙 패널·청색 측면 패널 | 재구성됨 · 정점색 기반 편집 가능 |
-| 마스크/흉부 웹과 가슴 문양 | 독립 폐쇄 메시로 재구성됨 |
-| 전진한 손과 비대칭 다리 | 오른손 선행·오른발 전진·왼발 후방 지지 포즈로 재구성됨 |
-| 17개 포즈 랜드마크 | 목표점 RMS 약 18.5 mm · 깊이는 `inferred` |
-| 업로드 사진 전면 표면 | 적·청 계열만 정점색 투영 · 배경/후면 복사 차단 |
-| 육각 직조 질감 | 절차적 `hex-knit` PBR로 추정 |
-| 정확한 손가락 제스처·피부 웨이트 | 아직 생산 기준 미달 |
-| 후면 패턴·실제 봉제선·정확한 원단 피치 | 사진에 없어 `inferred` |
-
-**결론:** 게임 프리비즈와 후편집 베이스로는 이전의 일반 인체 출력보다 분명히 고도화됐지만, 한 장만으로 동일 인물·정확한 손가락·후면까지 자동 복원하는 완성품은 아닙니다. 실무 납품 전 검수를 작게 만들려면 정면·후면·좌·우, 손 근접, 마스크·원단 매크로 사진과 실제 키를 추가해야 합니다. 한 장만 있거나 동일 시점 비교가 없으면 UI 총점은 최대 `59/100`으로 제한되고 `BLOCKED`를 표시합니다. 삼각형 수나 재질 수만으로 사진 유사도를 통과시키지 않습니다.
+상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md)
 
 ## 현재 한계
 
-- 한 장의 사진만으로 숨은 부품, 정확한 두께, 공차, 핀 배열을 측정할 수 없습니다.
-- 현재 배선 검사는 기하·포트·핀명·AWG·검증 근거 연결성 검사이며, SPICE 시뮬레이션·PCB ERC·실물 도통 검사를 대신하지 않습니다.
-- 사람은 편집 가능한 사실적 베이스 단계입니다. 얼굴 동일성, 실제 skin weights, facial rig, 의상 시뮬레이션은 다음 품질 게이트입니다.
-- 사진 기반 de-light, 다중 시점 카메라 캘리브레이션, UV atlas/bake, LOD, 충돌 메시, Blender/Unity/Unreal 왕복 검증이 남아 있습니다.
+- 한 장의 사진만으로 숨은 형상, 정확한 두께와 후면을 측정할 수 없습니다.
+- 사람 얼굴 동일성, 정확한 손가락, 스킨 웨이트와 의류 시뮬레이션은 아직 완성 단계가 아닙니다.
+- 포즈 기반 의류 주름과 micro-normal은 지원하지만 실제 원단 스캔을 대체하지 않습니다.
+- 전기 연결 검사는 포트·핀명·AWG·3D 끝점 검사이며 SPICE, PCB ERC, 실물 도통 검사가 아닙니다.
+- 건축 출력은 도면 기반 검수 셸이며 구조해석, MEP와 현장 승인을 포함하지 않습니다.
 
-## 프로젝트 구조
+## 로컬 데이터와 보안
+
+- 뷰어는 입력 파일을 외부 서버로 업로드하지 않습니다.
+- 불러온 IR은 브라우저 메모리에만 있고 새로고침·명시적 제거·30분 만료 시 삭제됩니다.
+- 저장소에 만든 IR, 코드와 원본 자료는 일반 로컬 파일이므로 자동 삭제되지 않습니다.
+- 결과물도 사용자가 저장 버튼을 눌러야 파일로 저장됩니다.
+
+## 주요 폴더
 
 ```text
-src/engine/assembly-compiler.ts  공통 형상 IR 컴파일러
-src/engine/connectivity.ts       포트·네트·개별 도체와 연결성 검사
-src/engine/surface-system.ts     PBR finish·micro-normal·roughness·이방성 반사
-src/engine/reference-set.ts      사진·도면·데이터시트의 역할·해결 속성 매니페스트
-src/engine/evidence-readiness.ts 근거 팩 충돌·buildReady·deliveryReady 판정
-src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
-src/engine/product.ts            스마트폰 164부품 예제
-src/engine/knife.ts              장식 단검 IR 예제
-src/engine/character.ts          CC0 인체 메시·모프·참조 포즈 변형
-src/engine/reference-pose.ts     2D 실측 관절·추정 깊이·뼈 구간 변형
-src/engine/reference-projection.ts 업로드 사진의 전면 슈트 정점색 투영
-src/engine/web-hero.ts           마스크·렌즈·웹·가슴 문양 편집 단위
-src/engine/topology.ts           메시 무결성 검사
-schemas/                         에이전트용 JSON 계약
-benchmarks/                      재현 가능한 수치와 비교 정책
+src/engine/        IR 컴파일·형상·재질·토폴로지·품질 검사
+src/components/    Three.js 결과 뷰어와 내보내기
+schemas/           CharacterIR / AssemblyIR 계약
+skills/            Codex/Claude 작업 지침
+benchmarks/        재현성·품질·브라우저 왕복 결과
+public/assets/     로컬 인체 베이스 팩
 ```
 
 ## 라이선스
 
-코드는 [Apache-2.0](./LICENSE)입니다. 포함된 `oxihuman-core-v1.ohpk` 데이터는 CC0-1.0입니다. 출처와 변경 사항은 [`NOTICE`](./NOTICE)와 provenance 파일에 기록했습니다.
-
----
-
-<div align="center">
-
-**만들 수 있는 근거를 검사하고, 검수를 최소화한 편집 가능 3D 구조로 만듭니다.**
-
-</div>
+코드는 [Apache-2.0](./LICENSE)입니다. 포함된 인체 베이스 데이터는 CC0-1.0이며 출처는 [`NOTICE`](./NOTICE)에 기록되어 있습니다.

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterBuild } from './engine/character';
-import type { ProductBuild, ProductPartInfo } from './engine/product';
+import type { ProductBuild } from './engine/product';
 import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
@@ -11,13 +11,16 @@ import { loadHumanPack } from './engine/ohpk';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { buildPhysicalNetlist } from './engine/netlist';
+import { createOrnateKnifeIR } from './engine/knife';
 import {
   formatMeasurement,
   type MeasurementMode,
   type MeasurementResult,
   type MeasurementUnit,
 } from './engine/measurement';
-import { ResultViewport, type ViewportHandle } from './components/ResultViewport';
+import { ResultViewport, type ExportReceipt, type InspectablePart, type ViewportHandle } from './components/ResultViewport';
+import { ViewportErrorBoundary } from './components/ViewportErrorBoundary';
+import { bytesLabel, type DeliveryAudit, type LocalBuildTelemetry } from './engine/delivery-validation';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from './types';
 
@@ -27,6 +30,8 @@ const MODES: Array<{ id: ViewMode; label: string }> = [
   { id: 'wireframe', label: 'Wire' },
   { id: 'rig', label: 'X-Ray' },
 ];
+
+const IMPORTED_RESULT_TTL_MS = 30 * 60 * 1000;
 
 type ViewerAsset = {
   id: string;
@@ -41,6 +46,18 @@ type ViewerAsset = {
   kind: 'product';
   spec: ProductSpec;
   assemblyIR?: AssemblyIR;
+};
+
+type LocalJobStatus = 'queued' | 'running' | 'complete' | 'failed' | 'cancelled';
+type LocalJob = {
+  id: number;
+  name: string;
+  status: LocalJobStatus;
+  action: () => Promise<ExportReceipt | void>;
+  error?: string;
+  durationMs?: number;
+  outputBytes?: number;
+  fileName?: string;
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
@@ -110,8 +127,12 @@ export function ViewerApp() {
   const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(LAUREL_HOMES_BUILDING_B_IR);
   const [mode, setMode] = useState<ViewMode>('beauty');
   const [buildMetrics, setBuildMetrics] = useState<CharacterBuild['metrics'] | ProductBuild['metrics']>();
-  const [selectedPart, setSelectedPart] = useState<ProductPartInfo>();
+  const [selectedPart, setSelectedPart] = useState<InspectablePart>();
   const [busyAction, setBusyAction] = useState<string>();
+  const [jobs, setJobs] = useState<LocalJob[]>([]);
+  const [deliveryAudit, setDeliveryAudit] = useState<DeliveryAudit>();
+  const [telemetry, setTelemetry] = useState<LocalBuildTelemetry>();
+  const [importedExpiresAt, setImportedExpiresAt] = useState<number>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
   const [measurementEnabled, setMeasurementEnabled] = useState(true);
   const [measurementMode, setMeasurementMode] = useState<MeasurementMode>('distance');
@@ -121,6 +142,12 @@ export function ViewerApp() {
   const [measurementMissed, setMeasurementMissed] = useState(false);
   const viewportRef = useRef<ViewportHandle>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
+  const importExpiryTimerRef = useRef<number | undefined>(undefined);
+  const jobSequenceRef = useRef(0);
+  const jobsRef = useRef<LocalJob[]>([]);
+  const activeJobRef = useRef<LocalJob | undefined>(undefined);
+  const processNextJobRef = useRef<() => void>(() => undefined);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
     let active = true;
@@ -131,6 +158,56 @@ export function ViewerApp() {
       });
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (importExpiryTimerRef.current !== undefined) window.clearTimeout(importExpiryTimerRef.current);
+      viewportRef.current?.cancelExport();
+      jobsRef.current = [];
+    };
+  }, []);
+
+  const syncJobs = useCallback(() => {
+    if (mountedRef.current) setJobs([...jobsRef.current]);
+  }, []);
+
+  processNextJobRef.current = () => {
+    if (activeJobRef.current) return;
+    const next = jobsRef.current.find((job) => job.status === 'queued');
+    if (!next) return;
+    next.status = 'running';
+    const startedAt = performance.now();
+    activeJobRef.current = next;
+    if (mountedRef.current) setBusyAction(next.name);
+    syncJobs();
+    void next.action()
+      .then((receipt) => {
+        if (next.status === 'cancelled') return;
+        next.status = 'complete';
+        if (receipt) {
+          next.outputBytes = receipt.bytes;
+          next.fileName = receipt.fileName;
+        }
+        if (mountedRef.current) setViewerNote(`${next.name} 작업을 완료했습니다. 브라우저 다운로드 목록에서 결과를 확인하세요.`);
+      })
+      .catch((error: unknown) => {
+        if (next.status === 'cancelled') return;
+        next.status = 'failed';
+        next.error = error instanceof Error ? error.message : `${next.name} 작업에 실패했습니다.`;
+        if (mountedRef.current) setViewerNote(next.error);
+      })
+      .finally(() => {
+        next.durationMs = performance.now() - startedAt;
+        activeJobRef.current = undefined;
+        if (mountedRef.current) {
+          setBusyAction(undefined);
+          syncJobs();
+          window.queueMicrotask(() => processNextJobRef.current());
+        }
+      });
+  };
 
   const productMetrics = buildMetrics && 'parts' in buildMetrics && buildMetrics.bounds ? buildMetrics : undefined;
   const productConnectivity = productMetrics?.connectivity;
@@ -144,9 +221,9 @@ export function ViewerApp() {
   const quality = useMemo(() => {
     if (!pack) return undefined;
     return assetKind === 'human'
-      ? evaluateQuality(pack, spec, undefined, characterMetrics)
-      : evaluateProductQuality(productSpec, undefined, productMetrics, assemblyIR);
-  }, [assemblyIR, assetKind, characterMetrics, pack, productMetrics, productSpec, spec]);
+      ? evaluateQuality(pack, spec, undefined, characterMetrics, deliveryAudit)
+      : evaluateProductQuality(productSpec, undefined, productMetrics, assemblyIR, deliveryAudit);
+  }, [assemblyIR, assetKind, characterMetrics, deliveryAudit, pack, productMetrics, productSpec, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
   const productPartCount = productMetrics?.parts;
   const architecturalResult = assemblyIR?.metadata?.assetKind === 'building';
@@ -155,8 +232,11 @@ export function ViewerApp() {
     : buildMetrics?.triangles;
 
   const handleBuilt = useCallback((build: CharacterBuild | ProductBuild) => {
-    setBuildMetrics(build.metrics);
-  }, []);
+    // Clay/wire/X-ray are inspection render modes, not different deliverables.
+    // Keep the quality evidence tied to the beauty/export build so toggling a
+    // viewport aid cannot lower or inflate the product score.
+    if (mode === 'beauty') setBuildMetrics(build.metrics);
+  }, [mode]);
 
   const handleMeasurementChange = useCallback((result: MeasurementResult | undefined, points: 0 | 1 | 2) => {
     setMeasurementResult(result);
@@ -197,12 +277,20 @@ export function ViewerApp() {
     setActiveAssetId(next.id);
     setAssetKind(next.kind);
     setSelectedPart(undefined);
+    setBuildMetrics(undefined);
     setMode('beauty');
     setMeasurementEnabled(next.kind === 'product');
     setMeasurementUnit(next.kind === 'product' && next.assemblyIR?.metadata?.assetKind === 'building' ? 'm' : 'mm');
     setMeasurementResult(undefined);
     setMeasurementPoints(0);
     setMeasurementMissed(false);
+    setDeliveryAudit(undefined);
+    setTelemetry(undefined);
+    setImportedExpiresAt(undefined);
+    if (importExpiryTimerRef.current !== undefined) {
+      window.clearTimeout(importExpiryTimerRef.current);
+      importExpiryTimerRef.current = undefined;
+    }
     if (next.kind === 'human') {
       setSpec(next.spec);
       setAssemblyIR(undefined);
@@ -213,18 +301,96 @@ export function ViewerApp() {
     setViewerNote(`${next.label} 결과를 불러왔습니다.`);
   };
 
-  const runAction = async (name: string, action: () => Promise<void>) => {
-    setBusyAction(name);
-    try {
-      await action();
-    } finally {
-      setBusyAction(undefined);
-    }
+  const clearImportedSession = () => {
+    if (importExpiryTimerRef.current !== undefined) window.clearTimeout(importExpiryTimerRef.current);
+    importExpiryTimerRef.current = undefined;
+    setImportedExpiresAt(undefined);
+    if (activeAssetId === 'imported') selectAsset('laurel-homes');
+    setViewerNote('가져온 결과를 브라우저 메모리에서 제거했습니다. 원본 파일은 서버로 업로드되지 않았습니다.');
   };
+
+  const scheduleImportedExpiry = () => {
+    if (importExpiryTimerRef.current !== undefined) window.clearTimeout(importExpiryTimerRef.current);
+    const expiresAt = Date.now() + IMPORTED_RESULT_TTL_MS;
+    setImportedExpiresAt(expiresAt);
+    importExpiryTimerRef.current = window.setTimeout(() => {
+      importExpiryTimerRef.current = undefined;
+      setImportedExpiresAt(undefined);
+      const fallback = VIEWER_ASSETS[0];
+      setActiveAssetId(fallback.id);
+      setAssetKind(fallback.kind);
+      if (fallback.kind === 'product') {
+        setProductSpec(fallback.spec);
+        setAssemblyIR(fallback.assemblyIR);
+      } else {
+        setSpec(fallback.spec);
+        setAssemblyIR(undefined);
+      }
+      setSelectedPart(undefined);
+      setDeliveryAudit(undefined);
+      setTelemetry(undefined);
+      setViewerNote('가져온 결과가 30분 보존기간 만료로 브라우저 메모리에서 자동 제거되었습니다.');
+    }, IMPORTED_RESULT_TTL_MS);
+  };
+
+  const runAction = (name: string, action: () => Promise<ExportReceipt | void>) => {
+    const unfinished = jobsRef.current.filter((job) => job.status === 'queued' || job.status === 'running').length;
+    if (unfinished >= 6) {
+      setViewerNote('로컬 내보내기 대기열은 최대 6개입니다. 완료 또는 취소 후 다시 시도하세요.');
+      return;
+    }
+    const job: LocalJob = { id: ++jobSequenceRef.current, name, action, status: 'queued' };
+    const retainedUnfinished = jobsRef.current.filter((item) => item.status === 'queued' || item.status === 'running');
+    const retainedFinished = jobsRef.current
+      .filter((item) => item.status !== 'queued' && item.status !== 'running')
+      .slice(-Math.max(0, 7 - retainedUnfinished.length));
+    const retained = retainedUnfinished.concat(retainedFinished);
+    jobsRef.current = [...retained, job];
+    syncJobs();
+    setViewerNote(`${name} 작업을 로컬 대기열에 추가했습니다.`);
+    window.queueMicrotask(() => processNextJobRef.current());
+  };
+
+  const cancelJob = (id: number) => {
+    const job = jobsRef.current.find((item) => item.id === id);
+    if (!job || (job.status !== 'queued' && job.status !== 'running')) return;
+    if (job.status === 'running') viewportRef.current?.cancelExport();
+    job.status = 'cancelled';
+    syncJobs();
+    setViewerNote(`${job.name} 작업을 취소했습니다.`);
+  };
+
+  const retryJob = (id: number) => {
+    const job = jobsRef.current.find((item) => item.id === id);
+    if (!job || job.status !== 'failed') return;
+    runAction(job.name, job.action);
+  };
+
+  const queueLocked = jobs.some((job) => job.status === 'queued' || job.status === 'running');
 
   const activeName = assetKind === 'human'
     ? spec.outfit === 'web-hero' ? 'ML—WEB_HERO_01' : 'ML—HUMAN_BASE'
     : assemblyIR ? assemblyIR.name.toUpperCase() : productSpec.kind === 'smartphone' ? 'ML—PHONE_ASSEMBLY' : 'ML—ORNATE_BLADE';
+  const sourcePayload = assetKind === 'human'
+    ? { schema: 'morphloom.character/0.2', spec, interpretation: spec.outfit === 'web-hero' ? WEB_HERO_VISUAL_INTERPRETATION : undefined }
+    : assemblyIR
+      ?? (productSpec.kind === 'ornate-knife'
+        ? createOrnateKnifeIR(productSpec)
+        : { schema: 'morphloom.product/0.2', units: 'mm', kind: productSpec.kind, spec: productSpec });
+  const sourceFileName = assetKind === 'human'
+    ? 'character-ir.json'
+    : 'components' in sourcePayload ? 'assembly-ir.json' : 'product-spec.json';
+  const evidenceBoundary = assetKind === 'human'
+    ? spec.outfit === 'web-hero'
+      ? 'Single-view character likeness and hidden depth remain evidence-limited; this is an editable previs base.'
+      : 'Procedural editable human base; identity likeness is not claimed.'
+    : productEngineering?.productionReady
+      ? 'All recorded digital and physical release gates pass.'
+      : architecturalResult
+        ? 'Architectural review shell only; survey, structure, MEP and as-built certification are excluded.'
+        : productEngineering?.electricalApplicable
+          ? 'Digital assembly is separate from physical bench continuity and manufacturing approval.'
+          : 'Editable visualization asset; manufacturing STEP/BREP approval is excluded.';
   const primaryMeasurement = measurementResult
     ? measurementMode === 'height' ? measurementResult.heightMeters : measurementResult.distanceMeters
     : undefined;
@@ -248,13 +414,13 @@ export function ViewerApp() {
         </div>
         <div className="result-selector">
           <span>ACTIVE RESULT</span>
-          <select value={activeAssetId} onChange={(event) => selectAsset(event.target.value)} aria-label="검수할 결과 선택">
+          <select disabled={queueLocked} value={activeAssetId} onChange={(event) => selectAsset(event.target.value)} aria-label="검수할 결과 선택">
             {activeAssetId === 'imported' && <option value="imported">Imported AssemblyIR</option>}
             {VIEWER_ASSETS.map((item) => <option value={item.id} key={item.id}>{item.label} — {item.caption}</option>)}
           </select>
         </div>
         <div className="topbar-status">
-          <span><i className="pulse-dot" /> LOCAL · VIEW ONLY</span>
+          <span><i className="pulse-dot" /> LOCAL · NO UPLOAD</span>
           <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
           <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
         </div>
@@ -323,22 +489,26 @@ export function ViewerApp() {
 
           <div className="viewfinder-corners" aria-hidden="true"><i /><i /><i /><i /></div>
           {pack ? (
-            <ResultViewport
-              ref={viewportRef}
-              assetKind={assetKind}
-              pack={pack}
-              spec={spec}
-              productSpec={productSpec}
-              assemblyIR={assemblyIR}
-              mode={mode}
-              measurementEnabled={measurementEnabled}
-              measurementMode={measurementMode}
-              measurementUnit={measurementUnit}
-              onBuilt={handleBuilt}
-              onPartSelected={setSelectedPart}
-              onMeasurementChange={handleMeasurementChange}
-              onMeasurementMiss={() => setMeasurementMissed(true)}
-            />
+            <ViewportErrorBoundary resetKey={activeAssetId}>
+              <ResultViewport
+                ref={viewportRef}
+                assetKind={assetKind}
+                pack={pack}
+                spec={spec}
+                productSpec={productSpec}
+                assemblyIR={assemblyIR}
+                mode={mode}
+                measurementEnabled={measurementEnabled}
+                measurementMode={measurementMode}
+                measurementUnit={measurementUnit}
+                onBuilt={handleBuilt}
+                onPartSelected={setSelectedPart}
+                onMeasurementChange={handleMeasurementChange}
+                onMeasurementMiss={() => setMeasurementMissed(true)}
+                onDeliveryAudit={setDeliveryAudit}
+                onTelemetry={setTelemetry}
+              />
+            </ViewportErrorBoundary>
           ) : (
             <div className="viewport-loading">
               {packError ? <><b>인체 팩 로드 실패</b><span>{packError}</span></> : <><i /><b>결과 뷰어 준비 중</b><span>로컬 메시와 재질을 불러옵니다.</span></>}
@@ -421,11 +591,18 @@ export function ViewerApp() {
             )) ?? <div className="quality-skeleton" />}
           </div>
 
-          {assetKind === 'product' && selectedPart && (
+          {selectedPart && (
             <div className="selected-part-card">
               <span className="eyebrow">selected component</span><b>{selectedPart.name}</b>
               <small>{selectedPart.category.toUpperCase()} · {selectedPart.material} · {selectedPart.surface.toUpperCase()}</small>
               <p>{selectedPart.detail}</p>
+              <div className="selected-part-actions">
+                <button onClick={() => {
+                  const focused = viewportRef.current?.focusPart(selectedPart.id) ?? false;
+                  setViewerNote(focused ? `${selectedPart.name} 부품을 화면에 맞춰 확대했습니다.` : '선택 부품의 표시 경계를 찾지 못했습니다.');
+                }}>FOCUS PART</button>
+                <button onClick={() => viewportRef.current?.fitAsset()}>FIT ASSET</button>
+              </div>
             </div>
           )}
 
@@ -488,11 +665,51 @@ export function ViewerApp() {
             </div>
           )}
 
+          <section className={`delivery-console status-${deliveryAudit?.status ?? 'running'}`} aria-label="내보내기 및 비용 검증">
+            <header>
+              <div><span className="eyebrow">delivery proof</span><b>실제 GLB 재열기</b></div>
+              <em>{deliveryAudit ? deliveryAudit.status.toUpperCase() : 'VERIFYING'}</em>
+            </header>
+            <div className="delivery-grid">
+              <span>FINGERPRINT<b>{deliveryAudit?.fingerprint ?? '계산 중'}</b></span>
+              <span>INPUT KEY<b>{deliveryAudit?.inputFingerprint ?? '계산 중'}</b></span>
+              <span>GLB SIZE<b>{bytesLabel(deliveryAudit?.glbBytes ?? 0)}</b></span>
+              <span>BOUNDS DRIFT<b>{deliveryAudit ? `${deliveryAudit.boundsErrorMm.toFixed(3)} mm` : '—'}</b></span>
+              <span>NAMED NODES<b>{deliveryAudit ? `${Math.round(deliveryAudit.namedNodeCoverage * 100)}%` : '—'}</b></span>
+            </div>
+            <p>{deliveryAudit?.status === 'blocked'
+              ? deliveryAudit.blockers.join(' · ')
+              : 'GLB를 메모리에서 다시 열어 메시·삼각형·명명 노드·포락을 원본과 비교합니다.'}</p>
+          </section>
+
+          <section className="local-telemetry" aria-label="로컬 비용 및 개인정보 추적">
+            <header><span className="eyebrow">local build trace</span><b>비용·보안 경계</b></header>
+            <div>
+              <span>COMPILE<b>{telemetry ? `${telemetry.compileMs.toFixed(1)} ms` : '—'}</b></span>
+              <span>RENDER MEMORY<b>{bytesLabel(telemetry?.estimatedRenderBytes ?? 0)}</b></span>
+              <span>LLM COST<b>BYOK · 미관측</b></span>
+              <span>UPLOAD<b>없음</b></span>
+            </div>
+            <p>뷰어는 파일을 서버로 보내거나 자동 저장하지 않습니다. 가져온 IR은 메모리에만 두며 새로고침·명시적 제거·30분 만료 시 삭제됩니다.</p>
+            {importedExpiresAt && <button onClick={clearImportedSession}>CLEAR IMPORTED SESSION · ≤{Math.max(1, Math.ceil((importedExpiresAt - Date.now()) / 60_000))} MIN</button>}
+          </section>
+
           <div className="export-actions">
-            <button className="export-primary" disabled={!pack || Boolean(busyAction)} onClick={() => void runAction('GLB', () => viewportRef.current!.exportGlb())}>
-              <span><b>{busyAction === 'GLB' ? 'PACKING…' : 'EXPORT GLB'}</b><small>{assetKind === 'human' ? 'Editable human + CharacterIR' : 'Named parts + AssemblyIR/BOM'}</small></span><i>↓</i>
+            <button className="export-primary" disabled={!pack || qualityBlocked || deliveryAudit?.status === 'blocked'} onClick={() => runAction('ASSET PACK', () => viewportRef.current!.exportAssetPack({
+              assetName: activeName,
+              sourceIr: sourcePayload,
+              qualityReport: quality,
+              evidenceBoundary,
+            }))}>
+              <span><b>SAVE ASSET PACK</b><small>GLB + OBJ/STL/PLY + IR + quality + preview + Figma SVG</small></span><i>↓</i>
             </button>
-            <button disabled={!pack || Boolean(busyAction)} onClick={() => void runAction('PNG', () => viewportRef.current!.capturePng())}>CAPTURE PNG</button>
+            <button disabled={!pack} title="PBR scene exchange for Blender, Unity glTF workflows, Unreal, Godot and web viewers" onClick={() => runAction('GLB', () => viewportRef.current!.exportGlb())}>GLB · BLENDER/UNITY/UNREAL/GODOT</button>
+            <button disabled={!pack} title="Mesh reference only; not STEP/BREP" onClick={() => runAction('OBJ', () => viewportRef.current!.exportObj())}>CAD MESH · OBJ</button>
+            <button disabled={!pack} title="Mesh reference only; not STEP/BREP" onClick={() => runAction('STL', () => viewportRef.current!.exportStl())}>CAD MESH · STL</button>
+            <button disabled={!pack} title="Static mesh with positions, normals, vertex colors and UVs; textures are not embedded" onClick={() => runAction('PLY', () => viewportRef.current!.exportPly())}>PLY · MESHLAB/CLOUDCOMPARE</button>
+            <button disabled={!pack} title="Apple AR Quick Look / Reality Composer handoff" onClick={() => runAction('USDZ', () => viewportRef.current!.exportUsdz())}>USDZ · APPLE AR</button>
+            <button disabled={!pack} title="2D inspection sheet; not a 3D Figma object" onClick={() => runAction('FIGMA SVG', () => viewportRef.current!.exportFigmaSvg())}>FIGMA · SVG SHEET</button>
+            <button disabled={!pack} onClick={() => runAction('PNG', () => viewportRef.current!.capturePng())}>CAPTURE PNG</button>
             <button onClick={() => irInputRef.current?.click()}>OPEN RESULT</button>
             <input
               ref={irInputRef}
@@ -513,25 +730,50 @@ export function ViewerApp() {
                     setSelectedPart(undefined);
                     setMeasurementEnabled(true);
                     setMeasurementUnit(value.metadata?.assetKind === 'building' ? 'm' : 'mm');
+                    setDeliveryAudit(undefined);
+                    setTelemetry(undefined);
+                    scheduleImportedExpiry();
                     setViewerNote(`AssemblyIR 결과 로드 · ${value.components.length}개 부품`);
                   } catch (error) {
                     setViewerNote(error instanceof Error ? error.message : 'AssemblyIR을 읽지 못했습니다.');
                   }
+                }).catch((error: unknown) => {
+                  setViewerNote(error instanceof Error ? error.message : '로컬 파일을 읽지 못했습니다.');
                 });
                 event.target.value = '';
               }}
             />
             <button onClick={() => {
-              const payload = assetKind === 'human'
-                ? { schema: 'morphloom.character/0.2', spec, interpretation: spec.outfit === 'web-hero' ? WEB_HERO_VISUAL_INTERPRETATION : undefined }
-                : assemblyIR ?? { schema: 'morphloom.assembly/0.1', kind: productSpec.kind, spec: productSpec };
-              downloadJson(payload, assetKind === 'human' ? 'character-ir.json' : 'assembly-ir.json');
+              downloadJson(sourcePayload, sourceFileName);
             }}>SAVE IR</button>
             {assetKind === 'product' && assemblyIR?.electrical && <button onClick={() => {
               downloadJson(buildPhysicalNetlist(assemblyIR), 'morphloom-physical-netlist.json');
               setViewerNote('물리 핀·AWG·검증 상태가 포함된 NETLIST를 저장했습니다.');
             }}>SAVE NETLIST</button>}
           </div>
+          <section className="format-compatibility" aria-label="3D 프로그램 내보내기 범위">
+            <span className="eyebrow">handoff scope</span>
+            <p><b>GLB</b> Blender · Unity · Unreal · Godot · web</p>
+            <p><b>OBJ / PLY</b> Maya · Cinema 4D · 3ds Max · MeshLab · CloudCompare</p>
+            <p><b>STL / SVG / USDZ</b> Fusion 메시 · Figma 2D · Apple AR</p>
+            <small>STEP/BREP·FBX·.blend·.uasset 네이티브 파일은 아니며 필요 시 대상 프로그램에서 변환합니다.</small>
+          </section>
+          {jobs.length > 0 && (
+            <section className="local-job-queue" aria-label="로컬 작업 대기열" aria-live="polite">
+              <header><span className="eyebrow">local job queue</span><b>{busyAction ? `${busyAction} 실행 중` : '대기열 유휴'}</b></header>
+              {jobs.slice(-5).reverse().map((job) => (
+                <div key={job.id}>
+                  <span>#{job.id} · {job.name}</span><b className={`job-${job.status}`}>{job.status.toUpperCase()}</b>
+                  {(job.status === 'queued' || job.status === 'running') && <button onClick={() => cancelJob(job.id)}>CANCEL</button>}
+                  {job.status === 'failed' && <button onClick={() => retryJob(job.id)}>RETRY</button>}
+                  {(job.durationMs !== undefined || job.outputBytes !== undefined) && (
+                    <small>{job.durationMs !== undefined ? `${job.durationMs.toFixed(0)} ms` : ''}{job.outputBytes !== undefined ? ` · ${bytesLabel(job.outputBytes)}` : ''}</small>
+                  )}
+                  {job.error && <small>{job.error}</small>}
+                </div>
+              ))}
+            </section>
+          )}
         </aside>
       </section>
 
@@ -539,10 +781,10 @@ export function ViewerApp() {
         <span className="eyebrow">result pipeline</span>
         {(assetKind === 'human' ? [
           ['01', 'CHARACTER IR', 'pass'], ['02', 'MORPH', pack ? 'pass' : 'run'], ['03', 'MATERIAL', pack ? 'pass' : 'wait'],
-          ['04', 'RIG', 'warn'], ['05', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['06', 'EXPORT', pack ? 'ready' : 'wait'],
+          ['04', 'RIG', 'warn'], ['05', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['06', 'EXPORT', qualityBlocked || deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit ? 'ready' : 'run'],
         ] : [
-          ['01', 'SOURCE', assemblyIR ? 'pass' : 'wait'], ['02', 'ASSEMBLY IR', 'pass'], ['03', 'COMPILE', pack ? 'pass' : 'run'],
-          ['04', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['05', 'PART TREE', pack ? 'pass' : 'wait'], ['06', 'EXPORT', pack ? 'ready' : 'wait'],
+          ['01', 'SOURCE', 'pass'], ['02', assemblyIR || productSpec.kind === 'ornate-knife' ? 'ASSEMBLY IR' : 'PRODUCT SPEC', 'pass'], ['03', 'COMPILE', pack ? 'pass' : 'run'],
+          ['04', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['05', 'PART TREE', pack ? 'pass' : 'wait'], ['06', 'EXPORT', qualityBlocked || deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit ? 'ready' : 'run'],
         ]).map(([step, label, state], index) => (
           <div className="pipeline-step" key={step}>
             <i className={state} /><span>{step}</span><b>{label}</b><small>{state.toUpperCase()}</small>{index < 5 && <em>→</em>}

@@ -25,25 +25,41 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     'raw', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
     'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
     'molded-polymer', 'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin',
-    'fabric', 'hair', 'semiconductor',
+    'fabric', 'hex-knit', 'hair', 'semiconductor',
   ]);
   const allowedEvidence = new Set(['measured', 'datasheet', 'estimated', 'inferred']);
-  const inspect = (node: unknown, key = ''): void => {
+  let inspectedNodes = 0;
+  const inspect = (node: unknown, key = '', depth = 0): void => {
+    inspectedNodes += 1;
+    if (inspectedNodes > 50_000) throw new Error('AssemblyIR is too complex to inspect safely.');
+    if (depth > 16) throw new Error(`AssemblyIR nesting is too deep at ${key}.`);
     if (typeof node === 'number') {
       if (!Number.isFinite(node) || Math.abs(node) > 1_000_000) throw new Error(`Unsafe numeric value at ${key}.`);
-      const minSegments = key === 'bevelSegments' ? 1 : 3;
+      const minSegments = /(^|\.)bevelSegments$/.test(key) ? 0 : 3;
       if (/segments/i.test(key) && (node < minSegments || node > 512)) throw new Error(`Unsafe segment count at ${key}.`);
+      return;
+    }
+    if (typeof node === 'string') {
+      if (node.length > 2_000) throw new Error(`String is too long at ${key}.`);
       return;
     }
     if (Array.isArray(node)) {
       if (node.length > 4096) throw new Error(`Array is too large at ${key}.`);
-      node.forEach((item, index) => inspect(item, `${key}[${index}]`));
+      node.forEach((item, index) => inspect(item, `${key}[${index}]`, depth + 1));
       return;
     }
     if (node && typeof node === 'object') {
-      for (const [childKey, child] of Object.entries(node)) inspect(child, childKey);
+      const entries = Object.entries(node);
+      if (entries.length > 512) throw new Error(`Object has too many fields at ${key}.`);
+      for (const [childKey, child] of entries) {
+        if (childKey === '__proto__' || childKey === 'prototype' || childKey === 'constructor') {
+          throw new Error(`Unsafe object key at ${key}.${childKey}.`);
+        }
+        inspect(child, key ? `${key}.${childKey}` : childKey, depth + 1);
+      }
     }
   };
+  inspect(candidate.metadata, 'metadata');
   for (const component of candidate.components as AssemblyComponentIR[]) {
     if (!component || typeof component !== 'object') throw new Error('AssemblyIR component is invalid.');
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(component.id) || ids.has(component.id)) throw new Error(`Invalid or duplicate component id: ${component.id}`);
@@ -55,12 +71,43 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       throw new Error(`Invalid component text metadata in ${component.id}.`);
     }
     inspect(component.geometry, `${component.id}.geometry`);
-    if (component.geometry.op === 'roundedBox') {
-      const minDimension = Math.min(...component.geometry.size);
-      if (minDimension <= 0) throw new Error(`Rounded box dimensions must be positive in ${component.id}.`);
-      if (component.geometry.radius < 0 || component.geometry.radius > minDimension * 0.49) {
-        throw new Error(`Rounded box radius exceeds the safe half-dimension limit in ${component.id}.`);
+    switch (component.geometry.op) {
+      case 'roundedBox': {
+        const minDimension = Math.min(...component.geometry.size);
+        if (minDimension <= 0) throw new Error(`Rounded box dimensions must be positive in ${component.id}.`);
+        if (component.geometry.radius < 0 || component.geometry.radius > minDimension * 0.49) {
+          throw new Error(`Rounded box radius exceeds the safe half-dimension limit in ${component.id}.`);
+        }
+        break;
       }
+      case 'cylinder':
+        if (component.geometry.depth <= 0 || component.geometry.radiusTop < 0 || component.geometry.radiusBottom < 0
+          || component.geometry.radiusTop + component.geometry.radiusBottom <= 0) throw new Error(`Cylinder dimensions must be positive in ${component.id}.`);
+        break;
+      case 'sphere':
+        if (component.geometry.radius <= 0) throw new Error(`Sphere radius must be positive in ${component.id}.`);
+        break;
+      case 'torus':
+        if (component.geometry.radius <= 0 || component.geometry.tube <= 0 || component.geometry.tube >= component.geometry.radius) {
+          throw new Error(`Torus radii are invalid in ${component.id}.`);
+        }
+        break;
+      case 'extrude':
+        if (component.geometry.points.length < 3 || component.geometry.depth <= 0) throw new Error(`Extrude profile is invalid in ${component.id}.`);
+        if (((component.geometry.bevelSize ?? 0) > 0 || (component.geometry.bevelThickness ?? 0) > 0)
+          && (component.geometry.bevelSegments ?? 3) < 1) throw new Error(`Extrude bevel segments are invalid in ${component.id}.`);
+        break;
+      case 'lathe':
+        if (component.geometry.profile.length < 2 || component.geometry.profile.some(([radius]) => radius < 0)) throw new Error(`Lathe profile is invalid in ${component.id}.`);
+        break;
+      case 'tube':
+        if (component.geometry.points.length < 2 || component.geometry.radius <= 0) throw new Error(`Tube path is invalid in ${component.id}.`);
+        break;
+      case 'bladeLoft':
+        if (component.geometry.sections.length < 2 || component.geometry.thickness <= 0 || component.geometry.apexThickness < 0) {
+          throw new Error(`Blade loft is invalid in ${component.id}.`);
+        }
+        break;
     }
     inspect(component.position, `${component.id}.position`);
     inspect(component.rotation, `${component.id}.rotation`);
