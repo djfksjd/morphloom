@@ -16,11 +16,11 @@ Treat a short request such as “이 사진으로 만들어줘” as a complete 
 
 ## Shared workflow
 
-1. Identify each provided image or drawing by view, scale, and evidence strength. Resolve rotation and anatomical/screen-side orientation before modeling.
+1. Identify each provided image or drawing by view, scale, and evidence strength. Resolve rotation and anatomical/screen-side orientation before modeling. For drawings, write down which facade each wing or projection extends from before assigning coordinates.
 2. Convert visible structure into semantic edit units with stable ASCII ids. Preserve holes, gaps, courtyards, seams, openings, connectors, and other negative space as geometry—not texture or prose.
 3. Use measured or manufacturer dimensions where available. Mark unsupported size, depth, or hidden surfaces `estimated` or `inferred`; never present inference as a measurement.
 4. Assign each material a physical surface finish. Include angle-dependent roughness/specular behavior, micro-normal detail, clearcoat/transmission/IOR where applicable, and anisotropy for directional surfaces.
-5. Compile the IR locally. Check reference alignment, envelope, part tree, topology, surface coverage, and export. Keep a failed evidence or likeness gate blocked even when part and triangle counts are high.
+5. Compile the IR locally. Check reference alignment, envelope, part tree, topology, surface coverage, and export. Verify relative direction as well as counts: projections shown on opposite facades must remain on opposite sides of the footprint origin. Keep a failed evidence or likeness gate blocked even when part and triangle counts are high.
 6. Deliver editable GLB plus source IR and an evidence summary. State what still requires survey, multi-view capture, bench testing, or artist review.
 
 Prefer correcting source interpretation and IR over hiding a mismatch with camera angle, material, fog, or a high quality number.

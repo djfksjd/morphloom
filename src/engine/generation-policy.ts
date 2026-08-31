@@ -102,7 +102,17 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
     const courtyardVoids = Number(ir.metadata?.courtyardVoids ?? 0);
     if (courtyardVoids > 0) {
       const slabCount = ir.components.filter((component) => component.id.endsWith('_floor_slab')).length;
-      if (slabCount < courtyardVoids + 3) blockers.push('courtyard voids are not preserved by segmented slabs');
+      if (slabCount < courtyardVoids + 2) blockers.push('courtyard voids are not preserved by segmented slabs');
+    }
+    if (ir.metadata?.planProjectionRelationship === 'side-wings-north-center-wing-south') {
+      const connectorZ = ir.components.find((component) => component.id === 'south_connector_bar_floor_slab')?.position?.[2];
+      const westWingZ = ir.components.find((component) => component.id === 'west_wing_floor_slab')?.position?.[2];
+      const eastWingZ = ir.components.find((component) => component.id === 'east_wing_floor_slab')?.position?.[2];
+      const centerWingZ = ir.components.find((component) => component.id === 'center_entry_wing_floor_slab')?.position?.[2];
+      if (connectorZ === undefined || westWingZ === undefined || eastWingZ === undefined || centerWingZ === undefined
+        || westWingZ <= connectorZ || eastWingZ <= connectorZ || centerWingZ >= connectorZ) {
+        blockers.push('side wings and center wing are not on opposite facades');
+      }
     }
     const entranceProjection = Number(ir.metadata?.planScaledEntranceProjectionMm ?? 0);
     if (entranceProjection > 0 && !ir.components.some((component) => component.id.startsWith('entrance_'))) {

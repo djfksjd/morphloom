@@ -191,18 +191,18 @@ describe('AssemblyIR product pipeline', () => {
       documentedStairwells: 3,
       measuredLengthMm: 42367.2,
       measuredMainDepthMm: 14122.4,
-      footprintForm: 'u-courtyard-with-projecting-entry',
-      courtyardVoids: 2,
+      footprintForm: 'u-courtyard-with-opposed-center-wing',
+      courtyardVoids: 1,
+      planProjectionRelationship: 'side-wings-north-center-wing-south',
     });
     expect(build.parts.length).toBeGreaterThan(180);
     expect(build.parts.filter((part) => /^unit_\d+_(living|bedroom|kitchen|bath|passage)_floor$/.test(part.id))).toHaveLength(45);
     expect(build.parts.filter((part) => /_step_/.test(part.id))).toHaveLength(66);
     expect(build.parts.filter((part) => /_window_\d+$/.test(part.id))).toHaveLength(36);
-    expect(build.root.getObjectByName('north_bar_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('south_connector_bar_floor_slab')).toBeTruthy();
     expect(build.root.getObjectByName('west_wing_floor_slab')).toBeTruthy();
     expect(build.root.getObjectByName('east_wing_floor_slab')).toBeTruthy();
     expect(build.root.getObjectByName('center_entry_wing_floor_slab')).toBeTruthy();
-    expect(build.root.getObjectByName('entrance_vestibule_floor_slab')).toBeTruthy();
     expect(build.root.getObjectByName('entrance_door_west')).toBeTruthy();
     expect(build.root.getObjectByName('stair_2_landing')).toBeTruthy();
     expect(build.root.getObjectByName('unit_9_bath_floor')).toBeTruthy();
@@ -213,6 +213,13 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.metrics.engineering).toMatchObject({
       scope: 'architectural-shell-only', electricalApplicable: false, digitalReady: true, productionReady: false,
     });
+
+    const componentZ = (id: string) => LAUREL_HOMES_BUILDING_B_IR.components
+      .find((component) => component.id === id)?.position?.[2];
+    const connectorZ = componentZ('south_connector_bar_floor_slab') ?? 0;
+    expect(componentZ('west_wing_floor_slab')).toBeGreaterThan(connectorZ);
+    expect(componentZ('east_wing_floor_slab')).toBeGreaterThan(connectorZ);
+    expect(componentZ('center_entry_wing_floor_slab')).toBeLessThan(connectorZ);
   });
 
   it('compiles a measured HABS cabin with explicit openings and evidence boundaries', () => {
@@ -563,5 +570,15 @@ describe('short-prompt generation contract', () => {
     const blocked = auditAssemblyDetail(unverified);
     expect(blocked.pass).toBe(false);
     expect(blocked.blockers).toContain('plan footprint not verified');
+
+    const reversedProjection = {
+      ...LAUREL_HOMES_BUILDING_B_IR,
+      components: LAUREL_HOMES_BUILDING_B_IR.components.map((component) => component.id === 'center_entry_wing_floor_slab'
+        ? { ...component, position: [component.position?.[0] ?? 0, component.position?.[1] ?? 0, 3_800] as [number, number, number] }
+        : component),
+    };
+    const projectionAudit = auditAssemblyDetail(reversedProjection);
+    expect(projectionAudit.pass).toBe(false);
+    expect(projectionAudit.blockers).toContain('side wings and center wing are not on opposite facades');
   });
 });
