@@ -9,7 +9,9 @@ import {
   type FidelityReview,
 } from '../src/engine/fidelity-pipeline';
 import { createOrnateKnifeIR } from '../src/engine/knife';
-import { compareReferenceFrames } from '../src/engine/reference-comparison';
+import { compareInteriorBands, compareReferenceFrames } from '../src/engine/reference-comparison';
+import { compareMaterialFrames } from '../src/engine/material-comparison';
+import { carveVisualHull } from '../src/engine/visual-hull';
 import { DEFAULT_KNIFE_SPEC } from '../src/types';
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
@@ -39,6 +41,30 @@ const pixelComparison = compareReferenceFrames(
   { width: 8, height: 8, rgba: comparisonPixels, backgroundRgb: [255, 255, 255] },
   { width: 8, height: 8, rgba: structuredClone(comparisonPixels), backgroundRgb: [255, 255, 255] },
 );
+const interiorBands = compareInteriorBands(
+  { width: 8, height: 8, rgba: comparisonPixels, backgroundRgb: [255, 255, 255] },
+  { width: 8, height: 8, rgba: structuredClone(comparisonPixels), backgroundRgb: [255, 255, 255] },
+  [{ id: 'all', from: 0, to: 1 }],
+  16,
+);
+const materialComparison = compareMaterialFrames(
+  { width: 8, height: 8, rgba: comparisonPixels, backgroundRgb: [255, 255, 255] },
+  { width: 8, height: 8, rgba: structuredClone(comparisonPixels), backgroundRgb: [255, 255, 255] },
+  { family: 'coating', roughness: 0.45 },
+  16,
+);
+const solidMask = Array.from({ length: 8 }, () => '1'.repeat(8));
+const visualHull = carveVisualHull({
+  projection: 'orthographic',
+  boundsSpace: 'component-local',
+  bounds: { min: [-1, -1, -1], max: [1, 1, 1] },
+  resolution: 8,
+  triangleBudget: 400_000,
+  views: [
+    { axis: 'front', confidence: 1, mask: solidMask },
+    { axis: 'side', confidence: 1, mask: solidMask },
+  ],
+});
 let state = startFidelityWorkflow(contract);
 const transitions = contract.passes.map((pass, index) => {
   const review: FidelityReview = {
@@ -86,6 +112,15 @@ const output = {
     contractAudit,
     deliveryAudit,
     pixelComparison: { ...pixelComparison, fixture: 'deterministic gate-path fixture; not a perceptual knife ranking' },
+    interiorBands,
+    materialComparison,
+    visualHull: {
+      status: visualHull.status,
+      triangles: visualHull.triangleCount,
+      occupiedVoxelCount: visualHull.occupiedVoxelCount,
+      unconstrainedAxes: visualHull.unconstrainedAxes,
+      limitationCount: visualHull.limitations.length,
+    },
     passes: transitions,
     compiledAsset: {
       parts: compiled.metrics.parts,
@@ -99,6 +134,9 @@ const output = {
     { capability: 'locked staged passes', img2threejs: 'yes', morphloom: transitions.length === 8 ? 'yes' : 'blocked' },
     { capability: 'per-feature thresholds', img2threejs: 'yes', morphloom: contract.details.every((item) => item.threshold >= 0.5) ? 'yes' : 'blocked' },
     { capability: 'calibrated source-camera proof', img2threejs: 'yes', morphloom: contract.cameras.length > 0 ? 'yes' : 'blocked' },
+    { capability: 'bounded welded visual-hull carving', img2threejs: 'yes', morphloom: visualHull.status === 'carved' && visualHull.triangleCount > 0 ? 'yes' : 'blocked' },
+    { capability: 'foreground-normalized interior bands', img2threejs: 'yes', morphloom: interiorBands.aggregateSimilarity === 1 ? 'yes' : 'blocked' },
+    { capability: 'deterministic material region comparator', img2threejs: 'yes', morphloom: materialComparison.passed ? 'yes' : 'blocked' },
     { capability: 'bounded correction and cost ceiling', img2threejs: 'yes', morphloom: contract.maxTotalIterations <= 128 && contract.tokenBudget > 0 ? 'yes' : 'blocked' },
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
@@ -110,4 +148,5 @@ const output = {
 writeFileSync('benchmarks/competitive-latest.json', `${JSON.stringify(output, null, 2)}\n`, 'utf8');
 console.log(JSON.stringify(output, null, 2));
 if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !item.accepted)
-  || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.1') process.exitCode = 1;
+  || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.1'
+  || visualHull.status !== 'carved' || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed) process.exitCode = 1;

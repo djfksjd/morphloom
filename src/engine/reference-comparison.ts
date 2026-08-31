@@ -1,3 +1,11 @@
+/**
+ * Bounded pixel comparison with foreground-normalized interior bands.
+ * The banded area-mean method is adapted from img2threejs.
+ * Copyright 2026 hoainho. Licensed under Apache-2.0.
+ * Source: https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage4_review/interior_difference.py
+ * Modified for Morphloom: in-memory RGBA frames, named multi-band evidence,
+ * explicit no-overlap refusal, and caller-controlled bounded grid resolution.
+ */
 export interface ComparisonFrame {
   width: number;
   height: number;
@@ -32,6 +40,30 @@ export interface ReferenceComparisonResult {
   score: number;
   foregroundPixels: { reference: number; render: number; intersection: number; union: number };
   regions: RegionComparisonScore[];
+}
+
+export interface InteriorComparisonBand {
+  id: string;
+  from: number;
+  to: number;
+}
+
+export interface InteriorBandScore {
+  id: string;
+  from: number;
+  to: number;
+  cellsCompared: number;
+  interiorDifference: number | null;
+  interiorSimilarity: number | null;
+  status: 'measured' | 'no-overlapping-foreground-cells';
+}
+
+export interface BandedInteriorComparisonResult {
+  method: 'foreground-normalized-bands-v1';
+  grid: number;
+  bands: InteriorBandScore[];
+  aggregateSimilarity: number | null;
+  cellsCompared: number;
 }
 
 const MAX_PIXELS = 16_777_216;
@@ -151,4 +183,110 @@ export function compareReferenceFrames(
       return { featureId: region.featureId, silhouetteIoU: score.silhouetteIoU, interiorSimilarity: score.interiorSimilarity, score: score.score };
     }),
   };
+}
+
+function foregroundBounds(frame: ComparisonFrame): [number, number, number, number] | null {
+  let minX = frame.width;
+  let minY = frame.height;
+  let maxX = -1;
+  let maxY = -1;
+  for (let y = 0; y < frame.height; y += 1) {
+    for (let x = 0; x < frame.width; x += 1) {
+      if (!foreground(frame, y * frame.width + x)) continue;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+  return maxX < 0 ? null : [minX, minY, maxX + 1, maxY + 1];
+}
+
+function sampleNormalizedInterior(frame: ComparisonFrame, grid: number): { luma: Float32Array; solid: Uint8Array } | null {
+  const bounds = foregroundBounds(frame);
+  if (!bounds) return null;
+  const [x0, y0, x1, y1] = bounds;
+  const boxWidth = Math.max(1, x1 - x0);
+  const boxHeight = Math.max(1, y1 - y0);
+  const luma = new Float32Array(grid * grid);
+  const solid = new Uint8Array(grid * grid);
+  for (let gy = 0; gy < grid; gy += 1) {
+    const startY = y0 + Math.floor(gy * boxHeight / grid);
+    const endY = Math.max(startY + 1, y0 + Math.floor((gy + 1) * boxHeight / grid));
+    for (let gx = 0; gx < grid; gx += 1) {
+      const startX = x0 + Math.floor(gx * boxWidth / grid);
+      const endX = Math.max(startX + 1, x0 + Math.floor((gx + 1) * boxWidth / grid));
+      let luminanceSum = 0;
+      let counted = 0;
+      let foregroundCount = 0;
+      for (let y = startY; y < Math.min(endY, frame.height); y += 1) {
+        for (let x = startX; x < Math.min(endX, frame.width); x += 1) {
+          const pixel = y * frame.width + x;
+          const offset = pixel * 4;
+          luminanceSum += (frame.rgba[offset] * 0.2126 + frame.rgba[offset + 1] * 0.7152 + frame.rgba[offset + 2] * 0.0722) / 255;
+          foregroundCount += Number(foreground(frame, pixel));
+          counted += 1;
+        }
+      }
+      const target = gy * grid + gx;
+      luma[target] = counted === 0 ? 0 : luminanceSum / counted;
+      solid[target] = counted > 0 && foregroundCount > counted / 2 ? 1 : 0;
+    }
+  }
+  return { luma, solid };
+}
+
+export function compareInteriorBands(
+  reference: ComparisonFrame,
+  render: ComparisonFrame,
+  bands: InteriorComparisonBand[] = [
+    { id: 'top', from: 0, to: 1 / 3 },
+    { id: 'middle', from: 1 / 3, to: 2 / 3 },
+    { id: 'bottom', from: 2 / 3, to: 1 },
+  ],
+  grid = 96,
+): BandedInteriorComparisonResult {
+  validateFrame(reference, 'Reference frame');
+  validateFrame(render, 'Render frame');
+  if (!Number.isInteger(grid) || grid < 8 || grid > 192) throw new Error('Interior comparison grid must be an integer from 8 to 192.');
+  if (!Array.isArray(bands) || bands.length < 1 || bands.length > 32) throw new Error('Interior comparison requires 1..32 bands.');
+  const ids = new Set<string>();
+  for (const band of bands) {
+    if (!/^[a-zA-Z0-9_-]{1,96}$/.test(band.id) || ids.has(band.id)
+      || !Number.isFinite(band.from) || !Number.isFinite(band.to)
+      || band.from < 0 || band.to > 1 || band.from >= band.to) {
+      throw new Error(`Interior comparison band is invalid: ${band.id}`);
+    }
+    ids.add(band.id);
+  }
+  const referenceSample = sampleNormalizedInterior(reference, grid);
+  const renderSample = sampleNormalizedInterior(render, grid);
+  const scores = bands.map<InteriorBandScore>((band) => {
+    if (!referenceSample || !renderSample) {
+      return { ...band, cellsCompared: 0, interiorDifference: null, interiorSimilarity: null, status: 'no-overlapping-foreground-cells' };
+    }
+    const firstRow = Math.floor(band.from * grid);
+    const lastRow = Math.max(firstRow + 1, Math.min(grid, Math.floor(band.to * grid)));
+    let difference = 0;
+    let cellsCompared = 0;
+    for (let y = firstRow; y < lastRow; y += 1) {
+      for (let x = 0; x < grid; x += 1) {
+        const index = y * grid + x;
+        if (!referenceSample.solid[index] || !renderSample.solid[index]) continue;
+        difference += Math.abs(referenceSample.luma[index] - renderSample.luma[index]);
+        cellsCompared += 1;
+      }
+    }
+    if (cellsCompared === 0) {
+      return { ...band, cellsCompared, interiorDifference: null, interiorSimilarity: null, status: 'no-overlapping-foreground-cells' };
+    }
+    const interiorDifference = difference / cellsCompared;
+    return { ...band, cellsCompared, interiorDifference, interiorSimilarity: 1 - interiorDifference, status: 'measured' };
+  });
+  const measured = scores.filter((score): score is InteriorBandScore & { interiorSimilarity: number } => score.interiorSimilarity !== null);
+  const cellsCompared = measured.reduce((sum, score) => sum + score.cellsCompared, 0);
+  const aggregateSimilarity = cellsCompared === 0
+    ? null
+    : measured.reduce((sum, score) => sum + score.interiorSimilarity * score.cellsCompared, 0) / cellsCompared;
+  return { method: 'foreground-normalized-bands-v1', grid, bands: scores, aggregateSimilarity, cellsCompared };
 }

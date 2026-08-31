@@ -1,4 +1,5 @@
 import type { FidelityContract } from './fidelity-pipeline';
+import type { VisualHullDescriptor } from './visual-hull';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -9,7 +10,8 @@ export type AssemblyGeometryIR =
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
   | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean }
   | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }
-  | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] };
+  | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] }
+  | { op: 'visualHull'; descriptor: VisualHullDescriptor };
 
 export interface AssemblyMaterialIR {
   color: string;

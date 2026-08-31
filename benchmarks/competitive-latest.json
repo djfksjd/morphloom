@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-08-31T19:00:49.201Z",
+  "generatedAt": "2026-08-31T22:36:36.960Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "competitor": {
     "repository": "https://github.com/img2threejs/img2threejs",
@@ -43,6 +43,73 @@
       },
       "regions": [],
       "fixture": "deterministic gate-path fixture; not a perceptual knife ranking"
+    },
+    "interiorBands": {
+      "method": "foreground-normalized-bands-v1",
+      "grid": 16,
+      "bands": [
+        {
+          "id": "all",
+          "from": 0,
+          "to": 1,
+          "cellsCompared": 88,
+          "interiorDifference": 0,
+          "interiorSimilarity": 1,
+          "status": "measured"
+        }
+      ],
+      "aggregateSimilarity": 1,
+      "cellsCompared": 88
+    },
+    "materialComparison": {
+      "method": "material-region-v1",
+      "reference": {
+        "meanRgb": [
+          138,
+          22,
+          52
+        ],
+        "meanLuma": 0.19148078431372542,
+        "lumaVariance": 3.0814879110195774e-33,
+        "horizontalGradient": 0,
+        "verticalGradient": 0,
+        "anisotropyProxy": 0,
+        "foregroundCoverage": 0.34375
+      },
+      "render": {
+        "meanRgb": [
+          138,
+          22,
+          52
+        ],
+        "meanLuma": 0.19148078431372542,
+        "lumaVariance": 3.0814879110195774e-33,
+        "horizontalGradient": 0,
+        "verticalGradient": 0,
+        "anisotropyProxy": 0,
+        "foregroundCoverage": 0.34375
+      },
+      "deltaE76": 0,
+      "scores": {
+        "baseColor": 1,
+        "meanLuma": 1,
+        "microstructure": 1,
+        "directionalResponse": 1,
+        "overall": 1
+      },
+      "mismatches": [],
+      "passed": true,
+      "nextAction": "continue",
+      "limitation": "Image metrics constrain appearance but cannot uniquely identify physical material parameters without calibrated lighting."
+    },
+    "visualHull": {
+      "status": "carved",
+      "triangles": 768,
+      "occupiedVoxelCount": 512,
+      "unconstrainedAxes": [
+        "y"
+      ],
+      "limitationCount": 2
     },
     "passes": [
       {
@@ -119,6 +186,21 @@
     },
     {
       "capability": "calibrated source-camera proof",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "bounded welded visual-hull carving",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "foreground-normalized interior bands",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "deterministic material region comparator",
       "img2threejs": "yes",
       "morphloom": "yes"
     },

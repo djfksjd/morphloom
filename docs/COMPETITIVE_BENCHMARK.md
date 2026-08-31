@@ -7,7 +7,7 @@ img2threejs 기준 커밋: [`9fbd0ca`](https://github.com/img2threejs/img2threej
 
 Morphloom이 모든 시각 결과에서 img2threejs보다 낫다고 아직 주장할 수는 없습니다. img2threejs는 한 장의 참조 이미지를 절차적 Three.js 모델로 재구성하는 과정과 자동 검수의 폭이 매우 넓습니다. Python 3.12.13에서 공식 테스트를 직접 실행해 1,083개 중 1,045개 통과, 38개 건너뜀, 실패 0개를 확인했습니다.
 
-Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가능한 부재, GLB/DCC 납품 쪽이 더 넓습니다. 이번 고도화로 img2threejs의 강점이었던 디테일 우선 계약과 단계별 시각 검수를 Morphloom의 AssemblyIR 납품 흐름에 결합했습니다.
+Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가능한 부재, GLB/DCC 납품 쪽이 더 넓습니다. 이번 고도화로 img2threejs의 강점이었던 디테일 우선 계약과 단계별 시각 검수에 더해, 실제 시각 외피·내부 밴드·재질 비교 알고리즘을 Apache-2.0 조건에 맞춰 Morphloom의 AssemblyIR 납품 흐름에 결합했습니다.
 
 ## 실제 반영한 장점
 
@@ -17,6 +17,9 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 - 전체 평균이 높아도 중요한 특징 하나가 임계값 아래면 통과하지 못합니다.
 - 각 단계는 참조 시점, 직교, 클레이, 사광, 와이어, X-ray 중 필요한 검수 화면을 증거로 요구합니다.
 - 동일 크기의 참조/렌더 프레임에서 실루엣 IoU, 내부 색·재질 차이, 특징 영역별 점수와 양쪽 이미지 지문을 직접 계산합니다.
+- 2~3개의 직교 실루엣이 있으면 제한된 복셀 공간을 교집합으로 깎아 중복 내부면이 없는 용접된 폐쇄 메시를 만듭니다.
+- 크기가 다른 참조/렌더도 전경 포락을 정렬한 뒤 상·중·하 내부를 분리 비교하므로 얼굴·창호·버튼 같은 내부 누락이 윤곽 점수에 숨지 않습니다.
+- 재질 영역은 CIE Lab 색차, 밝기, 미세 대비, 방향성 반사를 별도로 검사해 색만 비슷한 평면 재질을 차단합니다.
 - 수정 결과가 나빠지면 이전 최선 결과로 되돌리고, 같은 결함이 두 번 남으면 IR이 아니라 명세를 다시 고칩니다.
 - 개선이 정체되거나 반복·토큰 상한에 도달하면 무한 생성하지 않고 추가 근거를 요청합니다.
 - 계약과 검수 결과를 AssemblyIR/Three.js 장면에 보존해 이후 납품 검사가 잊지 않게 했습니다.
@@ -28,6 +31,9 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 | 한 장 이미지 기반 절차적 재구성 | 강점 | 보조 입력 |
 | 디테일 인벤토리·특징별 합격 | 지원 | 지원 |
 | 단계 잠금·회귀 방지·비용 상한 | 지원 | 지원 |
+| 다중 실루엣 시각 외피 | 지원 | 지원—브라우저용 TypeScript 이식 |
+| 전경 정렬 내부 밴드 비교 | 지원 | 지원—상·중·하/사용자 구간 |
+| 결정론적 재질 영역 비교 | 지원 | 지원—색·밝기·미세구조·방향성 |
 | 실측 건축·방/부재 편집 | 로드맵 | 지원 |
 | 제품 내부 부품·전선 연결 감사 | 문서상 핵심 범위 아님 | 지원 |
 | GLB와 Blender/Unity/Unreal 재열기 검사 | Three.js factory 중심 | 지원 |
@@ -48,3 +54,5 @@ npm run benchmark:competitive
 - [단계 오케스트레이션 구현](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage3_build/orchestrate_passes.py)
 - [특징별 합격 정책](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/_shared/feature_acceptance_policy.py)
 - [내부 차이 비교](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage4_review/interior_difference.py)
+- [시각 외피 공간 깎기](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage3_build/visual_hull.py)
+- [재질 영역 비교](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage4_review/material_comparator.py)

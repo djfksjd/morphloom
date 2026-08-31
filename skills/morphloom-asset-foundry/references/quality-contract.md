@@ -38,6 +38,7 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 - Verify spatial relationships numerically where possible. Counts cannot prove side, order, direction, alignment, attachment, containment, or continuity.
 - Require finite dimensions, bounded segment counts, zero degenerate triangles, zero non-manifold edges, and closed meshes where the component should be solid.
 - Block inverted normals, accidental open borders, duplicate coplanar faces, visible z-fighting, floating parts, unexplained penetrations, and self-intersections that affect the intended view or deformation.
+- If two or three compatible orthographic silhouette masks are available, use `geometry.op: visualHull` to intersect them on the bounded voxel grid. Require a non-empty carve, welded boundary faces, zero boundary/non-manifold edges, and an explicit list of unconstrained axes. Treat the hull as an upper bound: it cannot recover a concavity that no supplied silhouette exposes.
 
 ## Surface response
 
@@ -47,6 +48,7 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 - Check Beauty under grazing light, Clay for form, Wire for topology, and X-Ray for internal structure.
 - Compare highlights as shape evidence: incorrect roughness, clearcoat, normal scale, or anisotropy can make correct geometry read as the wrong material.
 - Require a deliberate non-fallback material on every rendered face. Verify visible material-zone coverage, intentional UV overlap, scale-consistent texel density, normal/tangent handling, and texture colour spaces.
+- Compare reference/render material crops deterministically. Gate base colour, luminance, luma variance as a microstructure proxy, and horizontal/vertical gradient ratio as a directional-response proxy separately; do not let one high aggregate hide wrong colour or a missing environment response.
 
 ## Review and self-correction loop
 
@@ -56,8 +58,8 @@ Review in this order because later polish cannot repair earlier interpretation e
 
 1. **Source interpretation:** orientation, anatomical/coordinate side, scale, projection direction, and evidence labels.
 2. **Camera calibration:** projection type, crop, field of view or focal-length estimate, pose, and stable image/model anchors. Lock this camera before judging geometry so camera fitting cannot hide proportion errors.
-3. **Silhouette and proportions:** outer contour, dominant masses, pose/balance, and major voids from the source camera.
-4. **Feature completeness:** every visible-feature row is resolved and every signature id exists in its proof view.
+3. **Silhouette and proportions:** outer contour, dominant masses, pose/balance, and major voids from the source camera. When orthographic masks exist, use their visual-hull intersection as a geometry constraint rather than inventing hidden depth.
+4. **Feature completeness:** every visible-feature row is resolved and every signature id exists in its proof view. Align the reference/render foreground bounds, area-average onto a bounded grid, and compare named height bands so missing eyes, controls, openings, trim, or fixtures cannot hide behind an unchanged outline. Refuse the metric when no foreground cells overlap.
 5. **Relationships and function:** adjacency, attachment, clearances, openings, joints, ports, conductors, circulation, and articulation.
 6. **Surface response:** material boundaries, grazing highlights, texture scale, transparency, and micro-detail.
 7. **Topology and export:** closed/manifold expectations, edit-unit names, transforms, bounds, and GLB/IR consistency. Reopen the GLB and compare part/material counts, units, transforms, and bounds with the IR.

@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-78%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-88%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -116,6 +116,8 @@ Current locked benchmark:
 This does not mean every generated asset is a finished deliverable. Model completeness and source confidence are separate. The ornate blade and verified architectural shell are positive release cases. The concept residence, cooling assembly, and single-view character are technical passes that are correctly blocked for insufficient evidence.
 
 Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
+
+With two or more compatible orthographic silhouettes, Morphloom now carves a welded, closed visual hull. It also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, microstructure, and directional response separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 

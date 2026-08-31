@@ -8,6 +8,7 @@ import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from 
 import { analyzeTopology } from './topology';
 import { inspectEngineeringEvidence } from './engineering-audit';
 import { auditFidelityContract } from './fidelity-pipeline';
+import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
 
 const mm = (value: number) => value / 1000;
 
@@ -21,7 +22,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     throw new Error('AssemblyIR must contain 1–500 components.');
   }
   const ids = new Set<string>();
-  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'hipRoof', 'bladeLoft']);
+  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'hipRoof', 'bladeLoft', 'visualHull']);
   const allowedSurfaces = new Set([
     'raw', 'concrete', 'plaster', 'stone', 'coated-metal', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
     'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
@@ -116,6 +117,9 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         if (component.geometry.sections.length < 2 || component.geometry.thickness <= 0 || component.geometry.apexThickness < 0) {
           throw new Error(`Blade loft is invalid in ${component.id}.`);
         }
+        break;
+      case 'visualHull':
+        validateVisualHullDescriptor(component.geometry.descriptor);
         break;
     }
     inspect(component.position, `${component.id}.position`);
@@ -395,6 +399,20 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
       result.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
       result.setIndex(indices);
       result.computeVertexNormals();
+      return result;
+    }
+    case 'visualHull': {
+      const carve = carveVisualHull(geometry.descriptor);
+      if (carve.status === 'empty') throw new Error('Visual hull silhouettes have no shared occupied volume.');
+      const result = visualHullToBufferGeometry(carve);
+      result.scale(0.001, 0.001, 0.001);
+      result.userData.visualHullEvidence = {
+        occupiedVoxelCount: carve.occupiedVoxelCount,
+        totalVoxelCount: carve.totalVoxelCount,
+        viewAxes: carve.viewAxes,
+        unconstrainedAxes: carve.unconstrainedAxes,
+        limitations: carve.limitations,
+      };
       return result;
     }
   }

@@ -89,7 +89,8 @@
             { "$ref": "#/$defs/lathe" },
             { "$ref": "#/$defs/tube" },
             { "$ref": "#/$defs/hipRoof" },
-            { "$ref": "#/$defs/bladeLoft" }
+            { "$ref": "#/$defs/bladeLoft" },
+            { "$ref": "#/$defs/visualHull" }
           ]
         }
       }
@@ -157,6 +158,47 @@
     "bladeLoft": {
       "type": "object", "required": ["op", "sections", "thickness", "apexThickness"], "additionalProperties": false,
       "properties": { "op": { "const": "bladeLoft" }, "sections": { "type": "array", "minItems": 3, "maxItems": 512, "items": { "$ref": "#/$defs/vec2" } }, "thickness": { "type": "number", "exclusiveMinimum": 0 }, "apexThickness": { "type": "number", "exclusiveMinimum": 0 }, "grindCurve": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "number", "minimum": 0, "maximum": 1 } } }
+    },
+    "visualHull": {
+      "type": "object",
+      "required": ["op", "descriptor"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "visualHull" },
+        "descriptor": {
+          "type": "object",
+          "required": ["projection", "boundsSpace", "bounds", "resolution", "triangleBudget", "views"],
+          "additionalProperties": false,
+          "properties": {
+            "projection": { "const": "orthographic" },
+            "boundsSpace": { "const": "component-local" },
+            "bounds": {
+              "type": "object",
+              "required": ["min", "max"],
+              "additionalProperties": false,
+              "properties": { "min": { "$ref": "#/$defs/vec3" }, "max": { "$ref": "#/$defs/vec3" } }
+            },
+            "resolution": { "type": "integer", "minimum": 4, "maximum": 32 },
+            "triangleBudget": { "type": "integer", "minimum": 1, "maximum": 400000 },
+            "views": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "required": ["axis", "confidence", "mask"],
+                "additionalProperties": false,
+                "properties": {
+                  "axis": { "enum": ["front", "side", "top"] },
+                  "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "mask": { "type": "array", "minItems": 4, "maxItems": 256, "items": { "type": "string", "minLength": 4, "maxLength": 256, "pattern": "^[01]+$" } }
+                }
+              }
+            },
+            "hiddenRegions": { "type": "array", "maxItems": 256, "items": { "type": "string", "minLength": 1, "maxLength": 256 } }
+          }
+        }
+      }
     },
     "electricalHarness": {
       "type": "object",
