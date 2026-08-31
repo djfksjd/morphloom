@@ -69,11 +69,11 @@ const glass: AssemblyMaterialIR = {
 };
 
 const floorMaterials: Record<string, AssemblyMaterialIR> = {
-  living: { color: '#c49a72', surface: 'wood', roughness: 0.64, microNormalStrength: 0.32, textureScale: [8, 64] },
-  bedroom: { color: '#b38d76', surface: 'wood', roughness: 0.69, microNormalStrength: 0.28, textureScale: [8, 54] },
-  kitchen: { color: '#8ca099', surface: 'raw', roughness: 0.72, microNormalStrength: 0.24, textureScale: [22, 22] },
-  bath: { color: '#7f9ba2', surface: 'ceramic-glass', roughness: 0.38, clearcoat: 0.22, microNormalStrength: 0.18, textureScale: [14, 14] },
-  passage: { color: '#b6ada0', surface: 'raw', roughness: 0.76, microNormalStrength: 0.2, textureScale: [26, 26] },
+  living: { color: '#d18b36', surface: 'wood', roughness: 0.61, microNormalStrength: 0.34, textureScale: [8, 64] },
+  bedroom: { color: '#a95448', surface: 'wood', roughness: 0.67, microNormalStrength: 0.3, textureScale: [8, 54] },
+  kitchen: { color: '#3f857b', surface: 'raw', roughness: 0.69, microNormalStrength: 0.25, textureScale: [22, 22] },
+  bath: { color: '#377c9a', surface: 'ceramic-glass', roughness: 0.34, clearcoat: 0.24, microNormalStrength: 0.18, textureScale: [14, 14] },
+  passage: { color: '#8b877e', surface: 'raw', roughness: 0.74, microNormalStrength: 0.2, textureScale: [26, 26] },
 };
 
 function box(

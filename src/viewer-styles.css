@@ -138,7 +138,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 }
 .character-canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; touch-action: none; }
 
-.viewport-toolbar, .viewport-title, .measure-readout, .axis-glyph { position: absolute; z-index: 3; }
+.viewport-toolbar, .viewport-title, .measure-readout, .axis-glyph, .architectural-material-legend { position: absolute; z-index: 3; }
 .viewport-toolbar {
   top: 18px;
   left: 18px;
@@ -186,6 +186,27 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.architectural-material-legend {
+  left: 26px;
+  bottom: 112px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 9px;
+  border: 1px solid rgba(23,24,21,0.5);
+  background: rgba(236,238,232,0.9);
+  box-shadow: 0 5px 18px rgba(40,44,40,0.09);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+.architectural-material-legend span { display: inline-flex; align-items: center; gap: 4px; color: #343733; font-size: 7px; font-weight: 600; }
+.architectural-material-legend .legend-title { margin-right: 2px; color: var(--muted); font-family: var(--mono); font-size: 6.5px; letter-spacing: 0.12em; }
+.architectural-material-legend i { width: 9px; height: 9px; border: 1px solid rgba(23,24,21,0.3); }
+.finish-living { background: #d18b36; }
+.finish-bedroom { background: #a95448; }
+.finish-kitchen { background: #3f857b; }
+.finish-bath { background: #377c9a; }
+.finish-passage { background: #8b877e; }
 .measure-readout { right: 22px; bottom: 22px; display: flex; border-top: 1px solid var(--ink); pointer-events: none; }
 .measure-readout span { padding: 6px 10px 0; border-left: 1px solid var(--ink); color: var(--muted); font-family: var(--mono); font-size: 7px; }
 .measure-readout b { display: block; margin-top: 2px; color: var(--ink); font-size: 9px; }

@@ -15,7 +15,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
-import { fitPerspectiveCameraToBounds } from '../src/engine/camera-framing';
+import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../src/engine/camera-framing';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from '../src/engine/quality';
 import {
@@ -477,6 +477,13 @@ describe('PBR micro-surface system', () => {
 });
 
 describe('result viewer camera framing', () => {
+  it('reduces atmospheric fog for building-scale bounds without removing product depth', () => {
+    expect(fogDensityForAssetRadius(23)).toBeLessThan(0.003);
+    expect(fogDensityForAssetRadius(4)).toBeCloseTo(0.01625, 5);
+    expect(fogDensityForAssetRadius(0.12)).toBe(0.055);
+    expect(() => fogDensityForAssetRadius(0)).toThrow(/positive and finite/);
+  });
+
   it('moves a wide product farther away when the viewport becomes narrow', () => {
     const bounds = new THREE.Box3(
       new THREE.Vector3(-0.0807, -0.06195, -0.0035),

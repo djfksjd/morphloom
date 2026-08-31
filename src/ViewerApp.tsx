@@ -244,6 +244,16 @@ export function ViewerApp() {
             <span>REVIEWING</span>
             <strong>{activeName}</strong>
           </div>
+          {architecturalResult && mode === 'beauty' && (
+            <div className="architectural-material-legend" aria-label="공간 마감 색상 범례">
+              <span className="legend-title">ROOM FINISH</span>
+              <span><i className="finish-living" />거실</span>
+              <span><i className="finish-bedroom" />침실</span>
+              <span><i className="finish-kitchen" />주방</span>
+              <span><i className="finish-bath" />욕실</span>
+              <span><i className="finish-passage" />통로</span>
+            </div>
+          )}
           <div className="measure-readout">
             <span>{assetKind === 'human' ? 'HEIGHT' : 'ENVELOPE'} <b>{assetKind === 'human'
               ? `${spec.heightCm} cm`

@@ -8,7 +8,7 @@ import { buildCharacter } from '../engine/character';
 import { buildProduct, type ProductBuild, type ProductPartInfo } from '../engine/product';
 import type { AssemblyIR } from '../engine/assembly-ir';
 import { compileAssemblyIR } from '../engine/assembly-compiler';
-import { fitPerspectiveCameraToBounds } from '../engine/camera-framing';
+import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../engine/camera-framing';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
@@ -116,6 +116,10 @@ function frameBuild(
     padding,
   });
 
+  const sceneFog = runtime.scene.fog;
+  if (sceneFog instanceof THREE.FogExp2) sceneFog.density = fogDensityForAssetRadius(fit.radius);
+  runtime.renderer.toneMappingExposure = architectural ? 0.78 : 1;
+
   runtime.camera.fov = fov;
   runtime.camera.up.copy(fit.up);
   runtime.camera.position.copy(fit.center).addScaledVector(fit.direction, fit.distance);
@@ -161,7 +165,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2('#d8d9d5', 0.055);
+      scene.fog = new THREE.FogExp2('#c9ceca', 0.055);
       const camera = new THREE.PerspectiveCamera(31, 1, 0.001, 30);
       const controls = new OrbitControls(camera, canvas);
       controls.enableDamping = true;

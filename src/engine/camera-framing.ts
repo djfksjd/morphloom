@@ -17,6 +17,16 @@ export interface CameraFit {
   radius: number;
 }
 
+/**
+ * Keeps atmospheric depth subtle across millimetre-scale products and
+ * building-scale scenes. A fixed density turns a 40 m building into the fog
+ * colour as soon as the camera is fitted far enough away to see it.
+ */
+export function fogDensityForAssetRadius(radius: number): number {
+  if (!Number.isFinite(radius) || radius <= 0) throw new Error('Asset radius must be positive and finite.');
+  return THREE.MathUtils.clamp(0.065 / radius, 0.0018, 0.055);
+}
+
 /** Fits every box corner inside both axes of a perspective frustum. */
 export function fitPerspectiveCameraToBounds({
   bounds,
