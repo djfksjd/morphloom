@@ -2,7 +2,7 @@
 
 Decompose the visible object by manufacturing and service boundaries: enclosure panels, frames, fasteners, seals, buttons, lenses, bezels, boards, connectors, flex cables, wires, and decorative layers. Preserve gaps and mating interfaces.
 
-Use orthographic or multi-view evidence to solve proportions. With one perspective image, keep hidden depth and rear features inferred. Prefer manufacturer dimensions, datasheets, teardowns, and labelled exploded views over visual guessing.
+Use whichever evidence resolves proportions and interfaces: orthographic drawings, dimensions, datasheets, scans, existing CAD, or multi-view photographs. A dimensioned drawing may replace separate exterior photographs; a BOM and component drawing may replace an exploded image. With only one perspective image, keep hidden depth and rear features inferred. Prefer stronger engineering evidence over visual guessing.
 
 Create a product signature manifest before geometry. Include the overall envelope and corner radii; silhouette breaks; asymmetric controls; camera/lens stack; vents and perforations; seams and panel gaps; fastener count and placement; logos or decoration that change recognition; and every part the intended edit, animation, service, or exploded view must manipulate independently.
 

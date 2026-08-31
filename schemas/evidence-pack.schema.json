@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/djfksjd/morphloom/schemas/evidence-pack.schema.json",
+  "title": "Morphloom Semi-professional Evidence Pack 0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "target", "profile", "baseManifest", "dimensions", "cameraCalibrations", "expectedComponentIds", "readiness", "agentInstructions"],
+  "properties": {
+    "schema": { "const": "morphloom.evidence-pack/0.2" },
+    "target": { "const": "semi-professional-editable" },
+    "profile": { "$ref": "#/$defs/profile" },
+    "baseManifest": { "$ref": "#/$defs/baseManifest" },
+    "dimensions": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/dimension" } },
+    "cameraCalibrations": { "type": "array", "maxItems": 24, "items": { "$ref": "#/$defs/camera" } },
+    "expectedComponentIds": { "type": "array", "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/asciiId" } },
+    "readiness": { "$ref": "#/$defs/readiness" },
+    "agentInstructions": { "type": "array", "minItems": 1, "maxItems": 16, "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
+  },
+  "$defs": {
+    "profile": { "enum": ["product-visualization", "service-assembly", "architectural-review", "game-character"] },
+    "role": { "enum": ["front", "rear", "left", "right", "top", "bottom", "plan", "elevation", "section", "exploded", "component", "detail", "material", "measurement"] },
+    "capability": { "enum": ["shape", "depth", "scale", "surface", "interfaces", "internals", "assembly-order", "layout", "verticals", "openings", "circulation", "pose", "identity"] },
+    "asciiId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,79}$" },
+    "baseManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "assetKind", "units", "evidencePolicy", "coverage", "views", "agentInstructions"],
+      "properties": {
+        "schema": { "const": "morphloom.evidence/0.1" },
+        "assetKind": { "enum": ["human", "product"] },
+        "units": { "const": "mm" },
+        "evidencePolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["visibleGeometry", "hiddenGeometry", "componentMerge", "conflicts"],
+          "properties": {
+            "visibleGeometry": { "const": "measured-or-estimated-from-listed-views" },
+            "hiddenGeometry": { "const": "mark-inferred" },
+            "componentMerge": { "const": "merge-by-stable-component-id" },
+            "conflicts": { "const": "require-human-review" }
+          }
+        },
+        "coverage": { "type": "object" },
+        "views": { "type": "array", "maxItems": 24, "items": { "$ref": "#/$defs/view" } },
+        "agentInstructions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fileName", "role", "coveredRoles", "capabilities", "sourceType", "width", "height", "fileSize", "mimeType", "averageColor", "brightness", "inputFit", "notes"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "fileName": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "role": { "$ref": "#/$defs/role" },
+        "coveredRoles": { "type": "array", "maxItems": 14, "uniqueItems": true, "items": { "$ref": "#/$defs/role" } },
+        "capabilities": { "type": "array", "maxItems": 13, "uniqueItems": true, "items": { "$ref": "#/$defs/capability" } },
+        "sourceType": { "enum": ["photo", "technical-drawing", "datasheet", "scan", "cad"] },
+        "componentId": { "$ref": "#/$defs/asciiId" },
+        "width": { "type": "integer", "minimum": 1, "maximum": 20000 },
+        "height": { "type": "integer", "minimum": 1, "maximum": 20000 },
+        "fileSize": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "mimeType": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "averageColor": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "brightness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "inputFit": { "type": "number", "minimum": 0, "maximum": 100 },
+        "notes": { "type": "array", "maxItems": 32, "items": { "type": "string", "maxLength": 500 } }
+      }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "property", "valueMm", "status", "sourceViewId"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "property": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "valueMm": { "type": "number", "exclusiveMinimum": 0, "maximum": 100000000 },
+        "toleranceMm": { "type": "number", "minimum": 0, "maximum": 1000000 },
+        "status": { "enum": ["measured", "datasheet", "estimated"] },
+        "sourceViewId": { "type": "string", "minLength": 1, "maxLength": 120 }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["viewId", "projection", "anchorCount", "reprojectionErrorPx"],
+      "properties": {
+        "viewId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "projection": { "enum": ["perspective", "orthographic"] },
+        "anchorCount": { "type": "integer", "minimum": 4, "maximum": 256 },
+        "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 10000 }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["property", "observationIds", "minValueMm", "maxValueMm", "allowedSpreadMm"],
+      "properties": {
+        "property": { "type": "string" },
+        "observationIds": { "type": "array", "minItems": 2, "items": { "type": "string" } },
+        "minValueMm": { "type": "number" },
+        "maxValueMm": { "type": "number" },
+        "allowedSpreadMm": { "type": "number", "minimum": 0 }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "profile", "buildReady", "deliveryReady", "score", "recommendedRoles", "presentRecommendedRoles", "missingRecommendedRoles", "requiredCapabilities", "resolvedCapabilities", "unresolvedCapabilities", "strongDimensionProperties", "calibratedViews", "identifiedComponentIds", "conflicts", "blockers", "warnings", "nextActions"],
+      "properties": {
+        "target": { "const": "semi-professional-editable" },
+        "profile": { "$ref": "#/$defs/profile" },
+        "buildReady": { "type": "boolean" },
+        "deliveryReady": { "type": "boolean" },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "recommendedRoles": { "type": "array", "items": { "$ref": "#/$defs/role" } },
+        "presentRecommendedRoles": { "type": "array", "items": { "$ref": "#/$defs/role" } },
+        "missingRecommendedRoles": { "type": "array", "items": { "$ref": "#/$defs/role" } },
+        "requiredCapabilities": { "type": "array", "items": { "$ref": "#/$defs/capability" } },
+        "resolvedCapabilities": { "type": "array", "items": { "$ref": "#/$defs/capability" } },
+        "unresolvedCapabilities": { "type": "array", "items": { "$ref": "#/$defs/capability" } },
+        "strongDimensionProperties": { "type": "array", "items": { "type": "string" } },
+        "calibratedViews": { "type": "array", "items": { "type": "string" } },
+        "identifiedComponentIds": { "type": "array", "items": { "$ref": "#/$defs/asciiId" } },
+        "conflicts": { "type": "array", "items": { "$ref": "#/$defs/conflict" } },
+        "blockers": { "type": "array", "items": { "type": "string" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "nextActions": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

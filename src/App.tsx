@@ -10,6 +10,7 @@ import {
   buildReferenceManifest,
   evaluateReferenceSet,
   inferReferenceRole,
+  inferReferenceSourceType,
   inferHumanOutfitFromReferenceNames,
   MAX_REFERENCE_FILES,
   MAX_REFERENCE_TOTAL_BYTES,
@@ -164,7 +165,7 @@ export function App() {
     if (!activeReference) return undefined;
     return {
       ...activeReference.evidence,
-      fileName: activeReferenceViews.length > 1 ? `${activeReferenceViews.length}개 증거 이미지` : activeReference.fileName,
+      fileName: activeReferenceViews.length > 1 ? `${activeReferenceViews.length}개 근거 자료` : activeReference.fileName,
       portraitSuitability: referenceCoverage.score,
       notes: referenceCoverage.warnings.length > 0
         ? referenceCoverage.warnings
@@ -212,17 +213,17 @@ export function App() {
     const known = new Set(activeReferenceViews.map((view) => `${view.fileName}:${view.fileSize}:${view.lastModified}`));
     const uniqueFiles = files.filter((file) => !known.has(referenceIdentity(file)));
     if (uniqueFiles.length === 0) {
-      setReferenceError('이미 추가된 사진입니다.');
+      setReferenceError('이미 추가된 근거 자료입니다.');
       return;
     }
     if (referenceViews.length + uniqueFiles.length > MAX_REFERENCE_FILES) {
-      setReferenceError(`증거 이미지는 최대 ${MAX_REFERENCE_FILES}개까지 추가할 수 있습니다.`);
+      setReferenceError(`근거 자료는 최대 ${MAX_REFERENCE_FILES}개까지 추가할 수 있습니다.`);
       return;
     }
     const totalBytes = referenceViews.reduce((sum, view) => sum + view.fileSize, 0)
       + uniqueFiles.reduce((sum, file) => sum + file.size, 0);
     if (totalBytes > MAX_REFERENCE_TOTAL_BYTES) {
-      setReferenceError('전체 증거 이미지 용량은 최대 96MB입니다.');
+      setReferenceError('전체 근거 자료 용량은 최대 96MB입니다.');
       return;
     }
     processingReferencesRef.current = true;
@@ -234,6 +235,7 @@ export function App() {
         const batch = uniqueFiles.slice(start, start + 2);
         const results = await Promise.allSettled(batch.map(async (file, offset) => {
           const analyzed = await analyzeReference(file, assetKind);
+          const role = inferReferenceRole(file.name, referenceViews.length + start + offset);
           return {
             id: crypto.randomUUID(),
             assetKind,
@@ -242,7 +244,8 @@ export function App() {
             fileSize: file.size,
             mimeType: file.type,
             lastModified: file.lastModified,
-            role: inferReferenceRole(file.name, referenceViews.length + start + offset),
+            role,
+            sourceType: inferReferenceSourceType(file.name, role),
             evidence: analyzed.evidence,
           } satisfies ReferenceView;
         }));
@@ -269,7 +272,7 @@ export function App() {
         }
         setPromptNote(inferredOutfit === 'web-hero'
           ? '웹 히어로 참조 파일명 감지 · 마스크·렌즈·슈트 상세 CharacterIR을 적용했습니다.'
-          : `${accepted.length}개 사진 분석 완료 · 시점과 부품 ID를 확인한 뒤 EVIDENCE JSON을 저장하세요.`);
+          : `${accepted.length}개 근거 분석 완료 · 해결 속성과 부품 ID를 확인한 뒤 EVIDENCE JSON을 저장하세요.`);
       }
       if (failures.length > 0) setReferenceError(failures.join(' · '));
     } catch (error) {
@@ -298,7 +301,7 @@ export function App() {
     if (activeReferenceViews.length === 0) return;
     downloadJson(buildReferenceManifest(activeReferenceViews, assetKind), 'morphloom-evidence.json');
     setPromptNote(referenceCoverage.ready
-      ? 'EVIDENCE JSON 저장 완료 · 이미지 파일들과 함께 Codex/Claude에 전달하세요.'
+      ? 'EVIDENCE JSON 저장 완료 · 원본 근거 파일들과 함께 Codex/Claude에 전달하세요.'
       : `EVIDENCE JSON 저장 완료 · ${referenceCoverage.warnings[0] ?? '누락 증거를 확인하세요.'}`);
   }, [activeReferenceViews, assetKind, referenceCoverage]);
 
@@ -338,7 +341,7 @@ export function App() {
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
           <span className="brand-name">MORPHLOOM</span>
-          <span className="brand-edition">Asset Foundry / α03</span>
+          <span className="brand-edition">Asset Foundry / α04</span>
         </div>
         <div className="topbar-status">
           <span><i className="pulse-dot" /> LOCAL MESH</span>
@@ -377,8 +380,8 @@ export function App() {
               </>
             ) : (
               <span className="drop-copy">
-                <b>{assetKind === 'human' ? '인물 사진 묶음을 놓으세요' : '제품 증거 사진을 모두 놓으세요'}</b>
-                <small>{assetKind === 'human' ? '정면·후면·좌우측' : '6면·분해도·부품·재질'} · 파일당 16MB · 최대 24장</small>
+                <b>{assetKind === 'human' ? '인물 근거 자료를 놓으세요' : '제품 근거 자료를 놓으세요'}</b>
+                <small>{assetKind === 'human' ? '사진·모델시트·치수·재질' : '사진·설계도·치수·데이터시트'} · 필요한 범위만 · 최대 24개</small>
                 <em>{isProcessingReferences ? 'Analyzing…' : 'Browse images'}</em>
               </span>
             )}
@@ -398,10 +401,10 @@ export function App() {
           {referenceError && <p className="inline-error">{referenceError}</p>}
           {activeReferenceViews.length > 0 && (
             <div className="evidence-set">
-              <div className="evidence-coverage" aria-label="필수 시점 촬영 현황">
-                {referenceCoverage.requiredRoles.map((role) => (
+              <div className="evidence-coverage" aria-label="권장 시점 근거 현황">
+                {referenceCoverage.recommendedRoles.map((role) => (
                   <span
-                    className={referenceCoverage.presentRequiredRoles.includes(role) ? 'is-present' : ''}
+                    className={referenceCoverage.presentRecommendedRoles.includes(role) ? 'is-present' : ''}
                     key={role}
                     title={REFERENCE_ROLE_LABELS[role]}
                   >
@@ -427,7 +430,7 @@ export function App() {
                       <div className="reference-view-fields">
                         <select
                           value={view.role}
-                          aria-label={`${index + 1}번 사진 역할`}
+                          aria-label={`${index + 1}번 근거 역할`}
                           onChange={(event) => updateReferenceView(view.id, { role: event.target.value as ReferenceRole })}
                         >
                           {REFERENCE_ROLES.map((role) => <option value={role} key={role}>{REFERENCE_ROLE_LABELS[role]}</option>)}
@@ -455,7 +458,7 @@ export function App() {
                   <span>EVIDENCE<br />FIT</span>
                 </div>
                 <div>
-                  <b>{referenceCoverage.presentRequiredRoles.length}/{referenceCoverage.requiredRoles.length} 필수 시점 · {activeReferenceViews.length}장</b>
+                  <b>{referenceCoverage.presentRecommendedRoles.length}/{referenceCoverage.recommendedRoles.length} 권장 시점 · {activeReferenceViews.length}개 근거</b>
                   <small>{referenceCoverage.ready ? '병합 준비 완료' : referenceCoverage.warnings[0]}</small>
                 </div>
                 <button onClick={saveEvidenceManifest}>SAVE<br />EVIDENCE</button>

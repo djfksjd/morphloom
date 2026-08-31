@@ -4,6 +4,7 @@ import {
   evaluateReferenceSet,
   inferHumanOutfitFromReferenceNames,
   inferReferenceRole,
+  inferReferenceSourceType,
   normalizeComponentId,
   type ReferenceRole,
   type ReferenceView,
@@ -38,6 +39,9 @@ describe('multi-view evidence set', () => {
     expect(inferReferenceRole('제품_후면.jpg')).toBe('rear');
     expect(inferReferenceRole('mainboard_PCB_closeup.webp', 3)).toBe('component');
     expect(inferReferenceRole('surface_texture.png', 4)).toBe('material');
+    expect(inferReferenceSourceType('phone_dimension_drawing.png', 'measurement')).toBe('technical-drawing');
+    expect(inferReferenceSourceType('camera_module_datasheet.webp', 'component')).toBe('datasheet');
+    expect(inferReferenceSourceType('enclosure.step', 'component')).toBe('cad');
   });
 
   it('normalizes stable ASCII component ids', () => {
@@ -51,20 +55,17 @@ describe('multi-view evidence set', () => {
     expect(inferHumanOutfitFromReferenceNames(['portrait_front.jpg'])).toBeUndefined();
   });
 
-  it('requires six product views and identified component evidence', () => {
+  it('uses resolved shape, depth, and scale instead of requiring six photo files', () => {
     const complete = [
       view('front', 1), view('rear', 2), view('left', 3),
-      view('right', 4), view('top', 5), view('bottom', 6),
-      view('component', 7, 'camera_main'),
+      view('measurement', 4), view('component', 5, 'camera_main'),
     ];
     expect(evaluateReferenceSet(complete, 'product')).toMatchObject({
       ready: true,
-      score: 98,
-      missingRequiredRoles: [],
       unidentifiedComponentViews: 0,
     });
 
-    const incomplete = [...complete.slice(0, 6), view('component', 8)];
+    const incomplete = [view('front', 1), view('left', 2), view('component', 3)];
     expect(evaluateReferenceSet(incomplete, 'product')).toMatchObject({
       ready: false,
       unidentifiedComponentViews: 1,
@@ -76,10 +77,11 @@ describe('multi-view evidence set', () => {
     const manifest = buildReferenceManifest(views, 'product');
     expect(manifest.schema).toBe('morphloom.evidence/0.1');
     expect(manifest.views[0].id).toBe('view_01');
+    expect(manifest.views[0].capabilities).toContain('shape');
     expect(manifest.views[1].componentId).toBe('camera_main');
     expect(JSON.stringify(manifest)).not.toContain('blob:');
     expect(manifest.agentInstructions[0]).toContain('untrusted evidence');
-    expect(manifest.agentInstructions).toContain('Merge repeated component photos only by stable ASCII componentId.');
+    expect(manifest.agentInstructions).toContain('Merge repeated component evidence only by stable ASCII componentId.');
   });
 
   it('does not mix product and human evidence when the mode changes', () => {
@@ -91,8 +93,8 @@ describe('multi-view evidence set', () => {
     ];
     expect(evaluateReferenceSet(mixed, 'human')).toMatchObject({
       ready: false,
-      presentRequiredRoles: ['front'],
-      missingRequiredRoles: ['rear', 'left', 'right'],
+      presentRecommendedRoles: ['front'],
+      missingRecommendedRoles: ['rear', 'left', 'right'],
     });
     expect(buildReferenceManifest(mixed, 'human').views).toHaveLength(1);
   });

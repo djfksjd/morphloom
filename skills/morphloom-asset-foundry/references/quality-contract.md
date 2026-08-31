@@ -1,6 +1,6 @@
 # Default quality contract
 
-Apply these requirements even when the user gives only a subject and one source.
+Apply these requirements to every asset. Source sufficiency comes from [evidence-pack.md](evidence-pack.md); do not substitute a fixed photograph count for capability coverage.
 
 ## Internal completion contract
 
@@ -19,6 +19,7 @@ Do not interrupt for ordinary quality choices. Ask only when alternatives confli
 ## Evidence
 
 - Record the source and status (`measured`, `datasheet`, `estimated`, or `inferred`) on every edit unit.
+- Judge evidence by resolved properties. A dimensioned drawing, datasheet, scan, existing CAD, or photograph may satisfy the same property; prefer the strongest source and never require a particular medium when another source resolves it.
 - Compare the compiled asset against the same view as the source. Counts and watertight topology do not prove visual fidelity.
 - A single image cannot directly establish hidden depth, rear detail, exact scale, or internal construction. Keep those values explicit as inference.
 - Do not let a plausible prior override visible evidence. When the source is ambiguous, retain the ambiguity in metadata and avoid precision claims.

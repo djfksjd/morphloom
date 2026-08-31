@@ -490,7 +490,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
 
       Object.assign(window, {
         __MORPHLOOM__: {
-          version: '0.3.0',
+          version: '0.4.0',
           vertices: build.metrics.vertices,
           triangles: build.metrics.triangles,
           heightMeters: build.metrics.heightMeters,

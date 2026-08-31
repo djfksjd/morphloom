@@ -19,7 +19,7 @@
 
 Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽어 공통 `CharacterIR` 또는 `AssemblyIR`을 작성하고, 브라우저의 결정론적 Three.js 엔진이 실제 메시를 컴파일하는 방식입니다. 결과물은 단일 렌더가 아니라 **부품 이름·실물 단위·재질·토폴로지·전기 연결 정보를 가진 편집 가능한 GLB**입니다.
 
-> 현재 상태는 `v0.3 alpha`입니다. 제품 시각화, 게임 프리비즈, 후편집 가능한 베이스 메시를 목표로 합니다. 제조 승인 CAD, 인물 스캔, 회로 설계 검증을 대체한다고 주장하지 않습니다.
+> 현재 상태는 `v0.4 alpha`입니다. 충분한 복합 근거에서 검수를 최소화한 준실무 편집 에셋을 목표로 합니다. 제조 승인 CAD, 인물 스캔, 회로 설계 검증을 대체한다고 주장하지 않습니다.
 
 ## 핵심 결과
 
@@ -51,7 +51,7 @@ GLB + PNG + IR
 ```
 
 - 사진과 자연어 요구사항은 웹 폼이 아니라 저장소를 연 **Codex 또는 Claude의 개발/CLI 대화**에 직접 전달합니다.
-- 에이전트는 정면·후면·좌·우·상·하단, 분해도, 부품, 재질, 치수 근거를 읽고 `CharacterIR` 또는 `AssemblyIR`을 작성합니다.
+- 에이전트는 사진 수를 세지 않고 설계도·치수·데이터시트·스캔·기존 CAD·사진이 해결하는 형상, 깊이, 스케일, 재질과 부품 관계를 판독해 `CharacterIR` 또는 `AssemblyIR`을 작성합니다.
 - 로컬 웹은 생성 명령을 받지 않는 결과 전용 뷰어입니다. 모델 선택, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, 부품 검사, 두 점 실측과 내보내기를 제공합니다.
 - 별도 API 키나 브라우저 내부 LLM 호출은 필요하지 않습니다. `OPEN RESULT`는 CLI가 만든 AssemblyIR JSON을 검수할 때만 사용합니다.
 - `CharacterIR 0.2`는 LLM의 시각 판단을 단순 문장으로 버리지 않습니다. 체형·복부·가슴·둔부·전방 머리·무게중심·손동작을 수치 제어값으로 보존하고, 화면 좌우와 해부학적 좌우를 별도로 기록합니다.
@@ -172,9 +172,9 @@ npm run build
 이 사진(또는 도면)으로 편집 가능한 3D 에셋 만들어줘.
 ```
 
-스킬 내부의 건축·제품·인체별 규칙이 일반적인 디테일 요구를 대신합니다. 실제 치수·다각도 사진·분해도·재질 근접 사진이 있으면 함께 주는 것이 좋지만, 누락된 정보는 자동으로 `estimated/inferred`로 분리됩니다. `generation-policy.ts`의 짧은 요청 확장기와 IR 상세 감사가 스킬 계약을 코드에서도 검사합니다.
+스킬 내부의 건축·제품·인체별 규칙이 일반적인 디테일 요구를 대신합니다. 입력은 특정 형식이나 장수가 아니라 **만들 수 있는 근거의 충분성**으로 평가됩니다. 치수가 있는 정투상 설계도 한 장이 여러 시점 사진을 대체할 수 있고, BOM·부품 도면이 분해도를 대체할 수 있습니다. 누락된 정보는 `estimated/inferred`로 분리되며, 핵심 속성이 해결되지 않으면 저품질 결과를 생성하지 않고 필요한 근거만 구체적으로 반환합니다.
 
-여러 사진을 사용하는 제품은 6면·분해도·부품·재질 사진을 파일명과 함께 Codex/Claude 대화에 전달합니다. 에이전트가 같은 부품의 반복 사진에 안정적인 ASCII `component_id`를 부여하고 하나의 AssemblyIR 노드로 병합합니다. 웹 화면은 이 근거를 수정하지 않고 결과와 품질 상태만 보여줍니다.
+`Evidence Pack 0.2`는 파일 개수가 아니라 `shape/depth/scale/surface/interfaces`와 도메인별 내부·배치·포즈 속성의 해결 여부를 기록합니다. `buildReady`는 검수 초벌 컴파일만 허용하고, 모든 필수 속성·치수 충돌·카메라 또는 정투상 근거가 통과한 `deliveryReady`에서만 준실무 납품 후보가 됩니다. 같은 부품의 반복 근거는 안정적인 ASCII `component_id`로 하나의 AssemblyIR 노드에 병합합니다.
 
 ## Claude 하나로 사용
 
@@ -240,7 +240,8 @@ Morphloom은 **부품 세분화, 재사용 가능한 IR, 전기 연결 의미론
 src/engine/assembly-compiler.ts  공통 형상 IR 컴파일러
 src/engine/connectivity.ts       포트·네트·개별 도체와 연결성 검사
 src/engine/surface-system.ts     PBR finish·micro-normal·roughness·이방성 반사
-src/engine/reference-set.ts      다중 시점·부품 사진 증거 매니페스트
+src/engine/reference-set.ts      사진·도면·데이터시트의 역할·해결 속성 매니페스트
+src/engine/evidence-readiness.ts 근거 팩 충돌·buildReady·deliveryReady 판정
 src/engine/cooling-assembly.ts   첨부 이미지 파생 회귀 사례
 src/engine/product.ts            스마트폰 164부품 예제
 src/engine/knife.ts              장식 단검 IR 예제
@@ -261,6 +262,6 @@ benchmarks/                      재현 가능한 수치와 비교 정책
 
 <div align="center">
 
-**사진을 그럴듯한 한 장의 렌더로 끝내지 않고, 검사하고 고칠 수 있는 3D 구조로 만듭니다.**
+**만들 수 있는 근거를 검사하고, 검수를 최소화한 편집 가능 3D 구조로 만듭니다.**
 
 </div>

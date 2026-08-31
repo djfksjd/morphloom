@@ -244,7 +244,7 @@ export function ViewerApp() {
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
           <span className="brand-name">MORPHLOOM</span>
-          <span className="brand-edition">Result Viewer / α03</span>
+          <span className="brand-edition">Result Viewer / α04</span>
         </div>
         <div className="result-selector">
           <span>ACTIVE RESULT</span>

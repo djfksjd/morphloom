@@ -596,4 +596,18 @@ describe('short-prompt generation contract', () => {
     expect(projectionAudit.pass).toBe(false);
     expect(projectionAudit.blockers).toContain('side wings and center wing are not on opposite facades');
   });
+
+  it('blocks duplicate edit-unit ids and non-finite transforms in the optimized detail audit', () => {
+    const duplicate = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    duplicate.components[1].id = duplicate.components[0].id;
+    const duplicateAudit = auditAssemblyDetail(duplicate);
+    expect(duplicateAudit.pass).toBe(false);
+    expect(duplicateAudit.duplicateComponentIds).toEqual([duplicate.components[0].id]);
+
+    const invalidTransform = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    invalidTransform.components[0].position = [Number.POSITIVE_INFINITY, 0, 0];
+    const transformAudit = auditAssemblyDetail(invalidTransform);
+    expect(transformAudit.pass).toBe(false);
+    expect(transformAudit.finiteTransformCoverage).toBeLessThan(1);
+  });
 });

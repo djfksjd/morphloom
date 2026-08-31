@@ -179,8 +179,8 @@ const result = {
       sourceResolution: '960×1280',
       inputFit: spiderManSingleView.evidence.portraitSuitability,
       evidenceScore: spiderManEvidence.score,
-      requiredViews: `${spiderManEvidence.presentRequiredRoles.length}/${spiderManEvidence.requiredRoles.length}`,
-      missingViews: spiderManEvidence.missingRequiredRoles,
+      recommendedViews: `${spiderManEvidence.presentRecommendedRoles.length}/${spiderManEvidence.recommendedRoles.length}`,
+      missingRecommendedViews: spiderManEvidence.missingRecommendedRoles,
       blocked: !spiderManEvidence.ready,
       visualFidelityClaimAllowed: false,
       characterBuild: {

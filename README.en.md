@@ -19,7 +19,7 @@
 
 Morphloom uses a multimodal coding agent to translate reference images and requirements into a shared `CharacterIR` or `AssemblyIR`. A deterministic Three.js engine then compiles real geometry locally. The output is not a single flattering render: it is an **editable GLB with named components, real units, materials, topology evidence, and electrical connectivity**.
 
-> Status: `v0.3 alpha`. The target is product visualization, game previs, and editable base meshes. Morphloom does not claim to replace manufacturing CAD, human scanning, or electrical design verification.
+> Status: `v0.4 alpha`. The target is a low-review semi-professional editable asset from sufficient mixed evidence. Morphloom does not claim to replace manufacturing CAD, human scanning, or electrical design verification.
 
 ## Verified results
 
@@ -51,7 +51,7 @@ images + known dimensions
 ```
 
 - Give images and natural-language requirements directly to **Codex or Claude in the development/CLI conversation**, not to a browser form.
-- The agent reads the exterior views, exploded views, components, materials, and measurements, then authors `CharacterIR` or `AssemblyIR`.
+- The agent does not count photographs. It reads the shape, depth, scale, surface, and relationship evidence resolved by drawings, dimensions, datasheets, scans, existing CAD, and photographs, then authors `CharacterIR` or `AssemblyIR`.
 - The local web app is a result-only viewer: asset selection, Beauty/Clay/Wire/X-Ray, ISO/TOP/REAR, component inspection, two-point measurement, and export.
 - No separate API key or hidden browser LLM call is required. `OPEN RESULT` exists only to inspect an AssemblyIR JSON produced from the CLI workflow.
 - `CharacterIR 0.2` keeps the agent's visual judgment as data instead of discarding it as prose: body type, abdomen, chest, glutes, forward head, balance, and hand gesture become editable controls, with screen-side and anatomical-side mappings stored separately.
@@ -172,9 +172,9 @@ The repository includes the [`morphloom-asset-foundry`](./skills/morphloom-asset
 Turn this image (or drawing) into an editable 3D asset.
 ```
 
-Asset-specific architecture, product, and human rules carry the ordinary detail requirements. Known dimensions, multi-view images, exploded views, and material macro photographs still improve the result; missing evidence is automatically separated as `estimated/inferred`. `generation-policy.ts` also expands short briefs and audits the resulting IR in code.
+Asset-specific architecture, product, and human rules carry the ordinary detail requirements. Inputs are judged by whether they resolve the properties needed to model the asset, not by a prescribed medium or file count. One dimensioned orthographic sheet can replace several exterior photographs, and a BOM plus part drawings can replace an exploded image. Unresolved properties remain `estimated/inferred`; unresolved core geometry returns a precise evidence request instead of a misleading low-quality result.
 
-For a multi-photo product, give the six exterior views plus exploded, component, and material photographs—with useful file names—to the Codex or Claude conversation. The agent assigns stable ASCII `component_id` values and merges repeated views into one AssemblyIR node. The web app does not edit that evidence; it only presents the compiled result and quality status.
+`Evidence Pack 0.2` records resolved `shape/depth/scale/surface/interfaces` capabilities plus domain-specific internal, spatial, or pose evidence. `buildReady` authorizes only a review draft. A semi-professional delivery candidate additionally requires `deliveryReady`, with required capabilities resolved, strong dimensions conflict-free, and photographic cameras calibrated or replaced by orthographic evidence. Repeated evidence for the same part is merged through a stable ASCII `component_id`.
 
 ## Using Claude alone
 
@@ -240,7 +240,8 @@ One [960×1280 cosplay photograph from Wikimedia Commons](https://commons.wikime
 src/engine/assembly-compiler.ts  shared geometry IR compiler
 src/engine/connectivity.ts       ports, nets, conductors, connectivity gates
 src/engine/surface-system.ts     PBR finishes, micro-normal, roughness, anisotropy
-src/engine/reference-set.ts      multi-view and component evidence manifest
+src/engine/reference-set.ts      source roles and resolved capabilities across photos/drawings/data
+src/engine/evidence-readiness.ts conflicts plus buildReady/deliveryReady evidence gates
 src/engine/cooling-assembly.ts   supplied-image regression asset
 src/engine/product.ts            164-part smartphone example
 src/engine/knife.ts              ornate knife IR example
@@ -261,6 +262,6 @@ Code is [Apache-2.0](./LICENSE). The bundled `oxihuman-core-v1.ohpk` data is CC0
 
 <div align="center">
 
-**Turn an image into a 3D structure you can inspect and repair—not just one convincing render.**
+**Turn sufficient evidence into an editable 3D structure designed to minimize review.**
 
 </div>
