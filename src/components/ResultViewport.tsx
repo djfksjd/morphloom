@@ -81,9 +81,11 @@ function createMeasurementField(height: number): THREE.Group {
   return group;
 }
 
-function viewDirection(view: CameraView, exteriorOnly: boolean): THREE.Vector3 {
+function viewDirection(view: CameraView, exteriorOnly: boolean, architectural: boolean): THREE.Vector3 {
+  if (view === 'top' && architectural) return new THREE.Vector3(0, 1, 0);
   if (view === 'front' || view === 'top') return new THREE.Vector3(0, 0, 1);
   if (view === 'rear') return new THREE.Vector3(0, 0, -1);
+  if (architectural) return new THREE.Vector3(1.35, 0.9, 1.3);
   return exteriorOnly
     ? new THREE.Vector3(-0.58, 0.28, -1.72)
     : new THREE.Vector3(1.5, 0.4, 1.05);
@@ -98,14 +100,17 @@ function frameBuild(
 ): void {
   const referenceFront = assetKind === 'human' && spec.pose === 'reference-action' && runtime.view === 'front';
   const exteriorOnly = assetKind === 'product' && assemblyIR?.metadata?.scope === 'exterior-only';
+  const architectural = assetKind === 'product' && assemblyIR?.metadata?.assetKind === 'building';
   const fov = referenceFront ? 40 : 31;
   const padding = exteriorOnly
     ? runtime.view === 'iso' ? 1.4 : 1.52
     : 1.24;
   const fit = fitPerspectiveCameraToBounds({
     bounds: build.metrics.bounds,
-    direction: viewDirection(runtime.view, exteriorOnly),
-    up: new THREE.Vector3(0, 1, 0),
+    direction: viewDirection(runtime.view, exteriorOnly, architectural),
+    up: architectural && runtime.view === 'top'
+      ? new THREE.Vector3(0, 0, 1)
+      : new THREE.Vector3(0, 1, 0),
     verticalFovDegrees: fov,
     aspect: runtime.camera.aspect,
     padding,

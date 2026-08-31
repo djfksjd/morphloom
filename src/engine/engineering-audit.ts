@@ -2,7 +2,7 @@ import type { AssemblyIR, EvidenceStatusIR } from './assembly-ir';
 import type { ConnectivityReport } from './connectivity';
 
 export interface EngineeringAuditReport {
-  scope: 'full-assembly' | 'exterior-only';
+  scope: 'full-assembly' | 'exterior-only' | 'architectural-shell-only';
   electricalApplicable: boolean;
   components: number;
   componentEvidence: Record<EvidenceStatusIR | 'undocumented', number>;
@@ -30,7 +30,11 @@ export function inspectEngineeringEvidence(
   assembly: AssemblyIR,
   connectivity?: ConnectivityReport,
 ): EngineeringAuditReport {
-  const scope = assembly.metadata?.scope === 'exterior-only' ? 'exterior-only' : 'full-assembly';
+  const scope = assembly.metadata?.scope === 'exterior-only'
+    ? 'exterior-only'
+    : assembly.metadata?.scope === 'architectural-shell-only'
+      ? 'architectural-shell-only'
+      : 'full-assembly';
   const electricalApplicable = Boolean(assembly.electrical);
   const componentEvidence: EngineeringAuditReport['componentEvidence'] = {
     measured: 0,
@@ -68,7 +72,7 @@ export function inspectEngineeringEvidence(
       && physicalPinCoverage === 1
       && conductorGaugeCoverage === 1
       && conductorVerificationCoverage === 1
-    : scope === 'exterior-only' && evidenceCoverage === 1;
+    : scope !== 'full-assembly' && evidenceCoverage === 1;
   const productionReady = digitalReady
     && evidenceScore >= 90
     && componentEvidence.inferred === 0

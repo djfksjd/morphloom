@@ -5,6 +5,7 @@ import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from './engine/galaxy-fold8-exterior';
+import { POOR_COYOTES_CABIN_IR } from './engine/poor-coyotes-cabin';
 import { loadHumanPack } from './engine/ohpk';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
@@ -36,6 +37,10 @@ type ViewerAsset = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'habs-cabin', label: 'HABS Measured Cabin', caption: '17′4″ × 13′10″ · architectural shell', kind: 'product',
+    spec: DEFAULT_PRODUCT_SPEC, assemblyIR: POOR_COYOTES_CABIN_IR,
+  },
   {
     id: 'fold8', label: 'Galaxy Z Fold8', caption: '2026 · Graphite · exterior', kind: 'product',
     spec: DEFAULT_PRODUCT_SPEC, assemblyIR: GALAXY_Z_FOLD8_EXTERIOR_IR,
@@ -127,6 +132,7 @@ export function ViewerApp() {
   }, [assemblyIR, assetKind, characterMetrics, pack, productMetrics, productSpec, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
   const productPartCount = productMetrics?.parts;
+  const architecturalResult = assemblyIR?.metadata?.assetKind === 'building';
   const displayedTriangles = buildMetrics && 'renderedTriangles' in buildMetrics
     ? buildMetrics.renderedTriangles
     : buildMetrics?.triangles;
@@ -201,7 +207,9 @@ export function ViewerApp() {
               <div className="view-switcher" role="group" aria-label="고정 카메라 시점">
                 {assetKind === 'human' && <button onClick={() => viewportRef.current?.setView('front')}>FRONT</button>}
                 <button onClick={() => viewportRef.current?.setView('iso')}>ISO</button>
-                {assetKind === 'product' && <button onClick={() => viewportRef.current?.setView('top')}>TOP</button>}
+                {assetKind === 'product' && <button onClick={() => viewportRef.current?.setView('top')}>
+                  {assemblyIR?.metadata?.assetKind === 'building' ? 'PLAN' : 'TOP'}
+                </button>}
                 <button onClick={() => viewportRef.current?.setView('rear')}>REAR</button>
               </div>
             </div>
@@ -286,9 +294,13 @@ export function ViewerApp() {
               <span className="eyebrow">engineering evidence audit</span>
               <b>{productEngineering.electricalApplicable
                 ? `${productEngineering.digitalReady ? 'DIGITAL CONNECTED' : 'DIGITAL BLOCKED'} · ${productEngineering.productionReady ? 'BENCH RELEASED' : 'PHYSICAL QA REQUIRED'}`
+                : architecturalResult
+                  ? `${productEngineering.digitalReady ? 'ARCHITECTURE COMPILED' : 'EVIDENCE BLOCKED'} · ${productEngineering.productionReady ? 'SOURCE RELEASED' : 'SITE QA REQUIRED'}`
                 : `${productEngineering.digitalReady ? 'EXTERIOR COMPILED' : 'EVIDENCE BLOCKED'} · ${productEngineering.productionReady ? 'SOURCE RELEASED' : 'SOURCE QA REQUIRED'}`}</b>
               <small>{productEngineering.electricalApplicable
                 ? `PIN ${Math.round(productEngineering.physicalPinCoverage * 100)}% · AWG ${Math.round(productEngineering.conductorGaugeCoverage * 100)}% · VERIFY ${Math.round(productEngineering.conductorVerificationCoverage * 100)}%`
+                : architecturalResult
+                  ? `PLAN EVIDENCE ${Math.round(productEngineering.componentEvidenceCoverage * 100)}% · STRUCTURE/MEP EXCLUDED`
                 : 'EXTERIOR SCOPE · INTERNAL ELECTRICAL EXCLUDED'}</small>
               <p>실측/데이터시트 {productEngineering.componentEvidence.measured + productEngineering.componentEvidence.datasheet} · 추정 {productEngineering.componentEvidence.estimated} · 숨은 형상 {productEngineering.componentEvidence.inferred}</p>
               <div className="semantic-tags">
@@ -297,7 +309,7 @@ export function ViewerApp() {
                   <span>{productEngineering.benchRequiredWires} polarity checks</span>
                   <span>live anchors {productConnectivity?.liveAnchors ? 'on' : 'off'}</span>
                 </> : <>
-                  <span>exterior only</span><span>{productEngineering.componentEvidence.datasheet} datasheet</span>
+                  <span>{architecturalResult ? 'architectural shell' : 'exterior only'}</span><span>{productEngineering.componentEvidence.datasheet} datasheet</span>
                   <span>{productEngineering.componentEvidence.estimated} image-scaled</span>
                 </>}
               </div>

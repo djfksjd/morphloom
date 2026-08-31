@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-31%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-33%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -32,6 +32,7 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 스마트폰 표면 | PBR finish 13종 · micro-normal 219/220 · 이방성 반사 재질 111개 |
 | 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
 | 첨부 이미지 파생 냉각 장치 | 97개 원본 부품 → 172개 렌더 부품 · watertight 322/322 메시 · 개별 도체 75/75 · 물리 포트 150/150 |
+| HABS 건물 실측도면 | 17′4″ × 13′10″ 셸 · 116개 명명 부재 · 108,432 tris · watertight 116/116 메시 |
 | 출력 | GLB · PNG · CharacterIR/AssemblyIR · 물리 Netlist JSON |
 
 ## 사진을 넣으면 바로 3D가 만들어지나요?
@@ -77,6 +78,10 @@ GLB + PNG + IR
 
 디지털 연결·토폴로지 검사는 통과하지만, 보이지 않는 바닥면, 정확한 체결 구조, 실제 PCB 패턴과 배선 경로는 사진 한 장으로 측정할 수 없어 `inferred`로 남습니다. 따라서 실물 도통·극성·안전정지 검사가 끝날 때까지 `productionReady`는 `false`이며 품질 화면도 이를 숨기지 않습니다. 원본 이미지는 권리가 불명확해 저장소에 재배포하지 않습니다.
 
+### 건물 실측도면 회귀 테스트
+
+미국 의회도서관의 공개 HABS 자료인 [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet)를 건축 셸 회귀 사례로 사용합니다. 도면과 기록에 명시된 외곽 `17′4″ × 13′10″`, 창 `2′0″ × 2′9″`, 문 `2′6″ × 5′11″`는 `measured/datasheet`로 보존하고, 도면에 없는 벽 높이·지붕 경사는 `estimated`로 분리합니다. 현재 결과는 116개 명명 부재, 108,432 tris, 경계·비매니폴드·퇴화 삼각형 0이며 건축 셸은 통과하지만 구조해석·기초·MEP·현장 시공 검증은 포함하지 않습니다.
+
 ## 30초 실행
 
 ```bash
@@ -87,6 +92,7 @@ npm run dev
 브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Galaxy Z Fold8 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
 
 - `Galaxy Z Fold8` — 삼성 공식 치수와 다각도 사진 기반 Graphite 외관
+- `HABS Measured Cabin` — 공개 실측도면 기반 건축 셸·개구부 회귀 사례
 - `TEC Cooling Assembly` — 첨부 이미지에서 파생한 전기 연결 회귀 사례
 - `Phone Assembly` — 스마트폰 164부품·28개 도체 분해도
 - `Ornate Blade` — 가변 두께 검신과 장식을 가진 단검

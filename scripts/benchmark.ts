@@ -8,6 +8,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
+import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { evaluateReferenceSet, type ReferenceView } from '../src/engine/reference-set';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, WEB_HERO_SPEC } from '../src/types';
 
@@ -15,6 +16,7 @@ const knife = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
 const fold8 = compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty');
+const habsCabin = compileAssemblyIR(POOR_COYOTES_CABIN_IR, 'beauty');
 const topology = analyzeTopology(knife.root);
 const humanPack = await parseOhpk(
   new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk')),
@@ -131,6 +133,22 @@ const result = {
       surfaces: fold8.metrics.surfaces,
       engineeringEvidence: fold8.metrics.engineering,
       internalElectronicsIncluded: false,
+    },
+    habsMeasuredCabin: {
+      source: POOR_COYOTES_CABIN_IR.metadata?.sourceUrl,
+      measuredFootprintMm: `${POOR_COYOTES_CABIN_IR.metadata?.measuredLengthMm}×${POOR_COYOTES_CABIN_IR.metadata?.measuredWidthMm}`,
+      components: POOR_COYOTES_CABIN_IR.components.length,
+      renderedParts: habsCabin.metrics.parts,
+      triangles: habsCabin.metrics.triangles,
+      namedOpenings: habsCabin.parts.filter((part) => /window|door/.test(part.id)).length,
+      watertightParts: `${habsCabin.metrics.topology.watertightMeshes}/${habsCabin.metrics.topology.meshes}`,
+      boundaryEdges: habsCabin.metrics.topology.boundaryEdges,
+      nonManifoldEdges: habsCabin.metrics.topology.nonManifoldEdges,
+      degenerateTriangles: habsCabin.metrics.topology.degenerateTriangles,
+      surfaces: habsCabin.metrics.surfaces,
+      engineeringEvidence: habsCabin.metrics.engineering,
+      architecturalShellReady: habsCabin.metrics.topology.pass,
+      structureAndMepReady: false,
     },
     spiderManSingleImageHonestyGate: {
       source: 'https://commons.wikimedia.org/wiki/File:Spider-Man_cosplay.jpg',

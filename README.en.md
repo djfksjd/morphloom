@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-31%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-33%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -32,6 +32,7 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Smartphone surfaces | 13 PBR finishes · micro-normal on 219/220 materials · 111 anisotropic materials |
 | Ornate knife | 16 parts · 18,930 tris · 16/16 watertight |
 | Image-derived cooling assembly | 97 source components → 172 rendered parts · 322/322 watertight meshes · 75/75 conductors · 150/150 physical ports |
+| HABS measured building plan | 17′4″ × 13′10″ shell · 116 named elements · 108,432 tris · 116/116 watertight meshes |
 | Output | GLB · PNG · CharacterIR/AssemblyIR · physical Netlist JSON |
 
 ## Does dropping in an image immediately create 3D?
@@ -77,6 +78,10 @@ The user-supplied 2038×1268 exploded electronics image and the `new-chat` engin
 
 Digital connectivity and topology pass, but hidden undersides, exact fasteners, PCB traces, and real routing cannot be measured from one exploded view and remain `inferred`. `productionReady` therefore stays `false` until continuity, polarity, and fail-safe checks pass. The source image is not redistributed because its reuse rights are unknown.
 
+### Measured-building regression test
+
+The public Library of Congress HABS record [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet) is the architectural-shell regression asset. The documented `17′4″ × 13′10″` footprint, `2′0″ × 2′9″` windows, and `2′6″ × 5′11″` door remain `measured/datasheet`; wall height and roof pitch missing from the plan remain `estimated`. The current build has 116 named elements, 108,432 triangles, and zero boundary, non-manifold, or degenerate edges. The architectural shell passes; structural analysis, foundation design, MEP, and site verification remain out of scope.
+
 ## Quick start
 
 ```bash
@@ -87,6 +92,7 @@ npm run dev
 Open the printed local URL. It starts with the Galaxy Z Fold8 result and contains no image-upload or prompt fields.
 
 - `Galaxy Z Fold8` — Graphite exterior grounded in official dimensions and imagery
+- `HABS Measured Cabin` — architectural shell and openings grounded in a public measured drawing
 - `TEC Cooling Assembly` — image-derived electrical-connectivity regression asset
 - `Phone Assembly` — 164-part smartphone with 28 individual conductors
 - `Ornate Blade` — ornate dagger with a variable-thickness blade

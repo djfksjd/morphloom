@@ -9,6 +9,7 @@ import { buildProduct } from '../src/engine/product';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
+import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
@@ -176,6 +177,29 @@ describe('OHPK human pipeline', () => {
 });
 
 describe('AssemblyIR product pipeline', () => {
+  it('compiles a measured HABS cabin with explicit openings and evidence boundaries', () => {
+    const build = compileAssemblyIR(POOR_COYOTES_CABIN_IR, 'beauty');
+    expect(POOR_COYOTES_CABIN_IR.metadata).toMatchObject({
+      assetKind: 'building',
+      measuredLengthMm: 5283.2,
+      measuredWidthMm: 4216.4,
+      estimatedRoofPitchDegrees: 38,
+    });
+    expect(build.parts.length).toBeGreaterThan(80);
+    expect(build.root.getObjectByName('west_door_trim_head')).toBeTruthy();
+    expect(build.root.getObjectByName('north_casement_vertical')).toBeTruthy();
+    expect(build.root.getObjectByName('cedar_shake_roof_north')).toBeTruthy();
+    expect(build.metrics.topology.pass).toBe(true);
+    expect(build.metrics.engineering.componentEvidence.measured).toBeGreaterThan(40);
+    expect(build.metrics.engineering).toMatchObject({
+      scope: 'architectural-shell-only', electricalApplicable: false, digitalReady: true, productionReady: false,
+    });
+    const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics, POOR_COYOTES_CABIN_IR);
+    expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({
+      label: '건축 셸 범위 검수', status: 'pass', score: 97,
+    });
+  });
+
   it('builds a detailed phone as independently named parts', () => {
     const build = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
     expect(build.metrics.parts).toBeGreaterThanOrEqual(160);

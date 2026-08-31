@@ -104,6 +104,7 @@ export function evaluateProductQuality(
   const isKnife = spec.kind === 'ornate-knife';
   const isImportedAssembly = Boolean(assemblyIR);
   const isExteriorOnly = assemblyIR?.metadata?.scope === 'exterior-only';
+  const isArchitectural = assemblyIR?.metadata?.assetKind === 'building';
   const connectivity = metrics?.connectivity;
   const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
@@ -139,7 +140,7 @@ export function evaluateProductQuality(
       + connectivity.specifiedGaugeWires / connectivity.wires
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
-  const connectivityScore = isKnife || isExteriorOnly
+  const connectivityScore = isKnife || isExteriorOnly || isArchitectural
     ? 97
     : connectivity?.errors.length
       ? Math.max(0, 72 - connectivity.errors.length * 8)
@@ -149,7 +150,7 @@ export function evaluateProductQuality(
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
-      label: isKnife ? '가변 두께 검신' : isExteriorOnly ? '외관 부품 구조' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
+      label: isKnife ? '가변 두께 검신' : isArchitectural ? '건축 부재 구조' : isExteriorOnly ? '외관 부품 구조' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
@@ -158,7 +159,7 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isImportedAssembly ? '부품 근거 완성도' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '실측 도면 근거' : isImportedAssembly ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
@@ -178,11 +179,13 @@ export function evaluateProductQuality(
     },
     {
       id: 'rig',
-      label: isKnife ? '실무 토폴로지' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
+      label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
-      status: isKnife || isExteriorOnly ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
+      status: isKnife || isExteriorOnly || isArchitectural ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
+        : isArchitectural
+          ? '도면 기반 벽체·개구부·지붕·지지부재 셸 · 구조해석과 MEP는 범위에서 제외'
         : isExteriorOnly
           ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity
