@@ -5,6 +5,7 @@ import type { AssemblyIR } from './engine/assembly-ir';
 import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from './engine/galaxy-fold8-exterior';
+import { LAUREL_HOMES_BUILDING_B_IR } from './engine/laurel-homes-building-b';
 import { POOR_COYOTES_CABIN_IR } from './engine/poor-coyotes-cabin';
 import { loadHumanPack } from './engine/ohpk';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
@@ -37,6 +38,10 @@ type ViewerAsset = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'laurel-homes', label: 'Laurel Homes Apartments', caption: '9 units · 3 stairs · measured HABS plan', kind: 'product',
+    spec: DEFAULT_PRODUCT_SPEC, assemblyIR: LAUREL_HOMES_BUILDING_B_IR,
+  },
   {
     id: 'habs-cabin', label: 'HABS Measured Cabin', caption: '17′4″ × 13′10″ · architectural shell', kind: 'product',
     spec: DEFAULT_PRODUCT_SPEC, assemblyIR: POOR_COYOTES_CABIN_IR,
@@ -93,10 +98,10 @@ export function ViewerApp() {
   const [pack, setPack] = useState<HumanPack>();
   const [packError, setPackError] = useState<string>();
   const [assetKind, setAssetKind] = useState<AssetKind>('product');
-  const [activeAssetId, setActiveAssetId] = useState('fold8');
+  const [activeAssetId, setActiveAssetId] = useState('laurel-homes');
   const [spec, setSpec] = useState<CharacterSpec>(DEFAULT_SPEC);
   const [productSpec, setProductSpec] = useState<ProductSpec>(DEFAULT_PRODUCT_SPEC);
-  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(GALAXY_Z_FOLD8_EXTERIOR_IR);
+  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(LAUREL_HOMES_BUILDING_B_IR);
   const [mode, setMode] = useState<ViewMode>('beauty');
   const [buildMetrics, setBuildMetrics] = useState<CharacterBuild['metrics'] | ProductBuild['metrics']>();
   const [selectedPart, setSelectedPart] = useState<ProductPartInfo>();

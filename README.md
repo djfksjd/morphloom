@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-33%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-34%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -33,6 +33,7 @@ Morphloom은 멀티모달 코딩 에이전트가 사진과 요구사항을 읽�
 | 장식 단검 | 16개 부품 · 18,930 tris · watertight 16/16 |
 | 첨부 이미지 파생 냉각 장치 | 97개 원본 부품 → 172개 렌더 부품 · watertight 322/322 메시 · 개별 도체 75/75 · 물리 포트 150/150 |
 | HABS 건물 실측도면 | 17′4″ × 13′10″ 셸 · 116개 명명 부재 · 108,432 tris · watertight 116/116 메시 |
+| HABS 공동주택 전체 기준층 | 4층·36세대 기록 → 9세대 기준층 · 3개 계단실 · 45개 명명 공간 · 305개 부재 · 179,340 tris |
 | 출력 | GLB · PNG · CharacterIR/AssemblyIR · 물리 Netlist JSON |
 
 ## 사진을 넣으면 바로 3D가 만들어지나요?
@@ -82,6 +83,10 @@ GLB + PNG + IR
 
 미국 의회도서관의 공개 HABS 자료인 [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet)를 건축 셸 회귀 사례로 사용합니다. 도면과 기록에 명시된 외곽 `17′4″ × 13′10″`, 창 `2′0″ × 2′9″`, 문 `2′6″ × 5′11″`는 `measured/datasheet`로 보존하고, 도면에 없는 벽 높이·지붕 경사는 `estimated`로 분리합니다. 현재 결과는 116개 명명 부재, 108,432 tris, 경계·비매니폴드·퇴화 삼각형 0이며 건축 셸은 통과하지만 구조해석·기초·MEP·현장 시공 검증은 포함하지 않습니다.
 
+단순 주택보다 복잡한 검증에는 [Laurel Homes Historic District, Building B · HABS OH-2468-A](https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf)의 실제 공동주택 도면을 사용합니다. 기록상 건물은 4층·36세대이며 한 층에 9세대와 3개 계단실이 있습니다. Morphloom 프리셋은 `139′ × 46′4″` 본체와 `27′ × 17′6″` 후면 날개를 실측값으로 유지하고, 각 세대의 거실·침실·주방·욕실·통로 45개 공간, 외벽·창호·칸막이·발코니·66개 계단 디딤판을 독립 부재로 만듭니다. 결과는 305개 부재, 179,340 tris, watertight 305/305이며 천장을 제거한 기준층 컷어웨이로 위에서 내부를 가리지 않습니다. 판독 가능한 외곽·평면 근거 231개와 도면에 없는 높이·세부 형상 추정 74개를 분리 기록합니다.
+
+이 결과는 **실제 도면을 편집 가능한 공간 모델로 옮길 수 있는지 확인하는 건축 시각화 회귀 사례**입니다. 아직 BIM 객체·구조 계산·배관/전기·법규·시공 허용오차를 포함하는 준공 모델은 아닙니다.
+
 ## 30초 실행
 
 ```bash
@@ -89,8 +94,9 @@ npm ci
 npm run dev
 ```
 
-브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Galaxy Z Fold8 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
+브라우저에서 표시된 로컬 주소를 엽니다. 기본 화면은 Laurel Homes 공동주택 기준층 결과이며 사진 업로드나 프롬프트 입력란은 없습니다.
 
+- `Laurel Homes Apartments` — 실제 4층·36세대 HABS 도면에서 재구성한 9세대 기준층 컷어웨이
 - `Galaxy Z Fold8` — 삼성 공식 치수와 다각도 사진 기반 Graphite 외관
 - `HABS Measured Cabin` — 공개 실측도면 기반 건축 셸·개구부 회귀 사례
 - `TEC Cooling Assembly` — 첨부 이미지에서 파생한 전기 연결 회귀 사례

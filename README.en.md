@@ -9,7 +9,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-33%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-34%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Model weights](https://img.shields.io/badge/3D%20model%20weights-none-f05d47?style=flat-square)
 
@@ -33,6 +33,7 @@ Morphloom uses a multimodal coding agent to translate reference images and requi
 | Ornate knife | 16 parts · 18,930 tris · 16/16 watertight |
 | Image-derived cooling assembly | 97 source components → 172 rendered parts · 322/322 watertight meshes · 75/75 conductors · 150/150 physical ports |
 | HABS measured building plan | 17′4″ × 13′10″ shell · 116 named elements · 108,432 tris · 116/116 watertight meshes |
+| HABS multifamily typical floor | documented 4 floors/36 apartments → 9-unit floor · 3 stairs · 45 named spaces · 305 parts · 179,340 tris |
 | Output | GLB · PNG · CharacterIR/AssemblyIR · physical Netlist JSON |
 
 ## Does dropping in an image immediately create 3D?
@@ -82,6 +83,10 @@ Digital connectivity and topology pass, but hidden undersides, exact fasteners, 
 
 The public Library of Congress HABS record [Poor Coyote’s Cabin · HABS ID-75](https://www.loc.gov/resource/hhh.id0103.sheet) is the architectural-shell regression asset. The documented `17′4″ × 13′10″` footprint, `2′0″ × 2′9″` windows, and `2′6″ × 5′11″` door remain `measured/datasheet`; wall height and roof pitch missing from the plan remain `estimated`. The current build has 116 named elements, 108,432 triangles, and zero boundary, non-manifold, or degenerate edges. The architectural shell passes; structural analysis, foundation design, MEP, and site verification remain out of scope.
 
+The complex-building regression uses the real multifamily plans for [Laurel Homes Historic District, Building B · HABS OH-2468-A](https://tile.loc.gov/storage-services/master/pnp/habshaer/oh/oh1800/oh1847/data/oh1847data.pdf). The record documents four floors, 36 apartments, nine units per floor, and three stairwells. The preset preserves the measured `139′ × 46′4″` main bar and `27′ × 17′6″` rear wing, then creates 45 independently named living, bedroom, kitchen, bath, and passage zones plus walls, windows, balconies, and 66 stair treads. The 305-part, 179,340-triangle result is watertight 305/305 and uses a ceiling-free floor cutaway so the top view cannot be blocked. It tracks 231 plan-grounded components separately from 74 components whose height or construction detail had to be estimated.
+
+This is an architectural-visualization regression for translating a real drawing into an editable spatial model. It is not yet a construction BIM, structural calculation, MEP design, code review, or as-built tolerance record.
+
 ## Quick start
 
 ```bash
@@ -89,8 +94,9 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL. It starts with the Galaxy Z Fold8 result and contains no image-upload or prompt fields.
+Open the printed local URL. It starts with the Laurel Homes apartment-floor result and contains no image-upload or prompt fields.
 
+- `Laurel Homes Apartments` — nine-unit cutaway reconstructed from a real four-floor, 36-apartment HABS record
 - `Galaxy Z Fold8` — Graphite exterior grounded in official dimensions and imagery
 - `HABS Measured Cabin` — architectural shell and openings grounded in a public measured drawing
 - `TEC Cooling Assembly` — image-derived electrical-connectivity regression asset

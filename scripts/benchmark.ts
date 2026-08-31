@@ -8,6 +8,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
+import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { evaluateReferenceSet, type ReferenceView } from '../src/engine/reference-set';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, WEB_HERO_SPEC } from '../src/types';
@@ -17,6 +18,7 @@ const phone = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
 const cooling = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
 const fold8 = compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty');
 const habsCabin = compileAssemblyIR(POOR_COYOTES_CABIN_IR, 'beauty');
+const laurelHomes = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
 const topology = analyzeTopology(knife.root);
 const humanPack = await parseOhpk(
   new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk')),
@@ -148,6 +150,26 @@ const result = {
       surfaces: habsCabin.metrics.surfaces,
       engineeringEvidence: habsCabin.metrics.engineering,
       architecturalShellReady: habsCabin.metrics.topology.pass,
+      structureAndMepReady: false,
+    },
+    laurelHomesApartmentFloor: {
+      source: LAUREL_HOMES_BUILDING_B_IR.metadata?.sourceUrl,
+      documentedBuilding: `${LAUREL_HOMES_BUILDING_B_IR.metadata?.documentedFloors} floors · ${LAUREL_HOMES_BUILDING_B_IR.metadata?.documentedApartments} apartments`,
+      modeledFloor: `${LAUREL_HOMES_BUILDING_B_IR.metadata?.modeledApartments} apartments · ${LAUREL_HOMES_BUILDING_B_IR.metadata?.documentedStairwells} stairs`,
+      measuredMainEnvelopeMm: `${LAUREL_HOMES_BUILDING_B_IR.metadata?.measuredLengthMm}×${LAUREL_HOMES_BUILDING_B_IR.metadata?.measuredMainDepthMm}`,
+      measuredRearWingMm: `${LAUREL_HOMES_BUILDING_B_IR.metadata?.measuredRearWingWidthMm}×${LAUREL_HOMES_BUILDING_B_IR.metadata?.measuredRearWingProjectionMm}`,
+      components: LAUREL_HOMES_BUILDING_B_IR.components.length,
+      renderedParts: laurelHomes.metrics.parts,
+      triangles: laurelHomes.metrics.triangles,
+      namedRooms: laurelHomes.parts.filter((part) => /_floor$/.test(part.id) && /^unit_/.test(part.id)).length,
+      stairSteps: laurelHomes.parts.filter((part) => /_step_/.test(part.id)).length,
+      windows: laurelHomes.parts.filter((part) => /_window_\d+$/.test(part.id)).length,
+      watertightParts: `${laurelHomes.metrics.topology.watertightMeshes}/${laurelHomes.metrics.topology.meshes}`,
+      boundaryEdges: laurelHomes.metrics.topology.boundaryEdges,
+      nonManifoldEdges: laurelHomes.metrics.topology.nonManifoldEdges,
+      degenerateTriangles: laurelHomes.metrics.topology.degenerateTriangles,
+      engineeringEvidence: laurelHomes.metrics.engineering,
+      architecturalShellReady: laurelHomes.metrics.topology.pass,
       structureAndMepReady: false,
     },
     spiderManSingleImageHonestyGate: {

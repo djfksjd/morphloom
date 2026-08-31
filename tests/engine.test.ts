@@ -10,6 +10,7 @@ import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
+import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
@@ -177,6 +178,34 @@ describe('OHPK human pipeline', () => {
 });
 
 describe('AssemblyIR product pipeline', () => {
+  it('compiles a complete nine-apartment HABS floor with rooms, stairs and façade openings', () => {
+    const build = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
+    expect(LAUREL_HOMES_BUILDING_B_IR.metadata).toMatchObject({
+      assetKind: 'building',
+      buildingType: 'multifamily-apartment',
+      documentedFloors: 4,
+      documentedApartments: 36,
+      modeledApartments: 9,
+      documentedStairwells: 3,
+      measuredLengthMm: 42367.2,
+      measuredMainDepthMm: 14122.4,
+    });
+    expect(build.parts.length).toBeGreaterThan(180);
+    expect(build.parts.filter((part) => /^unit_\d+_(living|bedroom|kitchen|bath|passage)_floor$/.test(part.id))).toHaveLength(45);
+    expect(build.parts.filter((part) => /_step_/.test(part.id))).toHaveLength(66);
+    expect(build.parts.filter((part) => /^(north|south)_window_\d+$/.test(part.id))).toHaveLength(36);
+    expect(build.root.getObjectByName('rear_wing_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('stair_2_landing')).toBeTruthy();
+    expect(build.root.getObjectByName('unit_9_bath_floor')).toBeTruthy();
+    expect(build.metrics.topology).toMatchObject({
+      pass: true, boundaryEdges: 0, nonManifoldEdges: 0, degenerateTriangles: 0,
+    });
+    expect(build.metrics.engineering.componentEvidenceCoverage).toBe(1);
+    expect(build.metrics.engineering).toMatchObject({
+      scope: 'architectural-shell-only', electricalApplicable: false, digitalReady: true, productionReady: false,
+    });
+  });
+
   it('compiles a measured HABS cabin with explicit openings and evidence boundaries', () => {
     const build = compileAssemblyIR(POOR_COYOTES_CABIN_IR, 'beauty');
     expect(POOR_COYOTES_CABIN_IR.metadata).toMatchObject({
