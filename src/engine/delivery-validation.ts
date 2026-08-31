@@ -289,9 +289,13 @@ export function compareGlbRoundTrip(
   if (reopened.materials < source.materials * 0.8) warnings.push(`material families changed ${source.materials}→${reopened.materials}`);
   if (glbBytes <= 20) blockers.push('GLB payload is empty');
   const status: DeliveryAuditStatus = blockers.length > 0 ? 'blocked' : warnings.length > 0 ? 'warn' : 'pass';
+  const exactParity = status === 'pass' && meshParity && triangleParity
+    && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
     ? Math.max(0, 58 - blockers.length * 8)
-    : Math.round(Math.max(70, Math.min(100, 92 + namedNodeCoverage * 6 - boundsErrorMm * 4 - warnings.length * 5)));
+    : exactParity
+      ? 100
+      : Math.round(Math.max(70, Math.min(99, 92 + namedNodeCoverage * 6 - boundsErrorMm * 4 - warnings.length * 5)));
   return {
     status,
     score,

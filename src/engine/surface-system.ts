@@ -53,6 +53,10 @@ const recipe = (value: Partial<SurfaceRecipe>): SurfaceRecipe => ({
 
 export const SURFACE_LIBRARY: Readonly<Record<SurfaceFinishIR, SurfaceRecipe>> = {
   raw: recipe({ pattern: 'none', microNormalStrength: 0 }),
+  concrete: recipe({ roughness: 0.88, metalness: 0, clearcoat: 0.01, microNormalStrength: 0.46, textureScale: [34, 34], pattern: 'grain' }),
+  plaster: recipe({ roughness: 0.82, metalness: 0, clearcoat: 0.025, microNormalStrength: 0.3, textureScale: [28, 28], pattern: 'orange-peel' }),
+  stone: recipe({ roughness: 0.56, metalness: 0, clearcoat: 0.14, microNormalStrength: 0.32, textureScale: [18, 18], pattern: 'grain' }),
+  'coated-metal': recipe({ roughness: 0.5, metalness: 0.42, clearcoat: 0.18, anisotropy: 0.42, microNormalStrength: 0.24, textureScale: [12, 48], pattern: 'directional' }),
   'brushed-metal': recipe({ roughness: 0.24, metalness: 0.94, clearcoat: 0.22, clearcoatRoughness: 0.26, anisotropy: 0.78, microNormalStrength: 0.2, textureScale: [4, 38], pattern: 'directional' }),
   'bead-blasted-metal': recipe({ roughness: 0.42, metalness: 0.9, clearcoat: 0.16, clearcoatRoughness: 0.42, microNormalStrength: 0.28, textureScale: [18, 18], pattern: 'grain' }),
   'anodized-metal': recipe({ roughness: 0.3, metalness: 0.82, clearcoat: 0.38, clearcoatRoughness: 0.3, anisotropy: 0.28, microNormalStrength: 0.18, textureScale: [14, 14], pattern: 'grain' }),
@@ -87,6 +91,10 @@ export function inferSurfaceFinish(materialName: string, explicit?: SurfaceFinis
   if (/사파이어|sapphire/.test(name)) return 'sapphire';
   if (/가죽|leather/.test(name)) return 'leather';
   if (/월넛|wood|목재/.test(name)) return 'wood';
+  if (/콘크리트|concrete|시멘트|cement/.test(name)) return 'concrete';
+  if (/스터코|stucco|플라스터|plaster|석고|gypsum|도장 벽/.test(name)) return 'plaster';
+  if (/석재|stone|화강암|granite|대리석|marble/.test(name)) return 'stone';
+  if (/도장.*금속|coated.*metal|powder.?coat|standing.?seam/.test(name)) return 'coated-metal';
   if (/cmos|bga|반도체|vcsel|mems|sensor/.test(name)) return 'semiconductor';
   if (/고무|rubber|실리콘|silicone|pfa|불소수지/.test(name)) return 'rubber';
   if (/fr-?4|pcb|솔더|solder/.test(name)) return 'pcb-soldermask';

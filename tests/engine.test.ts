@@ -11,12 +11,14 @@ import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
+import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../src/engine/camera-framing';
 import { calculateMeasurement, formatMeasurement, valueInUnit } from '../src/engine/measurement';
+import { editAssemblyLayout, isLayoutEditable } from '../src/engine/layout-edit';
 import { auditAssemblyDetail, expandGenerationBrief } from '../src/engine/generation-policy';
 import { applyProductPrompt, applyPrompt } from '../src/engine/prompt';
 import { evaluateProductQuality, evaluateQuality } from '../src/engine/quality';
@@ -261,8 +263,33 @@ describe('AssemblyIR product pipeline', () => {
     });
     const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics, POOR_COYOTES_CABIN_IR);
     expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({
-      label: '건축 셸 범위 검수', status: 'pass', score: 97,
+      label: '건축 셸 범위 검수', status: 'pass', score: 100,
     });
+  });
+
+  it('builds the Pinterest concept residence but keeps semi-professional delivery blocked', () => {
+    expect(() => validateAssemblyIR(MODERNCAT_CONCEPT_RESIDENCE_IR)).not.toThrow();
+    const build = compileAssemblyIR(MODERNCAT_CONCEPT_RESIDENCE_IR, 'beauty');
+    expect(build.parts.length).toBeGreaterThan(90);
+    expect(build.root.getObjectByName('ground_floor_slab')).toBeTruthy();
+    expect(build.root.getObjectByName('living_front_glazing')).toBeTruthy();
+    expect(build.root.getObjectByName('garage_door')).toBeTruthy();
+    expect(build.root.getObjectByName('front_balcony_glass')).toBeTruthy();
+    expect(build.root.getObjectByName('roof_hip_shell')).toBeTruthy();
+    expect(build.root.getObjectByName('upper_bath_toilet')).toBeTruthy();
+    expect(build.root.getObjectByName('upper_bath_shower_glass')).toBeTruthy();
+    expect(build.root.getObjectByName('living_ceiling_light')?.children.some((child) => child instanceof THREE.PointLight)).toBe(true);
+    expect(build.metrics.topology).toMatchObject({
+      pass: true, boundaryEdges: 0, nonManifoldEdges: 0, degenerateTriangles: 0,
+    });
+    const detail = auditAssemblyDetail(MODERNCAT_CONCEPT_RESIDENCE_IR);
+    expect(detail.footprintVerified).toBe(true);
+    expect(detail.blockers).toContain('evidence pack not delivery-ready: verified-provenance,verified-section,field-measured-height,dimension-arithmetic');
+    const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics, MODERNCAT_CONCEPT_RESIDENCE_IR);
+    expect(report.total).toBeGreaterThanOrEqual(90);
+    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'pass', score: 100 });
+    expect(report.deliveryReady).toBe(false);
+    expect(report.evidenceScore).toBeLessThan(100);
   });
 
   it('builds a detailed phone as independently named parts', () => {
@@ -666,5 +693,27 @@ describe('short-prompt generation contract', () => {
     const transformAudit = auditAssemblyDetail(invalidTransform);
     expect(transformAudit.pass).toBe(false);
     expect(transformAudit.finiteTransformCoverage).toBeLessThan(1);
+  });
+
+  it('persists furniture translation, rotation, and reset in AssemblyIR', () => {
+    const source = structuredClone(MODERNCAT_CONCEPT_RESIDENCE_IR);
+    const original = source.components.find((component) => component.id === 'primary_bed');
+    expect(original?.position).toBeTruthy();
+    expect(isLayoutEditable('primary_bed')).toBe(true);
+    const moved = editAssemblyLayout(source, 'primary_bed', { kind: 'translate', deltaMm: [250, 0, -250] });
+    const movedBed = moved.components.find((component) => component.id === 'primary_bed');
+    expect(movedBed?.position).toEqual([
+      (original?.position?.[0] ?? 0) + 250,
+      original?.position?.[1],
+      (original?.position?.[2] ?? 0) - 250,
+    ]);
+    const rotated = editAssemblyLayout(moved, 'primary_bed', { kind: 'rotateY', radians: Math.PI / 12 });
+    expect(rotated.components.find((component) => component.id === 'primary_bed')?.rotation?.[1])
+      .toBeCloseTo((original?.rotation?.[1] ?? 0) + Math.PI / 12);
+    const reset = editAssemblyLayout(rotated, 'primary_bed', { kind: 'reset', source });
+    expect(reset.components.find((component) => component.id === 'primary_bed')).toMatchObject({
+      position: original?.position,
+      rotation: original?.rotation,
+    });
   });
 });

@@ -6,6 +6,7 @@ export type AssemblyGeometryIR =
   | { op: 'extrude'; points: Array<[number, number]>; depth: number; bevelSize?: number; bevelThickness?: number; bevelSegments?: number }
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
   | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean }
+  | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }
   | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] };
 
 export interface AssemblyMaterialIR {
@@ -32,6 +33,10 @@ export interface AssemblyMaterialIR {
 
 export type SurfaceFinishIR =
   | 'raw'
+  | 'concrete'
+  | 'plaster'
+  | 'stone'
+  | 'coated-metal'
   | 'brushed-metal'
   | 'bead-blasted-metal'
   | 'anodized-metal'
@@ -67,11 +72,20 @@ export interface AssemblyComponentIR {
   category: 'enclosure' | 'display' | 'logic' | 'power' | 'camera' | 'audio' | 'radio' | 'mechanical' | 'interconnect';
   materialName: string;
   detail: string;
+  /** Optional architectural/storey grouping used by the read-only viewer. */
+  level?: string;
   geometry: AssemblyGeometryIR;
   position?: [number, number, number];
   rotation?: [number, number, number];
   scale?: [number, number, number];
   material: AssemblyMaterialIR;
+  /** Optional physically inspectable light source compiled with the fixture. */
+  light?: {
+    color: string;
+    intensity: number;
+    rangeMm: number;
+    decay?: number;
+  };
   evidence?: ComponentEvidenceIR;
 }
 

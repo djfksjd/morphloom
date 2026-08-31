@@ -35,6 +35,8 @@ import {
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
+export type BuildingLevel = 'all' | 'L1' | 'L2';
+export type LightingMode = 'day' | 'night';
 
 export interface ExportReceipt {
   fileName: string;
@@ -61,8 +63,11 @@ export interface ViewportHandle {
   capturePng: () => Promise<ExportReceipt>;
   cancelExport: () => void;
   setView: (view: CameraView) => void;
+  setBuildingLevel: (level: BuildingLevel) => void;
+  setLighting: (mode: LightingMode) => void;
   focusPart: (partId: string) => boolean;
   fitAsset: () => void;
+  zoomBy: (factor: number) => void;
   clearMeasurement: () => void;
 }
 
@@ -83,6 +88,7 @@ interface ResultViewportProps {
   measurementEnabled?: boolean;
   measurementMode?: MeasurementMode;
   measurementUnit?: MeasurementUnit;
+  dimensionOverviewEnabled?: boolean;
   onBuilt?: (build: CharacterBuild | ProductBuild) => void;
   onPartSelected?: (part?: InspectablePart) => void;
   onMeasurementChange?: (result: MeasurementResult | undefined, points: 0 | 1 | 2) => void;
@@ -99,17 +105,49 @@ interface Runtime {
   root: THREE.Group;
   measurement: THREE.Group;
   annotation: THREE.Group;
+  dimensionOverview: THREE.Group;
   floor: THREE.Mesh;
   frame: number;
   observer: ResizeObserver;
   environment: THREE.Texture;
   view: CameraView;
+  buildingLevel: BuildingLevel;
+  lighting: LightingMode;
+  key: THREE.DirectionalLight;
+  edge: THREE.DirectionalLight;
+  hemisphere: THREE.HemisphereLight;
+  reflectionStrip: THREE.RectAreaLight;
+  warmStrip: THREE.RectAreaLight;
   syncDiagnostics: () => void;
 }
 
 function clearGroup(group: THREE.Group): void {
   disposeObject(group);
   group.clear();
+}
+
+function applyLighting(runtime: Runtime, build?: CharacterBuild | ProductBuild): void {
+  const night = runtime.lighting === 'night';
+  runtime.renderer.toneMappingExposure = night ? 1 : 1;
+  runtime.scene.background = new THREE.Color(night ? '#182535' : '#d9dad5');
+  runtime.scene.fog = new THREE.FogExp2(night ? '#1a2938' : '#c9ceca', night ? 0.026 : 0.055);
+  runtime.key.intensity = night ? 1.35 : 2.65;
+  runtime.edge.intensity = night ? 1.5 : 1.35;
+  runtime.hemisphere.intensity = night ? 0.75 : 1.05;
+  runtime.reflectionStrip.intensity = night ? 1.8 : 4.4;
+  runtime.warmStrip.intensity = night ? 1.65 : 2.45;
+  build?.root.traverse((object) => {
+    if (!(object instanceof THREE.PointLight) || !object.userData.morphloomFixture) return;
+    object.intensity = night ? Number(object.userData.nightIntensity ?? 1) : Number(object.userData.dayIntensity ?? 0.08);
+  });
+  runtime.syncDiagnostics();
+}
+
+function zoomOptically(runtime: Runtime, factor: number): void {
+  if (!Number.isFinite(factor) || factor <= 0) return;
+  runtime.camera.zoom = THREE.MathUtils.clamp(runtime.camera.zoom * factor, 0.65, 12);
+  runtime.camera.updateProjectionMatrix();
+  runtime.syncDiagnostics();
 }
 
 function annotationLine(
@@ -174,11 +212,104 @@ function drawMeasurementAnnotation(
   runtime.annotation.add(valueLabel);
 }
 
+function drawDimensionOverview(
+  runtime: Runtime,
+  build: CharacterBuild | ProductBuild,
+  unit: MeasurementUnit,
+): void {
+  clearGroup(runtime.dimensionOverview);
+  build.root.updateMatrixWorld(true);
+  const assetSize = build.metrics.bounds.getSize(new THREE.Vector3());
+  const assetDiagonal = Math.max(assetSize.length(), 0.1);
+  const tick = Math.max(assetDiagonal * 0.006, 0.018);
+  const labelWidth = THREE.MathUtils.clamp(assetDiagonal * 0.092, 0.48, 1.72);
+  const repeatedDetail = /(slat|seam|mullion|post|step|chair|light|screw|port|ring|aperture|connector|nightstand|ridge cap)/i;
+  const candidates: Array<{
+    bounds: THREE.Box3;
+    size: THREE.Vector3;
+    part: ProductPartInfo;
+    priority: number;
+  }> = [];
+  const seenPartIds = new Set<string>();
+  build.root.traverseVisible((object) => {
+    if (!(object instanceof THREE.Mesh) || !object.userData.part) return;
+    const part = object.userData.part as ProductPartInfo;
+    if (seenPartIds.has(part.id) || repeatedDetail.test(`${part.id} ${part.name}`)) return;
+    const bounds = new THREE.Box3().setFromObject(object, true);
+    if (bounds.isEmpty()) return;
+    const size = bounds.getSize(new THREE.Vector3());
+    const longest = Math.max(size.x, size.y, size.z);
+    if (longest < assetDiagonal * 0.012) return;
+    seenPartIds.add(part.id);
+    const architecturalWeight = part.category === 'enclosure' ? assetDiagonal * 0.2 : part.category === 'display' ? assetDiagonal * 0.08 : 0;
+    candidates.push({ bounds, size, part, priority: longest + Math.cbrt(Math.max(size.x * size.y * size.z, 0)) * 0.25 + architecturalWeight });
+  });
+
+  const maximumDimensions = assetDiagonal > 4 ? 20 : 28;
+  const selected = candidates.sort((left, right) => right.priority - left.priority).slice(0, maximumDimensions);
+  selected.forEach(({ bounds, size, part }, index) => {
+    const lane = index % 4;
+    const offset = Math.max(tick * (2.1 + lane * 0.6), Math.min(size.y, assetDiagonal * 0.03) * 0.18);
+    const y = bounds.max.y + offset;
+    const z = bounds.max.z + offset * 0.35;
+    const widthStart = new THREE.Vector3(bounds.min.x, y, z);
+    const widthEnd = new THREE.Vector3(bounds.max.x, y, z);
+    runtime.dimensionOverview.add(annotationLine([widthStart, widthEnd], '#04b7d6'));
+    runtime.dimensionOverview.add(annotationLine([
+      widthStart.clone().add(new THREE.Vector3(0, -tick, 0)),
+      widthStart.clone().add(new THREE.Vector3(0, tick, 0)),
+    ], '#04b7d6'));
+    runtime.dimensionOverview.add(annotationLine([
+      widthEnd.clone().add(new THREE.Vector3(0, -tick, 0)),
+      widthEnd.clone().add(new THREE.Vector3(0, tick, 0)),
+    ], '#04b7d6'));
+    const widthLabel = annotationLabel(
+      `W ${formatMeasurement(size.x, unit)}  ·  D ${formatMeasurement(size.z, unit)}`,
+      labelWidth,
+      '#10191b',
+      '#ffffff',
+    );
+    widthLabel.position.copy(widthStart).lerp(widthEnd, 0.5).add(new THREE.Vector3(0, tick * 1.55, 0));
+    widthLabel.userData.partId = part.id;
+    runtime.dimensionOverview.add(widthLabel);
+
+    const heightX = bounds.max.x + offset * 0.9;
+    const heightStart = new THREE.Vector3(heightX, bounds.min.y, z);
+    const heightEnd = new THREE.Vector3(heightX, bounds.max.y, z);
+    runtime.dimensionOverview.add(annotationLine([heightStart, heightEnd], '#ffb454'));
+    runtime.dimensionOverview.add(annotationLine([
+      heightStart.clone().add(new THREE.Vector3(-tick, 0, 0)),
+      heightStart.clone().add(new THREE.Vector3(tick, 0, 0)),
+    ], '#ffb454'));
+    runtime.dimensionOverview.add(annotationLine([
+      heightEnd.clone().add(new THREE.Vector3(-tick, 0, 0)),
+      heightEnd.clone().add(new THREE.Vector3(tick, 0, 0)),
+    ], '#ffb454'));
+    const heightLabel = annotationLabel(
+      `H ${formatMeasurement(size.y, unit)}`,
+      labelWidth * 0.72,
+      '#261b0d',
+      '#fff7e8',
+      '#ffb454',
+    );
+    heightLabel.position.copy(heightStart).lerp(heightEnd, 0.5).add(new THREE.Vector3(offset * 0.85, 0, 0));
+    heightLabel.userData.partId = part.id;
+    runtime.dimensionOverview.add(heightLabel);
+  });
+  runtime.dimensionOverview.userData.dimensionCount = selected.length;
+  runtime.dimensionOverview.userData.dimensionCandidateCount = candidates.length;
+  runtime.dimensionOverview.userData.dimensionLimit = maximumDimensions;
+  runtime.dimensionOverview.userData.dimensionMode = 'decluttered-width-depth-height';
+  runtime.dimensionOverview.visible = true;
+  runtime.syncDiagnostics();
+}
+
 function annotationLabel(
   text: string,
   width: number,
   background: string,
   foreground: string,
+  border = '#70d6e8',
 ): THREE.Sprite {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -187,7 +318,7 @@ function annotationLabel(
   if (!context) throw new Error('Measurement label canvas is unavailable.');
   context.fillStyle = background;
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.strokeStyle = '#70d6e8';
+  context.strokeStyle = border;
   context.lineWidth = 8;
   context.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
   context.fillStyle = foreground;
@@ -223,6 +354,15 @@ function safeFileName(value: string, fallback = 'morphloom-result'): string {
     .replace(/^-+|-+$/g, '')
     .slice(0, 80);
   return normalized || fallback;
+}
+
+function visibleInHierarchy(object: THREE.Object3D): boolean {
+  let current: THREE.Object3D | null = object;
+  while (current) {
+    if (!current.visible) return false;
+    current = current.parent;
+  }
+  return true;
 }
 
 function downloadBlob(blob: Blob, name: string): ExportReceipt {
@@ -374,7 +514,7 @@ function frameBuild(
     bounds: build.metrics.bounds,
     direction: viewDirection(runtime.view, exteriorOnly, architectural),
     up: architectural && runtime.view === 'top'
-      ? new THREE.Vector3(0, 0, 1)
+      ? new THREE.Vector3(0, 0, -1)
       : new THREE.Vector3(0, 1, 0),
     verticalFovDegrees: fov,
     aspect: runtime.camera.aspect,
@@ -386,6 +526,7 @@ function frameBuild(
   runtime.renderer.toneMappingExposure = architectural ? 0.78 : 1;
 
   runtime.camera.fov = fov;
+  runtime.camera.zoom = 1;
   runtime.camera.up.copy(fit.up);
   runtime.camera.position.copy(fit.center).addScaledVector(fit.direction, fit.distance);
   runtime.camera.near = Math.max(0.001, fit.distance - fit.radius * 1.8);
@@ -393,7 +534,9 @@ function frameBuild(
   runtime.camera.updateProjectionMatrix();
   runtime.camera.lookAt(fit.center);
   runtime.controls.target.copy(fit.center);
-  runtime.controls.minDistance = Math.max(fit.radius * 0.55, 0.035);
+  // Keep the camera outside the asset's bounding sphere. Allowing the dolly
+  // inside a building made the model appear to vanish as near faces clipped.
+  runtime.controls.minDistance = Math.max(fit.radius * 0.72, 0.035);
   runtime.controls.maxDistance = Math.max(fit.distance * 4, fit.radius * 5);
   runtime.controls.update();
 
@@ -420,18 +563,38 @@ function focusBounds(runtime: Runtime, bounds: THREE.Box3): void {
   // “Focus” must be visibly different from a mere target pan, including for
   // large but thin panels whose projected fit distance can exceed the full
   // assembly's isometric fit. A deliberate crop is acceptable here because
-  // FIT ASSET remains a one-click, exact reset.
+  // Screen reset remains a one-click exact return to the asset framing.
   const focusedDistance = Math.min(fit.distance, currentDistance * 0.72);
+  runtime.camera.zoom = 1;
   runtime.camera.position.copy(fit.center).addScaledVector(fit.direction, focusedDistance);
   runtime.camera.near = Math.max(0.0001, focusedDistance - fit.radius * 2.2);
   runtime.camera.far = Math.max(runtime.camera.near + 1, focusedDistance + fit.radius * 8);
   runtime.camera.updateProjectionMatrix();
   runtime.camera.lookAt(fit.center);
   runtime.controls.target.copy(fit.center);
-  runtime.controls.minDistance = Math.max(fit.radius * 0.18, 0.001);
+  runtime.controls.minDistance = Math.max(fit.radius * 0.72, 0.001);
   runtime.controls.maxDistance = Math.max(focusedDistance * 8, fit.radius * 10);
   runtime.controls.update();
   runtime.syncDiagnostics();
+}
+
+function applyArchitecturalViewVisibility(
+  root: THREE.Object3D,
+  view: CameraView,
+  assemblyIR: AssemblyIR | undefined,
+  buildingLevel: BuildingLevel,
+): void {
+  if (assemblyIR?.metadata?.assetKind !== 'building') return;
+  const planReveal = view === 'top';
+  root.traverse((object) => {
+    const part = object.userData.part as ProductPartInfo | undefined;
+    const partId = part?.id ?? object.name;
+    const isRoof = partId.startsWith('roof_') || partId.includes('_roof_') || part?.level === 'ROOF';
+    const levelVisible = buildingLevel === 'all' || part?.level === undefined || part.level === buildingLevel;
+    object.visible = levelVisible && !(planReveal && isRoof);
+    object.userData.planViewHidden = planReveal && isRoof;
+    object.userData.levelViewHidden = !levelVisible;
+  });
 }
 
 export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
@@ -445,6 +608,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     measurementEnabled = false,
     measurementMode = 'distance',
     measurementUnit = 'mm',
+    dimensionOverviewEnabled = false,
     onBuilt,
     onPartSelected,
     onMeasurementChange,
@@ -457,8 +621,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     const buildRef = useRef<CharacterBuild | ProductBuild | undefined>(undefined);
     const configRef = useRef({ assetKind, assemblyIR, spec });
     configRef.current = { assetKind, assemblyIR, spec };
-    const interactionRef = useRef({ measurementEnabled, measurementMode, measurementUnit, onMeasurementChange, onMeasurementMiss, onPartSelected });
-    interactionRef.current = { measurementEnabled, measurementMode, measurementUnit, onMeasurementChange, onMeasurementMiss, onPartSelected };
+    const interactionRef = useRef({ measurementEnabled, measurementMode, measurementUnit, dimensionOverviewEnabled, onMeasurementChange, onMeasurementMiss, onPartSelected });
+    interactionRef.current = { measurementEnabled, measurementMode, measurementUnit, dimensionOverviewEnabled, onMeasurementChange, onMeasurementMiss, onPartSelected };
     const measurementPointsRef = useRef<THREE.Vector3[]>([]);
     const markerRadiusRef = useRef(0.01);
     const assetIdentityRef = useRef<{ assetKind: AssetKind; assemblyIR?: AssemblyIR; productSpec: ProductSpec; spec: CharacterSpec } | undefined>(undefined);
@@ -529,6 +693,20 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const controls = new OrbitControls(camera, canvas);
       controls.enableDamping = true;
       controls.dampingFactor = 0.065;
+      controls.zoomToCursor = true;
+      controls.screenSpacePanning = true;
+
+      // Perspective dolly can move the camera through walls and make a model
+      // look sliced. Morphloom uses optical zoom instead: the camera stays
+      // outside the asset while the view magnifies like a design canvas.
+      const handleOpticalZoom = (event: WheelEvent) => {
+        if (event.deltaY === 0) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const runtime = runtimeRef.current;
+        if (runtime) zoomOptically(runtime, Math.exp(-event.deltaY * 0.0015));
+      };
+      canvas.addEventListener('wheel', handleOpticalZoom, { capture: true, passive: false });
 
       const pmrem = new THREE.PMREMGenerator(renderer);
       const environmentScene = new RoomEnvironment();
@@ -545,7 +723,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const edge = new THREE.DirectionalLight('#6d86ff', 1.35);
       edge.position.set(-3.5, 2.2, -2.4);
       scene.add(edge);
-      scene.add(new THREE.HemisphereLight('#f1f4ff', '#4d4f4c', 1.05));
+      const hemisphere = new THREE.HemisphereLight('#f1f4ff', '#4d4f4c', 1.05);
+      scene.add(hemisphere);
       const reflectionStrip = new THREE.RectAreaLight('#eef4ff', 4.4, 0.24, 2.4);
       reflectionStrip.position.set(1.5, 1.9, 2.2);
       reflectionStrip.lookAt(0, 0.8, 0);
@@ -568,7 +747,9 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const measurement = new THREE.Group();
       const annotation = new THREE.Group();
       annotation.name = 'interactive_measurement_annotation';
-      scene.add(root, measurement, annotation);
+      const dimensionOverview = new THREE.Group();
+      dimensionOverview.name = 'architectural_dimension_overview';
+      scene.add(root, measurement, annotation, dimensionOverview);
 
       const resize = () => {
         const width = Math.max(1, canvas.clientWidth);
@@ -590,14 +771,17 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const diagnostic = window as Window & { __MORPHLOOM__?: Record<string, unknown> };
         if (!diagnostic.__MORPHLOOM__) return;
         diagnostic.__MORPHLOOM__.view = runtimeRef.current?.view;
+        diagnostic.__MORPHLOOM__.buildingLevel = runtimeRef.current?.buildingLevel;
         diagnostic.__MORPHLOOM__.cameraPosition = camera.position.toArray();
         diagnostic.__MORPHLOOM__.cameraTarget = controls.target.toArray();
         diagnostic.__MORPHLOOM__.cameraDistance = camera.position.distanceTo(controls.target);
+        diagnostic.__MORPHLOOM__.cameraZoom = camera.zoom;
       };
       controls.addEventListener('change', syncDiagnostics);
       const runtime: Runtime = {
-        scene, camera, renderer, controls, root, measurement, annotation, floor,
-        frame: 0, observer, environment, view: 'iso', syncDiagnostics,
+        scene, camera, renderer, controls, root, measurement, annotation, dimensionOverview, floor,
+        frame: 0, observer, environment, view: 'iso', buildingLevel: 'all', lighting: 'day',
+        key, edge, hemisphere, reflectionStrip, warmStrip, syncDiagnostics,
       };
       runtimeRef.current = runtime;
       resize();
@@ -616,14 +800,38 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const raycaster = new THREE.Raycaster();
       let pointerDown = new THREE.Vector2();
       let activePointerId: number | undefined;
+      let spacePanActive = false;
+      const setSpacePan = (active: boolean) => {
+        spacePanActive = active;
+        controls.mouseButtons.LEFT = active ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE;
+        canvas.classList.toggle('is-pan-ready', active);
+        if (!active) canvas.classList.remove('is-panning');
+      };
+      const editableTarget = (target: EventTarget | null) => target instanceof HTMLInputElement
+        || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement
+        || (target instanceof HTMLElement && target.isContentEditable);
+      const handlePanKeyDown = (event: KeyboardEvent) => {
+        if (event.code !== 'Space' || editableTarget(event.target)) return;
+        event.preventDefault();
+        if (!spacePanActive) setSpacePan(true);
+      };
+      const handlePanKeyUp = (event: KeyboardEvent) => {
+        if (event.code !== 'Space') return;
+        event.preventDefault();
+        setSpacePan(false);
+      };
+      const releasePan = () => setSpacePan(false);
       const rememberPointer = (event: PointerEvent) => {
         if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
         activePointerId = event.pointerId;
         pointerDown = new THREE.Vector2(event.clientX, event.clientY);
+        if (spacePanActive) canvas.classList.add('is-panning');
       };
       const selectPart = (event: PointerEvent) => {
         if (!event.isPrimary || activePointerId !== event.pointerId) return;
         activePointerId = undefined;
+        canvas.classList.remove('is-panning');
+        if (spacePanActive) return;
         const clickTolerance = event.pointerType === 'touch' ? 14 : 6;
         if (pointerDown.distanceTo(new THREE.Vector2(event.clientX, event.clientY)) > clickTolerance) return;
         const rect = canvas.getBoundingClientRect();
@@ -633,7 +841,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const intersections = raycaster.intersectObject(root, true);
         const interaction = interactionRef.current;
         if (interaction.measurementEnabled) {
-          const surfaceHit = intersections.find((item) => item.object instanceof THREE.Mesh);
+          const surfaceHit = intersections.find((item) => item.object instanceof THREE.Mesh && visibleInHierarchy(item.object));
           if (!surfaceHit) {
             interaction.onMeasurementMiss?.();
             return;
@@ -652,15 +860,20 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           }
           return;
         }
-        const partHit = intersections.find((item) => item.object.userData.part || item.object.userData.characterPart);
+        const partHit = intersections.find((item) => visibleInHierarchy(item.object)
+          && (item.object.userData.part || item.object.userData.characterPart));
         interaction.onPartSelected?.(inspectablePartFromObject(partHit?.object ?? null));
       };
       const cancelPointer = (event: PointerEvent) => {
         if (activePointerId === event.pointerId) activePointerId = undefined;
+        canvas.classList.remove('is-panning');
       };
       canvas.addEventListener('pointerdown', rememberPointer);
       canvas.addEventListener('pointerup', selectPart);
       canvas.addEventListener('pointercancel', cancelPointer);
+      window.addEventListener('keydown', handlePanKeyDown);
+      window.addEventListener('keyup', handlePanKeyUp);
+      window.addEventListener('blur', releasePan);
 
       return () => {
         cancelAnimationFrame(runtime.frame);
@@ -673,6 +886,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         canvas.removeEventListener('pointerdown', rememberPointer);
         canvas.removeEventListener('pointerup', selectPart);
         canvas.removeEventListener('pointercancel', cancelPointer);
+        canvas.removeEventListener('wheel', handleOpticalZoom, { capture: true });
+        window.removeEventListener('keydown', handlePanKeyDown);
+        window.removeEventListener('keyup', handlePanKeyUp);
+        window.removeEventListener('blur', releasePan);
         runtimeRef.current = undefined;
       };
     }, []);
@@ -702,6 +919,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         : assemblyIR ? compileAssemblyIR(assemblyIR, mode) : buildProduct(productSpec, mode);
       const compileMs = performance.now() - compileStarted;
       runtime.root.add(build.root);
+      applyLighting(runtime, build);
+      applyArchitecturalViewVisibility(build.root, runtime.view, assemblyIR, runtime.buildingLevel);
+      if (dimensionOverviewEnabled) drawDimensionOverview(runtime, build, measurementUnit);
+      else clearGroup(runtime.dimensionOverview);
       if (assetKind === 'human') {
         runtime.measurement.add(createMeasurementField(build.metrics.heightMeters));
       } else {
@@ -738,7 +959,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         },
       });
       runtime.syncDiagnostics();
-    }, [assemblyIR, assetKind, mode, onBuilt, onTelemetry, pack, productSpec, spec]);
+    }, [assemblyIR, assetKind, dimensionOverviewEnabled, measurementUnit, mode, onBuilt, onTelemetry, pack, productSpec, spec]);
 
     useEffect(() => {
       const sequence = ++validationSequenceRef.current;
@@ -786,14 +1007,43 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       if (points.length === 2) onMeasurementChange?.(calculateMeasurement(points[0], points[1]), 2);
     }, [measurementEnabled, measurementMode, measurementUnit, onMeasurementChange]);
 
+    useEffect(() => {
+      const runtime = runtimeRef.current;
+      const build = buildRef.current;
+      if (!runtime || !build) return;
+      if (dimensionOverviewEnabled) drawDimensionOverview(runtime, build, measurementUnit);
+      else clearGroup(runtime.dimensionOverview);
+    }, [dimensionOverviewEnabled, measurementUnit]);
+
     useImperativeHandle(ref, () => ({
       setView(view) {
         const runtime = runtimeRef.current;
         const build = buildRef.current;
         if (!runtime || !build) return;
         runtime.view = view;
+        applyArchitecturalViewVisibility(build.root, view, assemblyIR, runtime.buildingLevel);
+        if (interactionRef.current.dimensionOverviewEnabled) {
+          drawDimensionOverview(runtime, build, interactionRef.current.measurementUnit);
+        }
         frameBuild(runtime, build, assetKind, assemblyIR, spec);
         runtime.syncDiagnostics();
+      },
+      setBuildingLevel(level) {
+        const runtime = runtimeRef.current;
+        const build = buildRef.current;
+        if (!runtime || !build) return;
+        runtime.buildingLevel = level;
+        applyArchitecturalViewVisibility(build.root, runtime.view, assemblyIR, level);
+        if (interactionRef.current.dimensionOverviewEnabled) {
+          drawDimensionOverview(runtime, build, interactionRef.current.measurementUnit);
+        }
+        runtime.syncDiagnostics();
+      },
+      setLighting(mode) {
+        const runtime = runtimeRef.current;
+        if (!runtime) return;
+        runtime.lighting = mode;
+        applyLighting(runtime, buildRef.current);
       },
       focusPart(partId) {
         const runtime = runtimeRef.current;
@@ -815,6 +1065,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         if (!runtime || !build) return;
         frameBuild(runtime, build, assetKind, assemblyIR, spec);
         runtime.syncDiagnostics();
+      },
+      zoomBy(factor) {
+        const runtime = runtimeRef.current;
+        if (runtime) zoomOptically(runtime, factor);
       },
       clearMeasurement() {
         resetMeasurement();

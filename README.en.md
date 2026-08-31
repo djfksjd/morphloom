@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-61%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-64%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -59,9 +59,13 @@ PBR surfaces, wiring connectivity, and topology.
 
 - Beauty, Clay, Wire, and X-Ray modes
 - Front, isometric, plan/top, and rear views
-- Orbit and dolly controls
-- Select and focus product or named character parts
-- Two-point distance and vertical-height measurement in `mm`, `cm`, or `m`
+- Drag to orbit, wheel optical zoom, and `Space`+drag panning
+- Bottom-right `+`/`−` zoom and view reset without cross-section clipping
+- Collapsible right inspector and bottom pipeline panels
+- Move, rotate, and reset existing furniture in 250 mm increments
+- Storey filters plus day/night lighting previews
+- Arbitrary two-point distance plus width, depth, and vertical-height dimension lines in `mm`, `cm`, or `m`
+- Decluttered architectural dimension overlay that suppresses repeated small hardware
 - GLB reopen checks for bounds, triangles, and named nodes
 - Visible evidence boundaries and quality blockers
 - Local job cancellation, retry, and save actions
@@ -87,7 +91,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 |---|---|
 | Product | 164-part smartphone · Galaxy Z Fold8 exterior · ornate blade |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
-| Architecture | Measured HABS cabin · nine-unit apartment floor |
+| Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
 | Character | 14,517-vertex human base · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
@@ -102,13 +106,13 @@ npm run build
 
 Current locked benchmark:
 
-- Overall pass: **100% (4/4)**
-- Technical integrity: **100% (4/4)**
-- Release/block decision accuracy: **100% (4/4)**
+- Overall pass: **100% (5/5)**
+- Technical integrity: **100% (5/5)**
+- Release/block decision accuracy: **100% (5/5)**
 - Release-intended model and browser GLB: **100% (2/2)**
-- Insufficient-evidence rejection safety: **100% (2/2)**
+- Insufficient-evidence rejection safety: **100% (3/3)**
 
-This does not mean every generated asset is a finished deliverable. The ornate blade and architectural shell are positive release cases. The cooling assembly and single-view character are technical passes that are correctly blocked for insufficient evidence.
+This does not mean every generated asset is a finished deliverable. Model completeness and source confidence are separate. The ornate blade and verified architectural shell are positive release cases. The concept residence, cooling assembly, and single-view character are technical passes that are correctly blocked for insufficient evidence.
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md)
 

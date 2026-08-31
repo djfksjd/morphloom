@@ -6,6 +6,7 @@ import { buildCharacter } from '../src/engine/character';
 import { parseOhpk } from '../src/engine/ohpk';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
+import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from '../src/types';
 import { deliveryInputFingerprint, snapshotScene } from '../src/engine/delivery-validation';
 import { auditAssemblyDetail } from '../src/engine/generation-policy';
@@ -16,6 +17,8 @@ const knifeA = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const knifeB = buildOrnateKnife(structuredClone(DEFAULT_KNIFE_SPEC), 'beauty');
 const architectureA = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
 const architectureB = compileAssemblyIR(structuredClone(LAUREL_HOMES_BUILDING_B_IR), 'beauty');
+const conceptArchitectureA = compileAssemblyIR(MODERNCAT_CONCEPT_RESIDENCE_IR, 'beauty');
+const conceptArchitectureB = compileAssemblyIR(structuredClone(MODERNCAT_CONCEPT_RESIDENCE_IR), 'beauty');
 const coolingA = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
 const coolingB = compileAssemblyIR(structuredClone(COOLING_ASSEMBLY_IR), 'beauty');
 const humanPack = await parseOhpk(
@@ -58,6 +61,7 @@ const surfaceCoverage = (build: { metrics: { surfaces: { authoredMaterials: numb
 const fingerprints = {
   knife: [snapshotScene(knifeA.root).fingerprint, snapshotScene(knifeB.root).fingerprint] as const,
   architecture: [snapshotScene(architectureA.root).fingerprint, snapshotScene(architectureB.root).fingerprint] as const,
+  conceptArchitecture: [snapshotScene(conceptArchitectureA.root).fingerprint, snapshotScene(conceptArchitectureB.root).fingerprint] as const,
   cooling: [snapshotScene(coolingA.root).fingerprint, snapshotScene(coolingB.root).fingerprint] as const,
   character: [snapshotScene(characterA.root).fingerprint, snapshotScene(characterB.root).fingerprint] as const,
 };
@@ -65,6 +69,7 @@ const fingerprints = {
 const inputFingerprints = {
   knife: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: undefined, productSpec: DEFAULT_KNIFE_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
   architecture: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: LAUREL_HOMES_BUILDING_B_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
+  conceptArchitecture: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: MODERNCAT_CONCEPT_RESIDENCE_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
   cooling: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: COOLING_ASSEMBLY_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
   character: deliveryInputFingerprint({ assetKind: 'human', assemblyIR: undefined, productSpec: DEFAULT_PRODUCT_SPEC, spec: WEB_HERO_SPEC, pack: humanPack }),
 };
@@ -77,6 +82,20 @@ const cases = [
     inputFingerprint: inputFingerprints.knife,
     browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife),
     expectedDecision: 'release',
+  }),
+  evaluateBenchmarkCase({
+    id: 'pinterest-concept-architectural-review', domain: 'architecture',
+    topologyPass: conceptArchitectureA.metrics.topology.pass,
+    evidenceScore: conceptArchitectureA.metrics.engineering?.evidenceScore ?? 0,
+    surfaceCoverage: surfaceCoverage(conceptArchitectureA),
+    domainChecksPass: MODERNCAT_CONCEPT_RESIDENCE_IR.metadata?.planFootprintVerified === true
+      && Boolean(conceptArchitectureA.root.getObjectByName('garage_door'))
+      && Boolean(conceptArchitectureA.root.getObjectByName('front_balcony_glass')),
+    firstFingerprint: fingerprints.conceptArchitecture[0],
+    repeatedFingerprint: fingerprints.conceptArchitecture[1],
+    inputFingerprint: inputFingerprints.conceptArchitecture,
+    browserGlbRoundTrip: hasMatchingBrowserProof('pinterest-concept-architectural-review', inputFingerprints.conceptArchitecture),
+    expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
     id: 'laurel-homes-architectural-review', domain: 'architecture', topologyPass: architectureA.metrics.topology.pass,

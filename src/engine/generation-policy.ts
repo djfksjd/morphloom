@@ -19,6 +19,8 @@ export interface ExpandedGenerationBrief {
 
 export interface AssemblyDetailAudit {
   pass: boolean;
+  modelPass: boolean;
+  modelBlockers: string[];
   blockers: string[];
   warnings: string[];
   evidenceCoverage: number;
@@ -31,6 +33,7 @@ export interface AssemblyDetailAudit {
 }
 
 const MICRO_SURFACE_FINISHES = new Set<SurfaceFinishIR>([
+  'concrete', 'plaster', 'stone', 'coated-metal',
   'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal', 'machined-copper',
   'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask', 'molded-polymer',
   'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin', 'fabric', 'hex-knit', 'hair',
@@ -215,10 +218,31 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
     if (entranceProjection > 0 && !ir.components.some((component) => component.id.startsWith('entrance_'))) {
       blockers.push('projecting entrance has no named geometry');
     }
+    if (ir.metadata?.programCompleteness !== undefined) {
+      const requiredPrograms = String(ir.metadata?.requiredPrograms ?? '')
+        .split(',').map((item) => item.trim()).filter(Boolean);
+      const searchable = ir.components.map((component) => `${component.id} ${component.name}`.toLowerCase()).join(' ');
+      const programAliases: Record<string, RegExp> = {
+        living: /living|거실/, dining: /dining|식당/, kitchen: /kitchen|주방/, garage: /garage|차고/,
+        foyer: /foyer|entry|현관/, stair: /stair|계단/, 'powder-room': /powder|toilet|화장실/,
+        multifunction: /multifunction|다목적/, bedrooms: /bedroom|primary_bed|침실/,
+        'upper-bathroom': /upper_bath|shower|욕실/,
+      };
+      const missingPrograms = requiredPrograms.filter((program) => !(programAliases[program] ?? new RegExp(program, 'i')).test(searchable));
+      if (missingPrograms.length > 0) blockers.push(`missing architectural programs: ${missingPrograms.join(', ')}`);
+      if (!ir.components.some((component) => component.geometry.op === 'hipRoof')) blockers.push('roof system is not a continuous hip-roof solid');
+      if (!ir.components.some((component) => /toilet|basin|vanity|shower/.test(component.id))) blockers.push('wet-room fixtures are missing');
+      if (!ir.components.some((component) => /bed|sofa|table|chair/.test(component.id))) blockers.push('editable furniture layout is missing');
+      if (!ir.components.some((component) => component.light)) blockers.push('physical lighting fixtures are missing');
+    }
   }
+
+  const modelBlockers = blockers.filter((blocker) => !blocker.startsWith('evidence pack not delivery-ready'));
 
   return {
     pass: blockers.length === 0,
+    modelPass: modelBlockers.length === 0,
+    modelBlockers,
     blockers,
     warnings,
     evidenceCoverage,

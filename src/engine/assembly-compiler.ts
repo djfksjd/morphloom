@@ -20,9 +20,9 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     throw new Error('AssemblyIR must contain 1–500 components.');
   }
   const ids = new Set<string>();
-  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'bladeLoft']);
+  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'hipRoof', 'bladeLoft']);
   const allowedSurfaces = new Set([
-    'raw', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
+    'raw', 'concrete', 'plaster', 'stone', 'coated-metal', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
     'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
     'molded-polymer', 'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin',
     'fabric', 'hex-knit', 'hair', 'semiconductor',
@@ -103,6 +103,13 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       case 'tube':
         if (component.geometry.points.length < 2 || component.geometry.radius <= 0) throw new Error(`Tube path is invalid in ${component.id}.`);
         break;
+      case 'hipRoof':
+        if (component.geometry.width <= 0 || component.geometry.depth <= 0 || component.geometry.rise <= 0
+          || component.geometry.thickness <= 0 || component.geometry.ridgeLength < 0
+          || component.geometry.ridgeLength >= component.geometry.width) {
+          throw new Error(`Hip roof dimensions are invalid in ${component.id}.`);
+        }
+        break;
       case 'bladeLoft':
         if (component.geometry.sections.length < 2 || component.geometry.thickness <= 0 || component.geometry.apexThickness < 0) {
           throw new Error(`Blade loft is invalid in ${component.id}.`);
@@ -142,6 +149,18 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         || component.evidence.notes.some((note) => typeof note !== 'string' || note.length > 500))) {
         throw new Error(`Invalid evidence notes in ${component.id}.`);
       }
+    }
+    if (component.light) {
+      if (!/^#[0-9a-fA-F]{6}$/.test(component.light.color)
+        || !Number.isFinite(component.light.intensity) || component.light.intensity < 0 || component.light.intensity > 1_000
+        || !Number.isFinite(component.light.rangeMm) || component.light.rangeMm <= 0 || component.light.rangeMm > 1_000_000
+        || (component.light.decay !== undefined && (!Number.isFinite(component.light.decay) || component.light.decay < 0 || component.light.decay > 4))) {
+        throw new Error(`Invalid light fixture in ${component.id}.`);
+      }
+    }
+    if (component.level !== undefined && (typeof component.level !== 'string'
+      || component.level.trim().length === 0 || component.level.length > 40)) {
+      throw new Error(`Invalid level in ${component.id}.`);
     }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
@@ -272,6 +291,42 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
       tube.dispose();
       return capped;
     }
+    case 'hipRoof': {
+      const halfWidth = mm(geometry.width) * 0.5;
+      const halfDepth = mm(geometry.depth) * 0.5;
+      const halfRidge = mm(geometry.ridgeLength) * 0.5;
+      const rise = mm(geometry.rise);
+      const thickness = mm(geometry.thickness);
+      const top = [
+        [-halfWidth, 0, -halfDepth], [halfWidth, 0, -halfDepth],
+        [halfWidth, 0, halfDepth], [-halfWidth, 0, halfDepth],
+        [-halfRidge, rise, 0], [halfRidge, rise, 0],
+      ];
+      const positions = [...top, ...top.map(([x, y, z]) => [x, y - thickness, z])].flat();
+      const indices: number[] = [];
+      const face = (...vertices: number[]) => {
+        for (let index = 1; index < vertices.length - 1; index += 1) {
+          indices.push(vertices[0], vertices[index], vertices[index + 1]);
+        }
+      };
+      face(0, 4, 5, 1); // front pitch
+      face(1, 5, 2); // east hip
+      face(2, 5, 4, 3); // rear pitch
+      face(3, 4, 0); // west hip
+      face(6, 7, 11, 10); // soffit front
+      face(7, 8, 11); // soffit east
+      face(8, 9, 10, 11); // soffit rear
+      face(9, 6, 10); // soffit west
+      face(0, 1, 7, 6);
+      face(1, 2, 8, 7);
+      face(2, 3, 9, 8);
+      face(3, 0, 6, 9);
+      const result = new THREE.BufferGeometry();
+      result.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      result.setIndex(indices);
+      result.computeVertexNormals();
+      return result;
+    }
     case 'bladeLoft': {
       const across = geometry.grindCurve ?? [0.04, 0.62, 1, 0.62, 0.04];
       const acrossX = [-1, -0.5, 0, 0.5, 1];
@@ -386,8 +441,22 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       material: component.materialName,
       surface: inferSurfaceFinish(`${component.materialName} ${component.id}`, component.material.surface),
       detail: component.detail,
+      level: component.level,
     };
     mesh.userData.part = info;
+    if (component.light && mode === 'beauty') {
+      const fixtureLight = new THREE.PointLight(
+        component.light.color,
+        component.light.intensity,
+        mm(component.light.rangeMm),
+        component.light.decay ?? 2,
+      );
+      fixtureLight.name = `${component.id}_light_source`;
+      fixtureLight.userData.morphloomFixture = true;
+      fixtureLight.userData.dayIntensity = Math.min(0.35, component.light.intensity * 0.01);
+      fixtureLight.userData.nightIntensity = component.light.intensity;
+      mesh.add(fixtureLight);
+    }
     parts.push(info);
     root.add(mesh);
   }

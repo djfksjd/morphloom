@@ -1,11 +1,11 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-08-31T15:35:44.459Z",
+  "generatedAt": "2026-08-31T17:23:18.141Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
-    "lockedCases": 4,
+    "lockedCases": 5,
     "releaseIntended": 2,
-    "expectedRejections": 2
+    "expectedRejections": 3
   },
   "requiredRates": {
     "overall": 1,
@@ -44,6 +44,30 @@
       "benchmarkPassed": true,
       "score": 98,
       "blockers": []
+    },
+    {
+      "id": "pinterest-concept-architectural-review",
+      "domain": "architecture",
+      "topologyPass": true,
+      "evidenceScore": 63,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "4db05a21552fed62",
+      "repeatedFingerprint": "4db05a21552fed62",
+      "inputFingerprint": "1cbce19a4c614109",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "block",
+      "expectedBlockerPrefix": "evidence",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": false,
+      "deliveryReady": false,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 59,
+      "blockers": [
+        "evidence 63/85"
+      ]
     },
     {
       "id": "laurel-homes-architectural-review",

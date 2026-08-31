@@ -6,19 +6,28 @@ import { validateAssemblyIR } from './engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from './engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from './engine/galaxy-fold8-exterior';
 import { LAUREL_HOMES_BUILDING_B_IR } from './engine/laurel-homes-building-b';
+import { MODERNCAT_CONCEPT_RESIDENCE_IR } from './engine/moderncat-concept-residence';
 import { POOR_COYOTES_CABIN_IR } from './engine/poor-coyotes-cabin';
 import { loadHumanPack } from './engine/ohpk';
 import { evaluateProductQuality, evaluateQuality } from './engine/quality';
 import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { buildPhysicalNetlist } from './engine/netlist';
 import { createOrnateKnifeIR } from './engine/knife';
+import { editAssemblyLayout, isLayoutEditable } from './engine/layout-edit';
 import {
   formatMeasurement,
   type MeasurementMode,
   type MeasurementResult,
   type MeasurementUnit,
 } from './engine/measurement';
-import { ResultViewport, type ExportReceipt, type InspectablePart, type ViewportHandle } from './components/ResultViewport';
+import {
+  ResultViewport,
+  type BuildingLevel,
+  type ExportReceipt,
+  type InspectablePart,
+  type LightingMode,
+  type ViewportHandle,
+} from './components/ResultViewport';
 import { ViewportErrorBoundary } from './components/ViewportErrorBoundary';
 import { bytesLabel, type DeliveryAudit, type LocalBuildTelemetry } from './engine/delivery-validation';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
@@ -61,6 +70,10 @@ type LocalJob = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'moderncat-concept', label: 'ModernCat Concept Residence', caption: 'Pinterest panel · concept evidence blocked', kind: 'product',
+    spec: DEFAULT_PRODUCT_SPEC, assemblyIR: MODERNCAT_CONCEPT_RESIDENCE_IR,
+  },
   {
     id: 'laurel-homes', label: 'Laurel Homes Apartments', caption: '9 units · 3 stairs · measured HABS plan', kind: 'product',
     spec: DEFAULT_PRODUCT_SPEC, assemblyIR: LAUREL_HOMES_BUILDING_B_IR,
@@ -121,10 +134,10 @@ export function ViewerApp() {
   const [pack, setPack] = useState<HumanPack>();
   const [packError, setPackError] = useState<string>();
   const [assetKind, setAssetKind] = useState<AssetKind>('product');
-  const [activeAssetId, setActiveAssetId] = useState('laurel-homes');
+  const [activeAssetId, setActiveAssetId] = useState('moderncat-concept');
   const [spec, setSpec] = useState<CharacterSpec>(DEFAULT_SPEC);
   const [productSpec, setProductSpec] = useState<ProductSpec>(DEFAULT_PRODUCT_SPEC);
-  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(LAUREL_HOMES_BUILDING_B_IR);
+  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(MODERNCAT_CONCEPT_RESIDENCE_IR);
   const [mode, setMode] = useState<ViewMode>('beauty');
   const [buildMetrics, setBuildMetrics] = useState<CharacterBuild['metrics'] | ProductBuild['metrics']>();
   const [selectedPart, setSelectedPart] = useState<InspectablePart>();
@@ -135,11 +148,16 @@ export function ViewerApp() {
   const [importedExpiresAt, setImportedExpiresAt] = useState<number>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
   const [measurementEnabled, setMeasurementEnabled] = useState(true);
-  const [measurementMode, setMeasurementMode] = useState<MeasurementMode>('distance');
+  const measurementMode: MeasurementMode = 'distance';
   const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>('m');
   const [measurementResult, setMeasurementResult] = useState<MeasurementResult>();
   const [measurementPoints, setMeasurementPoints] = useState<0 | 1 | 2>(0);
   const [measurementMissed, setMeasurementMissed] = useState(false);
+  const [dimensionOverviewEnabled, setDimensionOverviewEnabled] = useState(false);
+  const [inspectorCollapsed, setInspectorCollapsed] = useState(false);
+  const [pipelineCollapsed, setPipelineCollapsed] = useState(false);
+  const [buildingLevel, setBuildingLevel] = useState<BuildingLevel>('all');
+  const [lightingMode, setLightingMode] = useState<LightingMode>('day');
   const viewportRef = useRef<ViewportHandle>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
   const importExpiryTimerRef = useRef<number | undefined>(undefined);
@@ -227,6 +245,14 @@ export function ViewerApp() {
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
   const productPartCount = productMetrics?.parts;
   const architecturalResult = assemblyIR?.metadata?.assetKind === 'building';
+  const activePreset = VIEWER_ASSETS.find((asset) => asset.id === activeAssetId);
+  const baselineAssemblyIR = activePreset?.kind === 'product' ? activePreset.assemblyIR : assemblyIR;
+  const layoutEditable = Boolean(selectedPart && assemblyIR && isLayoutEditable(selectedPart.id));
+  const editSelectedLayout = useCallback((edit: Parameters<typeof editAssemblyLayout>[2]) => {
+    if (!selectedPart || !assemblyIR) return;
+    setAssemblyIR(editAssemblyLayout(assemblyIR, selectedPart.id, edit));
+    setViewerNote(`${selectedPart.name} 배치를 모델 데이터에 반영했습니다. 내보내기에도 동일하게 포함됩니다.`);
+  }, [assemblyIR, selectedPart]);
   const displayedTriangles = buildMetrics && 'renderedTriangles' in buildMetrics
     ? buildMetrics.renderedTriangles
     : buildMetrics?.triangles;
@@ -249,6 +275,7 @@ export function ViewerApp() {
     setMeasurementResult(undefined);
     setMeasurementPoints(0);
     setMeasurementMissed(false);
+    setDimensionOverviewEnabled(false);
   }, []);
 
   const toggleMeasurement = useCallback(() => {
@@ -279,6 +306,10 @@ export function ViewerApp() {
     setSelectedPart(undefined);
     setBuildMetrics(undefined);
     setMode('beauty');
+    setBuildingLevel('all');
+    setLightingMode('day');
+    viewportRef.current?.setBuildingLevel('all');
+    viewportRef.current?.setLighting('day');
     setMeasurementEnabled(next.kind === 'product');
     setMeasurementUnit(next.kind === 'product' && next.assemblyIR?.metadata?.assetKind === 'building' ? 'm' : 'mm');
     setMeasurementResult(undefined);
@@ -392,7 +423,7 @@ export function ViewerApp() {
           ? 'Digital assembly is separate from physical bench continuity and manufacturing approval.'
           : 'Editable visualization asset; manufacturing STEP/BREP approval is excluded.';
   const primaryMeasurement = measurementResult
-    ? measurementMode === 'height' ? measurementResult.heightMeters : measurementResult.distanceMeters
+    ? measurementResult.distanceMeters
     : undefined;
   const measurementPrompt = !measurementEnabled
     ? '실측 시작을 눌러 켜세요'
@@ -405,7 +436,7 @@ export function ViewerApp() {
         : '완료 · 다음 선택은 새 A점';
 
   return (
-    <main className="app-shell viewer-shell">
+    <main className={`app-shell viewer-shell${pipelineCollapsed ? ' pipeline-is-collapsed' : ''}`}>
       <header className="topbar viewer-topbar">
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
@@ -426,7 +457,7 @@ export function ViewerApp() {
         </div>
       </header>
 
-      <section className="studio-grid viewer-grid">
+      <section className={`studio-grid viewer-grid${inspectorCollapsed ? ' inspector-is-collapsed' : ''}`}>
         <section className="viewport-panel" aria-label="3D 결과 검수 뷰포트">
           <div className="viewport-toolbar">
             <div className="toolbar-cluster">
@@ -445,8 +476,43 @@ export function ViewerApp() {
                 </button>}
                 <button onClick={() => viewportRef.current?.setView('rear')}>REAR</button>
               </div>
+              {assemblyIR?.metadata?.assetKind === 'building' && (
+                <div className="view-switcher level-switcher" role="group" aria-label="건물 층 표시">
+                  {(['all', 'L1', 'L2'] as BuildingLevel[]).map((level) => (
+                    <button
+                      key={level}
+                      className={buildingLevel === level ? 'active' : ''}
+                      aria-pressed={buildingLevel === level}
+                      onClick={() => {
+                        setBuildingLevel(level);
+                        setSelectedPart(undefined);
+                        clearMeasurement();
+                        viewportRef.current?.setBuildingLevel(level);
+                      }}
+                    >
+                      {level === 'all' ? 'ALL' : level}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {assemblyIR?.metadata?.assetKind === 'building' && (
+                <div className="view-switcher lighting-switcher" role="group" aria-label="낮과 밤 조명 미리보기">
+                  {(['day', 'night'] as LightingMode[]).map((item) => (
+                    <button
+                      key={item}
+                      className={lightingMode === item ? 'active' : ''}
+                      aria-pressed={lightingMode === item}
+                      onClick={() => {
+                        setLightingMode(item);
+                        viewportRef.current?.setLighting(item);
+                        setViewerNote(item === 'night' ? '야간 조명과 등기구 광원을 표시합니다.' : '주간 자연광 검수 모드입니다.');
+                      }}
+                    >{item === 'day' ? 'DAY' : 'NIGHT'}</button>
+                  ))}
+                </div>
+              )}
             </div>
-            <span className="viewport-hint">AUTO FIT · DRAG TO ORBIT · SCROLL TO DOLLY</span>
+            <span className="viewport-hint">DRAG ORBIT · WHEEL ZOOM · SPACE + DRAG PAN</span>
           </div>
 
           {assetKind === 'product' && (
@@ -466,12 +532,19 @@ export function ViewerApp() {
                 <span className={measurementPoints >= 2 ? 'is-complete' : measurementPoints === 1 ? 'is-current' : ''}><b>B</b><small>끝점</small></span>
               </div>
               <div className="measure-mode-switch" role="group" aria-label="측정 종류">
-                <button aria-pressed={measurementMode === 'distance'} disabled={!measurementEnabled} className={measurementMode === 'distance' ? 'active' : ''} onClick={() => setMeasurementMode('distance')}>직선거리</button>
-                <button aria-pressed={measurementMode === 'height'} disabled={!measurementEnabled} className={measurementMode === 'height' ? 'active' : ''} onClick={() => setMeasurementMode('height')}>수직높이</button>
+                <button aria-pressed="true" disabled={!measurementEnabled} className="active">직선거리</button>
+                <button
+                  aria-pressed={dimensionOverviewEnabled}
+                  className={dimensionOverviewEnabled ? 'active overview-active' : ''}
+                  onClick={() => {
+                    setDimensionOverviewEnabled((enabled) => !enabled);
+                    setViewerNote(dimensionOverviewEnabled ? '주요 부재 치수선을 숨겼습니다.' : '주요 부재의 폭·깊이와 세로 높이 치수선을 겹침 없이 표시합니다.');
+                  }}
+                >주요 치수 보기</button>
               </div>
               <label className="measure-unit-select">
                 <span>UNIT</span>
-                <select disabled={!measurementEnabled} value={measurementUnit} onChange={(event) => setMeasurementUnit(event.target.value as MeasurementUnit)}>
+                <select disabled={!measurementEnabled && !dimensionOverviewEnabled} value={measurementUnit} onChange={(event) => setMeasurementUnit(event.target.value as MeasurementUnit)}>
                   <option value="mm">mm</option>
                   <option value="cm">cm</option>
                   <option value="m">m</option>
@@ -481,11 +554,29 @@ export function ViewerApp() {
               <span className="measure-prompt"><b>SURFACE PICK · 2 POINT</b>{measurementPrompt}</span>
               {measurementResult && primaryMeasurement !== undefined && (
                 <div className="measure-live-result">
-                  <span><b>{measurementMode === 'height' ? 'HEIGHT' : 'DISTANCE'}</b>{formatMeasurement(primaryMeasurement, measurementUnit)}</span>
+                  <span><b>DISTANCE</b>{formatMeasurement(primaryMeasurement, measurementUnit)}</span>
                 </div>
               )}
             </div>
           )}
+
+          {dimensionOverviewEnabled && (
+            <div className="dimension-overview-key" role="status">
+              <b>ARCHITECTURAL DIMENSIONS</b>
+              <span><i className="dimension-width-key" /> W 폭 · D 깊이</span>
+              <span><i className="dimension-height-key" /> H 높이</span>
+              <small>주요 부재 우선 · 반복 소부품 자동 정리</small>
+            </div>
+          )}
+
+          <div className="viewport-zoom-controls" role="group" aria-label="화면 확대 축소와 초기화">
+            <button aria-label="확대" title="확대" onClick={() => viewportRef.current?.zoomBy(1.25)}>+</button>
+            <button aria-label="축소" title="축소" onClick={() => viewportRef.current?.zoomBy(0.8)}>−</button>
+            <button className="reset-view" aria-label="화면 초기화" title="화면 초기화" onClick={() => {
+              viewportRef.current?.fitAsset();
+              setViewerNote('카메라 중심과 배율을 초기 상태로 되돌렸습니다.');
+            }}>↺</button>
+          </div>
 
           <div className="viewfinder-corners" aria-hidden="true"><i /><i /><i /><i /></div>
           {pack ? (
@@ -501,6 +592,7 @@ export function ViewerApp() {
                 measurementEnabled={measurementEnabled}
                 measurementMode={measurementMode}
                 measurementUnit={measurementUnit}
+                dimensionOverviewEnabled={dimensionOverviewEnabled}
                 onBuilt={handleBuilt}
                 onPartSelected={setSelectedPart}
                 onMeasurementChange={handleMeasurementChange}
@@ -542,13 +634,27 @@ export function ViewerApp() {
           <div className="axis-glyph" aria-hidden="true"><i className="axis-y" /><i className="axis-x" /><span>Y</span><b>X</b></div>
         </section>
 
-        <aside className="panel inspector-panel result-inspector">
+        <aside className={`panel inspector-panel result-inspector${inspectorCollapsed ? ' is-collapsed' : ''}`}>
+          <button
+            className="panel-collapse-button inspector-collapse-button"
+            aria-expanded={!inspectorCollapsed}
+            aria-label={inspectorCollapsed ? '오른쪽 검사 패널 펼치기' : '오른쪽 검사 패널 접기'}
+            title={inspectorCollapsed ? '검사 패널 펼치기' : '검사 패널 접기'}
+            onClick={() => setInspectorCollapsed((collapsed) => !collapsed)}
+          >{inspectorCollapsed ? '‹' : '›'}</button>
           <div className="panel-heading quality-heading">
-            <div><span className="eyebrow">result integrity</span><h2>Quality gate</h2></div>
+            <div><span className="eyebrow">model completeness</span><h2>Model quality</h2></div>
             <div className={`quality-total ${qualityBlocked ? 'has-blocker' : ''}`}>
               <strong>{quality?.total ?? '—'}</strong><span>/100</span>{qualityBlocked && <em>BLOCKED</em>}
             </div>
           </div>
+
+          {architecturalResult && quality && (
+            <div className={`evidence-boundary ${quality.deliveryReady ? 'is-ready' : 'is-review'}`}>
+              <span>SOURCE CONFIDENCE</span><b>{quality.evidenceScore ?? '—'}/100</b>
+              <p>{quality.deliveryReady ? '검증된 실측 근거로 납품 판정 가능' : '모델 완성도와 별도입니다. 현장 실측·검증 단면이 없어 시공 납품은 보류됩니다.'}</p>
+            </div>
+          )}
 
           <div className="viewer-note"><span>CLI → IR → VIEWER</span><p>{viewerNote}</p></div>
 
@@ -561,7 +667,7 @@ export function ViewerApp() {
               {measurementResult && primaryMeasurement !== undefined ? (
                 <>
                   <div className="measurement-primary">
-                    <span>{measurementMode === 'height' ? '수직 높이' : '3D 직선거리'}</span>
+                    <span>3D 직선거리</span>
                     <strong>{formatMeasurement(primaryMeasurement, measurementUnit)}</strong>
                   </div>
                   <div className="measurement-deltas">
@@ -596,13 +702,21 @@ export function ViewerApp() {
               <span className="eyebrow">selected component</span><b>{selectedPart.name}</b>
               <small>{selectedPart.category.toUpperCase()} · {selectedPart.material} · {selectedPart.surface.toUpperCase()}</small>
               <p>{selectedPart.detail}</p>
-              <div className="selected-part-actions">
-                <button onClick={() => {
-                  const focused = viewportRef.current?.focusPart(selectedPart.id) ?? false;
-                  setViewerNote(focused ? `${selectedPart.name} 부품을 화면에 맞춰 확대했습니다.` : '선택 부품의 표시 경계를 찾지 못했습니다.');
-                }}>FOCUS PART</button>
-                <button onClick={() => viewportRef.current?.fitAsset()}>FIT ASSET</button>
-              </div>
+              {layoutEditable && assemblyIR && (
+                <div className="layout-editor" aria-label="선택 가구 배치 편집">
+                  <span>LAYOUT EDIT · 250 mm</span>
+                  <div>
+                    <button onClick={() => editSelectedLayout({ kind: 'translate', deltaMm: [-250, 0, 0] })}>←</button>
+                    <button onClick={() => editSelectedLayout({ kind: 'translate', deltaMm: [0, 0, -250] })}>↑</button>
+                    <button onClick={() => editSelectedLayout({ kind: 'translate', deltaMm: [0, 0, 250] })}>↓</button>
+                    <button onClick={() => editSelectedLayout({ kind: 'translate', deltaMm: [250, 0, 0] })}>→</button>
+                    <button onClick={() => editSelectedLayout({ kind: 'rotateY', radians: -Math.PI / 12 })}>↺ 15°</button>
+                    <button onClick={() => editSelectedLayout({ kind: 'rotateY', radians: Math.PI / 12 })}>↻ 15°</button>
+                    <button onClick={() => baselineAssemblyIR && editSelectedLayout({ kind: 'reset', source: baselineAssemblyIR })}>RESET</button>
+                  </div>
+                  <small>새 가구·조명은 CLI/Codex에 자연어로 요청하면 같은 편집 가능한 IR 부품으로 추가됩니다.</small>
+                </div>
+              )}
             </div>
           )}
 
@@ -777,7 +891,14 @@ export function ViewerApp() {
         </aside>
       </section>
 
-      <footer className="pipeline-footer">
+      <footer className={`pipeline-footer${pipelineCollapsed ? ' is-collapsed' : ''}`}>
+        <button
+          className="panel-collapse-button pipeline-collapse-button"
+          aria-expanded={!pipelineCollapsed}
+          aria-label={pipelineCollapsed ? '하단 파이프라인 펼치기' : '하단 파이프라인 접기'}
+          title={pipelineCollapsed ? '파이프라인 펼치기' : '파이프라인 접기'}
+          onClick={() => setPipelineCollapsed((collapsed) => !collapsed)}
+        >{pipelineCollapsed ? 'PIPELINE ↑' : 'PIPELINE ↓'}</button>
         <span className="eyebrow">result pipeline</span>
         {(assetKind === 'human' ? [
           ['01', 'CHARACTER IR', 'pass'], ['02', 'MORPH', pack ? 'pass' : 'run'], ['03', 'MATERIAL', pack ? 'pass' : 'wait'],

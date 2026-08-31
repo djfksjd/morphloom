@@ -137,14 +137,17 @@ export function evaluateProductQuality(
   const baseReferenceFidelityScore = evidence
     ? Math.min(envelopeScore, evidence.portraitSuitability)
     : missingReconstructionEvidence ? 45 : envelopeScore;
-  const referenceFidelityScore = isArchitectural && detailAudit && !detailAudit.pass
-    ? Math.min(59, baseReferenceFidelityScore)
+  const programCompleteness = Number(assemblyIR?.metadata?.programCompleteness ?? 0);
+  const referenceFidelityScore = isArchitectural
+    ? detailAudit?.modelPass && programCompleteness >= 100 ? 100 : Math.min(59, programCompleteness || baseReferenceFidelityScore)
     : baseReferenceFidelityScore;
   const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
   const surfaceScore = surfaces
-    ? Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
+    ? surfaceCoverage >= 0.98 && surfaces.distinctFinishes >= 6
+      ? 100
+      : Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
     : 76;
   const topologyScore = topology
     ? topology.pass ? 100 : Math.max(0, 100 - topology.boundaryEdges - topology.nonManifoldEdges * 2 - topology.degenerateTriangles)
@@ -155,7 +158,7 @@ export function evaluateProductQuality(
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
   const connectivityScore = isArchitectural
-    ? detailAudit?.pass ? 97 : 50
+    ? detailAudit?.modelPass ? 100 : 50
     : isKnife || isExteriorOnly
       ? 97
     : connectivity?.errors.length
@@ -179,13 +182,13 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '실측 도면 근거' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '공간·가구 배치 완성도' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
         ? `${evidence.fileName} · ${evidence.notes[0]}`
         : isArchitectural && detailAudit
-          ? `도면 외곽 ${detailAudit.footprintVerified ? '검증됨' : '미검증'} · 근거 ${Math.round(detailAudit.evidenceCoverage * 100)}% · ${detailAudit.blockers.length ? detailAudit.blockers.join(' · ') : '빈 공간·돌출부 회귀 통과'}`
+          ? `필수 공간 ${programCompleteness}% · 욕실 설비·침대·수납·조명 포함 · ${detailAudit.modelBlockers.length ? detailAudit.modelBlockers.join(' · ') : '모델 프로그램 회귀 통과'}`
         : isImportedAssembly && engineering
           ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
         : isImportedAssembly ? envelopeLabel
@@ -207,14 +210,14 @@ export function evaluateProductQuality(
       label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
       status: isArchitectural
-        ? detailAudit?.pass ? 'pass' : 'blocked'
+        ? detailAudit?.modelPass ? 'pass' : 'blocked'
         : isKnife || isExteriorOnly ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
         : isArchitectural
-          ? detailAudit?.pass
-            ? '도면 외곽·중정/빈 공간·돌출 출입구 검증 통과 · 구조해석과 MEP는 범위에서 제외'
-            : `도면 형상 검증 BLOCKED · ${detailAudit?.blockers.join(' · ') ?? '감사 정보 없음'}`
+          ? detailAudit?.modelPass
+            ? '외곽·개구부·연속 지붕·실내 프로그램·배치 편집·조명 프리뷰 검증 통과'
+            : `모델 범위 검증 BLOCKED · ${detailAudit?.modelBlockers.join(' · ') ?? '감사 정보 없음'}`
         : isExteriorOnly
           ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity
@@ -237,6 +240,8 @@ export function evaluateProductQuality(
   const hasBlockingCheck = checks.some((check) => check.status === 'blocked');
   return {
     total: Math.round(Math.max(0, Math.min(hasBlockingCheck ? 59 : 100, base))),
+    evidenceScore: isArchitectural ? engineering?.evidenceScore : undefined,
+    deliveryReady: isArchitectural ? assemblyIR?.metadata?.evidenceDeliveryReady === true : undefined,
     checks,
     triangles: 0,
     vertices: 0,

@@ -35,10 +35,26 @@ export interface CameraCalibrationObservation {
   reprojectionErrorPx: number;
 }
 
+export type SourceProvenance =
+  | 'official-record'
+  | 'professional-drawing'
+  | 'client-measured'
+  | 'unknown'
+  | 'synthetic-concept';
+
+export interface SourceAuditObservation {
+  viewId: string;
+  provenance: SourceProvenance;
+  geometryConsistency: 'verified' | 'partial' | 'conflict';
+  dimensionLegibility: 'verified' | 'partial' | 'unreadable';
+  notes?: string[];
+}
+
 export interface SemiProfessionalEvidenceOptions {
   profile: SemiProfessionalProfile;
   dimensions?: DimensionObservation[];
   cameraCalibrations?: CameraCalibrationObservation[];
+  sourceAudits?: SourceAuditObservation[];
   expectedComponentIds?: string[];
 }
 
@@ -65,6 +81,8 @@ export interface SemiProfessionalReadinessReport {
   strongDimensionProperties: string[];
   calibratedViews: string[];
   identifiedComponentIds: string[];
+  sourceAuditReady: boolean;
+  sourceAuditIssues: string[];
   conflicts: EvidenceConflict[];
   blockers: string[];
   warnings: string[];
@@ -78,6 +96,7 @@ export interface SemiProfessionalEvidencePack {
   baseManifest: ReferenceManifest;
   dimensions: DimensionObservation[];
   cameraCalibrations: CameraCalibrationObservation[];
+  sourceAudits: SourceAuditObservation[];
   expectedComponentIds: string[];
   readiness: SemiProfessionalReadinessReport;
   agentInstructions: string[];
@@ -95,6 +114,7 @@ interface ProfileRequirements {
 
 const MAX_DIMENSION_OBSERVATIONS = 128;
 const MAX_CAMERA_CALIBRATIONS = 24;
+const MAX_SOURCE_AUDITS = 24;
 const MAX_EXPECTED_COMPONENTS = 512;
 const MAX_TEXT_LENGTH = 120;
 const MAX_DIMENSION_MM = 100_000_000;
@@ -221,6 +241,7 @@ export function evaluateSemiProfessionalReadiness(
   if (!requirements) throw new Error(`Unsupported semi-professional evidence profile: ${String(options.profile)}`);
   const dimensionInputs = options.dimensions ?? [];
   const calibrationInputs = options.cameraCalibrations ?? [];
+  const sourceAuditInputs = options.sourceAudits ?? [];
   const expectedComponentInputs = options.expectedComponentIds ?? [];
   const boundedViews = views.slice(0, MAX_REFERENCE_FILES);
   const scopedViews = boundedViews.filter((view) => view.assetKind === requirements.assetKind);
@@ -234,6 +255,7 @@ export function evaluateSemiProfessionalReadiness(
   const missingRecommendedRoles = requirements.recommendedRoles.filter((role) => !present.has(role));
   const dimensions = dimensionInputs.slice(0, MAX_DIMENSION_OBSERVATIONS);
   const calibrations = calibrationInputs.slice(0, MAX_CAMERA_CALIBRATIONS);
+  const sourceAudits = sourceAuditInputs.slice(0, MAX_SOURCE_AUDITS);
   const expectedComponentIds = expectedComponentInputs.slice(0, MAX_EXPECTED_COMPONENTS);
   const invalidDimensions = dimensions.filter((observation) => !validDimension(observation, viewIds));
   const validDimensions = dimensions.filter((observation) => validDimension(observation, viewIds));
@@ -246,6 +268,32 @@ export function evaluateSemiProfessionalReadiness(
     || calibration.anchorCount < 4
     || !Number.isFinite(calibration.reprojectionErrorPx)
     || calibration.reprojectionErrorPx < 0);
+  const invalidSourceAudits = sourceAudits.filter((audit) => !viewIds.has(audit.viewId)
+    || !['official-record', 'professional-drawing', 'client-measured', 'unknown', 'synthetic-concept'].includes(audit.provenance)
+    || !['verified', 'partial', 'conflict'].includes(audit.geometryConsistency)
+    || !['verified', 'partial', 'unreadable'].includes(audit.dimensionLegibility));
+  const validSourceAudits = sourceAudits.filter((audit) => !invalidSourceAudits.includes(audit));
+  const sourceAuditIssues: string[] = [];
+  const trustedArchitectureSources = validSourceAudits.filter((audit) =>
+    ['official-record', 'professional-drawing', 'client-measured'].includes(audit.provenance)
+      && audit.geometryConsistency !== 'conflict'
+      && audit.dimensionLegibility === 'verified');
+  const sourceAuditReady = options.profile !== 'architectural-review' || trustedArchitectureSources.length > 0;
+  if (options.profile === 'architectural-review') {
+    if (validSourceAudits.length === 0) sourceAuditIssues.push('도면 출처·내부 일관성 감사가 없습니다.');
+    if (validSourceAudits.some((audit) => audit.provenance === 'synthetic-concept')) {
+      sourceAuditIssues.push('AI 콘셉트 패널은 실측·전문 도면 근거로 사용할 수 없습니다.');
+    }
+    if (validSourceAudits.some((audit) => audit.provenance === 'unknown')) {
+      sourceAuditIssues.push('도면 작성 출처를 검증할 수 없습니다.');
+    }
+    if (validSourceAudits.some((audit) => audit.dimensionLegibility !== 'verified')) {
+      sourceAuditIssues.push('치수 표기가 완전하게 판독되지 않습니다.');
+    }
+    if (validSourceAudits.some((audit) => audit.geometryConsistency !== 'verified')) {
+      sourceAuditIssues.push('평면·입면·단면 사이 형상 일관성이 검증되지 않았습니다.');
+    }
+  }
   const calibratedViews = unique([
     ...calibrations
     .filter((calibration) => !invalidCalibrations.includes(calibration)
@@ -289,6 +337,11 @@ export function evaluateSemiProfessionalReadiness(
   if (dimensionInputs.length > MAX_DIMENSION_OBSERVATIONS) blockers.push(`치수 근거는 최대 ${MAX_DIMENSION_OBSERVATIONS}개입니다.`);
   if (invalidCalibrations.length > 0) blockers.push(`잘못된 카메라 보정 ${invalidCalibrations.length}개`);
   if (calibrationInputs.length > MAX_CAMERA_CALIBRATIONS) blockers.push(`카메라 보정은 최대 ${MAX_CAMERA_CALIBRATIONS}개입니다.`);
+  if (invalidSourceAudits.length > 0) blockers.push(`잘못된 원본 감사 ${invalidSourceAudits.length}개`);
+  if (sourceAuditInputs.length > MAX_SOURCE_AUDITS) blockers.push(`원본 감사는 최대 ${MAX_SOURCE_AUDITS}개입니다.`);
+  if (validSourceAudits.some((audit) => audit.geometryConsistency === 'conflict')) {
+    blockers.push('평면·입면·단면 형상 근거가 서로 충돌합니다.');
+  }
   if (expectedComponentInputs.length > MAX_EXPECTED_COMPONENTS) blockers.push(`예상 부품 ID는 최대 ${MAX_EXPECTED_COMPONENTS}개입니다.`);
   if (invalidExpectedIds > 0) blockers.push(`ASCII로 정규화할 수 없는 예상 부품 ID ${invalidExpectedIds}개`);
   if (unidentifiedComponentViews.length > 0) blockers.push(`부품 ID가 없는 부품 사진 ${unidentifiedComponentViews.length}개`);
@@ -312,12 +365,17 @@ export function evaluateSemiProfessionalReadiness(
     warnings.push('서비스 어셈블리용 식별 부품 근거가 없습니다.');
     nextActions.push('BOM·부품 도면·분해 자료 중 하나에서 안정적인 ASCII component_id 지정');
   }
+  if (!sourceAuditReady) {
+    warnings.push(`근거 신뢰성 미확정: ${sourceAuditIssues.join(' ')}`);
+    nextActions.push('전문가 작성 도면·공식 기록·현장 실측 중 하나로 치수와 평면/입면 일관성을 검증');
+  }
 
   const buildReady = blockers.length === 0;
   const deliveryReady = buildReady
     && unresolvedCapabilities.length === 0
     && strongDimensionProperties.length >= requirements.minStrongDimensions
     && calibratedViews.length >= requirements.minCalibratedViews
+    && sourceAuditReady
     && (!requirements.requireIdentifiedComponentView || identifiedComponentIds.length > 0);
   const capabilityScore = resolvedCapabilities.length / requiredCapabilities.length;
   const dimensionScore = Math.min(1, strongDimensionProperties.length / requirements.minStrongDimensions);
@@ -345,6 +403,8 @@ export function evaluateSemiProfessionalReadiness(
     strongDimensionProperties,
     calibratedViews,
     identifiedComponentIds,
+    sourceAuditReady,
+    sourceAuditIssues,
     conflicts,
     blockers,
     warnings,
@@ -373,6 +433,8 @@ export function buildSemiProfessionalEvidencePack(
       .map((observation) => ({ ...structuredClone(observation), sourceViewId: stableViewId(observation.sourceViewId) })),
     cameraCalibrations: (options.cameraCalibrations ?? []).slice(0, MAX_CAMERA_CALIBRATIONS)
       .map((calibration) => ({ ...structuredClone(calibration), viewId: stableViewId(calibration.viewId) })),
+    sourceAudits: (options.sourceAudits ?? []).slice(0, MAX_SOURCE_AUDITS)
+      .map((audit) => ({ ...structuredClone(audit), viewId: stableViewId(audit.viewId) })),
     expectedComponentIds: unique((options.expectedComponentIds ?? []).slice(0, MAX_EXPECTED_COMPONENTS).map(normalizeComponentId).filter(Boolean)),
     readiness: {
       ...readiness,
@@ -403,6 +465,8 @@ export function attachEvidenceReadinessToAssembly(
       evidenceDeliveryReady: readiness.deliveryReady,
       evidencePackScore: readiness.score,
       evidenceUnresolvedCapabilities: readiness.unresolvedCapabilities.join(','),
+      evidenceSourceAuditReady: readiness.sourceAuditReady,
+      evidenceSourceAuditIssues: readiness.sourceAuditIssues.join(' '),
     },
   };
 }

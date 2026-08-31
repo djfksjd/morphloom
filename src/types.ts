@@ -96,6 +96,9 @@ export interface QualityCheck {
 
 export interface QualityReport {
   total: number;
+  /** Independent source confidence; never inflate it to match model completeness. */
+  evidenceScore?: number;
+  deliveryReady?: boolean;
   checks: QualityCheck[];
   triangles: number;
   vertices: number;

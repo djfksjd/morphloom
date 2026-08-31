@@ -93,9 +93,43 @@ describe('semi-professional evidence readiness', () => {
     const report = evaluateSemiProfessionalReadiness([sheet], {
       profile: 'architectural-review',
       dimensions: [dimension('d-grid-a', 'grid_a', 7200, sheet.id)],
+      sourceAudits: [{
+        viewId: sheet.id,
+        provenance: 'professional-drawing',
+        geometryConsistency: 'verified',
+        dimensionLegibility: 'verified',
+      }],
     });
-    expect(report).toMatchObject({ buildReady: true, deliveryReady: true });
+    expect(report).toMatchObject({ buildReady: true, deliveryReady: true, sourceAuditReady: true });
     expect(report.score).toBeGreaterThanOrEqual(95);
+  });
+
+  it('allows an AI concept sheet draft but blocks semi-professional architectural delivery', () => {
+    const sheet = source('pinterest-moderncat-concept', 'plan', {
+      sourceType: 'technical-drawing',
+      coveredRoles: ['elevation', 'measurement', 'material'],
+      capabilities: ['layout', 'scale', 'verticals', 'openings', 'surface', 'circulation'],
+      fit: 82,
+    });
+    const report = evaluateSemiProfessionalReadiness([sheet], {
+      profile: 'architectural-review',
+      dimensions: [dimension('overall-width', 'overall_width', 12_440, sheet.id)],
+      sourceAudits: [{
+        viewId: sheet.id,
+        provenance: 'synthetic-concept',
+        geometryConsistency: 'partial',
+        dimensionLegibility: 'partial',
+        notes: ['Composite Pinterest panel; no verifiable authoring or field-survey record.'],
+      }],
+    });
+    expect(report).toMatchObject({
+      buildReady: true,
+      deliveryReady: false,
+      sourceAuditReady: false,
+    });
+    expect(report.score).toBeLessThanOrEqual(84);
+    expect(report.sourceAuditIssues.join(' ')).toContain('AI 콘셉트 패널');
+    expect(report.nextActions.join(' ')).toContain('현장 실측');
   });
 
   it('blocks a photo that does not resolve depth or scale without demanding a fixed file count', () => {

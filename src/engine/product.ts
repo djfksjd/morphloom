@@ -15,6 +15,7 @@ export interface ProductPartInfo {
   material: string;
   surface: string;
   detail: string;
+  level?: string;
 }
 
 export interface ProductMetrics {

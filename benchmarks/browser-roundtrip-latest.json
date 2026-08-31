@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.browser-roundtrip/0.2",
-  "observedAt": "2026-08-31T13:47:00Z",
+  "observedAt": "2026-08-31T16:47:00Z",
   "environment": "local Chromium via Playwright CLI, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
   "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
   "console": {
@@ -8,6 +8,17 @@
     "warnings": 0
   },
   "assets": [
+    {
+      "id": "pinterest-concept-architectural-review",
+      "status": "pass",
+      "sceneFingerprint": "4db05a21552fed62",
+      "inputFingerprint": "1cbce19a4c614109",
+      "glbDisplaySize": "7.95 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "AI concept panel; verified provenance, section and field-measured height blocked"
+    },
     {
       "id": "laurel-homes-architectural-review",
       "status": "pass",
