@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T19:57:12.819Z",
+  "generatedAt": "2026-09-01T20:16:52.846Z",
   "captures": {
     "reference": {
       "file": "talon-doppler-ruby.webp",
@@ -7,7 +7,7 @@
     },
     "morphloom": {
       "file": "morphloom-result.png",
-      "sha256": "ac307befa75ce95363ed45d2b55f5efbbaa093fa1fa406266c672034b66dd71c"
+      "sha256": "3de45e58bb05cc418d7001e6c63bec737240a7eba3ae6dbd4d2e322d7df61717"
     },
     "img2threejs": {
       "file": "img2threejs-talon-live.png",
@@ -33,25 +33,25 @@
     "scores": {
       "morphloom": {
         "id": "morphloom",
-        "score": 0.8921307044361552,
+        "score": 0.9159465966916535,
         "silhouetteIoU": 0.9373054979253111,
-        "interiorSimilarity": 0.8596080058917113,
-        "materialSimilarity": 0.8385478498819464,
-        "surfaceScaleSimilarity": 0.8741470812852328,
-        "irregularitySimilarity": 0.8810132600864617,
-        "minimumFeatureScore": 0.8832668599857052,
-        "minimumViewScore": 0.8921307044361552,
+        "interiorSimilarity": 0.911485220313022,
+        "materialSimilarity": 0.8938099994201002,
+        "surfaceScaleSimilarity": 0.8880194232499424,
+        "irregularitySimilarity": 0.8834723725636415,
+        "minimumFeatureScore": 0.9166785733789462,
+        "minimumViewScore": 0.9159465966916535,
         "views": [
           {
             "viewId": "broadside",
-            "score": 0.8921307044361552,
+            "score": 0.9159465966916535,
             "reference": {
               "method": "pixel-frame-v1",
               "referenceFingerprint": "0e21c3ac",
-              "renderFingerprint": "235b8576",
+              "renderFingerprint": "aeb7ecb5",
               "silhouetteIoU": 0.9373054979253111,
-              "interiorSimilarity": 0.8596080058917113,
-              "score": 0.9101113757135512,
+              "interiorSimilarity": 0.911485220313022,
+              "score": 0.9282684007610099,
               "foregroundPixels": {
                 "reference": 28993,
                 "render": 30769,
@@ -62,8 +62,8 @@
                 {
                   "featureId": "whole-silhouette",
                   "silhouetteIoU": 0.9373054979253111,
-                  "interiorSimilarity": 0.8596080058917113,
-                  "score": 0.9101113757135512,
+                  "interiorSimilarity": 0.911485220313022,
+                  "score": 0.9282684007610099,
                   "foregroundPixels": {
                     "reference": 28993,
                     "render": 30769,
@@ -74,8 +74,8 @@
                 {
                   "featureId": "blade-and-openings",
                   "silhouetteIoU": 0.9658983050847457,
-                  "interiorSimilarity": 0.8887119911954862,
-                  "score": 0.9388830952235049,
+                  "interiorSimilarity": 0.8959720450263351,
+                  "score": 0.941424114064302,
                   "foregroundPixels": {
                     "reference": 14266,
                     "render": 14731,
@@ -86,8 +86,8 @@
                 {
                   "featureId": "grip-fasteners-and-ring",
                   "silhouetteIoU": 0.911177347242921,
-                  "interiorSimilarity": 0.8314330979365904,
-                  "score": 0.8832668599857052,
+                  "interiorSimilarity": 0.9268951362029928,
+                  "score": 0.9166785733789462,
                   "foregroundPixels": {
                     "reference": 15345,
                     "render": 16715,
@@ -97,9 +97,9 @@
                 }
               ]
             },
-            "materialSimilarity": 0.8385478498819464,
-            "surfaceScaleSimilarity": 0.8741470812852328,
-            "irregularitySimilarity": 0.8810132600864617,
+            "materialSimilarity": 0.8938099994201002,
+            "surfaceScaleSimilarity": 0.8880194232499424,
+            "irregularitySimilarity": 0.8834723725636415,
             "material": {
               "method": "material-region-v2",
               "reference": {
@@ -132,41 +132,41 @@
               },
               "render": {
                 "meanRgb": [
-                  156.7888888888889,
-                  115.27222222222223,
-                  116.01666666666667
+                  140.77592592592592,
+                  101.05925925925926,
+                  101.63148148148149
                 ],
-                "meanLuma": 0.4868722135076255,
-                "lumaVariance": 0.09551323957282096,
-                "horizontalGradient": 0.09752349241583426,
-                "verticalGradient": 0.07936559971010992,
-                "anisotropyProxy": 1.2287879480788615,
-                "fineContrast": 0.06192794143652157,
-                "coarseContrast": 0.14897160237865642,
-                "gradientEntropy": 0.9532381797989607,
-                "periodicity": 0.8135010174928072,
-                "irregularity": 0.6312077169364182,
+                "meanLuma": 0.4295856354393609,
+                "lumaVariance": 0.06750042271737819,
+                "horizontalGradient": 0.0921753853742755,
+                "verticalGradient": 0.07867118250996497,
+                "anisotropyProxy": 1.1716537419861461,
+                "fineContrast": 0.05891907213813908,
+                "coarseContrast": 0.1282153278688524,
+                "gradientEntropy": 0.961912182731378,
+                "periodicity": 0.8284069173485021,
+                "irregularity": 0.6299781606978283,
                 "gradientHistogram": [
-                  0.18649629777783214,
-                  0.07098803897186225,
-                  0.0908605356488374,
-                  0.15271008601963307,
-                  0.12263198103763336,
-                  0.09278878313809233,
-                  0.05608512939848944,
-                  0.22743914800762
+                  0.16934230250079782,
+                  0.07960616840712112,
+                  0.09287462545817228,
+                  0.13563524815064518,
+                  0.13950232002465757,
+                  0.06814459483335505,
+                  0.08605842417669378,
+                  0.22883631644855715
                 ],
                 "foregroundCoverage": 0.234375
               },
-              "deltaE76": 10.235771567882006,
+              "deltaE76": 7.648925081561558,
               "scores": {
-                "baseColor": 0.7952845686423599,
-                "meanLuma": 0.8274280236269937,
-                "microstructure": 0.8148079284095988,
-                "surfaceScale": 0.8741470812852328,
-                "irregularity": 0.8810132600864617,
-                "directionalResponse": 0.9366330186183854,
-                "overall": 0.8385478498819464
+                "baseColor": 0.8470214983687688,
+                "meanLuma": 0.9547315304453595,
+                "microstructure": 0.908370984118191,
+                "surfaceScale": 0.8880194232499424,
+                "irregularity": 0.8834723725636415,
+                "directionalResponse": 0.932694727751719,
+                "overall": 0.8938099994201002
               },
               "mismatches": [],
               "passed": true,

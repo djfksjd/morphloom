@@ -6,7 +6,7 @@ import { buildCharacter, deriveBodyTopology, poseCharacterPoint } from '../src/e
 import { buildOrnateKnife, createOrnateKnifeIR } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
-import { compileAssemblyIR, validateAssemblyIR } from '../src/engine/assembly-compiler';
+import { compileAssemblyIR, referenceProjectionDiffuseGain, validateAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
@@ -306,6 +306,16 @@ describe('AssemblyIR product pipeline', () => {
       verifiedEdgeTaperSegments: 14,
       maximumMeasuredEdgeThicknessMm: expect.closeTo(0.12, 4),
     });
+  });
+
+  it('bounds photographed-light compensation while preserving stronger metallic response', () => {
+    expect(referenceProjectionDiffuseGain(0, 0)).toBeCloseTo(0.8);
+    expect(referenceProjectionDiffuseGain(0.08, 0.67)).toBeCloseTo(0.5346);
+    expect(referenceProjectionDiffuseGain(0.76, 0.11)).toBeCloseTo(0.9058);
+    expect(referenceProjectionDiffuseGain(1, 0)).toBeCloseTo(0.95);
+    expect(referenceProjectionDiffuseGain(0, 1)).toBeCloseTo(0.5);
+    expect(() => referenceProjectionDiffuseGain(-0.01, 0.5)).toThrow(/0\.\.1/);
+    expect(() => referenceProjectionDiffuseGain(0.5, Number.NaN)).toThrow(/0\.\.1/);
   });
 
   it('maps reference UVs in assembly space so independently editable parts retain one aligned photograph', () => {

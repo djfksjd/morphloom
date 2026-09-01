@@ -709,6 +709,44 @@ interface ProjectionLoadRecord {
   promise: Promise<boolean>;
 }
 
+export function referenceProjectionDiffuseGain(metalness: number, authoredLinearLuma: number): number {
+  if (!Number.isFinite(metalness) || metalness < 0 || metalness > 1
+    || !Number.isFinite(authoredLinearLuma) || authoredLinearLuma < 0 || authoredLinearLuma > 1) {
+    throw new Error('Reference projection metalness and authored luminance must be within 0..1.');
+  }
+  return THREE.MathUtils.clamp(0.8 - authoredLinearLuma * 0.42 + metalness * 0.2, 0.5, 0.95);
+}
+
+function applyReferenceProjectionAppearance(
+  material: THREE.MeshPhysicalMaterial,
+  record: ProjectionLoadRecord,
+): void {
+  material.map = record.texture;
+  if (record.normalTexture) material.normalMap = record.normalTexture;
+  if (record.roughnessTexture) material.roughnessMap = record.roughnessTexture;
+  // The admitted plate already contains photographed illumination. Applying a
+  // full white multiplier under a second PBR studio rig overexposes pale
+  // dielectrics while highly metallic regions receive much less diffuse light.
+  // Keep a bounded, deterministic diffuse-energy compensation that approaches
+  // neutral for metals and remains visibly light-responsive for every finish.
+  const recordedLuma = material.userData.morphloomSurface?.referenceAuthoredLinearLuma;
+  const authoredLinearLuma = typeof recordedLuma === 'number'
+    ? recordedLuma
+    : material.color.r * 0.2126 + material.color.g * 0.7152 + material.color.b * 0.0722;
+  const colorGain = referenceProjectionDiffuseGain(material.metalness, authoredLinearLuma);
+  material.color.setRGB(colorGain, colorGain, colorGain);
+  material.userData.morphloomSurface = {
+    ...material.userData.morphloomSurface,
+    referenceProjectionState: 'loaded',
+    referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
+    referenceIrregularity: record.metrics?.irregularity,
+    referenceAlphaFillPixels: record.alphaFillPixels,
+    referenceAuthoredLinearLuma: authoredLinearLuma,
+    referenceDiffuseEnergyGain: colorGain,
+  };
+  material.needsUpdate = true;
+}
+
 function createOpaqueCroppedProjectionTexture(
   texture: THREE.Texture,
   projection: ReferenceProjectionIR,
@@ -908,18 +946,7 @@ function createProjectionRecord(
         record.state = 'loaded';
         status.loaded += 1;
         for (const material of materials) {
-          material.map = record.texture;
-          if (record.normalTexture) material.normalMap = record.normalTexture;
-          if (record.roughnessTexture) material.roughnessMap = record.roughnessTexture;
-          material.color.set('#ffffff');
-          material.userData.morphloomSurface = {
-            ...material.userData.morphloomSurface,
-            referenceProjectionState: 'loaded',
-            referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
-            referenceIrregularity: record.metrics?.irregularity,
-            referenceAlphaFillPixels: record.alphaFillPixels,
-          };
-          material.needsUpdate = true;
+          applyReferenceProjectionAppearance(material, record);
         }
         resolveLoad(true);
       })().catch(() => {
@@ -1030,18 +1057,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
           referenceProjectionState: record.state,
         };
         if (record.state === 'loaded') {
-          projectedMaterial.map = record.texture;
-          if (record.normalTexture) projectedMaterial.normalMap = record.normalTexture;
-          if (record.roughnessTexture) projectedMaterial.roughnessMap = record.roughnessTexture;
-          projectedMaterial.color.set('#ffffff');
-          projectedMaterial.userData.morphloomSurface = {
-            ...projectedMaterial.userData.morphloomSurface,
-            referenceProjectionState: 'loaded',
-            referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
-            referenceIrregularity: record.metrics?.irregularity,
-            referenceAlphaFillPixels: record.alphaFillPixels,
-          };
-          projectedMaterial.needsUpdate = true;
+          applyReferenceProjectionAppearance(projectedMaterial, record);
         }
       }
     }

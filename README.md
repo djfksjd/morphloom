@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-157%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-158%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -151,7 +151,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
-동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 원본 정면 색상을 조립 좌표계에 정렬해 투영하고, 같은 사진의 미세 밝기 변화에서 normal·roughness 맵을 파생해 빛에 반응하는 요철·마모를 보존합니다. 검신은 가짜 튜브가 아니라 실제 쐐기 형상이며, 외곽선 15점으로 정의한 절삭선 14/14구간 모두에서 최대 날끝 0.12 mm를 측정합니다. 해당 사례는 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm를 확인했습니다. UI 없는 투명 WebGL 캡처를 전경 정렬한 1개 정면 진단에서 Morphloom은 종합 0.892 대 0.796, 실루엣 0.937 대 0.745, 불규칙 표면 0.881 대 0.771로 앞섰지만 평균 재질 색·밝기 점수는 0.839 대 0.877로 뒤졌습니다. 정면 한 뷰뿐이고 블라인드 패널이 없으므로 결과는 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [기계 판독 결과](./benchmarks/talon-visual-broadside-latest.json)를 공개합니다. 비교용 경쟁 렌더는 라이선스 경계 때문에 저장소에 재배포하지 않으며 해시만 기록합니다.
+동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 원본 정면 색상을 조립 좌표계에 정렬해 투영하고, 같은 사진의 미세 밝기 변화에서 normal·roughness 맵을 파생해 빛에 반응하는 요철·마모를 보존합니다. 사진에 이미 기록된 조명과 PBR 스튜디오 조명이 중복되지 않도록 원래 재질의 밝기·금속성으로 확산 에너지를 제한합니다. 검신은 가짜 튜브가 아니라 실제 쐐기 형상이며, 외곽선 15점으로 정의한 절삭선 14/14구간 모두에서 최대 날끝 0.12 mm를 측정합니다. 해당 사례는 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm를 확인했습니다. UI 없는 투명 WebGL 캡처를 전경 정렬한 1개 정면 진단에서 Morphloom은 종합 0.916 대 0.796, 실루엣 0.937 대 0.745, 내부 디테일 0.911 대 0.868, 재질·질감 종합 0.894 대 0.877, 불규칙 표면 0.883 대 0.771로 모든 집계 항목에서 앞섰습니다. 정면 한 뷰뿐이고 블라인드 패널이 없으므로 결과는 여전히 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [기계 판독 결과](./benchmarks/talon-visual-broadside-latest.json)를 공개합니다. 비교용 경쟁 렌더는 라이선스 경계 때문에 저장소에 재배포하지 않으며 해시만 기록합니다.
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 

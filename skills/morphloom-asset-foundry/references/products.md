@@ -18,6 +18,8 @@ Assign surface finishes by actual material: anodized or brushed metal, coated gl
 
 When projecting a transparent product photograph, do not sample transparent black RGB at antialiased boundaries. Extend the nearest admitted opaque colour within a bounded pixel budget, keep actual openings as geometry, and project the plate only onto the intended front/back caps. Extruded side walls retain their authored physical material; copying a broadside photograph around the thickness is a fidelity defect.
 
+A photographic plate already contains illumination. When it remains a light-responsive PBR base colour, apply a bounded diffuse-energy compensation derived from the authored linear luminance and metalness so a second studio rig does not wash out pale dielectrics. Keep the compensation deterministic, recorded on the material, and within 0.5–0.95; never replace the normal/roughness response with an unlit screenshot merely to improve a comparison score.
+
 Visible cameras, lenses, indicators, and displays require physical layering—bezel, recess, cover glass/window, optical or emissive layer, and source state where evidenced. A flat dark or glowing patch does not substitute for an optical stack. Inventory visible labels, legends, icons, engravings, and regulatory marks; preserve orientation/mirroring and mark unreadable copy uncertain rather than fabricating it.
 
 For movable parts, record pivot/axis, travel limits, endpoint poses, clearances/collisions, and cable behavior after motion. Service/exploded assets additionally require an assembly dependency order and a plausible removal path.
