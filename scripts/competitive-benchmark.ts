@@ -16,7 +16,65 @@ import { visualBenchmarkMinimumViews, type VisualBenchmarkDomain } from '../src/
 import { DEFAULT_KNIFE_SPEC } from '../src/types';
 import { polygonizeImplicitSurface } from '../src/engine/implicit-surface';
 import { analyzeTopology } from '../src/engine/topology';
+import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import * as THREE from 'three';
+
+const auditSerializedValidation = async () => {
+  const queue = new SerializedTaskQueue(3);
+  const order: string[] = [];
+  let active = 0;
+  let maximumActive = 0;
+  let executionCount = 0;
+  const run = (key: string) => queue.run(key, async () => {
+    executionCount += 1;
+    active += 1;
+    maximumActive = Math.max(maximumActive, active);
+    order.push(`${key}:start`);
+    await Promise.resolve();
+    order.push(`${key}:end`);
+    active -= 1;
+    return key;
+  });
+  const first = run('same-input');
+  const duplicate = run('same-input');
+  const second = run('next-input');
+  await Promise.all([first, duplicate, second]);
+
+  const recoveryQueue = new SerializedTaskQueue(2);
+  const expectedFailure = recoveryQueue.run('failure', async () => { throw new Error('expected'); });
+  const recovered = recoveryQueue.run('recovery', async () => 'recovered');
+  await expectedFailure.catch(() => undefined);
+
+  const capacityQueue = new SerializedTaskQueue(1);
+  let releaseCapacity!: () => void;
+  const capacityGate = new Promise<void>((resolve) => { releaseCapacity = resolve; });
+  const holding = capacityQueue.run('holding', () => capacityGate);
+  let capacityRejected = false;
+  try {
+    capacityQueue.run('overflow', async () => undefined);
+  } catch {
+    capacityRejected = true;
+  }
+  releaseCapacity();
+  await holding;
+
+  return {
+    pass: duplicate === first
+      && executionCount === 2
+      && maximumActive === 1
+      && order.join('|') === 'same-input:start|same-input:end|next-input:start|next-input:end'
+      && await recovered === 'recovered'
+      && recoveryQueue.pendingCount === 0
+      && capacityRejected
+      && capacityQueue.pendingCount === 0,
+    sameInputDeduplicated: duplicate === first,
+    maximumConcurrentTasks: maximumActive,
+    failureReleasedQueue: recoveryQueue.pendingCount === 0,
+    capacityRejected,
+  };
+};
+
+const serializedValidationAudit = await auditSerializedValidation();
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -201,6 +259,7 @@ const output = {
       rates: qualityBenchmark.rates,
       domains: domainProof,
     },
+    browserValidationLifecycle: serializedValidationAudit,
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -216,6 +275,7 @@ const output = {
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'GLB and DCC delivery validation', img2threejs: 'Three.js factory focus', morphloom: 'yes' },
+    { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
     { capability: 'named editable facial controls preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphTargets === 5 ? '5 non-zero named morph targets' : 'blocked' },
     { capability: 'measured bone deformation, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
@@ -235,4 +295,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || visualHull.status !== 'carved' || visualHull.minimumViewIoU < 0.85
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
-  || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed) process.exitCode = 1;
+  || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
+  || !serializedValidationAudit.pass) process.exitCode = 1;

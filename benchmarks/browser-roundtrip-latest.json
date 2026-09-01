@@ -1,13 +1,13 @@
 {
   "schema": "morphloom.browser-roundtrip/0.2",
-  "observedAt": "2026-09-01T17:58:16Z",
+  "observedAt": "2026-09-01T18:06:23Z",
   "environment": "optimized local Vite preview via Codex in-app browser, http://127.0.0.1:4175, Three.js GLTFExporter -> GLTFLoader",
   "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
   "console": {
     "errors": 0,
     "warnings": 0,
     "developmentHotReloadTransients": 0,
-    "warningNote": "Nine representative assets passed after compiler 0.14.0 in one clean optimized-preview browser tab. The console contained no warning or error entries after the proof run. Character proofs preserve five named facial morph targets plus the exact dimension-and-bone collision manifest; drawing-based buildings preserve the compiled concave-plan projection audit fingerprint."
+    "warningNote": "Nine representative assets passed after compiler 0.14.0 in one clean optimized-preview browser tab. A same-asset re-selection preserved PASS and its fingerprint; subsequent Laurel Homes and TEC assembly selections each reached PASS without stale-state overwrite. The console contained no warning or error entries after the proof run. Character proofs preserve five named facial morph targets plus the exact dimension-and-bone collision manifest; drawing-based buildings preserve the compiled concave-plan projection audit fingerprint."
   },
   "interactionProof": {
     "displayModes": ["beauty", "clay", "wire", "x-ray"],
@@ -17,6 +17,7 @@
     "navigation": ["wheel-zoom", "zoom-buttons", "reset", "space-drag-pan"],
     "measurement": ["two-point-distance", "architectural-dimensions"],
     "collapsiblePanels": ["inspection", "pipeline"],
+    "deliveryLifecycle": ["same-selection-preserves-pass", "same-input-deduplicated", "heavy-validation-serialized", "stale-result-ignored", "pending-queue-cap-4"],
     "status": "pass"
   },
   "assets": [

@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T17:58:51.650Z",
+  "generatedAt": "2026-09-01T18:09:41.087Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1030,6 +1030,13 @@
           }
         }
       }
+    },
+    "browserValidationLifecycle": {
+      "pass": true,
+      "sameInputDeduplicated": true,
+      "maximumConcurrentTasks": 1,
+      "failureReleasedQueue": true,
+      "capacityRejected": true
     }
   },
   "capabilityMatrix": [
@@ -1096,6 +1103,11 @@
     {
       "capability": "GLB and DCC delivery validation",
       "img2threejs": "Three.js factory focus",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "bounded serialized browser GLB validation with same-input deduplication and stale-result guard",
+      "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },
     {

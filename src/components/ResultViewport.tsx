@@ -35,6 +35,7 @@ import {
   type LocalBuildTelemetry,
 } from '../engine/delivery-validation';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
+import { SerializedTaskQueue } from '../engine/serialized-task-queue';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
 export type BuildingLevel = 'all' | 'L1' | 'L2';
@@ -664,7 +665,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     const validationSequenceRef = useRef(0);
     const exportSequenceRef = useRef(0);
     const validatedGlbRef = useRef<{ sourceKey: string; bytes: ArrayBuffer; audit: DeliveryAudit } | undefined>(undefined);
-    const glbPromiseRef = useRef<{ sourceKey: string; promise: Promise<{ bytes: ArrayBuffer; audit: DeliveryAudit }> } | undefined>(undefined);
+    const glbQueueRef = useRef<SerializedTaskQueue | undefined>(undefined);
+    const glbQueue = glbQueueRef.current ??= new SerializedTaskQueue(4);
     const telemetryRef = useRef<LocalBuildTelemetry | undefined>(undefined);
 
     const resetMeasurement = (): void => {
@@ -684,8 +686,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       if (cached?.sourceKey === sourceKey && cached.audit.status !== 'blocked') {
         return { bytes: cached.bytes, audit: cached.audit };
       }
-      if (glbPromiseRef.current?.sourceKey === sourceKey) return glbPromiseRef.current.promise;
-      const promise = (async () => {
+      return glbQueue.run(sourceKey, async () => {
         const deliveryBuild = createBeautyBuild();
         try {
           const buildFingerprint = snapshotScene(deliveryBuild.root).fingerprint;
@@ -697,13 +698,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         } finally {
           disposeObject(deliveryBuild.root);
         }
-      })();
-      glbPromiseRef.current = { sourceKey, promise };
-      try {
-        return await promise;
-      } finally {
-        if (glbPromiseRef.current?.promise === promise) glbPromiseRef.current = undefined;
-      }
+      });
     };
 
     useEffect(() => {
@@ -983,7 +978,6 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const surfaces = inspectSurfaceSystem(build.root);
         build.metrics.surfaces = surfaces;
         validatedGlbRef.current = undefined;
-        glbPromiseRef.current = undefined;
         onBuilt?.({
           ...build,
           metrics: { ...build.metrics, surfaces },

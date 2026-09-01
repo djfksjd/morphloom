@@ -325,6 +325,10 @@ export function ViewerApp() {
   }, [assetKind, clearMeasurement, measurementEnabled, toggleMeasurement]);
 
   const selectAsset = (id: string) => {
+    // A native select can dispatch change even when automation or assistive
+    // technology re-selects its current option. Do not clear a valid delivery
+    // result when the underlying asset identity has not changed.
+    if (id === activeAssetId) return;
     const next = VIEWER_ASSETS.find((item) => item.id === id);
     if (!next) return;
     setActiveAssetId(next.id);
