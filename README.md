@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-175%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-177%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -146,13 +146,13 @@ Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립
 
 Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격선을 잠그고, 8단계 검수에서 회귀·반복 결함·비용 상한을 실제로 차단합니다.
 
-두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고 각 입력 시점으로 역투영해 정확도를 다시 검사합니다. 유기형·인체 블록아웃·연속 곡면은 `implicitSurface`의 smooth-union/subtract/intersect 연산과 Surface Nets로 만들며, 모호한 셀이 생기면 최대 4단계의 결정론적 해상도 보정 후에도 비매니폴드이면 차단합니다. 참조와 렌더의 전경을 정렬해 상·중·하 내부 누락을 검사하고, 재질은 색뿐 아니라 밝기, 미세·중간·큰 스케일 대비, 방향 분포, 주기성, 불규칙성을 따로 비교합니다. 이 구현은 Apache-2.0인 img2threejs의 강한 부분을 TypeScript로 이식·수정한 것이며 출처와 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
+두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고 각 입력 시점으로 역투영해 정확도를 다시 검사합니다. 유기형·인체 블록아웃·연속 곡면은 `implicitSurface`와 Surface Nets로 만들며, 결정론적 보정 후에도 비매니폴드이면 차단합니다. 사진 투영은 원본을 향한 삼각형에만 적용하고 측면·후면은 근거 없는 반복 무늬 없이 별도 재질로 둡니다. 재질 검사는 색과 통계뿐 아니라 미세·중간·큰 스케일 및 실제 공간 배치를 비교해 픽셀을 뒤섞은 가짜 질감도 차단합니다. Apache-2.0인 img2threejs에서 참고한 부분과 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
 
 도면 기반 건축은 `planFootprintVerified` 표시만 믿지 않습니다. 소스 도면에서 잠근 점유 영역과 중정·후퇴부 같은 보호 공백을 실제 컴파일 메시 위에서 수직 광선으로 다시 샘플링해 IoU, 과잉 시공, 누락, 공백 침범을 계산합니다. 중앙 돌출부가 반대편으로 뒤집히거나 U자 중정이 메워지면 토폴로지가 멀쩡해도 품질 점수와 납품 판정이 차단되며, 이 감사 지문도 GLB 재열기까지 보존되어야 합니다.
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [다중 시점 캡처 규격](./docs/VISUAL_CAPTURE_SET.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
-동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 원본 정면 색상을 조립 좌표계에 정렬하고, 선형 색공간에서 넓은 조명 변화만 제한적으로 제거한 뒤 미세 밝기 변화로 normal·roughness 맵을 만듭니다. 보정량·입력 fingerprint·단일 사진 추론의 제한도 재질에 기록합니다. 검신은 실제 쐐기 형상이며 절삭선 14/14구간에서 최대 날끝 0.12 mm를 측정합니다. 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm도 확인했습니다. UI 없는 투명 WebGL 정면 진단에서 Morphloom은 종합 0.916 대 0.796, 실루엣 0.937 대 0.745, 내부 디테일 0.926 대 0.868, 재질·질감 0.902 대 0.877, 표면 스케일 0.853 대 0.777, 불규칙성 0.848 대 0.771로 앞섰습니다. 정면 한 뷰뿐이고 블라인드 패널이 없으므로 결과는 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [기계 판독 결과](./benchmarks/talon-visual-broadside-latest.json)를 공개합니다. 비교용 경쟁 렌더는 재배포하지 않고 해시만 기록합니다.
+동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 조립 좌표계의 source-facing 삼각형에 원본을 정렬하고, 선형 색공간에서 넓은 조명 변화만 제한적으로 제거한 뒤 normal·roughness 맵을 만듭니다. 검신은 실제 쐐기 형상이며 절삭선 14/14구간에서 최대 날끝 0.12 mm를 측정합니다. 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm도 확인했습니다. 실제 투명 WebGL 정면 진단에서 Morphloom은 종합 0.911 대 0.785, 실루엣 0.937 대 0.745, 내부 디테일 0.929 대 0.868, 재질·질감 0.851 대 0.805, 공간 질감 0.602 대 0.470으로 앞섰습니다. 비교 렌더는 공간 질감 게이트에서 탈락했고 Morphloom은 통과했습니다. 정면 한 뷰뿐이고 블라인드 패널이 없으므로 결과는 여전히 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [기계 판독 결과](./benchmarks/talon-visual-broadside-latest.json)를 공개합니다. 비교용 경쟁 렌더는 재배포하지 않고 해시만 기록합니다.
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 

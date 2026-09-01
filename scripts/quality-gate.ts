@@ -9,7 +9,7 @@ import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-
 import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC } from '../src/types';
-import { deliveryInputFingerprint, snapshotScene } from '../src/engine/delivery-validation';
+import { DELIVERY_PIPELINE_REVISION, deliveryInputFingerprint, snapshotScene } from '../src/engine/delivery-validation';
 import { auditAssemblyDetail } from '../src/engine/generation-policy';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 import { analyzeTopology } from '../src/engine/topology';
@@ -45,8 +45,13 @@ type BrowserProof = {
 
 const browserProofs = (() => {
   try {
-    const parsed = JSON.parse(readFileSync('benchmarks/browser-roundtrip-latest.json', 'utf8')) as { assets?: unknown };
-    if (!Array.isArray(parsed.assets)) return new Map<string, BrowserProof>();
+    const parsed = JSON.parse(readFileSync('benchmarks/browser-roundtrip-latest.json', 'utf8')) as {
+      compilerRevision?: unknown;
+      assets?: unknown;
+    };
+    if (parsed.compilerRevision !== DELIVERY_PIPELINE_REVISION || !Array.isArray(parsed.assets)) {
+      return new Map<string, BrowserProof>();
+    }
     return new Map(parsed.assets
       .filter((item): item is BrowserProof => Boolean(item) && typeof item === 'object' && typeof (item as BrowserProof).id === 'string')
       .map((item) => [item.id as string, item]));

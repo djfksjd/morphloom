@@ -125,4 +125,13 @@ describe('same-input blind visual benchmark contract', () => {
       irregularitySimilarity: expect.any(Number),
     });
   });
+
+  it('blocks a candidate when its per-view material gate fails even if aggregate geometry metrics remain populated', () => {
+    const input = benchmark(true);
+    input.candidates[1].views[0].render = frame([0, 200, 0]);
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.scores.img2threejs.views[0].material.passed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/img2threejs\/front: material region failed/);
+    expect(report.claimAllowed).toBe(false);
+  });
 });

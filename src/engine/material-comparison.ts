@@ -35,6 +35,7 @@ export type MaterialMismatch =
   | 'wrong-exposure-or-value'
   | 'wrong-roughness-or-microstructure'
   | 'wrong-surface-scale'
+  | 'wrong-spatial-structure'
   | 'surface-too-regular'
   | 'wrong-anisotropy'
   | 'highlight-response-too-flat'
@@ -42,7 +43,7 @@ export type MaterialMismatch =
   | 'missing-environment-response';
 
 export interface MaterialComparisonResult {
-  method: 'material-region-v2';
+  method: 'material-region-v3';
   reference: MaterialFeatures;
   render: MaterialFeatures;
   deltaE76: number;
@@ -53,6 +54,7 @@ export interface MaterialComparisonResult {
     surfaceScale: number;
     irregularity: number;
     directionalResponse: number;
+    spatialStructure: number;
     overall: number;
   };
   mismatches: MaterialMismatch[];
@@ -240,6 +242,152 @@ function similarity(first: number, second: number, scale: number): number {
   return Math.max(0, Math.min(1, 1 - Math.abs(first - second) / scale));
 }
 
+interface LumaGrid {
+  luma: Float32Array;
+  foreground: Uint8Array;
+}
+
+function sampleLumaGrid(frame: ComparisonFrame, grid: number): LumaGrid {
+  const values = new Float32Array(grid * grid);
+  const selected = new Uint8Array(grid * grid);
+  for (let y = 0; y < grid; y += 1) {
+    const sourceY = Math.min(frame.height - 1, Math.floor((y + 0.5) * frame.height / grid));
+    for (let x = 0; x < grid; x += 1) {
+      const sourceX = Math.min(frame.width - 1, Math.floor((x + 0.5) * frame.width / grid));
+      const source = sourceY * frame.width + sourceX;
+      const offset = source * 4;
+      const target = y * grid + x;
+      values[target] = luma([frame.rgba[offset]!, frame.rgba[offset + 1]!, frame.rgba[offset + 2]!]);
+      selected[target] = Number(foreground(frame, source));
+    }
+  }
+  return { luma: values, foreground: selected };
+}
+
+/**
+ * Compares where local texture and highlight structure occurs, not only its
+ * global histogram. A pixel shuffle can preserve colour, variance, entropy,
+ * and frequency totals while destroying the actual stone, weave, scratch, or
+ * reflection layout. Multi-scale masked contrast-structure SSIM makes that
+ * failure visible while remaining tolerant of bounded exposure changes.
+ */
+function spatialStructureSimilarity(reference: ComparisonFrame, render: ComparisonFrame, grid: number): number {
+  if (reference.width !== render.width || reference.height !== render.height) {
+    throw new Error('Material frames must use matched dimensions for spatial comparison.');
+  }
+  const first = sampleLumaGrid(reference, grid);
+  const second = sampleLumaGrid(render, grid);
+  const blockSizes = [...new Set([
+    Math.max(2, Math.round(grid / 8)),
+    Math.max(3, Math.round(grid / 4)),
+  ])];
+  const stability = 0.0009;
+  const scoreBlock = (
+    originX: number,
+    originY: number,
+    blockSize: number,
+    shiftX: number,
+    shiftY: number,
+  ): { score: number; weight: number } | undefined => {
+    let samples = 0;
+    let meanFirst = 0;
+    let meanSecond = 0;
+    for (let y = originY; y < originY + blockSize; y += 1) {
+      for (let x = originX; x < originX + blockSize; x += 1) {
+        const shiftedX = x + shiftX;
+        const shiftedY = y + shiftY;
+        if (shiftedX < 0 || shiftedX >= grid || shiftedY < 0 || shiftedY >= grid) continue;
+        const firstIndex = y * grid + x;
+        const secondIndex = shiftedY * grid + shiftedX;
+        if (!first.foreground[firstIndex] || !second.foreground[secondIndex]) continue;
+        meanFirst += first.luma[firstIndex]!;
+        meanSecond += second.luma[secondIndex]!;
+        samples += 1;
+      }
+    }
+    if (samples < Math.max(4, Math.floor(blockSize * blockSize * 0.3))) return undefined;
+    meanFirst /= samples;
+    meanSecond /= samples;
+    let varianceFirst = 0;
+    let varianceSecond = 0;
+    let covariance = 0;
+    for (let y = originY; y < originY + blockSize; y += 1) {
+      for (let x = originX; x < originX + blockSize; x += 1) {
+        const shiftedX = x + shiftX;
+        const shiftedY = y + shiftY;
+        if (shiftedX < 0 || shiftedX >= grid || shiftedY < 0 || shiftedY >= grid) continue;
+        const firstIndex = y * grid + x;
+        const secondIndex = shiftedY * grid + shiftedX;
+        if (!first.foreground[firstIndex] || !second.foreground[secondIndex]) continue;
+        const a = first.luma[firstIndex]! - meanFirst;
+        const b = second.luma[secondIndex]! - meanSecond;
+        varianceFirst += a * a;
+        varianceSecond += b * b;
+        covariance += a * b;
+      }
+    }
+    varianceFirst /= samples;
+    varianceSecond /= samples;
+    covariance /= samples;
+    return {
+      score: Math.max(0, Math.min(1,
+        (2 * covariance + stability) / (varianceFirst + varianceSecond + stability),
+      )),
+      weight: 0.01 + Math.sqrt(Math.max(0, varianceFirst + varianceSecond)),
+    };
+  };
+  let globalBest = 0;
+  // One grid cell is the maximum calibration tolerance. It absorbs a small
+  // raster/camera rounding difference without allowing a globally shifted or
+  // spatially shuffled texture to hide behind histogram similarity.
+  for (let shiftY = -1; shiftY <= 1; shiftY += 1) {
+    for (let shiftX = -1; shiftX <= 1; shiftX += 1) {
+      let weightedScore = 0;
+      let totalWeight = 0;
+      for (const blockSize of blockSizes) {
+        const stride = Math.max(1, Math.floor(blockSize / 2));
+        for (let originY = 0; originY <= grid - blockSize; originY += stride) {
+          for (let originX = 0; originX <= grid - blockSize; originX += stride) {
+            const block = scoreBlock(originX, originY, blockSize, shiftX, shiftY);
+            if (!block) continue;
+            weightedScore += block.score * block.weight;
+            totalWeight += block.weight;
+          }
+        }
+      }
+      if (totalWeight > 0) globalBest = Math.max(globalBest, weightedScore / totalWeight);
+    }
+  }
+  // Curved geometry and sub-pixel camera fitting cause small non-rigid shifts
+  // that are not a material error. Admit only a one-cell local correspondence,
+  // keep it a minority of the score, and penalise each displaced match. Random
+  // shuffles cannot pass because most evidence still uses one global mapping.
+  let localScore = 0;
+  let localWeight = 0;
+  for (const blockSize of blockSizes) {
+    const stride = Math.max(1, Math.floor(blockSize / 2));
+    for (let originY = 0; originY <= grid - blockSize; originY += stride) {
+      for (let originX = 0; originX <= grid - blockSize; originX += stride) {
+        let best: { score: number; weight: number } | undefined;
+        for (let shiftY = -1; shiftY <= 1; shiftY += 1) {
+          for (let shiftX = -1; shiftX <= 1; shiftX += 1) {
+            const candidate = scoreBlock(originX, originY, blockSize, shiftX, shiftY);
+            if (!candidate) continue;
+            const penalty = 0.018 * (Math.abs(shiftX) + Math.abs(shiftY));
+            const penalised = { ...candidate, score: Math.max(0, candidate.score - penalty) };
+            if (!best || penalised.score > best.score) best = penalised;
+          }
+        }
+        if (!best) continue;
+        localScore += best.score * best.weight;
+        localWeight += best.weight;
+      }
+    }
+  }
+  const boundedLocal = localWeight > 0 ? localScore / localWeight : globalBest;
+  return globalBest * 0.72 + boundedLocal * 0.28;
+}
+
 export function compareMaterialFrames(
   referenceFrame: ComparisonFrame,
   renderFrame: ComparisonFrame,
@@ -251,6 +399,7 @@ export function compareMaterialFrames(
   const reference = sampleFeatures(referenceFrame, grid);
   const render = sampleFeatures(renderFrame, grid);
   const colorDistance = deltaE76(reference.meanRgb, render.meanRgb);
+  const spatialStructure = spatialStructureSimilarity(referenceFrame, renderFrame, grid);
   const scores = {
     baseColor: similarity(colorDistance, 0, 50),
     meanLuma: similarity(reference.meanLuma, render.meanLuma, 0.45),
@@ -270,15 +419,18 @@ export function compareMaterialFrames(
       similarity(reference.anisotropyProxy, render.anisotropyProxy, 2) * 0.5
       + histogramSimilarity(reference.gradientHistogram, render.gradientHistogram) * 0.5
     ),
+    spatialStructure,
     overall: 0,
   };
-  scores.overall = scores.baseColor * 0.3 + scores.meanLuma * 0.15 + scores.microstructure * 0.2
-    + scores.surfaceScale * 0.15 + scores.irregularity * 0.1 + scores.directionalResponse * 0.1;
+  scores.overall = scores.baseColor * 0.25 + scores.meanLuma * 0.1 + scores.microstructure * 0.18
+    + scores.surfaceScale * 0.14 + scores.irregularity * 0.08 + scores.directionalResponse * 0.08
+    + scores.spatialStructure * 0.17;
   const mismatches: MaterialMismatch[] = [];
   if (colorDistance > 20) mismatches.push('wrong-base-color');
   if (scores.meanLuma < 0.72) mismatches.push('wrong-exposure-or-value');
   if (scores.microstructure < 0.62) mismatches.push('wrong-roughness-or-microstructure');
   if (scores.surfaceScale < 0.62) mismatches.push('wrong-surface-scale');
+  if (scores.spatialStructure < 0.58) mismatches.push('wrong-spatial-structure');
   if (expected?.surfaceCharacter === 'granular'
     && (render.irregularity < 0.45 || render.irregularity < reference.irregularity - 0.16)) {
     mismatches.push('surface-too-regular');
@@ -294,9 +446,10 @@ export function compareMaterialFrames(
     && !uniqueMismatches.includes('wrong-base-color')
     && !uniqueMismatches.includes('missing-environment-response')
     && !uniqueMismatches.includes('wrong-surface-scale')
+    && !uniqueMismatches.includes('wrong-spatial-structure')
     && !uniqueMismatches.includes('surface-too-regular');
   return {
-    method: 'material-region-v2',
+    method: 'material-region-v3',
     reference,
     render,
     deltaE76: colorDistance,

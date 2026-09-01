@@ -31,7 +31,7 @@ function manifest() {
     schema: 'morphloom.visual-capture-set/0.1',
     id: 'two-view-product-proof',
     domain: 'industrial-design',
-    rendererVersions: { morphloom: '0.18.0', img2threejs: 'pinned-commit' },
+    rendererVersions: { morphloom: '0.19.0', img2threejs: 'pinned-commit' },
     views: [view('front', 0), view('oblique', 0.6)],
   };
 }

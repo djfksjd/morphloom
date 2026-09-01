@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T21:11:03.111Z",
+  "generatedAt": "2026-09-01T22:13:14.557Z",
   "captures": {
     "reference": {
       "file": "talon-doppler-ruby.webp",
@@ -7,7 +7,7 @@
     },
     "morphloom": {
       "file": "morphloom-result.png",
-      "sha256": "c6147196188b11dd9e7c472579a69fe6158a440b301284ae678f11f87c020217"
+      "sha256": "ca509cf36bd5a0cfc8bd59a8acc61174624162caee0958964d7187734591baed"
     },
     "img2threejs": {
       "file": "img2threejs-talon-live.png",
@@ -33,25 +33,26 @@
     "scores": {
       "morphloom": {
         "id": "morphloom",
-        "score": 0.9161065058204569,
+        "score": 0.9105999225249181,
         "silhouetteIoU": 0.9372751142662648,
-        "interiorSimilarity": 0.9258593774370785,
-        "materialSimilarity": 0.9017759683993352,
-        "surfaceScaleSimilarity": 0.8531992585558703,
-        "irregularitySimilarity": 0.8476258151751281,
-        "minimumFeatureScore": 0.9262694008766441,
-        "minimumViewScore": 0.9161065058204569,
+        "interiorSimilarity": 0.9291836824190376,
+        "materialSimilarity": 0.8514461236504883,
+        "surfaceScaleSimilarity": 0.8733365910891511,
+        "irregularitySimilarity": 0.8487799751007392,
+        "spatialStructureSimilarity": 0.6020199790003788,
+        "minimumFeatureScore": 0.9282803475734998,
+        "minimumViewScore": 0.9105999225249181,
         "views": [
           {
             "viewId": "broadside",
-            "score": 0.9161065058204569,
+            "score": 0.9105999225249181,
             "reference": {
               "method": "pixel-frame-v1",
               "referenceFingerprint": "0e21c3ac",
-              "renderFingerprint": "55951464",
+              "renderFingerprint": "1fc67b52",
               "silhouetteIoU": 0.9372751142662648,
-              "interiorSimilarity": 0.9258593774370785,
-              "score": 0.9332796063760496,
+              "interiorSimilarity": 0.9291836824190376,
+              "score": 0.9344431131197353,
               "foregroundPixels": {
                 "reference": 28993,
                 "render": 30770,
@@ -62,8 +63,8 @@
                 {
                   "featureId": "whole-silhouette",
                   "silhouetteIoU": 0.9372751142662648,
-                  "interiorSimilarity": 0.9258593774370785,
-                  "score": 0.9332796063760496,
+                  "interiorSimilarity": 0.9291836824190376,
+                  "score": 0.9344431131197353,
                   "foregroundPixels": {
                     "reference": 28993,
                     "render": 30770,
@@ -74,8 +75,8 @@
                 {
                   "featureId": "blade-and-openings",
                   "silhouetteIoU": 0.9658983050847457,
-                  "interiorSimilarity": 0.8969565430814239,
-                  "score": 0.9417686883835831,
+                  "interiorSimilarity": 0.8976310114134796,
+                  "score": 0.9420047522998025,
                   "foregroundPixels": {
                     "reference": 14266,
                     "render": 14731,
@@ -86,8 +87,8 @@
                 {
                   "featureId": "grip-fasteners-and-ring",
                   "silhouetteIoU": 0.9111230329041488,
-                  "interiorSimilarity": 0.9543983699684213,
-                  "score": 0.9262694008766441,
+                  "interiorSimilarity": 0.9601439319594374,
+                  "score": 0.9282803475734998,
                   "foregroundPixels": {
                     "reference": 15345,
                     "render": 16716,
@@ -97,11 +98,12 @@
                 }
               ]
             },
-            "materialSimilarity": 0.9017759683993352,
-            "surfaceScaleSimilarity": 0.8531992585558703,
-            "irregularitySimilarity": 0.8476258151751281,
+            "materialSimilarity": 0.8514461236504883,
+            "surfaceScaleSimilarity": 0.8733365910891511,
+            "irregularitySimilarity": 0.8487799751007392,
+            "spatialStructureSimilarity": 0.6020199790003788,
             "material": {
-              "method": "material-region-v2",
+              "method": "material-region-v3",
               "reference": {
                 "meanRgb": [
                   147.84824902723736,
@@ -132,41 +134,42 @@
               },
               "render": {
                 "meanRgb": [
-                  137.36481481481482,
-                  95.74814814814815,
-                  96.6574074074074
+                  135.84444444444443,
+                  94.1462962962963,
+                  94.9462962962963
                 ],
-                "meanLuma": 0.4104372549019608,
-                "lumaVariance": 0.05678063119238696,
-                "horizontalGradient": 0.09323091051095495,
-                "verticalGradient": 0.08126249063896605,
-                "anisotropyProxy": 1.1472809875488843,
-                "fineContrast": 0.05964471056327046,
-                "coarseContrast": 0.11958020090003213,
-                "gradientEntropy": 0.9626784403998095,
-                "periodicity": 0.7867906096185822,
-                "irregularity": 0.647901439392085,
+                "meanLuma": 0.404192480755265,
+                "lumaVariance": 0.05443035979933974,
+                "horizontalGradient": 0.09302051383236735,
+                "verticalGradient": 0.07904912831662436,
+                "anisotropyProxy": 1.1767430686873843,
+                "fineContrast": 0.058539700941384554,
+                "coarseContrast": 0.1240995242687239,
+                "gradientEntropy": 0.9650075224692006,
+                "periodicity": 0.791380960959183,
+                "irregularity": 0.6473243594292795,
                 "gradientHistogram": [
-                  0.17605129239949882,
-                  0.0864138250356227,
-                  0.09339378439927157,
-                  0.13697102308911635,
-                  0.14497473794266452,
-                  0.06636681932409119,
-                  0.07776172822492715,
-                  0.21806678958480782
+                  0.19198721464329535,
+                  0.09026313052535416,
+                  0.09070282692056529,
+                  0.13232546115111246,
+                  0.14432596147782362,
+                  0.06340589563364794,
+                  0.08562991273357577,
+                  0.20135959691462532
                 ],
                 "foregroundCoverage": 0.234375
               },
-              "deltaE76": 6.554223895330679,
+              "deltaE76": 6.507908681386549,
               "scores": {
-                "baseColor": 0.8689155220933864,
-                "meanLuma": 0.9972834871951375,
-                "microstructure": 0.934277667641849,
-                "surfaceScale": 0.8531992585558703,
-                "irregularity": 0.8476258151751281,
-                "directionalResponse": 0.919107848627855,
-                "overall": 0.9017759683993352
+                "baseColor": 0.869841826372269,
+                "meanLuma": 0.9888392369233162,
+                "microstructure": 0.9395443209145333,
+                "surfaceScale": 0.8733365910891511,
+                "irregularity": 0.8487799751007392,
+                "directionalResponse": 0.9183856051233581,
+                "spatialStructure": 0.6020199790003788,
+                "overall": 0.8514461236504883
               },
               "mismatches": [],
               "passed": true,
@@ -178,18 +181,19 @@
       },
       "img2threejs": {
         "id": "img2threejs",
-        "score": 0.7962249127872962,
+        "score": 0.7846591589401846,
         "silhouetteIoU": 0.7446938242211318,
         "interiorSimilarity": 0.8681558067186117,
-        "materialSimilarity": 0.8769342206532289,
+        "materialSimilarity": 0.8046482591087805,
         "surfaceScaleSimilarity": 0.7770192700536637,
         "irregularitySimilarity": 0.7712629454002173,
+        "spatialStructureSimilarity": 0.46963230886455287,
         "minimumFeatureScore": 0.7596942812229835,
-        "minimumViewScore": 0.7962249127872962,
+        "minimumViewScore": 0.7846591589401846,
         "views": [
           {
             "viewId": "broadside",
-            "score": 0.7962249127872962,
+            "score": 0.7846591589401846,
             "reference": {
               "method": "pixel-frame-v1",
               "referenceFingerprint": "0e21c3ac",
@@ -242,11 +246,12 @@
                 }
               ]
             },
-            "materialSimilarity": 0.8769342206532289,
+            "materialSimilarity": 0.8046482591087805,
             "surfaceScaleSimilarity": 0.7770192700536637,
             "irregularitySimilarity": 0.7712629454002173,
+            "spatialStructureSimilarity": 0.46963230886455287,
             "material": {
-              "method": "material-region-v2",
+              "method": "material-region-v3",
               "reference": {
                 "meanRgb": [
                   147.84824902723736,
@@ -311,11 +316,14 @@
                 "surfaceScale": 0.7770192700536637,
                 "irregularity": 0.7712629454002173,
                 "directionalResponse": 0.9164817566985484,
-                "overall": 0.8769342206532289
+                "spatialStructure": 0.46963230886455287,
+                "overall": 0.8046482591087805
               },
-              "mismatches": [],
-              "passed": true,
-              "nextAction": "continue",
+              "mismatches": [
+                "wrong-spatial-structure"
+              ],
+              "passed": false,
+              "nextAction": "refine-material",
               "limitation": "Image metrics constrain appearance but cannot uniquely identify physical material parameters without calibrated lighting."
             }
           }
@@ -332,6 +340,7 @@
     "blockers": [
       "morphloom: 1/2 required calibrated views",
       "img2threejs: 1/2 required calibrated views",
+      "img2threejs/broadside: material region failed (wrong-spatial-structure)",
       "blind evaluation requires at least five unique raters and balanced presentation order"
     ],
     "limitation": "This audit ranks only the locked input, calibrated matched views, declared feature regions, renderer versions, and blind panel recorded in this report."

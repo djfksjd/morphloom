@@ -289,7 +289,20 @@ describe('AssemblyIR product pipeline', () => {
     expect(coreMesh.material).toHaveLength(2);
     const [projectedCaps, authoredEdges] = coreMesh.material as THREE.MeshPhysicalMaterial[];
     expect(projectedCaps).not.toBe(authoredEdges);
-    expect(authoredEdges.userData.morphloomSurface.referenceProjection).toBeUndefined();
+    expect(authoredEdges.userData.morphloomSurface).toMatchObject({
+      referenceProjection: null,
+      referenceProjectionState: 'unobserved-side',
+      referenceRelief: false,
+    });
+    expect(authoredEdges.normalMap).toBeNull();
+    expect(authoredEdges.roughnessMap).toBeNull();
+    expect(authoredEdges.anisotropy).toBe(0);
+    expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition).toMatchObject({
+      method: 'source-facing-triangle-partition-v1',
+      projectionAxis: 'z',
+    });
+    expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition.projectedTriangles).toBeGreaterThan(0);
+    expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition.sideTriangles).toBeGreaterThan(0);
     const positions = coreMesh.geometry.getAttribute('position');
     const halfThicknesses = Array.from({ length: positions.count }, (_, index) => Math.abs(positions.getZ(index)))
       .filter((value) => value > 1e-8);
@@ -325,16 +338,30 @@ describe('AssemblyIR product pipeline', () => {
     const rightPanel = build.root.getObjectByName('ivory_panel_3_front') as THREE.Mesh;
     const leftUv = leftPanel.geometry.getAttribute('uv');
     const rightUv = rightPanel.geometry.getAttribute('uv');
-    const range = (attribute: THREE.BufferAttribute | THREE.InterleavedBufferAttribute, axis: 'x' | 'y') => {
-      const values = Array.from({ length: attribute.count }, (_, index) => axis === 'x' ? attribute.getX(index) : attribute.getY(index));
+    const projectedRange = (mesh: THREE.Mesh, axis: 'x' | 'y') => {
+      const attribute = mesh.geometry.getAttribute('uv');
+      const values = mesh.geometry.groups
+        .filter((group) => group.materialIndex === 0)
+        .flatMap((group) => Array.from({ length: group.count }, (_, offset) => {
+          const index = group.start + offset;
+          return axis === 'x' ? attribute.getX(index) : attribute.getY(index);
+        }));
       return [Math.min(...values), Math.max(...values)] as const;
     };
-    const [leftMinU, leftMaxU] = range(leftUv, 'x');
-    const [rightMinU, rightMaxU] = range(rightUv, 'x');
+    expect(leftUv).toBeTruthy();
+    expect(rightUv).toBeTruthy();
+    const [leftMinU, leftMaxU] = projectedRange(leftPanel, 'x');
+    const [rightMinU, rightMaxU] = projectedRange(rightPanel, 'x');
     expect(leftMinU).toBeGreaterThan(0.35);
     expect(leftMaxU).toBeLessThan(0.6);
     expect(rightMinU).toBeGreaterThan(leftMaxU);
     expect(rightMaxU).toBeLessThanOrEqual(1.01);
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.metrics.uvFiniteCoverage).toBe(1);
+    expect(report.metrics.degenerateUvTriangleFraction).toBe(0);
   });
 
   it('rejects remote reference projection URLs to keep customer images local-only', () => {

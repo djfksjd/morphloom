@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.18.0",
-  "generatedAt": "2026-09-01T21:37:11.759Z",
+  "compilerRevision": "morphloom-compiler/0.19.0",
+  "generatedAt": "2026-09-01T22:18:41.172Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -1409,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "c25255b68daa3096454d387d28fd645ff336baeddad218dd6e6464920f0a41c4",
+          "outputSha256": "d0629d1b2b18460aa4fcf995817bfb183667fc858ac3a25b250775c2134c82de",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",

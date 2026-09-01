@@ -52,6 +52,7 @@ export interface CandidateVisualScore {
   materialSimilarity: number;
   surfaceScaleSimilarity: number;
   irregularitySimilarity: number;
+  spatialStructureSimilarity: number;
   minimumFeatureScore: number;
   minimumViewScore: number;
   views: Array<{
@@ -61,6 +62,7 @@ export interface CandidateVisualScore {
     materialSimilarity: number;
     surfaceScaleSimilarity: number;
     irregularitySimilarity: number;
+    spatialStructureSimilarity: number;
     material: MaterialComparisonResult;
   }>;
 }
@@ -153,6 +155,7 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
       materialSimilarity: material.scores.overall,
       surfaceScaleSimilarity: material.scores.surfaceScale,
       irregularitySimilarity: material.scores.irregularity,
+      spatialStructureSimilarity: material.scores.spatialStructure,
       material,
     };
   });
@@ -161,6 +164,7 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
   const materialSimilarity = average(views.map((view) => view.materialSimilarity));
   const surfaceScaleSimilarity = average(views.map((view) => view.surfaceScaleSimilarity));
   const irregularitySimilarity = average(views.map((view) => view.irregularitySimilarity));
+  const spatialStructureSimilarity = average(views.map((view) => view.spatialStructureSimilarity));
   const featureScores = views.flatMap((view) => view.reference.regions.map((region) => region.score));
   const minimumFeatureScore = featureScores.length > 0 ? Math.min(...featureScores) : 0;
   const minimumViewScore = views.length > 0 ? Math.min(...views.map((view) => view.score)) : 0;
@@ -173,6 +177,7 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
     materialSimilarity,
     surfaceScaleSimilarity,
     irregularitySimilarity,
+    spatialStructureSimilarity,
     minimumFeatureScore,
     minimumViewScore,
     views,
@@ -272,9 +277,13 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
           blockers.push(`${score.id}/${view.viewId}/${region.featureId}: critical region does not cover reference and render evidence`);
         }
       }
+      if (!view.material.passed) {
+        blockers.push(`${score.id}/${view.viewId}: material region failed (${view.material.mismatches.join(', ') || 'score'})`);
+      }
     }
     if (benchmark.domain === 'surface'
-      && (score.surfaceScaleSimilarity < 0.65 || score.irregularitySimilarity < 0.65)) {
+      && (score.surfaceScaleSimilarity < 0.65 || score.irregularitySimilarity < 0.65
+        || score.spatialStructureSimilarity < 0.62)) {
       blockers.push(`${score.id}: multi-scale surface threshold failed`);
     }
   }

@@ -63,6 +63,29 @@ describe('material-region comparison', () => {
     ]));
   });
 
+  it('rejects a spatially shuffled texture even when its global colour and contrast statistics are preserved', () => {
+    const valueAt = (x: number, y: number) => {
+      const hash = ((x * 73_856_093) ^ (y * 19_349_663) ^ ((x >> 2) * (y + 17) * 83_492_791)) >>> 0;
+      return 34 + (hash % 188);
+    };
+    const reference = texture(64, 64, (x, y) => {
+      const value = valueAt(x, y);
+      return [value, value, value];
+    });
+    const shuffled = texture(64, 64, (x, y) => {
+      const value = valueAt((x + 29) % 64, (y + 17) % 64);
+      return [value, value, value];
+    });
+    const result = compareMaterialFrames(reference, shuffled, {
+      family: 'coating', roughness: 0.9, surfaceCharacter: 'granular',
+    }, 48);
+    expect(result.scores.baseColor).toBeGreaterThan(0.95);
+    expect(result.scores.microstructure).toBeGreaterThan(0.75);
+    expect(result.scores.spatialStructure).toBeLessThan(0.58);
+    expect(result.mismatches).toContain('wrong-spatial-structure');
+    expect(result.passed).toBe(false);
+  });
+
   it('rejects unbounded sampling requests and malformed frames', () => {
     const source = texture(8, 8, () => [20, 20, 20]);
     expect(() => compareMaterialFrames(source, source, undefined, 256)).toThrow(/grid/);

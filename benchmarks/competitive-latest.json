@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T21:46:41.576Z",
+  "generatedAt": "2026-09-01T22:19:04.392Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -106,7 +106,7 @@
       "cellsCompared": 88
     },
     "materialComparison": {
-      "method": "material-region-v2",
+      "method": "material-region-v3",
       "reference": {
         "meanRgb": [
           138,
@@ -171,7 +171,8 @@
         "surfaceScale": 1,
         "irregularity": 1,
         "directionalResponse": 1,
-        "overall": 0.9999999999999999
+        "spatialStructure": 1,
+        "overall": 1
       },
       "mismatches": [],
       "passed": true,
@@ -1197,7 +1198,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.18.0",
+      "compilerRevision": "morphloom-compiler/0.19.0",
       "pass": true,
       "benchmarkAccepted": true,
       "blenderVersions": [

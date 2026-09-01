@@ -725,22 +725,94 @@ function ensurePrimaryUv(source: THREE.BufferGeometry): THREE.BufferGeometry {
   return geometry;
 }
 
-function applyAssemblyProjectionUv(mesh: THREE.Mesh, projection: ReferenceProjectionIR): void {
-  const position = mesh.geometry.getAttribute('position');
-  if (!position) return;
+function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: ReferenceProjectionIR): void {
+  if (!Array.isArray(mesh.material) || mesh.material.length !== 2) {
+    throw new Error(`Reference projection materials are not partitionable in ${mesh.name}.`);
+  }
+  const source = mesh.geometry;
+  const geometry = source.index ? source.toNonIndexed() : source;
+  if (geometry !== source) {
+    geometry.name = source.name;
+    geometry.userData = structuredClone(source.userData);
+    mesh.geometry = geometry;
+  }
+  const rejectProjection = (message: string): never => {
+    if (geometry !== source) geometry.dispose();
+    throw new Error(message);
+  };
+  const position = geometry.getAttribute('position')
+    ?? rejectProjection(`Reference projection geometry has no positions in ${mesh.name}.`);
+  if (position.count % 3 !== 0) rejectProjection(`Reference projection geometry is not triangle-expanded in ${mesh.name}.`);
+  const existingUv = geometry.getAttribute('uv');
+  const uv = new Float32Array(position.count * 2);
+  if (existingUv) {
+    for (let index = 0; index < position.count; index += 1) {
+      uv[index * 2] = existingUv.getX(index);
+      uv[index * 2 + 1] = existingUv.getY(index);
+    }
+  }
   mesh.updateMatrix();
   const [minX, minSecondary, maxX, maxSecondary] = projection.boundsMm;
   const width = maxX - minX;
   const height = maxSecondary - minSecondary;
-  const uv = new Float32Array(position.count * 2);
-  const point = new THREE.Vector3();
-  for (let index = 0; index < position.count; index += 1) {
-    point.fromBufferAttribute(position, index).applyMatrix4(mesh.matrix).multiplyScalar(1000);
-    uv[index * 2] = (point.x - minX) / width;
-    const secondary = projection.mapping === 'assembly-xz' ? point.z : point.y;
-    uv[index * 2 + 1] = (secondary - minSecondary) / height;
+  const points = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] as const;
+  const edgeA = new THREE.Vector3();
+  const edgeB = new THREE.Vector3();
+  const normal = new THREE.Vector3();
+  const projectionAxis = projection.mapping === 'assembly-xz' ? 'y' : 'z';
+  // Keep the admitted plate on every genuinely source-visible triangle,
+  // including rounded bevels.  A high front-facing cutoff leaves hard seams
+  // across curved products (for example a knife handle) even though those
+  // facets are visible in the source.  Only tangent/rear triangles must fall
+  // back to authored UVs: at 0.05 the planar footprint still has meaningful
+  // area while near-degenerate side projections remain excluded.
+  const minimumFacing = 0.05;
+  let projectedTriangles = 0;
+  let sideTriangles = 0;
+  let groupStart = 0;
+  let activeMaterial = -1;
+  geometry.clearGroups();
+  for (let triangle = 0; triangle < position.count; triangle += 3) {
+    for (let corner = 0; corner < 3; corner += 1) {
+      points[corner].fromBufferAttribute(position, triangle + corner).applyMatrix4(mesh.matrix).multiplyScalar(1000);
+    }
+    normal.crossVectors(edgeA.copy(points[1]).sub(points[0]), edgeB.copy(points[2]).sub(points[0]));
+    const normalLength = normal.length();
+    if (normalLength <= 1e-12) rejectProjection(`Reference projection encountered a degenerate triangle in ${mesh.name}.`);
+    // A single admitted image constrains only the source-facing hemisphere.
+    // Projecting it onto the hidden rear would duplicate evidence and mirror
+    // visible detail onto geometry the source never observed.
+    const materialIndex = normal[projectionAxis] / normalLength >= minimumFacing ? 0 : 1;
+    if (materialIndex === 0) {
+      projectedTriangles += 1;
+      for (let corner = 0; corner < 3; corner += 1) {
+        const point = points[corner];
+        uv[(triangle + corner) * 2] = (point.x - minX) / width;
+        const secondary = projection.mapping === 'assembly-xz' ? point.z : point.y;
+        uv[(triangle + corner) * 2 + 1] = (secondary - minSecondary) / height;
+      }
+    } else {
+      sideTriangles += 1;
+    }
+    if (activeMaterial < 0) activeMaterial = materialIndex;
+    if (materialIndex !== activeMaterial) {
+      geometry.addGroup(groupStart, triangle - groupStart, activeMaterial);
+      groupStart = triangle;
+      activeMaterial = materialIndex;
+    }
   }
-  mesh.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  if (activeMaterial >= 0) geometry.addGroup(groupStart, position.count - groupStart, activeMaterial);
+  if (projectedTriangles === 0) rejectProjection(`Reference projection has no source-facing triangles in ${mesh.name}.`);
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  geometry.userData.morphloomReferenceProjectionPartition = {
+    method: 'source-facing-triangle-partition-v1',
+    projectionAxis,
+    minimumFacing,
+    projectedTriangles,
+    sideTriangles,
+    groups: geometry.groups.length,
+  };
+  if (geometry !== source) source.dispose();
 }
 
 interface ProjectionLoadRecord {
@@ -1068,16 +1140,29 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     });
     const projection = mode === 'beauty' ? component.material.referenceProjection : undefined;
     const projectedMaterial = projection ? baseMaterial : undefined;
-    const hasProjectedSurfaceCap = projection
-      && (component.geometry.op === 'surfacePatch' || component.geometry.op === 'extrude');
-    const sideMaterial = hasProjectedSurfaceCap ? baseMaterial.clone() : undefined;
+    const sideMaterial = projection ? baseMaterial.clone() : undefined;
     if (sideMaterial) {
       sideMaterial.name = `${baseMaterial.name || component.id}_cut_edges`;
       sideMaterial.userData = structuredClone(baseMaterial.userData);
+      // A single plate does not observe cut edges or the rear hemisphere.
+      // Repeating the front image there is false evidence, while retaining a
+      // strongly directional procedural normal creates barcode-like seams at
+      // rounded silhouettes. Keep only the authored bulk PBR response on the
+      // unobserved partition and mark the evidence boundary explicitly.
+      sideMaterial.normalMap = null;
+      sideMaterial.roughnessMap = null;
+      sideMaterial.anisotropy = 0;
+      sideMaterial.userData.morphloomSurface = {
+        ...sideMaterial.userData.morphloomSurface,
+        referenceProjection: null,
+        referenceProjectionState: 'unobserved-side',
+        referenceRelief: false,
+      };
+      sideMaterial.needsUpdate = true;
     }
     const mesh = new THREE.Mesh(
       geometry,
-      hasProjectedSurfaceCap && projectedMaterial && sideMaterial
+      projectedMaterial && sideMaterial
         ? [projectedMaterial, sideMaterial]
         : projectedMaterial ?? baseMaterial,
     );
@@ -1086,7 +1171,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     if (component.rotation) mesh.rotation.set(...component.rotation);
     if (component.scale) mesh.scale.set(...component.scale);
     if (projection && projectedMaterial) {
-      applyAssemblyProjectionUv(mesh, projection);
+      partitionReferenceProjectionFaces(mesh, projection);
       const key = projectionKey(projection);
       let record = projectionLoads.get(key);
       if (!record) {
