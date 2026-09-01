@@ -106,6 +106,24 @@ const standardValidationAudit = {
   validFixture: validGlb,
   corruptFixture: corruptGlb,
 };
+const blenderRoundTrip = JSON.parse(readFileSync('benchmarks/blender-roundtrip-latest.json', 'utf8')) as {
+  pass?: boolean;
+  blenderVersion?: string;
+  boundsErrorMm?: number;
+  imported?: { meshes?: number; polygons?: number; materials?: number };
+  reopened?: { meshes?: number; polygons?: number; materials?: number };
+  roundTripStandardValidation?: { status?: string; khronosErrors?: number; khronosWarnings?: number; independentReadStatus?: string };
+};
+const blenderRoundTripPass = blenderRoundTrip.pass === true
+  && /^5\.2\./.test(blenderRoundTrip.blenderVersion ?? '')
+  && Number(blenderRoundTrip.boundsErrorMm) <= 0.1
+  && blenderRoundTrip.imported?.meshes === blenderRoundTrip.reopened?.meshes
+  && blenderRoundTrip.imported?.polygons === blenderRoundTrip.reopened?.polygons
+  && blenderRoundTrip.imported?.materials === blenderRoundTrip.reopened?.materials
+  && blenderRoundTrip.roundTripStandardValidation?.status === 'pass'
+  && blenderRoundTrip.roundTripStandardValidation?.khronosErrors === 0
+  && blenderRoundTrip.roundTripStandardValidation?.khronosWarnings === 0
+  && blenderRoundTrip.roundTripStandardValidation?.independentReadStatus === 'pass';
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -292,6 +310,7 @@ const output = {
     },
     browserValidationLifecycle: serializedValidationAudit,
     gltfStandardValidation: standardValidationAudit,
+    blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -307,7 +326,8 @@ const output = {
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'exact-byte glTF 2.0 specification and independent parser validation', img2threejs: 'Three.js factory focus', morphloom: standardValidationAudit.pass ? 'Khronos Validator + glTF Transform + Three.js reopen' : 'blocked' },
-    { capability: 'Blender/Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
+    { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderRoundTripPass ? 'Blender 5.2.1 LTS pass; 321 meshes / 188,748 polygons / 0.000 mm bounds drift' : 'blocked' },
+    { capability: 'Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
     { capability: 'named editable facial controls preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphTargets === 5 ? '5 non-zero named morph targets' : 'blocked' },
@@ -329,4 +349,4 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
-  || !serializedValidationAudit.pass || !standardValidationAudit.pass) process.exitCode = 1;
+  || !serializedValidationAudit.pass || !standardValidationAudit.pass || !blenderRoundTripPass) process.exitCode = 1;

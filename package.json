@@ -17,6 +17,7 @@
     "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
     "surface:prepare": "vite-node scripts/prepare-surface-reference.ts",
     "gltf:validate": "vite-node scripts/validate-glb.ts",
+    "blender:validate": "blender --background --python scripts/blender-glb-roundtrip.py --",
     "quality:gate": "vite-node scripts/quality-gate.ts && vite-node scripts/competitive-benchmark.ts",
     "preview": "vite preview --host 127.0.0.1"
   },

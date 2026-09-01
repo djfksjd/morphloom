@@ -84,6 +84,8 @@ For each failed gate, correct the IR rather than compensating with the camera or
 
 GLB is the authoritative interchange candidate for Blender, Unity, and Unreal. Khronos validation and Three.js reopening prove format and local runtime integrity, not that a particular Blender, Unity, or Unreal version was actually imported. Mark each target application `application-import-not-run` until that application or an approved CI fixture performs the import. OBJ/STL exports are mesh references for DCC/CAD import and must never be described as parametric STEP/BREP manufacturing CAD. Figma receives a 2D SVG inspection/reference sheet; do not imply that Figma has received the editable 3D asset.
 
+For a Blender proof, import the source GLB in a clean background session, record mesh/polygon/material/armature/bone/action counts and world bounds, export a new GLB, reopen that file in another clean session, and require semantic-count parity with no more than 0.1 mm bounds drift. Run Khronos and the independent parser on the Blender-produced bytes too. A Blender pass does not imply Unity or Unreal passed.
+
 The local viewer must not upload customer evidence. Imported IR is memory-only, size-bounded, explicitly clearable, and automatically expires. LLM cost is reported only when provider usage is actually present; otherwise label it unobserved instead of inventing a price. Compile time, round-trip time, GLB bytes, geometry bytes, texture bytes, and estimated render memory are measured locally.
 
 ## Stop conditions

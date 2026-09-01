@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T18:43:44.196Z",
+  "generatedAt": "2026-09-01T18:48:34.603Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1132,6 +1132,50 @@
           "animations": 0
         }
       }
+    },
+    "blenderRoundTrip": {
+      "schema": "morphloom.blender-roundtrip/0.1",
+      "observedAt": "2026-09-02T03:47:38+09:00",
+      "pass": true,
+      "blenderVersion": "5.2.1 LTS",
+      "source": "laurel-homes-building-b-typical-floor.glb",
+      "sourceBytes": 18987464,
+      "sourceSha256": "e3867a0bb2359c3823c1707870f9f55ebd2fe9a9fde568c7861705ddb8509397",
+      "roundTripBytes": 18503576,
+      "roundTripSha256": "fff11ac2ec9de9449261032eead2978efd4a62ff8f7abce21395d3e24483d53e",
+      "boundsErrorMm": 0,
+      "imported": {
+        "objects": 322,
+        "meshes": 321,
+        "vertices": 566244,
+        "polygons": 188748,
+        "materials": 321,
+        "armatures": 0,
+        "bones": 0,
+        "actions": 0
+      },
+      "reopened": {
+        "objects": 322,
+        "meshes": 321,
+        "vertices": 566244,
+        "polygons": 188748,
+        "materials": 321,
+        "armatures": 0,
+        "bones": 0,
+        "actions": 0
+      },
+      "roundTripStandardValidation": {
+        "status": "pass",
+        "khronosErrors": 0,
+        "khronosWarnings": 0,
+        "independentParser": "glTF Transform WebIO",
+        "independentReadStatus": "pass",
+        "nodes": 322,
+        "meshes": 321,
+        "materials": 321
+      },
+      "scope": "Actual Blender import/export/reimport of the measured Laurel Homes architecture representative. Unity and Unreal application imports remain not run.",
+      "benchmarkAccepted": true
     }
   },
   "capabilityMatrix": [
@@ -1201,7 +1245,12 @@
       "morphloom": "Khronos Validator + glTF Transform + Three.js reopen"
     },
     {
-      "capability": "Blender/Unity/Unreal application import execution",
+      "capability": "Blender application import/export/reimport execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "Blender 5.2.1 LTS pass; 321 meshes / 188,748 polygons / 0.000 mm bounds drift"
+    },
+    {
+      "capability": "Unity/Unreal application import execution",
       "img2threejs": "not established in pinned audit",
       "morphloom": "application-import-not-run"
     },
