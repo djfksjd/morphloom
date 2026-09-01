@@ -17,10 +17,11 @@ Baseline: https://img2threejs.io/#/x/talon-doppler-ruby
 
 Portions of the visual-hull space carving, Surface Nets implicit-surface
 polygonization, foreground-normalized interior comparison, deterministic
-material comparison, and extruded-profile hole authoring are adapted from
+material comparison, reference-image de-lighting, and extruded-profile hole authoring are adapted from
 img2threejs, Copyright 2026 hoainho, licensed under Apache License 2.0.
 Morphloom converted and modified those implementations for bounded in-browser
-TypeScript execution, typed-array geometry, and its evidence/quality pipeline.
+TypeScript execution, typed-array geometry, linear-light colour correction,
+bounded downsampled lighting fields, and its evidence/quality pipeline.
 Upstream: https://github.com/img2threejs/img2threejs
 Upstream revision: 9fbd0ca5bbcc3b13bebe712745d6784d33db0b85
 

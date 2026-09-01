@@ -18,7 +18,11 @@ import {
 } from './reference-surface';
 import type { QuantizedReferenceHeightField } from './reference-surface';
 import { auditPlanFootprint, validatePlanFootprintDescriptor } from './plan-footprint';
-import { extendOpaqueProjectionColors } from './reference-projection-image';
+import {
+  delightReferenceProjection,
+  extendOpaqueProjectionColors,
+  type ReferenceDelightMetrics,
+} from './reference-projection-image';
 
 const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
@@ -704,6 +708,7 @@ interface ProjectionLoadRecord {
   roughnessTexture?: THREE.Texture;
   metrics?: ReferenceSurfaceMetrics;
   alphaFillPixels?: number;
+  delightMetrics?: ReferenceDelightMetrics;
   materials: Set<THREE.MeshPhysicalMaterial>;
   state: 'loading' | 'loaded' | 'failed';
   promise: Promise<boolean>;
@@ -743,6 +748,7 @@ function applyReferenceProjectionAppearance(
     referenceAlphaFillPixels: record.alphaFillPixels,
     referenceAuthoredLinearLuma: authoredLinearLuma,
     referenceDiffuseEnergyGain: colorGain,
+    referenceDelight: record.delightMetrics,
   };
   material.needsUpdate = true;
 }
@@ -750,7 +756,7 @@ function applyReferenceProjectionAppearance(
 function createOpaqueCroppedProjectionTexture(
   texture: THREE.Texture,
   projection: ReferenceProjectionIR,
-): { texture: THREE.CanvasTexture; filledPixels: number } | undefined {
+): { texture: THREE.CanvasTexture; filledPixels: number; delightMetrics: ReferenceDelightMetrics } | undefined {
   if (typeof document === 'undefined') return undefined;
   const source = texture.image as CanvasImageSource & { naturalWidth?: number; naturalHeight?: number; width?: number; height?: number };
   const sourceWidth = source.naturalWidth ?? source.width ?? 0;
@@ -782,8 +788,9 @@ function createOpaqueCroppedProjectionTexture(
     return undefined;
   }
   const extended = extendOpaqueProjectionColors(pixels.data, width, height);
+  const delighted = delightReferenceProjection(extended.rgba, width, height);
   const opaqueImage = context.createImageData(width, height);
-  opaqueImage.data.set(extended.rgba);
+  opaqueImage.data.set(delighted.rgba);
   context.putImageData(opaqueImage, 0, 0);
   const result = new THREE.CanvasTexture(canvas);
   result.name = `morphloom_reference_opaque_${projection.fingerprint ?? 'unverified'}`;
@@ -791,8 +798,9 @@ function createOpaqueCroppedProjectionTexture(
   result.wrapS = result.wrapT = THREE.ClampToEdgeWrapping;
   result.userData.morphloomProjectionOwned = true;
   result.userData.morphloomTransparentColorFill = extended.filledPixels;
+  result.userData.morphloomReferenceDelight = delighted.metrics;
   result.needsUpdate = true;
-  return { texture: result, filledPixels: extended.filledPixels };
+  return { texture: result, filledPixels: extended.filledPixels, delightMetrics: delighted.metrics };
 }
 
 function projectionKey(projection: ReferenceProjectionIR): string {
@@ -941,6 +949,7 @@ function createProjectionRecord(
         record.roughnessTexture = derivedMaps?.roughness;
         record.metrics = derivedMaps?.metrics;
         record.alphaFillPixels = opaqueProjection.filledPixels;
+        record.delightMetrics = opaqueProjection.delightMetrics;
         record.texture = opaqueProjection.texture;
         texture.dispose();
         record.state = 'loaded';

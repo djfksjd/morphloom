@@ -30,6 +30,8 @@ export interface SurfaceReport {
   transmissionMaterials: number;
   /** Materials whose color comes from a successfully loaded local reference projection. */
   referenceProjectedMaterials: number;
+  /** Projected materials whose baked broad lighting was removed in linear light. */
+  referenceDelightedMaterials: number;
   referenceReliefMaterials: number;
   referenceProjectionFingerprints: string[];
   maximumReferenceIrregularity: number;
@@ -424,13 +426,18 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
   let clearcoatMaterials = 0;
   let transmissionMaterials = 0;
   let referenceProjectedMaterials = 0;
+  let referenceDelightedMaterials = 0;
   let referenceReliefMaterials = 0;
   let maximumReferenceIrregularity = 0;
   const referenceProjectionFingerprints = new Set<string>();
   for (const material of materials) {
     if (!(material instanceof THREE.MeshPhysicalMaterial)) continue;
     physicalMaterials += 1;
-    const metadata = material.userData.morphloomSurface as { finish?: string; referenceIrregularity?: number } | undefined;
+    const metadata = material.userData.morphloomSurface as {
+      finish?: string;
+      referenceIrregularity?: number;
+      referenceDelight?: { method?: string; confidence?: number };
+    } | undefined;
     if (metadata?.finish) {
       authoredMaterials += 1;
       finishes.add(metadata.finish);
@@ -444,6 +451,9 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     const referenceFingerprint = material.userData.morphloomSurface?.referenceFingerprint;
     if (projectedTexture) {
       referenceProjectedMaterials += 1;
+      if (metadata?.referenceDelight?.method === 'bounded-linear-illumination-field-v1') {
+        referenceDelightedMaterials += 1;
+      }
       if (material.normalMap?.userData.morphloomReferenceDerived === 'normal'
         && material.roughnessMap?.userData.morphloomReferenceDerived === 'roughness') {
         referenceReliefMaterials += 1;
@@ -465,6 +475,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     clearcoatMaterials,
     transmissionMaterials,
     referenceProjectedMaterials,
+    referenceDelightedMaterials,
     referenceReliefMaterials,
     referenceProjectionFingerprints: [...referenceProjectionFingerprints].sort(),
     maximumReferenceIrregularity,

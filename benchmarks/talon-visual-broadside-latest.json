@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T20:16:52.846Z",
+  "generatedAt": "2026-09-01T21:11:03.111Z",
   "captures": {
     "reference": {
       "file": "talon-doppler-ruby.webp",
@@ -7,7 +7,7 @@
     },
     "morphloom": {
       "file": "morphloom-result.png",
-      "sha256": "3de45e58bb05cc418d7001e6c63bec737240a7eba3ae6dbd4d2e322d7df61717"
+      "sha256": "c6147196188b11dd9e7c472579a69fe6158a440b301284ae678f11f87c020217"
     },
     "img2threejs": {
       "file": "img2threejs-talon-live.png",
@@ -33,49 +33,49 @@
     "scores": {
       "morphloom": {
         "id": "morphloom",
-        "score": 0.9159465966916535,
-        "silhouetteIoU": 0.9373054979253111,
-        "interiorSimilarity": 0.911485220313022,
-        "materialSimilarity": 0.8938099994201002,
-        "surfaceScaleSimilarity": 0.8880194232499424,
-        "irregularitySimilarity": 0.8834723725636415,
-        "minimumFeatureScore": 0.9166785733789462,
-        "minimumViewScore": 0.9159465966916535,
+        "score": 0.9161065058204569,
+        "silhouetteIoU": 0.9372751142662648,
+        "interiorSimilarity": 0.9258593774370785,
+        "materialSimilarity": 0.9017759683993352,
+        "surfaceScaleSimilarity": 0.8531992585558703,
+        "irregularitySimilarity": 0.8476258151751281,
+        "minimumFeatureScore": 0.9262694008766441,
+        "minimumViewScore": 0.9161065058204569,
         "views": [
           {
             "viewId": "broadside",
-            "score": 0.9159465966916535,
+            "score": 0.9161065058204569,
             "reference": {
               "method": "pixel-frame-v1",
               "referenceFingerprint": "0e21c3ac",
-              "renderFingerprint": "aeb7ecb5",
-              "silhouetteIoU": 0.9373054979253111,
-              "interiorSimilarity": 0.911485220313022,
-              "score": 0.9282684007610099,
+              "renderFingerprint": "55951464",
+              "silhouetteIoU": 0.9372751142662648,
+              "interiorSimilarity": 0.9258593774370785,
+              "score": 0.9332796063760496,
               "foregroundPixels": {
                 "reference": 28993,
-                "render": 30769,
+                "render": 30770,
                 "intersection": 28914,
-                "union": 30848
+                "union": 30849
               },
               "regions": [
                 {
                   "featureId": "whole-silhouette",
-                  "silhouetteIoU": 0.9373054979253111,
-                  "interiorSimilarity": 0.911485220313022,
-                  "score": 0.9282684007610099,
+                  "silhouetteIoU": 0.9372751142662648,
+                  "interiorSimilarity": 0.9258593774370785,
+                  "score": 0.9332796063760496,
                   "foregroundPixels": {
                     "reference": 28993,
-                    "render": 30769,
+                    "render": 30770,
                     "intersection": 28914,
-                    "union": 30848
+                    "union": 30849
                   }
                 },
                 {
                   "featureId": "blade-and-openings",
                   "silhouetteIoU": 0.9658983050847457,
-                  "interiorSimilarity": 0.8959720450263351,
-                  "score": 0.941424114064302,
+                  "interiorSimilarity": 0.8969565430814239,
+                  "score": 0.9417686883835831,
                   "foregroundPixels": {
                     "reference": 14266,
                     "render": 14731,
@@ -85,21 +85,21 @@
                 },
                 {
                   "featureId": "grip-fasteners-and-ring",
-                  "silhouetteIoU": 0.911177347242921,
-                  "interiorSimilarity": 0.9268951362029928,
-                  "score": 0.9166785733789462,
+                  "silhouetteIoU": 0.9111230329041488,
+                  "interiorSimilarity": 0.9543983699684213,
+                  "score": 0.9262694008766441,
                   "foregroundPixels": {
                     "reference": 15345,
-                    "render": 16715,
+                    "render": 16716,
                     "intersection": 15285,
-                    "union": 16775
+                    "union": 16776
                   }
                 }
               ]
             },
-            "materialSimilarity": 0.8938099994201002,
-            "surfaceScaleSimilarity": 0.8880194232499424,
-            "irregularitySimilarity": 0.8834723725636415,
+            "materialSimilarity": 0.9017759683993352,
+            "surfaceScaleSimilarity": 0.8531992585558703,
+            "irregularitySimilarity": 0.8476258151751281,
             "material": {
               "method": "material-region-v2",
               "reference": {
@@ -132,41 +132,41 @@
               },
               "render": {
                 "meanRgb": [
-                  140.77592592592592,
-                  101.05925925925926,
-                  101.63148148148149
+                  137.36481481481482,
+                  95.74814814814815,
+                  96.6574074074074
                 ],
-                "meanLuma": 0.4295856354393609,
-                "lumaVariance": 0.06750042271737819,
-                "horizontalGradient": 0.0921753853742755,
-                "verticalGradient": 0.07867118250996497,
-                "anisotropyProxy": 1.1716537419861461,
-                "fineContrast": 0.05891907213813908,
-                "coarseContrast": 0.1282153278688524,
-                "gradientEntropy": 0.961912182731378,
-                "periodicity": 0.8284069173485021,
-                "irregularity": 0.6299781606978283,
+                "meanLuma": 0.4104372549019608,
+                "lumaVariance": 0.05678063119238696,
+                "horizontalGradient": 0.09323091051095495,
+                "verticalGradient": 0.08126249063896605,
+                "anisotropyProxy": 1.1472809875488843,
+                "fineContrast": 0.05964471056327046,
+                "coarseContrast": 0.11958020090003213,
+                "gradientEntropy": 0.9626784403998095,
+                "periodicity": 0.7867906096185822,
+                "irregularity": 0.647901439392085,
                 "gradientHistogram": [
-                  0.16934230250079782,
-                  0.07960616840712112,
-                  0.09287462545817228,
-                  0.13563524815064518,
-                  0.13950232002465757,
-                  0.06814459483335505,
-                  0.08605842417669378,
-                  0.22883631644855715
+                  0.17605129239949882,
+                  0.0864138250356227,
+                  0.09339378439927157,
+                  0.13697102308911635,
+                  0.14497473794266452,
+                  0.06636681932409119,
+                  0.07776172822492715,
+                  0.21806678958480782
                 ],
                 "foregroundCoverage": 0.234375
               },
-              "deltaE76": 7.648925081561558,
+              "deltaE76": 6.554223895330679,
               "scores": {
-                "baseColor": 0.8470214983687688,
-                "meanLuma": 0.9547315304453595,
-                "microstructure": 0.908370984118191,
-                "surfaceScale": 0.8880194232499424,
-                "irregularity": 0.8834723725636415,
-                "directionalResponse": 0.932694727751719,
-                "overall": 0.8938099994201002
+                "baseColor": 0.8689155220933864,
+                "meanLuma": 0.9972834871951375,
+                "microstructure": 0.934277667641849,
+                "surfaceScale": 0.8531992585558703,
+                "irregularity": 0.8476258151751281,
+                "directionalResponse": 0.919107848627855,
+                "overall": 0.9017759683993352
               },
               "mismatches": [],
               "passed": true,

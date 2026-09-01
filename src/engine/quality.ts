@@ -176,6 +176,7 @@ export function evaluateProductQuality(
       && surfaces.roughnessMappedMaterials === surfaces.authoredMaterials
       ? 100
       : surfaces.referenceProjectedMaterials > 0
+      && surfaces.referenceDelightedMaterials === surfaces.referenceProjectedMaterials
       && surfaces.referenceReliefMaterials === surfaces.referenceProjectedMaterials
       ? 100
       : surfaceCoverage >= 0.98 && surfaces.distinctFinishes >= 6
@@ -241,7 +242,7 @@ export function evaluateProductQuality(
       score: surfaceScore,
       status: status(surfaceScore),
       detail: surfaces
-        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · roughness-map ${surfaces.roughnessMappedMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ` · 입력 fingerprint 검증 · 불규칙성 ${surfaces.maximumReferenceIrregularity.toFixed(2)}` : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · roughness-map ${surfaces.roughnessMappedMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 선형 de-light ${surfaces.referenceDelightedMaterials}/${surfaces.referenceProjectedMaterials} · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ` · 입력 fingerprint 검증 · 불규칙성 ${surfaces.maximumReferenceIrregularity.toFixed(2)}` : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
         : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {

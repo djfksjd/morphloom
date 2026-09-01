@@ -18,7 +18,7 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 공개 Talon Doppler Ruby 정면 사진 한 장을 양쪽에 동일하게 사용했습니다. img2threejs는 공개 데모의 고정 캡처 모드로 다시 렌더했고, Morphloom은 사진의 알파 외곽과 내부 개구를 측정해 `TALON_REFERENCE_BENCHMARK_IR`을 생성한 뒤 로컬 뷰어에서 정면·ISO 렌더와 GLB 재열기를 실행했습니다.
 
-UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. 사진 조명과 PBR 조명의 중복을 재질 밝기·금속성으로 제한한 뒤 Morphloom은 종합 0.916 대 0.796, 실루엣 0.937 대 0.745, 내부 디테일 0.911 대 0.868, 재질·질감 종합 0.894 대 0.877, 불규칙 표면 0.883 대 0.771로 모든 집계 항목에서 앞섰습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 보정 시점과 5명 블라인드 패널을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
+UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. 사진의 넓은 조명 변화는 메모리 상한이 있는 선형 색공간 lighting field로 제한적으로 제거하고, 원본의 미세·중간 표면 신호는 normal·roughness 입력으로 유지했습니다. Morphloom은 종합 0.916 대 0.796, 실루엣 0.937 대 0.745, 내부 디테일 0.926 대 0.868, 재질·질감 0.902 대 0.877, 표면 스케일 0.853 대 0.777, 불규칙성 0.848 대 0.771로 앞섰습니다. 색상 0.869 대 0.863과 미세구조 0.934 대 0.931도 이번에는 Morphloom이 앞섰습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 보정 시점과 5명 블라인드 패널을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
 
 | 실제 결과 | img2threejs | Morphloom |
 |---|---:|---:|

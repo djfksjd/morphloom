@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T20:54:37.788Z",
+  "generatedAt": "2026-09-01T21:18:12.969Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1321,6 +1321,11 @@
       "capability": "deterministic material region comparator",
       "img2threejs": "yes",
       "morphloom": "yes"
+    },
+    {
+      "capability": "bounded reference-image de-lighting with recorded correction evidence",
+      "img2threejs": "box-blurred luminance proxy, single-image confidence capped",
+      "morphloom": "linear-light bounded field, global-exposure preservation, correction metrics and capped confidence"
     },
     {
       "capability": "bounded correction and cost ceiling",
