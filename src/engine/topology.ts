@@ -13,6 +13,8 @@ export interface MeshTopologyReport {
   nonManifoldEdges: number;
   degenerateTriangles: number;
   triangles: number;
+  edgeTaperMeshes?: number;
+  minimumAuthoredEdgeThicknessMm?: number;
   pass: boolean;
   details: Array<{
     name: string;
@@ -34,11 +36,22 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
   let nonManifoldEdges = 0;
   let degenerateTriangles = 0;
   let triangles = 0;
+  let edgeTaperMeshes = 0;
+  let minimumAuthoredEdgeThicknessMm = Number.POSITIVE_INFINITY;
   const details: MeshTopologyReport['details'] = [];
 
   root.traverse((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     meshes += 1;
+    const edgeTapers = object.geometry.userData.morphloomEdgeTapers as Array<{ tipThicknessMm?: number }> | undefined;
+    if (edgeTapers?.length) {
+      edgeTaperMeshes += 1;
+      for (const taper of edgeTapers) {
+        if (typeof taper.tipThicknessMm === 'number') {
+          minimumAuthoredEdgeThicknessMm = Math.min(minimumAuthoredEdgeThicknessMm, taper.tipThicknessMm);
+        }
+      }
+    }
     const expanded = object.geometry.index ? object.geometry.toNonIndexed() : object.geometry.clone();
     const positionsOnly = new THREE.BufferGeometry();
     positionsOnly.setAttribute('position', expanded.getAttribute('position').clone());
@@ -98,6 +111,10 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     nonManifoldEdges,
     degenerateTriangles,
     triangles,
+    edgeTaperMeshes,
+    minimumAuthoredEdgeThicknessMm: Number.isFinite(minimumAuthoredEdgeThicknessMm)
+      ? minimumAuthoredEdgeThicknessMm
+      : undefined,
     pass: meshes > 0 && watertightMeshes === meshes,
     details,
   };

@@ -17,6 +17,13 @@ export type AssemblyGeometryIR =
     bevelSize?: number;
     bevelThickness?: number;
     bevelSegments?: number;
+    /** Real wedge thinning along one or more cutting-edge paths, in profile XY millimetres. */
+    edgeTapers?: Array<{
+      path: Array<[number, number]>;
+      width: number;
+      tipThickness: number;
+      curve?: number;
+    }>;
   }
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
   | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean }
@@ -44,6 +51,24 @@ export interface AssemblyMaterialIR {
   textureScale?: [number, number];
   thicknessMm?: number;
   emissive?: string;
+  /**
+   * Optional local, user-owned reference plate projected in assembly XY space.
+   * Remote URLs are rejected so a local-only build never contacts a third party.
+   */
+  referenceProjection?: {
+    uri: string;
+    mapping: 'assembly-xy';
+    /** Source-image crop as normalized [x, y, width, height], y measured from the top. */
+    crop: [number, number, number, number];
+    /** Assembly-space projection bounds [minX, minY, maxX, maxY] in millimetres. */
+    boundsMm: [number, number, number, number];
+    fingerprint?: string;
+    /** Derive tangent-space micro relief and local roughness from visible source detail. */
+    relief?: {
+      strength?: number;
+      maxResolution?: number;
+    };
+  };
 }
 
 export type SurfaceFinishIR =

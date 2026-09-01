@@ -28,6 +28,10 @@ export interface SurfaceReport {
   anisotropicMaterials: number;
   clearcoatMaterials: number;
   transmissionMaterials: number;
+  /** Materials whose color comes from a successfully loaded local reference projection. */
+  referenceProjectedMaterials: number;
+  referenceReliefMaterials: number;
+  referenceProjectionFingerprints: string[];
   distinctFinishes: number;
   finishes: string[];
 }
@@ -281,6 +285,9 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
   let anisotropicMaterials = 0;
   let clearcoatMaterials = 0;
   let transmissionMaterials = 0;
+  let referenceProjectedMaterials = 0;
+  let referenceReliefMaterials = 0;
+  const referenceProjectionFingerprints = new Set<string>();
   for (const material of materials) {
     if (!(material instanceof THREE.MeshPhysicalMaterial)) continue;
     physicalMaterials += 1;
@@ -294,6 +301,18 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     if (material.anisotropy > 0) anisotropicMaterials += 1;
     if (material.clearcoat > 0) clearcoatMaterials += 1;
     if (material.transmission > 0) transmissionMaterials += 1;
+    const projectedTexture = material.map?.userData.morphloomProjectionOwned === true;
+    const referenceFingerprint = material.userData.morphloomSurface?.referenceFingerprint;
+    if (projectedTexture) {
+      referenceProjectedMaterials += 1;
+      if (material.normalMap?.userData.morphloomReferenceDerived === 'normal'
+        && material.roughnessMap?.userData.morphloomReferenceDerived === 'roughness') {
+        referenceReliefMaterials += 1;
+      }
+      if (typeof referenceFingerprint === 'string' && referenceFingerprint.length > 0) {
+        referenceProjectionFingerprints.add(referenceFingerprint);
+      }
+    }
   }
   return {
     physicalMaterials,
@@ -303,6 +322,9 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     anisotropicMaterials,
     clearcoatMaterials,
     transmissionMaterials,
+    referenceProjectedMaterials,
+    referenceReliefMaterials,
+    referenceProjectionFingerprints: [...referenceProjectionFingerprints].sort(),
     distinctFinishes: finishes.size,
     finishes: [...finishes].sort(),
   };

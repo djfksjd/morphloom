@@ -215,6 +215,59 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.root.getObjectByName('ring_lip_front')).toBeTruthy();
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(240);
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeLessThan(242);
+    const coreMesh = build.root.getObjectByName('continuous_steel_body') as THREE.Mesh;
+    const positions = coreMesh.geometry.getAttribute('position');
+    const halfThicknesses = Array.from({ length: positions.count }, (_, index) => Math.abs(positions.getZ(index)))
+      .filter((value) => value > 1e-8);
+    expect(Math.min(...halfThicknesses) * 1000).toBeLessThanOrEqual(0.061);
+    expect(Math.max(...halfThicknesses) * 1000).toBeGreaterThan(2);
+    expect(build.metrics.topology).toMatchObject({ pass: true, degenerateTriangles: 0, nonManifoldEdges: 0 });
+  });
+
+  it('maps reference UVs in assembly space so independently editable parts retain one aligned photograph', () => {
+    const build = compileAssemblyIR(TALON_REFERENCE_BENCHMARK_IR, 'beauty');
+    const leftPanel = build.root.getObjectByName('ivory_panel_1_front') as THREE.Mesh;
+    const rightPanel = build.root.getObjectByName('ivory_panel_3_front') as THREE.Mesh;
+    const leftUv = leftPanel.geometry.getAttribute('uv');
+    const rightUv = rightPanel.geometry.getAttribute('uv');
+    const range = (attribute: THREE.BufferAttribute | THREE.InterleavedBufferAttribute, axis: 'x' | 'y') => {
+      const values = Array.from({ length: attribute.count }, (_, index) => axis === 'x' ? attribute.getX(index) : attribute.getY(index));
+      return [Math.min(...values), Math.max(...values)] as const;
+    };
+    const [leftMinU, leftMaxU] = range(leftUv, 'x');
+    const [rightMinU, rightMaxU] = range(rightUv, 'x');
+    expect(leftMinU).toBeGreaterThan(0.35);
+    expect(leftMaxU).toBeLessThan(0.6);
+    expect(rightMinU).toBeGreaterThan(leftMaxU);
+    expect(rightMaxU).toBeLessThanOrEqual(1.01);
+  });
+
+  it('rejects remote reference projection URLs to keep customer images local-only', () => {
+    const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    invalid.components[0].material.referenceProjection = {
+      ...invalid.components[0].material.referenceProjection!,
+      uri: 'https://example.com/customer-reference.png',
+    };
+    expect(() => validateAssemblyIR(invalid)).toThrow(/local or blob-backed/);
+  });
+
+  it('bounds reference-derived relief work before allocating browser canvases', () => {
+    const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    invalid.components[0].material.referenceProjection = {
+      ...invalid.components[0].material.referenceProjection!,
+      relief: { strength: 3, maxResolution: 8192 },
+    };
+    expect(() => validateAssemblyIR(invalid)).toThrow(/relief strength is invalid/);
+    invalid.components[0].material.referenceProjection.relief = { strength: 1, maxResolution: 8192 };
+    expect(() => validateAssemblyIR(invalid)).toThrow(/relief resolution is invalid/);
+  });
+
+  it('rejects zero-width, zero-tip, and over-thick cutting-edge tapers', () => {
+    const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    const core = invalid.components.find((component) => component.id === 'continuous_steel_body');
+    if (!core || core.geometry.op !== 'extrude') throw new Error('Missing benchmark core.');
+    core.geometry.edgeTapers = [{ path: [[0, 0], [1, 1]], width: 0, tipThickness: 0, curve: 5 }];
+    expect(() => validateAssemblyIR(invalid)).toThrow(/edge taper is invalid/);
   });
 
   it('rejects malformed through-hole descriptors before Three.js allocation', () => {

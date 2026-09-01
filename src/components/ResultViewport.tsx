@@ -12,7 +12,8 @@ import type { CharacterBuild } from '../engine/character';
 import { buildCharacter } from '../engine/character';
 import { buildProduct, type ProductBuild, type ProductPartInfo } from '../engine/product';
 import type { AssemblyIR } from '../engine/assembly-ir';
-import { compileAssemblyIR } from '../engine/assembly-compiler';
+import { compileAssemblyIR, waitForReferenceProjections } from '../engine/assembly-compiler';
+import { inspectSurfaceSystem } from '../engine/surface-system';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../engine/camera-framing';
 import {
   calculateMeasurement,
@@ -335,13 +336,18 @@ function annotationLabel(
 }
 
 function disposeObject(object: THREE.Object3D): void {
+  const disposedTextures = new Set<THREE.Texture>();
   object.traverse((child) => {
+    if (child.userData.morphloomProjectionActive === true) child.userData.morphloomProjectionActive = false;
     if (!(child instanceof THREE.Mesh || child instanceof THREE.Line || child instanceof THREE.Sprite)) return;
     child.geometry?.dispose();
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     for (const material of materials) {
       for (const value of Object.values(material)) {
-        if (value instanceof THREE.Texture && !value.userData.morphloomShared) value.dispose();
+        if (value instanceof THREE.Texture && !value.userData.morphloomShared && !disposedTextures.has(value)) {
+          disposedTextures.add(value);
+          value.dispose();
+        }
       }
       material.dispose();
     }
@@ -438,6 +444,7 @@ function inspectablePartFromObject(object: THREE.Object3D | null): InspectablePa
 }
 
 async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
+  await waitForReferenceProjections(root);
   normalizeVisibleNormals(root);
   const exporter = new GLTFExporter();
   const result = await exporter.parseAsync(root, {
@@ -941,6 +948,19 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       telemetryRef.current = telemetry;
       onTelemetry?.(telemetry);
       onBuilt?.(build);
+      const handleReferenceProjectionReady = () => {
+        if (!('surfaces' in build.metrics)) return;
+        const surfaces = inspectSurfaceSystem(build.root);
+        build.metrics.surfaces = surfaces;
+        validatedGlbRef.current = undefined;
+        glbPromiseRef.current = undefined;
+        onBuilt?.({
+          ...build,
+          metrics: { ...build.metrics, surfaces },
+        } as ProductBuild);
+        runtime.syncDiagnostics();
+      };
+      build.root.addEventListener('morphloom-reference-projection-ready' as never, handleReferenceProjectionReady as never);
       frameBuild(runtime, build, assetKind, assemblyIR, spec);
       if (preserveMeasurement && measurementEnabled && measurementPointsRef.current.length > 0) {
         drawMeasurementAnnotation(runtime, measurementPointsRef.current, measurementMode, measurementUnit, markerRadiusRef.current);
@@ -959,6 +979,9 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         },
       });
       runtime.syncDiagnostics();
+      return () => {
+        build.root.removeEventListener('morphloom-reference-projection-ready' as never, handleReferenceProjectionReady as never);
+      };
     }, [assemblyIR, assetKind, dimensionOverviewEnabled, measurementUnit, mode, onBuilt, onTelemetry, pack, productSpec, spec]);
 
     useEffect(() => {

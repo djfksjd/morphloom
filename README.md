@@ -121,7 +121,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
-동일한 Talon 사진으로도 실제 비교했습니다. Morphloom은 이제 비대칭 외곽과 여러 관통 홀을 가진 프로파일을 폐쇄형 메시로 만들며, 해당 사례는 26개 편집 부품·경계 0·비매니폴드 0·GLB 포락 오차 0.000 mm를 확인했습니다. 다만 원본 픽셀을 투영하는 img2threejs가 정면 사진 재현에서는 아직 더 좋습니다. Morphloom의 현재 우위는 사진 복사가 아니라 준실무 편집·검수·납품입니다.
+동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 원본 정면 색상을 조립 좌표계에 정렬해 투영하고, 같은 사진의 미세 밝기 변화에서 normal·roughness 맵을 파생해 빛에 반응하는 요철·마모를 보존합니다. 검신은 검은 튜브가 아닌 실제 쏐기 형상으로 줄어들어 날끝 0.12 mm를 기록합니다. 해당 사례는 정면 참조 투영·PBR 100점, 25개 편집 부품, 경계 0, 비매니폴드 0, GLB 포락 오차 0.000 mm를 실제 브라우저에서 확인했습니다. 비교용 사진은 라이선스 경계 때문에 저장소에 재배포하지 않으며, 사용자가 소유한 로컬 파일이나 `blob:` URL만 허용합니다.
 
 ## 현재 한계
 

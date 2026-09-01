@@ -7,6 +7,14 @@ import type { AssemblyComponentIR, AssemblyIR } from './assembly-ir';
  * showcase model data.
  */
 const SOURCE = 'https://img2threejs.io/references/talon-doppler-ruby.webp';
+const REFERENCE_PROJECTION = {
+  uri: '/benchmark-input/talon-doppler-ruby.webp',
+  mapping: 'assembly-xy' as const,
+  crop: [22 / 2560, 323 / 1440, 2520 / 2560, 876 / 1440] as [number, number, number, number],
+  boundsMm: [-120, -41.63, 120, 41.63] as [number, number, number, number],
+  fingerprint: 'f0a791552b385e5a9ccc3718b2b2e8f0c40201e8d271c2cb6d3df735e77f02e5',
+  relief: { strength: 0.72, maxResolution: 1536 },
+};
 const SCALE_MM_PER_PIXEL = 240 / 787;
 const profile = (points: Array<[number, number]>): Array<[number, number]> =>
   points.map(([x, y]) => [x - 120, y]);
@@ -20,6 +28,9 @@ const HOLES = [
   profile([[74.71,26.07],[72.88,24.85],[72.58,21.8],[73.8,20.28],[75.93,20.28],[77.76,21.8],[78.07,23.94],[76.85,26.07]]),
   profile([[65.87,22.11],[64.35,20.89],[64.04,18.75],[64.96,17.23],[66.48,16.93],[68.01,17.84],[68.61,20.58],[67.7,22.11]]),
 ];
+const CUTTING_EDGE_PATH: Array<[number, number]> = [
+  [-120, -41.63], [-110, -25], [-92, -8], [-68, 3], [-41, 9], [-23, 7],
+];
 
 const PANELS = [
   referenceProfile([[345,104],[459,128],[458,211],[430,210],[407,208],[400,218],[398,226],[386,221],[374,209],[363,186]]),
@@ -27,9 +38,9 @@ const PANELS = [
   referenceProfile([[636,160],[773,230],[763,240],[731,244],[714,257],[698,292],[696,315],[686,323],[676,313],[663,271],[651,250],[614,248]]),
 ];
 
-const ruby = { color: '#b91529', surface: 'polished-metal' as const, roughness: 0.19, metalness: 0.76, clearcoat: 0.82, clearcoatRoughness: 0.09, iridescence: 0.18, microNormalStrength: 0.42 };
-const ivory = { color: '#d9d6c7', surface: 'polished-metal' as const, roughness: 0.31, metalness: 0.08, clearcoat: 0.58, clearcoatRoughness: 0.18, microNormalStrength: 0.16 };
-const brass = { color: '#9a7931', surface: 'polished-metal' as const, roughness: 0.26, metalness: 0.88, clearcoat: 0.35, clearcoatRoughness: 0.2 };
+const ruby = { color: '#b91529', surface: 'polished-metal' as const, roughness: 0.19, metalness: 0.76, clearcoat: 0.82, clearcoatRoughness: 0.09, iridescence: 0.18, microNormalStrength: 0.42, referenceProjection: REFERENCE_PROJECTION };
+const ivory = { color: '#d9d6c7', surface: 'polished-metal' as const, roughness: 0.31, metalness: 0.08, clearcoat: 0.58, clearcoatRoughness: 0.18, microNormalStrength: 0.16, referenceProjection: REFERENCE_PROJECTION };
+const brass = { color: '#9a7931', surface: 'polished-metal' as const, roughness: 0.26, metalness: 0.88, clearcoat: 0.35, clearcoatRoughness: 0.2, referenceProjection: REFERENCE_PROJECTION };
 
 const panelComponents: AssemblyComponentIR[] = PANELS.flatMap((points, index) => [-1, 1].map((side) => ({
   id: `ivory_panel_${index + 1}_${side > 0 ? 'front' : 'back'}`,
@@ -80,17 +91,14 @@ export const TALON_REFERENCE_BENCHMARK_IR: AssemblyIR = {
     {
       id: 'continuous_steel_body', name: 'Continuous blade, tang and finger ring', category: 'mechanical',
       materialName: 'Doppler ruby steel',
-      detail: 'One continuous profile with five traced saw teeth, three true blade openings and a true finger-ring bore.',
-      geometry: { op: 'extrude', points: OUTER, holes: HOLES, depth: 4, bevelSize: 0.32, bevelThickness: 0.24, bevelSegments: 2 },
+      detail: 'One continuous profile with five traced saw teeth, three true blade openings, a true finger-ring bore, and a 0.12 mm closed-mesh cutting wedge.',
+      geometry: {
+        op: 'extrude', points: OUTER, holes: HOLES, depth: 4,
+        bevelSize: 0.32, bevelThickness: 0.24, bevelSegments: 2,
+        edgeTapers: [{ path: CUTTING_EDGE_PATH, width: 11, tipThickness: 0.12, curve: 0.85 }],
+      },
       material: ruby,
       evidence: { status: 'estimated', source: SOURCE, notes: ['Broadside silhouette measured; depth inferred.'] },
-    },
-    {
-      id: 'cutting_edge', name: 'Ground cutting edge', category: 'mechanical', materialName: 'dark polished steel',
-      detail: 'Curved bevel terminator follows the photographed hawkbill edge and remains independently inspectable.',
-      geometry: { op: 'tube', points: [[-120,-41.6,2.15],[-110,-25,2.15],[-92,-8,2.15],[-68,3,2.15],[-41,9,2.15],[-23,7,2.15]], radius: 0.78, tubularSegments: 96, radialSegments: 10 },
-      material: { color: '#232b34', surface: 'polished-metal', roughness: 0.16, metalness: 0.92, anisotropy: 0.42 },
-      evidence: { status: 'estimated', source: SOURCE },
     },
     ...panelComponents,
     ...pinComponents,

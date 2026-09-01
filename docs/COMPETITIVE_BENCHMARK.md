@@ -15,14 +15,16 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 | 실제 결과 | img2threejs | Morphloom |
 |---|---:|---:|
-| 사진처럼 보이는 정면 재질 | 우세—원본 픽셀 투영 | 절차적 PBR이므로 아직 열세 |
+| 정면 색상 재현 | 원본 플레이트 투영 | 조립 좌표계 원본 투영 |
+| 사진 기반 표면 요철·거칠기 | Talon 코드에 normal/roughness map 없음 | 우세—소스 파생 normal+roughness 25/25 |
+| 절삭날 두께 | 장면 수치 미표시 | 실제 wedge taper, 최소 0.12 mm |
 | 실제 관통 개구 | 칼날 3 + 링 1 | 칼날 3 + 링 1 |
-| 독립 편집 부품 | 데모 표시 5개 | 26개 명명 부품 |
-| 폐쇄 메시 | 공개 화면에서 수치 미표시 | 26/26, 경계 0, 비매니폴드 0 |
-| GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 포락 오차 0.000 mm, 명명 노드 100% |
+| 독립 편집 부품 | 데모 표시 5개 | 25개 명명 부품 |
+| 폐쇄 메시 | 공개 화면에서 수치 미표시 | 25/25, 경계 0, 비매니폴드 0 |
+| GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 9.16 MB, 포락 오차 0.000 mm, 명명 노드 100% |
 | 준실무 납품성 | Three.js 전시 강점 | 우세—IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG |
 
-따라서 이번 사례의 정직한 결론은 **정면 사진 재현은 img2threejs 우세, 편집·토폴로지·납품은 Morphloom 우세**입니다. Morphloom이 모든 축에서 이겼다는 문구는 넣지 않았습니다. 상세 수치는 [`../benchmarks/talon-same-reference-latest.json`](../benchmarks/talon-same-reference-latest.json)에 고정했습니다.
+정면 색상 투영은 양쪽 모두 지원합니다. 하지만 검증한 img2threejs Talon 재질은 base-color plate와 상수 roughness를 사용하고, Morphloom은 같은 입력에서 파생한 normal·roughness를 GLB에 포함합니다. 따라서 이 사례의 **참조 기반 표면 재질 반응은 Morphloom 우세**, 편집·토폴로지·납품도 Morphloom 우세입니다. 단, 단일 사진에서 안 보이는 깊이와 후면을 실측했다고 판정하지 않습니다. 상세 수치는 [`../benchmarks/talon-same-reference-latest.json`](../benchmarks/talon-same-reference-latest.json)에 고정했습니다.
 
 이 비교로 확인된 근본 결함도 수정했습니다. 기존 `extrude`는 외곽만 받아 칼날 구멍을 가짜 검은 원으로 표현할 수밖에 없었지만, 이제 임의 다각형 홀과 타원 홀을 실제로 뚫고 검증합니다. 이 연산은 칼뿐 아니라 환기구, 기계 브래킷, 가구 손잡이, 제품 포트에도 재사용됩니다.
 
@@ -37,6 +39,9 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 - 2~3개의 직교 실루엣이 있으면 제한된 복셀 공간을 교집합으로 깎아 중복 내부면이 없는 용접된 폐쇄 메시를 만듭니다.
 - 크기가 다른 참조/렌더도 전경 포락을 정렬한 뒤 상·중·하 내부를 분리 비교하므로 얼굴·창호·버튼 같은 내부 누락이 윤곽 점수에 숨지 않습니다.
 - 재질 영역은 CIE Lab 색차, 밝기, 미세 대비, 방향성 반사를 별도로 검사해 색만 비슷한 평면 재질을 차단합니다.
+- 로컬 참조 플레이트를 부품 별 UV가 아닌 조립 XY 좌표계로 투영해 편집 부품 사이의 무늬가 끊기지 않습니다.
+- 원본 밝기의 국부 기울기와 변동에서 tangent-space normal·roughness map을 생성해 요철·마모가 조명에 반응하게 합니다.
+- `https:` 참조는 거부하고 로컬 경로와 `blob:`만 허용하며, 투영 로드 실패 시 100점과 GLB 납품을 모두 차단합니다.
 - 수정 결과가 나빠지면 이전 최선 결과로 되돌리고, 같은 결함이 두 번 남으면 IR이 아니라 명세를 다시 고칩니다.
 - 개선이 정체되거나 반복·토큰 상한에 도달하면 무한 생성하지 않고 추가 근거를 요청합니다.
 - 계약과 검수 결과를 AssemblyIR/Three.js 장면에 보존해 이후 납품 검사가 잊지 않게 했습니다.
@@ -55,8 +60,9 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 | 제품 내부 부품·전선 연결 감사 | 문서상 핵심 범위 아님 | 지원 |
 | GLB와 Blender/Unity/Unreal 재열기 검사 | Three.js factory 중심 | 지원 |
 | 자동 테스트 폭 | 1,083개 실행 확인 | 더 작음—계속 확대 필요 |
-| 동일 Talon 이미지 정면 사진 재현 | 우세 | 열세—원본 투영 미사용 |
-| 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—26개 부품, 폐쇄 토폴로지, GLB 재열기 |
+| 동일 Talon 이미지 정면 색상 | 원본 plate 투영 | 원본 plate 투영 |
+| 동일 Talon 이미지 표면 PBR 반응 | 상수 roughness, normal map 없음 | 우세—사진 파생 normal+roughness |
+| 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—25개 부품, 실제 wedge 날, 폐쇄 토폴로지, GLB 재열기 |
 
 ## 재실행
 
@@ -68,6 +74,7 @@ npm run benchmark:competitive
 
 ## 참고한 img2threejs 근거
 
+- [Talon 전시의 base-color plate·상수 roughness 재질 구현](https://github.com/img2threejs/img2threejs-showcase/blob/1deaefc66407e6765782f9578b76db079e1ad40c/src/demos/talon-doppler-ruby/createTalonDopplerRubyModel.ts#L383-L445)
 - [README의 detailInventory, visual hull, material pipeline, 단계별 검수](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/README.md)
 - [단계 오케스트레이션 구현](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/stage3_build/orchestrate_passes.py)
 - [특징별 합격 정책](https://github.com/img2threejs/img2threejs/blob/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85/forge/_shared/feature_acceptance_policy.py)

@@ -11,6 +11,30 @@ import { auditFidelityContract } from './fidelity-pipeline';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
 
 const mm = (value: number) => value / 1000;
+type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
+type ProjectionStatus = { declared: number; loaded: number; failed: number; errors: string[] };
+const projectionReadiness = new WeakMap<THREE.Object3D, Promise<ProjectionStatus>>();
+
+function validateReferenceProjection(projection: ReferenceProjectionIR, componentId: string): void {
+  if (!/^(?:\/(?!\/)|blob:)/.test(projection.uri) || projection.uri.includes('\\') || projection.uri.includes('\0')) {
+    throw new Error(`Reference projection URI must be local or blob-backed in ${componentId}.`);
+  }
+  const [x, y, width, height] = projection.crop;
+  if (x < 0 || y < 0 || width <= 0 || height <= 0 || x + width > 1 || y + height > 1) {
+    throw new Error(`Reference projection crop is invalid in ${componentId}.`);
+  }
+  const [minX, minY, maxX, maxY] = projection.boundsMm;
+  if (maxX <= minX || maxY <= minY) throw new Error(`Reference projection bounds are invalid in ${componentId}.`);
+  if (projection.relief?.strength !== undefined && (projection.relief.strength < 0 || projection.relief.strength > 2)) {
+    throw new Error(`Reference relief strength is invalid in ${componentId}.`);
+  }
+  if (projection.relief?.maxResolution !== undefined
+    && (!Number.isInteger(projection.relief.maxResolution)
+      || projection.relief.maxResolution < 256
+      || projection.relief.maxResolution > 2048)) {
+    throw new Error(`Reference relief resolution is invalid in ${componentId}.`);
+  }
+}
 
 export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR {
   if (!value || typeof value !== 'object') throw new Error('AssemblyIR must be an object.');
@@ -104,6 +128,18 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         }
         if (((component.geometry.bevelSize ?? 0) > 0 || (component.geometry.bevelThickness ?? 0) > 0)
           && (component.geometry.bevelSegments ?? 3) < 1) throw new Error(`Extrude bevel segments are invalid in ${component.id}.`);
+        {
+          const extrudeDepth = component.geometry.depth;
+          if (component.geometry.edgeTapers && (component.geometry.edgeTapers.length > 8
+          || component.geometry.edgeTapers.some((taper) => taper.path.length < 2
+            || taper.path.length > 512
+            || taper.width <= 0
+            || taper.tipThickness <= 0
+            || taper.tipThickness >= extrudeDepth
+            || (taper.curve !== undefined && (taper.curve < 0.25 || taper.curve > 4))))) {
+            throw new Error(`Extrude edge taper is invalid in ${component.id}.`);
+          }
+        }
         break;
       case 'lathe':
         if (component.geometry.profile.length < 2 || component.geometry.profile.some(([radius]) => radius < 0)) throw new Error(`Lathe profile is invalid in ${component.id}.`);
@@ -150,6 +186,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     if (component.material.thicknessMm !== undefined && (component.material.thicknessMm < 0 || component.material.thicknessMm > 100)) {
       throw new Error(`Unsafe thicknessMm in ${component.id}.`);
     }
+    if (component.material.referenceProjection) validateReferenceProjection(component.material.referenceProjection, component.id);
     if (component.evidence) {
       if (!allowedEvidence.has(component.evidence.status)) throw new Error(`Unsupported evidence status in ${component.id}.`);
       if (component.evidence.source !== undefined && (typeof component.evidence.source !== 'string' || component.evidence.source.length > 500)) {
@@ -179,6 +216,65 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
     if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
   }
+}
+
+function distanceToProfilePath(x: number, y: number, path: Array<[number, number]>): number {
+  let minimumSquared = Number.POSITIVE_INFINITY;
+  for (let index = 0; index < path.length - 1; index += 1) {
+    const start = path[index]!;
+    const end = path[index + 1]!;
+    const dx = end[0] - start[0];
+    const dy = end[1] - start[1];
+    const lengthSquared = dx * dx + dy * dy;
+    const projected = lengthSquared > 1e-12
+      ? Math.max(0, Math.min(1, ((x - start[0]) * dx + (y - start[1]) * dy) / lengthSquared))
+      : 0;
+    const offsetX = x - (start[0] + dx * projected);
+    const offsetY = y - (start[1] + dy * projected);
+    minimumSquared = Math.min(minimumSquared, offsetX * offsetX + offsetY * offsetY);
+  }
+  return Math.sqrt(minimumSquared);
+}
+
+function applyExtrudeEdgeTapers(
+  geometry: THREE.BufferGeometry,
+  tapers: NonNullable<Extract<AssemblyGeometryIR, { op: 'extrude' }>['edgeTapers']>,
+): void {
+  const position = geometry.getAttribute('position');
+  if (!position || tapers.length === 0) return;
+  let fullHalfThickness = 0;
+  for (let index = 0; index < position.count; index += 1) {
+    fullHalfThickness = Math.max(fullHalfThickness, Math.abs(position.getZ(index)));
+  }
+  for (let index = 0; index < position.count; index += 1) {
+    const originalZ = position.getZ(index);
+    let targetHalfThickness = fullHalfThickness;
+    const xMm = position.getX(index) * 1000;
+    const yMm = position.getY(index) * 1000;
+    for (const taper of tapers) {
+      const normalizedDistance = Math.min(1, distanceToProfilePath(xMm, yMm, taper.path) / taper.width);
+      if (normalizedDistance >= 1) continue;
+      const smoothDistance = normalizedDistance * normalizedDistance * (3 - 2 * normalizedDistance);
+      const blend = Math.pow(smoothDistance, taper.curve ?? 1);
+      const tipHalfThickness = mm(taper.tipThickness) * 0.5;
+      targetHalfThickness = Math.min(
+        targetHalfThickness,
+        tipHalfThickness + (fullHalfThickness - tipHalfThickness) * blend,
+      );
+    }
+    if (targetHalfThickness < fullHalfThickness) {
+      position.setZ(index, Math.sign(originalZ || 1) * Math.min(Math.abs(originalZ), targetHalfThickness));
+    }
+  }
+  position.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  geometry.userData.morphloomEdgeTapers = tapers.map((taper) => ({
+    widthMm: taper.width,
+    tipThicknessMm: taper.tipThickness,
+    curve: taper.curve ?? 1,
+  }));
 }
 
 function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
@@ -237,6 +333,7 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
         bevelSegments: geometry.bevelSegments ?? 3,
       });
       result.translate(0, 0, -depth * 0.5);
+      if (geometry.edgeTapers?.length) applyExtrudeEdgeTapers(result, geometry.edgeTapers);
       return result;
     }
     case 'lathe': {
@@ -462,24 +559,322 @@ function ensurePrimaryUv(geometry: THREE.BufferGeometry): void {
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
 
+function applyAssemblyProjectionUv(mesh: THREE.Mesh, projection: ReferenceProjectionIR): void {
+  const position = mesh.geometry.getAttribute('position');
+  if (!position) return;
+  mesh.updateMatrix();
+  const [minX, minY, maxX, maxY] = projection.boundsMm;
+  const width = maxX - minX;
+  const height = maxY - minY;
+  const uv = new Float32Array(position.count * 2);
+  const point = new THREE.Vector3();
+  for (let index = 0; index < position.count; index += 1) {
+    point.fromBufferAttribute(position, index).applyMatrix4(mesh.matrix).multiplyScalar(1000);
+    uv[index * 2] = (point.x - minX) / width;
+    uv[index * 2 + 1] = (point.y - minY) / height;
+  }
+  mesh.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
+
+interface ProjectionLoadRecord {
+  texture: THREE.Texture;
+  normalTexture?: THREE.Texture;
+  roughnessTexture?: THREE.Texture;
+  materials: Set<THREE.MeshPhysicalMaterial>;
+  state: 'loading' | 'loaded' | 'failed';
+  promise: Promise<boolean>;
+}
+
+function projectionKey(projection: ReferenceProjectionIR): string {
+  return `${projection.uri}|${projection.crop.join(',')}|${projection.fingerprint ?? ''}|${projection.relief?.strength ?? ''}|${projection.relief?.maxResolution ?? ''}`;
+}
+
+async function verifyReferenceFingerprint(projection: ReferenceProjectionIR): Promise<boolean> {
+  if (!projection.fingerprint) return true;
+  if (typeof fetch !== 'function' || !globalThis.crypto?.subtle) return false;
+  try {
+    const response = await fetch(projection.uri, { cache: 'no-store', credentials: 'same-origin' });
+    if (!response.ok) return false;
+    const digest = await globalThis.crypto.subtle.digest('SHA-256', await response.arrayBuffer());
+    const actual = [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, '0')).join('');
+    return actual.startsWith(projection.fingerprint.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
+function createReferenceSurfaceMaps(
+  texture: THREE.Texture,
+  projection: ReferenceProjectionIR,
+): { normal: THREE.CanvasTexture; roughness: THREE.CanvasTexture } | undefined {
+  if (!projection.relief || typeof document === 'undefined') return undefined;
+  const source = texture.image as CanvasImageSource & { naturalWidth?: number; naturalHeight?: number; width?: number; height?: number };
+  const sourceWidth = source.naturalWidth ?? source.width ?? 0;
+  const sourceHeight = source.naturalHeight ?? source.height ?? 0;
+  if (sourceWidth <= 0 || sourceHeight <= 0) return undefined;
+  const [cropX, cropY, cropWidth, cropHeight] = projection.crop;
+  const sourceCropWidth = Math.max(1, Math.round(sourceWidth * cropWidth));
+  const sourceCropHeight = Math.max(1, Math.round(sourceHeight * cropHeight));
+  const maxResolution = projection.relief.maxResolution ?? 1536;
+  const scale = Math.min(1, maxResolution / Math.max(sourceCropWidth, sourceCropHeight));
+  const width = Math.max(2, Math.round(sourceCropWidth * scale));
+  const height = Math.max(2, Math.round(sourceCropHeight * scale));
+  const sourceCanvas = document.createElement('canvas');
+  sourceCanvas.width = width;
+  sourceCanvas.height = height;
+  const sourceContext = sourceCanvas.getContext('2d', { willReadFrequently: true });
+  if (!sourceContext) return undefined;
+  sourceContext.drawImage(
+    source,
+    Math.round(sourceWidth * cropX),
+    Math.round(sourceHeight * cropY),
+    sourceCropWidth,
+    sourceCropHeight,
+    0,
+    0,
+    width,
+    height,
+  );
+  let pixels: ImageData;
+  try {
+    pixels = sourceContext.getImageData(0, 0, width, height);
+  } catch {
+    return undefined;
+  }
+  const normalCanvas = document.createElement('canvas');
+  const roughnessCanvas = document.createElement('canvas');
+  normalCanvas.width = roughnessCanvas.width = width;
+  normalCanvas.height = roughnessCanvas.height = height;
+  const normalContext = normalCanvas.getContext('2d');
+  const roughnessContext = roughnessCanvas.getContext('2d');
+  if (!normalContext || !roughnessContext) return undefined;
+  const normalPixels = normalContext.createImageData(width, height);
+  const roughnessPixels = roughnessContext.createImageData(width, height);
+  const sourcePixels = pixels.data;
+  const luminanceAt = (x: number, y: number): number => {
+    const clampedX = Math.max(0, Math.min(width - 1, x));
+    const clampedY = Math.max(0, Math.min(height - 1, y));
+    const offset = (clampedY * width + clampedX) * 4;
+    return (sourcePixels[offset]! * 0.2126 + sourcePixels[offset + 1]! * 0.7152 + sourcePixels[offset + 2]! * 0.0722) / 255;
+  };
+  const strength = projection.relief.strength ?? 0.72;
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const offset = (y * width + x) * 4;
+      const center = luminanceAt(x, y);
+      const left = luminanceAt(x - 1, y);
+      const right = luminanceAt(x + 1, y);
+      const up = luminanceAt(x, y - 1);
+      const down = luminanceAt(x, y + 1);
+      const dx = (right - left) * strength * 5;
+      const dy = (down - up) * strength * 5;
+      const length = Math.hypot(dx, dy, 1);
+      normalPixels.data[offset] = Math.round(((-dx / length) * 0.5 + 0.5) * 255);
+      normalPixels.data[offset + 1] = Math.round(((dy / length) * 0.5 + 0.5) * 255);
+      normalPixels.data[offset + 2] = Math.round((1 / length) * 255);
+      normalPixels.data[offset + 3] = 255;
+      const localVariation = Math.min(1, (Math.abs(center - left) + Math.abs(center - right)
+        + Math.abs(center - up) + Math.abs(center - down)) * 1.6);
+      const roughness = Math.round(168 + localVariation * 87);
+      roughnessPixels.data[offset] = roughness;
+      roughnessPixels.data[offset + 1] = roughness;
+      roughnessPixels.data[offset + 2] = roughness;
+      roughnessPixels.data[offset + 3] = 255;
+    }
+  }
+  normalContext.putImageData(normalPixels, 0, 0);
+  roughnessContext.putImageData(roughnessPixels, 0, 0);
+  sourceCanvas.width = sourceCanvas.height = 1;
+  const configure = (map: THREE.CanvasTexture, kind: string) => {
+    map.name = `morphloom_reference_${kind}_${projection.fingerprint ?? 'unverified'}`;
+    map.colorSpace = THREE.NoColorSpace;
+    map.wrapS = map.wrapT = THREE.ClampToEdgeWrapping;
+    map.userData.morphloomProjectionOwned = true;
+    map.userData.morphloomReferenceDerived = kind;
+    map.needsUpdate = true;
+  };
+  const normal = new THREE.CanvasTexture(normalCanvas);
+  const roughness = new THREE.CanvasTexture(roughnessCanvas);
+  configure(normal, 'normal');
+  configure(roughness, 'roughness');
+  return { normal, roughness };
+}
+
+function createProjectionRecord(
+  root: THREE.Group,
+  projection: ReferenceProjectionIR,
+  status: ProjectionStatus,
+): ProjectionLoadRecord | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const materials = new Set<THREE.MeshPhysicalMaterial>();
+  let resolveLoad: (loaded: boolean) => void = () => undefined;
+  const promise = new Promise<boolean>((resolve) => { resolveLoad = resolve; });
+  const record = {} as ProjectionLoadRecord;
+  const loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('anonymous');
+  const texture = loader.load(
+    projection.uri,
+    () => {
+      void (async () => {
+        if (root.userData.morphloomProjectionActive !== true) {
+          texture.dispose();
+          resolveLoad(false);
+          return;
+        }
+        if (!await verifyReferenceFingerprint(projection)) {
+          record.state = 'failed';
+          status.failed += 1;
+          status.errors.push(`Reference projection fingerprint mismatch: ${projection.uri}`);
+          texture.dispose();
+          resolveLoad(false);
+          return;
+        }
+        if (root.userData.morphloomProjectionActive !== true) {
+          texture.dispose();
+          resolveLoad(false);
+          return;
+        }
+        const derivedMaps = createReferenceSurfaceMaps(texture, projection);
+        if (projection.relief && !derivedMaps) {
+          record.state = 'failed';
+          status.failed += 1;
+          status.errors.push(`Unable to derive local reference relief: ${projection.uri}`);
+          texture.dispose();
+          resolveLoad(false);
+          return;
+        }
+        record.normalTexture = derivedMaps?.normal;
+        record.roughnessTexture = derivedMaps?.roughness;
+        record.state = 'loaded';
+        status.loaded += 1;
+        for (const material of materials) {
+          material.map = texture;
+          if (record.normalTexture) material.normalMap = record.normalTexture;
+          if (record.roughnessTexture) material.roughnessMap = record.roughnessTexture;
+          material.color.set('#ffffff');
+          material.userData.morphloomSurface = {
+            ...material.userData.morphloomSurface,
+            referenceProjectionState: 'loaded',
+            referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
+          };
+          material.needsUpdate = true;
+        }
+        resolveLoad(true);
+      })().catch(() => {
+        record.state = 'failed';
+        status.failed += 1;
+        status.errors.push(`Unable to verify local reference projection: ${projection.uri}`);
+        texture.dispose();
+        resolveLoad(false);
+      });
+    },
+    undefined,
+    () => {
+      record.state = 'failed';
+      status.failed += 1;
+      status.errors.push(`Unable to load local reference projection: ${projection.uri}`);
+      for (const material of materials) {
+        material.userData.morphloomSurface = {
+          ...material.userData.morphloomSurface,
+          referenceProjectionState: 'failed',
+        };
+      }
+      texture.dispose();
+      resolveLoad(false);
+    },
+  );
+  const [cropX, cropY, cropWidth, cropHeight] = projection.crop;
+  texture.name = `morphloom_reference_${projection.fingerprint ?? 'unverified'}`;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.offset.set(cropX, 1 - cropY - cropHeight);
+  texture.repeat.set(cropWidth, cropHeight);
+  texture.userData.morphloomProjectionOwned = true;
+  Object.assign(record, { texture, materials, state: 'loading' as const, promise });
+  return record;
+}
+
+export async function waitForReferenceProjections(root: THREE.Object3D, timeoutMs = 8_000): Promise<ProjectionStatus | undefined> {
+  const ready = projectionReadiness.get(root);
+  if (!ready) return undefined;
+  if (!Number.isInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > 30_000) throw new Error('Reference projection timeout is invalid.');
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const result = await Promise.race([
+      ready,
+      new Promise<never>((_, reject) => {
+        timeout = setTimeout(() => reject(new Error('Reference projection load timed out.')), timeoutMs);
+      }),
+    ]);
+    if (result.failed > 0) throw new Error(result.errors.join(' · '));
+    return result;
+  } finally {
+    if (timeout !== undefined) clearTimeout(timeout);
+  }
+}
+
 export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild {
   validateAssemblyIR(ir);
   const root = new THREE.Group();
   root.name = ir.name;
   root.userData.assemblyIR = structuredClone(ir);
+  root.userData.morphloomProjectionActive = true;
+  const projectionLoads = new Map<string, ProjectionLoadRecord>();
+  const declaredProjectionKeys = new Set<string>();
+  const projectionStatus: ProjectionStatus = { declared: 0, loaded: 0, failed: 0, errors: [] };
   const parts: ProductPartInfo[] = [];
   for (const component of ir.components) {
     const geometry = compileGeometry(component.geometry);
     ensurePrimaryUv(geometry);
-    const mesh = new THREE.Mesh(geometry, createSurfaceMaterial(component.material, {
+    const baseMaterial = createSurfaceMaterial(component.material, {
       mode,
       category: component.category,
       materialName: `${component.materialName} ${component.id}`,
-    }));
+    });
+    const projection = mode === 'beauty' ? component.material.referenceProjection : undefined;
+    const projectedMaterial = projection ? baseMaterial : undefined;
+    const mesh = new THREE.Mesh(
+      geometry,
+      projectedMaterial ?? baseMaterial,
+    );
     mesh.name = component.id;
     if (component.position) mesh.position.set(...component.position.map(mm) as [number, number, number]);
     if (component.rotation) mesh.rotation.set(...component.rotation);
     if (component.scale) mesh.scale.set(...component.scale);
+    if (projection && projectedMaterial) {
+      applyAssemblyProjectionUv(mesh, projection);
+      const key = projectionKey(projection);
+      let record = projectionLoads.get(key);
+      if (!record) {
+        if (!declaredProjectionKeys.has(key)) {
+          declaredProjectionKeys.add(key);
+          projectionStatus.declared += 1;
+        }
+        record = createProjectionRecord(root, projection, projectionStatus);
+        if (record) projectionLoads.set(key, record);
+      }
+      if (record) {
+        record.materials.add(projectedMaterial);
+        projectedMaterial.userData.morphloomSurface = {
+          ...projectedMaterial.userData.morphloomSurface,
+          referenceProjection: projection.mapping,
+          referenceFingerprint: projection.fingerprint ?? null,
+          referenceProjectionState: record.state,
+        };
+        if (record.state === 'loaded') {
+          projectedMaterial.map = record.texture;
+          if (record.normalTexture) projectedMaterial.normalMap = record.normalTexture;
+          if (record.roughnessTexture) projectedMaterial.roughnessMap = record.roughnessTexture;
+          projectedMaterial.color.set('#ffffff');
+          projectedMaterial.userData.morphloomSurface = {
+            ...projectedMaterial.userData.morphloomSurface,
+            referenceProjectionState: 'loaded',
+            referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
+          };
+          projectedMaterial.needsUpdate = true;
+        }
+      }
+    }
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     const info: ProductPartInfo = {
@@ -507,6 +902,17 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     }
     parts.push(info);
     root.add(mesh);
+  }
+  if (projectionLoads.size > 0) {
+    const ready = Promise.all([...projectionLoads.values()].map((record) => record.promise)).then(() => {
+      const surfaces = inspectSurfaceSystem(root);
+      root.userData.surfaceSystem = structuredClone(surfaces);
+      if (root.userData.morphloomProjectionActive === true) {
+        root.dispatchEvent({ type: 'morphloom-reference-projection-ready' } as never);
+      }
+      return { ...projectionStatus, errors: [...projectionStatus.errors] };
+    });
+    projectionReadiness.set(root, ready);
   }
   const connectivity = ir.electrical
     ? compileElectricalHarness(root, parts, ir.electrical, mode)

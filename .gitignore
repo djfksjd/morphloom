@@ -4,6 +4,7 @@ dist/
 coverage/
 *.tsbuildinfo
 work/
+public/benchmark-input/
 .env
 .env.*
 !.env.example

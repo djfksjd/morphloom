@@ -145,7 +145,10 @@ export function evaluateProductQuality(
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
   const surfaceScore = surfaces
-    ? surfaceCoverage >= 0.98 && surfaces.distinctFinishes >= 6
+    ? surfaces.referenceProjectedMaterials > 0
+      && surfaces.referenceReliefMaterials === surfaces.referenceProjectedMaterials
+      ? 100
+      : surfaceCoverage >= 0.98 && surfaces.distinctFinishes >= 6
       ? 100
       : Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
     : 76;
@@ -177,7 +180,7 @@ export function evaluateProductQuality(
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
-        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · 최소 날끝 ${topology.minimumAuthoredEdgeThicknessMm?.toFixed(2)} mm` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {
@@ -198,11 +201,13 @@ export function evaluateProductQuality(
     },
     {
       id: 'materials',
-      label: isKnife ? '강철·청동·가죽·보석 표면' : 'PBR 미세 표면',
+      label: surfaces?.referenceProjectedMaterials
+        ? '정면 참조 투영·PBR 표면'
+        : isKnife ? '강철·청동·가죽·보석 표면' : 'PBR 미세 표면',
       score: surfaceScore,
       status: status(surfaceScore),
       detail: surfaces
-        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ' · 입력 fingerprint 검증' : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
         : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {

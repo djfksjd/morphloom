@@ -59,7 +59,27 @@
           "maxItems": 2
         },
         "thicknessMm": { "type": "number", "minimum": 0, "maximum": 100 },
-        "emissive": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+        "emissive": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "referenceProjection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["uri", "mapping", "crop", "boundsMm"],
+          "properties": {
+            "uri": { "type": "string", "minLength": 1, "maxLength": 512 },
+            "mapping": { "const": "assembly-xy" },
+            "crop": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }, { "type": "number" }], "minItems": 4, "maxItems": 4 },
+            "boundsMm": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }, { "type": "number" }], "minItems": 4, "maxItems": 4 },
+            "fingerprint": { "type": "string", "pattern": "^[a-fA-F0-9]{8,128}$" },
+            "relief": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "strength": { "type": "number", "minimum": 0, "maximum": 2 },
+                "maxResolution": { "type": "integer", "minimum": 256, "maximum": 2048 }
+              }
+            }
+          }
+        }
       }
     },
     "component": {
@@ -151,7 +171,22 @@
         },
         "bevelSize": { "type": "number", "minimum": 0 },
         "bevelThickness": { "type": "number", "minimum": 0 },
-        "bevelSegments": { "type": "integer", "minimum": 1, "maximum": 512 }
+        "bevelSegments": { "type": "integer", "minimum": 1, "maximum": 512 },
+        "edgeTapers": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "width", "tipThickness"],
+            "properties": {
+              "path": { "type": "array", "minItems": 2, "maxItems": 512, "items": { "$ref": "#/$defs/vec2" } },
+              "width": { "type": "number", "exclusiveMinimum": 0 },
+              "tipThickness": { "type": "number", "exclusiveMinimum": 0 },
+              "curve": { "type": "number", "minimum": 0.25, "maximum": 4 }
+            }
+          }
+        }
       }
     },
     "lathe": {
