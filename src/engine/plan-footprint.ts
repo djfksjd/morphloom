@@ -3,7 +3,9 @@ import * as THREE from 'three';
 export interface PlanFootprintRegion {
   id: string;
   /** [minimum X, minimum Z, maximum X, maximum Z] in assembly millimetres. */
-  boundsMm: [number, number, number, number];
+  boundsMm?: [number, number, number, number];
+  /** Ordered X/Z outline in assembly millimetres. Concave simple polygons are supported. */
+  polygonMm?: Array<[number, number]>;
 }
 
 export interface PlanFootprintDescriptor {
@@ -48,6 +50,108 @@ const finiteBounds = (bounds: readonly number[]): boolean => bounds.length === 4
   && bounds[2]! > bounds[0]!
   && bounds[3]! > bounds[1]!;
 
+type Point2 = readonly [number, number];
+
+function regionPolygon(region: PlanFootprintRegion): Point2[] {
+  if (region.boundsMm) {
+    const [minX, minZ, maxX, maxZ] = region.boundsMm;
+    return [[minX, minZ], [maxX, minZ], [maxX, maxZ], [minX, maxZ]];
+  }
+  return region.polygonMm ?? [];
+}
+
+function polygonSignedArea(points: readonly Point2[]): number {
+  let doubleArea = 0;
+  for (let index = 0; index < points.length; index += 1) {
+    const current = points[index]!;
+    const next = points[(index + 1) % points.length]!;
+    doubleArea += current[0] * next[1] - next[0] * current[1];
+  }
+  return doubleArea / 2;
+}
+
+function orientation(a: Point2, b: Point2, c: Point2): number {
+  return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+}
+
+function onSegment(a: Point2, b: Point2, point: Point2): boolean {
+  const epsilon = 1e-7;
+  return Math.abs(orientation(a, b, point)) <= epsilon
+    && point[0] >= Math.min(a[0], b[0]) - epsilon && point[0] <= Math.max(a[0], b[0]) + epsilon
+    && point[1] >= Math.min(a[1], b[1]) - epsilon && point[1] <= Math.max(a[1], b[1]) + epsilon;
+}
+
+function segmentsIntersect(a: Point2, b: Point2, c: Point2, d: Point2): boolean {
+  const abC = orientation(a, b, c);
+  const abD = orientation(a, b, d);
+  const cdA = orientation(c, d, a);
+  const cdB = orientation(c, d, b);
+  if (((abC > 0 && abD < 0) || (abC < 0 && abD > 0))
+    && ((cdA > 0 && cdB < 0) || (cdA < 0 && cdB > 0))) return true;
+  return onSegment(a, b, c) || onSegment(a, b, d) || onSegment(c, d, a) || onSegment(c, d, b);
+}
+
+function simplePolygon(points: readonly Point2[]): boolean {
+  if (points.length < 3 || points.length > 256 || Math.abs(polygonSignedArea(points)) <= 1e-6) return false;
+  if (points.some((point) => point.length !== 2 || !point.every(Number.isFinite))) return false;
+  for (let index = 0; index < points.length; index += 1) {
+    const a = points[index]!;
+    const b = points[(index + 1) % points.length]!;
+    if (a[0] === b[0] && a[1] === b[1]) return false;
+    for (let other = index + 1; other < points.length; other += 1) {
+      if (other === index || other === (index + 1) % points.length
+        || index === (other + 1) % points.length) continue;
+      const c = points[other]!;
+      const d = points[(other + 1) % points.length]!;
+      if (segmentsIntersect(a, b, c, d)) return false;
+    }
+  }
+  return true;
+}
+
+function regionEnvelope(region: PlanFootprintRegion): [number, number, number, number] {
+  if (region.boundsMm) return region.boundsMm;
+  return regionPolygon(region).reduce<[number, number, number, number]>((bounds, point) => [
+    Math.min(bounds[0], point[0]), Math.min(bounds[1], point[1]),
+    Math.max(bounds[2], point[0]), Math.max(bounds[3], point[1]),
+  ], [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY]);
+}
+
+function pointInPolygon(points: readonly Point2[], xMm: number, zMm: number): boolean {
+  for (let index = 0; index < points.length; index += 1) {
+    if (onSegment(points[index]!, points[(index + 1) % points.length]!, [xMm, zMm])) return true;
+  }
+  let inside = false;
+  for (let index = 0, previous = points.length - 1; index < points.length; previous = index, index += 1) {
+    const current = points[index]!;
+    const prior = points[previous]!;
+    if ((current[1] > zMm) !== (prior[1] > zMm)
+      && xMm < (prior[0] - current[0]) * (zMm - current[1]) / (prior[1] - current[1]) + current[0]) inside = !inside;
+  }
+  return inside;
+}
+
+function regionsOverlap(a: PlanFootprintRegion, b: PlanFootprintRegion): boolean {
+  const aBounds = regionEnvelope(a);
+  const bBounds = regionEnvelope(b);
+  const minX = Math.max(aBounds[0], bBounds[0]);
+  const minZ = Math.max(aBounds[1], bBounds[1]);
+  const maxX = Math.min(aBounds[2], bBounds[2]);
+  const maxZ = Math.min(aBounds[3], bBounds[3]);
+  if (maxX <= minX || maxZ <= minZ) return false;
+  // Interior sampling treats shared walls as legal but catches positive-area overlap
+  // between concave regions without depending on polygon winding.
+  const samples = 24;
+  for (let zIndex = 0; zIndex < samples; zIndex += 1) {
+    for (let xIndex = 0; xIndex < samples; xIndex += 1) {
+      const x = minX + (xIndex + 0.5) * (maxX - minX) / samples;
+      const z = minZ + (zIndex + 0.5) * (maxZ - minZ) / samples;
+      if (contains(a, x, z) && contains(b, x, z)) return true;
+    }
+  }
+  return false;
+}
+
 export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescriptor): void {
   if (!descriptor || descriptor.schema !== 'morphloom.plan-footprint/0.1') {
     throw new Error('Unsupported plan-footprint schema.');
@@ -57,19 +161,22 @@ export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescrip
     || descriptor.componentIds.some((id) => !/^[a-zA-Z0-9_-]{1,80}$/.test(id))) {
     throw new Error('Plan-footprint component ids are invalid.');
   }
+  if (!Array.isArray(descriptor.targetRegions) || !Array.isArray(descriptor.voidRegions ?? [])) {
+    throw new Error('Plan-footprint regions are invalid.');
+  }
   const regions = [...descriptor.targetRegions, ...(descriptor.voidRegions ?? [])];
   const regionIds = regions.map((region) => region?.id);
   if (descriptor.targetRegions.length < 1 || descriptor.targetRegions.length > 128
     || (descriptor.voidRegions?.length ?? 0) > 128
     || new Set(regionIds).size !== regionIds.length
-    || regions.some((region) => !region || !/^[a-zA-Z0-9_-]{1,80}$/.test(region.id)
-      || !finiteBounds(region.boundsMm))) {
+    || regions.some((region) => {
+      if (!region || !/^[a-zA-Z0-9_-]{1,80}$/.test(region.id)) return true;
+      const forms = Number(region.boundsMm !== undefined) + Number(region.polygonMm !== undefined);
+      return forms !== 1 || (region.boundsMm ? !finiteBounds(region.boundsMm) : !simplePolygon(region.polygonMm ?? []));
+    })) {
     throw new Error('Plan-footprint regions are invalid.');
   }
-  if ((descriptor.voidRegions ?? []).some((empty) => descriptor.targetRegions.some((occupied) => (
-    Math.min(empty.boundsMm[2], occupied.boundsMm[2]) > Math.max(empty.boundsMm[0], occupied.boundsMm[0])
-      && Math.min(empty.boundsMm[3], occupied.boundsMm[3]) > Math.max(empty.boundsMm[1], occupied.boundsMm[1])
-  )))) {
+  if ((descriptor.voidRegions ?? []).some((empty) => descriptor.targetRegions.some((occupied) => regionsOverlap(empty, occupied)))) {
     throw new Error('Plan-footprint occupied and void regions overlap.');
   }
   const resolution = descriptor.resolution ?? 128;
@@ -93,8 +200,11 @@ export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescrip
 }
 
 function contains(region: PlanFootprintRegion, xMm: number, zMm: number): boolean {
-  const [minX, minZ, maxX, maxZ] = region.boundsMm;
-  return xMm >= minX && xMm <= maxX && zMm >= minZ && zMm <= maxZ;
+  if (region.boundsMm) {
+    const [minX, minZ, maxX, maxZ] = region.boundsMm;
+    return xMm >= minX && xMm <= maxX && zMm >= minZ && zMm <= maxZ;
+  }
+  return pointInPolygon(regionPolygon(region), xMm, zMm);
 }
 
 export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootprintDescriptor): PlanFootprintAudit {
@@ -106,12 +216,13 @@ export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootpri
     .filter((object): object is THREE.Object3D => Boolean(object));
   const objectBounds = new THREE.Box3();
   footprintObjects.forEach((object) => objectBounds.expandByObject(object));
-  const targetEnvelope = [...descriptor.targetRegions, ...(descriptor.voidRegions ?? [])].reduce((bounds, region) => ({
-    minX: Math.min(bounds.minX, region.boundsMm[0]),
-    minZ: Math.min(bounds.minZ, region.boundsMm[1]),
-    maxX: Math.max(bounds.maxX, region.boundsMm[2]),
-    maxZ: Math.max(bounds.maxZ, region.boundsMm[3]),
-  }), { minX: Number.POSITIVE_INFINITY, minZ: Number.POSITIVE_INFINITY, maxX: Number.NEGATIVE_INFINITY, maxZ: Number.NEGATIVE_INFINITY });
+  const targetEnvelope = [...descriptor.targetRegions, ...(descriptor.voidRegions ?? [])].reduce((bounds, region) => {
+    const envelope = regionEnvelope(region);
+    return {
+      minX: Math.min(bounds.minX, envelope[0]), minZ: Math.min(bounds.minZ, envelope[1]),
+      maxX: Math.max(bounds.maxX, envelope[2]), maxZ: Math.max(bounds.maxZ, envelope[3]),
+    };
+  }, { minX: Number.POSITIVE_INFINITY, minZ: Number.POSITIVE_INFINITY, maxX: Number.NEGATIVE_INFINITY, maxZ: Number.NEGATIVE_INFINITY });
   if (!objectBounds.isEmpty()) {
     targetEnvelope.minX = Math.min(targetEnvelope.minX, objectBounds.min.x * 1000);
     targetEnvelope.minZ = Math.min(targetEnvelope.minZ, objectBounds.min.z * 1000);

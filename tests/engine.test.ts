@@ -866,7 +866,7 @@ describe('short-prompt generation contract', () => {
     contradictory.planFootprint!.voidRegions = [{ id: 'north_courtyard', boundsMm: [-100, -100, 100, 100] }];
     expect(() => validateAssemblyIR(contradictory)).toThrow(/occupied and void regions overlap/);
     const duplicate = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
-    duplicate.planFootprint!.targetRegions[1]!.id = duplicate.planFootprint!.targetRegions[0]!.id;
+    duplicate.planFootprint!.targetRegions.push(structuredClone(duplicate.planFootprint!.targetRegions[0]!));
     expect(() => validateAssemblyIR(duplicate)).toThrow(/regions are invalid/);
   });
 
