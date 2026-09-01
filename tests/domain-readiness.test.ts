@@ -23,19 +23,56 @@ beforeAll(async () => {
 });
 
 describe('cross-domain semi-professional readiness', () => {
-  it('exports a real weighted humanoid skeleton with a deterministic animation clip', () => {
+  it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');
     const firstSnapshot = snapshotScene(first.root);
     const secondSnapshot = snapshotScene(second.root);
     expect(first.body).toBeInstanceOf(THREE.SkinnedMesh);
-    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 1, animationTracks: 4 });
+    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 5, animationTracks: 50 });
+    expect(firstSnapshot.animationClipNames).toEqual([
+      'morphloom_hand_gesture',
+      'morphloom_idle_preview',
+      'morphloom_run_cycle',
+      'morphloom_turn_in_place',
+      'morphloom_walk_cycle',
+    ]);
+    for (const clip of first.root.animations) {
+      expect(clip.validate()).toBe(true);
+      expect(clip.tracks.length).toBeGreaterThan(0);
+      for (const track of clip.tracks) {
+        const stride = track.getValueSize();
+        expect(Array.from(track.values.slice(0, stride))).toEqual(
+          Array.from(track.values.slice(track.values.length - stride)),
+        );
+        const firstKey = Array.from(track.values.slice(0, stride));
+        const hasMotion = Array.from({ length: track.times.length }, (_, key) => (
+          Array.from(track.values.slice(key * stride, key * stride + stride))
+        )).some((value) => value.some((component, index) => Math.abs(component - firstKey[index]) > 1e-7));
+        expect(hasMotion, `${clip.name}:${track.name} should contain motion`).toBe(true);
+        expect(first.body.skeleton.bones.some((bone) => track.name.startsWith(`${bone.name}.`))).toBe(true);
+      }
+    }
+    expect(first.root.animations.find((clip) => clip.name === 'morphloom_walk_cycle')?.tracks.map((track) => track.name)).toEqual(expect.arrayContaining([
+      'hips.position', 'hip_L.quaternion', 'hip_R.quaternion', 'knee_L.quaternion', 'knee_R.quaternion',
+    ]));
+    expect(first.root.animations.find((clip) => clip.name === 'morphloom_hand_gesture')?.tracks.filter((track) => /^(thumb|index|middle|ring|little)_/.test(track.name))).toHaveLength(10);
+    expect(first.root.userData.gameDelivery).toMatchObject({
+      schema: 'morphloom.game-delivery/0.2',
+      animationSet: expect.arrayContaining([
+        expect.objectContaining({ name: 'morphloom_idle_preview', tracks: 4, loop: true }),
+        expect.objectContaining({ name: 'morphloom_walk_cycle', tracks: 12, loop: true }),
+        expect.objectContaining({ name: 'morphloom_run_cycle', tracks: 12, loop: true }),
+        expect.objectContaining({ name: 'morphloom_turn_in_place', tracks: 6, loop: true }),
+        expect.objectContaining({ name: 'morphloom_hand_gesture', tracks: 16, loop: true }),
+      ]),
+    });
     expect(first.metrics.rig).toMatchObject({
       boneCount: 49,
       weightedVertices: first.metrics.vertices,
       maximumInfluences: 2,
-      animationClips: 1,
-      animationTracks: 4,
+      animationClips: 5,
+      animationTracks: 50,
     });
     expect(first.body.skeleton.bones.map((bone) => bone.name)).toEqual(expect.arrayContaining([
       'toe_L', 'toe_R', 'thumb_03_L', 'index_03_L', 'middle_03_R', 'little_03_R',
@@ -88,17 +125,18 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.blockers).toEqual([]);
     expect(animation.pass).toBe(true);
     expect(animation.score).toBeGreaterThanOrEqual(98);
-    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 49, animationClips: 1, animationTracks: 4 });
+    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 49, animationClips: 5, animationTracks: 50, animationSetCoverage: 1 });
     expect(animation.metrics.bindPoseRmsErrorMm).toBeLessThanOrEqual(0.01);
     expect(animation.metrics.deformationMovedVertices).toBeGreaterThan(0);
     expect(animation.metrics.deformationMaximumMm).toBeGreaterThan(1);
     expect(animation.metrics.fingerBones).toBe(30);
     expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
-    expect(animation.metrics.fingerAnimationTracks).toBe(2);
+    expect(animation.metrics.fingerAnimationTracks).toBe(12);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
     expect(game.metrics).toMatchObject({ gameLods: 2, collisionPrimitives: 2 });
+    expect(game.metrics.animationSetCoverage).toBe(1);
     expect(game.warnings).toEqual([]);
     const lod1 = build.root.getObjectByName('LOD1_morphloom_human_body');
     expect(lod1).toBeInstanceOf(THREE.SkinnedMesh);
@@ -106,6 +144,22 @@ describe('cross-domain semi-professional readiness', () => {
     expect(((lod1 as THREE.SkinnedMesh).material as THREE.Material).opacity).toBe(1);
     expect(lod1!.layers.isEnabled(31)).toBe(true);
     expect(analyzeTopology(lod1 as THREE.SkinnedMesh).pass).toBe(true);
+  }, 20_000);
+
+  it('blocks animation and game delivery when a required runtime clip is missing', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    build.root.animations = build.root.animations.filter((clip) => clip.name !== 'morphloom_run_cycle');
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-clips/);
+    expect(game.pass).toBe(false);
+    expect(game.blockers.join(' ')).toMatch(/game-runtime-motion/);
+    expect(animation.metrics.animationSetCoverage).toBe(0.8);
   }, 20_000);
 
   it('passes industrial-design and millimetre 3D-print contracts on appropriate assets', () => {

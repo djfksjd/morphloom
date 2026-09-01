@@ -50,7 +50,7 @@ export interface CharacterBuild {
 }
 
 interface GameDeliveryManifest {
-  schema: 'morphloom.game-delivery/0.1';
+  schema: 'morphloom.game-delivery/0.2';
   lods: Array<{ level: number; triangles: number; role: 'render' }>;
   collisionPrimitives: Array<{
     id: string;
@@ -60,10 +60,12 @@ interface GameDeliveryManifest {
     height?: number;
   }>;
   textureSets: number;
+  animationSet: Array<{ name: string; duration: number; tracks: number; loop: true }>;
 }
 
 function createGameDeliveryManifest(
   metrics: Pick<CharacterMetrics, 'bounds' | 'triangles' | 'heightMeters'>,
+  animations: readonly THREE.AnimationClip[],
   lod1Triangles?: number,
 ): GameDeliveryManifest {
   const size = metrics.bounds.getSize(new THREE.Vector3());
@@ -72,7 +74,7 @@ function createGameDeliveryManifest(
   const bodyHeight = Math.max(bodyRadius * 2, metrics.heightMeters * 0.72);
   const headRadius = Math.max(0.06, Math.min(size.x, size.z) * 0.25);
   return {
-    schema: 'morphloom.game-delivery/0.1',
+    schema: 'morphloom.game-delivery/0.2',
     lods: [
       { level: 0, triangles: Math.round(metrics.triangles), role: 'render' },
       ...(lod1Triangles === undefined ? [] : [{ level: 1, triangles: lod1Triangles, role: 'render' as const }]),
@@ -82,6 +84,12 @@ function createGameDeliveryManifest(
       { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius },
     ],
     textureSets: 1,
+    animationSet: animations.map((clip) => ({
+      name: clip.name,
+      duration: clip.duration,
+      tracks: clip.tracks.length,
+      loop: true,
+    })),
   };
 }
 
@@ -519,7 +527,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
 
   const root = new THREE.Group();
   root.name = 'morphloom_character';
-  root.animations = [humanoidRig.clip];
+  root.animations = humanoidRig.clips;
   root.userData.characterIR = {
     version: '0.2',
     spec: structuredClone(spec),
@@ -570,6 +578,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   root.userData.surfaceSystem = completeMetrics.surfaces;
   root.userData.gameDelivery = createGameDeliveryManifest(
     completeMetrics,
+    root.animations,
     lod1 ? Math.round((lod1.geometry.getIndex()?.count ?? lod1.geometry.getAttribute('position').count) / 3) : undefined,
   );
   return { root, body, rig, metrics: completeMetrics };

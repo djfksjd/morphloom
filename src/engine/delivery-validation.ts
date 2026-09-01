@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.6.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.7.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -18,6 +18,9 @@ export interface SceneSnapshot {
   bones: number;
   animationClips: number;
   animationTracks: number;
+  /** Sorted semantic identities, used to reject a GLB that preserves only counts. */
+  animationClipNames: string[];
+  animationTrackNames: string[];
   gameLods: number;
   collisionPrimitives: number;
   materials: number;
@@ -212,11 +215,15 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
   const animations = root.animations ?? [];
   let animationTracks = 0;
+  const animationClipNames: string[] = [];
+  const animationTrackNames: string[] = [];
   for (const clip of animations) {
+    animationClipNames.push(clip.name);
     hasher.text(clip.name);
     hasher.number(clip.duration);
     animationTracks += clip.tracks.length;
     for (const track of clip.tracks) {
+      animationTrackNames.push(`${clip.name}:${track.name}`);
       hasher.text(track.name);
       hasher.array(track.times);
       hasher.array(track.values);
@@ -233,6 +240,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     bones,
     animationClips: animations.length,
     animationTracks,
+    animationClipNames: animationClipNames.sort(),
+    animationTrackNames: animationTrackNames.sort(),
     gameLods,
     collisionPrimitives,
     materials: materials.size,
@@ -353,6 +362,12 @@ export function compareGlbRoundTrip(
   if (source.animationTracks !== reopened.animationTracks) {
     blockers.push(`animation track count changed ${source.animationTracks}→${reopened.animationTracks}`);
   }
+  if (source.animationClipNames.join('|') !== reopened.animationClipNames.join('|')) {
+    blockers.push('animation clip identities changed during GLB round-trip');
+  }
+  if (source.animationTrackNames.join('|') !== reopened.animationTrackNames.join('|')) {
+    blockers.push('animation binding identities changed during GLB round-trip');
+  }
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -366,6 +381,8 @@ export function compareGlbRoundTrip(
   const exactParity = status === 'pass' && meshParity && triangleParity
     && source.skeletons === reopened.skeletons && source.bones === reopened.bones
     && source.animationClips === reopened.animationClips && source.animationTracks === reopened.animationTracks
+    && source.animationClipNames.join('|') === reopened.animationClipNames.join('|')
+    && source.animationTrackNames.join('|') === reopened.animationTrackNames.join('|')
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'

@@ -101,7 +101,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
-| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, four GLB animation tracks, a real skinned LOD1, and collision primitives · posed Web Hero |
+| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, five idle/walk/run/turn/gesture clips with 50 tracks, a real skinned LOD1, and collision primitives · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
 
@@ -128,8 +128,8 @@ This means all eight locked contracts made the correct decision; it does not mea
 |---|---:|---|
 | Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
 | Architecture | 98 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
-| Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · real finger weights/tracks · GLB reopen |
-| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · collision primitives · UV/normals · PBR |
+| Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · five required motions/50 tracks · finger weights/12 tracks · semantic GLB preservation |
+| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · idle/walk/run/turn/gesture · collision primitives · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · positive volume · measured 45° overhang |
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.

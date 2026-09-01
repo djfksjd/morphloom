@@ -1,11 +1,11 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T15:00:09.274Z",
+  "generatedAt": "2026-09-01T15:34:08.077Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
     "claimAllowed": false,
-    "reason": "No admitted same-input competitor WebGL captures and balanced blind panel are stored in this repository.",
+    "reason": "Local same-input Talon WebGL capture hashes exist, but no redistributable matched-camera multi-view set and balanced blind panel are stored in this repository.",
     "requiredEvidence": {
       "identicalInputFingerprint": true,
       "matchedCalibratedCameras": true,
@@ -33,6 +33,29 @@
       "skipped": 38,
       "failed": 0,
       "testFiles": 85
+    },
+    "latestShowcase": {
+      "repository": "https://github.com/img2threejs/img2threejs-showcase",
+      "commit": "db90e65a8d46f2a8d1a4eb76bd370b74ecfc467a",
+      "build": "pass",
+      "observedCharacters": [
+        {
+          "id": "leesin",
+          "bones": 42,
+          "clips": 10
+        },
+        {
+          "id": "boxing-man",
+          "bones": 41,
+          "clips": 19
+        },
+        {
+          "id": "monster",
+          "bones": 41,
+          "clips": 27
+        }
+      ],
+      "scope": "Showcase breadth evidence, not a matched GLB delivery-gate comparison."
     }
   },
   "morphloom": {
@@ -281,6 +304,7 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "animationSetCoverage": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -381,6 +405,7 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "animationSetCoverage": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -472,15 +497,15 @@
               "label": "손가락 리그·가중치",
               "pass": true,
               "score": 100,
-              "detail": "30 finger bones · 7000 weighted vertices · 2 animated tracks",
+              "detail": "30 finger bones · 7000 weighted vertices · 12 animated tracks",
               "blocking": true
             },
             {
               "id": "animation-clips",
-              "label": "재생 가능한 애니메이션",
+              "label": "납품용 기본 동작 세트",
               "pass": true,
               "score": 100,
-              "detail": "1 clips · 4 tracks",
+              "detail": "5 clips · 50 tracks · 필수 동작 100%",
               "blocking": true
             },
             {
@@ -511,8 +536,9 @@
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
-            "animationClips": 1,
-            "animationTracks": 4,
+            "animationClips": 5,
+            "animationTracks": 50,
+            "animationSetCoverage": 1,
             "bindPoseRmsErrorMm": 0.00001921850244310798,
             "deformationMovedVertices": 708,
             "deformationMaximumMm": 35.459934188085825,
@@ -521,7 +547,7 @@
             "collisionPrimitives": 2,
             "fingerBones": 30,
             "fingerWeightedVertices": 7000,
-            "fingerAnimationTracks": 2,
+            "fingerAnimationTracks": 12,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
@@ -616,6 +642,14 @@
               "blocking": true
             },
             {
+              "id": "game-runtime-motion",
+              "label": "게임 런타임 동작 세트",
+              "pass": true,
+              "score": 100,
+              "detail": "5 clips · idle/walk/run/turn/gesture 100%",
+              "blocking": true
+            },
+            {
               "id": "game-collision",
               "label": "충돌 프리미티브",
               "pass": true,
@@ -659,8 +693,9 @@
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
-            "animationClips": 1,
-            "animationTracks": 4,
+            "animationClips": 5,
+            "animationTracks": 50,
+            "animationSetCoverage": 1,
             "bindPoseRmsErrorMm": 0.00001921850244310798,
             "deformationMovedVertices": 708,
             "deformationMaximumMm": 35.459934188085825,
@@ -669,7 +704,7 @@
             "collisionPrimitives": 2,
             "fingerBones": 30,
             "fingerWeightedVertices": 7000,
-            "fingerAnimationTracks": 2,
+            "fingerAnimationTracks": 12,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
@@ -777,6 +812,7 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "animationSetCoverage": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -854,8 +890,13 @@
       "morphloom": "yes"
     },
     {
-      "capability": "skeletal animation plus measured bone deformation",
-      "img2threejs": "not established in pinned audit",
+      "capability": "skeletal animation breadth",
+      "img2threejs": "latest showcase: 41–42 bones and 10–27 clips",
+      "morphloom": "49 bones and 5 semantic delivery clips"
+    },
+    {
+      "capability": "measured bone deformation and exact GLB animation-binding preservation",
+      "img2threejs": "not established in pinned core audit",
       "morphloom": "yes"
     },
     {

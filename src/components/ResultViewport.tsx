@@ -27,6 +27,7 @@ import {
   buildFigmaReferenceSvg,
   compareGlbRoundTrip,
   createLocalBuildTelemetry,
+  DELIVERY_PIPELINE_REVISION,
   deliveryInputFingerprint,
   snapshotScene,
   withDeliveryAudit,
@@ -447,12 +448,25 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
   await waitForReferenceProjections(root);
   normalizeVisibleNormals(root);
   const exporter = new GLTFExporter();
-  const result = await exporter.parseAsync(root, {
-    binary: true,
-    onlyVisible: true,
-    includeCustomExtensions: true,
-    animations: root.animations,
-  });
+  // Three.js logs one warning per PBR material whenever it packs roughness G
+  // and metalness B into glTF's required shared texture. This is expected
+  // exporter behavior, not data loss; suppress only that exact noisy message.
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    if (args[0] === 'THREE.GLTFExporter: Merged metalnessMap and roughnessMap textures.') return;
+    originalWarn(...args);
+  };
+  let result: ArrayBuffer | Record<string, unknown>;
+  try {
+    result = await exporter.parseAsync(root, {
+      binary: true,
+      onlyVisible: true,
+      includeCustomExtensions: true,
+      animations: root.animations,
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
   if (!(result instanceof ArrayBuffer)) throw new Error('GLB exporter returned text output.');
   if (result.byteLength > 256 * 1024 * 1024) throw new Error('GLB exceeds the 256MB local safety limit.');
   return result;
@@ -996,8 +1010,11 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceBones: sourceSnapshot.bones,
           sourceAnimationClips: sourceSnapshot.animationClips,
           sourceAnimationTracks: sourceSnapshot.animationTracks,
+          sourceAnimationClipNames: sourceSnapshot.animationClipNames,
+          sourceAnimationTrackNames: sourceSnapshot.animationTrackNames,
           sourceGameLods: sourceSnapshot.gameLods,
           sourceCollisionPrimitives: sourceSnapshot.collisionPrimitives,
+          compilerRevision: DELIVERY_PIPELINE_REVISION,
         },
       });
       runtime.syncDiagnostics();
@@ -1018,10 +1035,17 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.inputFingerprint = audit.inputFingerprint;
               diagnostic.__MORPHLOOM__.sceneFingerprint = audit.fingerprint;
               diagnostic.__MORPHLOOM__.deliveryStatus = audit.status;
+              diagnostic.__MORPHLOOM__.deliveryScore = audit.score;
+              diagnostic.__MORPHLOOM__.buildFingerprint = audit.buildFingerprint;
+              diagnostic.__MORPHLOOM__.glbBytes = audit.glbBytes;
+              diagnostic.__MORPHLOOM__.boundsErrorMm = audit.boundsErrorMm;
+              diagnostic.__MORPHLOOM__.namedNodeCoverage = audit.namedNodeCoverage;
               diagnostic.__MORPHLOOM__.reopenedSkeletons = audit.reopened?.skeletons;
               diagnostic.__MORPHLOOM__.reopenedBones = audit.reopened?.bones;
               diagnostic.__MORPHLOOM__.reopenedAnimationClips = audit.reopened?.animationClips;
               diagnostic.__MORPHLOOM__.reopenedAnimationTracks = audit.reopened?.animationTracks;
+              diagnostic.__MORPHLOOM__.reopenedAnimationClipNames = audit.reopened?.animationClipNames;
+              diagnostic.__MORPHLOOM__.reopenedAnimationTrackNames = audit.reopened?.animationTrackNames;
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }

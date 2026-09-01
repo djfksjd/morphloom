@@ -112,7 +112,7 @@ const output = {
   visualSuperiorityPolicy: {
     status: 'not-established',
     claimAllowed: false,
-    reason: 'No admitted same-input competitor WebGL captures and balanced blind panel are stored in this repository.',
+    reason: 'Local same-input Talon WebGL capture hashes exist, but no redistributable matched-camera multi-view set and balanced blind panel are stored in this repository.',
     requiredEvidence: {
       identicalInputFingerprint: true,
       matchedCalibratedCameras: true,
@@ -130,6 +130,17 @@ const output = {
     commit: '9fbd0ca5bbcc3b13bebe712745d6784d33db0b85',
     testedRuntime: 'Python 3.12.13',
     observedTestResult: { tests: 1083, passed: 1045, skipped: 38, failed: 0, testFiles: 85 },
+    latestShowcase: {
+      repository: 'https://github.com/img2threejs/img2threejs-showcase',
+      commit: 'db90e65a8d46f2a8d1a4eb76bd370b74ecfc467a',
+      build: 'pass',
+      observedCharacters: [
+        { id: 'leesin', bones: 42, clips: 10 },
+        { id: 'boxing-man', bones: 41, clips: 19 },
+        { id: 'monster', bones: 41, clips: 27 },
+      ],
+      scope: 'Showcase breadth evidence, not a matched GLB delivery-gate comparison.',
+    },
   },
   morphloom: {
     contractAudit,
@@ -168,7 +179,8 @@ const output = {
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'GLB and DCC delivery validation', img2threejs: 'Three.js factory focus', morphloom: 'yes' },
-    { capability: 'skeletal animation plus measured bone deformation', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
+    { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 5 semantic delivery clips' : 'blocked' },
+    { capability: 'measured bone deformation and exact GLB animation-binding preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
     { capability: 'real skinned LOD1 plus collision manifest preserved in GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass ? 'yes' : 'blocked' },
     { capability: 'millimetre 3D-print topology, volume, feature and 45-degree overhang audit', img2threejs: 'not established in pinned audit', morphloom: domainProof.print3d?.pass ? 'yes' : 'blocked' },
     { capability: 'architecture plan, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },

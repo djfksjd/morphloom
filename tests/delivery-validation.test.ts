@@ -107,6 +107,22 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers.join(' ')).toMatch(/collision primitive manifest changed/);
   });
 
+  it('blocks a GLB that preserves animation counts but changes semantic bindings', () => {
+    const root = new THREE.Group();
+    root.name = 'animation_semantics_fixture';
+    root.animations = [new THREE.AnimationClip('walk', 1, [
+      new THREE.VectorKeyframeTrack('hips.position', [0, 1], [0, 0, 0, 0, 0.01, 0]),
+    ])];
+    const source = snapshotScene(root);
+    const reopened = structuredClone(source);
+    reopened.animationClipNames = ['renamed'];
+    reopened.animationTrackNames = ['renamed:unknown.position'];
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers.join(' ')).toMatch(/clip identities changed/);
+    expect(audit.blockers.join(' ')).toMatch(/binding identities changed/);
+  });
+
   it('exports an honest Figma reference sheet and measured local telemetry', () => {
     const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     const snapshot = snapshotScene(build.root);

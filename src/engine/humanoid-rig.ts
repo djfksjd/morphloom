@@ -134,6 +134,8 @@ function extendedHumanoidBones(
 export interface HumanoidRigResult {
   skeleton: THREE.Skeleton;
   rootBone: THREE.Bone;
+  clips: THREE.AnimationClip[];
+  /** Backward-compatible primary preview clip. */
   clip: THREE.AnimationClip;
   boneCount: number;
   weightedVertices: number;
@@ -141,37 +143,125 @@ export interface HumanoidRigResult {
   maximumInfluences: number;
 }
 
-function createIdleClip(bones: Map<string, THREE.Bone>, heightMeters: number): THREE.AnimationClip {
+type EulerTriplet = readonly [number, number, number];
+
+function quaternionTrack(
+  bones: Map<string, THREE.Bone>,
+  name: string,
+  times: readonly number[],
+  rotations: readonly EulerTriplet[],
+): THREE.QuaternionKeyframeTrack {
+  if (!bones.has(name)) throw new Error(`Humanoid animation anchor ${name} is missing.`);
+  if (times.length !== rotations.length) throw new Error(`Humanoid animation key count mismatch for ${name}.`);
+  const values: number[] = [];
+  for (const [x, y, z] of rotations) {
+    const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(x, y, z));
+    values.push(q.x, q.y, q.z, q.w);
+  }
+  return new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, [...times], values);
+}
+
+function hipsPositionTrack(
+  bones: Map<string, THREE.Bone>,
+  heightMeters: number,
+  times: readonly number[],
+  offsets: ReadonlyArray<readonly [number, number, number]>,
+): THREE.VectorKeyframeTrack {
   const hips = bones.get('hips');
-  const chest = bones.get('chest');
-  if (!hips || !chest) throw new Error('Humanoid animation anchors are missing.');
-  const times = [0, 1, 2];
-  const hipBase = hips.position;
-  const hipLift = heightMeters * 0.0025;
-  const hipsTrack = new THREE.VectorKeyframeTrack('hips.position', times, [
-    hipBase.x, hipBase.y, hipBase.z,
-    hipBase.x, hipBase.y + hipLift, hipBase.z,
-    hipBase.x, hipBase.y, hipBase.z,
+  if (!hips) throw new Error('Humanoid animation anchor hips is missing.');
+  if (times.length !== offsets.length) throw new Error('Humanoid hips animation key count mismatch.');
+  const values = offsets.flatMap(([x, y, z]) => [
+    hips.position.x + x * heightMeters,
+    hips.position.y + y * heightMeters,
+    hips.position.z + z * heightMeters,
   ]);
-  const rest = new THREE.Quaternion();
-  const breath = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.012, 0, 0));
-  const chestTrack = new THREE.QuaternionKeyframeTrack('chest.quaternion', times, [
-    rest.x, rest.y, rest.z, rest.w,
-    breath.x, breath.y, breath.z, breath.w,
-    rest.x, rest.y, rest.z, rest.w,
-  ]);
-  const fingerTracks = ['index_01_L', 'index_01_R'].map((name, index) => {
-    if (!bones.has(name)) throw new Error(`Humanoid finger animation anchor ${name} is missing.`);
-    const curl = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, index === 0 ? -0.08 : 0.08));
-    return new THREE.QuaternionKeyframeTrack(`${name}.quaternion`, times, [
-      rest.x, rest.y, rest.z, rest.w,
-      curl.x, curl.y, curl.z, curl.w,
-      rest.x, rest.y, rest.z, rest.w,
-    ]);
-  });
-  const clip = new THREE.AnimationClip('morphloom_idle_preview', 2, [hipsTrack, chestTrack, ...fingerTracks]);
-  if (!clip.validate()) throw new Error('Generated humanoid animation clip is invalid.');
+  return new THREE.VectorKeyframeTrack('hips.position', [...times], values);
+}
+
+function animationClip(name: string, duration: number, tracks: THREE.KeyframeTrack[]): THREE.AnimationClip {
+  const clip = new THREE.AnimationClip(name, duration, tracks);
+  if (!clip.validate()) throw new Error(`Generated humanoid animation clip ${name} is invalid.`);
   return clip;
+}
+
+function createAnimationSet(bones: Map<string, THREE.Bone>, heightMeters: number): THREE.AnimationClip[] {
+  const rest: EulerTriplet = [0, 0, 0];
+  const idleTimes = [0, 1, 2] as const;
+  const idle = animationClip('morphloom_idle_preview', 2, [
+    hipsPositionTrack(bones, heightMeters, idleTimes, [[0, 0, 0], [0, 0.0025, 0], [0, 0, 0]]),
+    quaternionTrack(bones, 'chest', idleTimes, [rest, [0.012, 0, 0], rest]),
+    quaternionTrack(bones, 'index_01_L', idleTimes, [rest, [0, 0, -0.08], rest]),
+    quaternionTrack(bones, 'index_01_R', idleTimes, [rest, [0, 0, 0.08], rest]),
+  ]);
+
+  const cyclicTimes = [0, 0.25, 0.5, 0.75, 1] as const;
+  const alternating = (amount: number): EulerTriplet[] => [
+    [amount, 0, 0], [0, 0, 0], [-amount, 0, 0], [0, 0, 0], [amount, 0, 0],
+  ];
+  const alternatingOpposite = (amount: number): EulerTriplet[] => alternating(-amount);
+  const bend = (amount: number): EulerTriplet[] => [
+    [0, 0, 0], [amount, 0, 0], [0, 0, 0], [amount * 0.35, 0, 0], [0, 0, 0],
+  ];
+  const walk = animationClip('morphloom_walk_cycle', 1.2, [
+    hipsPositionTrack(bones, heightMeters, cyclicTimes, [[0, 0, 0], [0, 0.008, 0], [0, 0, 0], [0, 0.008, 0], [0, 0, 0]]),
+    quaternionTrack(bones, 'chest', cyclicTimes, [[0, 0.035, 0], rest, [0, -0.035, 0], rest, [0, 0.035, 0]]),
+    quaternionTrack(bones, 'hip_L', cyclicTimes, alternating(0.42)),
+    quaternionTrack(bones, 'hip_R', cyclicTimes, alternatingOpposite(0.42)),
+    quaternionTrack(bones, 'knee_L', cyclicTimes, bend(0.62)),
+    quaternionTrack(bones, 'knee_R', cyclicTimes, [rest, [0.22, 0, 0], rest, [0.62, 0, 0], rest]),
+    quaternionTrack(bones, 'ankle_L', cyclicTimes, alternatingOpposite(0.15)),
+    quaternionTrack(bones, 'ankle_R', cyclicTimes, alternating(0.15)),
+    quaternionTrack(bones, 'shoulder_L', cyclicTimes, alternatingOpposite(0.32)),
+    quaternionTrack(bones, 'shoulder_R', cyclicTimes, alternating(0.32)),
+    quaternionTrack(bones, 'elbow_L', cyclicTimes, bend(0.28)),
+    quaternionTrack(bones, 'elbow_R', cyclicTimes, [rest, [0.12, 0, 0], rest, [0.28, 0, 0], rest]),
+  ]);
+
+  const run = animationClip('morphloom_run_cycle', 0.8, [
+    hipsPositionTrack(bones, heightMeters, cyclicTimes, [[0, 0, 0], [0, 0.018, 0.008], [0, 0.003, 0], [0, 0.018, -0.008], [0, 0, 0]]),
+    quaternionTrack(bones, 'chest', cyclicTimes, [[0.1, 0.055, 0], [0.08, 0, 0], [0.1, -0.055, 0], [0.08, 0, 0], [0.1, 0.055, 0]]),
+    quaternionTrack(bones, 'hip_L', cyclicTimes, alternating(0.72)),
+    quaternionTrack(bones, 'hip_R', cyclicTimes, alternatingOpposite(0.72)),
+    quaternionTrack(bones, 'knee_L', cyclicTimes, bend(1.02)),
+    quaternionTrack(bones, 'knee_R', cyclicTimes, [rest, [0.42, 0, 0], rest, [1.02, 0, 0], rest]),
+    quaternionTrack(bones, 'ankle_L', cyclicTimes, alternatingOpposite(0.28)),
+    quaternionTrack(bones, 'ankle_R', cyclicTimes, alternating(0.28)),
+    quaternionTrack(bones, 'shoulder_L', cyclicTimes, alternatingOpposite(0.7)),
+    quaternionTrack(bones, 'shoulder_R', cyclicTimes, alternating(0.7)),
+    quaternionTrack(bones, 'elbow_L', cyclicTimes, bend(0.75)),
+    quaternionTrack(bones, 'elbow_R', cyclicTimes, [rest, [0.3, 0, 0], rest, [0.75, 0, 0], rest]),
+  ]);
+
+  const turnTimes = [0, 0.5, 1, 1.5, 2] as const;
+  const turn = animationClip('morphloom_turn_in_place', 2, [
+    quaternionTrack(bones, 'hips', turnTimes, [rest, [0, 0.28, 0], [0, 0, 0], [0, -0.28, 0], rest]),
+    quaternionTrack(bones, 'chest', turnTimes, [rest, [0, 0.16, 0], [0, 0, 0], [0, -0.16, 0], rest]),
+    quaternionTrack(bones, 'neck', turnTimes, [rest, [0, 0.2, 0], [0, 0, 0], [0, -0.2, 0], rest]),
+    quaternionTrack(bones, 'head', turnTimes, [rest, [0, 0.3, 0], [0, 0, 0], [0, -0.3, 0], rest]),
+    quaternionTrack(bones, 'shoulder_L', turnTimes, [rest, [0, -0.1, 0], rest, [0, 0.1, 0], rest]),
+    quaternionTrack(bones, 'shoulder_R', turnTimes, [rest, [0, -0.1, 0], rest, [0, 0.1, 0], rest]),
+  ]);
+
+  const gestureTimes = [0, 0.35, 0.9, 1.4] as const;
+  const gestureTracks: THREE.KeyframeTrack[] = [
+    quaternionTrack(bones, 'shoulder_L', gestureTimes, [rest, [-0.35, 0, -0.45], [-0.35, 0, -0.45], rest]),
+    quaternionTrack(bones, 'shoulder_R', gestureTimes, [rest, [-0.35, 0, 0.45], [-0.35, 0, 0.45], rest]),
+    quaternionTrack(bones, 'elbow_L', gestureTimes, [rest, [0, 0, -0.72], [0, 0, -0.72], rest]),
+    quaternionTrack(bones, 'elbow_R', gestureTimes, [rest, [0, 0, 0.72], [0, 0, 0.72], rest]),
+    quaternionTrack(bones, 'wrist_L', gestureTimes, [rest, [0.08, 0, -0.16], [0.08, 0, -0.16], rest]),
+    quaternionTrack(bones, 'wrist_R', gestureTimes, [rest, [0.08, 0, 0.16], [0.08, 0, 0.16], rest]),
+  ];
+  for (const side of ['L', 'R'] as const) {
+    const sign = side === 'L' ? -1 : 1;
+    for (const finger of FINGERS) {
+      const curl = finger.name === 'index' ? 0.16 : finger.name === 'thumb' ? 0.34 : 0.68;
+      gestureTracks.push(quaternionTrack(bones, `${finger.name}_01_${side}`, gestureTimes, [
+        rest, [0, 0, curl * sign], [0, 0, curl * sign], rest,
+      ]));
+    }
+  }
+  const gesture = animationClip('morphloom_hand_gesture', 1.4, gestureTracks);
+  return [idle, walk, run, turn, gesture];
 }
 
 /**
@@ -273,10 +363,12 @@ export function rigHumanoidGeometry(
   geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(skinIndices, 4));
   geometry.setAttribute('skinWeight', new THREE.Float32BufferAttribute(skinWeights, 4));
   const skeleton = new THREE.Skeleton(orderedBones);
+  const clips = createAnimationSet(bones, heightMeters);
   return {
     skeleton,
     rootBone: bones.get('hips')!,
-    clip: createIdleClip(bones, heightMeters),
+    clips,
+    clip: clips[0],
     boneCount: orderedBones.length,
     weightedVertices: position.count,
     maximumWeightError,

@@ -19,7 +19,13 @@
     "frontColorProjection": true,
     "sourceDerivedNormalMap": false,
     "sourceDerivedRoughnessMap": false,
-    "photoFidelityVerdict": "strong"
+    "photoFidelityVerdict": "strong",
+    "latestShowcaseCommit": "db90e65a8d46f2a8d1a4eb76bd370b74ecfc467a",
+    "localWebglCapture": {
+      "sha256": "737d805e843a481804b7ce3a97b0c2504fcdd3149eea2a223f33253cceacfa00",
+      "viewport": "1280x720",
+      "redistributed": false
+    }
   },
   "morphloom": {
     "fixture": "TALON_REFERENCE_BENCHMARK_IR",
@@ -44,11 +50,18 @@
     "overallEnvelopeMm": [240, 83.26, 9.715],
     "glbRoundTrip": {
       "status": "pass",
-      "verificationMode": "headless geometry and material scalars; reference-derived maps excluded",
-      "sizeMb": 0.53,
+      "verificationMode": "local Chromium Three.js GLTFExporter to GLTFLoader with projected normal and roughness maps",
+      "sizeMb": 11.78,
       "boundsDriftMm": 0,
       "namedNodesPercent": 100,
-      "fingerprint": "68ed14db27324022"
+      "fingerprint": "9444d74036e602f1",
+      "buildFingerprint": "7af5b6c8d8fc52ad",
+      "inputFingerprint": "8100ee7ce9d51a92"
+    },
+    "localWebglCapture": {
+      "sha256": "a17860fdeaa97696aa9f2e101991ec97fea85b7726b39f20a007fa44388e9f37",
+      "viewport": "1280x720",
+      "redistributed": false
     },
     "deliveryAssetVerdict": "winner"
   },

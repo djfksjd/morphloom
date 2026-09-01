@@ -11,6 +11,14 @@ export type ProductionDomain =
   | 'game'
   | '3d-print';
 
+const REQUIRED_RUNTIME_CLIPS = [
+  'morphloom_idle_preview',
+  'morphloom_walk_cycle',
+  'morphloom_run_cycle',
+  'morphloom_turn_in_place',
+  'morphloom_hand_gesture',
+] as const;
+
 export interface DomainReadinessInput {
   domain: ProductionDomain;
   root: THREE.Object3D;
@@ -50,6 +58,7 @@ export interface DomainReadinessReport {
     bones: number;
     animationClips: number;
     animationTracks: number;
+    animationSetCoverage: number;
     bindPoseRmsErrorMm?: number;
     deformationMovedVertices: number;
     deformationMaximumMm: number;
@@ -297,6 +306,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const geometry = inspectGeometry(input.root);
   const deformation = inspectSkinDeformation(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
+  const deliveredClipNames = new Set(snapshot.animationClipNames);
+  const animationSetCoverage = REQUIRED_RUNTIME_CLIPS.filter((name) => deliveredClipNames.has(name)).length
+    / REQUIRED_RUNTIME_CLIPS.length;
   const namedMeshCoverage = snapshot.meshes > 0 ? snapshot.namedMeshes / snapshot.meshes : 0;
   const uvMeshCoverage = snapshot.meshes > 0 ? geometry.uvMeshes / snapshot.meshes : 0;
   const normalMeshCoverage = snapshot.meshes > 0 ? geometry.normalMeshes / snapshot.meshes : 0;
@@ -333,9 +345,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const deformationPass = deformation.finite && bindPoseRmsErrorMm <= 0.01
       && deformation.movedVertices > 0 && deformation.maximumMm > 1 && deformation.maximumMm < 500;
     add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
-    const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 2;
+    const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 10;
     add('animation-finger-rig', '손가락 리그·가중치', fingerRigPass, fingerRigPass ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices · ${geometry.fingerAnimationTracks} animated tracks`);
-    add('animation-clips', '재생 가능한 애니메이션', snapshot.animationClips >= 1 && snapshot.animationTracks >= 2, snapshot.animationClips >= 1 ? 100 : 0, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks`);
+    const animationSetPass = snapshot.animationClips >= 5 && snapshot.animationTracks >= 50 && animationSetCoverage === 1;
+    add('animation-clips', '납품용 기본 동작 세트', animationSetPass, animationSetPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks · 필수 동작 ${Math.round(animationSetCoverage * 100)}%`);
     add('animation-uv', '캐릭터 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('animation-evidence', '캐릭터 베이스 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
   } else if (input.domain === 'game') {
@@ -347,6 +360,8 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
+    const runtimeMotionPass = snapshot.animationClips >= 5 && snapshot.animationTracks >= 50 && animationSetCoverage === 1;
+    add('game-runtime-motion', '게임 런타임 동작 세트', runtimeMotionPass, runtimeMotionPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · idle/walk/run/turn/gesture ${Math.round(animationSetCoverage * 100)}%`);
     add('game-collision', '충돌 프리미티브', snapshot.collisionPrimitives >= 1, snapshot.collisionPrimitives >= 1 ? 100 : 0, `${snapshot.collisionPrimitives} collision primitives`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
@@ -387,6 +402,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       bones: snapshot.bones,
       animationClips: snapshot.animationClips,
       animationTracks: snapshot.animationTracks,
+      animationSetCoverage,
       bindPoseRmsErrorMm: deformation.bindPoseRmsErrorMm,
       deformationMovedVertices: deformation.movedVertices,
       deformationMaximumMm: deformation.maximumMm,
