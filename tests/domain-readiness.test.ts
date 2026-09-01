@@ -265,6 +265,34 @@ describe('cross-domain semi-professional readiness', () => {
     expect(print.warnings).toEqual([]);
   }, 20_000);
 
+  it('blocks placeholder UVs and invalid normals even when the attributes exist', () => {
+    const broken = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
+    broken.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const uv = object.geometry.getAttribute('uv');
+      const normal = object.geometry.getAttribute('normal');
+      if (uv) {
+        for (let index = 0; index < uv.array.length; index += 1) uv.array[index] = 0;
+        if (uv.array.length > 0) uv.array[0] = Number.NaN;
+        uv.needsUpdate = true;
+      }
+      if (normal) {
+        for (let index = 0; index < normal.array.length; index += 1) normal.array[index] = 0;
+        normal.needsUpdate = true;
+      }
+    });
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: broken.root, topology: broken.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(false);
+    expect(report.blockers.some((blocker) => blocker.startsWith('design-uv:'))).toBe(true);
+    expect(report.blockers.some((blocker) => blocker.startsWith('design-normals:'))).toBe(true);
+    expect(report.metrics.uvFiniteCoverage).toBeLessThan(1);
+    expect(report.metrics.degenerateUvTriangleFraction).toBeGreaterThan(0.99);
+    expect(report.metrics.normalValidityCoverage).toBe(0);
+  });
+
   it('measures unsupported 45-degree overhangs instead of emitting a fixed print warning', () => {
     const material = { color: '#888888', surface: 'molded-polymer' as const, roughness: 0.7, microNormalStrength: 0.2 };
     const evidence = { status: 'measured' as const, source: 'print regression fixture' };

@@ -50,6 +50,10 @@ export interface DomainReadinessReport {
     namedMeshCoverage: number;
     uvMeshCoverage: number;
     normalMeshCoverage: number;
+    uvFiniteCoverage: number;
+    degenerateUvTriangleFraction: number;
+    normalValidityCoverage: number;
+    maximumNormalUnitError: number;
     pbrSurfaceCoverage: number;
     skeletons: number;
     bones: number;
@@ -198,10 +202,21 @@ function inspectGeometry(root: THREE.Object3D): {
   visualHullMeshes: number;
   minimumVisualHullViewIoU: number;
   confidenceWeightedVisualHullIoU: number;
+  uvFiniteCoverage: number;
+  degenerateUvTriangleFraction: number;
+  normalValidityCoverage: number;
+  maximumNormalUnitError: number;
 } {
   let meshes = 0;
   let uvMeshes = 0;
   let normalMeshes = 0;
+  let uvVertices = 0;
+  let invalidUvVertices = 0;
+  let uvTriangles = 0;
+  let degenerateUvTriangles = 0;
+  let normalVertices = 0;
+  let invalidNormalVertices = 0;
+  let maximumNormalUnitError = 0;
   let maximumSkinWeightError = 0;
   let maximumSkinInfluences = 0;
   let minimumMeshAxisMm = Number.POSITIVE_INFINITY;
@@ -257,8 +272,35 @@ function inspectGeometry(root: THREE.Object3D): {
         facialMorphMaximumMm = Math.max(facialMorphMaximumMm, displacement);
       }
     }
-    if (geometry.hasAttribute('uv')) uvMeshes += 1;
-    if (geometry.hasAttribute('normal')) normalMeshes += 1;
+    const uv = geometry.getAttribute('uv');
+    const normal = geometry.getAttribute('normal');
+    if (uv && uv.itemSize >= 2 && uv.count === position.count) {
+      uvMeshes += 1;
+      uvVertices += uv.count;
+      for (let vertex = 0; vertex < uv.count; vertex += 1) {
+        if (!Number.isFinite(uv.getX(vertex)) || !Number.isFinite(uv.getY(vertex))) invalidUvVertices += 1;
+      }
+    } else if (uv) {
+      uvVertices += position.count;
+      invalidUvVertices += position.count;
+    }
+    if (normal && normal.itemSize >= 3 && normal.count === position.count) {
+      normalMeshes += 1;
+      normalVertices += normal.count;
+      for (let vertex = 0; vertex < normal.count; vertex += 1) {
+        const nx = normal.getX(vertex);
+        const ny = normal.getY(vertex);
+        const nz = normal.getZ(vertex);
+        const length = Math.hypot(nx, ny, nz);
+        const error = Math.abs(length - 1);
+        maximumNormalUnitError = Math.max(maximumNormalUnitError, Number.isFinite(error) ? error : Number.POSITIVE_INFINITY);
+        if (!Number.isFinite(length) || error > 0.05) invalidNormalVertices += 1;
+      }
+    } else if (normal) {
+      normalVertices += position.count;
+      invalidNormalVertices += position.count;
+      maximumNormalUnitError = Number.POSITIVE_INFINITY;
+    }
     if (!geometry.boundingBox) geometry.computeBoundingBox();
     if (geometry.boundingBox) {
       const size = geometry.boundingBox.clone().applyMatrix4(object.matrixWorld).getSize(new THREE.Vector3());
@@ -315,6 +357,14 @@ function inspectGeometry(root: THREE.Object3D): {
         if (normalY < -Math.SQRT1_2 && centroidY > bounds.min.y + buildPlateToleranceM) {
           unsupportedOverhangAreaM2 += area;
         }
+        if (uv && uv.itemSize >= 2 && uv.count === position.count) {
+          uvTriangles += 1;
+          const ua = uv.getX(ia); const va = uv.getY(ia);
+          const ub = uv.getX(ib); const vb = uv.getY(ib);
+          const uc = uv.getX(ic); const vc = uv.getY(ic);
+          const signedDoubleUvArea = (ub - ua) * (vc - va) - (vb - va) * (uc - ua);
+          if (!Number.isFinite(signedDoubleUvArea) || Math.abs(signedDoubleUvArea) <= 1e-10) degenerateUvTriangles += 1;
+        }
       }
     }
   });
@@ -338,6 +388,10 @@ function inspectGeometry(root: THREE.Object3D): {
     visualHullMeshes,
     minimumVisualHullViewIoU,
     confidenceWeightedVisualHullIoU,
+    uvFiniteCoverage: uvVertices > 0 ? 1 - invalidUvVertices / uvVertices : 0,
+    degenerateUvTriangleFraction: uvTriangles > 0 ? degenerateUvTriangles / uvTriangles : 1,
+    normalValidityCoverage: normalVertices > 0 ? 1 - invalidNormalVertices / normalVertices : 0,
+    maximumNormalUnitError,
   };
 }
 
@@ -426,6 +480,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const namedMeshCoverage = snapshot.meshes > 0 ? snapshot.namedMeshes / snapshot.meshes : 0;
   const uvMeshCoverage = snapshot.meshes > 0 ? geometry.uvMeshes / snapshot.meshes : 0;
   const normalMeshCoverage = snapshot.meshes > 0 ? geometry.normalMeshes / snapshot.meshes : 0;
+  const uvIntegrityScore = Math.min(uvMeshCoverage, geometry.uvFiniteCoverage,
+    Math.max(0, 1 - geometry.degenerateUvTriangleFraction)) * 100;
+  const normalIntegrityScore = Math.min(normalMeshCoverage, geometry.normalValidityCoverage) * 100;
   const pbrSurfaceCoverage = surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
@@ -454,10 +511,15 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       footprint ? `IoU ${footprint.iou.toFixed(3)} · 과잉 ${(footprint.falsePositiveFraction * 100).toFixed(1)}% · 누락 ${(footprint.falseNegativeFraction * 100).toFixed(1)}%${footprint.voidOccupancy.length ? ` · 공백 ${footprint.voidOccupancy.map((entry) => `${entry.id} ${(entry.fraction * 100).toFixed(1)}%`).join(', ')}` : ''}` : '컴파일된 도면 외곽 검증 없음');
     add('architecture-evidence', '실측·도면 근거', input.evidenceScore >= 85, input.evidenceScore, `${input.evidenceScore}/85`);
     add('architecture-surface', '건축 마감 표면', pbrSurfaceCoverage >= 0.8, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal (최소 80%)`);
+    const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('architecture-uv', '건축 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
   } else if (input.domain === 'industrial-design') {
     add('design-topology', '제품 토폴로지', topology.pass, topology.pass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges}`);
     add('design-evidence', '제품 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
-    add('design-uv', '제품 UV', uvMeshCoverage >= 0.95, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
+    const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('design-uv', '제품 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
+    const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
+    add('design-normals', '제품 노멀 무결성', normalPass, normalIntegrityScore, `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
     add('design-surface', '제품 PBR 미세표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
   } else if (input.domain === 'animation') {
     const bodyTopologyPass = skinnedTopology?.pass === true;
@@ -483,15 +545,20 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       && animationDelivery.inPlaceCoverage === 1
       && animationDelivery.maximumQuaternionError <= 1e-5;
     add('animation-clip-quality', '동작 바인딩·반복·루트모션 품질', animationQualityPass, animationQualityPass ? 100 : 0, `binding ${Math.round(animationDelivery.bindingCoverage * 100)}% · motion ${Math.round(animationDelivery.motionCoverage * 100)}% · loop ${Math.round(animationDelivery.loopClosureCoverage * 100)}% · in-place ${Math.round(animationDelivery.inPlaceCoverage * 100)}%`);
-    add('animation-uv', '캐릭터 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
+    const uvPass = uvMeshCoverage >= 0.8 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('animation-uv', '캐릭터 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
+    const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
+    add('animation-normals', '캐릭터 노멀 무결성', normalPass, normalIntegrityScore, `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
     add('animation-evidence', '캐릭터 베이스 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
   } else if (input.domain === 'game') {
     const triangleBudget = input.triangleBudget ?? 100_000;
     add('game-budget', '실시간 삼각형 예산', snapshot.triangles <= triangleBudget, snapshot.triangles <= triangleBudget ? 100 : triangleBudget / snapshot.triangles * 100, `${snapshot.triangles.toLocaleString()} / ${triangleBudget.toLocaleString()} tris`);
     const runtimeTopologyPass = topology.nonManifoldEdges === 0 && topology.degenerateTriangles === 0;
     add('game-topology', '게임 메시 토폴로지', runtimeTopologyPass, runtimeTopologyPass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`);
-    add('game-uv', '게임 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
-    add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
+    const uvPass = uvMeshCoverage >= 0.8 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('game-uv', '게임 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
+    const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
+    add('game-normals', '게임 노멀 무결성', normalPass, normalIntegrityScore, `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
     const gameFacialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
@@ -541,6 +608,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       namedMeshCoverage,
       uvMeshCoverage,
       normalMeshCoverage,
+      uvFiniteCoverage: geometry.uvFiniteCoverage,
+      degenerateUvTriangleFraction: geometry.degenerateUvTriangleFraction,
+      normalValidityCoverage: geometry.normalValidityCoverage,
+      maximumNormalUnitError: geometry.maximumNormalUnitError,
       pbrSurfaceCoverage,
       skeletons: snapshot.skeletons,
       bones: snapshot.bones,

@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T17:06:26.834Z",
+  "generatedAt": "2026-09-01T17:22:19.084Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -324,10 +324,18 @@
             },
             {
               "id": "design-uv",
-              "label": "제품 UV",
+              "label": "제품 UV 무결성",
+              "pass": true,
+              "score": 99,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.95%",
+              "blocking": true
+            },
+            {
+              "id": "design-normals",
+              "label": "제품 노멀 무결성",
               "pass": true,
               "score": 100,
-              "detail": "100% 메시 UV",
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.09e-8",
               "blocking": true
             },
             {
@@ -347,6 +355,10 @@
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0.009508716323296355,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.087549942966007e-8,
             "pbrSurfaceCoverage": 1,
             "skeletons": 0,
             "bones": 0,
@@ -384,7 +396,7 @@
         "architecture": {
           "domain": "architecture",
           "pass": true,
-          "score": 98,
+          "score": 99,
           "checks": [
             {
               "id": "determinism",
@@ -449,6 +461,14 @@
               "score": 100,
               "detail": "100% micro-normal (최소 80%)",
               "blocking": true
+            },
+            {
+              "id": "architecture-uv",
+              "label": "건축 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
             }
           ],
           "blockers": [],
@@ -459,6 +479,10 @@
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.3657002740383746e-8,
             "pbrSurfaceCoverage": 1,
             "skeletons": 0,
             "bones": 0,
@@ -596,10 +620,18 @@
             },
             {
               "id": "animation-uv",
-              "label": "캐릭터 UV",
+              "label": "캐릭터 UV 무결성",
               "pass": true,
               "score": 100,
-              "detail": "100% 메시 UV",
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "animation-normals",
+              "label": "캐릭터 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.59e-8",
               "blocking": true
             },
             {
@@ -619,6 +651,10 @@
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
@@ -708,18 +744,18 @@
             },
             {
               "id": "game-uv",
-              "label": "게임 UV",
+              "label": "게임 UV 무결성",
               "pass": true,
               "score": 100,
-              "detail": "100% 메시 UV",
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
               "blocking": true
             },
             {
               "id": "game-normals",
-              "label": "게임 노멀",
+              "label": "게임 노멀 무결성",
               "pass": true,
               "score": 100,
-              "detail": "100% 메시 노멀",
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.59e-8",
               "blocking": true
             },
             {
@@ -803,6 +839,10 @@
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
@@ -931,6 +971,10 @@
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0.012006861063464836,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.983618057645799e-8,
             "pbrSurfaceCoverage": 1,
             "skeletons": 0,
             "bones": 0,
@@ -1051,6 +1095,11 @@
     },
     {
       "capability": "real skinned LOD1 plus collision manifest preserved in GLB",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "finite non-degenerate UV triangles and near-unit normal delivery gate",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },

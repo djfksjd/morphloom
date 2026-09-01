@@ -12,7 +12,7 @@ Apply only the contract matching the requested destination. Never award one univ
 ## Game and real-time use
 
 - Declare the triangle budget before optimization and verify it after export. Preserve silhouette, UVs, normals, material slots, skeleton, and named edit units while reducing geometry.
-- Block non-manifold or degenerate geometry, missing UVs/normals, unnormalized skin weights, and missing runtime PBR surfaces. Open garment/hair borders may be intentional only when identified and free of non-manifold edges.
+- Block non-manifold or degenerate geometry, missing UVs/normals, unnormalized skin weights, and missing runtime PBR surfaces. Attribute names alone are not proof: require finite UV values, no more than 5% zero-area UV triangles, finite near-unit normals, and the declared mesh coverage. Open garment/hair borders may be intentional only when identified and free of non-manifold edges.
 - Require actual lower-detail render geometry for every declared LOD and preserve its skin attributes when animated. Report LODs, collision, texture resolution, animation set, and target engine import settings as missing when they were not produced; do not infer them from a successful GLB load or metadata alone.
 
 ## 3D printing
