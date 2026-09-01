@@ -27,6 +27,7 @@ describe('Khronos glTF delivery validation', () => {
       errors: 0,
       warnings: 0,
       truncated: false,
+      independentRead: { status: 'pass', parser: 'glTF Transform WebIO' },
     });
     expect(result.validatorVersion).toMatch(/^2\./);
   });
@@ -38,6 +39,7 @@ describe('Khronos glTF delivery validation', () => {
     expect(result.status).toBe('blocked');
     expect(result.errors).toBeGreaterThan(0);
     expect(result.issueCodes).toContain('GLB_INVALID_MAGIC');
+    expect(result.independentRead.status).toBe('not-run');
 
     const root = new THREE.Group();
     root.name = 'standard-validation-fixture';
@@ -63,6 +65,9 @@ describe('Khronos glTF delivery validation', () => {
       hints: 0,
       truncated: false,
       issueCodes: ['TEST_WARNING'],
+      independentRead: {
+        status: 'pass', parser: 'glTF Transform WebIO', nodes: 1, meshes: 0, materials: 0, skins: 0, animations: 0,
+      },
     });
     expect(audit.status).toBe('warn');
     expect(audit.score).toBeLessThan(100);

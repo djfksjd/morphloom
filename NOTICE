@@ -29,3 +29,8 @@ Group Inc., licensed under Apache License 2.0. The validator runs locally on
 the exact delivery bytes; Morphloom does not upload customer assets for this
 check.
 Upstream: https://github.com/KhronosGroup/glTF-Validator
+
+Independent binary glTF parsing and physical-material extension registration
+use glTF Transform, Copyright Don McCurdy and contributors, licensed under the
+MIT License.
+Upstream: https://github.com/donmccurdy/glTF-Transform

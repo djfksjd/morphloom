@@ -105,7 +105,7 @@ export function evaluateQuality(
       detail: deliveryAudit
         ? deliveryAudit.status === 'blocked'
           ? `재열기 실패 · ${deliveryAudit.blockers.join(' · ')}`
-          : `${deliveryAudit.standardValidation ? `Khronos 오류 ${deliveryAudit.standardValidation.errors} / 경고 ${deliveryAudit.standardValidation.warnings} · ` : ''}${deliveryAudit.source?.meshes ?? 0}개 메시 재열기 · 이름 ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm`
+          : `${deliveryAudit.standardValidation ? `Khronos 오류 ${deliveryAudit.standardValidation.errors} / 경고 ${deliveryAudit.standardValidation.warnings} · 독립 파서 ${deliveryAudit.standardValidation.independentRead.status === 'pass' ? '통과' : '미실행'} · ` : ''}${deliveryAudit.source?.meshes ?? 0}개 메시 재열기 · 이름 ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm`
         : 'Khronos glTF 규격과 브라우저 재열기 구조를 검증하는 중',
     },
   ];
@@ -273,7 +273,7 @@ export function evaluateProductQuality(
       detail: deliveryAudit
         ? deliveryAudit.status === 'blocked'
           ? `재열기 실패 · ${deliveryAudit.blockers.join(' · ')}`
-          : `${deliveryAudit.standardValidation ? `Khronos 오류 ${deliveryAudit.standardValidation.errors} / 경고 ${deliveryAudit.standardValidation.warnings} · ` : ''}${deliveryAudit.source?.meshes ?? 0}개 메시 · ${deliveryAudit.source?.triangles.toLocaleString() ?? '—'} tris · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm · ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% 명명 노드`
+          : `${deliveryAudit.standardValidation ? `Khronos 오류 ${deliveryAudit.standardValidation.errors} / 경고 ${deliveryAudit.standardValidation.warnings} · 독립 파서 ${deliveryAudit.standardValidation.independentRead.status === 'pass' ? '통과' : '미실행'} · ` : ''}${deliveryAudit.source?.meshes ?? 0}개 메시 · ${deliveryAudit.source?.triangles.toLocaleString() ?? '—'} tris · 포락 오차 ${deliveryAudit.boundsErrorMm.toFixed(3)} mm · ${Math.round(deliveryAudit.namedNodeCoverage * 100)}% 명명 노드`
         : 'Khronos glTF 규격과 브라우저 재열기 구조를 검증하는 중',
     },
   ];

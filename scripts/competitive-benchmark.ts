@@ -99,6 +99,7 @@ new DataView(corruptGlbBytes).setUint32(0, 0, true);
 const corruptGlb = await validateGlbStandard(corruptGlbBytes);
 const standardValidationAudit = {
   pass: validGlb.status === 'pass' && validGlb.errors === 0 && validGlb.warnings === 0
+    && validGlb.independentRead.status === 'pass'
     && corruptGlb.status === 'blocked' && corruptGlb.issueCodes.includes('GLB_INVALID_MAGIC'),
   validator: validGlb.validator,
   validatorVersion: validGlb.validatorVersion,
@@ -305,7 +306,7 @@ const output = {
     { capability: 'bounded correction and cost ceiling', img2threejs: 'yes', morphloom: contract.maxTotalIterations <= 128 && contract.tokenBudget > 0 ? 'yes' : 'blocked' },
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
-    { capability: 'exact-byte glTF 2.0 specification and browser round-trip validation', img2threejs: 'Three.js factory focus', morphloom: standardValidationAudit.pass ? 'Khronos Validator + Three.js reopen' : 'blocked' },
+    { capability: 'exact-byte glTF 2.0 specification and independent parser validation', img2threejs: 'Three.js factory focus', morphloom: standardValidationAudit.pass ? 'Khronos Validator + glTF Transform + Three.js reopen' : 'blocked' },
     { capability: 'Blender/Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },

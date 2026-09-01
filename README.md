@@ -74,7 +74,7 @@ Codex/Claude 요청 예시:
 - 층별 보기와 주간·야간 광원 미리보기
 - 임의 두 점 거리 측정과 주요 부재의 폭·깊이·세로 높이 치수선 (`mm`, `cm`, `m`)
 - 반복 소부품을 자동 정리하는 건축 치수 오버레이
-- Khronos 공식 glTF 2.0 규격 검사와 GLB 재열기 포락·삼각형·명명 노드 비교
+- Khronos 공식 glTF 2.0 규격 검사, 독립 glTF Transform 파서, Three.js GLB 재열기의 3중 검사
 - 같은 입력의 GLB 검증은 중복 실행하지 않고, 무거운 검증은 최대 4개 대기열에서 직렬 처리하며 이전 결과가 새 화면을 덮지 않음
 - 품질 차단 사유와 근거 범위 표시
 - 로컬 작업 취소·재시도와 결과 저장
@@ -92,7 +92,7 @@ Codex/Claude 요청 예시:
 | PNG | 현재 뷰포트 캡처 |
 | ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
 
-OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격과 로컬 Three.js 재열기를 자동 검사하지만, Blender·Unity·Unreal 애플리케이션 자체의 버전별 임포트 실행은 아직 별도 검수 항목입니다.
+OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격, 독립 glTF Transform 파싱, 로컬 Three.js 재열기를 자동 검사하지만 Blender·Unity·Unreal 애플리케이션 자체의 버전별 임포트 실행은 아직 별도 검수 항목입니다.
 
 ## 현재 제공되는 예제
 

@@ -8,6 +8,15 @@ export interface GltfStandardValidation {
   hints: number;
   truncated: boolean;
   issueCodes: string[];
+  independentRead: {
+    status: 'pass' | 'not-run';
+    parser: 'glTF Transform WebIO';
+    nodes: number;
+    meshes: number;
+    materials: number;
+    skins: number;
+    animations: number;
+  };
 }
 
 const MAX_GLB_BYTES = 256 * 1024 * 1024;
@@ -41,6 +50,27 @@ export async function validateGlbStandard(bytes: ArrayBuffer): Promise<GltfStand
     .map((message) => String(message.code ?? '').trim())
     .filter(Boolean))].sort();
 
+  let independentRead: GltfStandardValidation['independentRead'] = {
+    status: 'not-run', parser: 'glTF Transform WebIO', nodes: 0, meshes: 0, materials: 0, skins: 0, animations: 0,
+  };
+  if (errors === 0) {
+    const [{ WebIO }, { ALL_EXTENSIONS }] = await Promise.all([
+      import('@gltf-transform/core'),
+      import('@gltf-transform/extensions'),
+    ]);
+    const document = await new WebIO().registerExtensions(ALL_EXTENSIONS).readBinary(new Uint8Array(bytes));
+    const root = document.getRoot();
+    independentRead = {
+      status: 'pass',
+      parser: 'glTF Transform WebIO',
+      nodes: root.listNodes().length,
+      meshes: root.listMeshes().length,
+      materials: root.listMaterials().length,
+      skins: root.listSkins().length,
+      animations: root.listAnimations().length,
+    };
+  }
+
   return {
     status: errors > 0 ? 'blocked' : warnings > 0 || issues.truncated === true ? 'warn' : 'pass',
     validator: 'Khronos glTF Validator',
@@ -51,5 +81,6 @@ export async function validateGlbStandard(bytes: ArrayBuffer): Promise<GltfStand
     hints,
     truncated: issues.truncated === true,
     issueCodes,
+    independentRead,
   };
 }
