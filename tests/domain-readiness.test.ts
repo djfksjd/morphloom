@@ -173,6 +173,15 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.metrics.collisionBoneCoverage).toBe(1);
     expect(game.metrics.collisionBoundsOverlapCoverage).toBe(1);
     expect(game.metrics.collisionVerticalCoverage).toBeGreaterThanOrEqual(0.75);
+    expect(game.metrics.lodTriangleRatio).toBeGreaterThanOrEqual(0.1);
+    expect(game.metrics.lodTriangleRatio).toBeLessThanOrEqual(0.85);
+    expect(game.metrics.lodMonotonicTriangleReduction).toBe(true);
+    expect(game.metrics.lodSkinWeightCoverage).toBe(1);
+    expect(game.metrics.lodSkeletonCoverage).toBe(1);
+    expect(game.metrics.lodNeutralBoundsError).toBeLessThanOrEqual(0.03);
+    expect(game.metrics.lodNeutralSilhouetteEnvelopeError).toBeLessThanOrEqual(0.012);
+    expect(game.metrics.lodPosedBoundsError).toBeLessThanOrEqual(0.04);
+    expect(game.metrics.lodPosedSilhouetteEnvelopeError).toBeLessThanOrEqual(0.016);
     expect(game.metrics.animationSetCoverage).toBe(1);
     expect(game.warnings).toEqual([]);
     const lod1 = build.root.getObjectByName('LOD1_morphloom_human_body');
@@ -181,6 +190,45 @@ describe('cross-domain semi-professional readiness', () => {
     expect(((lod1 as THREE.SkinnedMesh).material as THREE.Material).opacity).toBe(1);
     expect(lod1!.layers.isEnabled(31)).toBe(true);
     expect(analyzeTopology(lod1 as THREE.SkinnedMesh).pass).toBe(true);
+  }, 20_000);
+
+  it('blocks a declared LOD that collapses the silhouette or loses valid skin weights', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const lod = build.root.getObjectByName('LOD1_morphloom_human_body');
+    if (!(lod instanceof THREE.SkinnedMesh)) throw new Error('Missing LOD1 fixture.');
+    const position = lod.geometry.getAttribute('position');
+    const originalX = Array.from({ length: position.count }, (_, vertex) => position.getX(vertex));
+    for (let vertex = 0; vertex < position.count; vertex += 1) position.setX(vertex, position.getX(vertex) * 0.1);
+    position.needsUpdate = true;
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(game.pass).toBe(false);
+    expect(game.blockers.some((blocker) => blocker.startsWith('game-lod-quality:'))).toBe(true);
+    expect(game.metrics.lodNeutralBoundsError).toBeGreaterThan(0.03);
+
+    for (let vertex = 0; vertex < position.count; vertex += 1) position.setX(vertex, originalX[vertex]!);
+    position.needsUpdate = true;
+    const manifest = build.root.userData.gameDelivery as { lods: Array<{ level: number; triangles: number; role: 'render' }> };
+    manifest.lods.push({ level: 2, triangles: 1_000, role: 'render' });
+    const missingDeclaredLod = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(missingDeclaredLod.pass).toBe(false);
+    expect(missingDeclaredLod.checks.find((check) => check.id === 'game-lod-quality')?.detail).toMatch(/1\/2 meshes/);
+    manifest.lods.pop();
+
+    const weights = lod.geometry.getAttribute('skinWeight');
+    for (let vertex = 0; vertex < weights.count; vertex += 1) {
+      for (let slot = 0; slot < 4; slot += 1) weights.setComponent(vertex, slot, 0);
+    }
+    weights.needsUpdate = true;
+    const unskinned = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(unskinned.pass).toBe(false);
+    expect(unskinned.blockers.some((blocker) => blocker.startsWith('game-lod-quality:'))).toBe(true);
+    expect(unskinned.metrics.lodSkinWeightCoverage).toBe(0);
   }, 20_000);
 
   it('blocks fake collision metadata with invalid dimensions or missing bone bindings', () => {

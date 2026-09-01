@@ -8,6 +8,7 @@ import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkle
 import { humanoidAnimationDelivery, rigHumanoidGeometry } from './humanoid-rig';
 import { analyzeTopology } from './topology';
 import { attachFacialMorphTargets, type FacialMorphReport } from './facial-morphs';
+import { auditSkinnedLodQuality, type LodQualityAudit } from './lod-quality';
 import {
   deformPointByReferencePose,
   getPoseJoints,
@@ -34,6 +35,7 @@ export interface CharacterMetrics {
   inferredDetailParts: number;
   garmentWrinkles?: ClothWrinkleReport;
   facialMorphs: FacialMorphReport;
+  lodQuality?: LodQualityAudit;
   rig: {
     boneCount: number;
     weightedVertices: number;
@@ -578,6 +580,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     renderedVertices += position?.count ?? 0;
     renderedTriangles += (object.geometry.getIndex()?.count ?? position?.count ?? 0) / 3;
   });
+  const lodQuality = mode === 'beauty' ? auditSkinnedLodQuality(root) : undefined;
   const completeMetrics: CharacterMetrics = {
     ...metrics,
     surfaces: inspectSurfaceSystem(root),
@@ -587,6 +590,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     inferredDetailParts: heroDetails?.inferredParts.length ?? 0,
     garmentWrinkles,
     facialMorphs,
+    lodQuality,
     rig: {
       boneCount: humanoidRig.boneCount,
       weightedVertices: humanoidRig.weightedVertices,

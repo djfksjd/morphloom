@@ -45,6 +45,7 @@ export function evaluateQuality(
   const exportStatus: QualityCheck['status'] = !deliveryAudit || deliveryAudit.status === 'running'
     ? 'warn'
     : deliveryAudit.status;
+  const lodQuality = metrics?.lodQuality;
 
   const checks: QualityCheck[] = [
     {
@@ -86,6 +87,15 @@ export function evaluateQuality(
         : deliveredRig
           ? `${deliveryAudit?.source?.bones ?? 0}본 · 30개 손가락 본 실제 웨이트 · ${deliveryAudit?.source?.animationClips ?? 0}클립/${deliveryAudit?.source?.animationTracks ?? 0}트랙 · ${deliveryAudit?.source?.morphTargets ?? 0}개 얼굴 모프 GLB 보존`
           : '49본·손가락 웨이트·22개 이동/점프/제스처/상호작용 동작·180개 이상 트랙·5개 얼굴 모프의 실제 GLB 보존 필요',
+    },
+    {
+      id: 'lod-quality',
+      label: '게임 LOD 형상·변형',
+      score: lodQuality?.pass ? 100 : 0,
+      status: lodQuality?.pass ? 'pass' : 'blocked',
+      detail: lodQuality
+        ? `${lodQuality.lodMeshes}개 LOD · LOD1 tris ${(lodQuality.triangleRatio * 100).toFixed(1)}% · 단계 감소 ${lodQuality.monotonicTriangleReduction ? '통과' : '실패'} · 중립 실루엣 ${(lodQuality.neutralSilhouetteEnvelopeError * 100).toFixed(2)}% · 관절 포즈 실루엣 ${(lodQuality.posedSilhouetteEnvelopeError * 100).toFixed(2)}% · 스킨 ${Math.round(lodQuality.skinWeightCoverage * 100)}%`
+        : '실제 LOD1 메시의 삼각형 감소·3축 실루엣·관절 변형·스킨 가중치 검증 필요',
     },
     {
       id: 'export',

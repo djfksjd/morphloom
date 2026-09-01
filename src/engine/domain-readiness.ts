@@ -6,6 +6,7 @@ import { analyzeTopology, type MeshTopologyReport } from './topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humanoid-rig';
 import { REQUIRED_FACIAL_MORPH_NAMES } from './facial-morphs';
 import type { PlanFootprintAudit } from './plan-footprint';
+import { auditSkinnedLodQuality } from './lod-quality';
 
 export type ProductionDomain =
   | 'architecture'
@@ -70,6 +71,14 @@ export interface DomainReadinessReport {
     deformationMaximumMm: number;
     deformationFinite: boolean;
     gameLods: number;
+    lodTriangleRatio: number;
+    lodMonotonicTriangleReduction: boolean;
+    lodSkinWeightCoverage: number;
+    lodSkeletonCoverage: number;
+    lodNeutralBoundsError: number;
+    lodNeutralSilhouetteEnvelopeError: number;
+    lodPosedBoundsError: number;
+    lodPosedSilhouetteEnvelopeError: number;
     collisionPrimitives: number;
     collisionPrimitiveValidityCoverage: number;
     collisionBoneCoverage: number;
@@ -556,6 +565,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const deformation = inspectSkinDeformation(input.root);
   const animationDelivery = inspectAnimationDelivery(input.root);
   const collisionDelivery = inspectCollisionDelivery(input.root);
+  const lodQuality = auditSkinnedLodQuality(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
   const deliveredClipNames = new Set(snapshot.animationClipNames);
   const animationSetCoverage = REQUIRED_RUNTIME_CLIPS.filter((name) => deliveredClipNames.has(name)).length
@@ -663,6 +673,14 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       `${snapshot.collisionPrimitives}개 · 유효 ${Math.round(collisionDelivery.primitiveValidityCoverage * 100)}% · 본 연결 ${Math.round(collisionDelivery.boneCoverage * 100)}% · 바디 교차 ${Math.round(collisionDelivery.boundsOverlapCoverage * 100)}% · 높이 커버 ${Math.round(collisionDelivery.verticalCoverage * 100)}%`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
+    const lodQualityRequired = snapshot.gameLods >= 2;
+    const everyDeclaredLodPresent = lodQuality.lodMeshes === Math.max(0, snapshot.gameLods - 1);
+    add('game-lod-quality', 'LOD 형상·변형 보존', !lodQualityRequired || (lodQuality.pass && everyDeclaredLodPresent),
+      lodQuality.pass && everyDeclaredLodPresent ? 100 : 0,
+      lodQualityRequired
+        ? `${lodQuality.lodMeshes}/${Math.max(0, snapshot.gameLods - 1)} meshes · tris ${(lodQuality.triangleRatio * 100).toFixed(1)}% · 감소 ${lodQuality.monotonicTriangleReduction ? '연속' : '실패'} · neutral bounds ${(lodQuality.neutralBoundsError * 100).toFixed(2)}% / silhouette ${(lodQuality.neutralSilhouetteEnvelopeError * 100).toFixed(2)}% · posed bounds ${(lodQuality.posedBoundsError * 100).toFixed(2)}% / silhouette ${(lodQuality.posedSilhouetteEnvelopeError * 100).toFixed(2)}% · skin ${Math.round(lodQuality.skinWeightCoverage * 100)}%`
+        : 'LOD1+가 선언되면 형상·스킨 변형 보존 검사를 차단 게이트로 적용',
+      lodQualityRequired);
     add('game-pbr', '게임 PBR 표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
   } else {
     const unitReady = input.sourceUnitMm === 1;
@@ -715,6 +733,14 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       deformationMaximumMm: deformation.maximumMm,
       deformationFinite: deformation.finite,
       gameLods: snapshot.gameLods,
+      lodTriangleRatio: lodQuality.triangleRatio,
+      lodMonotonicTriangleReduction: lodQuality.monotonicTriangleReduction,
+      lodSkinWeightCoverage: lodQuality.skinWeightCoverage,
+      lodSkeletonCoverage: lodQuality.skeletonCoverage,
+      lodNeutralBoundsError: lodQuality.neutralBoundsError,
+      lodNeutralSilhouetteEnvelopeError: lodQuality.neutralSilhouetteEnvelopeError,
+      lodPosedBoundsError: lodQuality.posedBoundsError,
+      lodPosedSilhouetteEnvelopeError: lodQuality.posedSilhouetteEnvelopeError,
       collisionPrimitives: snapshot.collisionPrimitives,
       collisionPrimitiveValidityCoverage: collisionDelivery.primitiveValidityCoverage,
       collisionBoneCoverage: collisionDelivery.boneCoverage,
