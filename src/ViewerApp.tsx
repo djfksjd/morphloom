@@ -15,6 +15,7 @@ import { buildPhysicalNetlist } from './engine/netlist';
 import { createOrnateKnifeIR } from './engine/knife';
 import { TALON_REFERENCE_BENCHMARK_IR } from './engine/talon-reference-benchmark';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from './engine/asphalt-surface-benchmark';
+import { IMPLICIT_SURFACE_BENCHMARK_IR } from './engine/implicit-surface-benchmark';
 import { editAssemblyLayout, isLayoutEditable } from './engine/layout-edit';
 import {
   formatMeasurement,
@@ -73,6 +74,10 @@ type LocalJob = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'implicit-surface', label: 'Implicit Surface Lab', caption: 'smooth union · real socket · manifold refinement', kind: 'product',
+    spec: DEFAULT_PRODUCT_SPEC, assemblyIR: IMPLICIT_SURFACE_BENCHMARK_IR,
+  },
   {
     id: 'asphalt-surface', label: 'Rough Asphalt Surface', caption: 'macro relief · aggregate PBR · deterministic', kind: 'product',
     spec: DEFAULT_PRODUCT_SPEC, assemblyIR: ASPHALT_SURFACE_BENCHMARK_IR,
@@ -837,6 +842,9 @@ export function ViewerApp() {
               <span>NAMED NODES<b>{deliveryAudit ? `${Math.round(deliveryAudit.namedNodeCoverage * 100)}%` : '—'}</b></span>
               {(deliveryAudit?.source?.skeletons ?? 0) > 0 && (
                 <span>RIG / MOTION<b>{deliveryAudit?.reopened?.skeletons ?? 0} skeleton · {deliveryAudit?.reopened?.bones ?? 0} bones · {deliveryAudit?.reopened?.animationClips ?? 0} clip / {deliveryAudit?.reopened?.animationTracks ?? 0} tracks</b></span>
+              )}
+              {(deliveryAudit?.source?.morphTargets ?? 0) > 0 && (
+                <span>FACE CONTROLS<b>{deliveryAudit?.reopened?.morphTargets ?? 0} morph targets · GLB names preserved</b></span>
               )}
               {(deliveryAudit?.source?.gameLods ?? 0) > 0 && (
                 <span>GAME DELIVERY<b>{deliveryAudit?.reopened?.gameLods ?? 0} LOD profile · {deliveryAudit?.reopened?.collisionPrimitives ?? 0} collision primitives</b></span>

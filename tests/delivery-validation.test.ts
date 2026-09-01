@@ -123,6 +123,23 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers.join(' ')).toMatch(/binding identities changed/);
   });
 
+  it('blocks delivery when facial morph identities are lost', () => {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(new Float32Array(geometry.getAttribute('position').count * 3), 3)];
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+    mesh.name = 'face';
+    mesh.updateMorphTargets();
+    mesh.morphTargetDictionary = { jaw_open: 0 };
+    const source = snapshotScene(mesh);
+    expect(source).toMatchObject({ morphTargets: 1, morphTargetNames: ['face:jaw_open'] });
+    const reopened = structuredClone(source);
+    reopened.morphTargets = 0;
+    reopened.morphTargetNames = [];
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers.join(' ')).toMatch(/morph target/);
+  });
+
   it('blocks a GLB that keeps clip names but loses loop, category or root-motion delivery metadata', () => {
     const root = new THREE.Group();
     root.name = 'animation_manifest_fixture';

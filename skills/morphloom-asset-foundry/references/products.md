@@ -21,3 +21,5 @@ Visible cameras, lenses, indicators, and displays require physical layering—be
 For movable parts, record pivot/axis, travel limits, endpoint poses, clearances/collisions, and cable behavior after motion. Service/exploded assets additionally require an assembly dependency order and a plausible removal path.
 
 Do not spend polygons uniformly. Prioritize source-defining silhouette, interfaces, lenses, controls, blade/edge profiles, engravings, and gaps before hidden generic board detail. A single-image exterior can be a strong visualization asset, but internal service or manufacturing claims require teardown/datasheet evidence.
+
+For continuous ergonomic grips, molded housings, blended fillets, and evidence-supported recessed sockets that cannot be expressed as one manufactured primitive, use a bounded `implicitSurface` graph. Preserve separate functional parts instead of merging the whole assembly into one field. Require padded sampling bounds, a recorded triangle budget, and a manifold compiled result; a smooth render does not excuse an invalid shell.

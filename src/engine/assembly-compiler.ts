@@ -9,6 +9,7 @@ import { analyzeTopology } from './topology';
 import { inspectEngineeringEvidence } from './engineering-audit';
 import { auditFidelityContract } from './fidelity-pipeline';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
+import { polygonizeImplicitSurface, validateImplicitSurfaceDescriptor } from './implicit-surface';
 import { createLayeredSurfaceGeometry } from './layered-surface';
 import {
   analyzeReferenceSurface,
@@ -82,7 +83,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     throw new Error('AssemblyIR must contain 1–500 components.');
   }
   const ids = new Set<string>();
-  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'surfacePatch', 'hipRoof', 'bladeLoft', 'visualHull']);
+  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'surfacePatch', 'hipRoof', 'bladeLoft', 'visualHull', 'implicitSurface']);
   const allowedSurfaces = new Set([
     'raw', 'concrete', 'asphalt', 'plaster', 'stone', 'coated-metal', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
     'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
@@ -219,6 +220,9 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         break;
       case 'visualHull':
         validateVisualHullDescriptor(component.geometry.descriptor);
+        break;
+      case 'implicitSurface':
+        validateImplicitSurfaceDescriptor(component.geometry.descriptor);
         break;
     }
     inspect(component.position, `${component.id}.position`);
@@ -638,6 +642,11 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
         unconstrainedAxes: carve.unconstrainedAxes,
         limitations: carve.limitations,
       };
+      return result;
+    }
+    case 'implicitSurface': {
+      const result = polygonizeImplicitSurface(geometry.descriptor).geometry;
+      result.scale(0.001, 0.001, 0.001);
       return result;
     }
   }

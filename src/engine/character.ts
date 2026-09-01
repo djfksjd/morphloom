@@ -7,6 +7,7 @@ import { createWebHeroDetails } from './web-hero';
 import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkleReport } from './cloth-wrinkles';
 import { humanoidAnimationDelivery, rigHumanoidGeometry } from './humanoid-rig';
 import { analyzeTopology } from './topology';
+import { attachFacialMorphTargets, type FacialMorphReport } from './facial-morphs';
 import {
   deformPointByReferencePose,
   getPoseJoints,
@@ -32,6 +33,7 @@ export interface CharacterMetrics {
   namedDetailParts: number;
   inferredDetailParts: number;
   garmentWrinkles?: ClothWrinkleReport;
+  facialMorphs: FacialMorphReport;
   rig: {
     boneCount: number;
     weightedVertices: number;
@@ -522,6 +524,8 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     poseLandmarkRmsMeters: poseLandmarkRms(spec.heightCm / 100, spec.pose),
   } as Omit<CharacterMetrics, 'surfaces'>;
 
+  const facialMorphs = attachFacialMorphTargets(geometry, headBounds);
+
   const webHero = spec.outfit === 'web-hero';
   const bodyMaterial = createSurfaceMaterial(webHero ? {
     color: '#ffffff', surface: 'hex-knit', roughness: 0.67, sheen: 0.54,
@@ -537,6 +541,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   body.receiveShadow = true;
   body.add(humanoidRig.rootBone);
   body.bind(humanoidRig.skeleton);
+  body.updateMorphTargets();
 
   const root = new THREE.Group();
   root.name = 'morphloom_character';
@@ -548,6 +553,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     visualInterpretation: spec.outfit === 'web-hero' ? structuredClone(WEB_HERO_VISUAL_INTERPRETATION) : undefined,
     clothWrinkleEvidence: spec.outfit === 'web-hero' ? structuredClone(CLOTH_WRINKLE_EVIDENCE) : undefined,
     garmentWrinkles,
+    facialMorphs,
     poseLandmarkRmsMeters: metrics.poseLandmarkRmsMeters,
   };
   root.add(body);
@@ -579,6 +585,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     namedDetailParts: heroDetails?.namedParts ?? 0,
     inferredDetailParts: heroDetails?.inferredParts.length ?? 0,
     garmentWrinkles,
+    facialMorphs,
     rig: {
       boneCount: humanoidRig.boneCount,
       weightedVertices: humanoidRig.weightedVertices,

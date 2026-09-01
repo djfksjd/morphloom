@@ -1,13 +1,13 @@
 {
   "schema": "morphloom.browser-roundtrip/0.2",
-  "observedAt": "2026-09-01T16:01:02Z",
+  "observedAt": "2026-09-01T16:46:00Z",
   "environment": "local Chromium via Codex in-app browser, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
   "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
   "console": {
     "errors": 0,
     "warnings": 0,
     "developmentHotReloadTransients": 0,
-    "warningNote": "Eight representative assets passed after compiler 0.8.0. A fresh post-fix Field Human run completed with zero console warnings or errors. Asset changes are ignored while the current GLB proof is still verifying, preventing overlapping validation work."
+    "warningNote": "Nine representative assets passed after compiler 0.10.0. The local browser console contained no warning or error entries after the proof run. Character proofs preserve five named facial morph targets in addition to skeleton and motion data."
   },
   "interactionProof": {
     "displayModes": ["beauty", "clay", "wire", "x-ray"],
@@ -25,7 +25,7 @@
       "status": "pass",
       "sceneFingerprint": "94bf5bd22d3a321d",
       "buildFingerprint": "94bf5bd22d3a321d",
-      "inputFingerprint": "646057638a120d81",
+      "inputFingerprint": "0b22a3c081e5038b",
       "glbDisplaySize": "7.95 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -37,7 +37,7 @@
       "status": "pass",
       "sceneFingerprint": "389dd42a5c2f2c29",
       "buildFingerprint": "389dd42a5c2f2c29",
-      "inputFingerprint": "f814c650b8336f44",
+      "inputFingerprint": "b250db0d0bb1598c",
       "glbDisplaySize": "18.35 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -49,7 +49,7 @@
       "status": "pass",
       "sceneFingerprint": "9abcb05be1fe7938",
       "buildFingerprint": "9abcb05be1fe7938",
-      "inputFingerprint": "42040bc2182fee21",
+      "inputFingerprint": "a0be9fd3be73536b",
       "glbDisplaySize": "12.85 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -61,7 +61,7 @@
       "status": "pass",
       "sceneFingerprint": "870c78aa74e6523f",
       "buildFingerprint": "870c78aa74e6523f",
-      "inputFingerprint": "aa89edccc6d441d1",
+      "inputFingerprint": "f9fc771bc6597fe3",
       "glbDisplaySize": "696.9 KB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -73,7 +73,7 @@
       "status": "pass",
       "sceneFingerprint": "9444d74036e602f1",
       "buildFingerprint": "7af5b6c8d8fc52ad",
-      "inputFingerprint": "5e2bfc0d731cc8e7",
+      "inputFingerprint": "7099496e66ae6629",
       "glbDisplaySize": "12.25 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -83,10 +83,10 @@
     {
       "id": "single-view-character-previs",
       "status": "pass",
-      "sceneFingerprint": "7882c0909e87bb37",
-      "buildFingerprint": "6d0b601abef0cc81",
-      "inputFingerprint": "e4e6bc835ca1a111",
-      "glbDisplaySize": "2.42 MB",
+      "sceneFingerprint": "a04fd6148d3ab567",
+      "buildFingerprint": "a04fd6148d3ab567",
+      "inputFingerprint": "86f78720311b82c1",
+      "glbDisplaySize": "3.26 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": false,
@@ -94,17 +94,18 @@
       "bones": 49,
       "animationClips": 22,
       "animationTracks": 185,
+      "morphTargets": 5,
       "gameLods": 1,
       "collisionPrimitives": 2,
-      "scope": "single-view likeness evidence blocked; GLB preserves 1 skeleton, 49 bones including 30 weighted finger bones, 22 semantic runtime clips, 185 tracks and the delivery metadata fingerprint"
+      "scope": "single-view likeness evidence blocked; GLB preserves 1 skeleton, 49 bones including 30 weighted finger bones, 22 semantic runtime clips, 185 tracks, five named editable facial morphs and delivery metadata"
     },
     {
       "id": "field-human-runtime-base",
       "status": "pass",
-      "sceneFingerprint": "470a031ad06dd456",
-      "buildFingerprint": "470a031ad06dd456",
-      "inputFingerprint": "3cbcc3144f0a53f8",
-      "glbDisplaySize": "2.38 MB",
+      "sceneFingerprint": "62ebb3f0ce35f76a",
+      "buildFingerprint": "62ebb3f0ce35f76a",
+      "inputFingerprint": "6dd727eb9feb1a48",
+      "glbDisplaySize": "3.22 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": true,
@@ -112,16 +113,17 @@
       "bones": 49,
       "animationClips": 22,
       "animationTracks": 185,
+      "morphTargets": 5,
       "gameLods": 2,
       "collisionPrimitives": 2,
-      "scope": "editable animation and game base; two real skinned LOD meshes share a 49-bone hierarchy with 30 weighted finger bones, 22 semantic idle/locomotion/turn/stance/airborne/gesture/interaction clips, 185 tracks, loop and in-place contracts, and two collision primitives"
+      "scope": "editable animation and game base; two real skinned LOD meshes share a 49-bone hierarchy with 30 weighted finger bones, 22 semantic clips, 185 tracks, five named facial morphs, loop/in-place contracts, and two collision primitives"
     },
     {
       "id": "asphalt-print-surface",
       "status": "pass",
       "sceneFingerprint": "cf0bc53d5fa7e992",
       "buildFingerprint": "cf0bc53d5fa7e992",
-      "inputFingerprint": "46971621ba45920f",
+      "inputFingerprint": "96f8542a38ff50a1",
       "glbDisplaySize": "10.55 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -129,6 +131,18 @@
       "unsupportedOverhangAreaMm2": 0,
       "unsupportedOverhangRatio": 0,
       "scope": "watertight millimeter-scale relief specimen; measured 45-degree overhang area is zero"
+    },
+    {
+      "id": "implicit-surface-manifold-lab",
+      "status": "pass",
+      "sceneFingerprint": "e114180b3f45fbe5",
+      "buildFingerprint": "e114180b3f45fbe5",
+      "inputFingerprint": "8454907685a6ea01",
+      "glbDisplaySize": "140.8 KB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": false,
+      "scope": "procedural topology/export regression, not a physical-source claim; Surface Nets requested resolution 32 refined deterministically to 35 with zero boundary and non-manifold edges"
     }
   ]
 }

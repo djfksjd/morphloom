@@ -24,4 +24,6 @@ Every visible garment and accessory is a named layer even when it does not chang
 
 Validate the rendered asset from the source camera, not only a flattering three-quarter view. Keep same-view likeness blocked when a comparison render or sufficient evidence is missing.
 
-For game use, additionally verify deformation topology around shoulders, elbows, wrists, hips, knees, neck, jaw, and fingers; neutral/rest transforms; named rig hierarchy; garment-body intersections across a small pose set; and an explicit LOD/texture scope. A posed watertight mesh without these checks is not a production-ready character.
+For game use, additionally verify deformation topology around shoulders, elbows, wrists, hips, knees, neck, jaw, and fingers; neutral/rest transforms; named rig hierarchy; non-zero editable facial controls; garment-body intersections across a small pose set; and an explicit LOD/texture scope. The bundled base requires jaw, smile, independent blink and brow controls, but those controls are not an identity-specific FACS or lip-sync solution. A posed watertight mesh without these checks is not a production-ready character.
+
+`implicitSurface` may be used for an evidence-bounded organic blockout or a non-deforming accessory, but it is not automatically animation topology. Before rigged delivery, retopologize or otherwise prove deformation loops, skin weights, bind pose, joint motion, and the runtime contract. Never call a smooth implicit silhouette a finished character merely because it is manifold.

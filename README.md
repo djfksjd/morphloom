@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-126%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-130%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -136,7 +136,7 @@ npm run build
 
 Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격선을 잠그고, 8단계 검수에서 회귀·반복 결함·비용 상한을 실제로 차단합니다.
 
-두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고, 참조와 렌더의 전경을 정렬해 상·중·하 내부 누락을 검사합니다. 재질은 색뿐 아니라 밝기, 미세·중간·큰 스케일 대비, 방향 분포, 주기성, 불규칙성을 따로 비교합니다. 이 구현은 Apache-2.0인 img2threejs의 강한 부분을 TypeScript로 이식·수정한 것이며 출처와 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
+두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고 각 입력 시점으로 역투영해 정확도를 다시 검사합니다. 유기형·인체 블록아웃·연속 곡면은 `implicitSurface`의 smooth-union/subtract/intersect 연산과 Surface Nets로 만들며, 모호한 셀이 생기면 최대 4단계의 결정론적 해상도 보정 후에도 비매니폴드이면 차단합니다. 참조와 렌더의 전경을 정렬해 상·중·하 내부 누락을 검사하고, 재질은 색뿐 아니라 밝기, 미세·중간·큰 스케일 대비, 방향 분포, 주기성, 불규칙성을 따로 비교합니다. 이 구현은 Apache-2.0인 img2threejs의 강한 부분을 TypeScript로 이식·수정한 것이며 출처와 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
@@ -144,12 +144,12 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 
-사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.963을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 높이장은 단일 블러가 아니라 미세·중간·큰 스케일 주파수 밴드를 결합하며 세 대역 모두 활성으로 측정됐고, 비교기는 반복 무늬가 같은 평균·분산으로 골재를 흉내 내는 경우도 차단합니다. 결과는 124,616 삼각형, RMS 0.58 mm, 최고–최저 4.35 mm, 폐쇄 메시 1/1입니다. 컴파일러 0.8 변경으로 이 로컬 사진 결과의 이전 GLB 증거는 무효화했으며, 실제 납품 전 로컬 원본으로 브라우저 재열기를 다시 해야 합니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
+사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.963을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 높이장은 단일 블러가 아니라 미세·중간·큰 스케일 주파수 밴드를 결합하며 세 대역 모두 활성으로 측정됐고, 비교기는 반복 무늬가 같은 평균·분산으로 골재를 흉내 내는 경우도 차단합니다. 결과는 124,616 삼각형, RMS 0.58 mm, 최고–최저 4.35 mm, 폐쇄 메시 1/1이며 컴파일러 0.10 브라우저 GLB 재열기에서도 크기 오차 0 mm로 통과했습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
 
 ## 현재 한계
 
 - 한 장의 사진만으로 숨은 형상, 정확한 두께와 후면을 측정할 수 없습니다.
-- 인체 베이스는 30개 손가락 본과 실제 손가락 웨이트를 포함하지만 얼굴 리그, 표정 블렌드셰이프, 손가락 충돌/근육 변형과 의류 물리 시뮬레이션은 아직 완성 단계가 아닙니다.
+- 인체 베이스는 30개 손가락 본·실제 손가락 웨이트·5개 편집형 얼굴 모프(`jaw_open`, `smile`, 좌우 눈깜박임, 눈썹 올림)를 GLB에 보존합니다. 다만 정밀 FACS, 음소 립싱크, 정체성 기반 얼굴 리그, 손가락 충돌/근육 변형과 의류 물리 시뮬레이션은 별도 범위입니다.
 - 포즈 기반 의류 주름과 micro-normal은 지원하지만 실제 원단 스캔을 대체하지 않습니다.
 - 전기 연결 검사는 포트·핀명·AWG·3D 끝점 검사이며 SPICE, PCB ERC, 실물 도통 검사가 아닙니다.
 - 건축 출력은 도면 기반 검수 셸이며 구조해석, MEP와 현장 승인을 포함하지 않습니다.

@@ -111,7 +111,8 @@
             { "$ref": "#/$defs/surfacePatch" },
             { "$ref": "#/$defs/hipRoof" },
             { "$ref": "#/$defs/bladeLoft" },
-            { "$ref": "#/$defs/visualHull" }
+            { "$ref": "#/$defs/visualHull" },
+            { "$ref": "#/$defs/implicitSurface" }
           ]
         }
       }
@@ -216,7 +217,7 @@
           "additionalProperties": false,
           "required": ["method", "width", "height", "samples", "amplitudeMm", "blend", "fingerprint", "irregularity"],
           "properties": {
-            "method": { "const": "image-highpass-height-v1" },
+            "method": { "enum": ["image-highpass-height-v1", "image-multiscale-height-v2"] },
             "width": { "type": "integer", "minimum": 2, "maximum": 128 },
             "height": { "type": "integer", "minimum": 2, "maximum": 128 },
             "samples": { "type": "array", "minItems": 4, "maxItems": 16384, "items": { "type": "integer", "minimum": -32767, "maximum": 32767 } },
@@ -264,6 +265,7 @@
             },
             "resolution": { "type": "integer", "minimum": 4, "maximum": 32 },
             "triangleBudget": { "type": "integer", "minimum": 1, "maximum": 400000 },
+            "silhouetteToleranceVoxels": { "type": "integer", "minimum": 0, "maximum": 2 },
             "views": {
               "type": "array",
               "minItems": 2,
@@ -274,12 +276,114 @@
                 "additionalProperties": false,
                 "properties": {
                   "axis": { "enum": ["front", "side", "top"] },
-                  "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "confidence": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
                   "mask": { "type": "array", "minItems": 4, "maxItems": 256, "items": { "type": "string", "minLength": 4, "maxLength": 256, "pattern": "^[01]+$" } }
                 }
               }
             },
             "hiddenRegions": { "type": "array", "maxItems": 256, "items": { "type": "string", "minLength": 1, "maxLength": 256 } }
+          }
+        }
+      }
+    },
+    "implicitTransform": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "position": { "$ref": "#/$defs/vec3" },
+        "rotation": { "$ref": "#/$defs/vec3" },
+        "scale": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "implicitPrimitive": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+        "type": { "enum": ["sphere", "capsule", "box", "cone", "ellipsoid"] },
+        "radius": {
+          "oneOf": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            {
+              "type": "array",
+              "prefixItems": [
+                { "type": "number", "exclusiveMinimum": 0 },
+                { "type": "number", "exclusiveMinimum": 0 },
+                { "type": "number", "exclusiveMinimum": 0 }
+              ],
+              "minItems": 3,
+              "maxItems": 3
+            }
+          ]
+        },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "size": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "radii": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "transform": { "$ref": "#/$defs/implicitTransform" }
+      }
+    },
+    "implicitOperation": {
+      "type": "object",
+      "required": ["id", "type", "left", "right"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+        "type": { "enum": ["smooth-union", "subtract", "intersect"] },
+        "left": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+        "right": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+        "radius": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "implicitSurface": {
+      "type": "object",
+      "required": ["op", "descriptor"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "implicitSurface" },
+        "descriptor": {
+          "type": "object",
+          "required": ["bounds", "resolution", "triangleBudget", "primitives"],
+          "additionalProperties": false,
+          "properties": {
+            "bounds": {
+              "type": "object",
+              "required": ["min", "max"],
+              "additionalProperties": false,
+              "properties": { "min": { "$ref": "#/$defs/vec3" }, "max": { "$ref": "#/$defs/vec3" } }
+            },
+            "resolution": { "type": "integer", "minimum": 8, "maximum": 64 },
+            "triangleBudget": { "type": "integer", "minimum": 1, "maximum": 400000 },
+            "primitives": { "type": "array", "minItems": 1, "maxItems": 64, "items": { "$ref": "#/$defs/implicitPrimitive" } },
+            "operations": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/implicitOperation" } },
+            "output": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" }
           }
         }
       }

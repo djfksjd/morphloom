@@ -14,6 +14,9 @@ import { compareMaterialFrames } from '../src/engine/material-comparison';
 import { carveVisualHull } from '../src/engine/visual-hull';
 import { visualBenchmarkMinimumViews, type VisualBenchmarkDomain } from '../src/engine/visual-benchmark';
 import { DEFAULT_KNIFE_SPEC } from '../src/types';
+import { polygonizeImplicitSurface } from '../src/engine/implicit-surface';
+import { analyzeTopology } from '../src/engine/topology';
+import * as THREE from 'three';
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -66,6 +69,22 @@ const visualHull = carveVisualHull({
     { axis: 'side', confidence: 1, mask: solidMask },
   ],
 });
+const implicitSurface = polygonizeImplicitSurface({
+  bounds: { min: [-130, -100, -100], max: [130, 100, 100] },
+  resolution: 32,
+  triangleBudget: 100_000,
+  primitives: [
+    { id: 'left', type: 'sphere', radius: 58, transform: { position: [-38, 0, 0] } },
+    { id: 'right', type: 'sphere', radius: 58, transform: { position: [38, 0, 0] } },
+    { id: 'socket', type: 'sphere', radius: 20, transform: { position: [0, 36, 0] } },
+  ],
+  operations: [
+    { id: 'body', type: 'smooth-union', left: 'left', right: 'right', radius: 24 },
+    { id: 'body_with_socket', type: 'subtract', left: 'body', right: 'socket' },
+  ],
+  output: 'body_with_socket',
+});
+const implicitTopology = analyzeTopology(new THREE.Mesh(implicitSurface.geometry));
 let state = startFidelityWorkflow(contract);
 const transitions = contract.passes.map((pass, index) => {
   const review: FidelityReview = {
@@ -101,7 +120,7 @@ const contractAudit = auditFidelityContract(contract, ir);
 const deliveryAudit = auditFidelityDelivery(contract, state);
 const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json', 'utf8')) as {
   rates?: Record<string, number>;
-  domainReports?: Record<string, { pass?: boolean; score?: number }>;
+  domainReports?: Record<string, { pass?: boolean; score?: number; metrics?: { facialMorphTargets?: number } }>;
 };
 const domainProof = qualityBenchmark.domainReports ?? {};
 const visualDomains: VisualBenchmarkDomain[] = ['industrial-design', 'architecture', 'character', 'surface'];
@@ -157,6 +176,20 @@ const output = {
       unconstrainedAxes: visualHull.unconstrainedAxes,
       limitationCount: visualHull.limitations.length,
     },
+    implicitSurface: {
+      requestedResolution: implicitSurface.requestedResolution,
+      resolvedResolution: implicitSurface.resolution,
+      refinementSteps: implicitSurface.refinementSteps,
+      primitives: implicitSurface.primitiveCount,
+      operations: implicitSurface.operationCount,
+      triangles: implicitSurface.triangleCount,
+      enclosedVolumeMm3: implicitSurface.enclosedVolumeMm3,
+      outwardFaceCoverage: implicitSurface.outwardFaceCoverage,
+      windingCorrected: implicitSurface.windingCorrected,
+      topologyPass: implicitTopology.pass,
+      boundaryEdges: implicitTopology.boundaryEdges,
+      nonManifoldEdges: implicitTopology.nonManifoldEdges,
+    },
     passes: transitions,
     compiledAsset: {
       parts: compiled.metrics.parts,
@@ -176,6 +209,7 @@ const output = {
     { capability: 'calibrated source-camera proof', img2threejs: 'yes', morphloom: contract.cameras.length > 0 ? 'yes' : 'blocked' },
     { capability: 'bounded welded visual-hull carving', img2threejs: 'yes', morphloom: visualHull.status === 'carved' && visualHull.triangleCount > 0 ? 'yes' : 'blocked' },
     { capability: 'per-view visual-hull reprojection audit and bounded calibration tolerance', img2threejs: 'not established in pinned audit', morphloom: visualHull.minimumViewIoU >= 0.85 ? 'yes' : 'blocked' },
+    { capability: 'smooth implicit Surface Nets with bounded manifold, positive-volume and outward-winding gates', img2threejs: 'Surface Nets', morphloom: implicitTopology.pass && implicitSurface.refinementSteps > 0 && implicitSurface.enclosedVolumeMm3 > 0 && implicitSurface.outwardFaceCoverage >= 0.995 ? 'yes + fail-closed manifold/winding refinement' : 'blocked' },
     { capability: 'foreground-normalized interior bands', img2threejs: 'yes', morphloom: interiorBands.aggregateSimilarity === 1 ? 'yes' : 'blocked' },
     { capability: 'deterministic material region comparator', img2threejs: 'yes', morphloom: materialComparison.passed ? 'yes' : 'blocked' },
     { capability: 'bounded correction and cost ceiling', img2threejs: 'yes', morphloom: contract.maxTotalIterations <= 128 && contract.tokenBudget > 0 ? 'yes' : 'blocked' },
@@ -183,6 +217,7 @@ const output = {
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'GLB and DCC delivery validation', img2threejs: 'Three.js factory focus', morphloom: 'yes' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
+    { capability: 'named editable facial controls preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphTargets === 5 ? '5 non-zero named morph targets' : 'blocked' },
     { capability: 'measured bone deformation, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
     { capability: 'real skinned LOD1 plus collision manifest preserved in GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass ? 'yes' : 'blocked' },
     { capability: 'millimetre 3D-print topology, volume, feature and 45-degree overhang audit', img2threejs: 'not established in pinned audit', morphloom: domainProof.print3d?.pass ? 'yes' : 'blocked' },
@@ -196,4 +231,6 @@ console.log(JSON.stringify(output, null, 2));
 if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !item.accepted)
   || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.1'
   || visualHull.status !== 'carved' || visualHull.minimumViewIoU < 0.85
+  || !implicitTopology.pass || implicitSurface.refinementSteps < 1
+  || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed) process.exitCode = 1;

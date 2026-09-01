@@ -4,6 +4,7 @@ import { snapshotScene } from './delivery-validation';
 import { inspectSurfaceSystem } from './surface-system';
 import { analyzeTopology, type MeshTopologyReport } from './topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humanoid-rig';
+import { REQUIRED_FACIAL_MORPH_NAMES } from './facial-morphs';
 
 export type ProductionDomain =
   | 'architecture'
@@ -68,6 +69,9 @@ export interface DomainReadinessReport {
     fingerBones: number;
     fingerWeightedVertices: number;
     fingerAnimationTracks: number;
+    facialMorphTargets: number;
+    facialMorphAffectedVertices: number;
+    facialMorphMaximumMm: number;
     maximumSkinWeightError: number;
     maximumSkinInfluences: number;
     visualHullMeshes: number;
@@ -187,6 +191,9 @@ function inspectGeometry(root: THREE.Object3D): {
   fingerBones: number;
   fingerWeightedVertices: number;
   fingerAnimationTracks: number;
+  facialMorphTargets: number;
+  facialMorphAffectedVertices: number;
+  facialMorphMaximumMm: number;
   visualHullMeshes: number;
   minimumVisualHullViewIoU: number;
   confidenceWeightedVisualHullIoU: number;
@@ -202,6 +209,9 @@ function inspectGeometry(root: THREE.Object3D): {
   let unsupportedOverhangAreaM2 = 0;
   const fingerBoneNames = new Set<string>();
   let fingerWeightedVertices = 0;
+  const facialMorphNames = new Set<string>();
+  const facialMorphVertices = new Set<string>();
+  let facialMorphMaximumMm = 0;
   let visualHullMeshes = 0;
   let minimumVisualHullViewIoU = 1;
   let confidenceWeightedVisualHullIoU = 1;
@@ -233,6 +243,19 @@ function inspectGeometry(root: THREE.Object3D): {
     }
     const position = geometry.getAttribute('position');
     if (!position) return;
+    const morphDictionary = object.morphTargetDictionary ?? {};
+    for (const requiredName of REQUIRED_FACIAL_MORPH_NAMES) {
+      const morphIndex = morphDictionary[requiredName];
+      const attribute = morphIndex === undefined ? undefined : geometry.morphAttributes.position?.[morphIndex];
+      if (!attribute || attribute.itemSize !== 3 || attribute.count !== position.count) continue;
+      facialMorphNames.add(requiredName);
+      for (let vertex = 0; vertex < attribute.count; vertex += 1) {
+        const displacement = Math.hypot(attribute.getX(vertex), attribute.getY(vertex), attribute.getZ(vertex)) * 1_000;
+        if (displacement <= 0.0001) continue;
+        facialMorphVertices.add(`${object.uuid}:${vertex}`);
+        facialMorphMaximumMm = Math.max(facialMorphMaximumMm, displacement);
+      }
+    }
     if (geometry.hasAttribute('uv')) uvMeshes += 1;
     if (geometry.hasAttribute('normal')) normalMeshes += 1;
     if (!geometry.boundingBox) geometry.computeBoundingBox();
@@ -308,6 +331,9 @@ function inspectGeometry(root: THREE.Object3D): {
     fingerAnimationTracks: root.animations.reduce((sum, clip) => (
       sum + clip.tracks.filter((track) => fingerPattern.test(track.name.split('.')[0])).length
     ), 0),
+    facialMorphTargets: facialMorphNames.size,
+    facialMorphAffectedVertices: facialMorphVertices.size,
+    facialMorphMaximumMm,
     visualHullMeshes,
     minimumVisualHullViewIoU,
     confidenceWeightedVisualHullIoU,
@@ -441,6 +467,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
     const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 16;
     add('animation-finger-rig', '손가락 리그·가중치', fingerRigPass, fingerRigPass ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices · ${geometry.fingerAnimationTracks} animated tracks`);
+    const facialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
+      && geometry.facialMorphAffectedVertices >= 100
+      && geometry.facialMorphMaximumMm >= 0.5 && geometry.facialMorphMaximumMm <= 30;
+    add('animation-facial-morphs', '얼굴 표정 모프', facialMorphPass, facialMorphPass ? 100 : 0, `${geometry.facialMorphTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · ${geometry.facialMorphAffectedVertices} affected vertices · max ${geometry.facialMorphMaximumMm.toFixed(2)} mm`);
     const animationSetPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
       && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
     add('animation-clips', '납품용 기본 동작 세트', animationSetPass, animationSetPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks · 필수 동작 ${Math.round(animationSetCoverage * 100)}%`);
@@ -461,6 +491,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
+    const gameFacialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
+      && geometry.facialMorphAffectedVertices >= 100;
+    add('game-facial-morphs', '게임 얼굴 표정 모프', gameFacialMorphPass, gameFacialMorphPass ? 100 : 0, `${geometry.facialMorphTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · ${geometry.facialMorphAffectedVertices} affected vertices`);
     const runtimeMotionPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
       && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
     add('game-runtime-motion', '게임 런타임 동작 세트', runtimeMotionPass, runtimeMotionPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · 이동/점프/제스처/상호작용 ${Math.round(animationSetCoverage * 100)}%`);
@@ -525,6 +558,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       fingerBones: geometry.fingerBones,
       fingerWeightedVertices: geometry.fingerWeightedVertices,
       fingerAnimationTracks: geometry.fingerAnimationTracks,
+      facialMorphTargets: geometry.facialMorphTargets,
+      facialMorphAffectedVertices: geometry.facialMorphAffectedVertices,
+      facialMorphMaximumMm: geometry.facialMorphMaximumMm,
       maximumSkinWeightError: geometry.maximumSkinWeightError,
       maximumSkinInfluences: geometry.maximumSkinInfluences,
       visualHullMeshes: geometry.visualHullMeshes,

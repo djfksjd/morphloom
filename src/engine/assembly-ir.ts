@@ -1,6 +1,7 @@
 import type { FidelityContract } from './fidelity-pipeline';
 import type { VisualHullDescriptor } from './visual-hull';
 import type { QuantizedReferenceHeightField } from './reference-surface';
+import type { ImplicitSurfaceDescriptor } from './implicit-surface';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -43,7 +44,8 @@ export type AssemblyGeometryIR =
   }
   | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }
   | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] }
-  | { op: 'visualHull'; descriptor: VisualHullDescriptor };
+  | { op: 'visualHull'; descriptor: VisualHullDescriptor }
+  | { op: 'implicitSurface'; descriptor: ImplicitSurfaceDescriptor };
 
 export interface AssemblyMaterialIR {
   color: string;

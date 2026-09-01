@@ -30,7 +30,15 @@ describe('cross-domain semi-professional readiness', () => {
     const firstSnapshot = snapshotScene(first.root);
     const secondSnapshot = snapshotScene(second.root);
     expect(first.body).toBeInstanceOf(THREE.SkinnedMesh);
-    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 22, animationTracks: 185 });
+    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 22, animationTracks: 185, morphTargets: 5 });
+    expect(firstSnapshot.morphTargetNames).toEqual(expect.arrayContaining([
+      'morphloom_human_body:jaw_open', 'morphloom_human_body:smile',
+      'morphloom_human_body:blink_L', 'morphloom_human_body:blink_R',
+      'morphloom_human_body:brow_raise',
+    ]));
+    expect(first.metrics.facialMorphs).toMatchObject({ nonZeroTargets: 5 });
+    expect(first.metrics.facialMorphs.affectedVertices).toBeGreaterThanOrEqual(100);
+    expect(first.metrics.facialMorphs.maximumDisplacementMm).toBeGreaterThanOrEqual(0.5);
     expect(firstSnapshot.animationClipNames).toEqual([...HUMANOID_RUNTIME_CLIP_NAMES].sort());
     for (const clip of first.root.animations) {
       expect(clip.validate()).toBe(true);
@@ -131,6 +139,8 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.metrics.fingerBones).toBe(30);
     expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
     expect(animation.metrics.fingerAnimationTracks).toBeGreaterThanOrEqual(19);
+    expect(animation.metrics.facialMorphTargets).toBe(5);
+    expect(animation.metrics.facialMorphAffectedVertices).toBeGreaterThanOrEqual(100);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
@@ -159,6 +169,26 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.pass).toBe(false);
     expect(game.blockers.join(' ')).toMatch(/game-runtime-motion/);
     expect(animation.metrics.animationSetCoverage).toBeCloseTo(21 / 22);
+  }, 20_000);
+
+  it('blocks animation and game delivery when required facial controls are absent', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    build.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      object.geometry.morphAttributes.position = [];
+      object.morphTargetDictionary = {};
+      object.morphTargetInfluences = [];
+    });
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.pass).toBe(false);
+    expect(game.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-facial-morphs/);
+    expect(game.blockers.join(' ')).toMatch(/game-facial-morphs/);
   }, 20_000);
 
   it('blocks a clip set whose loop seam is visually discontinuous even when names and counts remain intact', () => {

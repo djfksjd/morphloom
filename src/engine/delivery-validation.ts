@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.8.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.10.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -23,6 +23,8 @@ export interface SceneSnapshot {
   animationTrackNames: string[];
   animationManifestEntries: number;
   animationManifestFingerprint: string;
+  morphTargets: number;
+  morphTargetNames: string[];
   gameLods: number;
   collisionPrimitives: number;
   materials: number;
@@ -148,6 +150,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let collisionPrimitives = 0;
   let animationManifestEntries = 0;
   let animationManifestFingerprint = 'none';
+  let morphTargets = 0;
+  const morphTargetNames: string[] = [];
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -186,6 +190,17 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       partIds.add(partId);
     }
     const geometry = object.geometry;
+    const targetEntries = Object.entries(object.morphTargetDictionary ?? {})
+      .sort((left, right) => left[1] - right[1]);
+    morphTargets += targetEntries.length;
+    for (const [name, targetIndex] of targetEntries) {
+      morphTargetNames.push(`${object.name}:${name}`);
+      hasher.text(name);
+      hasher.number(targetIndex);
+      const target = geometry.morphAttributes.position?.[targetIndex];
+      hasher.array(target?.array);
+      geometryBytes += target?.array.byteLength ?? 0;
+    }
     const groups = geometry.groups;
     const materialCount = materialList(object.material).length;
     const deliveryGroups = materialCount > 1 && groups.length > 0 ? groups : [{ start: 0, count: 0, materialIndex: 0 }];
@@ -196,9 +211,11 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       hasher.number(group.count);
       hasher.number(group.materialIndex ?? 0);
     }
-    if (!geometry.boundingBox) geometry.computeBoundingBox();
-    if (geometry.boundingBox) visibleBounds.union(geometry.boundingBox.clone().applyMatrix4(object.matrixWorld));
     const position = geometry.getAttribute('position');
+    // GLTFLoader expands BufferGeometry.boundingBox to include morph extrema.
+    // Delivery dimensions are compared in the neutral/base pose; morph ranges
+    // are audited independently by identity and payload below.
+    if (position) visibleBounds.union(new THREE.Box3().setFromBufferAttribute(position).applyMatrix4(object.matrixWorld));
     const index = geometry.getIndex();
     triangles += index ? index.count / 3 : (position?.count ?? 0) / 3;
     for (const attribute of Object.values(geometry.attributes) as THREE.BufferAttribute[]) {
@@ -257,6 +274,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     animationTrackNames: animationTrackNames.sort(),
     animationManifestEntries,
     animationManifestFingerprint,
+    morphTargets,
+    morphTargetNames: morphTargetNames.sort(),
     gameLods,
     collisionPrimitives,
     materials: materials.size,
@@ -387,6 +406,10 @@ export function compareGlbRoundTrip(
     || source.animationManifestFingerprint !== reopened.animationManifestFingerprint) {
     blockers.push('animation delivery metadata changed during GLB round-trip');
   }
+  if (source.morphTargets !== reopened.morphTargets) blockers.push(`morph target count changed ${source.morphTargets}→${reopened.morphTargets}`);
+  if (source.morphTargetNames.join('|') !== reopened.morphTargetNames.join('|')) {
+    blockers.push('morph target identities changed during GLB round-trip');
+  }
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -404,6 +427,8 @@ export function compareGlbRoundTrip(
     && source.animationTrackNames.join('|') === reopened.animationTrackNames.join('|')
     && source.animationManifestEntries === reopened.animationManifestEntries
     && source.animationManifestFingerprint === reopened.animationManifestFingerprint
+    && source.morphTargets === reopened.morphTargets
+    && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
