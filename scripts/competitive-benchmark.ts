@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import {
   auditFidelityContract,
@@ -98,6 +98,11 @@ const transitions = contract.passes.map((pass, index) => {
 
 const contractAudit = auditFidelityContract(contract, ir);
 const deliveryAudit = auditFidelityDelivery(contract, state);
+const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json', 'utf8')) as {
+  rates?: Record<string, number>;
+  domainReports?: Record<string, { pass?: boolean; score?: number }>;
+};
+const domainProof = qualityBenchmark.domainReports ?? {};
 const output = {
   schema: 'morphloom.competitive-benchmark/0.1',
   generatedAt: new Date().toISOString(),
@@ -128,6 +133,10 @@ const output = {
       topologyPass: compiled.metrics.topology.pass,
       fidelityContractPersisted: compiled.root.userData.fidelityContract?.schema === 'morphloom.fidelity/0.1',
     },
+    crossDomainDelivery: {
+      rates: qualityBenchmark.rates,
+      domains: domainProof,
+    },
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -141,6 +150,10 @@ const output = {
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'GLB and DCC delivery validation', img2threejs: 'Three.js factory focus', morphloom: 'yes' },
+    { capability: 'real skeletal animation GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
+    { capability: 'real-time game budget, UV and topology gate', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass ? 'yes' : 'blocked' },
+    { capability: 'millimetre 3D-print topology and feature gate', img2threejs: 'not established in pinned audit', morphloom: domainProof.print3d?.pass ? 'yes' : 'blocked' },
+    { capability: 'architecture plan, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },
   ],
 };

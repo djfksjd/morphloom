@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.4.4';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.5.1';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -14,6 +14,10 @@ export interface SceneSnapshot {
   namedMeshes: number;
   /** Render primitives expected after glTF splits a mesh by material group. */
   primitives: number;
+  skeletons: number;
+  bones: number;
+  animationClips: number;
+  animationTracks: number;
   materials: number;
   triangles: number;
   geometryBytes: number;
@@ -128,6 +132,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let meshes = 0;
   let namedMeshes = 0;
   let primitives = 0;
+  let skeletons = 0;
+  let bones = 0;
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -141,7 +147,9 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     hasher.text(object.name);
     hasher.array(object.matrixWorld.elements);
     finiteTransforms = finiteTransforms && object.matrixWorld.elements.every(Number.isFinite);
+    if (object instanceof THREE.Bone) bones += 1;
     if (!(object instanceof THREE.Mesh)) return;
+    if (object instanceof THREE.SkinnedMesh) skeletons += 1;
     meshes += 1;
     if (object.name.trim()) namedMeshes += 1;
     const partId = typeof object.userData.part?.id === 'string' ? object.userData.part.id : '';
@@ -190,6 +198,18 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   if (visibleBounds.isEmpty()) visibleBounds.set(new THREE.Vector3(), new THREE.Vector3());
   const size = visibleBounds.getSize(new THREE.Vector3());
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
+  const animations = root.animations ?? [];
+  let animationTracks = 0;
+  for (const clip of animations) {
+    hasher.text(clip.name);
+    hasher.number(clip.duration);
+    animationTracks += clip.tracks.length;
+    for (const track of clip.tracks) {
+      hasher.text(track.name);
+      hasher.array(track.times);
+      hasher.array(track.values);
+    }
+  }
   return {
     fingerprint: hasher.digest(),
     nodes,
@@ -197,6 +217,10 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     meshes,
     namedMeshes,
     primitives,
+    skeletons,
+    bones,
+    animationClips: animations.length,
+    animationTracks,
     materials: materials.size,
     triangles: Math.round(triangles),
     geometryBytes,
@@ -306,6 +330,14 @@ export function compareGlbRoundTrip(
   if (!source.finiteTransforms || !reopened.finiteTransforms) blockers.push('non-finite transform detected');
   if (!meshParity) blockers.push(`delivery primitive count changed ${source.primitives}→${reopened.meshes}`);
   if (!triangleParity) blockers.push(`triangle count changed ${source.triangles}→${reopened.triangles}`);
+  if (source.skeletons !== reopened.skeletons) blockers.push(`skeleton count changed ${source.skeletons}→${reopened.skeletons}`);
+  if (source.bones !== reopened.bones) blockers.push(`bone count changed ${source.bones}→${reopened.bones}`);
+  if (source.animationClips !== reopened.animationClips) {
+    blockers.push(`animation clip count changed ${source.animationClips}→${reopened.animationClips}`);
+  }
+  if (source.animationTracks !== reopened.animationTracks) {
+    blockers.push(`animation track count changed ${source.animationTracks}→${reopened.animationTracks}`);
+  }
   if (boundsErrorMm > 0.1) blockers.push(`round-trip bounds drift ${boundsErrorMm.toFixed(3)} mm`);
   if (namedNodeCoverage < 0.95) blockers.push(`named node coverage ${Math.round(namedNodeCoverage * 100)}%`);
   if (source.duplicatePartIds.length > 0) blockers.push(`duplicate source part ids: ${source.duplicatePartIds.join(', ')}`);
@@ -313,6 +345,8 @@ export function compareGlbRoundTrip(
   if (glbBytes <= 20) blockers.push('GLB payload is empty');
   const status: DeliveryAuditStatus = blockers.length > 0 ? 'blocked' : warnings.length > 0 ? 'warn' : 'pass';
   const exactParity = status === 'pass' && meshParity && triangleParity
+    && source.skeletons === reopened.skeletons && source.bones === reopened.bones
+    && source.animationClips === reopened.animationClips && source.animationTracks === reopened.animationTracks
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
     ? Math.max(0, 58 - blockers.length * 8)

@@ -451,6 +451,7 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
     binary: true,
     onlyVisible: true,
     includeCustomExtensions: true,
+    animations: root.animations,
   });
   if (!(result instanceof ArrayBuffer)) throw new Error('GLB exporter returned text output.');
   if (result.byteLength > 256 * 1024 * 1024) throw new Error('GLB exceeds the 256MB local safety limit.');
@@ -463,6 +464,7 @@ async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inpu
   const loader = new GLTFLoader();
   const reopened = await loader.parseAsync(bytes.slice(0), '');
   try {
+    reopened.scene.animations = reopened.animations;
     const reopenedSnapshot = snapshotScene(reopened.scene);
     return compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, performance.now() - started, inputFingerprint);
   } finally {
@@ -956,7 +958,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       buildRef.current = build;
       const size = build.metrics.bounds.getSize(new THREE.Vector3());
       markerRadiusRef.current = Math.max(0.004, Math.min(0.12, size.length() * 0.004));
-      const telemetry = createLocalBuildTelemetry(snapshotScene(build.root), compileMs);
+      const sourceSnapshot = snapshotScene(build.root);
+      const telemetry = createLocalBuildTelemetry(sourceSnapshot, compileMs);
       telemetryRef.current = telemetry;
       onTelemetry?.(telemetry);
       onBuilt?.(build);
@@ -988,6 +991,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           assetKind,
           parts: 'parts' in build.metrics ? build.metrics.parts : undefined,
           view: runtime.view,
+          sourceSkeletons: sourceSnapshot.skeletons,
+          sourceBones: sourceSnapshot.bones,
+          sourceAnimationClips: sourceSnapshot.animationClips,
+          sourceAnimationTracks: sourceSnapshot.animationTracks,
         },
       });
       runtime.syncDiagnostics();
@@ -1008,6 +1015,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.inputFingerprint = audit.inputFingerprint;
               diagnostic.__MORPHLOOM__.sceneFingerprint = audit.fingerprint;
               diagnostic.__MORPHLOOM__.deliveryStatus = audit.status;
+              diagnostic.__MORPHLOOM__.reopenedSkeletons = audit.reopened?.skeletons;
+              diagnostic.__MORPHLOOM__.reopenedBones = audit.reopened?.bones;
+              diagnostic.__MORPHLOOM__.reopenedAnimationClips = audit.reopened?.animationClips;
+              diagnostic.__MORPHLOOM__.reopenedAnimationTracks = audit.reopened?.animationTracks;
             }
             onDeliveryAudit?.(audit);
             const telemetry = telemetryRef.current;

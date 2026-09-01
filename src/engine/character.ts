@@ -4,6 +4,7 @@ import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { createWebHeroDetails } from './web-hero';
 import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkleReport } from './cloth-wrinkles';
+import { rigHumanoidGeometry } from './humanoid-rig';
 import {
   deformPointByReferencePose,
   getPoseJoints,
@@ -29,11 +30,19 @@ export interface CharacterMetrics {
   namedDetailParts: number;
   inferredDetailParts: number;
   garmentWrinkles?: ClothWrinkleReport;
+  rig: {
+    boneCount: number;
+    weightedVertices: number;
+    maximumWeightError: number;
+    maximumInfluences: number;
+    animationClips: number;
+    animationTracks: number;
+  };
 }
 
 export interface CharacterBuild {
   root: THREE.Group;
-  body: THREE.Mesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial>;
+  body: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial>;
   rig: THREE.Group;
   metrics: CharacterMetrics;
 }
@@ -410,13 +419,17 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     color: '#ffffff', surface: 'skin', roughness: 0.56, sheen: 0.17, microNormalStrength: 0.13,
   }, { mode, category: 'human', materialName: webHero ? '웹 히어로 편집형 패브릭 슈트' : '연속형 피부/의상 베이스' });
   bodyMaterial.vertexColors = mode !== 'clay';
-  const body = new THREE.Mesh(geometry, bodyMaterial);
+  const humanoidRig = rigHumanoidGeometry(geometry, metrics.heightMeters, spec.pose);
+  const body = new THREE.SkinnedMesh(geometry, bodyMaterial);
   body.name = 'morphloom_human_body';
   body.castShadow = true;
   body.receiveShadow = true;
+  body.add(humanoidRig.rootBone);
+  body.bind(humanoidRig.skeleton);
 
   const root = new THREE.Group();
   root.name = 'morphloom_character';
+  root.animations = [humanoidRig.clip];
   root.userData.characterIR = {
     version: '0.2',
     spec: structuredClone(spec),
@@ -453,6 +466,14 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     namedDetailParts: heroDetails?.namedParts ?? 0,
     inferredDetailParts: heroDetails?.inferredParts.length ?? 0,
     garmentWrinkles,
+    rig: {
+      boneCount: humanoidRig.boneCount,
+      weightedVertices: humanoidRig.weightedVertices,
+      maximumWeightError: humanoidRig.maximumWeightError,
+      maximumInfluences: humanoidRig.maximumInfluences,
+      animationClips: root.animations.length,
+      animationTracks: root.animations.reduce((sum, clip) => sum + clip.tracks.length, 0),
+    },
   };
   root.userData.surfaceSystem = completeMetrics.surfaces;
   return { root, body, rig, metrics: completeMetrics };

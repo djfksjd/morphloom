@@ -35,11 +35,16 @@ export interface MeshTopologyReport {
   }>;
 }
 
+export interface TopologyAnalysisOptions {
+  onlyVisible?: boolean;
+  meshFilter?: (mesh: THREE.Mesh) => boolean;
+}
+
 function edgeKey(a: number, b: number): string {
   return a < b ? `${a}:${b}` : `${b}:${a}`;
 }
 
-export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
+export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisOptions = {}): MeshTopologyReport {
   let meshes = 0;
   let watertightMeshes = 0;
   let boundaryEdges = 0;
@@ -60,8 +65,9 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
   let maximumSurfacePeakToValleyMm = Number.NEGATIVE_INFINITY;
   const details: MeshTopologyReport['details'] = [];
 
-  root.traverse((object) => {
+  const inspect = (object: THREE.Object3D): void => {
     if (!(object instanceof THREE.Mesh)) return;
+    if (options.meshFilter && !options.meshFilter(object)) return;
     meshes += 1;
     const edgeTapers = object.geometry.userData.morphloomEdgeTapers as Array<{
       tipThicknessMm?: number;
@@ -163,7 +169,9 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     if (watertight) watertightMeshes += 1;
     details.push({ name: object.name, boundaryEdges: meshBoundary, nonManifoldEdges: meshNonManifold, degenerateTriangles: meshDegenerate, watertight });
     geometry.dispose();
-  });
+  };
+  if (options.onlyVisible) root.traverseVisible(inspect);
+  else root.traverse(inspect);
 
   return {
     meshes,

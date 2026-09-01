@@ -7,11 +7,13 @@ import { parseOhpk } from '../src/engine/ohpk';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from '../src/types';
+import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC } from '../src/types';
 import { deliveryInputFingerprint, snapshotScene } from '../src/engine/delivery-validation';
 import { auditAssemblyDetail } from '../src/engine/generation-policy';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 import { analyzeTopology } from '../src/engine/topology';
+import { auditDomainReadiness } from '../src/engine/domain-readiness';
 
 const knifeA = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const knifeB = buildOrnateKnife(structuredClone(DEFAULT_KNIFE_SPEC), 'beauty');
@@ -27,6 +29,10 @@ const humanPack = await parseOhpk(
 );
 const characterA = buildCharacter(humanPack, WEB_HERO_SPEC, 'beauty');
 const characterB = buildCharacter(humanPack, structuredClone(WEB_HERO_SPEC), 'beauty');
+const baseCharacterA = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+const baseCharacterB = buildCharacter(humanPack, structuredClone(FIELD_HUMAN_SPEC), 'beauty');
+const asphaltA = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
+const asphaltB = compileAssemblyIR(structuredClone(ASPHALT_SURFACE_BENCHMARK_IR), 'beauty');
 
 type BrowserProof = {
   id?: unknown;
@@ -64,6 +70,8 @@ const fingerprints = {
   conceptArchitecture: [snapshotScene(conceptArchitectureA.root).fingerprint, snapshotScene(conceptArchitectureB.root).fingerprint] as const,
   cooling: [snapshotScene(coolingA.root).fingerprint, snapshotScene(coolingB.root).fingerprint] as const,
   character: [snapshotScene(characterA.root).fingerprint, snapshotScene(characterB.root).fingerprint] as const,
+  baseCharacter: [snapshotScene(baseCharacterA.root).fingerprint, snapshotScene(baseCharacterB.root).fingerprint] as const,
+  asphalt: [snapshotScene(asphaltA.root).fingerprint, snapshotScene(asphaltB.root).fingerprint] as const,
 };
 
 const inputFingerprints = {
@@ -72,12 +80,45 @@ const inputFingerprints = {
   conceptArchitecture: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: MODERNCAT_CONCEPT_RESIDENCE_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
   cooling: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: COOLING_ASSEMBLY_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
   character: deliveryInputFingerprint({ assetKind: 'human', assemblyIR: undefined, productSpec: DEFAULT_PRODUCT_SPEC, spec: WEB_HERO_SPEC, pack: humanPack }),
+  baseCharacter: deliveryInputFingerprint({ assetKind: 'human', assemblyIR: undefined, productSpec: DEFAULT_PRODUCT_SPEC, spec: FIELD_HUMAN_SPEC, pack: humanPack }),
+  asphalt: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: ASPHALT_SURFACE_BENCHMARK_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
 };
+
+const baseBrowserProof = hasMatchingBrowserProof('field-human-runtime-base', inputFingerprints.baseCharacter);
+const asphaltBrowserProof = hasMatchingBrowserProof('asphalt-print-surface', inputFingerprints.asphalt);
+const domainReports = {
+  industrialDesign: auditDomainReadiness({
+    domain: 'industrial-design', root: knifeA.root, topology: knifeA.metrics.topology,
+    evidenceScore: 90, deterministic: fingerprints.knife[0] === fingerprints.knife[1],
+    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife),
+  }),
+  architecture: auditDomainReadiness({
+    domain: 'architecture', root: architectureA.root, topology: architectureA.metrics.topology,
+    evidenceScore: architectureA.metrics.engineering?.evidenceScore ?? 0,
+    deterministic: fingerprints.architecture[0] === fingerprints.architecture[1],
+    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture),
+  }),
+  animation: auditDomainReadiness({
+    domain: 'animation', root: baseCharacterA.root, evidenceScore: 90,
+    deterministic: fingerprints.baseCharacter[0] === fingerprints.baseCharacter[1], browserGlbRoundTrip: baseBrowserProof,
+  }),
+  game: auditDomainReadiness({
+    domain: 'game', root: baseCharacterA.root, evidenceScore: 90,
+    deterministic: fingerprints.baseCharacter[0] === fingerprints.baseCharacter[1], browserGlbRoundTrip: baseBrowserProof,
+  }),
+  print3d: auditDomainReadiness({
+    domain: '3d-print', root: asphaltA.root, topology: asphaltA.metrics.topology,
+    evidenceScore: 84, deterministic: fingerprints.asphalt[0] === fingerprints.asphalt[1],
+    browserGlbRoundTrip: asphaltBrowserProof, sourceUnitMm: 1,
+  }),
+};
+
+const checkPassed = (report: { checks: Array<{ id: string; pass: boolean }> }, id: string): boolean => report.checks.some((check) => check.id === id && check.pass);
 
 const cases = [
   evaluateBenchmarkCase({
-    id: 'ornate-knife-product-visualization', domain: 'product', topologyPass: knifeA.metrics.topology.pass,
-    evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: knifeA.metrics.parts >= 15,
+    id: 'ornate-knife-product-visualization', domain: 'industrial-design', topologyPass: knifeA.metrics.topology.pass,
+    evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: domainReports.industrialDesign.pass,
     firstFingerprint: fingerprints.knife[0], repeatedFingerprint: fingerprints.knife[1],
     inputFingerprint: inputFingerprints.knife,
     browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife),
@@ -123,6 +164,29 @@ const cases = [
     browserGlbRoundTrip: hasMatchingBrowserProof('single-view-character-previs', inputFingerprints.character),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
+  evaluateBenchmarkCase({
+    id: 'field-human-animation-base', domain: 'animation',
+    topologyPass: checkPassed(domainReports.animation, 'animation-topology'), evidenceScore: 90,
+    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: domainReports.animation.pass,
+    firstFingerprint: fingerprints.baseCharacter[0], repeatedFingerprint: fingerprints.baseCharacter[1],
+    inputFingerprint: inputFingerprints.baseCharacter, browserGlbRoundTrip: baseBrowserProof,
+    expectedDecision: 'release',
+  }),
+  evaluateBenchmarkCase({
+    id: 'field-human-game-base', domain: 'game',
+    topologyPass: checkPassed(domainReports.game, 'game-topology'), evidenceScore: 90,
+    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: domainReports.game.pass,
+    firstFingerprint: fingerprints.baseCharacter[0], repeatedFingerprint: fingerprints.baseCharacter[1],
+    inputFingerprint: inputFingerprints.baseCharacter, browserGlbRoundTrip: baseBrowserProof,
+    expectedDecision: 'release',
+  }),
+  evaluateBenchmarkCase({
+    id: 'asphalt-3d-print-surface', domain: '3d-print', topologyPass: asphaltA.metrics.topology.pass,
+    evidenceScore: 84, surfaceCoverage: surfaceCoverage(asphaltA), domainChecksPass: domainReports.print3d.pass,
+    firstFingerprint: fingerprints.asphalt[0], repeatedFingerprint: fingerprints.asphalt[1],
+    inputFingerprint: inputFingerprints.asphalt, browserGlbRoundTrip: asphaltBrowserProof,
+    expectedDecision: 'release',
+  }),
 ];
 
 const rates = benchmarkPassRates(cases);
@@ -146,6 +210,7 @@ const output = {
   },
   requiredRates,
   rates,
+  domainReports,
   cases,
 };
 writeFileSync('benchmarks/quality-latest.json', `${JSON.stringify(output, null, 2)}\n`, 'utf8');

@@ -4,6 +4,14 @@
 
 `npm run quality:gate` recompiles product, architecture, service-assembly, and character cases twice, compares deterministic fingerprints, applies evidence and micro-surface thresholds, and writes `quality-latest.json`. It then runs the eight-stage Fidelity Contract benchmark and writes `competitive-latest.json`. Each locked case declares whether the correct outcome is release or block. The overall rate requires both technical integrity and the correct decision; expected rejections count only when their named blocker is observed. Model/browser release rates use only release-intended cases, while expected rejections have a separate safety rate.
 
+The current suite locks eight decisions: five release-intended contracts (industrial design, measured architecture, animation, game, and 3D print) plus three evidence-limited rejections. Domain readiness is not one shared beauty score:
+
+- architecture requires a verified plan footprint, closed shells, evidence ≥85, and ≥80% micro-normal coverage;
+- industrial design requires closed topology, evidence ≥80, ≥95% UV coverage, and ≥75% micro-normal coverage;
+- animation requires a closed skinned body, at least 15 real bones, normalized ≤4-influence weights, animation tracks, UVs, and GLB preservation;
+- game requires the triangle budget, no non-manifold or degenerate geometry, UVs, normals, a skeleton, and PBR surfaces;
+- 3D print requires a closed positive-volume mesh, explicit millimetres, and an IR-declared minimum feature of at least 0.8 mm. Printer-specific overhang and support analysis remains a warning.
+
 A browser proof requires the viewer to export and reopen the actual GLB. The proof is bound to a normalized input fingerprint containing the relevant asset inputs and compiler revision. Raw scene fingerprints remain in the report for same-runtime diagnostics; platform-level floating-point noise is not used as a cross-runtime cache key. A fixed score, stale compiler revision, stale input proof, or download click is not evidence.
 
 It does not convert triangle count into a beauty score. Reference fidelity needs the same admitted images and camera calibration. Morphloom now computes same-size reference/render silhouette IoU, interior pixel similarity, feature-region scores, and frame fingerprints; it still does not claim to beat another renderer without a same-input blind visual evaluation. See [`../docs/COMPETITIVE_BENCHMARK.md`](../docs/COMPETITIVE_BENCHMARK.md).

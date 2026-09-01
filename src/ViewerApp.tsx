@@ -34,7 +34,7 @@ import { ViewportErrorBoundary } from './components/ViewportErrorBoundary';
 import { bytesLabel, type DeliveryAudit, type LocalBuildTelemetry } from './engine/delivery-validation';
 import { auditFidelityContract } from './engine/fidelity-pipeline';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from './types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC } from './types';
 
 const MODES: Array<{ id: ViewMode; label: string }> = [
   { id: 'beauty', label: 'Beauty' },
@@ -115,7 +115,7 @@ const VIEWER_ASSETS: ViewerAsset[] = [
   },
   {
     id: 'field-human', label: 'Field Human', caption: 'editable character base', kind: 'human',
-    spec: { ...DEFAULT_SPEC, muscle: 0.72, weight: 0.56, shoulderScale: 1.1, outfit: 'field', suitColor: '#242a33' },
+    spec: FIELD_HUMAN_SPEC,
   },
 ];
 
@@ -820,6 +820,9 @@ export function ViewerApp() {
               <span>GLB SIZE<b>{bytesLabel(deliveryAudit?.glbBytes ?? 0)}</b></span>
               <span>BOUNDS DRIFT<b>{deliveryAudit ? `${deliveryAudit.boundsErrorMm.toFixed(3)} mm` : '—'}</b></span>
               <span>NAMED NODES<b>{deliveryAudit ? `${Math.round(deliveryAudit.namedNodeCoverage * 100)}%` : '—'}</b></span>
+              {(deliveryAudit?.source?.skeletons ?? 0) > 0 && (
+                <span>RIG / MOTION<b>{deliveryAudit?.reopened?.skeletons ?? 0} skeleton · {deliveryAudit?.reopened?.bones ?? 0} bones · {deliveryAudit?.reopened?.animationClips ?? 0} clip / {deliveryAudit?.reopened?.animationTracks ?? 0} tracks</b></span>
+              )}
             </div>
             <p>{deliveryAudit?.status === 'blocked'
               ? deliveryAudit.blockers.join(' · ')

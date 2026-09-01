@@ -1,19 +1,19 @@
 {
   "schema": "morphloom.browser-roundtrip/0.2",
-  "observedAt": "2026-09-01T04:14:00Z",
-  "environment": "local Chromium via Playwright CLI, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
+  "observedAt": "2026-09-01T13:53:05Z",
+  "environment": "local Chromium via Codex in-app browser, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
   "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
   "console": {
     "errors": 0,
-    "warnings": 28,
-    "warningNote": "One repeated Three.js GLTFExporter notice: metalnessMap and roughnessMap were intentionally merged."
+    "warnings": 0,
+    "warningNote": "Seven locked assets were selected in the real viewer; no console warning or error was captured."
   },
   "assets": [
     {
       "id": "pinterest-concept-architectural-review",
       "status": "pass",
       "sceneFingerprint": "94bf5bd22d3a321d",
-      "inputFingerprint": "acacf4ab3937bc99",
+      "inputFingerprint": "29e2e2a3314c2da5",
       "glbDisplaySize": "7.95 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -24,8 +24,8 @@
       "id": "laurel-homes-architectural-review",
       "status": "pass",
       "sceneFingerprint": "389dd42a5c2f2c29",
-      "inputFingerprint": "48b507f0d63bce34",
-      "glbDisplaySize": "18.22 MB",
+      "inputFingerprint": "32923b10389f64d0",
+      "glbDisplaySize": "18.35 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": true,
@@ -45,7 +45,7 @@
       "id": "cooling-service-assembly",
       "status": "pass",
       "sceneFingerprint": "9abcb05be1fe7938",
-      "inputFingerprint": "71b2b282f2a464b9",
+      "inputFingerprint": "72f0a7aa3457fcc5",
       "glbDisplaySize": "12.85 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -66,7 +66,7 @@
       "id": "ornate-knife-product-visualization",
       "status": "pass",
       "sceneFingerprint": "870c78aa74e6523f",
-      "inputFingerprint": "eb7273ac8e455b31",
+      "inputFingerprint": "2afa14e4d3f0a915",
       "glbDisplaySize": "696.9 KB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -87,13 +87,39 @@
     {
       "id": "single-view-character-previs",
       "status": "pass",
-      "sceneFingerprint": "d125981710da745a",
-      "inputFingerprint": "c005b943dba19fe9",
-      "glbDisplaySize": "1.99 MB",
+      "sceneFingerprint": "3ffb6515bf412add",
+      "inputFingerprint": "5a980da308472cc5",
+      "glbDisplaySize": "2.32 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": false,
-      "scope": "single-view likeness evidence blocked"
+      "scope": "single-view likeness evidence blocked; GLB preserves 1 skeleton, 17 bones, 1 clip and 2 tracks"
+    },
+    {
+      "id": "field-human-runtime-base",
+      "status": "pass",
+      "sceneFingerprint": "d1cdfe6d5423e63c",
+      "inputFingerprint": "872c4db473d44184",
+      "glbDisplaySize": "1.40 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": true,
+      "skeletons": 1,
+      "bones": 17,
+      "animationClips": 1,
+      "animationTracks": 2,
+      "scope": "editable animation and game base; real glTF skin and idle preview clip"
+    },
+    {
+      "id": "asphalt-print-surface",
+      "status": "pass",
+      "sceneFingerprint": "cf0bc53d5fa7e992",
+      "inputFingerprint": "bdfd8771384abceb",
+      "glbDisplaySize": "10.55 MB",
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "qualityReleaseReady": true,
+      "scope": "watertight millimeter-scale relief specimen; slicer support review remains downstream"
     }
   ]
 }

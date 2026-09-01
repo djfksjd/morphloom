@@ -222,11 +222,15 @@ function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
   return new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
 }
 
-function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]) {
-  const key = `${finish}:${scale[0]}:${scale[1]}`;
+function createMicroSurfaceMaps(
+  finish: SurfaceFinishIR,
+  scale: [number, number],
+  patternOverride?: SurfaceRecipe['pattern'],
+) {
+  const pattern = patternOverride ?? SURFACE_LIBRARY[finish].pattern;
+  const key = `${finish}:${pattern}:${scale[0]}:${scale[1]}`;
   const cached = textureCache.get(key);
   if (cached) return cached;
-  const pattern = SURFACE_LIBRARY[finish].pattern;
   const size = pattern === 'aggregate' ? 256 : 64;
   const albedoData = new Uint8Array(size * size * 4);
   const normalData = new Uint8Array(size * size * 4);
@@ -316,6 +320,12 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
   const ghost = context.mode === 'rig' && (context.category === 'enclosure' || context.category === 'display');
   const transmission = context.mode === 'beauty' ? (source.transmission ?? preset.transmission) : 0;
   const microNormalStrength = source.microNormalStrength ?? preset.microNormalStrength;
+  // `raw` means the exact finish is unknown, not that an explicitly requested
+  // micro-surface should be silently discarded. Use a conservative grain map
+  // until the evidence pipeline can classify a more specific physical finish.
+  const effectivePattern = preset.pattern === 'none' && (source.microNormalStrength ?? 0) > 0
+    ? 'grain'
+    : preset.pattern;
   const material = new THREE.MeshPhysicalMaterial({
     color: clay ? '#c5c6c3' : source.color,
     roughness: clay ? 0.82 : (source.roughness ?? preset.roughness),
@@ -345,9 +355,9 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     // smooth shading would turn the same geometry back into rounded bubbles.
     flatShading: finish === 'asphalt',
   });
-  if (context.mode === 'beauty' && preset.pattern !== 'none' && microNormalStrength > 0) {
+  if (context.mode === 'beauty' && effectivePattern !== 'none' && microNormalStrength > 0) {
     const scale = source.textureScale ?? preset.textureScale;
-    const maps = createMicroSurfaceMaps(finish, scale);
+    const maps = createMicroSurfaceMaps(finish, scale, effectivePattern);
     material.normalMap = maps.normal;
     material.normalScale.set(microNormalStrength, microNormalStrength);
     material.roughnessMap = maps.roughness;
@@ -365,7 +375,7 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     anisotropy: material.anisotropy,
     microNormalStrength: context.mode === 'beauty' ? microNormalStrength : 0,
     textureScale: source.textureScale ?? preset.textureScale,
-    procedural: preset.pattern !== 'none',
+    procedural: effectivePattern !== 'none',
   };
   return material;
 }

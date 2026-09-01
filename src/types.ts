@@ -152,6 +152,16 @@ export const WEB_HERO_SPEC: CharacterSpec = {
   handGesture: 'web-shooting',
 };
 
+/** Shared runtime and benchmark base for editable game/animation delivery. */
+export const FIELD_HUMAN_SPEC: CharacterSpec = {
+  ...DEFAULT_SPEC,
+  muscle: 0.72,
+  weight: 0.56,
+  shoulderScale: 1.1,
+  outfit: 'field',
+  suitColor: '#242a33',
+};
+
 export const DEFAULT_PRODUCT_SPEC: ProductSpec = {
   kind: 'smartphone',
   widthMm: 76.7,

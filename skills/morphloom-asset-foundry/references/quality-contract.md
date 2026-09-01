@@ -6,7 +6,7 @@ Apply these requirements to every asset. Source sufficiency comes from [evidence
 
 Before building geometry, derive a compact contract from the request and evidence:
 
-- **Use:** preview, game asset, product visualization, service/exploded assembly, architectural review, or another explicit target. This determines the smallest feature that must be geometry.
+- **Use:** preview, game asset, animation, 3D print, product visualization, service/exploded assembly, architectural review, or another explicit target. This determines the smallest feature that must be geometry and which domain contract must block delivery.
 - **Evidence map:** source view, scale/dimension authority, occlusion, and `measured`, `datasheet`, `estimated`, or `inferred` status.
 - **Signature-feature manifest:** the silhouette breaks, proportions, openings, seams, controls, decorations, material boundaries, pose landmarks, or spatial forms whose omission would make the result feel like a generic substitute.
 - **Relationship constraints:** left/right and front/rear mapping, ordering, attachment, containment, symmetry/asymmetry, projection direction, port endpoints, and negative-space boundaries.

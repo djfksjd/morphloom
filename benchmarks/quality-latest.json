@@ -1,10 +1,10 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-09-01T04:19:01.238Z",
+  "generatedAt": "2026-09-01T13:54:49.428Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
-    "lockedCases": 5,
-    "releaseIntended": 2,
+    "lockedCases": 8,
+    "releaseIntended": 5,
     "expectedRejections": 3
   },
   "requiredRates": {
@@ -23,17 +23,517 @@
     "deliveryRelease": 1,
     "rejectionSafety": 1
   },
+  "domainReports": {
+    "industrialDesign": {
+      "domain": "industrial-design",
+      "pass": true,
+      "score": 99,
+      "checks": [
+        {
+          "id": "determinism",
+          "label": "동일 입력 재현성",
+          "pass": true,
+          "score": 100,
+          "detail": "구조 fingerprint 일치",
+          "blocking": true
+        },
+        {
+          "id": "finite-scene",
+          "label": "유한 장면 데이터",
+          "pass": true,
+          "score": 100,
+          "detail": "모든 변환값이 유한함",
+          "blocking": true
+        },
+        {
+          "id": "named-parts",
+          "label": "이름 있는 편집 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "16/16 메시 명명",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": true,
+          "score": 100,
+          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "blocking": true
+        },
+        {
+          "id": "design-topology",
+          "label": "제품 토폴로지",
+          "pass": true,
+          "score": 100,
+          "detail": "경계 0 · 비매니폴드 0",
+          "blocking": true
+        },
+        {
+          "id": "design-evidence",
+          "label": "제품 근거",
+          "pass": true,
+          "score": 90,
+          "detail": "90/80",
+          "blocking": true
+        },
+        {
+          "id": "design-uv",
+          "label": "제품 UV",
+          "pass": true,
+          "score": 100,
+          "detail": "100% 메시 UV",
+          "blocking": true
+        },
+        {
+          "id": "design-surface",
+          "label": "제품 PBR 미세표면",
+          "pass": true,
+          "score": 100,
+          "detail": "100% micro-normal",
+          "blocking": true
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "metrics": {
+        "meshes": 16,
+        "triangles": 18930,
+        "namedMeshCoverage": 1,
+        "uvMeshCoverage": 1,
+        "normalMeshCoverage": 1,
+        "pbrSurfaceCoverage": 1,
+        "skeletons": 0,
+        "bones": 0,
+        "animationClips": 0,
+        "animationTracks": 0,
+        "maximumSkinWeightError": 0,
+        "maximumSkinInfluences": 0,
+        "minimumMeshAxisMm": 2.53915809957823,
+        "declaredMinimumFeatureMm": 0.16,
+        "enclosedVolumeMm3": 146608.7279233531
+      }
+    },
+    "architecture": {
+      "domain": "architecture",
+      "pass": true,
+      "score": 98,
+      "checks": [
+        {
+          "id": "determinism",
+          "label": "동일 입력 재현성",
+          "pass": true,
+          "score": 100,
+          "detail": "구조 fingerprint 일치",
+          "blocking": true
+        },
+        {
+          "id": "finite-scene",
+          "label": "유한 장면 데이터",
+          "pass": true,
+          "score": 100,
+          "detail": "모든 변환값이 유한함",
+          "blocking": true
+        },
+        {
+          "id": "named-parts",
+          "label": "이름 있는 편집 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "321/321 메시 명명",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": true,
+          "score": 100,
+          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "blocking": true
+        },
+        {
+          "id": "architecture-topology",
+          "label": "건축 셸 토폴로지",
+          "pass": true,
+          "score": 100,
+          "detail": "321/321 폐쇄형",
+          "blocking": true
+        },
+        {
+          "id": "architecture-plan",
+          "label": "도면 외곽 검증",
+          "pass": true,
+          "score": 100,
+          "detail": "검증된 평면 외곽",
+          "blocking": true
+        },
+        {
+          "id": "architecture-evidence",
+          "label": "실측·도면 근거",
+          "pass": true,
+          "score": 87,
+          "detail": "87/85",
+          "blocking": true
+        },
+        {
+          "id": "architecture-surface",
+          "label": "건축 마감 표면",
+          "pass": true,
+          "score": 100,
+          "detail": "100% micro-normal (최소 80%)",
+          "blocking": true
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "metrics": {
+        "meshes": 321,
+        "triangles": 188748,
+        "namedMeshCoverage": 1,
+        "uvMeshCoverage": 1,
+        "normalMeshCoverage": 1,
+        "pbrSurfaceCoverage": 1,
+        "skeletons": 0,
+        "bones": 0,
+        "animationClips": 0,
+        "animationTracks": 0,
+        "maximumSkinWeightError": 0,
+        "maximumSkinInfluences": 0,
+        "minimumMeshAxisMm": 17.999999225139618,
+        "declaredMinimumFeatureMm": 18,
+        "enclosedVolumeMm3": 254482354093.11646
+      }
+    },
+    "animation": {
+      "domain": "animation",
+      "pass": true,
+      "score": 99,
+      "checks": [
+        {
+          "id": "determinism",
+          "label": "동일 입력 재현성",
+          "pass": true,
+          "score": 100,
+          "detail": "구조 fingerprint 일치",
+          "blocking": true
+        },
+        {
+          "id": "finite-scene",
+          "label": "유한 장면 데이터",
+          "pass": true,
+          "score": 100,
+          "detail": "모든 변환값이 유한함",
+          "blocking": true
+        },
+        {
+          "id": "named-parts",
+          "label": "이름 있는 편집 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "2/2 메시 명명",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": true,
+          "score": 100,
+          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "blocking": true
+        },
+        {
+          "id": "animation-topology",
+          "label": "변형 가능한 폐쇄형 바디",
+          "pass": true,
+          "score": 100,
+          "detail": "1/1 스킨 메시 폐쇄형",
+          "blocking": true
+        },
+        {
+          "id": "animation-skeleton",
+          "label": "실제 스켈레톤",
+          "pass": true,
+          "score": 100,
+          "detail": "1 skeleton · 17 bones",
+          "blocking": true
+        },
+        {
+          "id": "animation-weights",
+          "label": "정규화 스킨 웨이트",
+          "pass": true,
+          "score": 100,
+          "detail": "오차 2.98e-8 · 최대 2 influences",
+          "blocking": true
+        },
+        {
+          "id": "animation-clips",
+          "label": "재생 가능한 애니메이션",
+          "pass": true,
+          "score": 100,
+          "detail": "1 clips · 2 tracks",
+          "blocking": true
+        },
+        {
+          "id": "animation-uv",
+          "label": "캐릭터 UV",
+          "pass": true,
+          "score": 100,
+          "detail": "100% 메시 UV",
+          "blocking": true
+        },
+        {
+          "id": "animation-evidence",
+          "label": "캐릭터 베이스 근거",
+          "pass": true,
+          "score": 90,
+          "detail": "90/80",
+          "blocking": true
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "metrics": {
+        "meshes": 2,
+        "triangles": 31868,
+        "namedMeshCoverage": 1,
+        "uvMeshCoverage": 1,
+        "normalMeshCoverage": 1,
+        "pbrSurfaceCoverage": 1,
+        "skeletons": 1,
+        "bones": 17,
+        "animationClips": 1,
+        "animationTracks": 2,
+        "maximumSkinWeightError": 2.9802322387695312e-8,
+        "maximumSkinInfluences": 2,
+        "minimumMeshAxisMm": 136.7105718143282,
+        "enclosedVolumeMm3": 97004271.53615975
+      }
+    },
+    "game": {
+      "domain": "game",
+      "pass": true,
+      "score": 100,
+      "checks": [
+        {
+          "id": "determinism",
+          "label": "동일 입력 재현성",
+          "pass": true,
+          "score": 100,
+          "detail": "구조 fingerprint 일치",
+          "blocking": true
+        },
+        {
+          "id": "finite-scene",
+          "label": "유한 장면 데이터",
+          "pass": true,
+          "score": 100,
+          "detail": "모든 변환값이 유한함",
+          "blocking": true
+        },
+        {
+          "id": "named-parts",
+          "label": "이름 있는 편집 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "2/2 메시 명명",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": true,
+          "score": 100,
+          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "blocking": true
+        },
+        {
+          "id": "game-budget",
+          "label": "실시간 삼각형 예산",
+          "pass": true,
+          "score": 100,
+          "detail": "31,868 / 100,000 tris",
+          "blocking": true
+        },
+        {
+          "id": "game-topology",
+          "label": "게임 메시 토폴로지",
+          "pass": true,
+          "score": 100,
+          "detail": "경계 72 · 비매니폴드 0 · 퇴화 0",
+          "blocking": true
+        },
+        {
+          "id": "game-uv",
+          "label": "게임 UV",
+          "pass": true,
+          "score": 100,
+          "detail": "100% 메시 UV",
+          "blocking": true
+        },
+        {
+          "id": "game-normals",
+          "label": "게임 노멀",
+          "pass": true,
+          "score": 100,
+          "detail": "100% 메시 노멀",
+          "blocking": true
+        },
+        {
+          "id": "game-skeleton",
+          "label": "게임용 스켈레톤",
+          "pass": true,
+          "score": 100,
+          "detail": "1 skeleton · 17 bones",
+          "blocking": true
+        },
+        {
+          "id": "game-pbr",
+          "label": "게임 PBR 표면",
+          "pass": true,
+          "score": 100,
+          "detail": "100% micro-normal",
+          "blocking": true
+        }
+      ],
+      "blockers": [],
+      "warnings": [],
+      "metrics": {
+        "meshes": 2,
+        "triangles": 31868,
+        "namedMeshCoverage": 1,
+        "uvMeshCoverage": 1,
+        "normalMeshCoverage": 1,
+        "pbrSurfaceCoverage": 1,
+        "skeletons": 1,
+        "bones": 17,
+        "animationClips": 1,
+        "animationTracks": 2,
+        "maximumSkinWeightError": 2.9802322387695312e-8,
+        "maximumSkinInfluences": 2,
+        "minimumMeshAxisMm": 136.7105718143282,
+        "enclosedVolumeMm3": 97004271.53615975
+      }
+    },
+    "print3d": {
+      "domain": "3d-print",
+      "pass": true,
+      "score": 100,
+      "checks": [
+        {
+          "id": "determinism",
+          "label": "동일 입력 재현성",
+          "pass": true,
+          "score": 100,
+          "detail": "구조 fingerprint 일치",
+          "blocking": true
+        },
+        {
+          "id": "finite-scene",
+          "label": "유한 장면 데이터",
+          "pass": true,
+          "score": 100,
+          "detail": "모든 변환값이 유한함",
+          "blocking": true
+        },
+        {
+          "id": "named-parts",
+          "label": "이름 있는 편집 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "1/1 메시 명명",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": true,
+          "score": 100,
+          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "blocking": true
+        },
+        {
+          "id": "print-topology",
+          "label": "출력 가능한 폐쇄형 메시",
+          "pass": true,
+          "score": 100,
+          "detail": "경계 0 · 비매니폴드 0 · 퇴화 0",
+          "blocking": true
+        },
+        {
+          "id": "print-units",
+          "label": "명시적 mm 단위",
+          "pass": true,
+          "score": 100,
+          "detail": "1 source unit = 1 mm",
+          "blocking": true
+        },
+        {
+          "id": "print-declared-feature",
+          "label": "선언된 최소 형상",
+          "pass": true,
+          "score": 100,
+          "detail": "33.500 mm / 최소 0.800 mm",
+          "blocking": true
+        },
+        {
+          "id": "print-bounds-sanity",
+          "label": "메시 축 치수 점검",
+          "pass": true,
+          "score": 100,
+          "detail": "43.453 mm",
+          "blocking": false
+        },
+        {
+          "id": "print-volume",
+          "label": "양의 폐쇄 체적",
+          "pass": true,
+          "score": 100,
+          "detail": "10762674.3 mm³",
+          "blocking": true
+        },
+        {
+          "id": "print-supports",
+          "label": "오버행·서포트 분석",
+          "pass": false,
+          "score": 50,
+          "detail": "슬라이서별 서포트 생성은 후속 공정",
+          "blocking": false
+        }
+      ],
+      "blockers": [],
+      "warnings": [
+        "print-supports: 슬라이서별 서포트 생성은 후속 공정"
+      ],
+      "metrics": {
+        "meshes": 1,
+        "triangles": 111936,
+        "namedMeshCoverage": 1,
+        "uvMeshCoverage": 1,
+        "normalMeshCoverage": 1,
+        "pbrSurfaceCoverage": 1,
+        "skeletons": 0,
+        "bones": 0,
+        "animationClips": 0,
+        "animationTracks": 0,
+        "maximumSkinWeightError": 0,
+        "maximumSkinInfluences": 0,
+        "minimumMeshAxisMm": 43.45347546041012,
+        "declaredMinimumFeatureMm": 33.5,
+        "enclosedVolumeMm3": 10762674.26790627
+      }
+    }
+  },
   "cases": [
     {
       "id": "ornate-knife-product-visualization",
-      "domain": "product",
+      "domain": "industrial-design",
       "topologyPass": true,
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
       "firstFingerprint": "870c78aa74e6523f",
       "repeatedFingerprint": "870c78aa74e6523f",
-      "inputFingerprint": "eb7273ac8e455b31",
+      "inputFingerprint": "2afa14e4d3f0a915",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -54,7 +554,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "94bf5bd22d3a321d",
       "repeatedFingerprint": "94bf5bd22d3a321d",
-      "inputFingerprint": "acacf4ab3937bc99",
+      "inputFingerprint": "29e2e2a3314c2da5",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -74,11 +574,11 @@
       "domain": "architecture",
       "topologyPass": true,
       "evidenceScore": 87,
-      "surfaceCoverage": 0.40498442367601245,
+      "surfaceCoverage": 1,
       "domainChecksPass": true,
       "firstFingerprint": "389dd42a5c2f2c29",
       "repeatedFingerprint": "389dd42a5c2f2c29",
-      "inputFingerprint": "48b507f0d63bce34",
+      "inputFingerprint": "32923b10389f64d0",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -87,7 +587,7 @@
       "deliveryReady": true,
       "decisionCorrect": true,
       "benchmarkPassed": true,
-      "score": 88,
+      "score": 98,
       "blockers": []
     },
     {
@@ -99,7 +599,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "4bbc86964c11a3f9",
       "repeatedFingerprint": "4bbc86964c11a3f9",
-      "inputFingerprint": "71b2b282f2a464b9",
+      "inputFingerprint": "72f0a7aa3457fcc5",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -121,9 +621,9 @@
       "evidenceScore": 35,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "ca1eb641472470e4",
-      "repeatedFingerprint": "ca1eb641472470e4",
-      "inputFingerprint": "c005b943dba19fe9",
+      "firstFingerprint": "e340853326f8c503",
+      "repeatedFingerprint": "e340853326f8c503",
+      "inputFingerprint": "5a980da308472cc5",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -137,6 +637,69 @@
       "blockers": [
         "evidence 35/85"
       ]
+    },
+    {
+      "id": "field-human-animation-base",
+      "domain": "animation",
+      "topologyPass": true,
+      "evidenceScore": 90,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "d1cdfe6d5423e63c",
+      "repeatedFingerprint": "d1cdfe6d5423e63c",
+      "inputFingerprint": "872c4db473d44184",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "release",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": true,
+      "deliveryReady": true,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 98,
+      "blockers": []
+    },
+    {
+      "id": "field-human-game-base",
+      "domain": "game",
+      "topologyPass": true,
+      "evidenceScore": 90,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "d1cdfe6d5423e63c",
+      "repeatedFingerprint": "d1cdfe6d5423e63c",
+      "inputFingerprint": "872c4db473d44184",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "release",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": true,
+      "deliveryReady": true,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 98,
+      "blockers": []
+    },
+    {
+      "id": "asphalt-3d-print-surface",
+      "domain": "3d-print",
+      "topologyPass": true,
+      "evidenceScore": 84,
+      "surfaceCoverage": 1,
+      "domainChecksPass": true,
+      "firstFingerprint": "cf0bc53d5fa7e992",
+      "repeatedFingerprint": "cf0bc53d5fa7e992",
+      "inputFingerprint": "bdfd8771384abceb",
+      "browserGlbRoundTrip": true,
+      "expectedDecision": "release",
+      "reproducible": true,
+      "technicalReady": true,
+      "modelReady": true,
+      "deliveryReady": true,
+      "decisionCorrect": true,
+      "benchmarkPassed": true,
+      "score": 97,
+      "blockers": []
     }
   ]
 }

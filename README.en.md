@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-106%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-110%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,7 +101,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
-| Character | 14,517-vertex human base · posed Web Hero |
+| Character | Human base with a real 17-bone skeleton, normalized skin weights, and GLB animation · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
 
@@ -116,13 +116,23 @@ npm run build
 
 Current locked benchmark:
 
-- Overall pass: **100% (5/5)**
-- Technical integrity: **100% (5/5)**
-- Release/block decision accuracy: **100% (5/5)**
-- Release-intended model and browser GLB: **100% (2/2)**
+- Overall pass: **100% (8/8)**
+- Technical integrity: **100% (8/8)**
+- Release/block decision accuracy: **100% (8/8)**
+- Release-intended model and browser GLB: **100% (5/5)**
 - Insufficient-evidence rejection safety: **100% (3/3)**
 
-This does not mean every generated asset is a finished deliverable. Model completeness and source confidence are separate. The ornate blade and verified architectural shell are positive release cases. The concept residence, cooling assembly, and single-view character are technical passes that are correctly blocked for insufficient evidence.
+This means all eight locked contracts made the correct decision; it does not mean every possible input has perfect visual quality. Release cases now cover industrial design, drawing-based architecture, animation, games, and 3D printing. The concept residence, cooling assembly, and single-view character remain correctly blocked when evidence is insufficient.
+
+| Semi-professional delivery contract | Score | Blocking evidence |
+|---|---:|---|
+| Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
+| Architecture | 98 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
+| Animation | 99 | real skeleton · skin weights · clip/tracks · GLB reopen |
+| Game | 100 | 100k-triangle budget · UV/normals · topology · skeleton · PBR |
+| 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · positive volume |
+
+Overhang and support generation remain downstream warnings because they depend on the target printer and slicer; Morphloom does not auto-approve manufacturing suitability.
 
 Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
 
@@ -139,7 +149,7 @@ The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 an
 ## Current limits
 
 - One photograph cannot measure hidden geometry, exact thickness, or the rear surface.
-- Identity-accurate faces, precise fingers, production skin weights, and cloth simulation are not finished.
+- The human base exports a real skeleton and normalized skin weights, but face/finger rigs, expression blendshapes, and cloth physics are not finished.
 - Pose-driven garment folds and micro-normal detail are supported but do not replace a real textile scan.
 - Electrical checks cover ports, physical labels, gauges, and 3D endpoints; they are not SPICE, PCB ERC, or physical continuity tests.
 - Architectural results are drawing-based review shells without structural analysis, MEP, or site approval.
