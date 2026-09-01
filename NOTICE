@@ -41,3 +41,9 @@ contributors, licensed under the MIT License. It provides an in-memory Canvas
 implementation so the same deterministic PBR textures exported in the browser
 can be validated without uploading source assets.
 Upstream: https://github.com/Brooooooklyn/canvas
+
+Skinned LOD index simplification uses meshoptimizer, Copyright Arseny
+Kapoulkine, licensed under the MIT License. Morphloom preserves the source
+vertex attributes and rejects simplified output that fails its topology,
+self-intersection, skin-weight, or silhouette contracts.
+Upstream: https://github.com/zeux/meshoptimizer

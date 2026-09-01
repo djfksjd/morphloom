@@ -12,7 +12,7 @@ Every exterior side must exist and receive a completeness view. Missing evidence
 
 For electronics, declare ports in component-local coordinates and route conductors between those ports. Preserve physical pin labels, net names, conductor gauge, shielding, and verification status. Graph continuity is not a bench continuity test.
 
-An electronics result does not pass merely because every wire has two endpoints. Confirm connector identity and orientation, pin-to-net mapping, strain relief, bend clearance, conductor attachment after component transforms, and that required ports have exactly the intended occupancy. Mark inferred routing and bench-required continuity separately.
+An electronics result does not pass merely because every wire has two endpoints. Confirm connector identity and orientation, pin-to-net mapping, strain relief, bend clearance, conductor attachment after component transforms, and that required ports have exactly the intended occupancy. Generate routes as straight runs with bounded corner fillets rather than an overshooting global spline; limit lane offsets relative to endpoint separation and reject every tube whose completed triangle audit finds a self-intersection. Re-run the same route audit after a connected component moves. Mark inferred routing and bench-required continuity separately.
 
 Assign surface finishes by actual material: anodized or brushed metal, coated glass, optical glass/sapphire, solder mask, molded or soft-touch polymer, rubber, leather, wood, and semiconductor package. Inspect reflection at grazing angles and ensure texture scale follows the component size.
 

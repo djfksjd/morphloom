@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T22:19:04.392Z",
+  "generatedAt": "2026-09-01T23:15:51.208Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -312,7 +312,7 @@
               "label": "제품 토폴로지",
               "pass": true,
               "score": 100,
-              "detail": "경계 0 · 비매니폴드 0",
+              "detail": "경계 0 · 비매니폴드 0 · 자기교차 0",
               "blocking": true
             },
             {
@@ -401,11 +401,11 @@
             "confidenceWeightedVisualHullIoU": 1,
             "minimumMeshAxisMm": 2.53915809957823,
             "declaredMinimumFeatureMm": 0.16,
-            "enclosedVolumeMm3": 146608.7279233531,
-            "surfaceAreaMm2": 64443.223742088456,
-            "volumeThicknessProxyMm": 4.55001222502783,
-            "unsupportedOverhangAreaMm2": 4106.5690757403,
-            "unsupportedOverhangRatio": 0.06372383064161116
+            "enclosedVolumeMm3": 144033.92680712207,
+            "surfaceAreaMm2": 63921.0682046812,
+            "volumeThicknessProxyMm": 4.506618266951111,
+            "unsupportedOverhangAreaMm2": 4040.379605627806,
+            "unsupportedOverhangRatio": 0.06320888744678257
           }
         },
         "architecture": {
@@ -612,7 +612,7 @@
               "label": "실제 뼈 변형 검증",
               "pass": true,
               "score": 100,
-              "detail": "bind RMS 0.0000 mm · 이동 표본 708 · 최대 35.5 mm",
+              "detail": "bind RMS 0.0000 mm · 이동 표본 638 · 최대 35.5 mm",
               "blocking": true
             },
             {
@@ -620,7 +620,7 @@
               "label": "손가락 리그·가중치",
               "pass": true,
               "score": 100,
-              "detail": "30 finger bones · 7000 weighted vertices · 19 animated tracks",
+              "detail": "30 finger bones · 7524 weighted vertices · 19 animated tracks",
               "blocking": true
             },
             {
@@ -628,7 +628,7 @@
               "label": "얼굴 표정 모프",
               "pass": true,
               "score": 100,
-              "detail": "5/5 targets · 3439 affected vertices · max 16.06 mm",
+              "detail": "5/5 targets · 6878 affected vertices · max 16.06 mm",
               "blocking": true
             },
             {
@@ -676,7 +676,7 @@
           "warnings": [],
           "metrics": {
             "meshes": 3,
-            "triangles": 52818,
+            "triangles": 51934,
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
@@ -695,29 +695,29 @@
             "animationLoopClosureCoverage": 1,
             "animationInPlaceCoverage": 1,
             "maximumAnimationQuaternionError": 3.5599639458538945e-8,
-            "bindPoseRmsErrorMm": 0.00001921850244310798,
-            "deformationMovedVertices": 708,
+            "bindPoseRmsErrorMm": 0.000019050116674877854,
+            "deformationMovedVertices": 638,
             "deformationMaximumMm": 35.459934188085825,
             "deformationFinite": true,
             "gameLods": 2,
-            "lodTriangleRatio": 0.7830019434893108,
+            "lodTriangleRatio": 0.7499626252055613,
             "lodMonotonicTriangleReduction": true,
             "lodSkinWeightCoverage": 1,
             "lodSkeletonCoverage": 1,
             "lodNeutralBoundsError": 0,
-            "lodNeutralSilhouetteEnvelopeError": 0.00027092437760621704,
+            "lodNeutralSilhouetteEnvelopeError": 0,
             "lodPosedBoundsError": 0,
-            "lodPosedSilhouetteEnvelopeError": 0.00032995923923919996,
+            "lodPosedSilhouetteEnvelopeError": 0,
             "collisionPrimitives": 2,
             "collisionPrimitiveValidityCoverage": 1,
             "collisionBoneCoverage": 1,
             "collisionBoundsOverlapCoverage": 1,
             "collisionVerticalCoverage": 0.8534365050320034,
             "fingerBones": 30,
-            "fingerWeightedVertices": 7000,
+            "fingerWeightedVertices": 7524,
             "fingerAnimationTracks": 19,
             "facialMorphTargets": 5,
-            "facialMorphAffectedVertices": 3439,
+            "facialMorphAffectedVertices": 6878,
             "facialMorphMaximumMm": 16.062596351537813,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
@@ -725,11 +725,11 @@
             "minimumVisualHullViewIoU": 1,
             "confidenceWeightedVisualHullIoU": 1,
             "minimumMeshAxisMm": 136.7105718143282,
-            "enclosedVolumeMm3": 156575801.90931997,
-            "surfaceAreaMm2": 3637618.040279692,
-            "volumeThicknessProxyMm": 86.08699438783356,
-            "unsupportedOverhangAreaMm2": 195328.2198585143,
-            "unsupportedOverhangRatio": 0.053696737176808076
+            "enclosedVolumeMm3": 156582531.80762315,
+            "surfaceAreaMm2": 3636796.9820398763,
+            "volumeThicknessProxyMm": 86.1101307446621,
+            "unsupportedOverhangAreaMm2": 195859.29683757343,
+            "unsupportedOverhangRatio": 0.05385488873995824
           }
         },
         "game": {
@@ -774,7 +774,7 @@
               "label": "실시간 삼각형 예산",
               "pass": true,
               "score": 100,
-              "detail": "52,818 / 100,000 tris",
+              "detail": "51,934 / 100,000 tris",
               "blocking": true
             },
             {
@@ -782,7 +782,7 @@
               "label": "게임 메시 토폴로지",
               "pass": true,
               "score": 100,
-              "detail": "경계 72 · 비매니폴드 0 · 퇴화 0",
+              "detail": "경계 72 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
               "blocking": true
             },
             {
@@ -814,7 +814,7 @@
               "label": "게임 손가락 리그",
               "pass": true,
               "score": 100,
-              "detail": "30 finger bones · 7000 weighted vertices",
+              "detail": "30 finger bones · 7524 weighted vertices",
               "blocking": true
             },
             {
@@ -822,7 +822,7 @@
               "label": "게임 얼굴 표정 모프",
               "pass": true,
               "score": 100,
-              "detail": "5/5 targets · 3439 affected vertices",
+              "detail": "5/5 targets · 6878 affected vertices",
               "blocking": true
             },
             {
@@ -870,7 +870,7 @@
               "label": "LOD 형상·변형 보존",
               "pass": true,
               "score": 100,
-              "detail": "1/1 meshes · tris 78.3% · 감소 연속 · neutral bounds 0.00% / silhouette 0.03% · posed bounds 0.00% / silhouette 0.03% · skin 100%",
+              "detail": "1/1 meshes · tris 75.0% · 감소 연속 · neutral bounds 0.00% / silhouette 0.00% · posed bounds 0.00% / silhouette 0.00% · skin 100%",
               "blocking": true
             },
             {
@@ -886,7 +886,7 @@
           "warnings": [],
           "metrics": {
             "meshes": 3,
-            "triangles": 52818,
+            "triangles": 51934,
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
@@ -905,29 +905,29 @@
             "animationLoopClosureCoverage": 1,
             "animationInPlaceCoverage": 1,
             "maximumAnimationQuaternionError": 3.5599639458538945e-8,
-            "bindPoseRmsErrorMm": 0.00001921850244310798,
-            "deformationMovedVertices": 708,
+            "bindPoseRmsErrorMm": 0.000019050116674877854,
+            "deformationMovedVertices": 638,
             "deformationMaximumMm": 35.459934188085825,
             "deformationFinite": true,
             "gameLods": 2,
-            "lodTriangleRatio": 0.7830019434893108,
+            "lodTriangleRatio": 0.7499626252055613,
             "lodMonotonicTriangleReduction": true,
             "lodSkinWeightCoverage": 1,
             "lodSkeletonCoverage": 1,
             "lodNeutralBoundsError": 0,
-            "lodNeutralSilhouetteEnvelopeError": 0.00027092437760621704,
+            "lodNeutralSilhouetteEnvelopeError": 0,
             "lodPosedBoundsError": 0,
-            "lodPosedSilhouetteEnvelopeError": 0.00032995923923919996,
+            "lodPosedSilhouetteEnvelopeError": 0,
             "collisionPrimitives": 2,
             "collisionPrimitiveValidityCoverage": 1,
             "collisionBoneCoverage": 1,
             "collisionBoundsOverlapCoverage": 1,
             "collisionVerticalCoverage": 0.8534365050320034,
             "fingerBones": 30,
-            "fingerWeightedVertices": 7000,
+            "fingerWeightedVertices": 7524,
             "fingerAnimationTracks": 19,
             "facialMorphTargets": 5,
-            "facialMorphAffectedVertices": 3439,
+            "facialMorphAffectedVertices": 6878,
             "facialMorphMaximumMm": 16.062596351537813,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
@@ -935,11 +935,11 @@
             "minimumVisualHullViewIoU": 1,
             "confidenceWeightedVisualHullIoU": 1,
             "minimumMeshAxisMm": 136.7105718143282,
-            "enclosedVolumeMm3": 156575801.90931997,
-            "surfaceAreaMm2": 3637618.040279692,
-            "volumeThicknessProxyMm": 86.08699438783356,
-            "unsupportedOverhangAreaMm2": 195328.2198585143,
-            "unsupportedOverhangRatio": 0.053696737176808076
+            "enclosedVolumeMm3": 156582531.80762315,
+            "surfaceAreaMm2": 3636796.9820398763,
+            "volumeThicknessProxyMm": 86.1101307446621,
+            "unsupportedOverhangAreaMm2": 195859.29683757343,
+            "unsupportedOverhangRatio": 0.05385488873995824
           }
         },
         "print3d": {
@@ -984,7 +984,7 @@
               "label": "출력 가능한 폐쇄형 메시",
               "pass": true,
               "score": 100,
-              "detail": "경계 0 · 비매니폴드 0 · 퇴화 0",
+              "detail": "경계 0 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
               "blocking": true
             },
             {
@@ -1200,7 +1200,7 @@
       "schema": "morphloom.blender-cross-domain-proof/0.1",
       "compilerRevision": "morphloom-compiler/0.19.0",
       "pass": true,
-      "benchmarkAccepted": true,
+      "benchmarkAccepted": false,
       "blenderVersions": [
         "5.2.1 LTS"
       ],
@@ -1352,17 +1352,17 @@
     {
       "capability": "same-input GLB byte reproducibility",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "five domains, two independent exports per fixture, identical SHA-256"
+      "morphloom": "blocked"
     },
     {
       "capability": "Blender application import/export/reimport execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "Blender 5.2.1 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation"
+      "morphloom": "blocked"
     },
     {
       "capability": "DCC re-export sanitation with final-byte conformance gate",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unity/Unreal application import execution",

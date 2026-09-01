@@ -84,8 +84,10 @@ describe('OHPK human pipeline', () => {
     expect(topology.boundaryEdges, JSON.stringify(topology.details.filter((item) => !item.watertight))).toBe(0);
     expect(topology.nonManifoldEdges, JSON.stringify(topology.details.filter((item) => !item.watertight))).toBe(0);
     expect(topology.degenerateTriangles).toBe(0);
-    expect(topology.watertightMeshes).toBe(topology.meshes);
-  });
+    expect(topology.selfIntersections).toBe(0);
+    expect(topology.selfIntersectionComplete).toBe(true);
+    expect(topology.pass).toBe(true);
+  }, 20_000);
 
   it('adds bounded pose-driven garment wrinkles without changing the closed body topology', async () => {
     const pack = await loadPack();
@@ -104,8 +106,10 @@ describe('OHPK human pipeline', () => {
     ]);
     expect(second.metrics.garmentWrinkles).toEqual(first.metrics.garmentWrinkles);
     const topology = analyzeTopology(first.body);
-    expect(topology.pass, JSON.stringify(topology)).toBe(true);
-  });
+    expect(topology.selfIntersections).toBe(0);
+    expect(topology.selfIntersectionComplete).toBe(true);
+    expect(topology.pass).toBe(true);
+  }, 20_000);
 
   it('recognizes a web hero instruction without a dedicated 3D model', () => {
     const result = applyPrompt('슬림한 남성 스파이더맨을 적청 웹 슈트 게임 에셋으로', DEFAULT_SPEC);
@@ -256,7 +260,7 @@ describe('AssemblyIR product pipeline', () => {
     expect(material.roughness).toBeCloseTo(0.94);
     expect(material.metalness).toBe(0);
     expect(material.flatShading).toBe(true);
-  });
+  }, 20_000);
 
   it('rejects unsafe asphalt surface grids and displacement ranges', () => {
     const oversized = structuredClone(ASPHALT_SURFACE_BENCHMARK_IR);
@@ -563,6 +567,12 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.metrics.surfaces.distinctFinishes).toBeGreaterThanOrEqual(8);
     expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(150);
     expect(build.metrics.topology.pass).toBe(true);
+    let checkedWireRoutes = 0;
+    build.root.traverse((object) => {
+      const audit = (object as THREE.Mesh).geometry?.userData?.morphloomWireRoute;
+      if (audit?.selfIntersectionChecked) checkedWireRoutes += 1;
+    });
+    expect(checkedWireRoutes).toBe(connectivity?.wires);
     expect(build.metrics.engineering).toMatchObject({
       digitalReady: true,
       productionReady: false,
@@ -635,7 +645,7 @@ describe('AssemblyIR product pipeline', () => {
     const settledGeometry = wire.geometry;
     update!();
     expect(wire.geometry).toBe(settledGeometry);
-  });
+  }, 20_000);
 
   it('blocks a production-readiness score while hidden geometry and bench checks remain', () => {
     const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');

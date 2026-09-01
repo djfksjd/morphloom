@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.19.0",
-  "generatedAt": "2026-09-01T22:18:41.172Z",
+  "compilerRevision": "morphloom-compiler/0.21.0",
+  "generatedAt": "2026-09-01T23:17:52.354Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -10,8 +10,8 @@
       "domain": "architecture",
       "pass": true,
       "source": {
-        "bytes": 29532200,
-        "sha256": "8e5e312c693fff1ab23fe4e051d66a584f5207665b01f83276ca4b5eefac4878",
+        "bytes": 29549656,
+        "sha256": "9234e79d897349b6f242d9c942cbdbad369895ad1504c98917a04ce6721938d8",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -402,8 +402,8 @@
       "domain": "industrial-design",
       "pass": true,
       "source": {
-        "bytes": 1147308,
-        "sha256": "b7ad2cd3f2b40f49df6552a39311ca9106b0fc85b3a0dfaf71744a5856f72dfc",
+        "bytes": 1148288,
+        "sha256": "a4e016736e27a4c65fc2f321c5cdb85a668ef972bda5a33b0653f0cfb14daf4e",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -527,23 +527,23 @@
               "cornerSum": [
                 -43.372169675974874,
                 -106.80115146712342,
-                -1759.782912134513
+                -1759.782912106748
               ],
               "cornerSumSquares": [
-                30.212821407308034,
-                5.4915738577726065,
-                353.0368600030001
+                30.207984370926816,
+                5.476091619412457,
+                353.02578348031625
               ],
-              "surfaceAreaSquareMeters": 0.06444322713339003
+              "surfaceAreaSquareMeters": 0.0639210715329539
             },
             "boundsMeters": {
               "min": [
-                -0.0610383003950119,
+                -0.06013668701052666,
                 -0.020335663110017776,
                 -0.1289999932050705
               ],
               "max": [
-                0.0610383003950119,
+                0.06013668701052666,
                 0.020335663110017776,
                 0.3440000116825104
               ]
@@ -635,23 +635,23 @@
               "cornerSum": [
                 -43.372169664275134,
                 -106.80115773119905,
-                -1759.782912138704
+                -1759.782912110939
               ],
               "cornerSumSquares": [
-                30.212821387177737,
-                5.4915733372958675,
-                353.03686001914974
+                30.2079843507962,
+                5.476091098935737,
+                353.02578349645887
               ],
-              "surfaceAreaSquareMeters": 0.06444322710989198
+              "surfaceAreaSquareMeters": 0.06392107150945599
             },
             "boundsMeters": {
               "min": [
-                -0.0610383003950119,
+                -0.06013668701052666,
                 -0.020335663110017776,
                 -0.1289999932050705
               ],
               "max": [
-                0.0610383003950119,
+                0.06013668701052666,
                 0.020335663110017776,
                 0.3440000116825104
               ]
@@ -684,7 +684,7 @@
           "applied": true,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "ba0c1fd7b2c9b7e48c7fed14704a1504eafe40c7b255c1abcf135f850db2d63b",
+          "outputSha256": "e2300a7766ef333fc6acbd9e049b44d7d85500b8cd3600b5a9367947ced42575",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -713,8 +713,8 @@
       "domain": "electronics",
       "pass": true,
       "source": {
-        "bytes": 18442072,
-        "sha256": "76517f725c9d3d5a69d3747011e841540b1602dbdf40779c50e7c4a138490439",
+        "bytes": 18463520,
+        "sha256": "7663d3339cb4fb2d8716fc939c245abbd2dacc9c01b296ead0c45e0601089ca3",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -858,16 +858,16 @@
             "geometryMoments": {
               "cornerCount": 817680,
               "cornerSum": [
-                16851.966702640348,
-                -39407.50085236059,
-                14021.708147847503
+                16807.501643399235,
+                -38934.96860254302,
+                13944.686374850633
               ],
               "cornerSumSquares": [
-                4559.504555022334,
-                3549.6276369983157,
-                715.913274084983
+                4498.672995376345,
+                3476.7964035314963,
+                706.8739706057384
               ],
-              "surfaceAreaSquareMeters": 1.1378668238630483
+              "surfaceAreaSquareMeters": 1.1373191291253686
             },
             "boundsMeters": {
               "min": [
@@ -986,16 +986,16 @@
             "geometryMoments": {
               "cornerCount": 817680,
               "cornerSum": [
-                16851.966703009148,
-                -39407.500852938916,
-                14021.708147847501
+                16807.50164376803,
+                -38934.96860312139,
+                13944.686374850635
               ],
               "cornerSumSquares": [
-                4559.50455470952,
-                3549.627630998556,
-                715.9132740559639
+                4498.672995061233,
+                3476.7963975304683,
+                706.8739705771702
               ],
-              "surfaceAreaSquareMeters": 1.1378668209362224
+              "surfaceAreaSquareMeters": 1.137319126198161
             },
             "boundsMeters": {
               "min": [
@@ -1037,9 +1037,9 @@
         },
         "deliveryRepair": {
           "applied": true,
-          "repairedTangents": 1409,
+          "repairedTangents": 1410,
           "removedUnusedTangentAccessors": 23,
-          "outputSha256": "15072e9dfafc66cccddedf9e8151e8e20f86f1fc32e6238f211a543ff3b2195f",
+          "outputSha256": "079a903366cfd9bc1509081b532a98e2d16205fe193ddd0ecc11e376dafe2230",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1068,8 +1068,8 @@
       "domain": "animation-game",
       "pass": true,
       "source": {
-        "bytes": 3830300,
-        "sha256": "cd9317ed23674f51547fc02dcd0b9e446d38b1a6edaa7e4ed1eae3d7bdb43e82",
+        "bytes": 5061852,
+        "sha256": "294cf0a2574a7fa9a0782d37e73b268d4587e20ca33e5bd7035d158bb247ca3d",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1106,8 +1106,8 @@
             "objects": 5,
             "excludedImporterHelpers": 1,
             "meshes": 3,
-            "vertices": 28831,
-            "polygons": 52818,
+            "vertices": 28180,
+            "polygons": 51934,
             "materials": 3,
             "images": 4,
             "imageNames": [
@@ -1134,9 +1134,9 @@
                 64
               ]
             ],
-            "shapeKeys": 5,
-            "skinnedVertices": 26131,
-            "weightedVertices": 26131,
+            "shapeKeys": 10,
+            "skinnedVertices": 25480,
+            "weightedVertices": 25480,
             "weightedCoverage": 1,
             "armatures": 1,
             "bones": 49,
@@ -1217,18 +1217,18 @@
               "morphloom_wave"
             ],
             "geometryMoments": {
-              "cornerCount": 158454,
+              "cornerCount": 155802,
               "cornerSum": [
-                -0.7491249039562717,
-                113.51804237270517,
-                176190.001654913
+                101.80184065628691,
+                844.2959749151269,
+                175372.91234208032
               ],
               "cornerSumSquares": [
-                13243.673623759954,
-                1768.7435641946736,
-                249221.9320075059
+                12235.722161220536,
+                1691.6767631612731,
+                249626.3515428137
               ],
-              "surfaceAreaSquareMeters": 3.637618086774848
+              "surfaceAreaSquareMeters": 3.6367970292691463
             },
             "boundsMeters": {
               "min": [
@@ -1247,8 +1247,8 @@
             "objects": 5,
             "excludedImporterHelpers": 1,
             "meshes": 3,
-            "vertices": 29124,
-            "polygons": 52818,
+            "vertices": 28209,
+            "polygons": 51934,
             "materials": 3,
             "images": 4,
             "imageNames": [
@@ -1275,9 +1275,9 @@
                 64
               ]
             ],
-            "shapeKeys": 5,
-            "skinnedVertices": 26424,
-            "weightedVertices": 26424,
+            "shapeKeys": 10,
+            "skinnedVertices": 25509,
+            "weightedVertices": 25509,
             "weightedCoverage": 1,
             "armatures": 1,
             "bones": 49,
@@ -1358,18 +1358,18 @@
               "morphloom_wave"
             ],
             "geometryMoments": {
-              "cornerCount": 158454,
+              "cornerCount": 155802,
               "cornerSum": [
-                -0.7490104183330004,
-                113.51768337563226,
-                176190.0060130874
+                101.80195514190336,
+                844.2955802694887,
+                175372.9168266359
               ],
               "cornerSumSquares": [
-                13243.673623759885,
-                1768.74352385569,
-                249221.94661194528
+                12235.722161220336,
+                1691.6767232840807,
+                249626.3665478375
               ],
-              "surfaceAreaSquareMeters": 3.637618210429299
+              "surfaceAreaSquareMeters": 3.6367971512714354
             },
             "boundsMeters": {
               "min": [
@@ -1409,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "d0629d1b2b18460aa4fcf995817bfb183667fc858ac3a25b250775c2134c82de",
+          "outputSha256": "0c715b0ab7c0fa6e1eb81b72932678f112e97d38efb3119a274cbe6aed353348",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1438,8 +1438,8 @@
       "domain": "3d-printing",
       "pass": true,
       "source": {
-        "bytes": 17744972,
-        "sha256": "17a9eb4f27684274c5548a2e7063c719548a33900748d5a857fffa870a64d1e8",
+        "bytes": 17745148,
+        "sha256": "c68792f9c9f9c0a9793b5bb8b4b7df496cd70b33237200641c2f4a3aa26e6de5",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",

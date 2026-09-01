@@ -7,6 +7,7 @@ import type {
 } from './assembly-ir';
 import type { ProductPartInfo } from './product';
 import { createSurfaceMaterial } from './surface-system';
+import { analyzeSelfIntersections } from './self-intersection';
 
 const mm = (value: number) => value / 1000;
 const SAFE_ID = /^[a-zA-Z0-9_-]{1,80}$/;
@@ -238,8 +239,30 @@ function resolvePortDirection(root: THREE.Group, component: THREE.Object3D, port
   return direction.normalize();
 }
 
+function createRoundedRoute(points: THREE.Vector3[], radius: number): THREE.Curve<THREE.Vector3> {
+  const curve = new THREE.CurvePath<THREE.Vector3>();
+  let cursor = points[0]!.clone();
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const previous = points[index - 1]!;
+    const corner = points[index]!;
+    const next = points[index + 1]!;
+    const incomingLength = previous.distanceTo(corner);
+    const outgoingLength = corner.distanceTo(next);
+    if (incomingLength < 1e-9 || outgoingLength < 1e-9) continue;
+    const cut = Math.min(radius * 3, incomingLength * 0.24, outgoingLength * 0.24);
+    const entry = corner.clone().lerp(previous, cut / incomingLength);
+    const exit = corner.clone().lerp(next, cut / outgoingLength);
+    if (cursor.distanceToSquared(entry) > 1e-18) curve.add(new THREE.LineCurve3(cursor, entry));
+    curve.add(new THREE.QuadraticBezierCurve3(entry, corner, exit));
+    cursor = exit;
+  }
+  const end = points[points.length - 1]!.clone();
+  if (cursor.distanceToSquared(end) > 1e-18) curve.add(new THREE.LineCurve3(cursor, end));
+  return curve;
+}
+
 function createCappedTube(points: THREE.Vector3[], radius: number): THREE.BufferGeometry {
-  const curve = new THREE.CatmullRomCurve3(points, false, 'centripetal');
+  const curve = createRoundedRoute(points, radius);
   const tubularSegments = Math.max(36, Math.min(192, points.length * 14));
   const radialSegments = 10;
   const tube = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegments, false);
@@ -282,6 +305,8 @@ function routeWire(
   ports: ReadonlyMap<string, ElectricalPortIR>,
   wire: ElectricalWireIR,
   routeIndex: number,
+  clearanceLift = 0,
+  leadScale = 1,
 ): THREE.Vector3[] {
   const from = ports.get(wire.from)!;
   const to = ports.get(wire.to)!;
@@ -289,16 +314,23 @@ function routeWire(
   const toComponent = components.get(to.componentId)!;
   const start = resolvePortPosition(root, fromComponent, from);
   const end = resolvePortPosition(root, toComponent, to);
-  const lead = Math.max(mm(wire.diameter * 3), 0.0014);
+  const baseLead = Math.max(mm(wire.diameter * 3), 0.0014);
+  const lead = Math.max(mm(wire.diameter * 0.6), baseLead * leadScale);
   const startLead = start.clone().addScaledVector(resolvePortDirection(root, fromComponent, from), lead);
   const endLead = end.clone().addScaledVector(resolvePortDirection(root, toComponent, to), lead);
   const waypointVectors = (wire.waypoints ?? []).map((point) => new THREE.Vector3(...point.map(mm) as [number, number, number]));
   if (waypointVectors.length === 0) {
     const lane = (routeIndex % 11) - 5;
     const layer = Math.floor(routeIndex / 11);
-    const routeZ = Math.max(startLead.z, endLead.z) + 0.006 + layer * 0.0025;
+    const routeZ = Math.max(startLead.z, endLead.z) + 0.006 + layer * 0.0025 + clearanceLift;
     const middle = startLead.clone().lerp(endLead, 0.5);
-    middle.x += lane * 0.0018;
+    const planar = new THREE.Vector2(endLead.x - startLead.x, endLead.y - startLead.y);
+    const planarLength = planar.length();
+    if (planarLength > 1e-9 && lane !== 0) {
+      const laneOffset = Math.min(Math.abs(lane) * 0.0018, planarLength * 0.35) * Math.sign(lane);
+      middle.x += (-planar.y / planarLength) * laneOffset;
+      middle.y += (planar.x / planarLength) * laneOffset;
+    }
     waypointVectors.push(
       new THREE.Vector3(startLead.x, startLead.y, routeZ),
       new THREE.Vector3(middle.x, middle.y, routeZ),
@@ -306,6 +338,36 @@ function routeWire(
     );
   }
   return [start, startLead, ...waypointVectors, endLead, end];
+}
+
+function routeCollisionSafeWire(
+  root: THREE.Group,
+  components: ReadonlyMap<string, THREE.Object3D>,
+  ports: ReadonlyMap<string, ElectricalPortIR>,
+  wire: ElectricalWireIR,
+  routeIndex: number,
+): { points: THREE.Vector3[]; geometry: THREE.BufferGeometry } {
+  const radius = mm(wire.diameter) * 0.5;
+  const attempted: number[] = [];
+  for (const [clearanceLift, leadScale] of [
+    [0, 1], [0.006, 1], [0.012, 0.5], [0.024, 0.25],
+  ] as const) {
+    const points = routeWire(root, components, ports, wire, routeIndex, clearanceLift, leadScale);
+    const geometry = createCappedTube(points, radius);
+    const report = analyzeSelfIntersections(geometry);
+    attempted.push(report.intersections);
+    if (report.complete && report.intersections === 0) {
+      geometry.userData.morphloomWireRoute = {
+        selfIntersectionChecked: true,
+        candidatePairs: report.candidatePairs,
+        clearanceLiftMm: clearanceLift * 1000,
+        leadScale,
+      };
+      return { points, geometry };
+    }
+    geometry.dispose();
+  }
+  throw new Error(`Wire ${wire.id} cannot be routed without self-intersection within the bounded clearance search (intersection counts: ${attempted.join(', ')}).`);
 }
 
 /** Compiles one independently selectable, endpoint-snapped mesh per conductor. */
@@ -358,8 +420,7 @@ export function compileElectricalHarness(
   }
 
   for (const [wireIndex, wire] of harness.wires.entries()) {
-    const points = routeWire(root, components, ports, wire, wireIndex);
-    const geometry = createCappedTube(points, mm(wire.diameter) * 0.5);
+    const { points, geometry } = routeCollisionSafeWire(root, components, ports, wire, wireIndex);
     const positions = geometry.getAttribute('position');
     const startCap = new THREE.Vector3().fromBufferAttribute(positions, positions.count - 2);
     const endCap = new THREE.Vector3().fromBufferAttribute(positions, positions.count - 1);
@@ -481,7 +542,8 @@ export function compileElectricalHarness(
     if (!consumeTransformChanges()) return;
     root.updateMatrixWorld(true);
     for (const record of liveRecords) {
-      const points = routeWire(root, components, ports, record.wire, record.routeIndex);
+      const routed = routeCollisionSafeWire(root, components, ports, record.wire, record.routeIndex);
+      const { points } = routed;
       const start = points[0];
       const startLead = points[1];
       const endLead = points[points.length - 2];
@@ -489,8 +551,11 @@ export function compileElectricalHarness(
       if (record.lastStart.distanceToSquared(start) < 1e-14
         && record.lastStartLead.distanceToSquared(startLead) < 1e-14
         && record.lastEndLead.distanceToSquared(endLead) < 1e-14
-        && record.lastEnd.distanceToSquared(end) < 1e-14) continue;
-      const replacement = createCappedTube(points, mm(record.wire.diameter) * 0.5);
+        && record.lastEnd.distanceToSquared(end) < 1e-14) {
+        routed.geometry.dispose();
+        continue;
+      }
+      const replacement = routed.geometry;
       record.mesh.geometry.dispose();
       record.mesh.geometry = replacement;
       record.terminals[0].position.copy(start);

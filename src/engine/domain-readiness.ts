@@ -615,7 +615,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
     add('architecture-uv', '건축 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
   } else if (input.domain === 'industrial-design') {
-    add('design-topology', '제품 토폴로지', topology.pass, topology.pass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges}`);
+    add('design-topology', '제품 토폴로지', topology.pass, topology.pass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 자기교차 ${topology.selfIntersections}`);
     add('design-evidence', '제품 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
     const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
     add('design-uv', '제품 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
@@ -654,8 +654,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   } else if (input.domain === 'game') {
     const triangleBudget = input.triangleBudget ?? 100_000;
     add('game-budget', '실시간 삼각형 예산', snapshot.triangles <= triangleBudget, snapshot.triangles <= triangleBudget ? 100 : triangleBudget / snapshot.triangles * 100, `${snapshot.triangles.toLocaleString()} / ${triangleBudget.toLocaleString()} tris`);
-    const runtimeTopologyPass = topology.nonManifoldEdges === 0 && topology.degenerateTriangles === 0;
-    add('game-topology', '게임 메시 토폴로지', runtimeTopologyPass, runtimeTopologyPass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`);
+    const runtimeTopologyPass = topology.nonManifoldEdges === 0
+      && topology.degenerateTriangles === 0
+      && topology.selfIntersections === 0
+      && topology.selfIntersectionComplete;
+    add('game-topology', '게임 메시 토폴로지', runtimeTopologyPass, runtimeTopologyPass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles} · 자기교차 ${topology.selfIntersections}`);
     const uvPass = uvMeshCoverage >= 0.8 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
     add('game-uv', '게임 UV 무결성', uvPass, uvIntegrityScore, `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
     const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
@@ -694,7 +697,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const unitReady = input.sourceUnitMm === 1;
     const minimumAxis = geometry.minimumMeshAxisMm ?? 0;
     const minimumFeature = declaredMinimumFeatureMm ?? 0;
-    add('print-topology', '출력 가능한 폐쇄형 메시', topology.pass, topology.pass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`);
+    add('print-topology', '출력 가능한 폐쇄형 메시', topology.pass, topology.pass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles} · 자기교차 ${topology.selfIntersections}`);
     add('print-units', '명시적 mm 단위', unitReady, unitReady ? 100 : 0, unitReady ? '1 source unit = 1 mm' : '출력 단위가 mm로 고정되지 않음');
     add('print-declared-feature', '선언된 최소 형상', minimumFeature >= 0.8, minimumFeature >= 0.8 ? 100 : minimumFeature / 0.8 * 100, declaredMinimumFeatureMm === undefined ? 'mm 기반 IR 형상 치수 없음' : `${minimumFeature.toFixed(3)} mm / 최소 0.800 mm`);
     add('print-bounds-sanity', '메시 축 치수 점검', minimumAxis >= 0.4, minimumAxis >= 0.4 ? 100 : minimumAxis / 0.4 * 100, `${minimumAxis.toFixed(3)} mm`, false);

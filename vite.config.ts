@@ -1,8 +1,16 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  test: {
+    // The exact triangle-intersection suites are intentionally CPU-heavy.
+    // Serial file execution keeps CI results deterministic and prevents the
+    // runner RPC from timing out while several geometry audits compete.
+    fileParallelism: false,
+    maxWorkers: 1,
+    minWorkers: 1,
+  },
   build: {
     // Three.js is an intentional shared runtime chunk; keep the application
     // bundle separate while warning only above the known vendor envelope.

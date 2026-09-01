@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-177%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-180%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -145,6 +145,8 @@ Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립
 일반 45° 기준의 비지지 오버행 면적은 실제 삼각형 노멀로 계산합니다. 다만 최종 방향·서포트·수축·공차는 프린터와 슬라이서에 따라 달라지므로 별도 공정 검수 없이 제조 적합성을 자동 승인하지 않습니다.
 
 Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격선을 잠그고, 8단계 검수에서 회귀·반복 결함·비용 상한을 실제로 차단합니다.
+
+토폴로지는 경계·비매니폴드·퇴화 삼각형뿐 아니라 실제 삼각형 자기 교차까지 검사합니다. 공간 격자로 후보를 제한한 뒤 정확 교차를 판정하며 검사 예산을 넘기면 합격시키지 않습니다. 이 게이트로 급격한 전선 스플라인 되감김과 캐릭터 골반·목 경계의 포즈 접힘을 발견해, 전선은 직선+필렛 경로로, 포즈는 연속 해부학 가중치로 수정했습니다. 게임 LOD는 source vertex 속성을 유지하는 meshoptimizer 인덱스 단순화를 사용하고 동일 토폴로지·스킨·실루엣 검사를 통과해야만 포함됩니다.
 
 두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고 각 입력 시점으로 역투영해 정확도를 다시 검사합니다. 유기형·인체 블록아웃·연속 곡면은 `implicitSurface`와 Surface Nets로 만들며, 결정론적 보정 후에도 비매니폴드이면 차단합니다. 사진 투영은 원본을 향한 삼각형에만 적용하고 측면·후면은 근거 없는 반복 무늬 없이 별도 재질로 둡니다. 재질 검사는 색과 통계뿐 아니라 미세·중간·큰 스케일 및 실제 공간 배치를 비교해 픽셀을 뒤섞은 가짜 질감도 차단합니다. Apache-2.0인 img2threejs에서 참고한 부분과 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
 

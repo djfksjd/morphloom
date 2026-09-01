@@ -224,11 +224,11 @@ export function deformPointByReferencePose(
   const absX = Math.abs(x);
   const side = x < 0 ? 'L' : 'R';
 
-  const torso = y01 >= 0.835
-    ? transformByBone(source, rest.neck, rest.head, target.neck, target.head)
-    : y01 >= 0.515
-      ? blendBonePair(source, rest, target, ['hips', 'chest'], ['chest', 'neck'])
-      : transformByBone(source, rest.hips, rest.spine, target.hips, target.spine);
+  const torsoCore = y01 >= 0.515
+    ? blendBonePair(source, rest, target, ['hips', 'chest'], ['chest', 'neck'])
+    : transformByBone(source, rest.hips, rest.spine, target.hips, target.spine);
+  const head = transformByBone(source, rest.neck, rest.head, target.neck, target.head);
+  const torso = torsoCore.lerp(head, smoothstep(0.815, 0.885, y01));
 
   if (y01 > 0.43 && y01 < 0.825 && absX > height * 0.085) {
     const arm = blendBonePair(
@@ -262,7 +262,8 @@ export function deformPointByReferencePose(
       [`hip${side}`, `knee${side}`],
       [`knee${side}`, `ankle${side}`],
     );
-    const legWeight = 1 - smoothstep(0.515, 0.56, y01);
+    const legWeight = (1 - smoothstep(0.515, 0.56, y01))
+      * smoothstep(height * 0.022, height * 0.085, absX);
     return torso.lerp(leg, legWeight);
   }
 

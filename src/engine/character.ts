@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { SimplifyModifier } from 'three/addons/modifiers/SimplifyModifier.js';
+import { MeshoptSimplifier } from 'meshoptimizer';
 import type { CharacterSpec, HandGesture, HumanPack, PoseStyle, ViewMode } from '../types';
 import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
@@ -16,6 +16,8 @@ import {
   WEB_HERO_REFERENCE_POSE,
   WEB_HERO_VISUAL_INTERPRETATION,
 } from './reference-pose';
+
+await MeshoptSimplifier.ready;
 
 export interface CharacterMetrics {
   vertices: number;
@@ -111,39 +113,28 @@ function createGameDeliveryManifest(
   };
 }
 
-function vertexPositionKey(position: THREE.BufferAttribute | THREE.InterleavedBufferAttribute, index: number): string {
-  return `${position.getX(index)},${position.getY(index)},${position.getZ(index)}`;
-}
-
 function createSkinnedLod1(
   source: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial>,
 ): THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial> | undefined {
   const sourcePosition = source.geometry.getAttribute('position');
   const sourceSkinIndex = source.geometry.getAttribute('skinIndex');
   const sourceSkinWeight = source.geometry.getAttribute('skinWeight');
-  if (!sourcePosition || !sourceSkinIndex || !sourceSkinWeight) return undefined;
-  const geometry = new SimplifyModifier().modify(source.geometry, Math.floor(sourcePosition.count * 0.2));
-  const lodPosition = geometry.getAttribute('position');
-  const sourceVertexByPosition = new Map<string, number>();
-  for (let index = 0; index < sourcePosition.count; index += 1) {
-    const key = vertexPositionKey(sourcePosition, index);
-    if (!sourceVertexByPosition.has(key)) sourceVertexByPosition.set(key, index);
-  }
-  const skinIndices = new Uint16Array(lodPosition.count * 4);
-  const skinWeights = new Float32Array(lodPosition.count * 4);
-  for (let index = 0; index < lodPosition.count; index += 1) {
-    const sourceIndex = sourceVertexByPosition.get(vertexPositionKey(lodPosition, index));
-    if (sourceIndex === undefined) {
-      geometry.dispose();
-      return undefined;
-    }
-    for (let slot = 0; slot < 4; slot += 1) {
-      skinIndices[index * 4 + slot] = sourceSkinIndex.getComponent(sourceIndex, slot);
-      skinWeights[index * 4 + slot] = sourceSkinWeight.getComponent(sourceIndex, slot);
-    }
-  }
-  geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(skinIndices, 4));
-  geometry.setAttribute('skinWeight', new THREE.Float32BufferAttribute(skinWeights, 4));
+  const sourceIndex = source.geometry.getIndex();
+  if (!sourcePosition || !sourceSkinIndex || !sourceSkinWeight || !sourceIndex
+    || !(sourcePosition.array instanceof Float32Array)) return undefined;
+  const sourceIndices = Uint32Array.from(sourceIndex.array);
+  const targetIndexCount = Math.max(3, Math.floor(sourceIndices.length * 0.75 / 3) * 3);
+  const [simplifiedIndices] = MeshoptSimplifier.simplify(
+    sourceIndices,
+    sourcePosition.array,
+    sourcePosition.itemSize,
+    targetIndexCount,
+    0.01,
+    ['LockBorder'],
+  );
+  if (simplifiedIndices.length >= sourceIndices.length || simplifiedIndices.length < targetIndexCount * 0.9) return undefined;
+  const geometry = source.geometry.clone();
+  geometry.setIndex(new THREE.Uint32BufferAttribute(simplifiedIndices, 1));
   const topologyRoot = new THREE.Group();
   topologyRoot.add(new THREE.Mesh(geometry, source.material));
   const topology = analyzeTopology(topologyRoot);

@@ -41,13 +41,13 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
   components.push({
     id: 'guard_scroll_left', name: '좌측 가드 스크롤', category: 'mechanical', materialName: '청동 합금',
     detail: '곡선 스윕으로 만든 좌측 장식 퀼론',
-    geometry: { op: 'tube', radius: 3.2, radialSegments: 12, points: [[-34, 10, 0], [-51, 8, 0], [-58, 1, 0], [-52, -7, 0], [-44, -3, 0]] },
+    geometry: { op: 'tube', radius: 2.4, radialSegments: 12, points: [[-34, 10, 0], [-51, 8, 0], [-58, 1, 0], [-52, -7, 0], [-44, -3, 0]] },
     material: metal(spec.batteryColor, 0.28),
   });
   components.push({
     id: 'guard_scroll_right', name: '우측 가드 스크롤', category: 'mechanical', materialName: '청동 합금',
     detail: '곡선 스윕으로 만든 우측 장식 퀼론',
-    geometry: { op: 'tube', radius: 3.2, radialSegments: 12, points: [[34, 10, 0], [51, 8, 0], [58, 1, 0], [52, -7, 0], [44, -3, 0]] },
+    geometry: { op: 'tube', radius: 2.4, radialSegments: 12, points: [[34, 10, 0], [51, 8, 0], [58, 1, 0], [52, -7, 0], [44, -3, 0]] },
     material: metal(spec.batteryColor, 0.28),
   });
   components.push({

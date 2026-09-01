@@ -189,7 +189,11 @@ describe('cross-domain semi-professional readiness', () => {
     expect((lod1 as THREE.SkinnedMesh).geometry.getAttribute('skinWeight')).toBeDefined();
     expect(((lod1 as THREE.SkinnedMesh).material as THREE.Material).opacity).toBe(1);
     expect(lod1!.layers.isEnabled(31)).toBe(true);
-    expect(analyzeTopology(lod1 as THREE.SkinnedMesh).pass).toBe(true);
+    expect(analyzeTopology(lod1 as THREE.SkinnedMesh)).toMatchObject({
+      pass: true,
+      selfIntersections: 0,
+      selfIntersectionComplete: true,
+    });
   }, 20_000);
 
   it('blocks a declared LOD that collapses the silhouette or loses valid skin weights', () => {
@@ -326,6 +330,8 @@ describe('cross-domain semi-professional readiness', () => {
     });
     expect(design.pass).toBe(true);
     expect(print.pass).toBe(true);
+    expect(knife.metrics.topology).toMatchObject({ selfIntersections: 0, selfIntersectionComplete: true });
+    expect(asphalt.metrics.topology).toMatchObject({ selfIntersections: 0, selfIntersectionComplete: true });
     expect(print.metrics.minimumMeshAxisMm).toBeGreaterThan(0.4);
     expect(print.metrics.declaredMinimumFeatureMm).toBeGreaterThanOrEqual(0.8);
     expect(print.metrics.enclosedVolumeMm3).toBeGreaterThan(1);

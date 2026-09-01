@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { analyzeSelfIntersections } from './self-intersection';
 
 // A triangle's absolute area depends on whether the asset is a phone chip or a
 // building panel. Compare its area with its own longest edge so topology checks
@@ -12,6 +13,10 @@ export interface MeshTopologyReport {
   boundaryEdges: number;
   nonManifoldEdges: number;
   degenerateTriangles: number;
+  selfIntersections: number;
+  selfIntersectionMeshes: number;
+  selfIntersectionCandidatePairs: number;
+  selfIntersectionComplete: boolean;
   triangles: number;
   edgeTaperMeshes?: number;
   minimumAuthoredEdgeThicknessMm?: number;
@@ -31,6 +36,8 @@ export interface MeshTopologyReport {
     boundaryEdges: number;
     nonManifoldEdges: number;
     degenerateTriangles: number;
+    selfIntersections: number;
+    selfIntersectionComplete: boolean;
     watertight: boolean;
   }>;
 }
@@ -50,6 +57,10 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
   let boundaryEdges = 0;
   let nonManifoldEdges = 0;
   let degenerateTriangles = 0;
+  let selfIntersections = 0;
+  let selfIntersectionMeshes = 0;
+  let selfIntersectionCandidatePairs = 0;
+  let selfIntersectionComplete = true;
   let triangles = 0;
   let edgeTaperMeshes = 0;
   let minimumAuthoredEdgeThicknessMm = Number.POSITIVE_INFINITY;
@@ -162,12 +173,29 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     }
     const meshBoundary = [...edges.values()].filter((count) => count === 1).length;
     const meshNonManifold = [...edges.values()].filter((count) => count > 2).length;
+    const selfIntersection = analyzeSelfIntersections(object.geometry);
+    selfIntersections += selfIntersection.intersections;
+    selfIntersectionCandidatePairs += selfIntersection.candidatePairs;
+    selfIntersectionComplete &&= selfIntersection.complete;
+    if (selfIntersection.intersections > 0) selfIntersectionMeshes += 1;
     boundaryEdges += meshBoundary;
     nonManifoldEdges += meshNonManifold;
     degenerateTriangles += meshDegenerate;
-    const watertight = meshBoundary === 0 && meshNonManifold === 0 && meshDegenerate === 0;
+    const watertight = meshBoundary === 0
+      && meshNonManifold === 0
+      && meshDegenerate === 0
+      && selfIntersection.intersections === 0
+      && selfIntersection.complete;
     if (watertight) watertightMeshes += 1;
-    details.push({ name: object.name, boundaryEdges: meshBoundary, nonManifoldEdges: meshNonManifold, degenerateTriangles: meshDegenerate, watertight });
+    details.push({
+      name: object.name,
+      boundaryEdges: meshBoundary,
+      nonManifoldEdges: meshNonManifold,
+      degenerateTriangles: meshDegenerate,
+      selfIntersections: selfIntersection.intersections,
+      selfIntersectionComplete: selfIntersection.complete,
+      watertight,
+    });
     geometry.dispose();
   };
   if (options.onlyVisible) root.traverseVisible(inspect);
@@ -179,6 +207,10 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     boundaryEdges,
     nonManifoldEdges,
     degenerateTriangles,
+    selfIntersections,
+    selfIntersectionMeshes,
+    selfIntersectionCandidatePairs,
+    selfIntersectionComplete,
     triangles,
     edgeTaperMeshes,
     minimumAuthoredEdgeThicknessMm: Number.isFinite(minimumAuthoredEdgeThicknessMm)
@@ -200,7 +232,7 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     maximumSurfacePeakToValleyMm: Number.isFinite(maximumSurfacePeakToValleyMm)
       ? maximumSurfacePeakToValleyMm
       : undefined,
-    pass: meshes > 0 && watertightMeshes === meshes,
+    pass: meshes > 0 && watertightMeshes === meshes && selfIntersections === 0 && selfIntersectionComplete,
     details,
   };
 }

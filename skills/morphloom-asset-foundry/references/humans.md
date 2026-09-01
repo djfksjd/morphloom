@@ -14,7 +14,7 @@ Build a human signature manifest before mesh refinement:
 - face silhouette and visible landmarks without inventing identity detail hidden by masks, hair, or angle;
 - garment layers, compression/looseness, hems, seams, closures, accessories, and silhouette-changing costume pieces.
 
-Run an anatomical sanity gate before surface polish. Block delivery for reversed limbs, impossible joint direction, collapsed shoulders/hips, disconnected hands/feet, implausible balance, finger fusion at the intended distance, or a silhouette that misses the source action. Correct the skeleton/landmarks and body volumes before compensating with clothing.
+Run an anatomical sanity gate before surface polish. Block delivery for reversed limbs, impossible joint direction, collapsed shoulders/hips, disconnected hands/feet, implausible balance, finger fusion at the intended distance, or a silhouette that misses the source action. Limb, pelvis, torso, neck, and head influence zones must blend continuously across anatomical boundaries; hard region switches commonly fold the groin or shoulder into itself. Run triangle-level self-intersection checks after the pose and again after garment wrinkles. Correct the skeleton/landmarks and body volumes before compensating with clothing.
 
 When resolved by the source, add dedicated face, hair, hand, and foot proof crops. Face review covers cranium/jaw silhouette, hairline, brows, eyelids, gaze, nose, lips/mouth, ears, and visible teeth. Hair review covers silhouette volume, parting/bangs, clump direction, brows/lashes/facial hair, scalp gaps, and intersections. Hand/foot review covers thumb side, visible digit count and separation, nails when resolved, ground/held-object contact, and footwear interfaces.
 

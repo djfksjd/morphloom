@@ -184,7 +184,7 @@ export function evaluateProductQuality(
       : Math.round(Math.min(99, 78 + surfaces.distinctFinishes * 1.25 + surfaceCoverage * 7))
     : 76;
   const topologyScore = topology
-    ? topology.pass ? 100 : Math.max(0, 100 - topology.boundaryEdges - topology.nonManifoldEdges * 2 - topology.degenerateTriangles)
+    ? topology.pass ? 100 : Math.max(0, 100 - topology.boundaryEdges - topology.nonManifoldEdges * 2 - topology.degenerateTriangles - topology.selfIntersections * 10)
     : 64;
   const connectionDocumentation = connectivity && connectivity.wires > 0 && connectivity.ports > 0
     ? (connectivity.documentedPhysicalPins / connectivity.ports
@@ -213,7 +213,7 @@ export function evaluateProductQuality(
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
-        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm${topology.referenceReliefMeshes ? ` · 사진 높이장 ${topology.referenceReliefSamples ?? 0}점` : ''}` : ''}`
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles} · 자기교차 ${topology.selfIntersections} · 교차검사 ${topology.selfIntersectionComplete ? '완료' : '예산초과'}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm${topology.referenceReliefMeshes ? ` · 사진 높이장 ${topology.referenceReliefSamples ?? 0}점` : ''}` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {
