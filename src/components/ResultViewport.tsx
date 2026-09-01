@@ -35,6 +35,8 @@ import {
   type LocalBuildTelemetry,
 } from '../engine/delivery-validation';
 import { validateGlbStandard } from '../engine/gltf-standard-validation';
+import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../engine/gltf-export-preparation';
+import { canonicalizeGlbBufferViews } from '../engine/glb-canonicalization';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 import { SerializedTaskQueue } from '../engine/serialized-task-queue';
 
@@ -388,26 +390,6 @@ function downloadBlob(blob: Blob, name: string): ExportReceipt {
   return { fileName, bytes: blob.size };
 }
 
-function normalizeVisibleNormals(root: THREE.Object3D): void {
-  const normal = new THREE.Vector3();
-  root.traverseVisible((object) => {
-    if (!(object instanceof THREE.Mesh)) return;
-    const attribute = object.geometry.getAttribute('normal');
-    if (!(attribute instanceof THREE.BufferAttribute)) return;
-    let changed = false;
-    for (let index = 0; index < attribute.count; index += 1) {
-      normal.fromBufferAttribute(attribute, index);
-      const length = normal.length();
-      if (Math.abs(length - 1) <= 0.0005) continue;
-      if (length <= 1e-12) normal.set(1, 0, 0);
-      else normal.multiplyScalar(1 / length);
-      attribute.setXYZ(index, normal.x, normal.y, normal.z);
-      changed = true;
-    }
-    if (changed) attribute.needsUpdate = true;
-  });
-}
-
 /**
  * Geometry-only exporters do not consistently honour Object3D.visible.
  * Export builds are disposable, so remove every hidden branch before handing
@@ -448,7 +430,11 @@ function inspectablePartFromObject(object: THREE.Object3D | null): InspectablePa
 
 async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
   await waitForReferenceProjections(root);
-  normalizeVisibleNormals(root);
+  const preparation = preparePortableGltfGeometry(root);
+  if (preparation.unresolvedNormalMappedMeshes.length > 0) {
+    throw new Error(`Normal-mapped meshes lack portable tangent inputs: ${preparation.unresolvedNormalMappedMeshes.join(', ')}`);
+  }
+  const exportInput = createPortableGltfExportInput(root);
   const exporter = new GLTFExporter();
   // Three.js logs one warning per PBR material whenever it packs roughness G
   // and metalness B into glTF's required shared texture. This is expected
@@ -460,7 +446,7 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
   };
   let result: ArrayBuffer | Record<string, unknown>;
   try {
-    result = await exporter.parseAsync(root, {
+    result = await exporter.parseAsync(exportInput, {
       binary: true,
       onlyVisible: true,
       includeCustomExtensions: true,
@@ -471,7 +457,7 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
   }
   if (!(result instanceof ArrayBuffer)) throw new Error('GLB exporter returned text output.');
   if (result.byteLength > 256 * 1024 * 1024) throw new Error('GLB exceeds the 256MB local safety limit.');
-  return result;
+  return canonicalizeGlbBufferViews(result);
 }
 
 async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inputFingerprint: string, buildFingerprint: string): Promise<DeliveryAudit> {

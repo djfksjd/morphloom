@@ -208,6 +208,7 @@ function asphaltAggregateSample(x: number, y: number, size: number, seed: number
 
 const textureCache = new Map<string, { albedo: THREE.Texture; normal: THREE.Texture; roughness: THREE.Texture }>();
 const MAX_SHARED_SURFACE_MAPS = 96;
+let iridescenceThicknessTexture: THREE.Texture | undefined;
 
 function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
   if (typeof document !== 'undefined') {
@@ -220,6 +221,20 @@ function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
     return new THREE.CanvasTexture(canvas);
   }
   return new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
+}
+
+function getIridescenceThicknessTexture(): THREE.Texture {
+  if (iridescenceThicknessTexture) return iridescenceThicknessTexture;
+  const texture = exportSafeTexture(new Uint8Array([255, 0, 0, 255]), 1);
+  texture.name = 'morphloom_uniform_iridescence_thickness';
+  texture.userData.morphloomShared = true;
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.magFilter = texture.minFilter = THREE.NearestFilter;
+  texture.generateMipmaps = false;
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.needsUpdate = true;
+  iridescenceThicknessTexture = texture;
+  return texture;
 }
 
 function createMicroSurfaceMaps(
@@ -342,7 +357,10 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     clearcoatRoughness: source.clearcoatRoughness ?? preset.clearcoatRoughness,
     iridescence: context.mode === 'beauty' ? (source.iridescence ?? preset.iridescence) : 0,
     iridescenceIOR: finish === 'sapphire' ? 1.76 : 1.3,
-    iridescenceThicknessRange: finish === 'sapphire' || finish === 'optical-glass' ? [80, 260] : [100, 180],
+    // glTF cannot use a non-default thickness minimum unless a dedicated
+    // iridescence-thickness texture exists. Keep the portable 100 nm minimum
+    // and vary the maximum so Blender/game engines reproduce the same film.
+    iridescenceThicknessRange: finish === 'sapphire' || finish === 'optical-glass' ? [100, 260] : [100, 180],
     anisotropy: context.mode === 'beauty' ? (source.anisotropy ?? preset.anisotropy) : 0,
     anisotropyRotation: source.anisotropyRotation ?? preset.anisotropyRotation,
     sheen: context.mode === 'beauty' ? (source.sheen ?? preset.sheen) : 0,
@@ -359,6 +377,12 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     // smooth shading would turn the same geometry back into rounded bubbles.
     flatShading: finish === 'asphalt',
   });
+  if (material.iridescence > 0) {
+    // Three's exporter always serializes both thickness endpoints. Khronos'
+    // validator correctly warns that the minimum is meaningless without a
+    // thickness texture, so make the intended uniform maximum explicit.
+    material.iridescenceThicknessMap = getIridescenceThicknessTexture();
+  }
   if (context.mode === 'beauty' && effectivePattern !== 'none' && microNormalStrength > 0) {
     const scale = source.textureScale ?? preset.textureScale;
     const maps = createMicroSurfaceMaps(finish, scale, effectivePattern);

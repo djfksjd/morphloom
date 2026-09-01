@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T18:48:34.603Z",
+  "generatedAt": "2026-09-01T19:35:00.379Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1176,6 +1176,86 @@
       },
       "scope": "Actual Blender import/export/reimport of the measured Laurel Homes architecture representative. Unity and Unreal application imports remain not run.",
       "benchmarkAccepted": true
+    },
+    "blenderCrossDomain": {
+      "schema": "morphloom.blender-cross-domain-proof/0.1",
+      "pass": true,
+      "benchmarkAccepted": true,
+      "blenderVersions": [
+        "4.5.11 LTS"
+      ],
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "blocked",
+          "repairApplied": true,
+          "repairedTangents": 432,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "pass",
+          "repairApplied": false,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "blocked",
+          "repairApplied": true,
+          "repairedTangents": 1409,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0.36613643169403076,
+          "boundsToleranceMm": 0.5,
+          "rawReexportStandard": "pass",
+          "repairApplied": false,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "pass",
+          "repairApplied": false,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        }
+      ]
     }
   },
   "capabilityMatrix": [
@@ -1245,9 +1325,19 @@
       "morphloom": "Khronos Validator + glTF Transform + Three.js reopen"
     },
     {
+      "capability": "same-input GLB byte reproducibility",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "five domains, two independent exports per fixture, identical SHA-256"
+    },
+    {
       "capability": "Blender application import/export/reimport execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "Blender 5.2.1 LTS pass; 321 meshes / 188,748 polygons / 0.000 mm bounds drift"
+      "morphloom": "Blender 4.5.11 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass semantic parity and final exact-byte validation"
+    },
+    {
+      "capability": "DCC re-export sanitation with final-byte conformance gate",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes"
     },
     {
       "capability": "Unity/Unreal application import execution",

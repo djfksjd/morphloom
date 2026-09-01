@@ -577,8 +577,11 @@ export function rigHumanoidGeometry(
     const parentWeight = 1 - best.t;
     const childWeight = best.t;
     const offset = vertex * 4;
-    skinIndices[offset] = boneIndices.get(best.parent)!;
-    skinIndices[offset + 1] = boneIndices.get(best.child)!;
+    // Khronos glTF requires every joint slot whose weight is exactly zero to
+    // contain joint index zero. Keeping a nearest-bone id in an unused slot is
+    // visually harmless in Three.js but non-portable in DCC/game importers.
+    skinIndices[offset] = parentWeight > 0 ? boneIndices.get(best.parent)! : 0;
+    skinIndices[offset + 1] = childWeight > 0 ? boneIndices.get(best.child)! : 0;
     skinWeights[offset] = parentWeight;
     skinWeights[offset + 1] = childWeight;
     maximumWeightError = Math.max(maximumWeightError, Math.abs(parentWeight + childWeight - 1));

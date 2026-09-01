@@ -34,3 +34,9 @@ Independent binary glTF parsing and physical-material extension registration
 use glTF Transform, Copyright Don McCurdy and contributors, licensed under the
 MIT License.
 Upstream: https://github.com/donmccurdy/glTF-Transform
+
+Node-side cross-domain export fixtures use @napi-rs/canvas, Copyright its
+contributors, licensed under the MIT License. It provides an in-memory Canvas
+implementation so the same deterministic PBR textures exported in the browser
+can be validated without uploading source assets.
+Upstream: https://github.com/Brooooooklyn/canvas

@@ -17,6 +17,7 @@ import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benc
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
+import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../src/engine/camera-framing';
 import { calculateMeasurement, formatMeasurement, valueInUnit } from '../src/engine/measurement';
@@ -30,7 +31,7 @@ import {
   WEB_HERO_REFERENCE_POSE,
   WEB_HERO_VISUAL_INTERPRETATION,
 } from '../src/engine/reference-pose';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, WEB_HERO_SPEC } from '../src/types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC } from '../src/types';
 
 async function loadPack() {
   const bytes = new Uint8Array(readFileSync('public/assets/oxihuman-core-v1.ohpk'));
@@ -750,7 +751,56 @@ describe('PBR micro-surface system', () => {
     expect(sapphire.transmission).toBeGreaterThan(0.5);
     expect(sapphire.clearcoat).toBe(1);
     expect(sapphire.iridescence).toBeGreaterThan(0.2);
+    expect(sapphire.iridescenceThicknessRange[0]).toBe(100);
+    expect(sapphire.iridescenceThicknessMap?.name).toBe('morphloom_uniform_iridescence_thickness');
     expect(sapphire.normalMap).toBeTruthy();
+  });
+
+  it('precomputes a portable tangent basis for every normal-mapped export mesh', () => {
+    const root = new THREE.Group();
+    const geometry = new THREE.BoxGeometry(1, 1, 1).toNonIndexed();
+    const texture = new THREE.DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1);
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ normalMap: texture }));
+    mesh.name = 'portable-normal-map-test';
+    root.add(mesh);
+    const report = preparePortableGltfGeometry(root);
+    expect(report).toMatchObject({
+      visibleMeshes: 1,
+      tangentSpacesGenerated: 1,
+      indexedForTangents: 1,
+      unresolvedNormalMappedMeshes: [],
+    });
+    expect(geometry.index).toBeTruthy();
+    const tangents = geometry.getAttribute('tangent');
+    const normals = geometry.getAttribute('normal');
+    expect(tangents?.count).toBe(geometry.getAttribute('position').count);
+    for (let index = 0; index < tangents.count; index += 1) {
+      const tangent = new THREE.Vector3().fromBufferAttribute(tangents, index);
+      const normal = new THREE.Vector3().fromBufferAttribute(normals, index);
+      expect(tangent.length()).toBeCloseTo(1, 6);
+      expect(Math.abs(tangent.dot(normal))).toBeLessThan(1e-6);
+      expect(Math.abs(tangents.getW(index))).toBe(1);
+    }
+  });
+
+  it('keeps unused humanoid joint slots zero and flattens skinned roots for glTF', async () => {
+    const pack = await loadPack();
+    const build = buildCharacter(pack, FIELD_HUMAN_SPEC, 'beauty');
+    for (const object of [build.body, build.root.getObjectByName('LOD1_morphloom_human_body')]) {
+      if (!(object instanceof THREE.SkinnedMesh)) continue;
+      const joints = object.geometry.getAttribute('skinIndex');
+      const weights = object.geometry.getAttribute('skinWeight');
+      for (let vertex = 0; vertex < weights.count; vertex += 1) {
+        for (let slot = 0; slot < 4; slot += 1) {
+          if (weights.getComponent(vertex, slot) === 0) expect(joints.getComponent(vertex, slot)).toBe(0);
+        }
+      }
+    }
+    const exportInput = createPortableGltfExportInput(build.root);
+    expect(exportInput).toBeInstanceOf(THREE.Scene);
+    expect(exportInput.userData.gameDelivery).toEqual(build.root.userData.gameDelivery);
+    expect(exportInput.children).toContain(build.body);
+    expect(build.body.parent).toBe(build.root);
   });
 });
 

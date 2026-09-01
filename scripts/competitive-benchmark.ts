@@ -124,6 +124,80 @@ const blenderRoundTripPass = blenderRoundTrip.pass === true
   && blenderRoundTrip.roundTripStandardValidation?.khronosErrors === 0
   && blenderRoundTrip.roundTripStandardValidation?.khronosWarnings === 0
   && blenderRoundTrip.roundTripStandardValidation?.independentReadStatus === 'pass';
+type BlenderCrossDomainCase = {
+  id?: string;
+  domain?: string;
+  pass?: boolean;
+  source?: { byteDeterministic?: boolean; standard?: { status?: string; errors?: number; warnings?: number } };
+  blender?: {
+    version?: string;
+    semanticRoundTrip?: {
+      pass?: boolean;
+      geometryParity?: boolean;
+      imageParity?: boolean;
+      skinningParity?: boolean;
+      boundsErrorMm?: number;
+      boundsToleranceMm?: number;
+    };
+    rawReexportStandard?: { status?: string };
+    deliveryRepair?: {
+      applied?: boolean;
+      repairedTangents?: number;
+      removedUnusedTangentAccessors?: number;
+      standard?: { status?: string; errors?: number; warnings?: number; infos?: number; independentRead?: { status?: string } };
+    };
+  };
+};
+const blenderCrossDomain = JSON.parse(readFileSync('benchmarks/blender-cross-domain-latest.json', 'utf8')) as {
+  schema?: string;
+  pass?: boolean;
+  cases?: BlenderCrossDomainCase[];
+};
+const requiredBlenderDomains = new Set(['architecture', 'industrial-design', 'electronics', 'animation-game', '3d-printing']);
+const blenderCrossDomainCases = blenderCrossDomain.cases ?? [];
+const blenderCrossDomainPass = blenderCrossDomain.pass === true
+  && blenderCrossDomainCases.length === requiredBlenderDomains.size
+  && new Set(blenderCrossDomainCases.map((item) => item.domain)).size === requiredBlenderDomains.size
+  && blenderCrossDomainCases.every((item) => {
+    const semantic = item.blender?.semanticRoundTrip;
+    const delivery = item.blender?.deliveryRepair?.standard;
+    return requiredBlenderDomains.has(item.domain ?? '')
+      && item.pass === true
+      && item.source?.byteDeterministic === true
+      && item.source?.standard?.status === 'pass'
+      && item.source.standard.errors === 0
+      && item.source.standard.warnings === 0
+      && semantic?.pass === true
+      && semantic.geometryParity === true
+      && semantic.imageParity === true
+      && semantic.skinningParity === true
+      && Number(semantic.boundsErrorMm) <= Number(semantic.boundsToleranceMm)
+      && delivery?.status === 'pass'
+      && delivery.errors === 0
+      && delivery.warnings === 0
+      && delivery.infos === 0
+      && delivery.independentRead?.status === 'pass';
+  });
+const blenderCrossDomainSummary = {
+  schema: blenderCrossDomain.schema,
+  pass: blenderCrossDomain.pass,
+  benchmarkAccepted: blenderCrossDomainPass,
+  blenderVersions: [...new Set(blenderCrossDomainCases.map((item) => item.blender?.version).filter(Boolean))],
+  cases: blenderCrossDomainCases.map((item) => ({
+    id: item.id,
+    domain: item.domain,
+    pass: item.pass,
+    sourceStandard: item.source?.standard?.status,
+    byteDeterministic: item.source?.byteDeterministic,
+    semanticParity: item.blender?.semanticRoundTrip?.pass,
+    boundsErrorMm: item.blender?.semanticRoundTrip?.boundsErrorMm,
+    boundsToleranceMm: item.blender?.semanticRoundTrip?.boundsToleranceMm,
+    rawReexportStandard: item.blender?.rawReexportStandard?.status,
+    repairApplied: item.blender?.deliveryRepair?.applied,
+    repairedTangents: item.blender?.deliveryRepair?.repairedTangents,
+    finalStandard: item.blender?.deliveryRepair?.standard?.status,
+  })),
+};
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -311,6 +385,7 @@ const output = {
     browserValidationLifecycle: serializedValidationAudit,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
+    blenderCrossDomain: blenderCrossDomainSummary,
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -326,7 +401,9 @@ const output = {
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'exact-byte glTF 2.0 specification and independent parser validation', img2threejs: 'Three.js factory focus', morphloom: standardValidationAudit.pass ? 'Khronos Validator + glTF Transform + Three.js reopen' : 'blocked' },
-    { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderRoundTripPass ? 'Blender 5.2.1 LTS pass; 321 meshes / 188,748 polygons / 0.000 mm bounds drift' : 'blocked' },
+    { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
+    { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'Blender 4.5.11 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass semantic parity and final exact-byte validation' : 'blocked' },
+    { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
     { capability: 'Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
@@ -349,4 +426,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
-  || !serializedValidationAudit.pass || !standardValidationAudit.pass || !blenderRoundTripPass) process.exitCode = 1;
+  || !serializedValidationAudit.pass || !standardValidationAudit.pass
+  || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;

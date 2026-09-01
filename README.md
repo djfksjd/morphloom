@@ -92,7 +92,7 @@ Codex/Claude 요청 예시:
 | PNG | 현재 뷰포트 캡처 |
 | ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
 
-OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격, 독립 glTF Transform 파싱, 로컬 Three.js 재열기를 자동 검사하지만 Blender·Unity·Unreal 애플리케이션 자체의 버전별 임포트 실행은 아직 별도 검수 항목입니다.
+OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격, 독립 glTF Transform 파싱, 로컬 Three.js 재열기를 자동 검사합니다. Blender 4.5.11 LTS는 아래 5개 분야에서 실제 임포트·재내보내기·재임포트를 검증했고, Unity·Unreal 자체 임포트는 아직 별도 검수 항목입니다.
 
 ## 현재 제공되는 예제
 
@@ -112,8 +112,11 @@ OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX�
 npm test
 npm run quality:gate
 npm run benchmark:competitive
+npm run benchmark:fixtures -- /tmp/morphloom-fixtures
+npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run build
 npm run gltf:validate -- path/to/asset.glb
+npm run gltf:repair -- blender-output.glb delivery.glb
 npm run blender:validate -- source.glb roundtrip.glb report.json
 ```
 
@@ -127,7 +130,7 @@ npm run blender:validate -- source.glb roundtrip.glb report.json
 
 100%는 잠근 8개 계약을 모두 올바르게 판정했다는 뜻이며 모든 입력의 시각 품질이 100점이라는 뜻이 아닙니다. 승인 사례는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과해도 근거 부족으로 정확히 차단됩니다. 브라우저 GLB 증명은 Three.js 재열기 결과이며, 새 내보내기 경로는 여기에 Khronos 공식 Validator 오류·경고를 별도로 기록합니다.
 
-Blender 5.2.1 LTS 실제 왕복 검증에서는 Laurel Homes 대표 GLB의 321개 메시, 188,748개 폴리곤, 321개 재질과 포락을 임포트→GLB 재내보내기→재임포트 뒤 그대로 보존했고 포락 오차는 0.000 mm였습니다. Blender 재출력도 Khronos 오류 0·경고 0 및 glTF Transform 독립 파싱을 통과했습니다. [기계 판독 결과](./benchmarks/blender-roundtrip-latest.json)를 저장하며 Unity·Unreal 자체 임포트는 아직 검증 완료로 표시하지 않습니다.
+Blender 4.5.11 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장하며 Unity·Unreal 자체 임포트는 아직 검증 완료로 표시하지 않습니다.
 
 | 준실무 납품 계약 | 점수 | 실제 차단 조건 |
 |---|---:|---|

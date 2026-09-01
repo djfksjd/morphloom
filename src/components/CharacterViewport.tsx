@@ -8,6 +8,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../engine/gltf-export-preparation';
+import { validateGlbStandard } from '../engine/gltf-standard-validation';
+import { canonicalizeGlbBufferViews } from '../engine/glb-canonicalization';
 import type { CharacterBuild } from '../engine/character';
 import { buildCharacter } from '../engine/character';
 import { buildProduct, type ProductBuild, type ProductPartInfo } from '../engine/product';
@@ -329,14 +332,25 @@ export const CharacterViewport = forwardRef<ViewportHandle, CharacterViewportPro
       async exportGlb() {
         const build = buildRef.current;
         if (!build) throw new Error('Character is not ready.');
+        const preparation = preparePortableGltfGeometry(build.root);
+        if (preparation.unresolvedNormalMappedMeshes.length > 0) {
+          throw new Error(`Normal-mapped meshes lack portable tangent inputs: ${preparation.unresolvedNormalMappedMeshes.join(', ')}`);
+        }
+        const exportInput = createPortableGltfExportInput(build.root);
         const exporter = new GLTFExporter();
-        const result = await exporter.parseAsync(build.root, {
+        const result = await exporter.parseAsync(exportInput, {
           binary: true,
           onlyVisible: true,
           includeCustomExtensions: true,
+          animations: build.root.animations,
         });
         if (!(result instanceof ArrayBuffer)) throw new Error('GLB exporter returned text output.');
-        downloadBlob(new Blob([result], { type: 'model/gltf-binary' }), 'morphloom-character.glb');
+        const deliveryBytes = canonicalizeGlbBufferViews(result);
+        const validation = await validateGlbStandard(deliveryBytes);
+        if (validation.status !== 'pass') {
+          throw new Error(`GLB delivery validation ${validation.status}: ${validation.issueCodes.join(', ') || 'unknown issue'}`);
+        }
+        downloadBlob(new Blob([deliveryBytes], { type: 'model/gltf-binary' }), 'morphloom-character.glb');
       },
       async capturePng() {
         const runtime = runtimeRef.current;

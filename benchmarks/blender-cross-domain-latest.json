@@ -1,0 +1,1632 @@
+{
+  "schema": "morphloom.blender-cross-domain-proof/0.1",
+  "generatedAt": "2026-09-01T19:33:40.999Z",
+  "pass": true,
+  "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
+  "cases": [
+    {
+      "id": "laurel-homes-architecture",
+      "domain": "architecture",
+      "pass": true,
+      "source": {
+        "bytes": 29532168,
+        "sha256": "fc58cd654f9ef6e9e8fc28a0761cd57d8f372c6e431dee5e87bdc9f5c363fbb1",
+        "byteDeterministic": true,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "portableTangents": 321
+      },
+      "blender": {
+        "version": "4.5.11 LTS",
+        "semanticRoundTrip": {
+          "pass": true,
+          "geometryParity": true,
+          "imageParity": true,
+          "skinningParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "imported": {
+            "objects": 322,
+            "excludedImporterHelpers": 0,
+            "meshes": 321,
+            "vertices": 566244,
+            "polygons": 188748,
+            "materials": 321,
+            "images": 20,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_12",
+              "Image_13",
+              "Image_14",
+              "Image_15",
+              "Image_16",
+              "Image_17",
+              "Image_18",
+              "Image_19",
+              "Image_2",
+              "Image_20",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 566244,
+              "cornerSum": [
+                100399.83054471016,
+                477984.37860542536,
+                608756.4006285723
+              ],
+              "cornerSumSquares": [
+                92136179.36359191,
+                14908681.968322106,
+                1107239.9983003687
+              ],
+              "surfaceAreaSquareMeters": 3461.6359382362098
+            },
+            "boundsMeters": {
+              "min": [
+                -21.36359977722168,
+                -8.271200180053711,
+                -0.2199999988079071
+              ],
+              "max": [
+                21.36359977722168,
+                13.350199699401855,
+                2.700000047683716
+              ]
+            }
+          },
+          "reopened": {
+            "objects": 322,
+            "excludedImporterHelpers": 0,
+            "meshes": 321,
+            "vertices": 566244,
+            "polygons": 188748,
+            "materials": 321,
+            "images": 20,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_12",
+              "Image_13",
+              "Image_14",
+              "Image_15",
+              "Image_16",
+              "Image_17",
+              "Image_18",
+              "Image_19",
+              "Image_2",
+              "Image_20",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 566244,
+              "cornerSum": [
+                100399.83054471016,
+                477984.37860542536,
+                608756.4006285723
+              ],
+              "cornerSumSquares": [
+                92136179.36613707,
+                14908681.972415688,
+                1107239.9982996818
+              ],
+              "surfaceAreaSquareMeters": 3461.635948218494
+            },
+            "boundsMeters": {
+              "min": [
+                -21.36359977722168,
+                -8.271200180053711,
+                -0.2199999988079071
+              ],
+              "max": [
+                21.36359977722168,
+                13.350199699401855,
+                2.700000047683716
+              ]
+            }
+          }
+        },
+        "rawReexportStandard": {
+          "status": "blocked",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 432,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "ACCESSOR_VECTOR3_NON_UNIT"
+          ],
+          "independentRead": {
+            "status": "not-run",
+            "parser": "glTF Transform WebIO",
+            "nodes": 0,
+            "meshes": 0,
+            "materials": 0,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "deliveryRepair": {
+          "applied": true,
+          "repairedTangents": 432,
+          "removedUnusedTangentAccessors": 0,
+          "outputSha256": "5b0b3fa0dada97f7911e0b4a43e12bfc8f4f05ff3f1241e42b052f1ac278d354",
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 322,
+              "meshes": 321,
+              "materials": 321,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ornate-knife-product",
+      "domain": "industrial-design",
+      "pass": true,
+      "source": {
+        "bytes": 945320,
+        "sha256": "d3c1b19773a6441c98cb001836d1b37bfdd3341b7165ac7a6c4ff1b2dbbde479",
+        "byteDeterministic": true,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "portableTangents": 16
+      },
+      "blender": {
+        "version": "4.5.11 LTS",
+        "semanticRoundTrip": {
+          "pass": true,
+          "geometryParity": true,
+          "imageParity": true,
+          "skinningParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "imported": {
+            "objects": 17,
+            "excludedImporterHelpers": 0,
+            "meshes": 16,
+            "vertices": 14321,
+            "polygons": 18930,
+            "materials": 16,
+            "images": 12,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_2",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_6",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 56790,
+              "cornerSum": [
+                -43.372169675974874,
+                -106.80115146712342,
+                -1759.782912134513
+              ],
+              "cornerSumSquares": [
+                30.212821407308034,
+                5.4915738577726065,
+                353.0368600030001
+              ],
+              "surfaceAreaSquareMeters": 0.06444322713339003
+            },
+            "boundsMeters": {
+              "min": [
+                -0.0610383003950119,
+                -0.020335663110017776,
+                -0.1289999932050705
+              ],
+              "max": [
+                0.0610383003950119,
+                0.020335663110017776,
+                0.3440000116825104
+              ]
+            }
+          },
+          "reopened": {
+            "objects": 17,
+            "excludedImporterHelpers": 0,
+            "meshes": 16,
+            "vertices": 14547,
+            "polygons": 18930,
+            "materials": 16,
+            "images": 12,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_2",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_6",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 56790,
+              "cornerSum": [
+                -43.372169664275134,
+                -106.80115773119905,
+                -1759.782912138704
+              ],
+              "cornerSumSquares": [
+                30.212821387177737,
+                5.4915733372958675,
+                353.03686001914974
+              ],
+              "surfaceAreaSquareMeters": 0.06444322710989198
+            },
+            "boundsMeters": {
+              "min": [
+                -0.0610383003950119,
+                -0.020335663110017776,
+                -0.1289999932050705
+              ],
+              "max": [
+                0.0610383003950119,
+                0.020335663110017776,
+                0.3440000116825104
+              ]
+            }
+          }
+        },
+        "rawReexportStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "deliveryRepair": {
+          "applied": false,
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "outputSha256": "36d14ad2a2249686bd883f00d76e8943b0f715b29f242f5211f66cec21264e04",
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 17,
+              "meshes": 16,
+              "materials": 16,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cooling-electronics-assembly",
+      "domain": "electronics",
+      "pass": true,
+      "source": {
+        "bytes": 18442040,
+        "sha256": "64589b761465707cd0451d44da74d44fddfcd5ba82d388ea1ef9b378aa0133e0",
+        "byteDeterministic": true,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "portableTangents": 299
+      },
+      "blender": {
+        "version": "4.5.11 LTS",
+        "semanticRoundTrip": {
+          "pass": true,
+          "geometryParity": true,
+          "imageParity": true,
+          "skinningParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "imported": {
+            "objects": 324,
+            "excludedImporterHelpers": 0,
+            "meshes": 322,
+            "vertices": 351877,
+            "polygons": 272560,
+            "materials": 322,
+            "images": 16,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_13",
+              "Image_14",
+              "Image_15",
+              "Image_16",
+              "Image_2",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_6",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 817680,
+              "cornerSum": [
+                16851.966702640348,
+                -39407.50085236059,
+                14021.708147847503
+              ],
+              "cornerSumSquares": [
+                4559.504555022334,
+                3549.6276369983157,
+                715.913274084983
+              ],
+              "surfaceAreaSquareMeters": 1.1378668238630483
+            },
+            "boundsMeters": {
+              "min": [
+                -0.1550000011920929,
+                -0.10199999809265137,
+                -0.030000001192092896
+              ],
+              "max": [
+                0.16200000047683716,
+                0.10199999809265137,
+                0.12049999833106995
+              ]
+            }
+          },
+          "reopened": {
+            "objects": 324,
+            "excludedImporterHelpers": 0,
+            "meshes": 322,
+            "vertices": 353631,
+            "polygons": 272560,
+            "materials": 322,
+            "images": 16,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_10",
+              "Image_11",
+              "Image_13",
+              "Image_14",
+              "Image_15",
+              "Image_16",
+              "Image_2",
+              "Image_3",
+              "Image_4",
+              "Image_5",
+              "Image_6",
+              "Image_7",
+              "Image_8",
+              "Image_9"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 817680,
+              "cornerSum": [
+                16851.966703009148,
+                -39407.500852938916,
+                14021.708147847501
+              ],
+              "cornerSumSquares": [
+                4559.50455470952,
+                3549.627630998556,
+                715.9132740559639
+              ],
+              "surfaceAreaSquareMeters": 1.1378668209362224
+            },
+            "boundsMeters": {
+              "min": [
+                -0.1550000011920929,
+                -0.10199999809265137,
+                -0.030000001192092896
+              ],
+              "max": [
+                0.16200000047683716,
+                0.10199999809265137,
+                0.12049999833106995
+              ]
+            }
+          }
+        },
+        "rawReexportStandard": {
+          "status": "blocked",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 954,
+          "warnings": 0,
+          "infos": 46,
+          "hints": 0,
+          "truncated": true,
+          "issueCodes": [
+            "ACCESSOR_VECTOR3_NON_UNIT",
+            "UNUSED_MESH_TANGENT",
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "not-run",
+            "parser": "glTF Transform WebIO",
+            "nodes": 0,
+            "meshes": 0,
+            "materials": 0,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "deliveryRepair": {
+          "applied": true,
+          "repairedTangents": 1409,
+          "removedUnusedTangentAccessors": 23,
+          "outputSha256": "15072e9dfafc66cccddedf9e8151e8e20f86f1fc32e6238f211a543ff3b2195f",
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 324,
+              "meshes": 322,
+              "materials": 322,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "field-human-runtime",
+      "domain": "animation-game",
+      "pass": true,
+      "source": {
+        "bytes": 3830268,
+        "sha256": "e3ca0e7fc5efd026503338a1e97fb0163dcc274518d9229f17e6f9ab3e4d0793",
+        "byteDeterministic": true,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 2,
+            "animations": 22
+          }
+        },
+        "portableTangents": 3
+      },
+      "blender": {
+        "version": "4.5.11 LTS",
+        "semanticRoundTrip": {
+          "pass": true,
+          "geometryParity": true,
+          "imageParity": true,
+          "skinningParity": true,
+          "boundsErrorMm": 0.36613643169403076,
+          "boundsToleranceMm": 0.5,
+          "imported": {
+            "objects": 5,
+            "excludedImporterHelpers": 1,
+            "meshes": 3,
+            "vertices": 28831,
+            "polygons": 52818,
+            "materials": 3,
+            "images": 4,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_2",
+              "Image_3"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 5,
+            "skinnedVertices": 26131,
+            "weightedVertices": 26131,
+            "weightedCoverage": 1,
+            "armatures": 1,
+            "bones": 49,
+            "boneNames": [
+              "ankle_L",
+              "ankle_R",
+              "chest",
+              "elbow_L",
+              "elbow_R",
+              "head",
+              "hip_L",
+              "hip_R",
+              "hips",
+              "index_01_L",
+              "index_01_R",
+              "index_02_L",
+              "index_02_R",
+              "index_03_L",
+              "index_03_R",
+              "knee_L",
+              "knee_R",
+              "little_01_L",
+              "little_01_R",
+              "little_02_L",
+              "little_02_R",
+              "little_03_L",
+              "little_03_R",
+              "middle_01_L",
+              "middle_01_R",
+              "middle_02_L",
+              "middle_02_R",
+              "middle_03_L",
+              "middle_03_R",
+              "neck",
+              "ring_01_L",
+              "ring_01_R",
+              "ring_02_L",
+              "ring_02_R",
+              "ring_03_L",
+              "ring_03_R",
+              "shoulder_L",
+              "shoulder_R",
+              "spine",
+              "thumb_01_L",
+              "thumb_01_R",
+              "thumb_02_L",
+              "thumb_02_R",
+              "thumb_03_L",
+              "thumb_03_R",
+              "toe_L",
+              "toe_R",
+              "wrist_L",
+              "wrist_R"
+            ],
+            "actions": 22,
+            "actionNames": [
+              "morphloom_breathe_idle",
+              "morphloom_crouch_idle",
+              "morphloom_crouch_walk",
+              "morphloom_hand_gesture",
+              "morphloom_idle_preview",
+              "morphloom_jump_air",
+              "morphloom_jump_land",
+              "morphloom_jump_start",
+              "morphloom_pick_up",
+              "morphloom_point",
+              "morphloom_pull",
+              "morphloom_push",
+              "morphloom_run_cycle",
+              "morphloom_sprint_cycle",
+              "morphloom_strafe_left",
+              "morphloom_strafe_right",
+              "morphloom_turn_in_place",
+              "morphloom_turn_left_90",
+              "morphloom_turn_right_90",
+              "morphloom_walk_backward",
+              "morphloom_walk_cycle",
+              "morphloom_wave"
+            ],
+            "geometryMoments": {
+              "cornerCount": 158454,
+              "cornerSum": [
+                -0.7491249039562717,
+                113.51804237270517,
+                176190.001654913
+              ],
+              "cornerSumSquares": [
+                13243.673623759954,
+                1768.7435641946736,
+                249221.9320075059
+              ],
+              "surfaceAreaSquareMeters": 3.637618086774848
+            },
+            "boundsMeters": {
+              "min": [
+                -0.5599526166915894,
+                -0.22326231002807617,
+                0.00018545985221862793
+              ],
+              "max": [
+                0.5599525570869446,
+                0.2234179526567459,
+                1.7994414567947388
+              ]
+            }
+          },
+          "reopened": {
+            "objects": 5,
+            "excludedImporterHelpers": 1,
+            "meshes": 3,
+            "vertices": 29124,
+            "polygons": 52818,
+            "materials": 3,
+            "images": 4,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_2",
+              "Image_3"
+            ],
+            "imageDimensions": [
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ],
+              [
+                64,
+                64
+              ]
+            ],
+            "shapeKeys": 5,
+            "skinnedVertices": 26424,
+            "weightedVertices": 26424,
+            "weightedCoverage": 1,
+            "armatures": 1,
+            "bones": 49,
+            "boneNames": [
+              "ankle_L",
+              "ankle_R",
+              "chest",
+              "elbow_L",
+              "elbow_R",
+              "head",
+              "hip_L",
+              "hip_R",
+              "hips",
+              "index_01_L",
+              "index_01_R",
+              "index_02_L",
+              "index_02_R",
+              "index_03_L",
+              "index_03_R",
+              "knee_L",
+              "knee_R",
+              "little_01_L",
+              "little_01_R",
+              "little_02_L",
+              "little_02_R",
+              "little_03_L",
+              "little_03_R",
+              "middle_01_L",
+              "middle_01_R",
+              "middle_02_L",
+              "middle_02_R",
+              "middle_03_L",
+              "middle_03_R",
+              "neck",
+              "ring_01_L",
+              "ring_01_R",
+              "ring_02_L",
+              "ring_02_R",
+              "ring_03_L",
+              "ring_03_R",
+              "shoulder_L",
+              "shoulder_R",
+              "spine",
+              "thumb_01_L",
+              "thumb_01_R",
+              "thumb_02_L",
+              "thumb_02_R",
+              "thumb_03_L",
+              "thumb_03_R",
+              "toe_L",
+              "toe_R",
+              "wrist_L",
+              "wrist_R"
+            ],
+            "actions": 22,
+            "actionNames": [
+              "morphloom_breathe_idle",
+              "morphloom_crouch_idle",
+              "morphloom_crouch_walk",
+              "morphloom_hand_gesture",
+              "morphloom_idle_preview",
+              "morphloom_jump_air",
+              "morphloom_jump_land",
+              "morphloom_jump_start",
+              "morphloom_pick_up",
+              "morphloom_point",
+              "morphloom_pull",
+              "morphloom_push",
+              "morphloom_run_cycle",
+              "morphloom_sprint_cycle",
+              "morphloom_strafe_left",
+              "morphloom_strafe_right",
+              "morphloom_turn_in_place",
+              "morphloom_turn_left_90",
+              "morphloom_turn_right_90",
+              "morphloom_walk_backward",
+              "morphloom_walk_cycle",
+              "morphloom_wave"
+            ],
+            "geometryMoments": {
+              "cornerCount": 158454,
+              "cornerSum": [
+                -0.7490104183330004,
+                113.51768337563226,
+                176190.0060130874
+              ],
+              "cornerSumSquares": [
+                13243.673623759885,
+                1768.74352385569,
+                249221.94661194528
+              ],
+              "surfaceAreaSquareMeters": 3.637618210429299
+            },
+            "boundsMeters": {
+              "min": [
+                -0.5601059794425964,
+                -0.2236284464597702,
+                0.00006955850403755903
+              ],
+              "max": [
+                0.5601059794425964,
+                0.2234179526567459,
+                1.7994414567947388
+              ]
+            }
+          }
+        },
+        "rawReexportStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        },
+        "deliveryRepair": {
+          "applied": false,
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "outputSha256": "b1698b1332ceab3903a809fe362ed01bf39b25f8ec7cda8e1a237e9c7d7e1d9b",
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 53,
+              "meshes": 3,
+              "materials": 3,
+              "skins": 1,
+              "animations": 22
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "asphalt-print-surface",
+      "domain": "3d-printing",
+      "pass": true,
+      "source": {
+        "bytes": 17744940,
+        "sha256": "0ac4435a7d0acc15da79db5f2250fbd4b818a9c31207d481c2eb9b902f63164a",
+        "byteDeterministic": true,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "portableTangents": 1
+      },
+      "blender": {
+        "version": "4.5.11 LTS",
+        "semanticRoundTrip": {
+          "pass": true,
+          "geometryParity": true,
+          "imageParity": true,
+          "skinningParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "imported": {
+            "objects": 2,
+            "excludedImporterHelpers": 0,
+            "meshes": 1,
+            "vertices": 335808,
+            "polygons": 111936,
+            "materials": 1,
+            "images": 3,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_2"
+            ],
+            "imageDimensions": [
+              [
+                256,
+                256
+              ],
+              [
+                256,
+                256
+              ],
+              [
+                256,
+                256
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 335808,
+              "cornerSum": [
+                0,
+                0,
+                -23.572950828820467
+              ],
+              "cornerSumSquares": [
+                10178.463775964225,
+                5745.062797222051,
+                133.54428420306488
+              ],
+              "surfaceAreaSquareMeters": 0.636534904015811
+            },
+            "boundsMeters": {
+              "min": [
+                -0.30000001192092896,
+                -0.22499999403953552,
+                -0.019999999552965164
+              ],
+              "max": [
+                0.30000001192092896,
+                0.22499999403953552,
+                0.023453475907444954
+              ]
+            }
+          },
+          "reopened": {
+            "objects": 2,
+            "excludedImporterHelpers": 0,
+            "meshes": 1,
+            "vertices": 335808,
+            "polygons": 111936,
+            "materials": 1,
+            "images": 3,
+            "imageNames": [
+              "Image_0",
+              "Image_1",
+              "Image_2"
+            ],
+            "imageDimensions": [
+              [
+                256,
+                256
+              ],
+              [
+                256,
+                256
+              ],
+              [
+                256,
+                256
+              ]
+            ],
+            "shapeKeys": 0,
+            "skinnedVertices": 0,
+            "weightedVertices": 0,
+            "weightedCoverage": 1,
+            "armatures": 0,
+            "bones": 0,
+            "boneNames": [],
+            "actions": 0,
+            "actionNames": [],
+            "geometryMoments": {
+              "cornerCount": 335808,
+              "cornerSum": [
+                0,
+                0,
+                -23.572950828820467
+              ],
+              "cornerSumSquares": [
+                10178.463775964225,
+                5745.062797222051,
+                133.54428420306488
+              ],
+              "surfaceAreaSquareMeters": 0.636534904015811
+            },
+            "boundsMeters": {
+              "min": [
+                -0.30000001192092896,
+                -0.22499999403953552,
+                -0.019999999552965164
+              ],
+              "max": [
+                0.30000001192092896,
+                0.22499999403953552,
+                0.023453475907444954
+              ]
+            }
+          }
+        },
+        "rawReexportStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "deliveryRepair": {
+          "applied": false,
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "outputSha256": "0b249e191f8aee9ddc63ca5c60b502d5ac0b71cc9325a6e106146a00b61d8f31",
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
