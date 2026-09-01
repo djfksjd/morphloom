@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-09-01T20:48:16.339Z",
+  "generatedAt": "2026-09-01T20:54:17.600Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -156,6 +156,8 @@
         "minimumMeshAxisMm": 2.53915809957823,
         "declaredMinimumFeatureMm": 0.16,
         "enclosedVolumeMm3": 146608.7279233531,
+        "surfaceAreaMm2": 64443.223742088456,
+        "volumeThicknessProxyMm": 4.55001222502783,
         "unsupportedOverhangAreaMm2": 4106.5690757403,
         "unsupportedOverhangRatio": 0.06372383064161116
       }
@@ -292,6 +294,8 @@
         "minimumMeshAxisMm": 17.999999225139618,
         "declaredMinimumFeatureMm": 18,
         "enclosedVolumeMm3": 254482354093.11646,
+        "surfaceAreaMm2": 3461635956.5943584,
+        "volumeThicknessProxyMm": 147.03010789354198,
         "unsupportedOverhangAreaMm2": 512845854.9532662,
         "unsupportedOverhangRatio": 0.1481512964921408
       }
@@ -476,6 +480,8 @@
         "confidenceWeightedVisualHullIoU": 1,
         "minimumMeshAxisMm": 136.7105718143282,
         "enclosedVolumeMm3": 156575801.90931997,
+        "surfaceAreaMm2": 3637618.040279692,
+        "volumeThicknessProxyMm": 86.08699438783356,
         "unsupportedOverhangAreaMm2": 195328.2198585143,
         "unsupportedOverhangRatio": 0.053696737176808076
       }
@@ -684,6 +690,8 @@
         "confidenceWeightedVisualHullIoU": 1,
         "minimumMeshAxisMm": 136.7105718143282,
         "enclosedVolumeMm3": 156575801.90931997,
+        "surfaceAreaMm2": 3637618.040279692,
+        "volumeThicknessProxyMm": 86.08699438783356,
         "unsupportedOverhangAreaMm2": 195328.2198585143,
         "unsupportedOverhangRatio": 0.053696737176808076
       }
@@ -766,6 +774,14 @@
           "blocking": true
         },
         {
+          "id": "print-volume-thickness",
+          "label": "체적·표면적 두께 지표",
+          "pass": true,
+          "score": 100,
+          "detail": "33.816 mm / 최소 0.800 mm",
+          "blocking": true
+        },
+        {
           "id": "print-overhang",
           "label": "45° 오버행 분석",
           "pass": true,
@@ -828,6 +844,8 @@
         "minimumMeshAxisMm": 43.45347546041012,
         "declaredMinimumFeatureMm": 33.5,
         "enclosedVolumeMm3": 10762674.26790627,
+        "surfaceAreaMm2": 636534.8951200972,
+        "volumeThicknessProxyMm": 33.816446986384435,
         "unsupportedOverhangAreaMm2": 0,
         "unsupportedOverhangRatio": 0
       }

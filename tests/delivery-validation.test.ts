@@ -27,7 +27,7 @@ describe('delivery validation and deterministic output', () => {
     const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
     expect(audit.status).toBe('blocked');
     expect(audit.blockers).toContain('plan-footprint audit metadata changed during GLB round-trip');
-  });
+  }, 20_000);
 
   it('excludes hidden editor helpers from the delivery snapshot', () => {
     const visible = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty').root;

@@ -98,6 +98,8 @@ export interface DomainReadinessReport {
     minimumMeshAxisMm?: number;
     declaredMinimumFeatureMm?: number;
     enclosedVolumeMm3?: number;
+    surfaceAreaMm2: number;
+    volumeThicknessProxyMm: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
   };
@@ -282,6 +284,8 @@ function inspectGeometry(root: THREE.Object3D): {
   maximumSkinInfluences: number;
   minimumMeshAxisMm?: number;
   enclosedVolumeMm3: number;
+  surfaceAreaMm2: number;
+  volumeThicknessProxyMm: number;
   unsupportedOverhangAreaMm2: number;
   unsupportedOverhangRatio: number;
   fingerBones: number;
@@ -459,13 +463,17 @@ function inspectGeometry(root: THREE.Object3D): {
       }
     }
   });
+  const enclosedVolumeMm3 = Math.abs(enclosedVolumeM3) * 1e9;
+  const surfaceAreaMm2 = totalSurfaceAreaM2 * 1e6;
   return {
     uvMeshes,
     normalMeshes,
     maximumSkinWeightError,
     maximumSkinInfluences,
     minimumMeshAxisMm: Number.isFinite(minimumMeshAxisMm) ? minimumMeshAxisMm : undefined,
-    enclosedVolumeMm3: Math.abs(enclosedVolumeM3) * 1e9,
+    enclosedVolumeMm3,
+    surfaceAreaMm2,
+    volumeThicknessProxyMm: surfaceAreaMm2 > 0 ? 2 * enclosedVolumeMm3 / surfaceAreaMm2 : 0,
     unsupportedOverhangAreaMm2: unsupportedOverhangAreaM2 * 1e6,
     unsupportedOverhangRatio: totalSurfaceAreaM2 > 0 ? unsupportedOverhangAreaM2 / totalSurfaceAreaM2 : 0,
     fingerBones: fingerBoneNames.size,
@@ -691,6 +699,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('print-declared-feature', '선언된 최소 형상', minimumFeature >= 0.8, minimumFeature >= 0.8 ? 100 : minimumFeature / 0.8 * 100, declaredMinimumFeatureMm === undefined ? 'mm 기반 IR 형상 치수 없음' : `${minimumFeature.toFixed(3)} mm / 최소 0.800 mm`);
     add('print-bounds-sanity', '메시 축 치수 점검', minimumAxis >= 0.4, minimumAxis >= 0.4 ? 100 : minimumAxis / 0.4 * 100, `${minimumAxis.toFixed(3)} mm`, false);
     add('print-volume', '양의 폐쇄 체적', geometry.enclosedVolumeMm3 > 1, geometry.enclosedVolumeMm3 > 1 ? 100 : 0, `${geometry.enclosedVolumeMm3.toFixed(1)} mm³`);
+    const thicknessProxyPass = geometry.volumeThicknessProxyMm >= 0.8;
+    add('print-volume-thickness', '체적·표면적 두께 지표', thicknessProxyPass,
+      thicknessProxyPass ? 100 : geometry.volumeThicknessProxyMm / 0.8 * 100,
+      `${geometry.volumeThicknessProxyMm.toFixed(3)} mm / 최소 0.800 mm`);
     const supportFree = geometry.unsupportedOverhangRatio <= 0.01;
     add('print-overhang', '45° 오버행 분석', supportFree, supportFree ? 100 : Math.max(0, 100 - geometry.unsupportedOverhangRatio * 500), `${geometry.unsupportedOverhangAreaMm2.toFixed(1)} mm² · 표면의 ${(geometry.unsupportedOverhangRatio * 100).toFixed(2)}%`, false);
   }
@@ -760,6 +772,8 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       minimumMeshAxisMm: geometry.minimumMeshAxisMm,
       declaredMinimumFeatureMm,
       enclosedVolumeMm3: geometry.enclosedVolumeMm3,
+      surfaceAreaMm2: geometry.surfaceAreaMm2,
+      volumeThicknessProxyMm: geometry.volumeThicknessProxyMm,
       unsupportedOverhangAreaMm2: geometry.unsupportedOverhangAreaMm2,
       unsupportedOverhangRatio: geometry.unsupportedOverhangRatio,
     },

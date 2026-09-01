@@ -329,6 +329,8 @@ describe('cross-domain semi-professional readiness', () => {
     expect(print.metrics.minimumMeshAxisMm).toBeGreaterThan(0.4);
     expect(print.metrics.declaredMinimumFeatureMm).toBeGreaterThanOrEqual(0.8);
     expect(print.metrics.enclosedVolumeMm3).toBeGreaterThan(1);
+    expect(print.metrics.surfaceAreaMm2).toBeGreaterThan(1);
+    expect(print.metrics.volumeThicknessProxyMm).toBeGreaterThanOrEqual(0.8);
     expect(print.metrics.unsupportedOverhangRatio).toBeLessThanOrEqual(0.01);
     expect(print.warnings).toEqual([]);
   }, 20_000);
@@ -380,6 +382,28 @@ describe('cross-domain semi-professional readiness', () => {
     expect(report.metrics.unsupportedOverhangAreaMm2).toBeGreaterThan(1_000);
     expect(report.metrics.unsupportedOverhangRatio).toBeGreaterThan(0.01);
     expect(report.warnings.join(' ')).toMatch(/print-overhang/);
+  });
+
+  it('blocks a broad but sub-millimetre solid using compiled volume and surface area', () => {
+    const material = { color: '#888888', surface: 'molded-polymer' as const, roughness: 0.7, microNormalStrength: 0.2 };
+    const evidence = { status: 'measured' as const, source: 'thin-solid regression fixture' };
+    const ir: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'sub-millimetre print solid', units: 'mm',
+      components: [{
+        id: 'thin_solid', name: 'Thin solid', category: 'mechanical', materialName: 'polymer',
+        detail: 'Broad closed solid that remains too thin for the locked print contract',
+        geometry: { op: 'roundedBox', size: [100, 0.2, 100], radius: 0.05 },
+        material, evidence,
+      }],
+    };
+    const build = compileAssemblyIR(ir, 'beauty');
+    const report = auditDomainReadiness({
+      domain: '3d-print', root: build.root, topology: build.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true, sourceUnitMm: 1,
+    });
+    expect(report.pass).toBe(false);
+    expect(report.metrics.volumeThicknessProxyMm).toBeLessThan(0.8);
+    expect(report.blockers.join(' ')).toMatch(/print-volume-thickness/);
   });
 
   it('blocks a watertight visual hull when its source-view reprojection remains inconsistent', () => {
