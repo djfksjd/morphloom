@@ -712,6 +712,21 @@ describe('AssemblyIR product pipeline', () => {
 });
 
 describe('PBR micro-surface system', () => {
+  it('keeps black emissive materials at the glTF default strength', () => {
+    const implicitBlack = createSurfaceMaterial({ color: '#666666', surface: 'molded-polymer' }, {
+      mode: 'beauty', category: 'enclosure', materialName: 'polymer shell',
+    });
+    const explicitBlack = createSurfaceMaterial({ color: '#666666', emissive: '#000000', surface: 'molded-polymer' }, {
+      mode: 'beauty', category: 'enclosure', materialName: 'polymer shell',
+    });
+    const luminous = createSurfaceMaterial({ color: '#666666', emissive: '#ff2200', surface: 'molded-polymer' }, {
+      mode: 'beauty', category: 'display', materialName: 'status light',
+    });
+    expect(implicitBlack.emissiveIntensity).toBe(1);
+    expect(explicitBlack.emissiveIntensity).toBe(1);
+    expect(luminous.emissiveIntensity).toBeCloseTo(0.35);
+  });
+
   it('creates angle-dependent brushed metal with deterministic export metadata', () => {
     const first = createSurfaceMaterial({ color: '#aeb1b4', surface: 'brushed-metal' }, {
       mode: 'beauty', category: 'mechanical', materialName: 'brushed aluminium',

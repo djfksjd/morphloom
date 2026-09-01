@@ -93,6 +93,12 @@ describe('delivery validation and deterministic output', () => {
     const source = snapshotScene(build.root);
     const passed = compareGlbRoundTrip(source, structuredClone(source), 1024, 12);
     expect(passed).toMatchObject({ status: 'pass', meshParity: true, triangleParity: true });
+    expect(passed.platformNotes).toMatchObject({
+      gltf20: 'not-run',
+      blender: 'application-import-not-run',
+      unity: 'application-import-not-run',
+      unreal: 'application-import-not-run',
+    });
     const drifted = structuredClone(source);
     drifted.meshes -= 1;
     drifted.triangles -= 4;

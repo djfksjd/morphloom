@@ -34,6 +34,7 @@ import {
   type DeliveryAudit,
   type LocalBuildTelemetry,
 } from '../engine/delivery-validation';
+import { validateGlbStandard } from '../engine/gltf-standard-validation';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 import { SerializedTaskQueue } from '../engine/serialized-task-queue';
 
@@ -475,13 +476,24 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
 
 async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inputFingerprint: string, buildFingerprint: string): Promise<DeliveryAudit> {
   const started = performance.now();
+  // The Khronos validator reads the buffer; avoid duplicating up to 256 MB
+  // before the loader's isolated round-trip copy is created.
+  const standardValidation = await validateGlbStandard(bytes);
   const source = snapshotScene(root);
   const loader = new GLTFLoader();
   const reopened = await loader.parseAsync(bytes.slice(0), '');
   try {
     reopened.scene.animations = reopened.animations;
     const reopenedSnapshot = snapshotScene(reopened.scene);
-    return compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, performance.now() - started, inputFingerprint, buildFingerprint);
+    return compareGlbRoundTrip(
+      source,
+      reopenedSnapshot,
+      bytes.byteLength,
+      performance.now() - started,
+      inputFingerprint,
+      buildFingerprint,
+      standardValidation,
+    );
   } finally {
     disposeObject(reopened.scene);
   }
@@ -1036,6 +1048,12 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.glbBytes = audit.glbBytes;
               diagnostic.__MORPHLOOM__.boundsErrorMm = audit.boundsErrorMm;
               diagnostic.__MORPHLOOM__.namedNodeCoverage = audit.namedNodeCoverage;
+              diagnostic.__MORPHLOOM__.gltfValidator = audit.standardValidation?.validator;
+              diagnostic.__MORPHLOOM__.gltfValidatorVersion = audit.standardValidation?.validatorVersion;
+              diagnostic.__MORPHLOOM__.gltfValidationStatus = audit.standardValidation?.status;
+              diagnostic.__MORPHLOOM__.gltfValidationErrors = audit.standardValidation?.errors;
+              diagnostic.__MORPHLOOM__.gltfValidationWarnings = audit.standardValidation?.warnings;
+              diagnostic.__MORPHLOOM__.gltfValidationIssueCodes = audit.standardValidation?.issueCodes;
               diagnostic.__MORPHLOOM__.reopenedSkeletons = audit.reopened?.skeletons;
               diagnostic.__MORPHLOOM__.reopenedBones = audit.reopened?.bones;
               diagnostic.__MORPHLOOM__.reopenedAnimationClips = audit.reopened?.animationClips;

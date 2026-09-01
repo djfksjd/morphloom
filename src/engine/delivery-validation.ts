@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
+import type { GltfStandardValidation } from './gltf-standard-validation';
 
 export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.14.0';
 
@@ -59,12 +60,14 @@ export interface DeliveryAudit {
   boundsErrorMm: number;
   source?: SceneSnapshot;
   reopened?: SceneSnapshot;
+  standardValidation?: GltfStandardValidation;
   blockers: string[];
   warnings: string[];
   platformNotes: {
-    blender: 'verified-glb';
-    unity: 'verified-glb';
-    unreal: 'verified-glb';
+    gltf20: 'khronos-validator-pass' | 'khronos-validator-warn' | 'khronos-validator-blocked' | 'not-run';
+    blender: 'application-import-not-run';
+    unity: 'application-import-not-run';
+    unreal: 'application-import-not-run';
     fusion360: 'mesh-import-only';
     figma: 'svg-reference-only';
   };
@@ -394,6 +397,7 @@ export function compareGlbRoundTrip(
   durationMs: number,
   inputFingerprint = source.fingerprint,
   buildFingerprint = source.fingerprint,
+  standardValidation?: GltfStandardValidation,
 ): DeliveryAudit {
   const blockers: string[] = [];
   const warnings: string[] = [];
@@ -445,6 +449,13 @@ export function compareGlbRoundTrip(
   if (source.duplicatePartIds.length > 0) blockers.push(`duplicate source part ids: ${source.duplicatePartIds.join(', ')}`);
   if (reopened.materials < source.materials * 0.8) warnings.push(`material families changed ${source.materials}→${reopened.materials}`);
   if (glbBytes <= 20) blockers.push('GLB payload is empty');
+  if (standardValidation?.errors) {
+    blockers.push(`Khronos glTF validation errors ${standardValidation.errors}: ${standardValidation.issueCodes.join(', ') || 'unspecified'}`);
+  }
+  if (standardValidation?.warnings) {
+    warnings.push(`Khronos glTF validation warnings ${standardValidation.warnings}: ${standardValidation.issueCodes.join(', ') || 'unspecified'}`);
+  }
+  if (standardValidation?.truncated) warnings.push('Khronos glTF validation issue list was truncated');
   const status: DeliveryAuditStatus = blockers.length > 0 ? 'blocked' : warnings.length > 0 ? 'warn' : 'pass';
   const exactParity = status === 'pass' && meshParity && triangleParity
     && source.skeletons === reopened.skeletons && source.bones === reopened.bones
@@ -479,12 +490,17 @@ export function compareGlbRoundTrip(
     boundsErrorMm,
     source,
     reopened,
+    standardValidation,
     blockers,
     warnings,
     platformNotes: {
-      blender: 'verified-glb',
-      unity: 'verified-glb',
-      unreal: 'verified-glb',
+      gltf20: standardValidation
+        ? standardValidation.status === 'pass' ? 'khronos-validator-pass'
+          : standardValidation.status === 'warn' ? 'khronos-validator-warn' : 'khronos-validator-blocked'
+        : 'not-run',
+      blender: 'application-import-not-run',
+      unity: 'application-import-not-run',
+      unreal: 'application-import-not-run',
       fusion360: 'mesh-import-only',
       figma: 'svg-reference-only',
     },
@@ -508,7 +524,8 @@ export function blockedDeliveryAudit(error: unknown, fingerprint = 'unavailable'
     blockers: [detail.slice(0, 240)],
     warnings: [],
     platformNotes: {
-      blender: 'verified-glb', unity: 'verified-glb', unreal: 'verified-glb',
+      gltf20: 'not-run',
+      blender: 'application-import-not-run', unity: 'application-import-not-run', unreal: 'application-import-not-run',
       fusion360: 'mesh-import-only', figma: 'svg-reference-only',
     },
   };

@@ -23,3 +23,9 @@ Morphloom converted and modified those implementations for bounded in-browser
 TypeScript execution, typed-array geometry, and its evidence/quality pipeline.
 Upstream: https://github.com/img2threejs/img2threejs
 Upstream revision: 9fbd0ca5bbcc3b13bebe712745d6784d33db0b85
+
+Binary glTF conformance checks use glTF Validator, Copyright The Khronos
+Group Inc., licensed under Apache License 2.0. The validator runs locally on
+the exact delivery bytes; Morphloom does not upload customer assets for this
+check.
+Upstream: https://github.com/KhronosGroup/glTF-Validator

@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T18:24:14.005Z",
+  "generatedAt": "2026-09-01T18:38:33.111Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1085,6 +1085,35 @@
       "maximumConcurrentTasks": 1,
       "failureReleasedQueue": true,
       "capacityRejected": true
+    },
+    "gltfStandardValidation": {
+      "pass": true,
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "validFixture": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": []
+      },
+      "corruptFixture": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 1,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "GLB_INVALID_MAGIC"
+        ]
+      }
     }
   },
   "capabilityMatrix": [
@@ -1149,9 +1178,14 @@
       "morphloom": "yes"
     },
     {
-      "capability": "GLB and DCC delivery validation",
+      "capability": "exact-byte glTF 2.0 specification and browser round-trip validation",
       "img2threejs": "Three.js factory focus",
-      "morphloom": "yes"
+      "morphloom": "Khronos Validator + Three.js reopen"
+    },
+    {
+      "capability": "Blender/Unity/Unreal application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "application-import-not-run"
     },
     {
       "capability": "bounded serialized browser GLB validation with same-input deduplication and stale-result guard",

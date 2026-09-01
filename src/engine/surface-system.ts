@@ -320,6 +320,8 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
   const ghost = context.mode === 'rig' && (context.category === 'enclosure' || context.category === 'display');
   const transmission = context.mode === 'beauty' ? (source.transmission ?? preset.transmission) : 0;
   const microNormalStrength = source.microNormalStrength ?? preset.microNormalStrength;
+  const emissive = new THREE.Color(source.emissive ?? '#000000');
+  const hasVisibleEmission = emissive.getHex() !== 0;
   // `raw` means the exact finish is unknown, not that an explicitly requested
   // micro-surface should be silently discarded. Use a conservative grain map
   // until the evidence pipeline can classify a more specific physical finish.
@@ -347,8 +349,10 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     sheenRoughness: source.sheenRoughness ?? preset.sheenRoughness,
     sheenColor: new THREE.Color(source.color),
     specularIntensity: source.specularIntensity ?? preset.specularIntensity,
-    emissive: source.emissive ?? '#000000',
-    emissiveIntensity: source.emissive ? 0.35 : 0,
+    emissive,
+    // glTF emissive strength 0 on an already-black emissive color is a
+    // redundant extension payload and is flagged by Khronos' validator.
+    emissiveIntensity: hasVisibleEmission ? 0.35 : 1,
     wireframe: context.mode === 'wireframe',
     envMapIntensity: context.mode === 'beauty' ? 1.18 : 0.82,
     // Asphalt uses the height-field triangles as visible broken-stone facets;

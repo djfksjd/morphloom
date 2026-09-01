@@ -16,6 +16,7 @@
     "benchmark": "vite-node scripts/benchmark.ts",
     "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
     "surface:prepare": "vite-node scripts/prepare-surface-reference.ts",
+    "gltf:validate": "vite-node scripts/validate-glb.ts",
     "quality:gate": "vite-node scripts/quality-gate.ts && vite-node scripts/competitive-benchmark.ts",
     "preview": "vite preview --host 127.0.0.1"
   },
@@ -30,6 +31,7 @@
     "@types/react-dom": "^19.1.7",
     "@types/three": "^0.179.0",
     "@vitejs/plugin-react": "^5.0.2",
+    "gltf-validator": "^2.0.0-dev.3.10",
     "typescript": "^5.9.2",
     "vite": "^7.1.3",
     "vitest": "^3.2.4"
