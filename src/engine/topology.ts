@@ -17,6 +17,11 @@ export interface MeshTopologyReport {
   minimumAuthoredEdgeThicknessMm?: number;
   verifiedEdgeTaperSegments?: number;
   maximumMeasuredEdgeThicknessMm?: number;
+  surfaceReliefMeshes?: number;
+  surfaceReliefSamples?: number;
+  surfaceAggregateFeatures?: number;
+  maximumSurfaceRmsRoughnessMm?: number;
+  maximumSurfacePeakToValleyMm?: number;
   pass: boolean;
   details: Array<{
     name: string;
@@ -42,6 +47,11 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
   let minimumAuthoredEdgeThicknessMm = Number.POSITIVE_INFINITY;
   let verifiedEdgeTaperSegments = 0;
   let maximumMeasuredEdgeThicknessMm = Number.NEGATIVE_INFINITY;
+  let surfaceReliefMeshes = 0;
+  let surfaceReliefSamples = 0;
+  let surfaceAggregateFeatures = 0;
+  let maximumSurfaceRmsRoughnessMm = Number.NEGATIVE_INFINITY;
+  let maximumSurfacePeakToValleyMm = Number.NEGATIVE_INFINITY;
   const details: MeshTopologyReport['details'] = [];
 
   root.traverse((object) => {
@@ -65,6 +75,25 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
             taper.measuredMaxTipThicknessMm,
           );
         }
+      }
+    }
+    const surfaceRelief = object.geometry.userData.morphloomSurfaceRelief as {
+      samples?: number;
+      aggregateFeatures?: number;
+      rmsRoughnessMm?: number;
+      peakToValleyMm?: number;
+    } | undefined;
+    if (surfaceRelief) {
+      surfaceReliefMeshes += 1;
+      if (typeof surfaceRelief.samples === 'number') surfaceReliefSamples += surfaceRelief.samples;
+      if (typeof surfaceRelief.aggregateFeatures === 'number') {
+        surfaceAggregateFeatures += surfaceRelief.aggregateFeatures;
+      }
+      if (typeof surfaceRelief.rmsRoughnessMm === 'number') {
+        maximumSurfaceRmsRoughnessMm = Math.max(maximumSurfaceRmsRoughnessMm, surfaceRelief.rmsRoughnessMm);
+      }
+      if (typeof surfaceRelief.peakToValleyMm === 'number') {
+        maximumSurfacePeakToValleyMm = Math.max(maximumSurfacePeakToValleyMm, surfaceRelief.peakToValleyMm);
       }
     }
     const expanded = object.geometry.index ? object.geometry.toNonIndexed() : object.geometry.clone();
@@ -133,6 +162,15 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     verifiedEdgeTaperSegments,
     maximumMeasuredEdgeThicknessMm: Number.isFinite(maximumMeasuredEdgeThicknessMm)
       ? maximumMeasuredEdgeThicknessMm
+      : undefined,
+    surfaceReliefMeshes,
+    surfaceReliefSamples,
+    surfaceAggregateFeatures,
+    maximumSurfaceRmsRoughnessMm: Number.isFinite(maximumSurfaceRmsRoughnessMm)
+      ? maximumSurfaceRmsRoughnessMm
+      : undefined,
+    maximumSurfacePeakToValleyMm: Number.isFinite(maximumSurfacePeakToValleyMm)
+      ? maximumSurfacePeakToValleyMm
       : undefined,
     pass: meshes > 0 && watertightMeshes === meshes,
     details,

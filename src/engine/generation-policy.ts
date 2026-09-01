@@ -37,7 +37,7 @@ export interface AssemblyDetailAudit {
 }
 
 const MICRO_SURFACE_FINISHES = new Set<SurfaceFinishIR>([
-  'concrete', 'plaster', 'stone', 'coated-metal',
+  'concrete', 'asphalt', 'plaster', 'stone', 'coated-metal',
   'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal', 'machined-copper',
   'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask', 'molded-polymer',
   'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin', 'fabric', 'hex-knit', 'hair',

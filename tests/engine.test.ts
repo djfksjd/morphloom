@@ -13,6 +13,7 @@ import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
 import { TALON_REFERENCE_BENCHMARK_IR } from '../src/engine/talon-reference-benchmark';
+import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
 import { analyzeTopology } from '../src/engine/topology';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
@@ -203,6 +204,72 @@ describe('OHPK human pipeline', () => {
 });
 
 describe('AssemblyIR product pipeline', () => {
+  it('builds deterministic bumpy asphalt with real macro relief and aggregate PBR maps', () => {
+    validateAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR);
+    const first = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
+    const second = compileAssemblyIR(structuredClone(ASPHALT_SURFACE_BENCHMARK_IR), 'beauty');
+    const firstMesh = first.root.getObjectByName('asphalt_core_sample') as THREE.Mesh;
+    const secondMesh = second.root.getObjectByName('asphalt_core_sample') as THREE.Mesh;
+    const firstAudit = firstMesh.geometry.userData.morphloomSurfaceRelief as {
+      samples: number;
+      rmsRoughnessMm: number;
+      peakToValleyMm: number;
+      minimumMm: number;
+      maximumMm: number;
+      aggregateFeatures: number;
+      coarseAggregateFeatures: number;
+      fineAggregateFeatures: number;
+      facetedNormals: boolean;
+    };
+    expect(firstAudit).toEqual(secondMesh.geometry.userData.morphloomSurfaceRelief);
+    expect(firstAudit.samples).toBe(27_985);
+    expect(firstAudit.coarseAggregateFeatures).toBeGreaterThan(1_000);
+    expect(firstAudit.fineAggregateFeatures).toBeGreaterThan(5_000);
+    expect(firstAudit.aggregateFeatures).toBe(
+      firstAudit.coarseAggregateFeatures + firstAudit.fineAggregateFeatures,
+    );
+    expect(firstAudit.facetedNormals).toBe(true);
+    expect(firstAudit.rmsRoughnessMm).toBeGreaterThan(0.8);
+    expect(firstAudit.peakToValleyMm).toBeGreaterThan(6);
+    expect(firstAudit.minimumMm).toBeLessThan(-1);
+    expect(firstAudit.maximumMm).toBeGreaterThan(2);
+    expect(Array.from(firstMesh.geometry.getAttribute('position').array)).toEqual(
+      Array.from(secondMesh.geometry.getAttribute('position').array),
+    );
+    expect(first.metrics.topology).toMatchObject({
+      pass: true,
+      boundaryEdges: 0,
+      nonManifoldEdges: 0,
+      degenerateTriangles: 0,
+    });
+    expect(first.metrics.surfaces).toMatchObject({
+      finishes: ['asphalt'],
+      microNormalMaterials: 1,
+      roughnessMappedMaterials: 1,
+    });
+    const material = firstMesh.material as THREE.MeshPhysicalMaterial;
+    expect(material.map).toBeTruthy();
+    expect(material.normalMap).toBeTruthy();
+    expect(material.roughnessMap).toBeTruthy();
+    expect(material.roughness).toBeCloseTo(0.94);
+    expect(material.metalness).toBe(0);
+    expect(material.flatShading).toBe(true);
+  });
+
+  it('rejects unsafe asphalt surface grids and displacement ranges', () => {
+    const oversized = structuredClone(ASPHALT_SURFACE_BENCHMARK_IR);
+    const geometry = oversized.components[0]!.geometry;
+    if (geometry.op !== 'surfacePatch') throw new Error('Missing asphalt surface patch.');
+    geometry.segments = [256, 256];
+    expect(() => validateAssemblyIR(oversized)).toThrow(/Surface patch is invalid/);
+
+    const unstable = structuredClone(ASPHALT_SURFACE_BENCHMARK_IR);
+    const unstableGeometry = unstable.components[0]!.geometry;
+    if (unstableGeometry.op !== 'surfacePatch') throw new Error('Missing asphalt surface patch.');
+    unstableGeometry.macroAmplitude = 40;
+    expect(() => validateAssemblyIR(unstable)).toThrow(/Surface patch is invalid/);
+  });
+
   it('compiles traced profiles with multiple real through-holes for the same-reference Talon benchmark', () => {
     validateAssemblyIR(TALON_REFERENCE_BENCHMARK_IR);
     const core = TALON_REFERENCE_BENCHMARK_IR.components.find((component) => component.id === 'continuous_steel_body');

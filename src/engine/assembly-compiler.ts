@@ -9,6 +9,7 @@ import { analyzeTopology } from './topology';
 import { inspectEngineeringEvidence } from './engineering-audit';
 import { auditFidelityContract } from './fidelity-pipeline';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
+import { createLayeredSurfaceGeometry } from './layered-surface';
 
 const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
@@ -46,9 +47,9 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     throw new Error('AssemblyIR must contain 1–500 components.');
   }
   const ids = new Set<string>();
-  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'hipRoof', 'bladeLoft', 'visualHull']);
+  const allowedOps = new Set(['roundedBox', 'cylinder', 'sphere', 'torus', 'extrude', 'lathe', 'tube', 'surfacePatch', 'hipRoof', 'bladeLoft', 'visualHull']);
   const allowedSurfaces = new Set([
-    'raw', 'concrete', 'plaster', 'stone', 'coated-metal', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
+    'raw', 'concrete', 'asphalt', 'plaster', 'stone', 'coated-metal', 'brushed-metal', 'bead-blasted-metal', 'anodized-metal', 'polished-metal',
     'machined-copper', 'ceramic-glass', 'optical-glass', 'sapphire', 'pcb-soldermask',
     'molded-polymer', 'soft-touch-polymer', 'rubber', 'leather', 'wood', 'skin',
     'fabric', 'hex-knit', 'hair', 'semiconductor',
@@ -147,6 +148,25 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       case 'tube':
         if (component.geometry.points.length < 2 || component.geometry.radius <= 0) throw new Error(`Tube path is invalid in ${component.id}.`);
         break;
+      case 'surfacePatch': {
+        const [segmentsX, segmentsZ] = component.geometry.segments;
+        const gridVertices = (segmentsX + 1) * (segmentsZ + 1) * 2;
+        if (component.geometry.size.some((value) => value <= 0)
+          || component.geometry.baseThickness <= 0
+          || !Number.isInteger(segmentsX) || !Number.isInteger(segmentsZ)
+          || segmentsX < 2 || segmentsZ < 2 || segmentsX > 256 || segmentsZ > 256
+          || gridVertices > 80_000
+          || !Number.isInteger(component.geometry.seed)
+          || component.geometry.seed < 0 || component.geometry.seed > 0x7fff_ffff
+          || component.geometry.macroAmplitude < 0
+          || component.geometry.aggregateAmplitude < 0
+          || component.geometry.aggregateScale <= 0
+          || component.geometry.macroAmplitude + component.geometry.aggregateAmplitude
+            >= component.geometry.baseThickness * 0.45) {
+          throw new Error(`Surface patch is invalid in ${component.id}.`);
+        }
+        break;
+      }
       case 'hipRoof':
         if (component.geometry.width <= 0 || component.geometry.depth <= 0 || component.geometry.rise <= 0
           || component.geometry.thickness <= 0 || component.geometry.ridgeLength < 0
@@ -463,6 +483,8 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
       tube.dispose();
       return capped;
     }
+    case 'surfacePatch':
+      return createLayeredSurfaceGeometry(geometry);
     case 'hipRoof': {
       const halfWidth = mm(geometry.width) * 0.5;
       const halfDepth = mm(geometry.depth) * 0.5;

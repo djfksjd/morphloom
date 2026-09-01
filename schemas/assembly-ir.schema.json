@@ -38,7 +38,7 @@
       "required": ["color"],
       "properties": {
         "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
-        "surface": { "enum": ["raw", "concrete", "plaster", "stone", "coated-metal", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hex-knit", "hair", "semiconductor"] },
+        "surface": { "enum": ["raw", "concrete", "asphalt", "plaster", "stone", "coated-metal", "brushed-metal", "bead-blasted-metal", "anodized-metal", "polished-metal", "machined-copper", "ceramic-glass", "optical-glass", "sapphire", "pcb-soldermask", "molded-polymer", "soft-touch-polymer", "rubber", "leather", "wood", "skin", "fabric", "hex-knit", "hair", "semiconductor"] },
         "roughness": { "type": "number", "minimum": 0, "maximum": 1 },
         "metalness": { "type": "number", "minimum": 0, "maximum": 1 },
         "transmission": { "type": "number", "minimum": 0, "maximum": 1 },
@@ -108,6 +108,7 @@
             { "$ref": "#/$defs/extrude" },
             { "$ref": "#/$defs/lathe" },
             { "$ref": "#/$defs/tube" },
+            { "$ref": "#/$defs/surfacePatch" },
             { "$ref": "#/$defs/hipRoof" },
             { "$ref": "#/$defs/bladeLoft" },
             { "$ref": "#/$defs/visualHull" }
@@ -196,6 +197,21 @@
     "tube": {
       "type": "object", "required": ["op", "points", "radius"], "additionalProperties": false,
       "properties": { "op": { "const": "tube" }, "points": { "type": "array", "minItems": 2, "maxItems": 4096, "items": { "$ref": "#/$defs/vec3" } }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "tubularSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "radialSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "closed": { "type": "boolean" } }
+    },
+    "surfacePatch": {
+      "type": "object",
+      "required": ["op", "size", "baseThickness", "segments", "seed", "macroAmplitude", "aggregateAmplitude", "aggregateScale"],
+      "additionalProperties": false,
+      "properties": {
+        "op": { "const": "surfacePatch" },
+        "size": { "$ref": "#/$defs/vec2" },
+        "baseThickness": { "type": "number", "exclusiveMinimum": 0 },
+        "segments": { "type": "array", "prefixItems": [{ "type": "integer", "minimum": 2, "maximum": 256 }, { "type": "integer", "minimum": 2, "maximum": 256 }], "minItems": 2, "maxItems": 2 },
+        "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "macroAmplitude": { "type": "number", "minimum": 0 },
+        "aggregateAmplitude": { "type": "number", "minimum": 0 },
+        "aggregateScale": { "type": "number", "exclusiveMinimum": 0 }
+      }
     },
     "hipRoof": {
       "type": "object", "required": ["op", "width", "depth", "rise", "thickness", "ridgeLength"], "additionalProperties": false,

@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-88%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-96%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -90,6 +90,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Domain | Examples |
 |---|---|
 | Product | 164-part smartphone · Galaxy Z Fold8 exterior · ornate blade |
+| Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
 | Character | 14,517-vertex human base · posed Web Hero |
@@ -122,6 +123,8 @@ With two or more compatible orthographic silhouettes, Morphloom now carves a wel
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
 We also ran a real same-input Talon comparison. Morphloom aligns the admitted front image across independently editable parts and derives aligned normal and roughness maps from its local pixels. Its blade is a real closed wedge rather than a cosmetic tube: all 14 cutting-edge segments traced through 15 contour points are measured at no more than 0.12 mm. The case has 25 named parts, zero boundary/non-manifold edges or degenerate triangles, and 0.000 mm GLB round-trip drift. This establishes the inspected material response, editability, and delivery checks; it does not infer unseen depth or rear geometry from one photograph.
+
+Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
 
 ## Current limits
 

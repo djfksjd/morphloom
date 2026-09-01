@@ -17,7 +17,7 @@ interface SurfaceRecipe {
   specularIntensity: number;
   microNormalStrength: number;
   textureScale: [number, number];
-  pattern: 'none' | 'directional' | 'grain' | 'orange-peel' | 'fibrous' | 'hex-weave';
+  pattern: 'none' | 'directional' | 'grain' | 'aggregate' | 'orange-peel' | 'fibrous' | 'hex-weave';
 }
 
 export interface SurfaceReport {
@@ -58,6 +58,7 @@ const recipe = (value: Partial<SurfaceRecipe>): SurfaceRecipe => ({
 export const SURFACE_LIBRARY: Readonly<Record<SurfaceFinishIR, SurfaceRecipe>> = {
   raw: recipe({ pattern: 'none', microNormalStrength: 0 }),
   concrete: recipe({ roughness: 0.88, metalness: 0, clearcoat: 0.01, microNormalStrength: 0.46, textureScale: [34, 34], pattern: 'grain' }),
+  asphalt: recipe({ roughness: 0.94, metalness: 0, clearcoat: 0, clearcoatRoughness: 1, specularIntensity: 0.34, microNormalStrength: 0.95, textureScale: [3, 3], pattern: 'aggregate' }),
   plaster: recipe({ roughness: 0.82, metalness: 0, clearcoat: 0.025, microNormalStrength: 0.3, textureScale: [28, 28], pattern: 'orange-peel' }),
   stone: recipe({ roughness: 0.56, metalness: 0, clearcoat: 0.14, microNormalStrength: 0.32, textureScale: [18, 18], pattern: 'grain' }),
   'coated-metal': recipe({ roughness: 0.5, metalness: 0.42, clearcoat: 0.18, anisotropy: 0.42, microNormalStrength: 0.24, textureScale: [12, 48], pattern: 'directional' }),
@@ -96,6 +97,7 @@ export function inferSurfaceFinish(materialName: string, explicit?: SurfaceFinis
   if (/가죽|leather/.test(name)) return 'leather';
   if (/월넛|wood|목재/.test(name)) return 'wood';
   if (/콘크리트|concrete|시멘트|cement/.test(name)) return 'concrete';
+  if (/아스팔트|asphalt|tarmac|bitumen|역청/.test(name)) return 'asphalt';
   if (/스터코|stucco|플라스터|plaster|석고|gypsum|도장 벽/.test(name)) return 'plaster';
   if (/석재|stone|화강암|granite|대리석|marble/.test(name)) return 'stone';
   if (/도장.*금속|coated.*metal|powder.?coat|standing.?seam/.test(name)) return 'coated-metal';
@@ -129,8 +131,78 @@ function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pa
     const cell = (Math.cos(x * 0.72) + Math.cos(x * 0.36 + y * 0.624) + Math.cos(x * 0.36 - y * 0.624)) / 3;
     return Math.pow(Math.max(-1, Math.min(1, cell)) * 0.5 + 0.5, 1.7) * 1.35 - 0.55 + noise * 0.1;
   }
+  if (pattern === 'aggregate') {
+    const grit = Math.sign(noise) * Math.pow(Math.abs(noise), 0.58);
+    const pebble = hash(Math.floor(x / 2), Math.floor(y / 2), seed + 43) * 2 - 1;
+    return grit * 0.72 + pebble * 0.28;
+  }
   if (pattern === 'grain') return noise * 0.58 + broad * 0.26;
   return 0;
+}
+
+interface AggregateTextureSample {
+  height: number;
+  tone: number;
+}
+
+function wrappedCell(value: number, cells: number): number {
+  return ((value % cells) + cells) % cells;
+}
+
+function asphaltAggregateLayer(
+  pixelX: number,
+  pixelY: number,
+  size: number,
+  seed: number,
+  cells: number,
+): AggregateTextureSample {
+  const gridX = pixelX / size * cells;
+  const gridY = pixelY / size * cells;
+  const cellX = Math.floor(gridX);
+  const cellY = Math.floor(gridY);
+  let strongest = 0;
+  let tone = 0;
+  for (let offsetY = -1; offsetY <= 1; offsetY += 1) {
+    for (let offsetX = -1; offsetX <= 1; offsetX += 1) {
+      const candidateX = cellX + offsetX;
+      const candidateY = cellY + offsetY;
+      const hashX = wrappedCell(candidateX, cells);
+      const hashY = wrappedCell(candidateY, cells);
+      if (hash(hashX, hashY, seed + 19) < 0.08) continue;
+      const centerX = candidateX + 0.12 + hash(hashX, hashY, seed + 31) * 0.76;
+      const centerY = candidateY + 0.12 + hash(hashX, hashY, seed + 47) * 0.76;
+      const rotation = hash(hashX, hashY, seed + 59) * Math.PI;
+      const cos = Math.cos(rotation);
+      const sin = Math.sin(rotation);
+      const deltaX = gridX - centerX;
+      const deltaY = gridY - centerY;
+      const localX = deltaX * cos - deltaY * sin;
+      const aspect = 0.58 + hash(hashX, hashY, seed + 71) * 0.38;
+      const localY = (deltaX * sin + deltaY * cos) / aspect;
+      const angle = Math.atan2(localY, localX);
+      const sides = 4 + Math.floor(hash(hashX, hashY, seed + 83) * 4);
+      const phase = hash(hashX, hashY, seed + 97) * Math.PI * 2;
+      const radius = 0.46 + hash(hashX, hashY, seed + 101) * 0.2;
+      const angularRadius = radius * (0.84 + Math.cos(angle * sides + phase) * 0.12);
+      const distance = Math.hypot(localX, localY) / angularRadius;
+      if (distance >= 1) continue;
+      const profile = 0.18 + (1 - distance) * 0.82;
+      const facet = 0.8 + Math.abs(Math.cos(angle * sides * 0.5 + phase)) * 0.2;
+      const height = profile * facet;
+      if (height > strongest) {
+        strongest = height;
+        tone = hash(hashX, hashY, seed + 127) * 2 - 1;
+      }
+    }
+  }
+  return { height: strongest, tone };
+}
+
+function asphaltAggregateSample(x: number, y: number, size: number, seed: number): AggregateTextureSample {
+  const coarse = asphaltAggregateLayer(x, y, size, seed, 22);
+  const fine = asphaltAggregateLayer(x, y, size, seed + 2_113, 51);
+  if (coarse.height >= fine.height * 0.64) return coarse;
+  return { height: fine.height * 0.64, tone: fine.tone * 0.75 };
 }
 
 const textureCache = new Map<string, { albedo: THREE.Texture; normal: THREE.Texture; roughness: THREE.Texture }>();
@@ -153,7 +225,8 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
   const key = `${finish}:${scale[0]}:${scale[1]}`;
   const cached = textureCache.get(key);
   if (cached) return cached;
-  const size = 64;
+  const pattern = SURFACE_LIBRARY[finish].pattern;
+  const size = pattern === 'aggregate' ? 256 : 64;
   const albedoData = new Uint8Array(size * size * 4);
   const normalData = new Uint8Array(size * size * 4);
   // glTF stores roughness in G and metalness in B of one shared texture.
@@ -161,24 +234,47 @@ function createMicroSurfaceMaps(finish: SurfaceFinishIR, scale: [number, number]
   // texture per material and preserves each material's scalar metalness.
   const metallicRoughnessData = new Uint8Array(size * size * 4);
   const seed = [...finish].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  const pattern = SURFACE_LIBRARY[finish].pattern;
+  const aggregateHeights = pattern === 'aggregate' ? new Float32Array(size * size) : undefined;
+  const aggregateTones = pattern === 'aggregate' ? new Float32Array(size * size) : undefined;
+  if (aggregateHeights && aggregateTones) {
+    for (let y = 0; y < size; y += 1) {
+      for (let x = 0; x < size; x += 1) {
+        const sample = asphaltAggregateSample(x, y, size, seed);
+        const index = y * size + x;
+        aggregateHeights[index] = sample.height;
+        aggregateTones[index] = sample.tone;
+      }
+    }
+  }
+  const aggregateHeight = (x: number, y: number) => aggregateHeights![wrappedCell(y, size) * size + wrappedCell(x, size)]!;
   for (let y = 0; y < size; y += 1) {
     for (let x = 0; x < size; x += 1) {
-      const left = heightAt((x - 1 + size) % size, y, seed, pattern);
-      const right = heightAt((x + 1) % size, y, seed, pattern);
-      const down = heightAt(x, (y - 1 + size) % size, seed, pattern);
-      const up = heightAt(x, (y + 1) % size, seed, pattern);
-      const normal = new THREE.Vector3((left - right) * 0.46, (down - up) * 0.46, 1).normalize();
+      const left = aggregateHeights ? aggregateHeight(x - 1, y) : heightAt((x - 1 + size) % size, y, seed, pattern);
+      const right = aggregateHeights ? aggregateHeight(x + 1, y) : heightAt((x + 1) % size, y, seed, pattern);
+      const down = aggregateHeights ? aggregateHeight(x, y - 1) : heightAt(x, (y - 1 + size) % size, seed, pattern);
+      const up = aggregateHeights ? aggregateHeight(x, y + 1) : heightAt(x, (y + 1) % size, seed, pattern);
+      const normalStrength = aggregateHeights ? 1.35 : 0.46;
+      const normal = new THREE.Vector3((left - right) * normalStrength, (down - up) * normalStrength, 1).normalize();
       const offset = (y * size + x) * 4;
       normalData[offset] = Math.round((normal.x * 0.5 + 0.5) * 255);
       normalData[offset + 1] = Math.round((normal.y * 0.5 + 0.5) * 255);
       normalData[offset + 2] = Math.round((normal.z * 0.5 + 0.5) * 255);
       normalData[offset + 3] = 255;
-      const variation = heightAt(x, y, seed + 31, pattern);
-      const value = Math.round(THREE.MathUtils.clamp(0.9 + variation * 0.095, 0.76, 1) * 255);
+      const variation = aggregateHeights
+        ? aggregateHeight(x, y) * 1.35 - 0.4 + (aggregateTones?.[y * size + x] ?? 0) * 0.18
+        : heightAt(x, y, seed + 31, pattern);
+      const value = Math.round(THREE.MathUtils.clamp(
+        aggregateHeights ? 0.91 - Math.max(variation, 0) * 0.075 : 0.9 + variation * 0.095,
+        0.76,
+        1,
+      ) * 255);
       metallicRoughnessData.set([255, value, 255, 255], offset);
-      const fibreContrast = pattern === 'hex-weave' ? 0.19 : 0.055;
-      const albedo = Math.round(THREE.MathUtils.clamp(0.86 + variation * fibreContrast, 0.58, 1) * 255);
+      const fibreContrast = pattern === 'hex-weave' ? 0.19 : pattern === 'aggregate' ? 0.24 : 0.055;
+      const albedo = Math.round(THREE.MathUtils.clamp(
+        aggregateHeights ? 0.72 + variation * 0.2 : 0.86 + variation * fibreContrast,
+        0.5,
+        1,
+      ) * 255);
       albedoData.set([albedo, albedo, albedo, 255], offset);
     }
   }
@@ -244,6 +340,9 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     emissiveIntensity: source.emissive ? 0.35 : 0,
     wireframe: context.mode === 'wireframe',
     envMapIntensity: context.mode === 'beauty' ? 1.18 : 0.82,
+    // Asphalt uses the height-field triangles as visible broken-stone facets;
+    // smooth shading would turn the same geometry back into rounded bubbles.
+    flatShading: finish === 'asphalt',
   });
   if (context.mode === 'beauty' && preset.pattern !== 'none' && microNormalStrength > 0) {
     const scale = source.textureScale ?? preset.textureScale;
@@ -252,7 +351,7 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     material.normalScale.set(microNormalStrength, microNormalStrength);
     material.roughnessMap = maps.roughness;
     material.metalnessMap = maps.roughness;
-    if (finish === 'hex-knit') material.map = maps.albedo;
+    if (finish === 'hex-knit' || finish === 'asphalt') material.map = maps.albedo;
   }
   material.name = `${context.materialName} [${finish}]`;
   material.userData.morphloomSurface = {

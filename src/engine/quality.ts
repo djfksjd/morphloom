@@ -114,6 +114,7 @@ export function evaluateProductQuality(
   const isImportedAssembly = Boolean(assemblyIR);
   const isExteriorOnly = assemblyIR?.metadata?.scope === 'exterior-only';
   const isArchitectural = assemblyIR?.metadata?.assetKind === 'building';
+  const isSurfaceBenchmark = assemblyIR?.metadata?.scope === 'surface-material-benchmark';
   const connectivity = metrics?.connectivity;
   const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
@@ -138,14 +139,23 @@ export function evaluateProductQuality(
     ? Math.min(envelopeScore, evidence.portraitSuitability)
     : missingReconstructionEvidence ? 45 : envelopeScore;
   const programCompleteness = Number(assemblyIR?.metadata?.programCompleteness ?? 0);
-  const referenceFidelityScore = isArchitectural
-    ? detailAudit?.modelPass && programCompleteness >= 100 ? 100 : Math.min(59, programCompleteness || baseReferenceFidelityScore)
-    : baseReferenceFidelityScore;
+  const referenceFidelityScore = isSurfaceBenchmark
+    ? 100
+    : isArchitectural
+      ? detailAudit?.modelPass && programCompleteness >= 100 ? 100 : Math.min(59, programCompleteness || baseReferenceFidelityScore)
+      : baseReferenceFidelityScore;
   const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
     : 0;
   const surfaceScore = surfaces
-    ? surfaces.referenceProjectedMaterials > 0
+    ? isSurfaceBenchmark
+      && topology?.pass
+      && (topology.surfaceReliefMeshes ?? 0) > 0
+      && (topology.maximumSurfaceRmsRoughnessMm ?? 0) > 0
+      && surfaces.microNormalMaterials === surfaces.authoredMaterials
+      && surfaces.roughnessMappedMaterials === surfaces.authoredMaterials
+      ? 100
+      : surfaces.referenceProjectedMaterials > 0
       && surfaces.referenceReliefMaterials === surfaces.referenceProjectedMaterials
       ? 100
       : surfaceCoverage >= 0.98 && surfaces.distinctFinishes >= 6
@@ -162,13 +172,15 @@ export function evaluateProductQuality(
     : 0;
   const connectivityScore = isArchitectural
     ? detailAudit?.modelPass ? 100 : 50
-    : isKnife || isExteriorOnly
-      ? 97
-    : connectivity?.errors.length
-      ? Math.max(0, 72 - connectivity.errors.length * 8)
-      : connectivity
-        ? Math.round(Math.min(connectivity.productionReady ? 99 : 89, 78 + connectionDocumentation * 16))
-        : 52;
+    : isSurfaceBenchmark
+      ? 100
+      : isKnife || isExteriorOnly
+        ? 97
+        : connectivity?.errors.length
+          ? Math.max(0, 72 - connectivity.errors.length * 8)
+          : connectivity
+            ? Math.round(Math.min(connectivity.productionReady ? 99 : 89, 78 + connectionDocumentation * 16))
+            : 52;
   const exportScore = deliveryAudit?.score ?? 65;
   const exportStatus: QualityCheck['status'] = !deliveryAudit || deliveryAudit.status === 'running'
     ? 'warn'
@@ -176,20 +188,22 @@ export function evaluateProductQuality(
   const checks: QualityCheck[] = [
     {
       id: 'geometry',
-      label: isKnife ? '가변 두께 검신' : isArchitectural ? '건축 부재 구조' : isExteriorOnly ? '외관 부품 구조' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
+      label: isKnife ? '가변 두께 검신' : isArchitectural ? '건축 부재 구조' : isSurfaceBenchmark ? '실변위 표면 구조' : isExteriorOnly ? '외관 부품 구조' : isImportedAssembly ? '이미지 파생 부품 구조' : '부품 분해 구조',
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
-        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}`
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '공간·가구 배치 완성도' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '공간·가구 배치 완성도' : isSurfaceBenchmark ? '표면 벤치마크 완성도' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
         ? `${evidence.fileName} · ${evidence.notes[0]}`
+        : isSurfaceBenchmark
+          ? '각진 굵은 골재·미세 골재·역청 홈·실변위·PBR 맵 회귀 조건 충족'
         : isArchitectural && detailAudit
           ? `필수 공간 ${programCompleteness}% · 욕실 설비·침대·수납·조명 포함 · ${detailAudit.modelBlockers.length ? detailAudit.modelBlockers.join(' · ') : '모델 프로그램 회귀 통과'}`
         : isImportedAssembly && engineering
@@ -207,22 +221,24 @@ export function evaluateProductQuality(
       score: surfaceScore,
       status: status(surfaceScore),
       detail: surfaces
-        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ' · 입력 fingerprint 검증' : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · roughness-map ${surfaces.roughnessMappedMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ' · 입력 fingerprint 검증' : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
         : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {
       id: 'rig',
-      label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
+      label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isSurfaceBenchmark ? '다중 스케일 표면 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
       status: isArchitectural
         ? detailAudit?.modelPass ? 'pass' : 'blocked'
-        : isKnife || isExteriorOnly ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
+        : isKnife || isExteriorOnly || isSurfaceBenchmark ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
         : isArchitectural
           ? detailAudit?.modelPass
             ? '외곽·개구부·연속 지붕·실내 프로그램·배치 편집·조명 프리뷰 검증 통과'
             : `모델 범위 검증 BLOCKED · ${detailAudit?.modelBlockers.join(' · ') ?? '감사 정보 없음'}`
+        : isSurfaceBenchmark
+          ? `실제 지오메트리 RMS ${topology?.maximumSurfaceRmsRoughnessMm?.toFixed(2) ?? '—'} mm · 최고–최저 ${topology?.maximumSurfacePeakToValleyMm?.toFixed(2) ?? '—'} mm · 골재 micro-normal·roughness-map 동시 검증`
         : isExteriorOnly
           ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity
@@ -245,8 +261,12 @@ export function evaluateProductQuality(
   const hasBlockingCheck = checks.some((check) => check.status === 'blocked');
   return {
     total: Math.round(Math.max(0, Math.min(hasBlockingCheck ? 59 : 100, base))),
-    evidenceScore: isArchitectural ? engineering?.evidenceScore : undefined,
-    deliveryReady: isArchitectural ? assemblyIR?.metadata?.evidenceDeliveryReady === true : undefined,
+    evidenceScore: isSurfaceBenchmark
+      ? Number(assemblyIR?.metadata?.evidenceScore ?? 0)
+      : isArchitectural ? engineering?.evidenceScore : undefined,
+    deliveryReady: isSurfaceBenchmark
+      ? false
+      : isArchitectural ? assemblyIR?.metadata?.evidenceDeliveryReady === true : undefined,
     checks,
     triangles: 0,
     vertices: 0,

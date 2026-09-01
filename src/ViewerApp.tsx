@@ -14,6 +14,7 @@ import { WEB_HERO_VISUAL_INTERPRETATION } from './engine/reference-pose';
 import { buildPhysicalNetlist } from './engine/netlist';
 import { createOrnateKnifeIR } from './engine/knife';
 import { TALON_REFERENCE_BENCHMARK_IR } from './engine/talon-reference-benchmark';
+import { ASPHALT_SURFACE_BENCHMARK_IR } from './engine/asphalt-surface-benchmark';
 import { editAssemblyLayout, isLayoutEditable } from './engine/layout-edit';
 import {
   formatMeasurement,
@@ -72,6 +73,10 @@ type LocalJob = {
 };
 
 const VIEWER_ASSETS: ViewerAsset[] = [
+  {
+    id: 'asphalt-surface', label: 'Rough Asphalt Surface', caption: 'macro relief · aggregate PBR · deterministic', kind: 'product',
+    spec: DEFAULT_PRODUCT_SPEC, assemblyIR: ASPHALT_SURFACE_BENCHMARK_IR,
+  },
   {
     id: 'talon-reference', label: 'Talon Ruby — Same Reference', caption: 'real silhouette · true openings · estimated depth', kind: 'product',
     spec: DEFAULT_KNIFE_SPEC, assemblyIR: TALON_REFERENCE_BENCHMARK_IR,
@@ -254,6 +259,7 @@ export function ViewerApp() {
     : undefined, [assemblyIR]);
   const productPartCount = productMetrics?.parts;
   const architecturalResult = assemblyIR?.metadata?.assetKind === 'building';
+  const surfaceBenchmarkResult = assemblyIR?.metadata?.scope === 'surface-material-benchmark';
   const activePreset = VIEWER_ASSETS.find((asset) => asset.id === activeAssetId);
   const baselineAssemblyIR = activePreset?.kind === 'product' ? activePreset.assemblyIR : assemblyIR;
   const layoutEditable = Boolean(selectedPart && assemblyIR && isLayoutEditable(selectedPart.id));
@@ -658,10 +664,14 @@ export function ViewerApp() {
             </div>
           </div>
 
-          {architecturalResult && quality && (
+          {(architecturalResult || surfaceBenchmarkResult) && quality && (
             <div className={`evidence-boundary ${quality.deliveryReady ? 'is-ready' : 'is-review'}`}>
               <span>SOURCE CONFIDENCE</span><b>{quality.evidenceScore ?? '—'}/100</b>
-              <p>{quality.deliveryReady ? '검증된 실측 근거로 납품 판정 가능' : '모델 완성도와 별도입니다. 현장 실측·검증 단면이 없어 시공 납품은 보류됩니다.'}</p>
+              <p>{quality.deliveryReady
+                ? '검증된 실측 근거로 납품 판정 가능'
+                : surfaceBenchmarkResult
+                  ? '모델 완성도와 별도입니다. 특정 현장의 스캔·입도·높이 보정 전에는 재질 프리셋으로 사용합니다.'
+                  : '모델 완성도와 별도입니다. 현장 실측·검증 단면이 없어 시공 납품은 보류됩니다.'}</p>
             </div>
           )}
 

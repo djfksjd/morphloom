@@ -1,0 +1,47 @@
+{
+  "schema": "morphloom.surface-benchmark/0.1",
+  "generatedAt": "2026-09-01T12:14:00+09:00",
+  "fixture": "Rough Asphalt Surface — layered relief benchmark",
+  "sourceReference": {
+    "kind": "user-supplied visual target",
+    "description": "Dense dark asphalt with irregular angular aggregate and binder troughs",
+    "redistributed": false,
+    "siteCalibrated": false
+  },
+  "geometry": {
+    "method": "deterministic-angular-aggregate-height-field-v2",
+    "seed": 260901,
+    "sizeMm": [600, 450],
+    "baseThicknessMm": 40,
+    "triangles": 111936,
+    "surfaceSamples": 27985,
+    "aggregateFeatures": 6959,
+    "coarseAggregateFeatures": 1099,
+    "fineAggregateFeatures": 5860,
+    "rmsRoughnessMm": 0.9782976116843785,
+    "peakToValleyMm": 6.2001592866946424
+  },
+  "material": {
+    "finish": "asphalt",
+    "albedoMap": true,
+    "normalMap": true,
+    "roughnessMap": true,
+    "flatAggregateFacets": true,
+    "facetedNormalsBakedForGlb": true
+  },
+  "topology": {
+    "watertightMeshes": 1,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0,
+    "degenerateTriangles": 0,
+    "pass": true
+  },
+  "reproducibility": {
+    "sceneFingerprint": "d08cb3e4875852b7",
+    "sameSeedSamePositions": true
+  },
+  "limitations": [
+    "This is a procedural appearance benchmark, not a calibrated scan of a specific road.",
+    "Millimetre values are authored regression parameters and require field evidence for construction use."
+  ]
+}
