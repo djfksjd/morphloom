@@ -17,6 +17,7 @@ import {
   type ReferenceSurfaceMetrics,
 } from './reference-surface';
 import type { QuantizedReferenceHeightField } from './reference-surface';
+import { auditPlanFootprint, validatePlanFootprintDescriptor } from './plan-footprint';
 
 const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
@@ -125,6 +126,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   };
   inspect(candidate.metadata, 'metadata');
   inspect(candidate.fidelity, 'fidelity');
+  inspect(candidate.planFootprint, 'planFootprint');
   for (const component of candidate.components as AssemblyComponentIR[]) {
     if (!component || typeof component !== 'object') throw new Error('AssemblyIR component is invalid.');
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(component.id) || ids.has(component.id)) throw new Error(`Invalid or duplicate component id: ${component.id}`);
@@ -274,6 +276,11 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
+  if (candidate.planFootprint) {
+    validatePlanFootprintDescriptor(candidate.planFootprint);
+    const missingFootprintIds = candidate.planFootprint.componentIds.filter((id) => !ids.has(id));
+    if (missingFootprintIds.length > 0) throw new Error(`Plan-footprint references missing components: ${missingFootprintIds.join(', ')}`);
+  }
   if (candidate.fidelity) {
     const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
     if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
@@ -1030,9 +1037,11 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const surfaces = inspectSurfaceSystem(root);
   const topology = analyzeTopology(root);
   const engineering = inspectEngineeringEvidence(ir, connectivity);
+  const planFootprint = ir.planFootprint ? auditPlanFootprint(root, ir.planFootprint) : undefined;
   root.userData.surfaceSystem = structuredClone(surfaces);
   root.userData.topology = structuredClone(topology);
   root.userData.engineeringAudit = structuredClone(engineering);
+  if (planFootprint) root.userData.planFootprintAudit = structuredClone(planFootprint);
   if (ir.fidelity) root.userData.fidelityContract = structuredClone(ir.fidelity);
   return {
     root,
@@ -1048,6 +1057,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       surfaces,
       topology,
       engineering,
+      planFootprint,
     },
   };
 }

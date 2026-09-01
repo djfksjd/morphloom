@@ -2,6 +2,7 @@ import type { FidelityContract } from './fidelity-pipeline';
 import type { VisualHullDescriptor } from './visual-hull';
 import type { QuantizedReferenceHeightField } from './reference-surface';
 import type { ImplicitSurfaceDescriptor } from './implicit-surface';
+import type { PlanFootprintDescriptor } from './plan-footprint';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -211,5 +212,7 @@ export interface AssemblyIR {
   electrical?: ElectricalHarnessIR;
   /** Optional locked detail-and-proof contract used by semi-professional delivery gates. */
   fidelity?: FidelityContract;
+  /** Source-derived plan regions checked against the compiled top-down mesh projection. */
+  planFootprint?: PlanFootprintDescriptor;
   metadata?: Record<string, string | number | boolean>;
 }

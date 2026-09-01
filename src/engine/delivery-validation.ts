@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.10.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.11.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -27,6 +27,8 @@ export interface SceneSnapshot {
   morphTargetNames: string[];
   gameLods: number;
   collisionPrimitives: number;
+  planFootprintAudits: number;
+  planFootprintAuditFingerprint: string;
   materials: number;
   triangles: number;
   geometryBytes: number;
@@ -148,6 +150,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let bones = 0;
   let gameLods = 0;
   let collisionPrimitives = 0;
+  let planFootprintAudits = 0;
+  let planFootprintAuditFingerprint = 'none';
   let animationManifestEntries = 0;
   let animationManifestFingerprint = 'none';
   let morphTargets = 0;
@@ -178,6 +182,12 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
         animationManifestFingerprint = fingerprintJson(gameDelivery.animationSet);
         hasher.text(animationManifestFingerprint);
       }
+    }
+    const planFootprintAudit = object.userData.planFootprintAudit as { schema?: string } | undefined;
+    if (planFootprintAudit?.schema === 'morphloom.plan-footprint-audit/0.1') {
+      planFootprintAudits += 1;
+      planFootprintAuditFingerprint = fingerprintJson(planFootprintAudit);
+      hasher.text(planFootprintAuditFingerprint);
     }
     if (object instanceof THREE.Bone) bones += 1;
     if (!(object instanceof THREE.Mesh)) return;
@@ -278,6 +288,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     morphTargetNames: morphTargetNames.sort(),
     gameLods,
     collisionPrimitives,
+    planFootprintAudits,
+    planFootprintAuditFingerprint,
     materials: materials.size,
     triangles: Math.round(triangles),
     geometryBytes,
@@ -414,6 +426,10 @@ export function compareGlbRoundTrip(
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
   }
+  if (source.planFootprintAudits !== reopened.planFootprintAudits
+    || source.planFootprintAuditFingerprint !== reopened.planFootprintAuditFingerprint) {
+    blockers.push('plan-footprint audit metadata changed during GLB round-trip');
+  }
   if (boundsErrorMm > 0.1) blockers.push(`round-trip bounds drift ${boundsErrorMm.toFixed(3)} mm`);
   if (namedNodeCoverage < 0.95) blockers.push(`named node coverage ${Math.round(namedNodeCoverage * 100)}%`);
   if (source.duplicatePartIds.length > 0) blockers.push(`duplicate source part ids: ${source.duplicatePartIds.join(', ')}`);
@@ -430,6 +446,8 @@ export function compareGlbRoundTrip(
     && source.morphTargets === reopened.morphTargets
     && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
+    && source.planFootprintAudits === reopened.planFootprintAudits
+    && source.planFootprintAuditFingerprint === reopened.planFootprintAuditFingerprint
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
     ? Math.max(0, 58 - blockers.length * 8)

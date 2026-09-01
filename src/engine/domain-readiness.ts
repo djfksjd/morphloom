@@ -5,6 +5,7 @@ import { inspectSurfaceSystem } from './surface-system';
 import { analyzeTopology, type MeshTopologyReport } from './topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humanoid-rig';
 import { REQUIRED_FACIAL_MORPH_NAMES } from './facial-morphs';
+import type { PlanFootprintAudit } from './plan-footprint';
 
 export type ProductionDomain =
   | 'architecture'
@@ -446,9 +447,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   }
 
   if (input.domain === 'architecture') {
-    const ir = input.root.userData.assemblyIR as { metadata?: { planFootprintVerified?: boolean; assetKind?: string } } | undefined;
+    const footprint = input.root.userData.planFootprintAudit as PlanFootprintAudit | undefined;
     add('architecture-topology', '건축 셸 토폴로지', topology.pass, topology.pass ? 100 : 0, `${topology.watertightMeshes}/${topology.meshes} 폐쇄형`);
-    add('architecture-plan', '도면 외곽 검증', ir?.metadata?.planFootprintVerified === true, ir?.metadata?.planFootprintVerified ? 100 : 0, ir?.metadata?.planFootprintVerified ? '검증된 평면 외곽' : '평면 외곽 근거 없음');
+    add('architecture-plan', '실제 도면 외곽 재투영', footprint?.pass === true,
+      footprint ? footprint.iou * 100 : 0,
+      footprint ? `IoU ${footprint.iou.toFixed(3)} · 과잉 ${(footprint.falsePositiveFraction * 100).toFixed(1)}% · 누락 ${(footprint.falseNegativeFraction * 100).toFixed(1)}%${footprint.voidOccupancy.length ? ` · 공백 ${footprint.voidOccupancy.map((entry) => `${entry.id} ${(entry.fraction * 100).toFixed(1)}%`).join(', ')}` : ''}` : '컴파일된 도면 외곽 검증 없음');
     add('architecture-evidence', '실측·도면 근거', input.evidenceScore >= 85, input.evidenceScore, `${input.evidenceScore}/85`);
     add('architecture-surface', '건축 마감 표면', pbrSurfaceCoverage >= 0.8, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal (최소 80%)`);
   } else if (input.domain === 'industrial-design') {

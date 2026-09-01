@@ -127,6 +127,7 @@ export function evaluateProductQuality(
   const surfaces = metrics?.surfaces;
   const topology = metrics?.topology;
   const detailAudit = assemblyIR ? auditAssemblyDetail(assemblyIR) : undefined;
+  const planFootprint = metrics?.planFootprint;
   const ratio = spec.heightMm / spec.widthMm;
   const compiledEnvelope = metrics?.bounds ? {
     x: metrics.bounds.max.x - metrics.bounds.min.x,
@@ -149,7 +150,9 @@ export function evaluateProductQuality(
   const referenceFidelityScore = isSurfaceBenchmark
     ? 100
     : isArchitectural
-      ? detailAudit?.modelPass && programCompleteness >= 100 ? 100 : Math.min(59, programCompleteness || baseReferenceFidelityScore)
+      ? detailAudit?.modelPass && planFootprint?.pass && programCompleteness >= 100
+        ? 100
+        : Math.min(59, programCompleteness || baseReferenceFidelityScore)
       : baseReferenceFidelityScore;
   const surfaceCoverage = surfaces && surfaces.authoredMaterials > 0
     ? surfaces.microNormalMaterials / surfaces.authoredMaterials
@@ -178,7 +181,7 @@ export function evaluateProductQuality(
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
   const connectivityScore = isArchitectural
-    ? detailAudit?.modelPass ? 100 : 50
+    ? detailAudit?.modelPass && planFootprint?.pass ? 100 : 50
     : isSurfaceBenchmark
       ? 100
       : isKnife || isExteriorOnly
@@ -212,7 +215,7 @@ export function evaluateProductQuality(
         : isSurfaceBenchmark
           ? '각진 굵은 골재·미세 골재·역청 홈·실변위·PBR 맵 회귀 조건 충족'
         : isArchitectural && detailAudit
-          ? `필수 공간 ${programCompleteness}% · 욕실 설비·침대·수납·조명 포함 · ${detailAudit.modelBlockers.length ? detailAudit.modelBlockers.join(' · ') : '모델 프로그램 회귀 통과'}`
+          ? `필수 공간 ${programCompleteness}% · 실제 평면 IoU ${planFootprint?.iou.toFixed(3) ?? '미검증'} · 과잉 ${planFootprint ? `${(planFootprint.falsePositiveFraction * 100).toFixed(1)}%` : '미검증'} · 누락 ${planFootprint ? `${(planFootprint.falseNegativeFraction * 100).toFixed(1)}%` : '미검증'} · ${detailAudit.modelBlockers.length || planFootprint?.blockers.length ? [...detailAudit.modelBlockers, ...(planFootprint?.blockers ?? [])].join(' · ') : '모델 프로그램·도면 재투영 통과'}`
         : isImportedAssembly && engineering
           ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
         : isImportedAssembly ? envelopeLabel

@@ -387,6 +387,20 @@ export const MODERNCAT_CONCEPT_RESIDENCE_IR: AssemblyIR = {
   name: 'ModernCat two-storey residence · Pinterest concept-panel test',
   units: 'mm',
   components,
+  planFootprint: {
+    schema: 'morphloom.plan-footprint/0.1',
+    componentIds: ['ground_floor_slab'],
+    targetRegions: [{ id: 'ground_floor_outline', boundsMm: [-WIDTH_MM / 2, -DEPTH_MM / 2, WIDTH_MM / 2, DEPTH_MM / 2] }],
+    resolution: 128,
+    minimumIoU: 0.985,
+    maximumFalsePositiveFraction: 0.01,
+    maximumFalseNegativeFraction: 0.015,
+    evidence: {
+      status: 'measured',
+      source: SOURCE_URL,
+      note: 'The visible plan panel and its 12.44 m dimension establish the rectangular ground-floor concept outline; construction provenance remains blocked separately.',
+    },
+  },
   metadata: {
     assetKind: 'building',
     buildingType: 'two-storey-residence',

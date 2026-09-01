@@ -382,6 +382,15 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.root.getObjectByName('entrance_door_west')).toBeTruthy();
     expect(build.root.getObjectByName('stair_2_landing')).toBeTruthy();
     expect(build.root.getObjectByName('unit_9_bath_floor')).toBeTruthy();
+    expect(build.root.userData.planFootprintAudit).toMatchObject({
+      schema: 'morphloom.plan-footprint-audit/0.1',
+      pass: true,
+      missingComponentIds: [],
+    });
+    expect(build.root.userData.planFootprintAudit.iou).toBeGreaterThanOrEqual(0.985);
+    expect(build.root.userData.planFootprintAudit.voidOccupancy).toEqual([
+      expect.objectContaining({ id: 'north_courtyard', fraction: 0 }),
+    ]);
     expect(build.metrics.topology).toMatchObject({
       pass: true, boundaryEdges: 0, nonManifoldEdges: 0, degenerateTriangles: 0,
     });
@@ -837,6 +846,28 @@ describe('short-prompt generation contract', () => {
     const projectionAudit = auditAssemblyDetail(reversedProjection);
     expect(projectionAudit.pass).toBe(false);
     expect(projectionAudit.blockers).toContain('side wings and center wing are not on opposite facades');
+    const reversedBuild = compileAssemblyIR(reversedProjection, 'beauty');
+    expect(reversedBuild.root.userData.planFootprintAudit.pass).toBe(false);
+    expect(reversedBuild.root.userData.planFootprintAudit.iou).toBeLessThan(0.985);
+    expect(reversedBuild.root.userData.planFootprintAudit.voidOccupancy[0].fraction).toBeGreaterThan(0);
+    const reversedQuality = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, reversedBuild.metrics, reversedProjection);
+    expect(reversedQuality.total).toBeLessThanOrEqual(59);
+    expect(reversedQuality.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'blocked' });
+  });
+
+  it('rejects a plan contract that names geometry absent from the assembly', () => {
+    const invalid = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    invalid.planFootprint!.componentIds.push('missing_plan_carrier');
+    expect(() => validateAssemblyIR(invalid)).toThrow(/references missing components/);
+  });
+
+  it('rejects contradictory or duplicate plan regions before raster allocation', () => {
+    const contradictory = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    contradictory.planFootprint!.voidRegions = [{ id: 'north_courtyard', boundsMm: [-100, -100, 100, 100] }];
+    expect(() => validateAssemblyIR(contradictory)).toThrow(/occupied and void regions overlap/);
+    const duplicate = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    duplicate.planFootprint!.targetRegions[1]!.id = duplicate.planFootprint!.targetRegions[0]!.id;
+    expect(() => validateAssemblyIR(duplicate)).toThrow(/regions are invalid/);
   });
 
   it('blocks duplicate edit-unit ids and non-finite transforms in the optimized detail audit', () => {

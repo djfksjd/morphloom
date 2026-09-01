@@ -13,6 +13,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from '../src/engine/humanoid-rig';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, type HumanPack } from '../src/types';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
+import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 
 let humanPack: HumanPack;
 
@@ -24,6 +25,29 @@ beforeAll(async () => {
 });
 
 describe('cross-domain semi-professional readiness', () => {
+  it('requires the compiled architecture footprint to match its measured plan contract', () => {
+    const build = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'architecture', root: build.root, topology: build.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(true);
+    expect(report.checks.find((check) => check.id === 'architecture-plan')).toMatchObject({ pass: true, score: 100 });
+
+    const reversed = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    const centerWing = reversed.components.find((component) => component.id === 'center_entry_wing_floor_slab');
+    if (!centerWing?.position) throw new Error('Missing center wing fixture.');
+    centerWing.position[2] = 3_800;
+    const reversedBuild = compileAssemblyIR(reversed, 'beauty');
+    const blocked = auditDomainReadiness({
+      domain: 'architecture', root: reversedBuild.root, topology: reversedBuild.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(blocked.pass).toBe(false);
+    expect(blocked.blockers.some((blocker) => blocker.startsWith('architecture-plan:'))).toBe(true);
+    expect(blocked.checks.find((check) => check.id === 'architecture-plan')?.detail).toMatch(/IoU|공백/);
+  });
+
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');

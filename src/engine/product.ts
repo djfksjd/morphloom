@@ -7,6 +7,7 @@ import type { AssemblyMaterialIR, ElectricalHarnessIR, ElectricalPortIR, Electri
 import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { analyzeTopology, type MeshTopologyReport } from './topology';
 import type { EngineeringAuditReport } from './engineering-audit';
+import type { PlanFootprintAudit } from './plan-footprint';
 
 export interface ProductPartInfo {
   id: string;
@@ -29,6 +30,7 @@ export interface ProductMetrics {
   surfaces: SurfaceReport;
   topology: MeshTopologyReport;
   engineering?: EngineeringAuditReport;
+  planFootprint?: PlanFootprintAudit;
 }
 
 export interface ProductBuild {

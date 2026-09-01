@@ -198,7 +198,9 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
   const warnings: string[] = [];
   const isArchitecture = ir.metadata?.assetKind === 'building';
   const targetsSemiProfessional = ir.metadata?.qualityTarget === 'semi-professional-editable';
-  const footprintVerified = isArchitecture ? ir.metadata?.planFootprintVerified === true : undefined;
+  const footprintVerified = isArchitecture
+    ? ir.metadata?.planFootprintVerified === true && ir.planFootprint?.schema === 'morphloom.plan-footprint/0.1'
+    : undefined;
   const fidelityAudit = ir.fidelity ? auditFidelityContract(ir.fidelity, ir) : undefined;
   const fidelityContractRequired = ir.metadata?.fidelityContractRequired === true;
 

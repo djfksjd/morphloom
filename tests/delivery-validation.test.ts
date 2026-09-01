@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { buildOrnateKnife } from '../src/engine/knife';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import {
   buildFigmaReferenceSvg,
   compareGlbRoundTrip,
@@ -15,6 +16,19 @@ import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC } from '../src/types';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 
 describe('delivery validation and deterministic output', () => {
+  it('fingerprints the compiled plan audit and blocks a GLB that drops it', () => {
+    const build = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
+    const source = snapshotScene(build.root);
+    expect(source.planFootprintAudits).toBe(1);
+    expect(source.planFootprintAuditFingerprint).not.toBe('none');
+    const reopened = structuredClone(source);
+    reopened.planFootprintAudits = 0;
+    reopened.planFootprintAuditFingerprint = 'none';
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers).toContain('plan-footprint audit metadata changed during GLB round-trip');
+  });
+
   it('excludes hidden editor helpers from the delivery snapshot', () => {
     const visible = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty').root;
     const baseline = snapshotScene(visible);

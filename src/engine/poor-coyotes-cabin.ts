@@ -269,6 +269,23 @@ export const POOR_COYOTES_CABIN_IR: AssemblyIR = {
   name: 'Poor Coyote’s Cabin · HABS ID-75',
   units: 'mm',
   components,
+  planFootprint: {
+    schema: 'morphloom.plan-footprint/0.1',
+    componentIds: ['exposed_earth_floor'],
+    targetRegions: [{
+      id: 'interior_plan_extent',
+      boundsMm: [-(LENGTH_MM - 420) / 2, -(WIDTH_MM - 420) / 2, (LENGTH_MM - 420) / 2, (WIDTH_MM - 420) / 2],
+    }],
+    resolution: 128,
+    minimumIoU: 0.985,
+    maximumFalsePositiveFraction: 0.01,
+    maximumFalseNegativeFraction: 0.015,
+    evidence: {
+      status: 'measured',
+      source: SOURCE_PDF,
+      note: 'The floor carrier is inset from the HABS wall dimensions by the authored wall build-up and verifies the modeled usable plan extent.',
+    },
+  },
   metadata: {
     assetKind: 'building',
     scope: 'architectural-shell-only',

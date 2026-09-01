@@ -381,6 +381,35 @@ export const LAUREL_HOMES_BUILDING_B_IR: AssemblyIR = {
   name: 'Laurel Homes Building B · HABS OH-2468-A',
   units: 'mm',
   components,
+  planFootprint: {
+    schema: 'morphloom.plan-footprint/0.1',
+    componentIds: [
+      'south_connector_bar_floor_slab',
+      'west_wing_floor_slab',
+      'east_wing_floor_slab',
+      'center_entry_wing_floor_slab',
+    ],
+    targetRegions: [
+      { id: 'south_connector', boundsMm: [-LENGTH_MM / 2, mainBarSouthZ, LENGTH_MM / 2, mainBarNorthZ] },
+      { id: 'west_return', boundsMm: [-LENGTH_MM / 2, mainBarNorthZ, -LENGTH_MM / 2 + SIDE_WING_WIDTH_MM, northEdgeZ] },
+      { id: 'east_return', boundsMm: [LENGTH_MM / 2 - SIDE_WING_WIDTH_MM, mainBarNorthZ, LENGTH_MM / 2, northEdgeZ] },
+      { id: 'opposed_center_wing', boundsMm: [-CENTER_WING_WIDTH_MM / 2, centerWingSouthZ, CENTER_WING_WIDTH_MM / 2, mainBarSouthZ] },
+    ],
+    voidRegions: [{
+      id: 'north_courtyard',
+      boundsMm: [-LENGTH_MM / 2 + SIDE_WING_WIDTH_MM, mainBarNorthZ, LENGTH_MM / 2 - SIDE_WING_WIDTH_MM, northEdgeZ],
+    }],
+    resolution: 160,
+    minimumIoU: 0.985,
+    maximumFalsePositiveFraction: 0.01,
+    maximumFalseNegativeFraction: 0.015,
+    maximumVoidOccupancy: 0.005,
+    evidence: {
+      status: 'measured',
+      source: SOURCE_PDF,
+      note: 'HABS first-floor plan union: south connector, two north returns, and the 27 ft center wing projecting from the opposite south facade.',
+    },
+  },
   metadata: {
     assetKind: 'building',
     buildingType: 'multifamily-apartment',
