@@ -823,6 +823,9 @@ export function ViewerApp() {
               {(deliveryAudit?.source?.skeletons ?? 0) > 0 && (
                 <span>RIG / MOTION<b>{deliveryAudit?.reopened?.skeletons ?? 0} skeleton · {deliveryAudit?.reopened?.bones ?? 0} bones · {deliveryAudit?.reopened?.animationClips ?? 0} clip / {deliveryAudit?.reopened?.animationTracks ?? 0} tracks</b></span>
               )}
+              {(deliveryAudit?.source?.gameLods ?? 0) > 0 && (
+                <span>GAME DELIVERY<b>{deliveryAudit?.reopened?.gameLods ?? 0} LOD profile · {deliveryAudit?.reopened?.collisionPrimitives ?? 0} collision primitives</b></span>
+              )}
             </div>
             <p>{deliveryAudit?.status === 'blocked'
               ? deliveryAudit.blockers.join(' · ')

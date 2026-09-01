@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-110%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-112%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,7 +101,7 @@ OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX�
 | 표면 | 각진 굵은·미세 골재와 역청 홈을 실제 변위+PBR로 결합한 아스팔트 |
 | 전자 조립 | 75개 도체와 150개 물리 포트를 가진 TEC 냉각 어셈블리 |
 | 건축 | HABS 실측 캐빈 · 9세대 공동주택 기준층 · 편집 가능한 2층 주택 콘셉트 |
-| 캐릭터 | 실제 17-bone 스켈레톤·정규화 스킨 웨이트·GLB 애니메이션을 가진 인체 베이스 · 포즈 기반 Web Hero |
+| 캐릭터 | 실제 17-bone 스켈레톤·정규화 스킨 웨이트·GLB 애니메이션·스킨 LOD1·충돌 프리미티브를 가진 인체 베이스 · 포즈 기반 Web Hero |
 
 제품·건축은 실측과 설계 근거가 충분할수록 정확도가 높아집니다. 캐릭터는 현재 게임 프리비즈와 후편집 베이스 단계입니다.
 
@@ -128,11 +128,11 @@ npm run build
 |---|---:|---|
 | 산업디자인 | 99 | 폐쇄 토폴로지 · UV · 75% 이상 PBR 미세표면 · 근거 |
 | 건축 | 98 | 검증 평면 · 폐쇄 셸 · 80% 이상 미세표면 · 실측/도면 근거 |
-| 애니메이션 | 99 | 실제 스켈레톤 · 스킨 웨이트 · 클립/트랙 · GLB 재열기 |
-| 게임 | 100 | 10만 tris 예산 · UV/노멀 · 토폴로지 · 스켈레톤 · PBR |
-| 3D 프린팅 | 100 | 폐쇄 메시 · mm 단위 · 선언 형상 0.8 mm 이상 · 양의 체적 |
+| 애니메이션 | 99 | 실제 스켈레톤 · 정규화 웨이트 · 뼈 변형 실측 · 클립/트랙 · GLB 재열기 |
+| 게임 | 100 | 10만 tris 예산 · 실제 스킨 LOD0/1 · 충돌 프리미티브 · UV/노멀 · PBR |
+| 3D 프린팅 | 100 | 폐쇄 메시 · mm 단위 · 선언 형상 0.8 mm 이상 · 양의 체적 · 45° 오버행 실측 |
 
-3D 프린팅의 오버행·서포트는 프린터와 슬라이서 설정에 따라 달라지므로 후속 경고로 남기며 제조 적합성을 자동 승인하지 않습니다.
+일반 45° 기준의 비지지 오버행 면적은 실제 삼각형 노멀로 계산합니다. 다만 최종 방향·서포트·수축·공차는 프린터와 슬라이서에 따라 달라지므로 별도 공정 검수 없이 제조 적합성을 자동 승인하지 않습니다.
 
 Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격선을 잠그고, 8단계 검수에서 회귀·반복 결함·비용 상한을 실제로 차단합니다.
 

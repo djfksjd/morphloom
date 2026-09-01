@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-110%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-112%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,7 +101,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
-| Character | Human base with a real 17-bone skeleton, normalized skin weights, and GLB animation · posed Web Hero |
+| Character | Human base with a real 17-bone skeleton, normalized skin weights, GLB animation, a real skinned LOD1, and collision primitives · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
 
@@ -128,11 +128,11 @@ This means all eight locked contracts made the correct decision; it does not mea
 |---|---:|---|
 | Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
 | Architecture | 98 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
-| Animation | 99 | real skeleton · skin weights · clip/tracks · GLB reopen |
-| Game | 100 | 100k-triangle budget · UV/normals · topology · skeleton · PBR |
-| 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · positive volume |
+| Animation | 99 | real skeleton · normalized weights · measured bone deformation · clip/tracks · GLB reopen |
+| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · collision primitives · UV/normals · PBR |
+| 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · positive volume · measured 45° overhang |
 
-Overhang and support generation remain downstream warnings because they depend on the target printer and slicer; Morphloom does not auto-approve manufacturing suitability.
+Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 
 Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
 

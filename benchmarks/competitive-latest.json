@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T13:54:49.934Z",
+  "generatedAt": "2026-09-01T14:30:51.576Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "competitor": {
     "repository": "https://github.com/img2threejs/img2threejs",
@@ -260,11 +260,18 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": true,
+            "gameLods": 0,
+            "collisionPrimitives": 0,
             "maximumSkinWeightError": 0,
             "maximumSkinInfluences": 0,
             "minimumMeshAxisMm": 2.53915809957823,
             "declaredMinimumFeatureMm": 0.16,
-            "enclosedVolumeMm3": 146608.7279233531
+            "enclosedVolumeMm3": 146608.7279233531,
+            "unsupportedOverhangAreaMm2": 4106.5690757403,
+            "unsupportedOverhangRatio": 0.06372383064161116
           }
         },
         "architecture": {
@@ -350,11 +357,18 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": true,
+            "gameLods": 0,
+            "collisionPrimitives": 0,
             "maximumSkinWeightError": 0,
             "maximumSkinInfluences": 0,
             "minimumMeshAxisMm": 17.999999225139618,
             "declaredMinimumFeatureMm": 18,
-            "enclosedVolumeMm3": 254482354093.11646
+            "enclosedVolumeMm3": 254482354093.11646,
+            "unsupportedOverhangAreaMm2": 512845854.9532662,
+            "unsupportedOverhangRatio": 0.1481512964921408
           }
         },
         "animation": {
@@ -383,7 +397,7 @@
               "label": "이름 있는 편집 단위",
               "pass": true,
               "score": 100,
-              "detail": "2/2 메시 명명",
+              "detail": "3/3 메시 명명",
               "blocking": true
             },
             {
@@ -399,7 +413,7 @@
               "label": "변형 가능한 폐쇄형 바디",
               "pass": true,
               "score": 100,
-              "detail": "1/1 스킨 메시 폐쇄형",
+              "detail": "2/2 스킨 메시 폐쇄형",
               "blocking": true
             },
             {
@@ -407,7 +421,7 @@
               "label": "실제 스켈레톤",
               "pass": true,
               "score": 100,
-              "detail": "1 skeleton · 17 bones",
+              "detail": "2 skeleton · 17 bones",
               "blocking": true
             },
             {
@@ -416,6 +430,14 @@
               "pass": true,
               "score": 100,
               "detail": "오차 2.98e-8 · 최대 2 influences",
+              "blocking": true
+            },
+            {
+              "id": "animation-deformation",
+              "label": "실제 뼈 변형 검증",
+              "pass": true,
+              "score": 100,
+              "detail": "bind RMS 0.0000 mm · 이동 표본 708 · 최대 35.5 mm",
               "blocking": true
             },
             {
@@ -446,20 +468,28 @@
           "blockers": [],
           "warnings": [],
           "metrics": {
-            "meshes": 2,
-            "triangles": 31868,
+            "meshes": 3,
+            "triangles": 52818,
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
             "pbrSurfaceCoverage": 1,
-            "skeletons": 1,
+            "skeletons": 2,
             "bones": 17,
             "animationClips": 1,
             "animationTracks": 2,
+            "bindPoseRmsErrorMm": 0.000020671425729653478,
+            "deformationMovedVertices": 708,
+            "deformationMaximumMm": 35.45993418808589,
+            "deformationFinite": true,
+            "gameLods": 2,
+            "collisionPrimitives": 2,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
-            "enclosedVolumeMm3": 97004271.53615975
+            "enclosedVolumeMm3": 156575801.90931997,
+            "unsupportedOverhangAreaMm2": 195328.2198585143,
+            "unsupportedOverhangRatio": 0.053696737176808076
           }
         },
         "game": {
@@ -488,7 +518,7 @@
               "label": "이름 있는 편집 단위",
               "pass": true,
               "score": 100,
-              "detail": "2/2 메시 명명",
+              "detail": "3/3 메시 명명",
               "blocking": true
             },
             {
@@ -504,7 +534,7 @@
               "label": "실시간 삼각형 예산",
               "pass": true,
               "score": 100,
-              "detail": "31,868 / 100,000 tris",
+              "detail": "52,818 / 100,000 tris",
               "blocking": true
             },
             {
@@ -536,8 +566,32 @@
               "label": "게임용 스켈레톤",
               "pass": true,
               "score": 100,
-              "detail": "1 skeleton · 17 bones",
+              "detail": "2 skeleton · 17 bones",
               "blocking": true
+            },
+            {
+              "id": "game-collision",
+              "label": "충돌 프리미티브",
+              "pass": true,
+              "score": 100,
+              "detail": "2 collision primitives",
+              "blocking": true
+            },
+            {
+              "id": "game-lod-profile",
+              "label": "LOD 납품 프로필",
+              "pass": true,
+              "score": 100,
+              "detail": "2 declared LOD levels",
+              "blocking": true
+            },
+            {
+              "id": "game-additional-lods",
+              "label": "추가 LOD 메시",
+              "pass": true,
+              "score": 100,
+              "detail": "2 LOD levels",
+              "blocking": false
             },
             {
               "id": "game-pbr",
@@ -551,20 +605,28 @@
           "blockers": [],
           "warnings": [],
           "metrics": {
-            "meshes": 2,
-            "triangles": 31868,
+            "meshes": 3,
+            "triangles": 52818,
             "namedMeshCoverage": 1,
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
             "pbrSurfaceCoverage": 1,
-            "skeletons": 1,
+            "skeletons": 2,
             "bones": 17,
             "animationClips": 1,
             "animationTracks": 2,
+            "bindPoseRmsErrorMm": 0.000020671425729653478,
+            "deformationMovedVertices": 708,
+            "deformationMaximumMm": 35.45993418808589,
+            "deformationFinite": true,
+            "gameLods": 2,
+            "collisionPrimitives": 2,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
-            "enclosedVolumeMm3": 97004271.53615975
+            "enclosedVolumeMm3": 156575801.90931997,
+            "unsupportedOverhangAreaMm2": 195328.2198585143,
+            "unsupportedOverhangRatio": 0.053696737176808076
           }
         },
         "print3d": {
@@ -645,18 +707,16 @@
               "blocking": true
             },
             {
-              "id": "print-supports",
-              "label": "오버행·서포트 분석",
-              "pass": false,
-              "score": 50,
-              "detail": "슬라이서별 서포트 생성은 후속 공정",
+              "id": "print-overhang",
+              "label": "45° 오버행 분석",
+              "pass": true,
+              "score": 100,
+              "detail": "0.0 mm² · 표면의 0.00%",
               "blocking": false
             }
           ],
           "blockers": [],
-          "warnings": [
-            "print-supports: 슬라이서별 서포트 생성은 후속 공정"
-          ],
+          "warnings": [],
           "metrics": {
             "meshes": 1,
             "triangles": 111936,
@@ -668,11 +728,18 @@
             "bones": 0,
             "animationClips": 0,
             "animationTracks": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": true,
+            "gameLods": 0,
+            "collisionPrimitives": 0,
             "maximumSkinWeightError": 0,
             "maximumSkinInfluences": 0,
             "minimumMeshAxisMm": 43.45347546041012,
             "declaredMinimumFeatureMm": 33.5,
-            "enclosedVolumeMm3": 10762674.26790627
+            "enclosedVolumeMm3": 10762674.26790627,
+            "unsupportedOverhangAreaMm2": 0,
+            "unsupportedOverhangRatio": 0
           }
         }
       }
@@ -735,17 +802,17 @@
       "morphloom": "yes"
     },
     {
-      "capability": "real skeletal animation GLB",
+      "capability": "skeletal animation plus measured bone deformation",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },
     {
-      "capability": "real-time game budget, UV and topology gate",
+      "capability": "real skinned LOD1 plus collision manifest preserved in GLB",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },
     {
-      "capability": "millimetre 3D-print topology and feature gate",
+      "capability": "millimetre 3D-print topology, volume, feature and 45-degree overhang audit",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },

@@ -1,10 +1,12 @@
 import * as THREE from 'three';
+import { SimplifyModifier } from 'three/addons/modifiers/SimplifyModifier.js';
 import type { CharacterSpec, HandGesture, HumanPack, PoseStyle, ViewMode } from '../types';
 import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { createWebHeroDetails } from './web-hero';
 import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkleReport } from './cloth-wrinkles';
 import { rigHumanoidGeometry } from './humanoid-rig';
+import { analyzeTopology } from './topology';
 import {
   deformPointByReferencePose,
   getPoseJoints,
@@ -45,6 +47,94 @@ export interface CharacterBuild {
   body: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial>;
   rig: THREE.Group;
   metrics: CharacterMetrics;
+}
+
+interface GameDeliveryManifest {
+  schema: 'morphloom.game-delivery/0.1';
+  lods: Array<{ level: number; triangles: number; role: 'render' }>;
+  collisionPrimitives: Array<{
+    id: string;
+    shape: 'capsule' | 'sphere';
+    center: [number, number, number];
+    radius: number;
+    height?: number;
+  }>;
+  textureSets: number;
+}
+
+function createGameDeliveryManifest(
+  metrics: Pick<CharacterMetrics, 'bounds' | 'triangles' | 'heightMeters'>,
+  lod1Triangles?: number,
+): GameDeliveryManifest {
+  const size = metrics.bounds.getSize(new THREE.Vector3());
+  const center = metrics.bounds.getCenter(new THREE.Vector3());
+  const bodyRadius = Math.max(0.08, Math.min(size.x, size.z) * 0.42);
+  const bodyHeight = Math.max(bodyRadius * 2, metrics.heightMeters * 0.72);
+  const headRadius = Math.max(0.06, Math.min(size.x, size.z) * 0.25);
+  return {
+    schema: 'morphloom.game-delivery/0.1',
+    lods: [
+      { level: 0, triangles: Math.round(metrics.triangles), role: 'render' },
+      ...(lod1Triangles === undefined ? [] : [{ level: 1, triangles: lod1Triangles, role: 'render' as const }]),
+    ],
+    collisionPrimitives: [
+      { id: 'collision_body', shape: 'capsule', center: [center.x, metrics.heightMeters * 0.47, center.z], radius: bodyRadius, height: bodyHeight },
+      { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius },
+    ],
+    textureSets: 1,
+  };
+}
+
+function vertexPositionKey(position: THREE.BufferAttribute | THREE.InterleavedBufferAttribute, index: number): string {
+  return `${position.getX(index)},${position.getY(index)},${position.getZ(index)}`;
+}
+
+function createSkinnedLod1(
+  source: THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial>,
+): THREE.SkinnedMesh<THREE.BufferGeometry, THREE.MeshPhysicalMaterial> | undefined {
+  const sourcePosition = source.geometry.getAttribute('position');
+  const sourceSkinIndex = source.geometry.getAttribute('skinIndex');
+  const sourceSkinWeight = source.geometry.getAttribute('skinWeight');
+  if (!sourcePosition || !sourceSkinIndex || !sourceSkinWeight) return undefined;
+  const geometry = new SimplifyModifier().modify(source.geometry, Math.floor(sourcePosition.count * 0.2));
+  const lodPosition = geometry.getAttribute('position');
+  const sourceVertexByPosition = new Map<string, number>();
+  for (let index = 0; index < sourcePosition.count; index += 1) {
+    const key = vertexPositionKey(sourcePosition, index);
+    if (!sourceVertexByPosition.has(key)) sourceVertexByPosition.set(key, index);
+  }
+  const skinIndices = new Uint16Array(lodPosition.count * 4);
+  const skinWeights = new Float32Array(lodPosition.count * 4);
+  for (let index = 0; index < lodPosition.count; index += 1) {
+    const sourceIndex = sourceVertexByPosition.get(vertexPositionKey(lodPosition, index));
+    if (sourceIndex === undefined) {
+      geometry.dispose();
+      return undefined;
+    }
+    for (let slot = 0; slot < 4; slot += 1) {
+      skinIndices[index * 4 + slot] = sourceSkinIndex.getComponent(sourceIndex, slot);
+      skinWeights[index * 4 + slot] = sourceSkinWeight.getComponent(sourceIndex, slot);
+    }
+  }
+  geometry.setAttribute('skinIndex', new THREE.Uint16BufferAttribute(skinIndices, 4));
+  geometry.setAttribute('skinWeight', new THREE.Float32BufferAttribute(skinWeights, 4));
+  const topologyRoot = new THREE.Group();
+  topologyRoot.add(new THREE.Mesh(geometry, source.material));
+  const topology = analyzeTopology(topologyRoot);
+  topologyRoot.clear();
+  if (!topology.pass) {
+    geometry.dispose();
+    return undefined;
+  }
+  const material = source.material.clone();
+  material.name = `${source.material.name} [LOD1 carrier]`;
+  const lod = new THREE.SkinnedMesh(geometry, material);
+  lod.name = 'LOD1_morphloom_human_body';
+  lod.userData.morphloomDeliveryRole = 'lod';
+  lod.userData.lodLevel = 1;
+  lod.layers.set(31);
+  lod.bind(source.skeleton, source.bindMatrix.clone());
+  return lod;
 }
 
 interface BodyTopology {
@@ -440,6 +530,8 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     poseLandmarkRmsMeters: metrics.poseLandmarkRmsMeters,
   };
   root.add(body);
+  const lod1 = mode === 'beauty' ? createSkinnedLod1(body) : undefined;
+  if (lod1) root.add(lod1);
   if (mode === 'beauty' && !webHero) root.add(createHair(metrics, spec));
   const heroDetails = webHero ? createWebHeroDetails(metrics, mode, spec.pose) : undefined;
   if (heroDetails) {
@@ -476,5 +568,9 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
     },
   };
   root.userData.surfaceSystem = completeMetrics.surfaces;
+  root.userData.gameDelivery = createGameDeliveryManifest(
+    completeMetrics,
+    lod1 ? Math.round((lod1.geometry.getIndex()?.count ?? lod1.geometry.getAttribute('position').count) / 3) : undefined,
+  );
   return { root, body, rig, metrics: completeMetrics };
 }

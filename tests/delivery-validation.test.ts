@@ -88,6 +88,25 @@ describe('delivery validation and deterministic output', () => {
     expect(blocked.blockers.join(' ')).toMatch(/triangle count changed/);
   });
 
+  it('blocks delivery when a game collision or LOD manifest is lost', () => {
+    const root = new THREE.Group();
+    root.name = 'game_delivery_fixture';
+    root.userData.gameDelivery = {
+      schema: 'morphloom.game-delivery/0.1',
+      lods: [{ level: 0, triangles: 12, role: 'render' }],
+      collisionPrimitives: [{ id: 'body', shape: 'capsule', center: [0, 1, 0], radius: 0.3, height: 1.4 }],
+    };
+    const source = snapshotScene(root);
+    expect(source).toMatchObject({ gameLods: 1, collisionPrimitives: 1 });
+    const reopened = structuredClone(source);
+    reopened.gameLods = 0;
+    reopened.collisionPrimitives = 0;
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers.join(' ')).toMatch(/LOD manifest changed/);
+    expect(audit.blockers.join(' ')).toMatch(/collision primitive manifest changed/);
+  });
+
   it('exports an honest Figma reference sheet and measured local telemetry', () => {
     const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     const snapshot = snapshotScene(build.root);

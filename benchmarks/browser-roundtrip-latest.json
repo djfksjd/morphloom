@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.browser-roundtrip/0.2",
-  "observedAt": "2026-09-01T13:53:05Z",
+  "observedAt": "2026-09-01T14:31:05Z",
   "environment": "local Chromium via Codex in-app browser, http://127.0.0.1:4173, Three.js GLTFExporter -> GLTFLoader",
   "policy": "This report proves binary round-trip structure only. inputFingerprint binds the proof to normalized build inputs and pipeline revision; qualityReleaseReady separately requires reference and domain gates.",
   "console": {
@@ -13,7 +13,7 @@
       "id": "pinterest-concept-architectural-review",
       "status": "pass",
       "sceneFingerprint": "94bf5bd22d3a321d",
-      "inputFingerprint": "29e2e2a3314c2da5",
+      "inputFingerprint": "2ce2e75cc30f8ce6",
       "glbDisplaySize": "7.95 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -24,7 +24,7 @@
       "id": "laurel-homes-architectural-review",
       "status": "pass",
       "sceneFingerprint": "389dd42a5c2f2c29",
-      "inputFingerprint": "32923b10389f64d0",
+      "inputFingerprint": "379242efa6dc058f",
       "glbDisplaySize": "18.35 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -45,7 +45,7 @@
       "id": "cooling-service-assembly",
       "status": "pass",
       "sceneFingerprint": "9abcb05be1fe7938",
-      "inputFingerprint": "72f0a7aa3457fcc5",
+      "inputFingerprint": "6ff0a2f1c61b5c06",
       "glbDisplaySize": "12.85 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -66,7 +66,7 @@
       "id": "ornate-knife-product-visualization",
       "status": "pass",
       "sceneFingerprint": "870c78aa74e6523f",
-      "inputFingerprint": "2afa14e4d3f0a915",
+      "inputFingerprint": "97db2d318195567c",
       "glbDisplaySize": "696.9 KB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
@@ -88,38 +88,42 @@
       "id": "single-view-character-previs",
       "status": "pass",
       "sceneFingerprint": "3ffb6515bf412add",
-      "inputFingerprint": "5a980da308472cc5",
+      "inputFingerprint": "80ed3a92d1d7bb84",
       "glbDisplaySize": "2.32 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": false,
-      "scope": "single-view likeness evidence blocked; GLB preserves 1 skeleton, 17 bones, 1 clip and 2 tracks"
+      "scope": "single-view likeness evidence blocked; GLB preserves 1 skeleton, 17 bones, 1 clip, 2 tracks, 1 LOD profile and 2 collision primitives"
     },
     {
       "id": "field-human-runtime-base",
       "status": "pass",
-      "sceneFingerprint": "d1cdfe6d5423e63c",
-      "inputFingerprint": "872c4db473d44184",
-      "glbDisplaySize": "1.40 MB",
+      "sceneFingerprint": "46998d8bc8516c8e",
+      "inputFingerprint": "0e4ec38d11eb6d6d",
+      "glbDisplaySize": "2.28 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": true,
-      "skeletons": 1,
+      "skeletons": 2,
       "bones": 17,
       "animationClips": 1,
       "animationTracks": 2,
-      "scope": "editable animation and game base; real glTF skin and idle preview clip"
+      "gameLods": 2,
+      "collisionPrimitives": 2,
+      "scope": "editable animation and game base; two real skinned LOD meshes share a 17-bone hierarchy, idle preview clip and two collision primitives"
     },
     {
       "id": "asphalt-print-surface",
       "status": "pass",
       "sceneFingerprint": "cf0bc53d5fa7e992",
-      "inputFingerprint": "bdfd8771384abceb",
+      "inputFingerprint": "c0fd8c2a58291634",
       "glbDisplaySize": "10.55 MB",
       "boundsErrorMm": 0,
       "namedNodeCoverage": 1,
       "qualityReleaseReady": true,
-      "scope": "watertight millimeter-scale relief specimen; slicer support review remains downstream"
+      "unsupportedOverhangAreaMm2": 0,
+      "unsupportedOverhangRatio": 0,
+      "scope": "watertight millimeter-scale relief specimen; measured 45-degree overhang area is zero"
     }
   ]
 }

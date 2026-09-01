@@ -8,9 +8,9 @@ The current suite locks eight decisions: five release-intended contracts (indust
 
 - architecture requires a verified plan footprint, closed shells, evidence ≥85, and ≥80% micro-normal coverage;
 - industrial design requires closed topology, evidence ≥80, ≥95% UV coverage, and ≥75% micro-normal coverage;
-- animation requires a closed skinned body, at least 15 real bones, normalized ≤4-influence weights, animation tracks, UVs, and GLB preservation;
-- game requires the triangle budget, no non-manifold or degenerate geometry, UVs, normals, a skeleton, and PBR surfaces;
-- 3D print requires a closed positive-volume mesh, explicit millimetres, and an IR-declared minimum feature of at least 0.8 mm. Printer-specific overhang and support analysis remains a warning.
+- animation requires closed skinned LOD meshes, at least 15 real bones, normalized ≤4-influence weights, measured non-zero bone deformation, animation tracks, UVs, and GLB preservation;
+- game requires the delivered triangle budget, no non-manifold or degenerate geometry, UVs, normals, a real skeleton, an actual skinned LOD1, collision primitives, and PBR surfaces;
+- 3D print requires a closed positive-volume mesh, explicit millimetres, an IR-declared minimum feature of at least 0.8 mm, and measured generic 45° overhang area. Printer-specific orientation and support generation remain downstream process checks.
 
 A browser proof requires the viewer to export and reopen the actual GLB. The proof is bound to a normalized input fingerprint containing the relevant asset inputs and compiler revision. Raw scene fingerprints remain in the report for same-runtime diagnostics; platform-level floating-point noise is not used as a cross-runtime cache key. A fixed score, stale compiler revision, stale input proof, or download click is not evidence.
 

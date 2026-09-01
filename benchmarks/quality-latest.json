@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-09-01T13:54:49.428Z",
+  "generatedAt": "2026-09-01T14:30:51.045Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -107,11 +107,18 @@
         "bones": 0,
         "animationClips": 0,
         "animationTracks": 0,
+        "deformationMovedVertices": 0,
+        "deformationMaximumMm": 0,
+        "deformationFinite": true,
+        "gameLods": 0,
+        "collisionPrimitives": 0,
         "maximumSkinWeightError": 0,
         "maximumSkinInfluences": 0,
         "minimumMeshAxisMm": 2.53915809957823,
         "declaredMinimumFeatureMm": 0.16,
-        "enclosedVolumeMm3": 146608.7279233531
+        "enclosedVolumeMm3": 146608.7279233531,
+        "unsupportedOverhangAreaMm2": 4106.5690757403,
+        "unsupportedOverhangRatio": 0.06372383064161116
       }
     },
     "architecture": {
@@ -197,11 +204,18 @@
         "bones": 0,
         "animationClips": 0,
         "animationTracks": 0,
+        "deformationMovedVertices": 0,
+        "deformationMaximumMm": 0,
+        "deformationFinite": true,
+        "gameLods": 0,
+        "collisionPrimitives": 0,
         "maximumSkinWeightError": 0,
         "maximumSkinInfluences": 0,
         "minimumMeshAxisMm": 17.999999225139618,
         "declaredMinimumFeatureMm": 18,
-        "enclosedVolumeMm3": 254482354093.11646
+        "enclosedVolumeMm3": 254482354093.11646,
+        "unsupportedOverhangAreaMm2": 512845854.9532662,
+        "unsupportedOverhangRatio": 0.1481512964921408
       }
     },
     "animation": {
@@ -230,7 +244,7 @@
           "label": "이름 있는 편집 단위",
           "pass": true,
           "score": 100,
-          "detail": "2/2 메시 명명",
+          "detail": "3/3 메시 명명",
           "blocking": true
         },
         {
@@ -246,7 +260,7 @@
           "label": "변형 가능한 폐쇄형 바디",
           "pass": true,
           "score": 100,
-          "detail": "1/1 스킨 메시 폐쇄형",
+          "detail": "2/2 스킨 메시 폐쇄형",
           "blocking": true
         },
         {
@@ -254,7 +268,7 @@
           "label": "실제 스켈레톤",
           "pass": true,
           "score": 100,
-          "detail": "1 skeleton · 17 bones",
+          "detail": "2 skeleton · 17 bones",
           "blocking": true
         },
         {
@@ -263,6 +277,14 @@
           "pass": true,
           "score": 100,
           "detail": "오차 2.98e-8 · 최대 2 influences",
+          "blocking": true
+        },
+        {
+          "id": "animation-deformation",
+          "label": "실제 뼈 변형 검증",
+          "pass": true,
+          "score": 100,
+          "detail": "bind RMS 0.0000 mm · 이동 표본 708 · 최대 35.5 mm",
           "blocking": true
         },
         {
@@ -293,20 +315,28 @@
       "blockers": [],
       "warnings": [],
       "metrics": {
-        "meshes": 2,
-        "triangles": 31868,
+        "meshes": 3,
+        "triangles": 52818,
         "namedMeshCoverage": 1,
         "uvMeshCoverage": 1,
         "normalMeshCoverage": 1,
         "pbrSurfaceCoverage": 1,
-        "skeletons": 1,
+        "skeletons": 2,
         "bones": 17,
         "animationClips": 1,
         "animationTracks": 2,
+        "bindPoseRmsErrorMm": 0.000020671425729653478,
+        "deformationMovedVertices": 708,
+        "deformationMaximumMm": 35.45993418808589,
+        "deformationFinite": true,
+        "gameLods": 2,
+        "collisionPrimitives": 2,
         "maximumSkinWeightError": 2.9802322387695312e-8,
         "maximumSkinInfluences": 2,
         "minimumMeshAxisMm": 136.7105718143282,
-        "enclosedVolumeMm3": 97004271.53615975
+        "enclosedVolumeMm3": 156575801.90931997,
+        "unsupportedOverhangAreaMm2": 195328.2198585143,
+        "unsupportedOverhangRatio": 0.053696737176808076
       }
     },
     "game": {
@@ -335,7 +365,7 @@
           "label": "이름 있는 편집 단위",
           "pass": true,
           "score": 100,
-          "detail": "2/2 메시 명명",
+          "detail": "3/3 메시 명명",
           "blocking": true
         },
         {
@@ -351,7 +381,7 @@
           "label": "실시간 삼각형 예산",
           "pass": true,
           "score": 100,
-          "detail": "31,868 / 100,000 tris",
+          "detail": "52,818 / 100,000 tris",
           "blocking": true
         },
         {
@@ -383,8 +413,32 @@
           "label": "게임용 스켈레톤",
           "pass": true,
           "score": 100,
-          "detail": "1 skeleton · 17 bones",
+          "detail": "2 skeleton · 17 bones",
           "blocking": true
+        },
+        {
+          "id": "game-collision",
+          "label": "충돌 프리미티브",
+          "pass": true,
+          "score": 100,
+          "detail": "2 collision primitives",
+          "blocking": true
+        },
+        {
+          "id": "game-lod-profile",
+          "label": "LOD 납품 프로필",
+          "pass": true,
+          "score": 100,
+          "detail": "2 declared LOD levels",
+          "blocking": true
+        },
+        {
+          "id": "game-additional-lods",
+          "label": "추가 LOD 메시",
+          "pass": true,
+          "score": 100,
+          "detail": "2 LOD levels",
+          "blocking": false
         },
         {
           "id": "game-pbr",
@@ -398,20 +452,28 @@
       "blockers": [],
       "warnings": [],
       "metrics": {
-        "meshes": 2,
-        "triangles": 31868,
+        "meshes": 3,
+        "triangles": 52818,
         "namedMeshCoverage": 1,
         "uvMeshCoverage": 1,
         "normalMeshCoverage": 1,
         "pbrSurfaceCoverage": 1,
-        "skeletons": 1,
+        "skeletons": 2,
         "bones": 17,
         "animationClips": 1,
         "animationTracks": 2,
+        "bindPoseRmsErrorMm": 0.000020671425729653478,
+        "deformationMovedVertices": 708,
+        "deformationMaximumMm": 35.45993418808589,
+        "deformationFinite": true,
+        "gameLods": 2,
+        "collisionPrimitives": 2,
         "maximumSkinWeightError": 2.9802322387695312e-8,
         "maximumSkinInfluences": 2,
         "minimumMeshAxisMm": 136.7105718143282,
-        "enclosedVolumeMm3": 97004271.53615975
+        "enclosedVolumeMm3": 156575801.90931997,
+        "unsupportedOverhangAreaMm2": 195328.2198585143,
+        "unsupportedOverhangRatio": 0.053696737176808076
       }
     },
     "print3d": {
@@ -492,18 +554,16 @@
           "blocking": true
         },
         {
-          "id": "print-supports",
-          "label": "오버행·서포트 분석",
-          "pass": false,
-          "score": 50,
-          "detail": "슬라이서별 서포트 생성은 후속 공정",
+          "id": "print-overhang",
+          "label": "45° 오버행 분석",
+          "pass": true,
+          "score": 100,
+          "detail": "0.0 mm² · 표면의 0.00%",
           "blocking": false
         }
       ],
       "blockers": [],
-      "warnings": [
-        "print-supports: 슬라이서별 서포트 생성은 후속 공정"
-      ],
+      "warnings": [],
       "metrics": {
         "meshes": 1,
         "triangles": 111936,
@@ -515,11 +575,18 @@
         "bones": 0,
         "animationClips": 0,
         "animationTracks": 0,
+        "deformationMovedVertices": 0,
+        "deformationMaximumMm": 0,
+        "deformationFinite": true,
+        "gameLods": 0,
+        "collisionPrimitives": 0,
         "maximumSkinWeightError": 0,
         "maximumSkinInfluences": 0,
         "minimumMeshAxisMm": 43.45347546041012,
         "declaredMinimumFeatureMm": 33.5,
-        "enclosedVolumeMm3": 10762674.26790627
+        "enclosedVolumeMm3": 10762674.26790627,
+        "unsupportedOverhangAreaMm2": 0,
+        "unsupportedOverhangRatio": 0
       }
     }
   },
@@ -533,7 +600,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "870c78aa74e6523f",
       "repeatedFingerprint": "870c78aa74e6523f",
-      "inputFingerprint": "2afa14e4d3f0a915",
+      "inputFingerprint": "97db2d318195567c",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -554,7 +621,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "94bf5bd22d3a321d",
       "repeatedFingerprint": "94bf5bd22d3a321d",
-      "inputFingerprint": "29e2e2a3314c2da5",
+      "inputFingerprint": "2ce2e75cc30f8ce6",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -578,7 +645,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "389dd42a5c2f2c29",
       "repeatedFingerprint": "389dd42a5c2f2c29",
-      "inputFingerprint": "32923b10389f64d0",
+      "inputFingerprint": "379242efa6dc058f",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -599,7 +666,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "4bbc86964c11a3f9",
       "repeatedFingerprint": "4bbc86964c11a3f9",
-      "inputFingerprint": "72f0a7aa3457fcc5",
+      "inputFingerprint": "6ff0a2f1c61b5c06",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -623,7 +690,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "e340853326f8c503",
       "repeatedFingerprint": "e340853326f8c503",
-      "inputFingerprint": "5a980da308472cc5",
+      "inputFingerprint": "80ed3a92d1d7bb84",
       "browserGlbRoundTrip": true,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -645,9 +712,9 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "d1cdfe6d5423e63c",
-      "repeatedFingerprint": "d1cdfe6d5423e63c",
-      "inputFingerprint": "872c4db473d44184",
+      "firstFingerprint": "46998d8bc8516c8e",
+      "repeatedFingerprint": "46998d8bc8516c8e",
+      "inputFingerprint": "0e4ec38d11eb6d6d",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -666,9 +733,9 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "d1cdfe6d5423e63c",
-      "repeatedFingerprint": "d1cdfe6d5423e63c",
-      "inputFingerprint": "872c4db473d44184",
+      "firstFingerprint": "46998d8bc8516c8e",
+      "repeatedFingerprint": "46998d8bc8516c8e",
+      "inputFingerprint": "0e4ec38d11eb6d6d",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,
@@ -689,7 +756,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "cf0bc53d5fa7e992",
       "repeatedFingerprint": "cf0bc53d5fa7e992",
-      "inputFingerprint": "bdfd8771384abceb",
+      "inputFingerprint": "c0fd8c2a58291634",
       "browserGlbRoundTrip": true,
       "expectedDecision": "release",
       "reproducible": true,

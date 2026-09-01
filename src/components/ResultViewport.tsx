@@ -995,6 +995,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceBones: sourceSnapshot.bones,
           sourceAnimationClips: sourceSnapshot.animationClips,
           sourceAnimationTracks: sourceSnapshot.animationTracks,
+          sourceGameLods: sourceSnapshot.gameLods,
+          sourceCollisionPrimitives: sourceSnapshot.collisionPrimitives,
         },
       });
       runtime.syncDiagnostics();
@@ -1019,6 +1021,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedBones = audit.reopened?.bones;
               diagnostic.__MORPHLOOM__.reopenedAnimationClips = audit.reopened?.animationClips;
               diagnostic.__MORPHLOOM__.reopenedAnimationTracks = audit.reopened?.animationTracks;
+              diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
+              diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }
             onDeliveryAudit?.(audit);
             const telemetry = telemetryRef.current;

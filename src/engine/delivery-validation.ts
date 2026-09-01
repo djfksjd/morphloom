@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.5.1';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.5.4';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -18,6 +18,8 @@ export interface SceneSnapshot {
   bones: number;
   animationClips: number;
   animationTracks: number;
+  gameLods: number;
+  collisionPrimitives: number;
   materials: number;
   triangles: number;
   geometryBytes: number;
@@ -134,6 +136,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let primitives = 0;
   let skeletons = 0;
   let bones = 0;
+  let gameLods = 0;
+  let collisionPrimitives = 0;
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -147,6 +151,11 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     hasher.text(object.name);
     hasher.array(object.matrixWorld.elements);
     finiteTransforms = finiteTransforms && object.matrixWorld.elements.every(Number.isFinite);
+    const gameDelivery = object.userData.gameDelivery as { lods?: unknown[]; collisionPrimitives?: unknown[] } | undefined;
+    if (gameDelivery) {
+      gameLods = Math.max(gameLods, Array.isArray(gameDelivery.lods) ? gameDelivery.lods.length : 0);
+      collisionPrimitives = Math.max(collisionPrimitives, Array.isArray(gameDelivery.collisionPrimitives) ? gameDelivery.collisionPrimitives.length : 0);
+    }
     if (object instanceof THREE.Bone) bones += 1;
     if (!(object instanceof THREE.Mesh)) return;
     if (object instanceof THREE.SkinnedMesh) skeletons += 1;
@@ -221,6 +230,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     bones,
     animationClips: animations.length,
     animationTracks,
+    gameLods,
+    collisionPrimitives,
     materials: materials.size,
     triangles: Math.round(triangles),
     geometryBytes,
@@ -338,6 +349,10 @@ export function compareGlbRoundTrip(
   if (source.animationTracks !== reopened.animationTracks) {
     blockers.push(`animation track count changed ${source.animationTracks}→${reopened.animationTracks}`);
   }
+  if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
+  if (source.collisionPrimitives !== reopened.collisionPrimitives) {
+    blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
+  }
   if (boundsErrorMm > 0.1) blockers.push(`round-trip bounds drift ${boundsErrorMm.toFixed(3)} mm`);
   if (namedNodeCoverage < 0.95) blockers.push(`named node coverage ${Math.round(namedNodeCoverage * 100)}%`);
   if (source.duplicatePartIds.length > 0) blockers.push(`duplicate source part ids: ${source.duplicatePartIds.join(', ')}`);
@@ -347,6 +362,7 @@ export function compareGlbRoundTrip(
   const exactParity = status === 'pass' && meshParity && triangleParity
     && source.skeletons === reopened.skeletons && source.bones === reopened.bones
     && source.animationClips === reopened.animationClips && source.animationTracks === reopened.animationTracks
+    && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
     ? Math.max(0, 58 - blockers.length * 8)

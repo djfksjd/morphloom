@@ -50,11 +50,19 @@ export interface DomainReadinessReport {
     bones: number;
     animationClips: number;
     animationTracks: number;
+    bindPoseRmsErrorMm?: number;
+    deformationMovedVertices: number;
+    deformationMaximumMm: number;
+    deformationFinite: boolean;
+    gameLods: number;
+    collisionPrimitives: number;
     maximumSkinWeightError: number;
     maximumSkinInfluences: number;
     minimumMeshAxisMm?: number;
     declaredMinimumFeatureMm?: number;
     enclosedVolumeMm3?: number;
+    unsupportedOverhangAreaMm2: number;
+    unsupportedOverhangRatio: number;
   };
 }
 
@@ -96,6 +104,8 @@ function inspectGeometry(root: THREE.Object3D): {
   maximumSkinInfluences: number;
   minimumMeshAxisMm?: number;
   enclosedVolumeMm3: number;
+  unsupportedOverhangAreaMm2: number;
+  unsupportedOverhangRatio: number;
 } {
   let meshes = 0;
   let uvMeshes = 0;
@@ -104,10 +114,17 @@ function inspectGeometry(root: THREE.Object3D): {
   let maximumSkinInfluences = 0;
   let minimumMeshAxisMm = Number.POSITIVE_INFINITY;
   let enclosedVolumeM3 = 0;
+  let totalSurfaceAreaM2 = 0;
+  let unsupportedOverhangAreaM2 = 0;
+  const bounds = new THREE.Box3().setFromObject(root);
+  const buildPlateToleranceM = 0.0002;
   const a = new THREE.Vector3();
   const b = new THREE.Vector3();
   const c = new THREE.Vector3();
   const cross = new THREE.Vector3();
+  const edgeA = new THREE.Vector3();
+  const edgeB = new THREE.Vector3();
+  const faceNormal = new THREE.Vector3();
   root.updateMatrixWorld(true);
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
@@ -154,6 +171,17 @@ function inspectGeometry(root: THREE.Object3D): {
       b.fromBufferAttribute(position, ib).applyMatrix4(object.matrixWorld);
       c.fromBufferAttribute(position, ic).applyMatrix4(object.matrixWorld);
       enclosedVolumeM3 += a.dot(cross.crossVectors(b, c)) / 6;
+      faceNormal.crossVectors(edgeA.copy(b).sub(a), edgeB.copy(c).sub(a));
+      const doubledArea = faceNormal.length();
+      if (doubledArea > 1e-14) {
+        const area = doubledArea * 0.5;
+        totalSurfaceAreaM2 += area;
+        const centroidY = (a.y + b.y + c.y) / 3;
+        const normalY = faceNormal.y / doubledArea;
+        if (normalY < -Math.SQRT1_2 && centroidY > bounds.min.y + buildPlateToleranceM) {
+          unsupportedOverhangAreaM2 += area;
+        }
+      }
     }
   });
   return {
@@ -163,6 +191,69 @@ function inspectGeometry(root: THREE.Object3D): {
     maximumSkinInfluences,
     minimumMeshAxisMm: Number.isFinite(minimumMeshAxisMm) ? minimumMeshAxisMm : undefined,
     enclosedVolumeMm3: Math.abs(enclosedVolumeM3) * 1e9,
+    unsupportedOverhangAreaMm2: unsupportedOverhangAreaM2 * 1e6,
+    unsupportedOverhangRatio: totalSurfaceAreaM2 > 0 ? unsupportedOverhangAreaM2 / totalSurfaceAreaM2 : 0,
+  };
+}
+
+function inspectSkinDeformation(root: THREE.Object3D): {
+  bindPoseRmsErrorMm?: number;
+  movedVertices: number;
+  maximumMm: number;
+  finite: boolean;
+} {
+  let squaredError = 0;
+  let samples = 0;
+  let movedVertices = 0;
+  let maximumMm = 0;
+  let finite = true;
+  const source = new THREE.Vector3();
+  const transformed = new THREE.Vector3();
+  root.updateMatrixWorld(true);
+  root.traverseVisible((object) => {
+    if (!(object instanceof THREE.SkinnedMesh)) return;
+    const position = object.geometry.getAttribute('position');
+    const elbow = object.skeleton.bones.find((bone) => bone.name === 'elbow_L');
+    if (!position || !elbow) {
+      finite = false;
+      return;
+    }
+    object.skeleton.update();
+    const stride = Math.max(1, Math.floor(position.count / 2_048));
+    for (let index = 0; index < position.count; index += stride) {
+      source.fromBufferAttribute(position, index);
+      transformed.copy(source);
+      object.applyBoneTransform(index, transformed);
+      const error = transformed.distanceTo(source);
+      squaredError += error * error;
+      samples += 1;
+      finite = finite && Number.isFinite(transformed.x) && Number.isFinite(transformed.y) && Number.isFinite(transformed.z);
+    }
+    const originalRotation = elbow.quaternion.clone();
+    try {
+      elbow.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0.18)));
+      root.updateMatrixWorld(true);
+      object.skeleton.update();
+      for (let index = 0; index < position.count; index += stride) {
+        source.fromBufferAttribute(position, index);
+        transformed.copy(source);
+        object.applyBoneTransform(index, transformed);
+        const movementMm = transformed.distanceTo(source) * 1_000;
+        if (movementMm > 0.1) movedVertices += 1;
+        maximumMm = Math.max(maximumMm, movementMm);
+        finite = finite && Number.isFinite(transformed.x) && Number.isFinite(transformed.y) && Number.isFinite(transformed.z);
+      }
+    } finally {
+      elbow.quaternion.copy(originalRotation);
+      root.updateMatrixWorld(true);
+      object.skeleton.update();
+    }
+  });
+  return {
+    bindPoseRmsErrorMm: samples > 0 ? Math.sqrt(squaredError / samples) * 1_000 : undefined,
+    movedVertices,
+    maximumMm,
+    finite,
   };
 }
 
@@ -181,6 +272,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     : undefined;
   const surfaces = inspectSurfaceSystem(input.root);
   const geometry = inspectGeometry(input.root);
+  const deformation = inspectSkinDeformation(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
   const namedMeshCoverage = snapshot.meshes > 0 ? snapshot.namedMeshes / snapshot.meshes : 0;
   const uvMeshCoverage = snapshot.meshes > 0 ? geometry.uvMeshes / snapshot.meshes : 0;
@@ -214,6 +306,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('animation-topology', '변형 가능한 폐쇄형 바디', bodyTopologyPass, bodyTopologyPass ? 100 : 0, `${skinnedTopology?.watertightMeshes ?? 0}/${skinnedTopology?.meshes ?? 0} 스킨 메시 폐쇄형`);
     add('animation-skeleton', '실제 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 15, Math.min(100, snapshot.bones / 15 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('animation-weights', '정규화 스킨 웨이트', geometry.maximumSkinWeightError <= 1e-5 && geometry.maximumSkinInfluences <= 4, geometry.maximumSkinWeightError <= 1e-5 ? 100 : 0, `오차 ${geometry.maximumSkinWeightError.toExponential(2)} · 최대 ${geometry.maximumSkinInfluences} influences`);
+    const bindPoseRmsErrorMm = deformation.bindPoseRmsErrorMm ?? Number.POSITIVE_INFINITY;
+    const deformationPass = deformation.finite && bindPoseRmsErrorMm <= 0.01
+      && deformation.movedVertices > 0 && deformation.maximumMm > 1 && deformation.maximumMm < 500;
+    add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
     add('animation-clips', '재생 가능한 애니메이션', snapshot.animationClips >= 1 && snapshot.animationTracks >= 2, snapshot.animationClips >= 1 ? 100 : 0, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks`);
     add('animation-uv', '캐릭터 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('animation-evidence', '캐릭터 베이스 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
@@ -225,6 +321,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('game-uv', '게임 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 15, Math.min(100, snapshot.bones / 15 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
+    add('game-collision', '충돌 프리미티브', snapshot.collisionPrimitives >= 1, snapshot.collisionPrimitives >= 1 ? 100 : 0, `${snapshot.collisionPrimitives} collision primitives`);
+    add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
+    add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
     add('game-pbr', '게임 PBR 표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
   } else {
     const unitReady = input.sourceUnitMm === 1;
@@ -235,7 +334,8 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('print-declared-feature', '선언된 최소 형상', minimumFeature >= 0.8, minimumFeature >= 0.8 ? 100 : minimumFeature / 0.8 * 100, declaredMinimumFeatureMm === undefined ? 'mm 기반 IR 형상 치수 없음' : `${minimumFeature.toFixed(3)} mm / 최소 0.800 mm`);
     add('print-bounds-sanity', '메시 축 치수 점검', minimumAxis >= 0.4, minimumAxis >= 0.4 ? 100 : minimumAxis / 0.4 * 100, `${minimumAxis.toFixed(3)} mm`, false);
     add('print-volume', '양의 폐쇄 체적', geometry.enclosedVolumeMm3 > 1, geometry.enclosedVolumeMm3 > 1 ? 100 : 0, `${geometry.enclosedVolumeMm3.toFixed(1)} mm³`);
-    add('print-supports', '오버행·서포트 분석', false, 50, '슬라이서별 서포트 생성은 후속 공정', false);
+    const supportFree = geometry.unsupportedOverhangRatio <= 0.01;
+    add('print-overhang', '45° 오버행 분석', supportFree, supportFree ? 100 : Math.max(0, 100 - geometry.unsupportedOverhangRatio * 500), `${geometry.unsupportedOverhangAreaMm2.toFixed(1)} mm² · 표면의 ${(geometry.unsupportedOverhangRatio * 100).toFixed(2)}%`, false);
   }
 
   const blockers = checks.filter((check) => check.blocking && !check.pass).map((check) => `${check.id}: ${check.detail}`);
@@ -261,11 +361,19 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       bones: snapshot.bones,
       animationClips: snapshot.animationClips,
       animationTracks: snapshot.animationTracks,
+      bindPoseRmsErrorMm: deformation.bindPoseRmsErrorMm,
+      deformationMovedVertices: deformation.movedVertices,
+      deformationMaximumMm: deformation.maximumMm,
+      deformationFinite: deformation.finite,
+      gameLods: snapshot.gameLods,
+      collisionPrimitives: snapshot.collisionPrimitives,
       maximumSkinWeightError: geometry.maximumSkinWeightError,
       maximumSkinInfluences: geometry.maximumSkinInfluences,
       minimumMeshAxisMm: geometry.minimumMeshAxisMm,
       declaredMinimumFeatureMm,
       enclosedVolumeMm3: geometry.enclosedVolumeMm3,
+      unsupportedOverhangAreaMm2: geometry.unsupportedOverhangAreaMm2,
+      unsupportedOverhangRatio: geometry.unsupportedOverhangRatio,
     },
   };
 }
