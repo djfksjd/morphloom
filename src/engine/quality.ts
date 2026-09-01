@@ -33,9 +33,12 @@ export function evaluateQuality(
     ? Math.min(98, 90 + Math.round((metrics?.surfaces.distinctFinishes ?? 0) * 1.5))
     : Math.round(82 + (spec.hairStyle !== 'none' ? 5 : 0) + (spec.outfit === 'field' ? 3 : 0));
   const poseErrorMm = (metrics?.poseLandmarkRmsMeters ?? Number.POSITIVE_INFINITY) * 1000;
+  const deliveredRig = Boolean(deliveryAudit?.status === 'pass'
+    && (deliveryAudit.source?.bones ?? 0) >= 49
+    && (deliveryAudit.source?.animationTracks ?? 0) >= 4);
   const rigScore = webHero
     ? Number.isFinite(poseErrorMm) ? Math.round(Math.max(0, 100 - poseErrorMm * 1.6)) : 0
-    : 74;
+    : deliveredRig ? 100 : 0;
   const exportScore = deliveryAudit?.score ?? 65;
   const exportStatus: QualityCheck['status'] = !deliveryAudit || deliveryAudit.status === 'running'
     ? 'warn'
@@ -75,10 +78,12 @@ export function evaluateQuality(
       id: 'rig',
       label: webHero ? '랜드마크 포즈 오차' : '게임 리그',
       score: rigScore,
-      status: webHero ? status(rigScore, 72) : 'warn',
+      status: webHero ? status(rigScore, 72) : deliveredRig ? 'pass' : 'blocked',
       detail: webHero
         ? `17개 관절 목표 RMS ${Number.isFinite(poseErrorMm) ? poseErrorMm.toFixed(1) : '—'} mm · 오른손=화면 왼쪽 · 숨은 깊이는 inferred`
-        : '17개 관절 프리뷰 완료 · 스킨 웨이트 연결 예정',
+        : deliveredRig
+          ? `${deliveryAudit?.source?.bones ?? 0}본 · 30개 손가락 본 실제 웨이트 · ${deliveryAudit?.source?.animationTracks ?? 0}개 트랙 GLB 보존`
+          : '49본·손가락 웨이트·4개 애니메이션 트랙의 실제 GLB 보존 필요',
     },
     {
       id: 'export',

@@ -56,6 +56,9 @@ export interface DomainReadinessReport {
     deformationFinite: boolean;
     gameLods: number;
     collisionPrimitives: number;
+    fingerBones: number;
+    fingerWeightedVertices: number;
+    fingerAnimationTracks: number;
     maximumSkinWeightError: number;
     maximumSkinInfluences: number;
     minimumMeshAxisMm?: number;
@@ -106,6 +109,9 @@ function inspectGeometry(root: THREE.Object3D): {
   enclosedVolumeMm3: number;
   unsupportedOverhangAreaMm2: number;
   unsupportedOverhangRatio: number;
+  fingerBones: number;
+  fingerWeightedVertices: number;
+  fingerAnimationTracks: number;
 } {
   let meshes = 0;
   let uvMeshes = 0;
@@ -116,6 +122,9 @@ function inspectGeometry(root: THREE.Object3D): {
   let enclosedVolumeM3 = 0;
   let totalSurfaceAreaM2 = 0;
   let unsupportedOverhangAreaM2 = 0;
+  const fingerBoneNames = new Set<string>();
+  let fingerWeightedVertices = 0;
+  const fingerPattern = /^(thumb|index|middle|ring|little)_\d{2}_[LR]$/;
   const bounds = new THREE.Box3().setFromObject(root);
   const buildPlateToleranceM = 0.0002;
   const a = new THREE.Vector3();
@@ -144,15 +153,24 @@ function inspectGeometry(root: THREE.Object3D): {
     if (object instanceof THREE.SkinnedMesh) {
       const weights = geometry.getAttribute('skinWeight');
       const indices = geometry.getAttribute('skinIndex');
+      const fingerIndices = new Set<number>();
+      object.skeleton.bones.forEach((bone, index) => {
+        if (!fingerPattern.test(bone.name)) return;
+        fingerBoneNames.add(bone.name);
+        fingerIndices.add(index);
+      });
       if (weights && indices && weights.itemSize === 4 && indices.itemSize === 4) {
         for (let vertex = 0; vertex < weights.count; vertex += 1) {
           let sum = 0;
           let influences = 0;
+          let fingerWeighted = false;
           for (let slot = 0; slot < 4; slot += 1) {
             const weight = weights.getComponent(vertex, slot);
             if (weight > 1e-6) influences += 1;
+            if (weight > 1e-3 && fingerIndices.has(indices.getComponent(vertex, slot))) fingerWeighted = true;
             sum += weight;
           }
+          if (fingerWeighted) fingerWeightedVertices += 1;
           maximumSkinWeightError = Math.max(maximumSkinWeightError, Math.abs(sum - 1));
           maximumSkinInfluences = Math.max(maximumSkinInfluences, influences);
         }
@@ -193,6 +211,11 @@ function inspectGeometry(root: THREE.Object3D): {
     enclosedVolumeMm3: Math.abs(enclosedVolumeM3) * 1e9,
     unsupportedOverhangAreaMm2: unsupportedOverhangAreaM2 * 1e6,
     unsupportedOverhangRatio: totalSurfaceAreaM2 > 0 ? unsupportedOverhangAreaM2 / totalSurfaceAreaM2 : 0,
+    fingerBones: fingerBoneNames.size,
+    fingerWeightedVertices,
+    fingerAnimationTracks: root.animations.reduce((sum, clip) => (
+      sum + clip.tracks.filter((track) => fingerPattern.test(track.name.split('.')[0])).length
+    ), 0),
   };
 }
 
@@ -304,12 +327,14 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   } else if (input.domain === 'animation') {
     const bodyTopologyPass = skinnedTopology?.pass === true;
     add('animation-topology', '변형 가능한 폐쇄형 바디', bodyTopologyPass, bodyTopologyPass ? 100 : 0, `${skinnedTopology?.watertightMeshes ?? 0}/${skinnedTopology?.meshes ?? 0} 스킨 메시 폐쇄형`);
-    add('animation-skeleton', '실제 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 15, Math.min(100, snapshot.bones / 15 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
+    add('animation-skeleton', '실제 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('animation-weights', '정규화 스킨 웨이트', geometry.maximumSkinWeightError <= 1e-5 && geometry.maximumSkinInfluences <= 4, geometry.maximumSkinWeightError <= 1e-5 ? 100 : 0, `오차 ${geometry.maximumSkinWeightError.toExponential(2)} · 최대 ${geometry.maximumSkinInfluences} influences`);
     const bindPoseRmsErrorMm = deformation.bindPoseRmsErrorMm ?? Number.POSITIVE_INFINITY;
     const deformationPass = deformation.finite && bindPoseRmsErrorMm <= 0.01
       && deformation.movedVertices > 0 && deformation.maximumMm > 1 && deformation.maximumMm < 500;
     add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
+    const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 2;
+    add('animation-finger-rig', '손가락 리그·가중치', fingerRigPass, fingerRigPass ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices · ${geometry.fingerAnimationTracks} animated tracks`);
     add('animation-clips', '재생 가능한 애니메이션', snapshot.animationClips >= 1 && snapshot.animationTracks >= 2, snapshot.animationClips >= 1 ? 100 : 0, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks`);
     add('animation-uv', '캐릭터 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('animation-evidence', '캐릭터 베이스 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
@@ -320,7 +345,8 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('game-topology', '게임 메시 토폴로지', runtimeTopologyPass, runtimeTopologyPass ? 100 : 0, `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}`);
     add('game-uv', '게임 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
-    add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 15, Math.min(100, snapshot.bones / 15 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
+    add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
+    add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
     add('game-collision', '충돌 프리미티브', snapshot.collisionPrimitives >= 1, snapshot.collisionPrimitives >= 1 ? 100 : 0, `${snapshot.collisionPrimitives} collision primitives`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
@@ -367,6 +393,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       deformationFinite: deformation.finite,
       gameLods: snapshot.gameLods,
       collisionPrimitives: snapshot.collisionPrimitives,
+      fingerBones: geometry.fingerBones,
+      fingerWeightedVertices: geometry.fingerWeightedVertices,
+      fingerAnimationTracks: geometry.fingerAnimationTracks,
       maximumSkinWeightError: geometry.maximumSkinWeightError,
       maximumSkinInfluences: geometry.maximumSkinInfluences,
       minimumMeshAxisMm: geometry.minimumMeshAxisMm,

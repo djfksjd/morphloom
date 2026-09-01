@@ -816,6 +816,7 @@ export function ViewerApp() {
             </header>
             <div className="delivery-grid">
               <span>FINGERPRINT<b>{deliveryAudit?.fingerprint ?? '계산 중'}</b></span>
+              <span>BUILD KEY<b>{deliveryAudit?.buildFingerprint ?? '계산 중'}</b></span>
               <span>INPUT KEY<b>{deliveryAudit?.inputFingerprint ?? '계산 중'}</b></span>
               <span>GLB SIZE<b>{bytesLabel(deliveryAudit?.glbBytes ?? 0)}</b></span>
               <span>BOUNDS DRIFT<b>{deliveryAudit ? `${deliveryAudit.boundsErrorMm.toFixed(3)} mm` : '—'}</b></span>

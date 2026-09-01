@@ -6,7 +6,7 @@ Apply only the contract matching the requested destination. Never award one univ
 
 - Require a real `SkinnedMesh`, named bone hierarchy, normalized weights with no more than four non-zero influences per vertex, and deformation-safe closed body topology. Perturb at least one driven joint and measure finite, non-zero vertex movement; metadata-only rigs do not pass.
 - Include at least one playable clip with actual tracks. Reopen the delivered GLB and block if skeleton, bone, clip, or track counts drift.
-- Treat a posed static mesh, decorative bone names, or metadata-only rig as a failure. Face/finger rigs, blendshapes, cloth physics, and retargeting remain separate scope unless requested and proved.
+- Treat a posed static mesh, decorative bone names, or metadata-only rig as a failure. When articulated hands are in scope, require named finger segments, non-zero finger-bone weights on actual hand vertices, and at least one finger animation track after GLB reopen. Face rigs, blendshapes, finger collision/muscle deformation, cloth physics, and retargeting remain separate scope unless requested and proved.
 
 ## Game and real-time use
 

@@ -3,6 +3,20 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    // Three.js is an intentional shared runtime chunk; keep the application
+    // bundle separate while warning only above the known vendor envelope.
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/three/')) return 'three';
+          if (id.includes('/node_modules/react/') || id.includes('/node_modules/react-dom/')) return 'react';
+          return undefined;
+        },
+      },
+    },
+  },
   optimizeDeps: {
     entries: ['index.html'],
   },

@@ -458,7 +458,7 @@ async function generateGlb(root: THREE.Object3D): Promise<ArrayBuffer> {
   return result;
 }
 
-async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inputFingerprint: string): Promise<DeliveryAudit> {
+async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inputFingerprint: string, buildFingerprint: string): Promise<DeliveryAudit> {
   const started = performance.now();
   const source = snapshotScene(root);
   const loader = new GLTFLoader();
@@ -466,7 +466,7 @@ async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inpu
   try {
     reopened.scene.animations = reopened.animations;
     const reopenedSnapshot = snapshotScene(reopened.scene);
-    return compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, performance.now() - started, inputFingerprint);
+    return compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, performance.now() - started, inputFingerprint, buildFingerprint);
   } finally {
     disposeObject(reopened.scene);
   }
@@ -674,8 +674,9 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const promise = (async () => {
         const deliveryBuild = createBeautyBuild();
         try {
+          const buildFingerprint = snapshotScene(deliveryBuild.root).fingerprint;
           const bytes = await generateGlb(deliveryBuild.root);
-          const audit = await verifyGlbRoundTrip(deliveryBuild.root, bytes, sourceKey);
+          const audit = await verifyGlbRoundTrip(deliveryBuild.root, bytes, sourceKey, buildFingerprint);
           if (audit.status === 'blocked') throw new Error(audit.blockers.join(' · '));
           validatedGlbRef.current = { sourceKey, bytes, audit };
           return { bytes, audit };

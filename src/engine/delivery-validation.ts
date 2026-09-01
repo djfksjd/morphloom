@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.5.4';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.6.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -36,6 +36,9 @@ export interface SceneSnapshot {
 export interface DeliveryAudit {
   status: DeliveryAuditStatus;
   score: number;
+  /** Deterministic scene fingerprint before exporter normalization/mutation. */
+  buildFingerprint: string;
+  /** Fingerprint of the exact source scene passed into the round-trip comparator. */
   fingerprint: string;
   inputFingerprint: string;
   glbBytes: number;
@@ -328,6 +331,7 @@ export function compareGlbRoundTrip(
   glbBytes: number,
   durationMs: number,
   inputFingerprint = source.fingerprint,
+  buildFingerprint = source.fingerprint,
 ): DeliveryAudit {
   const blockers: string[] = [];
   const warnings: string[] = [];
@@ -372,6 +376,7 @@ export function compareGlbRoundTrip(
   return {
     status,
     score,
+    buildFingerprint,
     fingerprint: source.fingerprint,
     inputFingerprint,
     glbBytes,
@@ -399,6 +404,7 @@ export function blockedDeliveryAudit(error: unknown, fingerprint = 'unavailable'
   return {
     status: 'blocked',
     score: 0,
+    buildFingerprint: fingerprint,
     fingerprint,
     inputFingerprint: fingerprint,
     glbBytes: 0,

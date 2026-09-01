@@ -12,6 +12,7 @@ import { createOrnateKnifeIR } from '../src/engine/knife';
 import { compareInteriorBands, compareReferenceFrames } from '../src/engine/reference-comparison';
 import { compareMaterialFrames } from '../src/engine/material-comparison';
 import { carveVisualHull } from '../src/engine/visual-hull';
+import { visualBenchmarkMinimumViews, type VisualBenchmarkDomain } from '../src/engine/visual-benchmark';
 import { DEFAULT_KNIFE_SPEC } from '../src/types';
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
@@ -103,10 +104,27 @@ const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json
   domainReports?: Record<string, { pass?: boolean; score?: number }>;
 };
 const domainProof = qualityBenchmark.domainReports ?? {};
+const visualDomains: VisualBenchmarkDomain[] = ['industrial-design', 'architecture', 'character', 'surface'];
 const output = {
   schema: 'morphloom.competitive-benchmark/0.1',
   generatedAt: new Date().toISOString(),
   comparisonPolicy: 'Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.',
+  visualSuperiorityPolicy: {
+    status: 'not-established',
+    claimAllowed: false,
+    reason: 'No admitted same-input competitor WebGL captures and balanced blind panel are stored in this repository.',
+    requiredEvidence: {
+      identicalInputFingerprint: true,
+      matchedCalibratedCameras: true,
+      actualBrowserWebglCaptures: true,
+      criticalFeatureRegions: true,
+      minimumViews: Object.fromEntries(visualDomains.map((domain) => [domain, visualBenchmarkMinimumViews(domain)])),
+      uniqueBlindRaters: 5,
+      balancedPresentationOrder: true,
+      minimumAutomaticMargin: 0.03,
+      minimumBlindPreferenceShare: 0.6,
+    },
+  },
   competitor: {
     repository: 'https://github.com/img2threejs/img2threejs',
     commit: '9fbd0ca5bbcc3b13bebe712745d6784d33db0b85',

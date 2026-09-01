@@ -38,6 +38,7 @@ type BrowserProof = {
   id?: unknown;
   status?: unknown;
   sceneFingerprint?: unknown;
+  buildFingerprint?: unknown;
   inputFingerprint?: unknown;
   qualityReleaseReady?: unknown;
 };
@@ -54,10 +55,12 @@ const browserProofs = (() => {
   }
 })();
 
-const hasMatchingBrowserProof = (id: string, inputFingerprint: string): boolean => {
+const hasMatchingBrowserProof = (id: string, inputFingerprint: string, _nodeSceneFingerprint: string): boolean => {
   const proof = browserProofs.get(id);
   return proof?.status === 'pass'
-    && proof.inputFingerprint === inputFingerprint;
+    && proof.inputFingerprint === inputFingerprint
+    && typeof proof.sceneFingerprint === 'string' && /^[a-f0-9]{16}$/.test(proof.sceneFingerprint)
+    && typeof proof.buildFingerprint === 'string' && /^[a-f0-9]{16}$/.test(proof.buildFingerprint);
 };
 
 const surfaceCoverage = (build: { metrics: { surfaces: { authoredMaterials: number; microNormalMaterials: number } } }) => build.metrics.surfaces.authoredMaterials > 0
@@ -84,19 +87,19 @@ const inputFingerprints = {
   asphalt: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: ASPHALT_SURFACE_BENCHMARK_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
 };
 
-const baseBrowserProof = hasMatchingBrowserProof('field-human-runtime-base', inputFingerprints.baseCharacter);
-const asphaltBrowserProof = hasMatchingBrowserProof('asphalt-print-surface', inputFingerprints.asphalt);
+const baseBrowserProof = hasMatchingBrowserProof('field-human-runtime-base', inputFingerprints.baseCharacter, fingerprints.baseCharacter[0]);
+const asphaltBrowserProof = hasMatchingBrowserProof('asphalt-print-surface', inputFingerprints.asphalt, fingerprints.asphalt[0]);
 const domainReports = {
   industrialDesign: auditDomainReadiness({
     domain: 'industrial-design', root: knifeA.root, topology: knifeA.metrics.topology,
     evidenceScore: 90, deterministic: fingerprints.knife[0] === fingerprints.knife[1],
-    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife),
+    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife, fingerprints.knife[0]),
   }),
   architecture: auditDomainReadiness({
     domain: 'architecture', root: architectureA.root, topology: architectureA.metrics.topology,
     evidenceScore: architectureA.metrics.engineering?.evidenceScore ?? 0,
     deterministic: fingerprints.architecture[0] === fingerprints.architecture[1],
-    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture),
+    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture, fingerprints.architecture[0]),
   }),
   animation: auditDomainReadiness({
     domain: 'animation', root: baseCharacterA.root, evidenceScore: 90,
@@ -121,7 +124,7 @@ const cases = [
     evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: domainReports.industrialDesign.pass,
     firstFingerprint: fingerprints.knife[0], repeatedFingerprint: fingerprints.knife[1],
     inputFingerprint: inputFingerprints.knife,
-    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife),
+    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife, fingerprints.knife[0]),
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
@@ -135,7 +138,7 @@ const cases = [
     firstFingerprint: fingerprints.conceptArchitecture[0],
     repeatedFingerprint: fingerprints.conceptArchitecture[1],
     inputFingerprint: inputFingerprints.conceptArchitecture,
-    browserGlbRoundTrip: hasMatchingBrowserProof('pinterest-concept-architectural-review', inputFingerprints.conceptArchitecture),
+    browserGlbRoundTrip: hasMatchingBrowserProof('pinterest-concept-architectural-review', inputFingerprints.conceptArchitecture, fingerprints.conceptArchitecture[0]),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
@@ -144,7 +147,7 @@ const cases = [
     domainChecksPass: auditAssemblyDetail(LAUREL_HOMES_BUILDING_B_IR).pass,
     firstFingerprint: fingerprints.architecture[0], repeatedFingerprint: fingerprints.architecture[1],
     inputFingerprint: inputFingerprints.architecture,
-    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture),
+    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture, fingerprints.architecture[0]),
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
@@ -153,7 +156,7 @@ const cases = [
     domainChecksPass: Boolean(coolingA.metrics.engineering?.digitalReady),
     firstFingerprint: fingerprints.cooling[0], repeatedFingerprint: fingerprints.cooling[1],
     inputFingerprint: inputFingerprints.cooling,
-    browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly', inputFingerprints.cooling),
+    browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly', inputFingerprints.cooling, fingerprints.cooling[0]),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
@@ -161,7 +164,7 @@ const cases = [
     evidenceScore: 35, surfaceCoverage: surfaceCoverage(characterA), domainChecksPass: characterA.metrics.poseLandmarkRmsMeters < 0.04,
     firstFingerprint: fingerprints.character[0], repeatedFingerprint: fingerprints.character[1],
     inputFingerprint: inputFingerprints.character,
-    browserGlbRoundTrip: hasMatchingBrowserProof('single-view-character-previs', inputFingerprints.character),
+    browserGlbRoundTrip: hasMatchingBrowserProof('single-view-character-previs', inputFingerprints.character, fingerprints.character[0]),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({

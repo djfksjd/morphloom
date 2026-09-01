@@ -29,14 +29,48 @@ describe('cross-domain semi-professional readiness', () => {
     const firstSnapshot = snapshotScene(first.root);
     const secondSnapshot = snapshotScene(second.root);
     expect(first.body).toBeInstanceOf(THREE.SkinnedMesh);
-    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 17, animationClips: 1, animationTracks: 2 });
+    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 1, animationTracks: 4 });
     expect(first.metrics.rig).toMatchObject({
-      boneCount: 17,
+      boneCount: 49,
       weightedVertices: first.metrics.vertices,
       maximumInfluences: 2,
       animationClips: 1,
-      animationTracks: 2,
+      animationTracks: 4,
     });
+    expect(first.body.skeleton.bones.map((bone) => bone.name)).toEqual(expect.arrayContaining([
+      'toe_L', 'toe_R', 'thumb_03_L', 'index_03_L', 'middle_03_R', 'little_03_R',
+    ]));
+    const fingerBones = new Set(first.body.skeleton.bones
+      .map((bone, index) => (/^(thumb|index|middle|ring|little)_/.test(bone.name) ? index : -1))
+      .filter((index) => index >= 0));
+    const skinIndex = first.body.geometry.getAttribute('skinIndex');
+    const skinWeight = first.body.geometry.getAttribute('skinWeight');
+    const position = first.body.geometry.getAttribute('position');
+    first.root.updateMatrixWorld(true);
+    const wristBySide = new Map(['L', 'R'].map((side) => {
+      const wrist = first.body.skeleton.bones.find((bone) => bone.name === `wrist_${side}`)!;
+      const tip = first.body.skeleton.bones.find((bone) => bone.name === `middle_03_${side}`)!;
+      const wristPoint = first.body.worldToLocal(wrist.getWorldPosition(new THREE.Vector3()));
+      const tipPoint = first.body.worldToLocal(tip.getWorldPosition(new THREE.Vector3()));
+      return [side, { wrist: wristPoint, length: wristPoint.distanceTo(tipPoint) }] as const;
+    }));
+    let fingerWeightedVertices = 0;
+    let mislocalizedFingerWeights = 0;
+    for (let vertex = 0; vertex < skinIndex.count; vertex += 1) {
+      for (const slot of [0, 1, 2, 3]) {
+        const boneIndex = skinIndex.getComponent(vertex, slot);
+        if (!fingerBones.has(boneIndex) || skinWeight.getComponent(vertex, slot) <= 0.001) continue;
+        fingerWeightedVertices += 1;
+        const side = first.body.skeleton.bones[boneIndex].name.endsWith('_L') ? 'L' : 'R';
+        const hand = wristBySide.get(side)!;
+        if (new THREE.Vector3().fromBufferAttribute(position, vertex).distanceTo(hand.wrist) > hand.length * 1.7) {
+          mislocalizedFingerWeights += 1;
+        }
+        break;
+      }
+    }
+    expect(fingerWeightedVertices).toBeGreaterThan(0);
+    expect(mislocalizedFingerWeights).toBe(0);
     expect(first.metrics.rig.maximumWeightError).toBeLessThanOrEqual(1e-7);
     expect(secondSnapshot.fingerprint).toBe(firstSnapshot.fingerprint);
   });
@@ -54,10 +88,13 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.blockers).toEqual([]);
     expect(animation.pass).toBe(true);
     expect(animation.score).toBeGreaterThanOrEqual(98);
-    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 17, animationClips: 1, animationTracks: 2 });
+    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 49, animationClips: 1, animationTracks: 4 });
     expect(animation.metrics.bindPoseRmsErrorMm).toBeLessThanOrEqual(0.01);
     expect(animation.metrics.deformationMovedVertices).toBeGreaterThan(0);
     expect(animation.metrics.deformationMaximumMm).toBeGreaterThan(1);
+    expect(animation.metrics.fingerBones).toBe(30);
+    expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
+    expect(animation.metrics.fingerAnimationTracks).toBe(2);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);

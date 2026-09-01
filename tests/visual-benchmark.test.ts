@@ -1,0 +1,91 @@
+import { describe, expect, it } from 'vitest';
+import { auditSameInputVisualBenchmark, type SameInputVisualBenchmark, type VisualBenchmarkView } from '../src/engine/visual-benchmark';
+import type { ComparisonFrame } from '../src/engine/reference-comparison';
+
+const sha = (char: string) => char.repeat(64);
+
+function frame(foreground: [number, number, number], offset = 0): ComparisonFrame {
+  const rgba = new Uint8Array(8 * 8 * 4);
+  for (let index = 0; index < 64; index += 1) rgba.set(index % 3 === 0
+    ? [foreground[0] + offset, foreground[1] + offset, foreground[2] + offset, 255]
+    : [255, 255, 255, 255], index * 4);
+  return { width: 8, height: 8, rgba, backgroundRgb: [255, 255, 255] };
+}
+
+function view(id: string, renderOffset: number, renderSha: string): VisualBenchmarkView {
+  return {
+    viewId: id,
+    cameraFingerprint: 'abcddcba12345678',
+    referenceSha256: sha('a'),
+    renderSha256: sha(renderSha),
+    sceneFingerprint: renderSha.repeat(64),
+    referenceOrigin: 'admitted-local-reference',
+    renderOrigin: 'browser-webgl-canvas',
+    reference: frame([120, 30, 40]),
+    render: frame([120, 30, 40], renderOffset),
+    regions: [{ featureId: 'critical', x: 0, y: 0, width: 8, height: 8 }],
+    materialExpectation: { family: 'coating', roughness: 0.5 },
+  };
+}
+
+function benchmark(withBlind = false): SameInputVisualBenchmark {
+  const views = ['front', 'side'];
+  return {
+    id: 'same-input-product',
+    domain: 'industrial-design',
+    lockedInputFingerprint: '1234567890abcdef',
+    candidates: [
+      { id: 'morphloom', rendererVersion: 'morphloom-test', inputFingerprint: '1234567890abcdef', views: views.map((id) => view(id, 1, 'b')) },
+      { id: 'img2threejs', rendererVersion: 'img2threejs-test', inputFingerprint: '1234567890abcdef', views: views.map((id) => view(id, 36, 'c')) },
+    ],
+    blindRatings: withBlind ? [
+      { raterFingerprint: '10000000', presentationOrder: 'morphloom-first', preferred: 'morphloom' },
+      { raterFingerprint: '20000000', presentationOrder: 'img2threejs-first', preferred: 'morphloom' },
+      { raterFingerprint: '30000000', presentationOrder: 'morphloom-first', preferred: 'morphloom' },
+      { raterFingerprint: '40000000', presentationOrder: 'img2threejs-first', preferred: 'morphloom' },
+      { raterFingerprint: '50000000', presentationOrder: 'morphloom-first', preferred: 'img2threejs' },
+    ] : undefined,
+  };
+}
+
+describe('same-input blind visual benchmark contract', () => {
+  it('reports only an automatic lead when no balanced blind panel exists', () => {
+    const report = auditSameInputVisualBenchmark(benchmark());
+    expect(report.status).toBe('automatic-morphloom-lead');
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers).toContain('blind evaluation requires at least five unique raters and balanced presentation order');
+  });
+
+  it('allows a winner claim only when automatic metrics and a balanced blind panel agree', () => {
+    const report = auditSameInputVisualBenchmark(benchmark(true));
+    expect(report.status).toBe('morphloom-winner');
+    expect(report.claimAllowed).toBe(true);
+    expect(report.blind).toMatchObject({ eligible: true, ratings: 5, morphloomShare: 0.8 });
+  });
+
+  it('blocks candidates that do not use the locked identical input', () => {
+    const input = benchmark(true);
+    input.candidates[1].inputFingerprint = 'ffffffffffffffff';
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/input fingerprint/);
+  });
+
+  it('blocks a reference plate passed off as a rendered scene', () => {
+    const input = benchmark(true);
+    input.candidates[0].views[0].renderSha256 = input.candidates[0].views[0].referenceSha256;
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/byte-identical/);
+  });
+
+  it('requires matched cameras, references, views and critical feature regions', () => {
+    const input = benchmark(true);
+    input.candidates[1].views[0].cameraFingerprint = 'deadbeefdeadbeef';
+    input.candidates[1].views[1].regions = [];
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/same calibrated camera/);
+    expect(report.blockers.join(' ')).toMatch(/no critical feature regions/);
+  });
+});
