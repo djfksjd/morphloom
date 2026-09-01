@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-158%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-164%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -111,6 +111,7 @@ Product and architecture accuracy improves with measured drawings and datasheets
 npm test
 npm run quality:gate
 npm run benchmark:competitive
+npm run benchmark:visual-set -- --manifest captures/manifest.json --output benchmarks/visual-set-latest.json --require-claim
 npm run build
 ```
 
@@ -138,7 +139,7 @@ Before generation, Morphloom locks detail, material, proof-view, and per-feature
 
 With two or more compatible orthographic silhouettes, Morphloom carves a welded, closed visual hull and reprojects it into every source view for an explicit fit audit. Organic blockouts and continuous forms use an editable `implicitSurface` graph with smooth-union/subtract/intersect operations and Surface Nets; ambiguous cells receive at most four deterministic resolution refinements, then fail closed if the mesh is still non-manifold. Morphloom also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, fine/medium/coarse-scale contrast, gradient orientation, periodicity, and irregularity separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
 
-Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
+Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [multi-view capture format](./docs/VISUAL_CAPTURE_SET.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
 We also ran a real same-input Talon comparison. Morphloom aligns the admitted front image across independently editable parts and derives aligned normal and roughness maps from its local pixels. A bounded diffuse-energy compensation based on the authored material luminance and metalness prevents photographed illumination from being applied a second time by the PBR studio rig. Its blade is a real closed wedge rather than a cosmetic tube: all 14 cutting-edge segments traced through 15 contour points are measured at no more than 0.12 mm. The case has 25 named parts, zero boundary/non-manifold edges or degenerate triangles, and 0.000 mm GLB round-trip drift. In one foreground-normalized broadside diagnostic using a UI-free transparent WebGL capture, Morphloom led every aggregate metric: 0.916 versus 0.796 overall, 0.937 versus 0.745 for silhouette, 0.911 versus 0.868 for interior detail, 0.894 versus 0.877 for combined material response, and 0.883 versus 0.771 for irregular surface response. One view without a blind panel remains `unproven` with `claimAllowed: false`, not a global superiority claim. The machine-readable result is [`benchmarks/talon-visual-broadside-latest.json`](./benchmarks/talon-visual-broadside-latest.json).
 

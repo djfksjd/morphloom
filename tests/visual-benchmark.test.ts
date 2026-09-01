@@ -2,8 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { auditSameInputVisualBenchmark, type SameInputVisualBenchmark, type VisualBenchmarkView } from '../src/engine/visual-benchmark';
 import type { ComparisonFrame } from '../src/engine/reference-comparison';
 
-const sha = (char: string) => char.repeat(64);
-
 function frame(foreground: [number, number, number], offset = 0): ComparisonFrame {
   const rgba = new Uint8Array(8 * 8 * 4);
   for (let index = 0; index < 64; index += 1) rgba.set(index % 3 === 0
@@ -18,7 +16,7 @@ function view(id: string, renderOffset: number, renderSha: string): VisualBenchm
   return {
     viewId: id,
     cameraFingerprint: 'abcddcba12345678',
-    referenceSha256: sha('a'),
+    referenceSha256: `${'a'.repeat(63)}${suffix}`,
     renderSha256: `${renderSha.repeat(63)}${suffix}`,
     sceneFingerprint: `${renderSha.repeat(63)}${suffix}`,
     referenceOrigin: 'admitted-local-reference',
@@ -105,6 +103,15 @@ describe('same-input blind visual benchmark contract', () => {
     expect(report.blockers.join(' ')).toMatch(/reused across calibrated views/);
     expect(report.blockers.join(' ')).toMatch(/identical critical feature regions/);
     expect(report.blockers.join(' ')).toMatch(/same rendered pixels/);
+  });
+
+  it('rejects the same reference image relabelled as multiple calibrated views', () => {
+    const input = benchmark(true);
+    input.candidates[0].views[1].referenceSha256 = input.candidates[0].views[0].referenceSha256;
+    input.candidates[1].views[1].referenceSha256 = input.candidates[1].views[0].referenceSha256;
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/reference capture was reused/);
   });
 
   it('publishes multi-scale material evidence instead of treating equal mean colour as equal surface', () => {
