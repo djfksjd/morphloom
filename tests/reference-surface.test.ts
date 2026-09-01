@@ -103,6 +103,7 @@ describe('reference-conditioned surface analysis', () => {
     expect(Array.from(first.heights)).toEqual(Array.from(second.heights));
     expect(first.metrics.irregularity).toBeGreaterThan(0.7);
     expect(first.metrics.irregularity).toBeGreaterThan(flat.metrics.irregularity + 0.35);
+    expect(first.metrics.multiScaleBalance).toBeGreaterThanOrEqual(2 / 3);
     expect(flat.metrics.heightDeviation).toBeLessThan(1e-6);
     expect(Array.from(flat.heights).every(Number.isFinite)).toBe(true);
   });
@@ -128,6 +129,7 @@ describe('reference-conditioned surface analysis', () => {
     const first = quantizeReferenceHeightField(analysis, 8, 6, 4.2, 0.9, 'a1b2c3d4');
     const second = quantizeReferenceHeightField(analysis, 8, 6, 4.2, 0.9, 'A1B2C3D4');
     expect(first).toEqual(second);
+    expect(first.method).toBe('image-multiscale-height-v2');
     expect(first.samples).toHaveLength(48);
     expect(Math.max(...first.samples)).toBeLessThanOrEqual(32_767);
     expect(Math.min(...first.samples)).toBeGreaterThanOrEqual(-32_767);
@@ -197,7 +199,7 @@ describe('reference-conditioned surface compilation', () => {
     const secondMesh = second.root.getObjectByName('asphalt_core_sample') as THREE.Mesh;
     const audit = firstMesh.geometry.userData.morphloomSurfaceRelief as Record<string, unknown>;
     expect(audit).toMatchObject({
-      method: 'reference-conditioned-aggregate-height-field-v3',
+      method: 'reference-conditioned-multiscale-aggregate-height-field-v4',
       referenceFingerprint: '1234abcd',
       referenceSamples: 1024,
       referenceBlend: 0.9,

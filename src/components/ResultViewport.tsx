@@ -1012,6 +1012,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceAnimationTracks: sourceSnapshot.animationTracks,
           sourceAnimationClipNames: sourceSnapshot.animationClipNames,
           sourceAnimationTrackNames: sourceSnapshot.animationTrackNames,
+          sourceAnimationManifestEntries: sourceSnapshot.animationManifestEntries,
+          sourceAnimationManifestFingerprint: sourceSnapshot.animationManifestFingerprint,
           sourceGameLods: sourceSnapshot.gameLods,
           sourceCollisionPrimitives: sourceSnapshot.collisionPrimitives,
           compilerRevision: DELIVERY_PIPELINE_REVISION,
@@ -1046,6 +1048,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedAnimationTracks = audit.reopened?.animationTracks;
               diagnostic.__MORPHLOOM__.reopenedAnimationClipNames = audit.reopened?.animationClipNames;
               diagnostic.__MORPHLOOM__.reopenedAnimationTrackNames = audit.reopened?.animationTrackNames;
+              diagnostic.__MORPHLOOM__.reopenedAnimationManifestEntries = audit.reopened?.animationManifestEntries;
+              diagnostic.__MORPHLOOM__.reopenedAnimationManifestFingerprint = audit.reopened?.animationManifestFingerprint;
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.7.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.8.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -21,6 +21,8 @@ export interface SceneSnapshot {
   /** Sorted semantic identities, used to reject a GLB that preserves only counts. */
   animationClipNames: string[];
   animationTrackNames: string[];
+  animationManifestEntries: number;
+  animationManifestFingerprint: string;
   gameLods: number;
   collisionPrimitives: number;
   materials: number;
@@ -144,6 +146,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let bones = 0;
   let gameLods = 0;
   let collisionPrimitives = 0;
+  let animationManifestEntries = 0;
+  let animationManifestFingerprint = 'none';
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -157,10 +161,19 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     hasher.text(object.name);
     hasher.array(object.matrixWorld.elements);
     finiteTransforms = finiteTransforms && object.matrixWorld.elements.every(Number.isFinite);
-    const gameDelivery = object.userData.gameDelivery as { lods?: unknown[]; collisionPrimitives?: unknown[] } | undefined;
+    const gameDelivery = object.userData.gameDelivery as {
+      lods?: unknown[];
+      collisionPrimitives?: unknown[];
+      animationSet?: unknown[];
+    } | undefined;
     if (gameDelivery) {
       gameLods = Math.max(gameLods, Array.isArray(gameDelivery.lods) ? gameDelivery.lods.length : 0);
       collisionPrimitives = Math.max(collisionPrimitives, Array.isArray(gameDelivery.collisionPrimitives) ? gameDelivery.collisionPrimitives.length : 0);
+      if (Array.isArray(gameDelivery.animationSet) && gameDelivery.animationSet.length >= animationManifestEntries) {
+        animationManifestEntries = gameDelivery.animationSet.length;
+        animationManifestFingerprint = fingerprintJson(gameDelivery.animationSet);
+        hasher.text(animationManifestFingerprint);
+      }
     }
     if (object instanceof THREE.Bone) bones += 1;
     if (!(object instanceof THREE.Mesh)) return;
@@ -242,6 +255,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     animationTracks,
     animationClipNames: animationClipNames.sort(),
     animationTrackNames: animationTrackNames.sort(),
+    animationManifestEntries,
+    animationManifestFingerprint,
     gameLods,
     collisionPrimitives,
     materials: materials.size,
@@ -368,6 +383,10 @@ export function compareGlbRoundTrip(
   if (source.animationTrackNames.join('|') !== reopened.animationTrackNames.join('|')) {
     blockers.push('animation binding identities changed during GLB round-trip');
   }
+  if (source.animationManifestEntries !== reopened.animationManifestEntries
+    || source.animationManifestFingerprint !== reopened.animationManifestFingerprint) {
+    blockers.push('animation delivery metadata changed during GLB round-trip');
+  }
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -383,6 +402,8 @@ export function compareGlbRoundTrip(
     && source.animationClips === reopened.animationClips && source.animationTracks === reopened.animationTracks
     && source.animationClipNames.join('|') === reopened.animationClipNames.join('|')
     && source.animationTrackNames.join('|') === reopened.animationTrackNames.join('|')
+    && source.animationManifestEntries === reopened.animationManifestEntries
+    && source.animationManifestFingerprint === reopened.animationManifestFingerprint
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'

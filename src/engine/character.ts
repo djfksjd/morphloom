@@ -5,7 +5,7 @@ import { morphPositions } from './morph';
 import { createSurfaceMaterial, inspectSurfaceSystem, type SurfaceReport } from './surface-system';
 import { createWebHeroDetails } from './web-hero';
 import { applyPoseDrivenClothWrinkles, CLOTH_WRINKLE_EVIDENCE, type ClothWrinkleReport } from './cloth-wrinkles';
-import { rigHumanoidGeometry } from './humanoid-rig';
+import { humanoidAnimationDelivery, rigHumanoidGeometry } from './humanoid-rig';
 import { analyzeTopology } from './topology';
 import {
   deformPointByReferencePose,
@@ -50,7 +50,7 @@ export interface CharacterBuild {
 }
 
 interface GameDeliveryManifest {
-  schema: 'morphloom.game-delivery/0.2';
+  schema: 'morphloom.game-delivery/0.3';
   lods: Array<{ level: number; triangles: number; role: 'render' }>;
   collisionPrimitives: Array<{
     id: string;
@@ -60,7 +60,14 @@ interface GameDeliveryManifest {
     height?: number;
   }>;
   textureSets: number;
-  animationSet: Array<{ name: string; duration: number; tracks: number; loop: true }>;
+  animationSet: Array<{
+    name: string;
+    duration: number;
+    tracks: number;
+    loop: boolean;
+    category: string;
+    rootMotion: 'in-place' | 'none';
+  }>;
 }
 
 function createGameDeliveryManifest(
@@ -74,7 +81,7 @@ function createGameDeliveryManifest(
   const bodyHeight = Math.max(bodyRadius * 2, metrics.heightMeters * 0.72);
   const headRadius = Math.max(0.06, Math.min(size.x, size.z) * 0.25);
   return {
-    schema: 'morphloom.game-delivery/0.2',
+    schema: 'morphloom.game-delivery/0.3',
     lods: [
       { level: 0, triangles: Math.round(metrics.triangles), role: 'render' },
       ...(lod1Triangles === undefined ? [] : [{ level: 1, triangles: lod1Triangles, role: 'render' as const }]),
@@ -84,12 +91,18 @@ function createGameDeliveryManifest(
       { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius },
     ],
     textureSets: 1,
-    animationSet: animations.map((clip) => ({
-      name: clip.name,
-      duration: clip.duration,
-      tracks: clip.tracks.length,
-      loop: true,
-    })),
+    animationSet: animations.map((clip) => {
+      const delivery = humanoidAnimationDelivery(clip.name);
+      if (!delivery) throw new Error(`Animation ${clip.name} is missing a delivery contract.`);
+      return {
+        name: clip.name,
+        duration: clip.duration,
+        tracks: clip.tracks.length,
+        loop: delivery.loop,
+        category: delivery.category,
+        rootMotion: delivery.rootMotion,
+      };
+    }),
   };
 }
 

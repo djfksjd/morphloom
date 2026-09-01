@@ -35,6 +35,34 @@ describe('material-region comparison', () => {
     expect(result.nextAction).toBe('refine-material');
   });
 
+  it('rejects regular stripes that imitate the colour and variance of irregular crushed aggregate', () => {
+    let state = 0x8c31_7a29;
+    const random = () => {
+      state ^= state << 13;
+      state ^= state >>> 17;
+      state ^= state << 5;
+      return (state >>> 0) / 0xffff_ffff;
+    };
+    const aggregate = texture(64, 64, (x, y) => {
+      const coarse = ((Math.floor(x / 5) * 37 + Math.floor(y / 7) * 53) % 92) - 46;
+      const fine = Math.round((random() - 0.5) * 84);
+      const value = Math.max(8, Math.min(224, 92 + coarse + fine));
+      return [value, value, value];
+    });
+    const stripes = texture(64, 64, (x) => {
+      const value = x % 8 < 4 ? 38 : 146;
+      return [value, value, value];
+    });
+    const result = compareMaterialFrames(aggregate, stripes, {
+      family: 'coating', roughness: 0.94, surfaceCharacter: 'granular',
+    });
+    expect(result.passed).toBe(false);
+    expect(result.scores.surfaceScale).toBeLessThan(0.8);
+    expect(result.mismatches).toEqual(expect.arrayContaining([
+      'wrong-surface-scale', 'surface-too-regular',
+    ]));
+  });
+
   it('rejects unbounded sampling requests and malformed frames', () => {
     const source = texture(8, 8, () => [20, 20, 20]);
     expect(() => compareMaterialFrames(source, source, undefined, 256)).toThrow(/grid/);

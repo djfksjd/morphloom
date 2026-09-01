@@ -10,6 +10,7 @@ import { buildOrnateKnife } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { snapshotScene } from '../src/engine/delivery-validation';
 import { analyzeTopology } from '../src/engine/topology';
+import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from '../src/engine/humanoid-rig';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, type HumanPack } from '../src/types';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 
@@ -29,22 +30,20 @@ describe('cross-domain semi-professional readiness', () => {
     const firstSnapshot = snapshotScene(first.root);
     const secondSnapshot = snapshotScene(second.root);
     expect(first.body).toBeInstanceOf(THREE.SkinnedMesh);
-    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 5, animationTracks: 50 });
-    expect(firstSnapshot.animationClipNames).toEqual([
-      'morphloom_hand_gesture',
-      'morphloom_idle_preview',
-      'morphloom_run_cycle',
-      'morphloom_turn_in_place',
-      'morphloom_walk_cycle',
-    ]);
+    expect(firstSnapshot).toMatchObject({ skeletons: 1, bones: 49, animationClips: 22, animationTracks: 185 });
+    expect(firstSnapshot.animationClipNames).toEqual([...HUMANOID_RUNTIME_CLIP_NAMES].sort());
     for (const clip of first.root.animations) {
       expect(clip.validate()).toBe(true);
       expect(clip.tracks.length).toBeGreaterThan(0);
+      const delivery = humanoidAnimationDelivery(clip.name);
+      expect(delivery).toBeDefined();
       for (const track of clip.tracks) {
         const stride = track.getValueSize();
-        expect(Array.from(track.values.slice(0, stride))).toEqual(
-          Array.from(track.values.slice(track.values.length - stride)),
-        );
+        if (delivery?.loop) {
+          expect(Array.from(track.values.slice(0, stride))).toEqual(
+            Array.from(track.values.slice(track.values.length - stride)),
+          );
+        }
         const firstKey = Array.from(track.values.slice(0, stride));
         const hasMotion = Array.from({ length: track.times.length }, (_, key) => (
           Array.from(track.values.slice(key * stride, key * stride + stride))
@@ -58,21 +57,21 @@ describe('cross-domain semi-professional readiness', () => {
     ]));
     expect(first.root.animations.find((clip) => clip.name === 'morphloom_hand_gesture')?.tracks.filter((track) => /^(thumb|index|middle|ring|little)_/.test(track.name))).toHaveLength(10);
     expect(first.root.userData.gameDelivery).toMatchObject({
-      schema: 'morphloom.game-delivery/0.2',
+      schema: 'morphloom.game-delivery/0.3',
       animationSet: expect.arrayContaining([
-        expect.objectContaining({ name: 'morphloom_idle_preview', tracks: 4, loop: true }),
-        expect.objectContaining({ name: 'morphloom_walk_cycle', tracks: 12, loop: true }),
-        expect.objectContaining({ name: 'morphloom_run_cycle', tracks: 12, loop: true }),
-        expect.objectContaining({ name: 'morphloom_turn_in_place', tracks: 6, loop: true }),
-        expect.objectContaining({ name: 'morphloom_hand_gesture', tracks: 16, loop: true }),
+        expect.objectContaining({ name: 'morphloom_idle_preview', tracks: 4, loop: true, category: 'idle', rootMotion: 'in-place' }),
+        expect.objectContaining({ name: 'morphloom_sprint_cycle', tracks: 12, loop: true, category: 'locomotion' }),
+        expect.objectContaining({ name: 'morphloom_jump_start', tracks: 8, loop: false, category: 'airborne', rootMotion: 'none' }),
+        expect.objectContaining({ name: 'morphloom_point', tracks: 6, loop: false, category: 'gesture' }),
+        expect.objectContaining({ name: 'morphloom_pick_up', tracks: 8, loop: false, category: 'interaction' }),
       ]),
     });
     expect(first.metrics.rig).toMatchObject({
       boneCount: 49,
       weightedVertices: first.metrics.vertices,
       maximumInfluences: 2,
-      animationClips: 5,
-      animationTracks: 50,
+      animationClips: 22,
+      animationTracks: 185,
     });
     expect(first.body.skeleton.bones.map((bone) => bone.name)).toEqual(expect.arrayContaining([
       'toe_L', 'toe_R', 'thumb_03_L', 'index_03_L', 'middle_03_R', 'little_03_R',
@@ -110,7 +109,7 @@ describe('cross-domain semi-professional readiness', () => {
     expect(mislocalizedFingerWeights).toBe(0);
     expect(first.metrics.rig.maximumWeightError).toBeLessThanOrEqual(1e-7);
     expect(secondSnapshot.fingerprint).toBe(firstSnapshot.fingerprint);
-  });
+  }, 20_000);
 
   it('passes separate animation and real-time game contracts for the editable base', () => {
     const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
@@ -125,13 +124,13 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.blockers).toEqual([]);
     expect(animation.pass).toBe(true);
     expect(animation.score).toBeGreaterThanOrEqual(98);
-    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 49, animationClips: 5, animationTracks: 50, animationSetCoverage: 1 });
+    expect(animation.metrics).toMatchObject({ skeletons: 2, bones: 49, animationClips: 22, animationTracks: 185, animationSetCoverage: 1 });
     expect(animation.metrics.bindPoseRmsErrorMm).toBeLessThanOrEqual(0.01);
     expect(animation.metrics.deformationMovedVertices).toBeGreaterThan(0);
     expect(animation.metrics.deformationMaximumMm).toBeGreaterThan(1);
     expect(animation.metrics.fingerBones).toBe(30);
     expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
-    expect(animation.metrics.fingerAnimationTracks).toBe(12);
+    expect(animation.metrics.fingerAnimationTracks).toBeGreaterThanOrEqual(19);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
@@ -159,7 +158,27 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.blockers.join(' ')).toMatch(/animation-clips/);
     expect(game.pass).toBe(false);
     expect(game.blockers.join(' ')).toMatch(/game-runtime-motion/);
-    expect(animation.metrics.animationSetCoverage).toBe(0.8);
+    expect(animation.metrics.animationSetCoverage).toBeCloseTo(21 / 22);
+  }, 20_000);
+
+  it('blocks a clip set whose loop seam is visually discontinuous even when names and counts remain intact', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const walk = build.root.animations.find((clip) => clip.name === 'morphloom_walk_cycle');
+    const hip = walk?.tracks.find((track) => track.name === 'hip_L.quaternion');
+    if (!hip) throw new Error('Missing walk hip track fixture.');
+    hip.values[hip.values.length - 4] += 0.2;
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.pass).toBe(false);
+    expect(game.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-clip-quality/);
+    expect(game.blockers.join(' ')).toMatch(/game-motion-quality/);
+    expect(animation.metrics.animationLoopClosureCoverage).toBeLessThan(1);
+    expect(animation.metrics.maximumAnimationQuaternionError).toBeGreaterThan(0.01);
   }, 20_000);
 
   it('passes industrial-design and millimetre 3D-print contracts on appropriate assets', () => {

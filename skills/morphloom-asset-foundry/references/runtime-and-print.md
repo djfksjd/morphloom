@@ -5,8 +5,9 @@ Apply only the contract matching the requested destination. Never award one univ
 ## Animation
 
 - Require a real `SkinnedMesh`, named bone hierarchy, normalized weights with no more than four non-zero influences per vertex, and deformation-safe closed body topology. Perturb at least one driven joint and measure finite, non-zero vertex movement; metadata-only rigs do not pass.
-- Include at least one playable clip with actual tracks. Reopen the delivered GLB and block if skeleton, bone, clip, or track counts drift.
-- Treat a posed static mesh, decorative bone names, or metadata-only rig as a failure. When articulated hands are in scope, require named finger segments, non-zero finger-bone weights on actual hand vertices, and at least one finger animation track after GLB reopen. Face rigs, blendshapes, finger collision/muscle deformation, cloth physics, and retargeting remain separate scope unless requested and proved.
+- For the bundled humanoid runtime base, require the complete `HUMANOID_RUNTIME_CLIP_NAMES` contract: 22 semantic idle, locomotion, turn, stance, airborne, gesture, and interaction clips with at least 180 tracks. A deliberately narrower custom delivery may declare a smaller set, but must not be reported as the full runtime base.
+- Every declared track must bind a real bone and contain measurable motion. Looping clips must close at the first/last key within the engine tolerance; in-place locomotion must not accumulate root translation. Reopen the delivered GLB and block if skeleton, bone, clip, track, semantic metadata, loop policy, or root-motion policy drifts.
+- Treat a posed static mesh, decorative bone names, zero-delta tracks, or metadata-only rig as a failure. When articulated hands are in scope, require named finger segments, non-zero finger-bone weights on actual hand vertices, and actual finger motion after GLB reopen. Face rigs, blendshapes, finger collision/muscle deformation, cloth physics, and cross-skeleton retargeting remain separate scope unless requested and proved.
 
 ## Game and real-time use
 

@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T15:34:08.077Z",
+  "generatedAt": "2026-09-01T16:07:23.855Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -106,7 +106,7 @@
       "cellsCompared": 88
     },
     "materialComparison": {
-      "method": "material-region-v1",
+      "method": "material-region-v2",
       "reference": {
         "meanRgb": [
           138,
@@ -118,6 +118,21 @@
         "horizontalGradient": 0,
         "verticalGradient": 0,
         "anisotropyProxy": 0,
+        "fineContrast": 0,
+        "coarseContrast": 0,
+        "gradientEntropy": 0,
+        "periodicity": 0,
+        "irregularity": 0.42,
+        "gradientHistogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
         "foregroundCoverage": 0.34375
       },
       "render": {
@@ -131,6 +146,21 @@
         "horizontalGradient": 0,
         "verticalGradient": 0,
         "anisotropyProxy": 0,
+        "fineContrast": 0,
+        "coarseContrast": 0,
+        "gradientEntropy": 0,
+        "periodicity": 0,
+        "irregularity": 0.42,
+        "gradientHistogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
         "foregroundCoverage": 0.34375
       },
       "deltaE76": 0,
@@ -138,8 +168,10 @@
         "baseColor": 1,
         "meanLuma": 1,
         "microstructure": 1,
+        "surfaceScale": 1,
+        "irregularity": 1,
         "directionalResponse": 1,
-        "overall": 1
+        "overall": 0.9999999999999999
       },
       "mismatches": [],
       "passed": true,
@@ -305,6 +337,11 @@
             "animationClips": 0,
             "animationTracks": 0,
             "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -406,6 +443,11 @@
             "animationClips": 0,
             "animationTracks": 0,
             "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -497,7 +539,7 @@
               "label": "손가락 리그·가중치",
               "pass": true,
               "score": 100,
-              "detail": "30 finger bones · 7000 weighted vertices · 12 animated tracks",
+              "detail": "30 finger bones · 7000 weighted vertices · 19 animated tracks",
               "blocking": true
             },
             {
@@ -505,7 +547,15 @@
               "label": "납품용 기본 동작 세트",
               "pass": true,
               "score": 100,
-              "detail": "5 clips · 50 tracks · 필수 동작 100%",
+              "detail": "22 clips · 185 tracks · 필수 동작 100%",
+              "blocking": true
+            },
+            {
+              "id": "animation-clip-quality",
+              "label": "동작 바인딩·반복·루트모션 품질",
+              "pass": true,
+              "score": 100,
+              "detail": "binding 100% · motion 100% · loop 100% · in-place 100%",
               "blocking": true
             },
             {
@@ -536,9 +586,14 @@
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
-            "animationClips": 5,
-            "animationTracks": 50,
+            "animationClips": 22,
+            "animationTracks": 185,
             "animationSetCoverage": 1,
+            "animationBindingCoverage": 1,
+            "animationMotionCoverage": 1,
+            "animationLoopClosureCoverage": 1,
+            "animationInPlaceCoverage": 1,
+            "maximumAnimationQuaternionError": 3.5599639458538945e-8,
             "bindPoseRmsErrorMm": 0.00001921850244310798,
             "deformationMovedVertices": 708,
             "deformationMaximumMm": 35.459934188085825,
@@ -547,7 +602,7 @@
             "collisionPrimitives": 2,
             "fingerBones": 30,
             "fingerWeightedVertices": 7000,
-            "fingerAnimationTracks": 12,
+            "fingerAnimationTracks": 19,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
@@ -646,7 +701,15 @@
               "label": "게임 런타임 동작 세트",
               "pass": true,
               "score": 100,
-              "detail": "5 clips · idle/walk/run/turn/gesture 100%",
+              "detail": "22 clips · 이동/점프/제스처/상호작용 100%",
+              "blocking": true
+            },
+            {
+              "id": "game-motion-quality",
+              "label": "게임 동작 품질 계약",
+              "pass": true,
+              "score": 100,
+              "detail": "binding 100% · motion 100% · loop 100% · in-place 100%",
               "blocking": true
             },
             {
@@ -693,9 +756,14 @@
             "pbrSurfaceCoverage": 1,
             "skeletons": 2,
             "bones": 49,
-            "animationClips": 5,
-            "animationTracks": 50,
+            "animationClips": 22,
+            "animationTracks": 185,
             "animationSetCoverage": 1,
+            "animationBindingCoverage": 1,
+            "animationMotionCoverage": 1,
+            "animationLoopClosureCoverage": 1,
+            "animationInPlaceCoverage": 1,
+            "maximumAnimationQuaternionError": 3.5599639458538945e-8,
             "bindPoseRmsErrorMm": 0.00001921850244310798,
             "deformationMovedVertices": 708,
             "deformationMaximumMm": 35.459934188085825,
@@ -704,7 +772,7 @@
             "collisionPrimitives": 2,
             "fingerBones": 30,
             "fingerWeightedVertices": 7000,
-            "fingerAnimationTracks": 12,
+            "fingerAnimationTracks": 19,
             "maximumSkinWeightError": 2.9802322387695312e-8,
             "maximumSkinInfluences": 2,
             "minimumMeshAxisMm": 136.7105718143282,
@@ -813,6 +881,11 @@
             "animationClips": 0,
             "animationTracks": 0,
             "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
             "deformationMovedVertices": 0,
             "deformationMaximumMm": 0,
             "deformationFinite": true,
@@ -892,10 +965,10 @@
     {
       "capability": "skeletal animation breadth",
       "img2threejs": "latest showcase: 41–42 bones and 10–27 clips",
-      "morphloom": "49 bones and 5 semantic delivery clips"
+      "morphloom": "49 bones and 22 semantic delivery clips / 185 tracks"
     },
     {
-      "capability": "measured bone deformation and exact GLB animation-binding preservation",
+      "capability": "measured bone deformation, motion/loop/root-motion checks, and exact GLB animation-metadata preservation",
       "img2threejs": "not established in pinned core audit",
       "morphloom": "yes"
     },

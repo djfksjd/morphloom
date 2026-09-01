@@ -8,6 +8,10 @@ export interface ReferenceSurfaceMetrics {
   normalizedEntropy: number;
   meanGradient: number;
   heightDeviation: number;
+  fineDeviation: number;
+  mediumDeviation: number;
+  coarseDeviation: number;
+  multiScaleBalance: number;
   periodicity: number;
   irregularity: number;
 }
@@ -22,7 +26,7 @@ export interface ReferenceSurfaceAnalysis {
 }
 
 export interface QuantizedReferenceHeightField {
-  method: 'image-highpass-height-v1';
+  method: 'image-highpass-height-v1' | 'image-multiscale-height-v2';
   width: number;
   height: number;
   samples: number[];
@@ -30,6 +34,12 @@ export interface QuantizedReferenceHeightField {
   blend: number;
   fingerprint: string;
   irregularity: number;
+}
+
+function rms(values: Float32Array): number {
+  let squared = 0;
+  for (const value of values) squared += value * value;
+  return Math.sqrt(squared / Math.max(1, values.length));
 }
 
 function assertImageInput(pixels: Uint8Array | Uint8ClampedArray, width: number, height: number): void {
@@ -119,18 +129,35 @@ export function analyzeReferenceSurface(
     histogram[Math.min(31, Math.floor(value * 32))] += 1;
   }
   const integral = buildIntegral(luminance, width, height);
-  const radius = Math.max(2, Math.round(Math.min(width, height) * 0.018));
+  const shortestSide = Math.min(width, height);
+  const fineRadius = Math.max(1, Math.round(shortestSide * 0.006));
+  const mediumRadius = Math.max(fineRadius + 1, Math.round(shortestSide * 0.022));
+  const coarseRadius = Math.max(mediumRadius + 1, Math.round(shortestSide * 0.075));
+  const fineBand = new Float32Array(count);
+  const mediumBand = new Float32Array(count);
+  const coarseBand = new Float32Array(count);
   const highpass = new Float32Array(count);
-  let squaredSum = 0;
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const index = y * width + x;
-      const local = luminance[index]! - boxMean(integral, width, height, x, y, radius);
-      highpass[index] = local;
-      squaredSum += local * local;
+      const fineMean = boxMean(integral, width, height, x, y, fineRadius);
+      const mediumMean = boxMean(integral, width, height, x, y, mediumRadius);
+      const coarseMean = boxMean(integral, width, height, x, y, coarseRadius);
+      const fine = luminance[index]! - fineMean;
+      const medium = fineMean - mediumMean;
+      const coarse = mediumMean - coarseMean;
+      fineBand[index] = fine;
+      mediumBand[index] = medium;
+      coarseBand[index] = coarse;
+      // Fine facets remain crisp while medium aggregate and broad cavities are
+      // retained at lower amplitude instead of being erased as illumination.
+      highpass[index] = fine * 0.58 + medium * 0.3 + coarse * 0.12;
     }
   }
-  const deviation = Math.sqrt(squaredSum / count);
+  const fineDeviation = rms(fineBand);
+  const mediumDeviation = rms(mediumBand);
+  const coarseDeviation = rms(coarseBand);
+  const deviation = rms(highpass);
   const normalizer = Math.max(deviation * 2.8, 1 / 255);
   const heights = new Float32Array(count);
   for (let index = 0; index < count; index += 1) {
@@ -171,8 +198,15 @@ export function analyzeReferenceSurface(
     normalizedCorrelation(heights, width, height, 0, Math.max(1, Math.floor(height / 4))),
   );
   const meanGradient = gradientSum / count;
+  const scaleTotal = fineDeviation + mediumDeviation + coarseDeviation;
+  const activeScales = scaleTotal <= 1e-12 ? 0 : [fineDeviation, mediumDeviation, coarseDeviation]
+    .filter((value) => value / scaleTotal >= 0.08).length;
+  const multiScaleBalance = activeScales / 3;
   const irregularity = THREE.MathUtils.clamp(
-    normalizedEntropy * 0.38 + Math.min(1, meanGradient * 2.8) * 0.42 + (1 - periodicity) * 0.2,
+    normalizedEntropy * 0.3
+      + Math.min(1, meanGradient * 2.8) * 0.34
+      + (1 - periodicity) * 0.2
+      + multiScaleBalance * 0.16,
     0,
     1,
   );
@@ -186,6 +220,10 @@ export function analyzeReferenceSurface(
       normalizedEntropy,
       meanGradient,
       heightDeviation: deviation,
+      fineDeviation,
+      mediumDeviation,
+      coarseDeviation,
+      multiScaleBalance,
       periodicity,
       irregularity,
     },
@@ -230,7 +268,7 @@ export function quantizeReferenceHeightField(
     }
   }
   return {
-    method: 'image-highpass-height-v1',
+    method: 'image-multiscale-height-v2',
     width,
     height,
     samples,

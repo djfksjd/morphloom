@@ -155,6 +155,7 @@ export function ViewerApp() {
   const [busyAction, setBusyAction] = useState<string>();
   const [jobs, setJobs] = useState<LocalJob[]>([]);
   const [deliveryAudit, setDeliveryAudit] = useState<DeliveryAudit>();
+  const [deliveryVerifying, setDeliveryVerifying] = useState(true);
   const [telemetry, setTelemetry] = useState<LocalBuildTelemetry>();
   const [importedExpiresAt, setImportedExpiresAt] = useState<number>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
@@ -285,6 +286,11 @@ export function ViewerApp() {
     setMeasurementMissed(false);
   }, []);
 
+  const handleDeliveryAudit = useCallback((audit: DeliveryAudit | undefined) => {
+    setDeliveryAudit(audit);
+    setDeliveryVerifying(audit === undefined);
+  }, []);
+
   const clearMeasurement = useCallback(() => {
     viewportRef.current?.clearMeasurement();
     setMeasurementResult(undefined);
@@ -331,6 +337,7 @@ export function ViewerApp() {
     setMeasurementPoints(0);
     setMeasurementMissed(false);
     setDeliveryAudit(undefined);
+    setDeliveryVerifying(true);
     setTelemetry(undefined);
     setImportedExpiresAt(undefined);
     if (importExpiryTimerRef.current !== undefined) {
@@ -374,6 +381,7 @@ export function ViewerApp() {
       }
       setSelectedPart(undefined);
       setDeliveryAudit(undefined);
+      setDeliveryVerifying(true);
       setTelemetry(undefined);
       setViewerNote('가져온 결과가 30분 보존기간 만료로 브라우저 메모리에서 자동 제거되었습니다.');
     }, IMPORTED_RESULT_TTL_MS);
@@ -460,7 +468,13 @@ export function ViewerApp() {
         </div>
         <div className="result-selector">
           <span>ACTIVE RESULT</span>
-          <select disabled={queueLocked} value={activeAssetId} onChange={(event) => selectAsset(event.target.value)} aria-label="검수할 결과 선택">
+          <select
+            disabled={queueLocked}
+            aria-disabled={queueLocked || deliveryVerifying}
+            value={activeAssetId}
+            onChange={(event) => { if (!deliveryVerifying) selectAsset(event.target.value); }}
+            aria-label="검수할 결과 선택"
+          >
             {activeAssetId === 'imported' && <option value="imported">Imported AssemblyIR</option>}
             {VIEWER_ASSETS.map((item) => <option value={item.id} key={item.id}>{item.label} — {item.caption}</option>)}
           </select>
@@ -612,7 +626,7 @@ export function ViewerApp() {
                 onPartSelected={setSelectedPart}
                 onMeasurementChange={handleMeasurementChange}
                 onMeasurementMiss={() => setMeasurementMissed(true)}
-                onDeliveryAudit={setDeliveryAudit}
+                onDeliveryAudit={handleDeliveryAudit}
                 onTelemetry={setTelemetry}
               />
             </ViewportErrorBoundary>
@@ -882,6 +896,7 @@ export function ViewerApp() {
                     setMeasurementEnabled(true);
                     setMeasurementUnit(value.metadata?.assetKind === 'building' ? 'm' : 'mm');
                     setDeliveryAudit(undefined);
+                    setDeliveryVerifying(true);
                     setTelemetry(undefined);
                     scheduleImportedExpiry();
                     setViewerNote(`AssemblyIR 결과 로드 · ${value.components.length}개 부품`);
@@ -939,7 +954,8 @@ export function ViewerApp() {
         <span className="eyebrow">result pipeline</span>
         {(assetKind === 'human' ? [
           ['01', 'CHARACTER IR', 'pass'], ['02', 'MORPH', pack ? 'pass' : 'run'], ['03', 'MATERIAL', pack ? 'pass' : 'wait'],
-          ['04', 'RIG', 'warn'], ['05', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['06', 'EXPORT', qualityBlocked || deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit ? 'ready' : 'run'],
+          ['04', 'RIG', deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit?.reopened?.skeletons && deliveryAudit.reopened.animationClips >= 22 ? 'pass' : deliveryAudit ? 'warn' : 'run'],
+          ['05', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['06', 'EXPORT', qualityBlocked || deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit ? 'ready' : 'run'],
         ] : [
           ['01', 'SOURCE', 'pass'], ['02', assemblyIR || productSpec.kind === 'ornate-knife' ? 'ASSEMBLY IR' : 'PRODUCT SPEC', 'pass'], ['03', 'COMPILE', pack ? 'pass' : 'run'],
           ['04', 'TOPOLOGY', pack ? 'pass' : 'wait'], ['05', 'PART TREE', pack ? 'pass' : 'wait'], ['06', 'EXPORT', qualityBlocked || deliveryAudit?.status === 'blocked' ? 'blocked' : deliveryAudit ? 'ready' : 'run'],

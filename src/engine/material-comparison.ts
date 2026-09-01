@@ -11,6 +11,7 @@ export interface MaterialExpectation {
   family?: 'metal' | 'glass' | 'gemstone' | 'plastic' | 'fabric' | 'wood' | 'coating' | 'other';
   roughness?: number;
   anisotropy?: number;
+  surfaceCharacter?: 'smooth' | 'directional' | 'granular' | 'woven' | 'porous';
 }
 
 export interface MaterialFeatures {
@@ -20,6 +21,12 @@ export interface MaterialFeatures {
   horizontalGradient: number;
   verticalGradient: number;
   anisotropyProxy: number;
+  fineContrast: number;
+  coarseContrast: number;
+  gradientEntropy: number;
+  periodicity: number;
+  irregularity: number;
+  gradientHistogram: number[];
   foregroundCoverage: number;
 }
 
@@ -27,13 +34,15 @@ export type MaterialMismatch =
   | 'wrong-base-color'
   | 'wrong-exposure-or-value'
   | 'wrong-roughness-or-microstructure'
+  | 'wrong-surface-scale'
+  | 'surface-too-regular'
   | 'wrong-anisotropy'
   | 'highlight-response-too-flat'
   | 'highlight-response-too-sharp'
   | 'missing-environment-response';
 
 export interface MaterialComparisonResult {
-  method: 'material-region-v1';
+  method: 'material-region-v2';
   reference: MaterialFeatures;
   render: MaterialFeatures;
   deltaE76: number;
@@ -41,6 +50,8 @@ export interface MaterialComparisonResult {
     baseColor: number;
     meanLuma: number;
     microstructure: number;
+    surfaceScale: number;
+    irregularity: number;
     directionalResponse: number;
     overall: number;
   };
@@ -77,6 +88,14 @@ function luma(rgb: readonly [number, number, number]): number {
   return (rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722) / 255;
 }
 
+function histogramSimilarity(first: readonly number[], second: readonly number[]): number {
+  let difference = 0;
+  for (let index = 0; index < Math.max(first.length, second.length); index += 1) {
+    difference += Math.abs((first[index] ?? 0) - (second[index] ?? 0));
+  }
+  return Math.max(0, 1 - difference * 0.5);
+}
+
 function sampleFeatures(frame: ComparisonFrame, grid: number): MaterialFeatures {
   validateFrame(frame, 'Input');
   if (!Number.isInteger(grid) || grid < MIN_GRID || grid > MAX_GRID) throw new Error(`Material grid must be ${MIN_GRID}..${MAX_GRID}.`);
@@ -106,6 +125,23 @@ function sampleFeatures(frame: ComparisonFrame, grid: number): MaterialFeatures 
   let vertical = 0;
   let horizontalCount = 0;
   let verticalCount = 0;
+  const gradientHistogram = new Array<number>(8).fill(0);
+  const contrastAt = (radius: number): number => {
+    let contrast = 0;
+    let compared = 0;
+    for (let y = radius; y < grid - radius; y += 1) {
+      for (let x = radius; x < grid - radius; x += 1) {
+        const index = y * grid + x;
+        if (useForeground && !selected[index]) continue;
+        const neighbours = [index - radius, index + radius, index - radius * grid, index + radius * grid];
+        if (useForeground && neighbours.some((neighbour) => !selected[neighbour])) continue;
+        const mean = neighbours.reduce((sum, neighbour) => sum + luminances[neighbour]!, 0) / neighbours.length;
+        contrast += Math.abs(luminances[index]! - mean);
+        compared += 1;
+      }
+    }
+    return contrast / Math.max(1, compared);
+  };
   for (let y = 0; y < grid; y += 1) {
     for (let x = 0; x < grid; x += 1) {
       const index = y * grid + x;
@@ -117,10 +153,52 @@ function sampleFeatures(frame: ComparisonFrame, grid: number): MaterialFeatures 
         vertical += Math.abs(luminances[index] - luminances[index - grid]);
         verticalCount += 1;
       }
+      if (x > 0 && x < grid - 1 && y > 0 && y < grid - 1
+        && (!useForeground || (selected[index] && selected[index - 1] && selected[index + 1]
+          && selected[index - grid] && selected[index + grid]))) {
+        const gx = luminances[index + 1]! - luminances[index - 1]!;
+        const gy = luminances[index + grid]! - luminances[index - grid]!;
+        const magnitude = Math.hypot(gx, gy);
+        const angle = (Math.atan2(gy, gx) + Math.PI) % Math.PI;
+        const bin = Math.min(7, Math.floor(angle / Math.PI * 8));
+        gradientHistogram[bin] += magnitude;
+      }
     }
   }
   const horizontalGradient = horizontal / Math.max(1, horizontalCount);
   const verticalGradient = vertical / Math.max(1, verticalCount);
+  const histogramTotal = gradientHistogram.reduce((sum, value) => sum + value, 0);
+  if (histogramTotal > 1e-12) {
+    for (let index = 0; index < gradientHistogram.length; index += 1) gradientHistogram[index] /= histogramTotal;
+  }
+  let gradientEntropy = 0;
+  for (const value of gradientHistogram) if (value > 0) gradientEntropy -= value * Math.log2(value);
+  gradientEntropy /= Math.log2(gradientHistogram.length);
+  const centered = luminances.map((value) => value - meanLuma);
+  let periodicity = 0;
+  const maximumLag = Math.max(2, Math.min(16, Math.floor(grid / 3)));
+  for (let lag = 2; lag <= maximumLag; lag += 1) {
+    for (const verticalLag of [false, true]) {
+      let dot = 0;
+      let leftEnergy = 0;
+      let rightEnergy = 0;
+      for (let y = 0; y < grid - (verticalLag ? lag : 0); y += 1) {
+        for (let x = 0; x < grid - (verticalLag ? 0 : lag); x += 1) {
+          const first = y * grid + x;
+          const second = (y + (verticalLag ? lag : 0)) * grid + x + (verticalLag ? 0 : lag);
+          if (useForeground && (!selected[first] || !selected[second])) continue;
+          dot += centered[first]! * centered[second]!;
+          leftEnergy += centered[first]! ** 2;
+          rightEnergy += centered[second]! ** 2;
+        }
+      }
+      if (leftEnergy > 1e-12 && rightEnergy > 1e-12) {
+        periodicity = Math.max(periodicity, Math.abs(dot / Math.sqrt(leftEnergy * rightEnergy)));
+      }
+    }
+  }
+  const fineContrast = contrastAt(1);
+  const coarseContrast = contrastAt(Math.max(2, Math.round(grid / 12)));
   return {
     meanRgb,
     meanLuma,
@@ -128,6 +206,12 @@ function sampleFeatures(frame: ComparisonFrame, grid: number): MaterialFeatures 
     horizontalGradient,
     verticalGradient,
     anisotropyProxy: Math.min(4, Math.max(horizontalGradient, verticalGradient) / Math.max(1e-6, Math.min(horizontalGradient, verticalGradient))),
+    fineContrast,
+    coarseContrast,
+    gradientEntropy,
+    periodicity,
+    irregularity: Math.max(0, Math.min(1, gradientEntropy * 0.58 + (1 - periodicity) * 0.42)),
+    gradientHistogram,
     foregroundCoverage: selectedCount / selected.length,
   };
 }
@@ -170,15 +254,35 @@ export function compareMaterialFrames(
   const scores = {
     baseColor: similarity(colorDistance, 0, 50),
     meanLuma: similarity(reference.meanLuma, render.meanLuma, 0.45),
-    microstructure: similarity(reference.lumaVariance, render.lumaVariance, 0.12),
-    directionalResponse: similarity(reference.anisotropyProxy, render.anisotropyProxy, 2),
+    microstructure: (
+      similarity(reference.lumaVariance, render.lumaVariance, 0.12) * 0.35
+      + similarity(reference.fineContrast, render.fineContrast, 0.18) * 0.4
+      + histogramSimilarity(reference.gradientHistogram, render.gradientHistogram) * 0.25
+    ),
+    surfaceScale: (
+      similarity(reference.coarseContrast, render.coarseContrast, 0.2) * 0.35
+      + similarity(reference.coarseContrast / Math.max(1e-5, reference.fineContrast), render.coarseContrast / Math.max(1e-5, render.fineContrast), 2) * 0.25
+      + similarity(reference.periodicity, render.periodicity, 0.65) * 0.25
+      + similarity(reference.gradientEntropy, render.gradientEntropy, 0.75) * 0.15
+    ),
+    irregularity: similarity(reference.irregularity, render.irregularity, 0.5),
+    directionalResponse: (
+      similarity(reference.anisotropyProxy, render.anisotropyProxy, 2) * 0.5
+      + histogramSimilarity(reference.gradientHistogram, render.gradientHistogram) * 0.5
+    ),
     overall: 0,
   };
-  scores.overall = scores.baseColor * 0.4 + scores.meanLuma * 0.2 + scores.microstructure * 0.25 + scores.directionalResponse * 0.15;
+  scores.overall = scores.baseColor * 0.3 + scores.meanLuma * 0.15 + scores.microstructure * 0.2
+    + scores.surfaceScale * 0.15 + scores.irregularity * 0.1 + scores.directionalResponse * 0.1;
   const mismatches: MaterialMismatch[] = [];
   if (colorDistance > 20) mismatches.push('wrong-base-color');
   if (scores.meanLuma < 0.72) mismatches.push('wrong-exposure-or-value');
   if (scores.microstructure < 0.62) mismatches.push('wrong-roughness-or-microstructure');
+  if (scores.surfaceScale < 0.62) mismatches.push('wrong-surface-scale');
+  if (expected?.surfaceCharacter === 'granular'
+    && (render.irregularity < 0.45 || render.irregularity < reference.irregularity - 0.16)) {
+    mismatches.push('surface-too-regular');
+  }
   if ((expected?.anisotropy ?? 0) > 0.5 && render.anisotropyProxy < 1.25) mismatches.push('wrong-anisotropy');
   if ((expected?.roughness ?? 0.5) < 0.2 && render.lumaVariance < 0.003) mismatches.push('highlight-response-too-flat');
   if ((expected?.roughness ?? 0.5) > 0.8 && render.lumaVariance > 0.08) mismatches.push('highlight-response-too-sharp');
@@ -186,9 +290,13 @@ export function compareMaterialFrames(
     mismatches.push('missing-environment-response');
   }
   const uniqueMismatches = [...new Set(mismatches)];
-  const passed = scores.overall >= 0.7 && !uniqueMismatches.includes('wrong-base-color') && !uniqueMismatches.includes('missing-environment-response');
+  const passed = scores.overall >= 0.72
+    && !uniqueMismatches.includes('wrong-base-color')
+    && !uniqueMismatches.includes('missing-environment-response')
+    && !uniqueMismatches.includes('wrong-surface-scale')
+    && !uniqueMismatches.includes('surface-too-regular');
   return {
-    method: 'material-region-v1',
+    method: 'material-region-v2',
     reference,
     render,
     deltaE76: colorDistance,

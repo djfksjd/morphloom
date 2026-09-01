@@ -35,8 +35,8 @@ export function evaluateQuality(
   const poseErrorMm = (metrics?.poseLandmarkRmsMeters ?? Number.POSITIVE_INFINITY) * 1000;
   const deliveredRig = Boolean(deliveryAudit?.status === 'pass'
     && (deliveryAudit.source?.bones ?? 0) >= 49
-    && (deliveryAudit.source?.animationClips ?? 0) >= 5
-    && (deliveryAudit.source?.animationTracks ?? 0) >= 50);
+    && (deliveryAudit.source?.animationClips ?? 0) >= 22
+    && (deliveryAudit.source?.animationTracks ?? 0) >= 180);
   const rigScore = webHero
     ? Number.isFinite(poseErrorMm) ? Math.round(Math.max(0, 100 - poseErrorMm * 1.6)) : 0
     : deliveredRig ? 100 : 0;
@@ -84,7 +84,7 @@ export function evaluateQuality(
         ? `17개 관절 목표 RMS ${Number.isFinite(poseErrorMm) ? poseErrorMm.toFixed(1) : '—'} mm · 오른손=화면 왼쪽 · 숨은 깊이는 inferred`
         : deliveredRig
           ? `${deliveryAudit?.source?.bones ?? 0}본 · 30개 손가락 본 실제 웨이트 · ${deliveryAudit?.source?.animationClips ?? 0}클립/${deliveryAudit?.source?.animationTracks ?? 0}트랙 GLB 보존`
-          : '49본·손가락 웨이트·5개 기본 동작·50개 애니메이션 트랙의 실제 GLB 보존 필요',
+          : '49본·손가락 웨이트·22개 이동/점프/제스처/상호작용 동작·180개 이상 트랙의 실제 GLB 보존 필요',
     },
     {
       id: 'export',

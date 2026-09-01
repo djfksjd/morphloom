@@ -88,4 +88,16 @@ describe('same-input blind visual benchmark contract', () => {
     expect(report.blockers.join(' ')).toMatch(/same calibrated camera/);
     expect(report.blockers.join(' ')).toMatch(/no critical feature regions/);
   });
+
+  it('publishes multi-scale material evidence instead of treating equal mean colour as equal surface', () => {
+    const report = auditSameInputVisualBenchmark(benchmark());
+    expect(report.scores.morphloom).toMatchObject({
+      surfaceScaleSimilarity: expect.any(Number),
+      irregularitySimilarity: expect.any(Number),
+    });
+    expect(report.scores.morphloom.views[0]).toMatchObject({
+      surfaceScaleSimilarity: expect.any(Number),
+      irregularitySimilarity: expect.any(Number),
+    });
+  });
 });

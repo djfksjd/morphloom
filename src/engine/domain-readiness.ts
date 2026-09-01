@@ -3,6 +3,7 @@ import type { AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
 import { snapshotScene } from './delivery-validation';
 import { inspectSurfaceSystem } from './surface-system';
 import { analyzeTopology, type MeshTopologyReport } from './topology';
+import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humanoid-rig';
 
 export type ProductionDomain =
   | 'architecture'
@@ -11,13 +12,7 @@ export type ProductionDomain =
   | 'game'
   | '3d-print';
 
-const REQUIRED_RUNTIME_CLIPS = [
-  'morphloom_idle_preview',
-  'morphloom_walk_cycle',
-  'morphloom_run_cycle',
-  'morphloom_turn_in_place',
-  'morphloom_hand_gesture',
-] as const;
+const REQUIRED_RUNTIME_CLIPS = HUMANOID_RUNTIME_CLIP_NAMES;
 
 export interface DomainReadinessInput {
   domain: ProductionDomain;
@@ -59,6 +54,11 @@ export interface DomainReadinessReport {
     animationClips: number;
     animationTracks: number;
     animationSetCoverage: number;
+    animationBindingCoverage: number;
+    animationMotionCoverage: number;
+    animationLoopClosureCoverage: number;
+    animationInPlaceCoverage: number;
+    maximumAnimationQuaternionError: number;
     bindPoseRmsErrorMm?: number;
     deformationMovedVertices: number;
     deformationMaximumMm: number;
@@ -75,6 +75,69 @@ export interface DomainReadinessReport {
     enclosedVolumeMm3?: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
+  };
+}
+
+function inspectAnimationDelivery(root: THREE.Object3D): {
+  bindingCoverage: number;
+  motionCoverage: number;
+  loopClosureCoverage: number;
+  inPlaceCoverage: number;
+  maximumQuaternionError: number;
+} {
+  const boneNames = new Set<string>();
+  root.traverse((object) => {
+    if (object instanceof THREE.Bone) boneNames.add(object.name);
+    if (object instanceof THREE.SkinnedMesh) object.skeleton.bones.forEach((bone) => boneNames.add(bone.name));
+  });
+  let tracks = 0;
+  let boundTracks = 0;
+  let movingTracks = 0;
+  let loopTracks = 0;
+  let closedLoopTracks = 0;
+  let inPlaceClips = 0;
+  let validInPlaceClips = 0;
+  let maximumQuaternionError = 0;
+  for (const clip of root.animations) {
+    const delivery = humanoidAnimationDelivery(clip.name);
+    let clipInPlace = true;
+    if (delivery?.rootMotion === 'in-place') inPlaceClips += 1;
+    for (const track of clip.tracks) {
+      tracks += 1;
+      const binding = track.name.split('.')[0];
+      if (boneNames.has(binding)) boundTracks += 1;
+      const stride = track.getValueSize();
+      const first = Array.from(track.values.slice(0, stride));
+      const last = Array.from(track.values.slice(track.values.length - stride));
+      const moving = Array.from({ length: track.times.length }, (_, key) => (
+        Array.from(track.values.slice(key * stride, key * stride + stride))
+      )).some((sample) => sample.some((value, index) => Math.abs(value - first[index]!) > 1e-7));
+      if (moving && Array.from(track.values).every(Number.isFinite)
+        && Array.from(track.times).every(Number.isFinite)) movingTracks += 1;
+      if (delivery?.loop) {
+        loopTracks += 1;
+        if (first.every((value, index) => Math.abs(value - last[index]!) <= 1e-6)) closedLoopTracks += 1;
+      }
+      if (track.name.endsWith('.quaternion') && stride === 4) {
+        for (let key = 0; key < track.times.length; key += 1) {
+          const offset = key * 4;
+          maximumQuaternionError = Math.max(maximumQuaternionError, Math.abs(Math.hypot(
+            track.values[offset]!, track.values[offset + 1]!, track.values[offset + 2]!, track.values[offset + 3]!,
+          ) - 1));
+        }
+      }
+      if (delivery?.rootMotion === 'in-place' && track.name === 'hips.position' && stride === 3) {
+        if (Math.hypot(last[0]! - first[0]!, last[2]! - first[2]!) > 0.001) clipInPlace = false;
+      }
+    }
+    if (delivery?.rootMotion === 'in-place' && clipInPlace) validInPlaceClips += 1;
+  }
+  return {
+    bindingCoverage: boundTracks / Math.max(1, tracks),
+    motionCoverage: movingTracks / Math.max(1, tracks),
+    loopClosureCoverage: closedLoopTracks / Math.max(1, loopTracks),
+    inPlaceCoverage: validInPlaceClips / Math.max(1, inPlaceClips),
+    maximumQuaternionError,
   };
 }
 
@@ -305,6 +368,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const surfaces = inspectSurfaceSystem(input.root);
   const geometry = inspectGeometry(input.root);
   const deformation = inspectSkinDeformation(input.root);
+  const animationDelivery = inspectAnimationDelivery(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
   const deliveredClipNames = new Set(snapshot.animationClipNames);
   const animationSetCoverage = REQUIRED_RUNTIME_CLIPS.filter((name) => deliveredClipNames.has(name)).length
@@ -345,10 +409,17 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const deformationPass = deformation.finite && bindPoseRmsErrorMm <= 0.01
       && deformation.movedVertices > 0 && deformation.maximumMm > 1 && deformation.maximumMm < 500;
     add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
-    const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 10;
+    const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 16;
     add('animation-finger-rig', '손가락 리그·가중치', fingerRigPass, fingerRigPass ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices · ${geometry.fingerAnimationTracks} animated tracks`);
-    const animationSetPass = snapshot.animationClips >= 5 && snapshot.animationTracks >= 50 && animationSetCoverage === 1;
+    const animationSetPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
+      && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
     add('animation-clips', '납품용 기본 동작 세트', animationSetPass, animationSetPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks · 필수 동작 ${Math.round(animationSetCoverage * 100)}%`);
+    const animationQualityPass = animationDelivery.bindingCoverage === 1
+      && animationDelivery.motionCoverage === 1
+      && animationDelivery.loopClosureCoverage === 1
+      && animationDelivery.inPlaceCoverage === 1
+      && animationDelivery.maximumQuaternionError <= 1e-5;
+    add('animation-clip-quality', '동작 바인딩·반복·루트모션 품질', animationQualityPass, animationQualityPass ? 100 : 0, `binding ${Math.round(animationDelivery.bindingCoverage * 100)}% · motion ${Math.round(animationDelivery.motionCoverage * 100)}% · loop ${Math.round(animationDelivery.loopClosureCoverage * 100)}% · in-place ${Math.round(animationDelivery.inPlaceCoverage * 100)}%`);
     add('animation-uv', '캐릭터 UV', uvMeshCoverage >= 0.8, uvMeshCoverage * 100, `${Math.round(uvMeshCoverage * 100)}% 메시 UV`);
     add('animation-evidence', '캐릭터 베이스 근거', input.evidenceScore >= 80, input.evidenceScore, `${input.evidenceScore}/80`);
   } else if (input.domain === 'game') {
@@ -360,8 +431,15 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('game-normals', '게임 노멀', normalMeshCoverage === 1, normalMeshCoverage * 100, `${Math.round(normalMeshCoverage * 100)}% 메시 노멀`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
     add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
-    const runtimeMotionPass = snapshot.animationClips >= 5 && snapshot.animationTracks >= 50 && animationSetCoverage === 1;
-    add('game-runtime-motion', '게임 런타임 동작 세트', runtimeMotionPass, runtimeMotionPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · idle/walk/run/turn/gesture ${Math.round(animationSetCoverage * 100)}%`);
+    const runtimeMotionPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
+      && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
+    add('game-runtime-motion', '게임 런타임 동작 세트', runtimeMotionPass, runtimeMotionPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · 이동/점프/제스처/상호작용 ${Math.round(animationSetCoverage * 100)}%`);
+    const gameMotionQualityPass = animationDelivery.bindingCoverage === 1
+      && animationDelivery.motionCoverage === 1
+      && animationDelivery.loopClosureCoverage === 1
+      && animationDelivery.inPlaceCoverage === 1
+      && animationDelivery.maximumQuaternionError <= 1e-5;
+    add('game-motion-quality', '게임 동작 품질 계약', gameMotionQualityPass, gameMotionQualityPass ? 100 : 0, `binding ${Math.round(animationDelivery.bindingCoverage * 100)}% · motion ${Math.round(animationDelivery.motionCoverage * 100)}% · loop ${Math.round(animationDelivery.loopClosureCoverage * 100)}% · in-place ${Math.round(animationDelivery.inPlaceCoverage * 100)}%`);
     add('game-collision', '충돌 프리미티브', snapshot.collisionPrimitives >= 1, snapshot.collisionPrimitives >= 1 ? 100 : 0, `${snapshot.collisionPrimitives} collision primitives`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
@@ -403,6 +481,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       animationClips: snapshot.animationClips,
       animationTracks: snapshot.animationTracks,
       animationSetCoverage,
+      animationBindingCoverage: animationDelivery.bindingCoverage,
+      animationMotionCoverage: animationDelivery.motionCoverage,
+      animationLoopClosureCoverage: animationDelivery.loopClosureCoverage,
+      animationInPlaceCoverage: animationDelivery.inPlaceCoverage,
+      maximumAnimationQuaternionError: animationDelivery.maximumQuaternionError,
       bindPoseRmsErrorMm: deformation.bindPoseRmsErrorMm,
       deformationMovedVertices: deformation.movedVertices,
       deformationMaximumMm: deformation.maximumMm,

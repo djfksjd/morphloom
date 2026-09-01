@@ -44,11 +44,11 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 
 - Choose a finish from the Morphloom surface system instead of relying on base colour alone.
 - Set roughness and metalness by material class. Use clearcoat for coated surfaces, transmission and IOR for glass, anisotropy for brushed metal/hair, and sheen for textile/leather/skin.
-- Add deterministic micro-normal and roughness variation at a scale appropriate to the real material. Do not use one texture scale for every object size.
+- Add deterministic micro-normal and roughness variation at a scale appropriate to the real material. For photo-conditioned relief, preserve separate fine, medium, and coarse frequency bands and record their measured deviation and balance. Do not use one texture scale for every object size.
 - Check Beauty under grazing light, Clay for form, Wire for topology, and X-Ray for internal structure.
 - Compare highlights as shape evidence: incorrect roughness, clearcoat, normal scale, or anisotropy can make correct geometry read as the wrong material.
 - Require a deliberate non-fallback material on every rendered face. Verify visible material-zone coverage, intentional UV overlap, scale-consistent texel density, normal/tangent handling, and texture colour spaces.
-- Compare reference/render material crops deterministically. Gate base colour, luminance, luma variance as a microstructure proxy, and horizontal/vertical gradient ratio as a directional-response proxy separately; do not let one high aggregate hide wrong colour or a missing environment response.
+- Compare reference/render material crops deterministically. Gate base colour, luminance, fine/coarse local contrast, gradient-orientation distribution, entropy, periodicity, and irregularity separately. Granular references must reject overly periodic or single-scale renders even when mean colour and total variance match; do not let one high aggregate hide a wrong surface structure or missing environment response.
 
 ## Review and self-correction loop
 
@@ -61,7 +61,7 @@ Review in this order because later polish cannot repair earlier interpretation e
 3. **Silhouette and proportions:** outer contour, dominant masses, pose/balance, and major voids from the source camera. When orthographic masks exist, use their visual-hull intersection as a geometry constraint rather than inventing hidden depth.
 4. **Feature completeness:** every visible-feature row is resolved and every signature id exists in its proof view. Align the reference/render foreground bounds, area-average onto a bounded grid, and compare named height bands so missing eyes, controls, openings, trim, or fixtures cannot hide behind an unchanged outline. Refuse the metric when no foreground cells overlap.
 5. **Relationships and function:** adjacency, attachment, clearances, openings, joints, ports, conductors, circulation, and articulation.
-6. **Surface response:** material boundaries, grazing highlights, texture scale, transparency, and micro-detail.
+6. **Surface response:** material boundaries, grazing highlights, fine/medium/coarse texture scale, regularity versus natural irregularity, transparency, and micro-detail.
 7. **Topology and export:** closed/manifold expectations, edit-unit names, transforms, bounds, and GLB/IR consistency. Reopen the GLB and compare part/material counts, units, transforms, and bounds with the IR.
 
 The export score must come from the bytes that will actually be delivered. Export the beauty asset to binary glTF, reopen those bytes with an independent glTF loader, and compare mesh count, triangle count, named-node coverage, finite transforms, and bounds drift. A hard-coded export score or a successful download click is not evidence. Block delivery on count drift, non-finite transforms, less than 95% named-node coverage, or more than 0.1 mm bounds drift. Record the output byte size and structural fingerprint.

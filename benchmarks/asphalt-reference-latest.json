@@ -1,14 +1,19 @@
 {
-  "schema": "morphloom.surface-reference-benchmark/0.1",
-  "generatedAt": "2026-09-01T03:58:00.000Z",
+  "schema": "morphloom.surface-reference-benchmark/0.2",
+  "generatedAt": "2026-09-01T16:01:02Z",
   "source": {
     "redistributed": false,
     "pixels": [508, 660],
     "sha256": "1a7662782c874259cb3ff13df6d292b3e5a4991bbae91f204bb776836db9cb88",
     "normalizedEntropy": 0.8789972596433167,
-    "meanGradient": 0.7479663047569867,
-    "periodicity": 0.009610953709502193,
-    "irregularity": 0.9520967679225599,
+    "meanGradient": 0.7675042657106678,
+    "heightDeviation": 0.10363456146618097,
+    "fineDeviation": 0.16175078320213676,
+    "mediumDeviation": 0.0916230225099904,
+    "coarseDeviation": 0.031161692341720535,
+    "multiScaleBalance": 1,
+    "periodicity": 0.005543286282399112,
+    "irregularity": 0.9625905206365152,
     "confidence": 0.84,
     "limitation": "Absolute height is photometric and estimated until scan- or measurement-calibrated."
   },
@@ -17,8 +22,8 @@
     "heightSamples": 12672,
     "aggregateFeatures": 13229,
     "triangles": 124616,
-    "rmsHeightMm": 0.59,
-    "peakToValleyMm": 4.64,
+    "rmsHeightMm": 0.5770698039239935,
+    "peakToValleyMm": 4.352079947778916,
     "watertightMeshes": 1,
     "meshes": 1,
     "boundaryEdges": 0,
@@ -26,18 +31,17 @@
     "degenerateTriangles": 0
   },
   "appearance": {
+    "reliefMethod": "image-multiscale-height-v2",
     "referenceProjection": 1,
     "derivedNormalMaps": 1,
     "derivedRoughnessMaps": 1,
     "fingerprintVerified": true
   },
   "delivery": {
-    "browserGlbReopen": "pass",
-    "fingerprint": "283d2c988e8643c4",
-    "inputKey": "262dfff3184a1ec0",
-    "glbSizeMb": 15.21,
-    "boundsDriftMm": 0,
-    "namedNodes": 1
+    "nodeCompile": "pass",
+    "sceneFingerprint": "f9fb95e7ee7f33d8",
+    "browserGlbReopen": "reverification-required",
+    "reason": "The compiler 0.8.0 multiscale upgrade invalidated the older browser proof. The local source bitmap and generated IR are intentionally not redistributed; browser delivery must be rerun from that local evidence before this exact photo-conditioned asset is released. The repository's procedural asphalt release case has a separate current browser proof."
   },
-  "testPolicy": "Nine focused tests cover deterministic analysis, irregularity discrimination, bounded PBR derivation, corrupted PNG rejection, sample budgets, coordinate orientation, closed topology, outward side normals, multi-material delivery primitives, and malformed IR rejection. Test count is not used as a quality score."
+  "testPolicy": "Nine focused tests cover deterministic multiscale analysis, irregularity discrimination, bounded PBR derivation, corrupted PNG rejection, sample budgets, coordinate orientation, closed topology, outward side normals, multi-material delivery primitives, and malformed IR rejection. A separate comparator regression rejects periodic stripes that imitate aggregate variance. Test count is not used as a quality score."
 }

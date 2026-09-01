@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-117%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-123%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -101,7 +101,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
-| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, five idle/walk/run/turn/gesture clips with 50 tracks, a real skinned LOD1, and collision primitives · posed Web Hero |
+| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, 22 idle/locomotion/turn/stance/airborne/gesture/interaction clips with 185 tracks, a real skinned LOD1, and collision primitives · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
 
@@ -128,15 +128,15 @@ This means all eight locked contracts made the correct decision; it does not mea
 |---|---:|---|
 | Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
 | Architecture | 98 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
-| Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · five required motions/50 tracks · finger weights/12 tracks · semantic GLB preservation |
-| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · idle/walk/run/turn/gesture · collision primitives · UV/normals · PBR |
+| Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · 22 motions/185 tracks · finger weights/19 tracks · loop/in-place/semantic GLB preservation |
+| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · collision primitives · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · positive volume · measured 45° overhang |
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 
 Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
 
-With two or more compatible orthographic silhouettes, Morphloom now carves a welded, closed visual hull. It also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, microstructure, and directional response separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
+With two or more compatible orthographic silhouettes, Morphloom now carves a welded, closed visual hull. It also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, fine/medium/coarse-scale contrast, gradient orientation, periodicity, and irregularity separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
@@ -144,7 +144,7 @@ We also ran a real same-input Talon comparison. Morphloom aligns the admitted fr
 
 Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
 
-The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.952 irregularity, then combines a 99×128 (12,672-sample) height field with 13,229 procedural aggregate features. The result has 124,616 triangles, 0.59 mm RMS height, 4.64 mm peak-to-valley relief, one of one closed meshes, and 0.000 mm bounds drift after GLB reopen. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
+The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.963 irregularity, then combines a 99×128 (12,672-sample) multi-band height field with 13,229 procedural aggregate features. Fine, medium, and coarse frequency bands are all measurably active, while the comparator rejects regular repeating patterns that merely match average colour or variance. The result has 124,616 triangles, 0.58 mm RMS height, 4.35 mm peak-to-valley relief, and one of one closed meshes. Compiler 0.8 invalidated this local photo asset's older GLB proof, so its browser round trip must be rerun from the private local source before delivery. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
 
 ## Current limits
 

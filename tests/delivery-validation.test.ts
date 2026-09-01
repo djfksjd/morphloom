@@ -123,6 +123,30 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers.join(' ')).toMatch(/binding identities changed/);
   });
 
+  it('blocks a GLB that keeps clip names but loses loop, category or root-motion delivery metadata', () => {
+    const root = new THREE.Group();
+    root.name = 'animation_manifest_fixture';
+    root.userData.gameDelivery = {
+      schema: 'morphloom.game-delivery/0.3',
+      lods: [],
+      collisionPrimitives: [],
+      animationSet: [{
+        name: 'morphloom_walk_cycle', duration: 1.2, tracks: 1,
+        loop: true, category: 'locomotion', rootMotion: 'in-place',
+      }],
+    };
+    root.animations = [new THREE.AnimationClip('morphloom_walk_cycle', 1.2, [
+      new THREE.VectorKeyframeTrack('hips.position', [0, 0.6, 1.2], [0, 0, 0, 0, 0.01, 0, 0, 0, 0]),
+    ])];
+    const source = snapshotScene(root);
+    expect(source.animationManifestEntries).toBe(1);
+    const reopened = structuredClone(source);
+    reopened.animationManifestFingerprint = 'lost';
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers.join(' ')).toMatch(/delivery metadata changed/);
+  });
+
   it('exports an honest Figma reference sheet and measured local telemetry', () => {
     const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     const snapshot = snapshotScene(build.root);

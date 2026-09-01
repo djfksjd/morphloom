@@ -50,11 +50,15 @@ export interface CandidateVisualScore {
   silhouetteIoU: number;
   interiorSimilarity: number;
   materialSimilarity: number;
+  surfaceScaleSimilarity: number;
+  irregularitySimilarity: number;
   minimumFeatureScore: number;
   views: Array<{
     viewId: string;
     reference: ReferenceComparisonResult;
     materialSimilarity: number;
+    surfaceScaleSimilarity: number;
+    irregularitySimilarity: number;
   }>;
 }
 
@@ -115,19 +119,30 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
   const views = candidate.views.map((view) => {
     const reference = compareReferenceFrames(view.reference, view.render, view.regions);
     const material = compareMaterialFrames(view.reference, view.render, view.materialExpectation);
-    return { viewId: view.viewId, reference, materialSimilarity: material.scores.overall };
+    return {
+      viewId: view.viewId,
+      reference,
+      materialSimilarity: material.scores.overall,
+      surfaceScaleSimilarity: material.scores.surfaceScale,
+      irregularitySimilarity: material.scores.irregularity,
+    };
   });
   const silhouetteIoU = average(views.map((view) => view.reference.silhouetteIoU));
   const interiorSimilarity = average(views.map((view) => view.reference.interiorSimilarity));
   const materialSimilarity = average(views.map((view) => view.materialSimilarity));
+  const surfaceScaleSimilarity = average(views.map((view) => view.surfaceScaleSimilarity));
+  const irregularitySimilarity = average(views.map((view) => view.irregularitySimilarity));
   const featureScores = views.flatMap((view) => view.reference.regions.map((region) => region.score));
   const minimumFeatureScore = featureScores.length > 0 ? Math.min(...featureScores) : 0;
   return {
     id: candidate.id,
-    score: silhouetteIoU * 0.45 + interiorSimilarity * 0.25 + materialSimilarity * 0.2 + minimumFeatureScore * 0.1,
+    score: silhouetteIoU * 0.4 + interiorSimilarity * 0.2 + materialSimilarity * 0.16
+      + surfaceScaleSimilarity * 0.08 + irregularitySimilarity * 0.06 + minimumFeatureScore * 0.1,
     silhouetteIoU,
     interiorSimilarity,
     materialSimilarity,
+    surfaceScaleSimilarity,
+    irregularitySimilarity,
     minimumFeatureScore,
     views,
   };
@@ -182,6 +197,10 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
   for (const score of [morphloomScore, competitorScore]) {
     if (score.silhouetteIoU < 0.65 || score.interiorSimilarity < 0.55 || score.materialSimilarity < 0.55 || score.minimumFeatureScore < 0.5) {
       blockers.push(`${score.id}: critical automatic visual threshold failed`);
+    }
+    if (benchmark.domain === 'surface'
+      && (score.surfaceScaleSimilarity < 0.65 || score.irregularitySimilarity < 0.65)) {
+      blockers.push(`${score.id}: multi-scale surface threshold failed`);
     }
   }
   const blind = evaluateBlindRatings(benchmark.blindRatings, blockers);
