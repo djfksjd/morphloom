@@ -28,9 +28,11 @@ const HOLES = [
   profile([[74.71,26.07],[72.88,24.85],[72.58,21.8],[73.8,20.28],[75.93,20.28],[77.76,21.8],[78.07,23.94],[76.85,26.07]]),
   profile([[65.87,22.11],[64.35,20.89],[64.04,18.75],[64.96,17.23],[66.48,16.93],[68.01,17.84],[68.61,20.58],[67.7,22.11]]),
 ];
-const CUTTING_EDGE_PATH: Array<[number, number]> = [
-  [-120, -41.63], [-110, -25], [-92, -8], [-68, 3], [-41, 9], [-23, 7],
-];
+const CUTTING_EDGE_PATH: Array<[number, number]> = profile([
+  [0, -41.63], [9.45, -33.09], [23.79, -21.8], [43.91, -9], [57.03, -2.59],
+  [67.7, 1.37], [83.86, 5.34], [93.32, 6.86], [95.76, 6.56], [96.98, 5.64],
+  [102.16, 5.34], [110.7, -1.07], [114.97, -2.9], [119.54, -3.81], [122.9, -3.81],
+]);
 
 const PANELS = [
   referenceProfile([[345,104],[459,128],[458,211],[430,210],[407,208],[400,218],[398,226],[386,221],[374,209],[363,186]]),
@@ -94,7 +96,6 @@ export const TALON_REFERENCE_BENCHMARK_IR: AssemblyIR = {
       detail: 'One continuous profile with five traced saw teeth, three true blade openings, a true finger-ring bore, and a 0.12 mm closed-mesh cutting wedge.',
       geometry: {
         op: 'extrude', points: OUTER, holes: HOLES, depth: 4,
-        bevelSize: 0.32, bevelThickness: 0.24, bevelSegments: 2,
         edgeTapers: [{ path: CUTTING_EDGE_PATH, width: 11, tipThickness: 0.12, curve: 0.85 }],
       },
       material: ruby,

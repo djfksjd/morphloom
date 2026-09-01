@@ -180,7 +180,7 @@ export function evaluateProductQuality(
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
-        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · 최소 날끝 ${topology.minimumAuthoredEdgeThicknessMm?.toFixed(2)} mm` : ''}`
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {

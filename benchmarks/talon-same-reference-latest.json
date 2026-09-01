@@ -24,7 +24,7 @@
   "morphloom": {
     "fixture": "TALON_REFERENCE_BENCHMARK_IR",
     "namedParts": 25,
-    "triangles": 14760,
+    "triangles": 13760,
     "watertightMeshes": 25,
     "boundaryEdges": 0,
     "nonManifoldEdges": 0,
@@ -36,16 +36,19 @@
     "sourceDerivedRoughnessMaterials": 25,
     "cuttingEdge": {
       "method": "closed-mesh wedge taper",
-      "minimumTipThicknessMm": 0.12,
+      "contourPoints": 15,
+      "verifiedSegments": 14,
+      "maximumMeasuredTipThicknessMm": 0.12,
       "degenerateTriangles": 0
     },
-    "overallEnvelopeMm": [240.955, 83.982, 9.715],
+    "overallEnvelopeMm": [240, 83.26, 9.715],
     "glbRoundTrip": {
       "status": "pass",
-      "sizeMb": 9.16,
+      "verificationMode": "headless geometry and material scalars; reference-derived maps excluded",
+      "sizeMb": 0.53,
       "boundsDriftMm": 0,
       "namedNodesPercent": 100,
-      "fingerprint": "7fd73ad63341793e"
+      "fingerprint": "68ed14db27324022"
     },
     "deliveryAssetVerdict": "winner"
   },
@@ -53,6 +56,6 @@
     "sameViewColorProjection": "comparable",
     "referenceDrivenSurfaceMaterial": "morphloom",
     "editableSemiProfessionalDelivery": "morphloom",
-    "reason": "Both routes project the admitted front plate. In the inspected Talon implementation img2threejs uses the plate with scalar roughness and no normal/roughness maps, while Morphloom derives and exports aligned normal plus roughness maps for all 25 materials, compiles a 0.12 mm closed-mesh cutting wedge, then proves closed topology and GLB round-trip. The verdict is limited to reference-driven surface response and modeled edge geometry, not unseen rear-face accuracy."
+    "reason": "Both routes project the admitted front plate. In the inspected Talon implementation img2threejs uses the plate with scalar roughness and no normal/roughness maps, while Morphloom derives aligned normal plus roughness maps for all 25 materials, compiles a closed-mesh cutting wedge whose 14/14 traced edge segments measure at most 0.12 mm, then proves closed topology and GLB round-trip. The verdict is limited to reference-driven surface response and modeled edge geometry, not unseen rear-face accuracy."
   }
 }

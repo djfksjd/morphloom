@@ -121,7 +121,7 @@ With two or more compatible orthographic silhouettes, Morphloom now carves a wel
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
-We also ran a real same-input Talon comparison. Morphloom now compiles asymmetric profiles with multiple true through-holes into closed meshes; that case has 26 editable parts, zero boundary/non-manifold edges, and 0.000 mm GLB round-trip drift. img2threejs still wins the broadside photographic match because it projects the admitted source pixels. Morphloom's current advantage is semi-professional editability, inspection, and delivery—not photographic copying.
+We also ran a real same-input Talon comparison. Morphloom aligns the admitted front image across independently editable parts and derives aligned normal and roughness maps from its local pixels. Its blade is a real closed wedge rather than a cosmetic tube: all 14 cutting-edge segments traced through 15 contour points are measured at no more than 0.12 mm. The case has 25 named parts, zero boundary/non-manifold edges or degenerate triangles, and 0.000 mm GLB round-trip drift. This establishes the inspected material response, editability, and delivery checks; it does not infer unseen depth or rear geometry from one photograph.
 
 ## Current limits
 

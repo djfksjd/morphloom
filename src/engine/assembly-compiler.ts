@@ -236,6 +236,21 @@ function distanceToProfilePath(x: number, y: number, path: Array<[number, number
   return Math.sqrt(minimumSquared);
 }
 
+function pointSegmentDistance(
+  x: number,
+  y: number,
+  start: [number, number],
+  end: [number, number],
+): number {
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const lengthSquared = dx * dx + dy * dy;
+  const projected = lengthSquared > 1e-12
+    ? Math.max(0, Math.min(1, ((x - start[0]) * dx + (y - start[1]) * dy) / lengthSquared))
+    : 0;
+  return Math.hypot(x - (start[0] + dx * projected), y - (start[1] + dy * projected));
+}
+
 function applyExtrudeEdgeTapers(
   geometry: THREE.BufferGeometry,
   tapers: NonNullable<Extract<AssemblyGeometryIR, { op: 'extrude' }>['edgeTapers']>,
@@ -270,11 +285,37 @@ function applyExtrudeEdgeTapers(
   geometry.computeVertexNormals();
   geometry.computeBoundingBox();
   geometry.computeBoundingSphere();
-  geometry.userData.morphloomEdgeTapers = tapers.map((taper) => ({
-    widthMm: taper.width,
-    tipThicknessMm: taper.tipThickness,
-    curve: taper.curve ?? 1,
-  }));
+  geometry.userData.morphloomEdgeTapers = tapers.map((taper) => {
+    const segmentThicknesses: number[] = [];
+    for (let segment = 0; segment < taper.path.length - 1; segment += 1) {
+      let maximum = 0;
+      let samples = 0;
+      for (let index = 0; index < position.count; index += 1) {
+        const distanceMm = pointSegmentDistance(
+          position.getX(index) * 1000,
+          position.getY(index) * 1000,
+          taper.path[segment]!,
+          taper.path[segment + 1]!,
+        );
+        if (distanceMm > 0.025) continue;
+        maximum = Math.max(maximum, Math.abs(position.getZ(index)) * 2000);
+        samples += 1;
+      }
+      if (samples === 0) throw new Error(`Edge taper segment ${segment} has no geometric samples.`);
+      segmentThicknesses.push(maximum);
+    }
+    const measuredMaxTipThicknessMm = Math.max(...segmentThicknesses);
+    if (measuredMaxTipThicknessMm > taper.tipThickness * 1.05) {
+      throw new Error(`Edge taper exceeds authored tip thickness: ${measuredMaxTipThicknessMm.toFixed(3)} mm.`);
+    }
+    return {
+      widthMm: taper.width,
+      tipThicknessMm: taper.tipThickness,
+      curve: taper.curve ?? 1,
+      verifiedSegments: segmentThicknesses.length,
+      measuredMaxTipThicknessMm,
+    };
+  });
 }
 
 function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {

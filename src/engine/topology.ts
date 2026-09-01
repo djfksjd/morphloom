@@ -15,6 +15,8 @@ export interface MeshTopologyReport {
   triangles: number;
   edgeTaperMeshes?: number;
   minimumAuthoredEdgeThicknessMm?: number;
+  verifiedEdgeTaperSegments?: number;
+  maximumMeasuredEdgeThicknessMm?: number;
   pass: boolean;
   details: Array<{
     name: string;
@@ -38,17 +40,30 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
   let triangles = 0;
   let edgeTaperMeshes = 0;
   let minimumAuthoredEdgeThicknessMm = Number.POSITIVE_INFINITY;
+  let verifiedEdgeTaperSegments = 0;
+  let maximumMeasuredEdgeThicknessMm = Number.NEGATIVE_INFINITY;
   const details: MeshTopologyReport['details'] = [];
 
   root.traverse((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     meshes += 1;
-    const edgeTapers = object.geometry.userData.morphloomEdgeTapers as Array<{ tipThicknessMm?: number }> | undefined;
+    const edgeTapers = object.geometry.userData.morphloomEdgeTapers as Array<{
+      tipThicknessMm?: number;
+      verifiedSegments?: number;
+      measuredMaxTipThicknessMm?: number;
+    }> | undefined;
     if (edgeTapers?.length) {
       edgeTaperMeshes += 1;
       for (const taper of edgeTapers) {
         if (typeof taper.tipThicknessMm === 'number') {
           minimumAuthoredEdgeThicknessMm = Math.min(minimumAuthoredEdgeThicknessMm, taper.tipThicknessMm);
+        }
+        if (typeof taper.verifiedSegments === 'number') verifiedEdgeTaperSegments += taper.verifiedSegments;
+        if (typeof taper.measuredMaxTipThicknessMm === 'number') {
+          maximumMeasuredEdgeThicknessMm = Math.max(
+            maximumMeasuredEdgeThicknessMm,
+            taper.measuredMaxTipThicknessMm,
+          );
         }
       }
     }
@@ -114,6 +129,10 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     edgeTaperMeshes,
     minimumAuthoredEdgeThicknessMm: Number.isFinite(minimumAuthoredEdgeThicknessMm)
       ? minimumAuthoredEdgeThicknessMm
+      : undefined,
+    verifiedEdgeTaperSegments,
+    maximumMeasuredEdgeThicknessMm: Number.isFinite(maximumMeasuredEdgeThicknessMm)
+      ? maximumMeasuredEdgeThicknessMm
       : undefined,
     pass: meshes > 0 && watertightMeshes === meshes,
     details,

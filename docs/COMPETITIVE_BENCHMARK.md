@@ -17,11 +17,11 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 |---|---:|---:|
 | 정면 색상 재현 | 원본 플레이트 투영 | 조립 좌표계 원본 투영 |
 | 사진 기반 표면 요철·거칠기 | Talon 코드에 normal/roughness map 없음 | 우세—소스 파생 normal+roughness 25/25 |
-| 절삭날 두께 | 장면 수치 미표시 | 실제 wedge taper, 최소 0.12 mm |
+| 절삭날 두께 | 장면 수치 미표시 | 실제 wedge taper, 14/14구간 최대 0.12 mm |
 | 실제 관통 개구 | 칼날 3 + 링 1 | 칼날 3 + 링 1 |
 | 독립 편집 부품 | 데모 표시 5개 | 25개 명명 부품 |
 | 폐쇄 메시 | 공개 화면에서 수치 미표시 | 25/25, 경계 0, 비매니폴드 0 |
-| GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 9.16 MB, 포락 오차 0.000 mm, 명명 노드 100% |
+| GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 포락 오차 0.000 mm, 명명 노드 100% |
 | 준실무 납품성 | Three.js 전시 강점 | 우세—IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG |
 
 정면 색상 투영은 양쪽 모두 지원합니다. 하지만 검증한 img2threejs Talon 재질은 base-color plate와 상수 roughness를 사용하고, Morphloom은 같은 입력에서 파생한 normal·roughness를 GLB에 포함합니다. 따라서 이 사례의 **참조 기반 표면 재질 반응은 Morphloom 우세**, 편집·토폴로지·납품도 Morphloom 우세입니다. 단, 단일 사진에서 안 보이는 깊이와 후면을 실측했다고 판정하지 않습니다. 상세 수치는 [`../benchmarks/talon-same-reference-latest.json`](../benchmarks/talon-same-reference-latest.json)에 고정했습니다.

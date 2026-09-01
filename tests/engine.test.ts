@@ -213,7 +213,7 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.parts.length).toBeGreaterThanOrEqual(24);
     expect(build.root.getObjectByName('continuous_steel_body')).toBeTruthy();
     expect(build.root.getObjectByName('ring_lip_front')).toBeTruthy();
-    expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(240);
+    expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(239.99);
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeLessThan(242);
     const coreMesh = build.root.getObjectByName('continuous_steel_body') as THREE.Mesh;
     const positions = coreMesh.geometry.getAttribute('position');
@@ -221,7 +221,18 @@ describe('AssemblyIR product pipeline', () => {
       .filter((value) => value > 1e-8);
     expect(Math.min(...halfThicknesses) * 1000).toBeLessThanOrEqual(0.061);
     expect(Math.max(...halfThicknesses) * 1000).toBeGreaterThan(2);
+    const taperAudit = coreMesh.geometry.userData.morphloomEdgeTapers as Array<{
+      verifiedSegments: number;
+      measuredMaxTipThicknessMm: number;
+    }>;
+    expect(taperAudit).toHaveLength(1);
+    expect(taperAudit[0]).toMatchObject({ verifiedSegments: 14 });
+    expect(taperAudit[0]!.measuredMaxTipThicknessMm).toBeCloseTo(0.12, 4);
     expect(build.metrics.topology).toMatchObject({ pass: true, degenerateTriangles: 0, nonManifoldEdges: 0 });
+    expect(build.metrics.topology).toMatchObject({
+      verifiedEdgeTaperSegments: 14,
+      maximumMeasuredEdgeThicknessMm: expect.closeTo(0.12, 4),
+    });
   });
 
   it('maps reference UVs in assembly space so independently editable parts retain one aligned photograph', () => {
