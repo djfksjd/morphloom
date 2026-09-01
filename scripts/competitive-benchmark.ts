@@ -18,6 +18,7 @@ import { polygonizeImplicitSurface } from '../src/engine/implicit-surface';
 import { analyzeTopology } from '../src/engine/topology';
 import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
+import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 import * as THREE from 'three';
 
 const auditSerializedValidation = async () => {
@@ -150,12 +151,14 @@ type BlenderCrossDomainCase = {
 };
 const blenderCrossDomain = JSON.parse(readFileSync('benchmarks/blender-cross-domain-latest.json', 'utf8')) as {
   schema?: string;
+  compilerRevision?: string;
   pass?: boolean;
   cases?: BlenderCrossDomainCase[];
 };
 const requiredBlenderDomains = new Set(['architecture', 'industrial-design', 'electronics', 'animation-game', '3d-printing']);
 const blenderCrossDomainCases = blenderCrossDomain.cases ?? [];
 const blenderCrossDomainPass = blenderCrossDomain.pass === true
+  && blenderCrossDomain.compilerRevision === DELIVERY_PIPELINE_REVISION
   && blenderCrossDomainCases.length === requiredBlenderDomains.size
   && new Set(blenderCrossDomainCases.map((item) => item.domain)).size === requiredBlenderDomains.size
   && blenderCrossDomainCases.every((item) => {
@@ -180,6 +183,7 @@ const blenderCrossDomainPass = blenderCrossDomain.pass === true
   });
 const blenderCrossDomainSummary = {
   schema: blenderCrossDomain.schema,
+  compilerRevision: blenderCrossDomain.compilerRevision,
   pass: blenderCrossDomain.pass,
   benchmarkAccepted: blenderCrossDomainPass,
   blenderVersions: [...new Set(blenderCrossDomainCases.map((item) => item.blender?.version).filter(Boolean))],
@@ -403,7 +407,7 @@ const output = {
     { capability: 'electrical connectivity audit', img2threejs: 'not documented', morphloom: 'yes' },
     { capability: 'exact-byte glTF 2.0 specification and independent parser validation', img2threejs: 'Three.js factory focus', morphloom: standardValidationAudit.pass ? 'Khronos Validator + glTF Transform + Three.js reopen' : 'blocked' },
     { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
-    { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'Blender 4.5.11 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass semantic parity and final exact-byte validation' : 'blocked' },
+    { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? `Blender ${blenderCrossDomainSummary.blenderVersions.join(', ')}: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation` : 'blocked' },
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
     { capability: 'Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },

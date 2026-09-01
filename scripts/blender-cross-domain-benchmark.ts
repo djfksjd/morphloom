@@ -2,9 +2,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
+import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 
 interface FixtureManifest {
   pass: boolean;
+  compilerRevision: string;
   results: Array<{
     id: string;
     domain: string;
@@ -46,7 +48,7 @@ if (!fixtureDirectoryArgument) {
 const fixtureDirectory = resolve(fixtureDirectoryArgument);
 const reportPath = resolve(process.argv[3] ?? 'benchmarks/blender-cross-domain-latest.json');
 const manifest = JSON.parse(readFileSync(resolve(fixtureDirectory, 'manifest.json'), 'utf8')) as FixtureManifest;
-if (!manifest.pass || manifest.results.length !== 5
+if (!manifest.pass || manifest.compilerRevision !== DELIVERY_PIPELINE_REVISION || manifest.results.length !== 5
   || manifest.results.some((result) => !result.byteDeterministic || result.sha256 !== result.repeatSha256)) {
   throw new Error('Cross-domain fixture manifest is incomplete or nondeterministic.');
 }
@@ -136,6 +138,7 @@ for (const fixture of manifest.results) {
 
 const report = {
   schema: 'morphloom.blender-cross-domain-proof/0.1',
+  compilerRevision: manifest.compilerRevision,
   generatedAt: new Date().toISOString(),
   pass: cases.length === 5 && cases.every((item) => item.pass),
   scope: 'actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation',

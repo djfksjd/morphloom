@@ -1,6 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "generatedAt": "2026-09-01T19:33:40.999Z",
+  "compilerRevision": "morphloom-compiler/0.18.0",
+  "generatedAt": "2026-09-01T21:37:11.759Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -9,8 +10,8 @@
       "domain": "architecture",
       "pass": true,
       "source": {
-        "bytes": 29532168,
-        "sha256": "fc58cd654f9ef6e9e8fc28a0761cd57d8f372c6e431dee5e87bdc9f5c363fbb1",
+        "bytes": 29532200,
+        "sha256": "8e5e312c693fff1ab23fe4e051d66a584f5207665b01f83276ca4b5eefac4878",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -35,7 +36,7 @@
         "portableTangents": 321
       },
       "blender": {
-        "version": "4.5.11 LTS",
+        "version": "5.2.1 LTS",
         "semanticRoundTrip": {
           "pass": true,
           "geometryParity": true,
@@ -50,7 +51,7 @@
             "vertices": 566244,
             "polygons": 188748,
             "materials": 321,
-            "images": 20,
+            "images": 21,
             "imageNames": [
               "Image_0",
               "Image_1",
@@ -69,11 +70,16 @@
               "Image_3",
               "Image_4",
               "Image_5",
+              "Image_6",
               "Image_7",
               "Image_8",
               "Image_9"
             ],
             "imageDimensions": [
+              [
+                1,
+                1
+              ],
               [
                 64,
                 64
@@ -320,7 +326,7 @@
                 608756.4006285723
               ],
               "cornerSumSquares": [
-                92136179.36613707,
+                92136179.366138,
                 14908681.972415688,
                 1107239.9982996818
               ],
@@ -346,11 +352,12 @@
           "validatorVersion": "2.0.0-dev.3.10",
           "errors": 432,
           "warnings": 0,
-          "infos": 0,
+          "infos": 47,
           "hints": 0,
           "truncated": false,
           "issueCodes": [
-            "ACCESSOR_VECTOR3_NON_UNIT"
+            "ACCESSOR_VECTOR3_NON_UNIT",
+            "UNUSED_OBJECT"
           ],
           "independentRead": {
             "status": "not-run",
@@ -366,7 +373,7 @@
           "applied": true,
           "repairedTangents": 432,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "5b0b3fa0dada97f7911e0b4a43e12bfc8f4f05ff3f1241e42b052f1ac278d354",
+          "outputSha256": "aa9add0e4d4f799af530cb4c29575c6895f2c19ee857170992f9f69e66dee562",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -395,8 +402,8 @@
       "domain": "industrial-design",
       "pass": true,
       "source": {
-        "bytes": 945320,
-        "sha256": "d3c1b19773a6441c98cb001836d1b37bfdd3341b7165ac7a6c4ff1b2dbbde479",
+        "bytes": 1147308,
+        "sha256": "b7ad2cd3f2b40f49df6552a39311ca9106b0fc85b3a0dfaf71744a5856f72dfc",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -421,7 +428,7 @@
         "portableTangents": 16
       },
       "blender": {
-        "version": "4.5.11 LTS",
+        "version": "5.2.1 LTS",
         "semanticRoundTrip": {
           "pass": true,
           "geometryParity": true,
@@ -433,15 +440,16 @@
             "objects": 17,
             "excludedImporterHelpers": 0,
             "meshes": 16,
-            "vertices": 14321,
+            "vertices": 18525,
             "polygons": 18930,
             "materials": 16,
-            "images": 12,
+            "images": 13,
             "imageNames": [
               "Image_0",
               "Image_1",
               "Image_10",
               "Image_11",
+              "Image_12",
               "Image_2",
               "Image_3",
               "Image_4",
@@ -452,6 +460,10 @@
               "Image_9"
             ],
             "imageDimensions": [
+              [
+                1,
+                1
+              ],
               [
                 64,
                 64
@@ -541,7 +553,7 @@
             "objects": 17,
             "excludedImporterHelpers": 0,
             "meshes": 16,
-            "vertices": 14547,
+            "vertices": 18615,
             "polygons": 18930,
             "materials": 16,
             "images": 12,
@@ -652,10 +664,12 @@
           "validatorVersion": "2.0.0-dev.3.10",
           "errors": 0,
           "warnings": 0,
-          "infos": 0,
+          "infos": 1,
           "hints": 0,
           "truncated": false,
-          "issueCodes": [],
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
           "independentRead": {
             "status": "pass",
             "parser": "glTF Transform WebIO",
@@ -667,10 +681,10 @@
           }
         },
         "deliveryRepair": {
-          "applied": false,
+          "applied": true,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "36d14ad2a2249686bd883f00d76e8943b0f715b29f242f5211f66cec21264e04",
+          "outputSha256": "ba0c1fd7b2c9b7e48c7fed14704a1504eafe40c7b255c1abcf135f850db2d63b",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -699,8 +713,8 @@
       "domain": "electronics",
       "pass": true,
       "source": {
-        "bytes": 18442040,
-        "sha256": "64589b761465707cd0451d44da74d44fddfcd5ba82d388ea1ef9b378aa0133e0",
+        "bytes": 18442072,
+        "sha256": "76517f725c9d3d5a69d3747011e841540b1602dbdf40779c50e7c4a138490439",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -727,7 +741,7 @@
         "portableTangents": 299
       },
       "blender": {
-        "version": "4.5.11 LTS",
+        "version": "5.2.1 LTS",
         "semanticRoundTrip": {
           "pass": true,
           "geometryParity": true,
@@ -742,12 +756,13 @@
             "vertices": 351877,
             "polygons": 272560,
             "materials": 322,
-            "images": 16,
+            "images": 17,
             "imageNames": [
               "Image_0",
               "Image_1",
               "Image_10",
               "Image_11",
+              "Image_12",
               "Image_13",
               "Image_14",
               "Image_15",
@@ -762,6 +777,10 @@
               "Image_9"
             ],
             "imageDimensions": [
+              [
+                1,
+                1
+              ],
               [
                 64,
                 64
@@ -996,9 +1015,9 @@
           "status": "blocked",
           "validator": "Khronos glTF Validator",
           "validatorVersion": "2.0.0-dev.3.10",
-          "errors": 954,
+          "errors": 940,
           "warnings": 0,
-          "infos": 46,
+          "infos": 60,
           "hints": 0,
           "truncated": true,
           "issueCodes": [
@@ -1049,8 +1068,8 @@
       "domain": "animation-game",
       "pass": true,
       "source": {
-        "bytes": 3830268,
-        "sha256": "e3ca0e7fc5efd026503338a1e97fb0163dcc274518d9229f17e6f9ab3e4d0793",
+        "bytes": 3830300,
+        "sha256": "cd9317ed23674f51547fc02dcd0b9e446d38b1a6edaa7e4ed1eae3d7bdb43e82",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1075,13 +1094,13 @@
         "portableTangents": 3
       },
       "blender": {
-        "version": "4.5.11 LTS",
+        "version": "5.2.1 LTS",
         "semanticRoundTrip": {
           "pass": true,
           "geometryParity": true,
           "imageParity": true,
           "skinningParity": true,
-          "boundsErrorMm": 0.36613643169403076,
+          "boundsErrorMm": 0.36619603633880615,
           "boundsToleranceMm": 0.5,
           "imported": {
             "objects": 5,
@@ -1214,7 +1233,7 @@
             "boundsMeters": {
               "min": [
                 -0.5599526166915894,
-                -0.22326231002807617,
+                -0.22326228022575378,
                 0.00018545985221862793
               ],
               "max": [
@@ -1355,11 +1374,11 @@
             "boundsMeters": {
               "min": [
                 -0.5601059794425964,
-                -0.2236284464597702,
+                -0.2236284762620926,
                 0.00006955850403755903
               ],
               "max": [
-                0.5601059794425964,
+                0.5601060390472412,
                 0.2234179526567459,
                 1.7994414567947388
               ]
@@ -1390,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "b1698b1332ceab3903a809fe362ed01bf39b25f8ec7cda8e1a237e9c7d7e1d9b",
+          "outputSha256": "c25255b68daa3096454d387d28fd645ff336baeddad218dd6e6464920f0a41c4",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1419,8 +1438,8 @@
       "domain": "3d-printing",
       "pass": true,
       "source": {
-        "bytes": 17744940,
-        "sha256": "0ac4435a7d0acc15da79db5f2250fbd4b818a9c31207d481c2eb9b902f63164a",
+        "bytes": 17744972,
+        "sha256": "17a9eb4f27684274c5548a2e7063c719548a33900748d5a857fffa870a64d1e8",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1445,7 +1464,7 @@
         "portableTangents": 1
       },
       "blender": {
-        "version": "4.5.11 LTS",
+        "version": "5.2.1 LTS",
         "semanticRoundTrip": {
           "pass": true,
           "geometryParity": true,
@@ -1604,7 +1623,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "0b249e191f8aee9ddc63ca5c60b502d5ac0b71cc9325a6e106146a00b61d8f31",
+          "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",

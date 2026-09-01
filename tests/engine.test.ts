@@ -15,6 +15,7 @@ import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-
 import { TALON_REFERENCE_BENCHMARK_IR } from '../src/engine/talon-reference-benchmark';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
 import { analyzeTopology } from '../src/engine/topology';
+import { auditDomainReadiness } from '../src/engine/domain-readiness';
 import { validateElectricalHarness } from '../src/engine/connectivity';
 import { createSurfaceMaterial } from '../src/engine/surface-system';
 import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
@@ -717,6 +718,17 @@ describe('AssemblyIR product pipeline', () => {
     expect(report.nonManifoldEdges).toBe(0);
     expect(report.degenerateTriangles).toBe(0);
     expect(report.watertightMeshes).toBe(report.meshes);
+  });
+
+  it('gives every non-degenerate custom knife face a finite non-zero UV triangle', () => {
+    const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.metrics.uvMeshCoverage).toBe(1);
+    expect(report.metrics.uvFiniteCoverage).toBe(1);
+    expect(report.metrics.degenerateUvTriangleFraction).toBe(0);
   });
 
   it('switches product families from a single Korean prompt', () => {

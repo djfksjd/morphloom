@@ -16,6 +16,7 @@ import { buildOrnateKnife } from '../src/engine/knife';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { parseOhpk } from '../src/engine/ohpk';
 import { DEFAULT_KNIFE_SPEC, FIELD_HUMAN_SPEC } from '../src/types';
+import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 
 class NodeFileReader {
   result: ArrayBuffer | string | null = null;
@@ -163,6 +164,7 @@ for (const fixture of fixtures) {
 }
 const manifest = {
   schema: 'morphloom.cross-domain-glb-fixtures/0.1',
+  compilerRevision: DELIVERY_PIPELINE_REVISION,
   generatedAt: startedAt,
   pass: results.length === fixtures.length,
   fixtureCount: results.length,

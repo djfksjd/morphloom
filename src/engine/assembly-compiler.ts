@@ -664,24 +664,65 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
   }
 }
 
-function ensurePrimaryUv(geometry: THREE.BufferGeometry): void {
-  if (geometry.hasAttribute('uv')) return;
-  const position = geometry.getAttribute('position');
+function ensurePrimaryUv(source: THREE.BufferGeometry): THREE.BufferGeometry {
+  if (source.hasAttribute('uv')) return source;
+  // A single planar projection collapses every face parallel to the chosen
+  // plane. Expand only custom geometry that lacks authored UVs and project
+  // each triangle along its dominant normal axis. The chosen plane has the
+  // largest possible projected area, so every non-degenerate 3D triangle also
+  // receives a non-degenerate finite UV triangle.
+  const geometry = source.index ? source.toNonIndexed() : source;
+  if (geometry !== source) {
+    // BufferGeometry.toNonIndexed() intentionally rebuilds attributes, but it
+    // does not preserve provenance stored in userData. Visual-hull and
+    // implicit-surface audits consume that evidence after compilation, so UV
+    // repair must remain metadata-lossless.
+    geometry.name = source.name;
+    geometry.userData = structuredClone(source.userData);
+  }
+  const rejectUvGeneration = (message: string): never => {
+    if (geometry !== source) geometry.dispose();
+    throw new Error(message);
+  };
+  const position = geometry.getAttribute('position')
+    ?? rejectUvGeneration('Custom geometry cannot receive a valid primary UV set.');
   geometry.computeBoundingBox();
-  const bounds = geometry.boundingBox;
-  if (!position || !bounds) return;
+  const bounds = geometry.boundingBox
+    ?? rejectUvGeneration('Custom geometry cannot receive a valid primary UV set.');
+  if (position.count % 3 !== 0) {
+    rejectUvGeneration('Custom geometry cannot receive a valid primary UV set.');
+  }
   const size = bounds.getSize(new THREE.Vector3());
-  const axes: Array<{ axis: 'x' | 'y' | 'z'; size: number }> = ([
-    { axis: 'x', size: size.x }, { axis: 'y', size: size.y }, { axis: 'z', size: size.z },
-  ] as Array<{ axis: 'x' | 'y' | 'z'; size: number }>).sort((a, b) => b.size - a.size);
-  const [uAxis, vAxis] = axes;
   const uv = new Float32Array(position.count * 2);
-  for (let index = 0; index < position.count; index += 1) {
-    const point = new THREE.Vector3().fromBufferAttribute(position, index);
-    uv[index * 2] = uAxis.size > 1e-9 ? (point[uAxis.axis] - bounds.min[uAxis.axis]) / uAxis.size : 0;
-    uv[index * 2 + 1] = vAxis.size > 1e-9 ? (point[vAxis.axis] - bounds.min[vAxis.axis]) / vAxis.size : 0;
+  const a = new THREE.Vector3();
+  const b = new THREE.Vector3();
+  const c = new THREE.Vector3();
+  const ab = new THREE.Vector3();
+  const ac = new THREE.Vector3();
+  const normal = new THREE.Vector3();
+  const axesForTriangle = (): [['x' | 'y' | 'z', number], ['x' | 'y' | 'z', number]] => {
+    const absolute = [Math.abs(normal.x), Math.abs(normal.y), Math.abs(normal.z)];
+    if (absolute[0]! >= absolute[1]! && absolute[0]! >= absolute[2]!) return [['z', size.z], ['y', size.y]];
+    if (absolute[1]! >= absolute[2]!) return [['x', size.x], ['z', size.z]];
+    return [['x', size.x], ['y', size.y]];
+  };
+  for (let triangle = 0; triangle < position.count; triangle += 3) {
+    a.fromBufferAttribute(position, triangle);
+    b.fromBufferAttribute(position, triangle + 1);
+    c.fromBufferAttribute(position, triangle + 2);
+    normal.crossVectors(ab.copy(b).sub(a), ac.copy(c).sub(a));
+    if (normal.lengthSq() <= 1e-20) rejectUvGeneration('Custom geometry contains a degenerate triangle before UV generation.');
+    const [[uAxis, uSize], [vAxis, vSize]] = axesForTriangle();
+    if (uSize <= 1e-12 || vSize <= 1e-12) rejectUvGeneration('Custom geometry UV projection axis is degenerate.');
+    for (let corner = 0; corner < 3; corner += 1) {
+      const point = corner === 0 ? a : corner === 1 ? b : c;
+      uv[(triangle + corner) * 2] = (point[uAxis] - bounds.min[uAxis]) / uSize;
+      uv[(triangle + corner) * 2 + 1] = (point[vAxis] - bounds.min[vAxis]) / vSize;
+    }
   }
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  if (geometry !== source) source.dispose();
+  return geometry;
 }
 
 function applyAssemblyProjectionUv(mesh: THREE.Mesh, projection: ReferenceProjectionIR): void {
@@ -1019,8 +1060,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const projectionStatus: ProjectionStatus = { declared: 0, loaded: 0, failed: 0, errors: [] };
   const parts: ProductPartInfo[] = [];
   for (const component of ir.components) {
-    const geometry = compileGeometry(component.geometry);
-    ensurePrimaryUv(geometry);
+    const geometry = ensurePrimaryUv(compileGeometry(component.geometry));
     const baseMaterial = createSurfaceMaterial(component.material, {
       mode,
       category: component.category,

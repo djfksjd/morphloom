@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T21:29:14.565Z",
+  "generatedAt": "2026-09-01T21:46:41.576Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -326,8 +326,8 @@
               "id": "design-uv",
               "label": "제품 UV 무결성",
               "pass": true,
-              "score": 99,
-              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.95%",
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
               "blocking": true
             },
             {
@@ -356,7 +356,7 @@
             "uvMeshCoverage": 1,
             "normalMeshCoverage": 1,
             "uvFiniteCoverage": 1,
-            "degenerateUvTriangleFraction": 0.009508716323296355,
+            "degenerateUvTriangleFraction": 0,
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 4.087549942966007e-8,
             "pbrSurfaceCoverage": 1,
@@ -1197,10 +1197,11 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.18.0",
       "pass": true,
       "benchmarkAccepted": true,
       "blenderVersions": [
-        "4.5.11 LTS"
+        "5.2.1 LTS"
       ],
       "cases": [
         {
@@ -1227,7 +1228,7 @@
           "boundsErrorMm": 0,
           "boundsToleranceMm": 0.1,
           "rawReexportStandard": "pass",
-          "repairApplied": false,
+          "repairApplied": true,
           "repairedTangents": 0,
           "finalStandard": "pass"
         },
@@ -1252,7 +1253,7 @@
           "sourceStandard": "pass",
           "byteDeterministic": true,
           "semanticParity": true,
-          "boundsErrorMm": 0.36613643169403076,
+          "boundsErrorMm": 0.36619603633880615,
           "boundsToleranceMm": 0.5,
           "rawReexportStandard": "pass",
           "repairApplied": false,
@@ -1355,7 +1356,7 @@
     {
       "capability": "Blender application import/export/reimport execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "Blender 4.5.11 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass semantic parity and final exact-byte validation"
+      "morphloom": "Blender 5.2.1 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation"
     },
     {
       "capability": "DCC re-export sanitation with final-byte conformance gate",
