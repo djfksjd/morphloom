@@ -152,6 +152,8 @@ const output = {
       status: visualHull.status,
       triangles: visualHull.triangleCount,
       occupiedVoxelCount: visualHull.occupiedVoxelCount,
+      minimumViewIoU: visualHull.minimumViewIoU,
+      confidenceWeightedIoU: visualHull.confidenceWeightedIoU,
       unconstrainedAxes: visualHull.unconstrainedAxes,
       limitationCount: visualHull.limitations.length,
     },
@@ -173,6 +175,7 @@ const output = {
     { capability: 'per-feature thresholds', img2threejs: 'yes', morphloom: contract.details.every((item) => item.threshold >= 0.5) ? 'yes' : 'blocked' },
     { capability: 'calibrated source-camera proof', img2threejs: 'yes', morphloom: contract.cameras.length > 0 ? 'yes' : 'blocked' },
     { capability: 'bounded welded visual-hull carving', img2threejs: 'yes', morphloom: visualHull.status === 'carved' && visualHull.triangleCount > 0 ? 'yes' : 'blocked' },
+    { capability: 'per-view visual-hull reprojection audit and bounded calibration tolerance', img2threejs: 'not established in pinned audit', morphloom: visualHull.minimumViewIoU >= 0.85 ? 'yes' : 'blocked' },
     { capability: 'foreground-normalized interior bands', img2threejs: 'yes', morphloom: interiorBands.aggregateSimilarity === 1 ? 'yes' : 'blocked' },
     { capability: 'deterministic material region comparator', img2threejs: 'yes', morphloom: materialComparison.passed ? 'yes' : 'blocked' },
     { capability: 'bounded correction and cost ceiling', img2threejs: 'yes', morphloom: contract.maxTotalIterations <= 128 && contract.tokenBudget > 0 ? 'yes' : 'blocked' },
@@ -192,4 +195,5 @@ writeFileSync('benchmarks/competitive-latest.json', `${JSON.stringify(output, nu
 console.log(JSON.stringify(output, null, 2));
 if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !item.accepted)
   || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.1'
-  || visualHull.status !== 'carved' || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed) process.exitCode = 1;
+  || visualHull.status !== 'carved' || visualHull.minimumViewIoU < 0.85
+  || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed) process.exitCode = 1;

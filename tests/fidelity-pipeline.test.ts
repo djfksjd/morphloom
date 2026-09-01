@@ -94,6 +94,16 @@ describe('locked fidelity contract', () => {
     ]));
   });
 
+  it('rejects underconstrained camera calibration with fewer than four anchors', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const contract = fixtureContract();
+    const underconstrained = structuredClone(contract);
+    underconstrained.cameras[0].anchorCount = 3;
+    expect(auditFidelityContract(underconstrained, ir).blockers).toContain(
+      'invalid camera calibration: source-front',
+    );
+  });
+
   it('rejects missing component mappings, material mismatches, and canonical pass reordering', () => {
     const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
     const contract = fixtureContract();

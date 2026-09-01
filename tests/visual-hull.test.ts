@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import * as THREE from 'three';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry, type VisualHullDescriptor } from '../src/engine/visual-hull';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 
@@ -53,6 +54,9 @@ describe('visual hull space carving', () => {
     expect(first.occupiedFraction).toBeGreaterThan(0.15);
     expect(first.occupiedFraction).toBeLessThan(0.75);
     expect(first.unconstrainedAxes).toEqual([]);
+    expect(first.viewAgreement).toHaveLength(3);
+    expect(first.minimumViewIoU).toBeGreaterThan(0.8);
+    expect(first.confidenceWeightedIoU).toBeGreaterThan(0.8);
     expect(edgeCounts(first.indices)).toEqual({ boundary: 0, nonManifold: 0 });
     const geometry = visualHullToBufferGeometry(first);
     expect(geometry.getAttribute('normal').count).toBe(first.positions.length / 3);
@@ -87,6 +91,35 @@ describe('visual hull space carving', () => {
       { axis: 'front', confidence: 1, mask: solidMask(16) },
       { axis: 'side', confidence: 1, mask: solidMask(16) },
     ]), resolution: 64 })).toThrow(/resolution/);
+    expect(() => validateVisualHullDescriptor({ ...descriptor([
+      { axis: 'front', confidence: 1, mask: solidMask(16) },
+      { axis: 'side', confidence: 1, mask: solidMask(16) },
+    ]), silhouetteToleranceVoxels: 3 })).toThrow(/silhouetteToleranceVoxels/);
+    expect(() => validateVisualHullDescriptor(descriptor([
+      { axis: 'front', confidence: 0, mask: solidMask(16) },
+      { axis: 'side', confidence: 1, mask: solidMask(16) },
+    ]))).toThrow(/confidence.*\(0, 1\]/);
+  });
+
+  it('uses a bounded tolerance for one-voxel calibration disagreement and reports the residual projection error', () => {
+    const left = Array.from({ length: 16 }, () => '1'.repeat(8) + '0'.repeat(8));
+    const right = Array.from({ length: 16 }, () => '0'.repeat(8) + '1'.repeat(8));
+    const strict = carveVisualHull(descriptor([
+      { axis: 'front', confidence: 1, mask: left },
+      { axis: 'top', confidence: 1, mask: right },
+    ]));
+    const tolerant = carveVisualHull({
+      ...descriptor([
+        { axis: 'front', confidence: 1, mask: left },
+        { axis: 'top', confidence: 1, mask: right },
+      ]),
+      silhouetteToleranceVoxels: 1,
+    });
+    expect(strict.status).toBe('empty');
+    expect(tolerant.status).toBe('carved');
+    expect(tolerant.minimumViewIoU).toBeLessThan(0.75);
+    expect(tolerant.limitations.join(' ')).toMatch(/dilated.*require review/);
+    expect(tolerant.viewAgreement.every((view) => view.falsePositiveFraction <= 0.5)).toBe(true);
   });
 
   it('maps the first image rows to positive world y', () => {
@@ -119,6 +152,9 @@ describe('visual hull space carving', () => {
     const mesh = build.root.getObjectByName('carved-shell');
     expect(mesh).toBeDefined();
     expect(build.root.userData.assemblyIR.components[0].geometry.op).toBe('visualHull');
+    const evidence = (mesh as THREE.Mesh).geometry.userData.visualHullEvidence;
+    expect(evidence.minimumViewIoU).toBe(1);
+    expect(evidence.viewAgreement).toHaveLength(2);
     expect(build.metrics.topology.pass).toBe(true);
     expect(build.metrics.parts).toBe(1);
   });

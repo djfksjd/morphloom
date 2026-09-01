@@ -452,7 +452,7 @@ export function auditFidelityContract(contract: FidelityContract, ir: AssemblyIR
     if (!validId(camera.id) || cameraIds.has(camera.id)) blockers.push(`invalid or duplicate camera id: ${camera.id}`);
     cameraIds.add(camera.id);
     if (typeof camera.sourceViewId !== 'string' || !camera.sourceViewId.trim() || camera.sourceViewId.length > 160 || !['perspective', 'orthographic'].includes(camera.projection)
-      || !Number.isInteger(camera.anchorCount) || camera.anchorCount < 3 || camera.anchorCount > 512
+      || !Number.isInteger(camera.anchorCount) || camera.anchorCount < 4 || camera.anchorCount > 512
       || !Number.isFinite(camera.reprojectionErrorPx) || camera.reprojectionErrorPx < 0 || camera.reprojectionErrorPx > 4) blockers.push(`invalid camera calibration: ${camera.id}`);
   }
   if (contract.complexity !== 'simple' && cameras.length < 1) blockers.push('moderate or complex assets require a calibrated source camera');

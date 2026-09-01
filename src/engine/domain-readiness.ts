@@ -70,6 +70,9 @@ export interface DomainReadinessReport {
     fingerAnimationTracks: number;
     maximumSkinWeightError: number;
     maximumSkinInfluences: number;
+    visualHullMeshes: number;
+    minimumVisualHullViewIoU: number;
+    confidenceWeightedVisualHullIoU: number;
     minimumMeshAxisMm?: number;
     declaredMinimumFeatureMm?: number;
     enclosedVolumeMm3?: number;
@@ -184,6 +187,9 @@ function inspectGeometry(root: THREE.Object3D): {
   fingerBones: number;
   fingerWeightedVertices: number;
   fingerAnimationTracks: number;
+  visualHullMeshes: number;
+  minimumVisualHullViewIoU: number;
+  confidenceWeightedVisualHullIoU: number;
 } {
   let meshes = 0;
   let uvMeshes = 0;
@@ -196,6 +202,9 @@ function inspectGeometry(root: THREE.Object3D): {
   let unsupportedOverhangAreaM2 = 0;
   const fingerBoneNames = new Set<string>();
   let fingerWeightedVertices = 0;
+  let visualHullMeshes = 0;
+  let minimumVisualHullViewIoU = 1;
+  let confidenceWeightedVisualHullIoU = 1;
   const fingerPattern = /^(thumb|index|middle|ring|little)_\d{2}_[LR]$/;
   const bounds = new THREE.Box3().setFromObject(root);
   const buildPlateToleranceM = 0.0002;
@@ -211,6 +220,17 @@ function inspectGeometry(root: THREE.Object3D): {
     if (!(object instanceof THREE.Mesh)) return;
     meshes += 1;
     const geometry = object.geometry;
+    const visualHullEvidence = geometry.userData.visualHullEvidence as {
+      minimumViewIoU?: unknown;
+      confidenceWeightedIoU?: unknown;
+    } | undefined;
+    if (visualHullEvidence) {
+      visualHullMeshes += 1;
+      const minimum = Number(visualHullEvidence.minimumViewIoU);
+      const weighted = Number(visualHullEvidence.confidenceWeightedIoU);
+      minimumVisualHullViewIoU = Math.min(minimumVisualHullViewIoU, Number.isFinite(minimum) ? minimum : 0);
+      confidenceWeightedVisualHullIoU = Math.min(confidenceWeightedVisualHullIoU, Number.isFinite(weighted) ? weighted : 0);
+    }
     const position = geometry.getAttribute('position');
     if (!position) return;
     if (geometry.hasAttribute('uv')) uvMeshes += 1;
@@ -288,6 +308,9 @@ function inspectGeometry(root: THREE.Object3D): {
     fingerAnimationTracks: root.animations.reduce((sum, clip) => (
       sum + clip.tracks.filter((track) => fingerPattern.test(track.name.split('.')[0])).length
     ), 0),
+    visualHullMeshes,
+    minimumVisualHullViewIoU,
+    confidenceWeightedVisualHullIoU,
   };
 }
 
@@ -388,6 +411,13 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   add('finite-scene', '유한 장면 데이터', snapshot.finiteTransforms, snapshot.finiteTransforms ? 100 : 0, snapshot.finiteTransforms ? '모든 변환값이 유한함' : 'NaN/Infinity 변환 발견');
   add('named-parts', '이름 있는 편집 단위', namedMeshCoverage === 1, namedMeshCoverage * 100, `${snapshot.namedMeshes}/${snapshot.meshes} 메시 명명`);
   add('glb-roundtrip', '실제 GLB 재열기', input.browserGlbRoundTrip, input.browserGlbRoundTrip ? 100 : 0, input.browserGlbRoundTrip ? '브라우저 GLTFLoader 재열기 통과' : '동일 입력 브라우저 증명 없음');
+  if (geometry.visualHullMeshes > 0) {
+    const projectionPass = geometry.minimumVisualHullViewIoU >= 0.75
+      && geometry.confidenceWeightedVisualHullIoU >= 0.85;
+    add('visual-hull-projection', '다중 시점 외피 재투영', projectionPass,
+      projectionPass ? 100 : geometry.confidenceWeightedVisualHullIoU * 100,
+      `${geometry.visualHullMeshes} hull · min IoU ${geometry.minimumVisualHullViewIoU.toFixed(3)} · weighted ${geometry.confidenceWeightedVisualHullIoU.toFixed(3)}`);
+  }
 
   if (input.domain === 'architecture') {
     const ir = input.root.userData.assemblyIR as { metadata?: { planFootprintVerified?: boolean; assetKind?: string } } | undefined;
@@ -497,6 +527,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       fingerAnimationTracks: geometry.fingerAnimationTracks,
       maximumSkinWeightError: geometry.maximumSkinWeightError,
       maximumSkinInfluences: geometry.maximumSkinInfluences,
+      visualHullMeshes: geometry.visualHullMeshes,
+      minimumVisualHullViewIoU: geometry.minimumVisualHullViewIoU,
+      confidenceWeightedVisualHullIoU: geometry.confidenceWeightedVisualHullIoU,
       minimumMeshAxisMm: geometry.minimumMeshAxisMm,
       declaredMinimumFeatureMm,
       enclosedVolumeMm3: geometry.enclosedVolumeMm3,

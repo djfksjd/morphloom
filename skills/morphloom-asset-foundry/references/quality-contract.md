@@ -38,7 +38,7 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 - Verify spatial relationships numerically where possible. Counts cannot prove side, order, direction, alignment, attachment, containment, or continuity.
 - Require finite dimensions, bounded segment counts, zero degenerate triangles, zero non-manifold edges, and closed meshes where the component should be solid.
 - Block inverted normals, accidental open borders, duplicate coplanar faces, visible z-fighting, floating parts, unexplained penetrations, and self-intersections that affect the intended view or deformation.
-- If two or three compatible orthographic silhouette masks are available, use `geometry.op: visualHull` to intersect them on the bounded voxel grid. Require a non-empty carve, welded boundary faces, zero boundary/non-manifold edges, and an explicit list of unconstrained axes. Treat the hull as an upper bound: it cannot recover a concavity that no supplied silhouette exposes.
+- If two or three compatible orthographic silhouette masks are available, use `geometry.op: visualHull` to intersect them on the bounded voxel grid. Require a non-empty carve, welded boundary faces, zero boundary/non-manifold edges, and an explicit list of unconstrained axes. Reproject the occupied volume into every supplied mask and record per-view IoU plus false-positive/negative fractions. Block delivery below `minimumViewIoU = 0.75` or `confidenceWeightedIoU = 0.85`, even when topology is watertight. Silhouette dilation is a bounded calibration aid (`0..2` voxels), never permission to erase a failed reprojection gate. Treat the hull as an upper bound: it cannot recover a concavity that no supplied silhouette exposes.
 
 ## Surface response
 
@@ -57,7 +57,7 @@ Lock the pass order as `blockout → structure → form → material → surface
 Review in this order because later polish cannot repair earlier interpretation errors:
 
 1. **Source interpretation:** orientation, anatomical/coordinate side, scale, projection direction, and evidence labels.
-2. **Camera calibration:** projection type, crop, field of view or focal-length estimate, pose, and stable image/model anchors. Lock this camera before judging geometry so camera fitting cannot hide proportion errors.
+2. **Camera calibration:** projection type, crop, field of view or focal-length estimate, pose, and at least four stable image/model anchors for a photographic source. Lock this camera before judging geometry so camera fitting cannot hide proportion errors. Orthographic drawings still require explicit orientation and scale.
 3. **Silhouette and proportions:** outer contour, dominant masses, pose/balance, and major voids from the source camera. When orthographic masks exist, use their visual-hull intersection as a geometry constraint rather than inventing hidden depth.
 4. **Feature completeness:** every visible-feature row is resolved and every signature id exists in its proof view. Align the reference/render foreground bounds, area-average onto a bounded grid, and compare named height bands so missing eyes, controls, openings, trim, or fixtures cannot hide behind an unchanged outline. Refuse the metric when no foreground cells overlap.
 5. **Relationships and function:** adjacency, attachment, clearances, openings, joints, ports, conductors, circulation, and articulation.

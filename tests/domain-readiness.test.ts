@@ -232,6 +232,41 @@ describe('cross-domain semi-professional readiness', () => {
     expect(report.warnings.join(' ')).toMatch(/print-overhang/);
   });
 
+  it('blocks a watertight visual hull when its source-view reprojection remains inconsistent', () => {
+    const left = Array.from({ length: 16 }, () => '1'.repeat(8) + '0'.repeat(8));
+    const right = Array.from({ length: 16 }, () => '0'.repeat(8) + '1'.repeat(8));
+    const build = compileAssemblyIR({
+      schema: 'morphloom.assembly/0.1', name: 'miscalibrated visual hull', units: 'mm',
+      components: [{
+        id: 'miscalibrated_shell', name: 'Miscalibrated shell', category: 'enclosure', materialName: 'polymer',
+        detail: 'Tolerance can preserve a review mesh but cannot erase a poor source-view score.',
+        geometry: {
+          op: 'visualHull',
+          descriptor: {
+            projection: 'orthographic', boundsSpace: 'component-local',
+            bounds: { min: [-100, -100, -100], max: [100, 100, 100] },
+            resolution: 8, triangleBudget: 400_000, silhouetteToleranceVoxels: 1,
+            views: [
+              { axis: 'front', confidence: 1, mask: left },
+              { axis: 'top', confidence: 1, mask: right },
+            ],
+          },
+        },
+        material: { color: '#667788', surface: 'molded-polymer', microNormalStrength: 0.25 },
+        evidence: { status: 'estimated', source: 'misaligned orthographic masks' },
+      }],
+    }, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: build.root, topology: build.metrics.topology,
+      evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(build.metrics.topology.pass).toBe(true);
+    expect(report.pass).toBe(false);
+    expect(report.metrics.visualHullMeshes).toBe(1);
+    expect(report.metrics.minimumVisualHullViewIoU).toBeLessThan(0.75);
+    expect(report.blockers.join(' ')).toMatch(/visual-hull-projection/);
+  });
+
   it('fails closed instead of awarding animation or print readiness to an unqualified mesh', () => {
     const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial());
     plane.name = 'unqualified_plane';

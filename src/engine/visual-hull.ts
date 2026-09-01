@@ -23,6 +23,8 @@ export interface VisualHullDescriptor {
   bounds: { min: [number, number, number]; max: [number, number, number] };
   resolution: number;
   triangleBudget: number;
+  /** Bounded silhouette dilation for small calibration/segmentation errors. */
+  silhouetteToleranceVoxels?: number;
   views: VisualHullView[];
   hiddenRegions?: string[];
 }
@@ -37,6 +39,15 @@ export interface VisualHullResult {
   totalVoxelCount: number;
   occupiedFraction: number;
   viewAxes: VisualHullViewAxis[];
+  viewAgreement: Array<{
+    axis: VisualHullViewAxis;
+    confidence: number;
+    silhouetteIoU: number;
+    falseNegativeFraction: number;
+    falsePositiveFraction: number;
+  }>;
+  minimumViewIoU: number;
+  confidenceWeightedIoU: number;
   unconstrainedAxes: VisualHullWorldAxis[];
   status: 'carved' | 'empty';
   limitations: string[];
@@ -99,6 +110,10 @@ export function validateVisualHullDescriptor(descriptor: unknown): asserts descr
   if (!Number.isInteger(value.triangleBudget) || (value.triangleBudget ?? 0) < 1 || (value.triangleBudget ?? 0) > MAX_TRIANGLES) {
     errors.push(`triangleBudget must be an integer from 1 to ${MAX_TRIANGLES}.`);
   }
+  if (value.silhouetteToleranceVoxels !== undefined
+    && (!Number.isInteger(value.silhouetteToleranceVoxels) || value.silhouetteToleranceVoxels < 0 || value.silhouetteToleranceVoxels > 2)) {
+    errors.push('silhouetteToleranceVoxels must be an integer from 0 to 2.');
+  }
   if (Number.isInteger(value.resolution) && Number.isInteger(value.triangleBudget)) {
     const worstCase = (value.resolution as number) ** 3 * 12;
     if ((value.triangleBudget as number) < worstCase) errors.push(`triangleBudget must be at least ${worstCase} for this resolution.`);
@@ -111,8 +126,8 @@ export function validateVisualHullDescriptor(descriptor: unknown): asserts descr
       if (!view || !Object.hasOwn(VIEW_AXES, view.axis)) errors.push(`views[${index}].axis is invalid.`);
       else if (axes.has(view.axis)) errors.push('view axes must be distinct.');
       else axes.add(view.axis);
-      if (typeof view?.confidence !== 'number' || !Number.isFinite(view.confidence) || view.confidence < 0 || view.confidence > 1) {
-        errors.push(`views[${index}].confidence must be within 0..1.`);
+      if (typeof view?.confidence !== 'number' || !Number.isFinite(view.confidence) || view.confidence <= 0 || view.confidence > 1) {
+        errors.push(`views[${index}].confidence must be within (0, 1].`);
       }
       validateMask(view?.mask, `views[${index}].mask`, errors);
     });
@@ -132,8 +147,79 @@ function sampleMask(mask: string[], column: number, row: number): boolean {
   return x >= 0 && y >= 0 && x < width && y < mask.length && mask[y][x] === '1';
 }
 
+function sampleMaskWithTolerance(mask: string[], column: number, row: number, toleranceVoxels: number, resolution: number): boolean {
+  if (toleranceVoxels <= 0) return sampleMask(mask, column, row);
+  const width = mask[0]!.length;
+  const height = mask.length;
+  const centerX = Math.floor(column * width);
+  const centerY = Math.floor(row * height);
+  const radiusX = Math.max(1, Math.ceil(toleranceVoxels * width / resolution));
+  const radiusY = Math.max(1, Math.ceil(toleranceVoxels * height / resolution));
+  for (let y = centerY - radiusY; y <= centerY + radiusY; y += 1) {
+    if (y < 0 || y >= height) continue;
+    for (let x = centerX - radiusX; x <= centerX + radiusX; x += 1) {
+      if (x < 0 || x >= width) continue;
+      const normalized = ((x - centerX) / radiusX) ** 2 + ((y - centerY) / radiusY) ** 2;
+      if (normalized <= 1 && mask[y]![x] === '1') return true;
+    }
+  }
+  return false;
+}
+
 function voxelKey(x: number, y: number, z: number, resolution: number): number {
   return x + resolution * (y + resolution * z);
+}
+
+function inspectProjectionAgreement(
+  occupied: Uint8Array,
+  resolution: number,
+  views: VisualHullView[],
+): Pick<VisualHullResult, 'viewAgreement' | 'minimumViewIoU' | 'confidenceWeightedIoU'> {
+  const viewAgreement = views.map((view) => {
+    const predicted = new Uint8Array(resolution * resolution);
+    for (let z = 0; z < resolution; z += 1) {
+      for (let y = 0; y < resolution; y += 1) {
+        for (let x = 0; x < resolution; x += 1) {
+          if (occupied[voxelKey(x, y, z, resolution)] === 0) continue;
+          const coordinates = [x, y, z];
+          const [columnAxis, columnFlip, rowAxis, rowFlip] = VIEW_AXES[view.axis];
+          let column = coordinates[columnAxis]!;
+          let row = coordinates[rowAxis]!;
+          if (columnFlip) column = resolution - column - 1;
+          if (rowFlip) row = resolution - row - 1;
+          predicted[row * resolution + column] = 1;
+        }
+      }
+    }
+    let intersection = 0;
+    let union = 0;
+    let targetCount = 0;
+    let predictedCount = 0;
+    for (let row = 0; row < resolution; row += 1) {
+      for (let column = 0; column < resolution; column += 1) {
+        const target = sampleMask(view.mask, (column + 0.5) / resolution, (row + 0.5) / resolution);
+        const projected = predicted[row * resolution + column] === 1;
+        if (target) targetCount += 1;
+        if (projected) predictedCount += 1;
+        if (target && projected) intersection += 1;
+        if (target || projected) union += 1;
+      }
+    }
+    return {
+      axis: view.axis,
+      confidence: view.confidence,
+      silhouetteIoU: intersection / Math.max(1, union),
+      falseNegativeFraction: (targetCount - intersection) / Math.max(1, targetCount),
+      falsePositiveFraction: (predictedCount - intersection) / Math.max(1, predictedCount),
+    };
+  });
+  const confidenceTotal = views.reduce((sum, view) => sum + view.confidence, 0);
+  return {
+    viewAgreement,
+    minimumViewIoU: Math.min(...viewAgreement.map((item) => item.silhouetteIoU)),
+    confidenceWeightedIoU: viewAgreement.reduce((sum, item) => sum + item.silhouetteIoU * item.confidence, 0)
+      / Math.max(1e-9, confidenceTotal),
+  };
 }
 
 function boundarySurface(
@@ -193,6 +279,7 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     (high[2] - low[2]) / resolution,
   ];
   const occupied = new Uint8Array(totalVoxelCount);
+  const silhouetteToleranceVoxels = descriptor.silhouetteToleranceVoxels ?? 0;
   let occupiedVoxelCount = 0;
   for (let z = 0; z < resolution; z += 1) {
     for (let y = 0; y < resolution; y += 1) {
@@ -204,7 +291,7 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
           let v = (point[rowAxis] - low[rowAxis]) / (high[rowAxis] - low[rowAxis]);
           if (columnFlip) u = 1 - u;
           if (rowFlip) v = 1 - v;
-          return sampleMask(view.mask, u, v);
+          return sampleMaskWithTolerance(view.mask, u, v, silhouetteToleranceVoxels, resolution);
         });
         if (!inside) continue;
         occupied[voxelKey(x, y, z, resolution)] = 1;
@@ -213,12 +300,15 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     }
   }
   const surface = boundarySurface(occupied, low, step, resolution);
+  const projectionAgreement = inspectProjectionAgreement(occupied, resolution, descriptor.views);
   const covered = new Set(descriptor.views.map((view) => VIEW_FREE_AXIS[view.axis]));
   const unconstrainedAxes = AXIS_NAMES.filter((_, axis) => !covered.has(axis));
   const limitations = [
     'A visual hull is an upper bound and cannot reproduce a concavity that no supplied silhouette exposes.',
   ];
   if (descriptor.views.length < 3) limitations.push(`Only ${descriptor.views.length} views were supplied; ${unconstrainedAxes.join(', ')} remains loose.`);
+  if (silhouetteToleranceVoxels > 0) limitations.push(`Silhouettes were dilated by at most ${silhouetteToleranceVoxels} voxel(s); inspect per-view projection error before delivery.`);
+  if (projectionAgreement.minimumViewIoU < 0.75) limitations.push(`Minimum source-view silhouette IoU is ${projectionAgreement.minimumViewIoU.toFixed(3)}; source calibration or masks require review.`);
   return {
     ...surface,
     triangleCount: surface.indices.length / 3,
@@ -228,6 +318,7 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     totalVoxelCount,
     occupiedFraction: occupiedVoxelCount / totalVoxelCount,
     viewAxes: descriptor.views.map((view) => view.axis),
+    ...projectionAgreement,
     unconstrainedAxes,
     status: occupiedVoxelCount === 0 ? 'empty' : 'carved',
     limitations,

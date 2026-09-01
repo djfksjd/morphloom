@@ -632,6 +632,9 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
         occupiedVoxelCount: carve.occupiedVoxelCount,
         totalVoxelCount: carve.totalVoxelCount,
         viewAxes: carve.viewAxes,
+        viewAgreement: carve.viewAgreement,
+        minimumViewIoU: carve.minimumViewIoU,
+        confidenceWeightedIoU: carve.confidenceWeightedIoU,
         unconstrainedAxes: carve.unconstrainedAxes,
         limitations: carve.limitations,
       };
