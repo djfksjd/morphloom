@@ -18,6 +18,8 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 공개 Talon Doppler Ruby 정면 사진 한 장을 양쪽에 동일하게 사용했습니다. img2threejs는 공개 데모의 고정 캡처 모드로 다시 렌더했고, Morphloom은 사진의 알파 외곽과 내부 개구를 측정해 `TALON_REFERENCE_BENCHMARK_IR`을 생성한 뒤 로컬 뷰어에서 정면·ISO 렌더와 GLB 재열기를 실행했습니다.
 
+UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. Morphloom은 종합 0.892 대 0.796, 실루엣 0.937 대 0.745, 불규칙 표면 0.881 대 0.771로 앞섰습니다. 반면 평균 재질 색·밝기 유사도는 0.839 대 0.877로 뒤졌습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 보정 시점과 5명 블라인드 패널을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
+
 | 실제 결과 | img2threejs | Morphloom |
 |---|---:|---:|
 | 정면 색상 재현 | 원본 플레이트 투영 | 조립 좌표계 원본 투영 |
@@ -46,6 +48,7 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 - 크기가 다른 참조/렌더도 전경 포락을 정렬한 뒤 상·중·하 내부를 분리 비교하므로 얼굴·창호·버튼 같은 내부 누락이 윤곽 점수에 숨지 않습니다.
 - 재질 영역은 CIE Lab 색차, 밝기, 미세·중간·큰 스케일 대비, 기울기 방향 분포, 주기성, 불규칙성을 별도로 검사해 색만 비슷하거나 반복 무늬인 평면 재질을 차단합니다.
 - 로컬 참조 플레이트를 부품 별 UV가 아닌 조립 XY 좌표계로 투영해 편집 부품 사이의 무늬가 끊기지 않습니다.
+- 투명 원본의 검정 RGB가 필터 경계에 번지지 않도록 가장 가까운 유효 표면색을 제한된 픽셀 예산 안에서 확장하고, 투영은 압출 메시의 앞·뒤 캡에만 적용해 측면 두께가 사진으로 오염되지 않게 합니다.
 - 원본 밝기의 국부 기울기와 변동에서 tangent-space normal·roughness map을 생성해 요철·마모가 조명에 반응하게 합니다.
 - `https:` 참조는 거부하고 로컬 경로와 `blob:`만 허용하며, 투영 로드 실패 시 100점과 GLB 납품을 모두 차단합니다.
 - 수정 결과가 나빠지면 이전 최선 결과로 되돌리고, 같은 결함이 두 번 남으면 IR이 아니라 명세를 다시 고칩니다.
@@ -84,6 +87,7 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 ```bash
 npm run benchmark:competitive
+npm run benchmark:visual-captures -- --reference public/benchmark-input/talon-doppler-ruby.webp --morphloom morphloom-result.png --competitor img2threejs-talon-live.png --competitor-threshold 48 --output benchmarks/talon-visual-broadside-latest.json
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 ```

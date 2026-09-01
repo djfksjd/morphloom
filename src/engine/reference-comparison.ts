@@ -29,6 +29,7 @@ export interface RegionComparisonScore {
   silhouetteIoU: number;
   interiorSimilarity: number;
   score: number;
+  foregroundPixels: { reference: number; render: number; intersection: number; union: number };
 }
 
 export interface ReferenceComparisonResult {
@@ -180,7 +181,18 @@ export function compareReferenceFrames(
     },
     regions: regions.map((region) => {
       const score = compareRange(reference, render, region.x, region.y, region.x + region.width, region.y + region.height);
-      return { featureId: region.featureId, silhouetteIoU: score.silhouetteIoU, interiorSimilarity: score.interiorSimilarity, score: score.score };
+      return {
+        featureId: region.featureId,
+        silhouetteIoU: score.silhouetteIoU,
+        interiorSimilarity: score.interiorSimilarity,
+        score: score.score,
+        foregroundPixels: {
+          reference: score.referencePixels,
+          render: score.renderPixels,
+          intersection: score.intersection,
+          union: score.union,
+        },
+      };
     }),
   };
 }

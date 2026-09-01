@@ -16,6 +16,8 @@ An electronics result does not pass merely because every wire has two endpoints.
 
 Assign surface finishes by actual material: anodized or brushed metal, coated glass, optical glass/sapphire, solder mask, molded or soft-touch polymer, rubber, leather, wood, and semiconductor package. Inspect reflection at grazing angles and ensure texture scale follows the component size.
 
+When projecting a transparent product photograph, do not sample transparent black RGB at antialiased boundaries. Extend the nearest admitted opaque colour within a bounded pixel budget, keep actual openings as geometry, and project the plate only onto the intended front/back caps. Extruded side walls retain their authored physical material; copying a broadside photograph around the thickness is a fidelity defect.
+
 Visible cameras, lenses, indicators, and displays require physical layering—bezel, recess, cover glass/window, optical or emissive layer, and source state where evidenced. A flat dark or glowing patch does not substitute for an optical stack. Inventory visible labels, legends, icons, engravings, and regulatory marks; preserve orientation/mirroring and mark unreadable copy uncertain rather than fabricating it.
 
 For movable parts, record pivot/axis, travel limits, endpoint poses, clearances/collisions, and cable behavior after motion. Service/exploded assets additionally require an assembly dependency order and a plausible removal path.

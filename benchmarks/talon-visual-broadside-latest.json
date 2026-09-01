@@ -1,0 +1,339 @@
+{
+  "generatedAt": "2026-09-01T19:57:12.819Z",
+  "captures": {
+    "reference": {
+      "file": "talon-doppler-ruby.webp",
+      "sha256": "f0a791552b385e5a9ccc3718b2b2e8f0c40201e8d271c2cb6d3df735e77f02e5"
+    },
+    "morphloom": {
+      "file": "morphloom-result.png",
+      "sha256": "ac307befa75ce95363ed45d2b55f5efbbaa093fa1fa406266c672034b66dd71c"
+    },
+    "img2threejs": {
+      "file": "img2threejs-talon-live.png",
+      "sha256": "06e9fa2464c299e0a55c97ebbb69926395b0c34b410c9021c21fffeeebfae99d"
+    }
+  },
+  "normalization": {
+    "width": 512,
+    "height": 256,
+    "method": "coherent-connected-foreground-fit-v2",
+    "thresholds": {
+      "reference": 32,
+      "morphloom": 32,
+      "img2threejs": 48
+    }
+  },
+  "report": {
+    "schema": "morphloom.same-input-visual-audit/0.1",
+    "id": "talon-broadside-live-capture",
+    "domain": "industrial-design",
+    "status": "unproven",
+    "claimAllowed": false,
+    "scores": {
+      "morphloom": {
+        "id": "morphloom",
+        "score": 0.8921307044361552,
+        "silhouetteIoU": 0.9373054979253111,
+        "interiorSimilarity": 0.8596080058917113,
+        "materialSimilarity": 0.8385478498819464,
+        "surfaceScaleSimilarity": 0.8741470812852328,
+        "irregularitySimilarity": 0.8810132600864617,
+        "minimumFeatureScore": 0.8832668599857052,
+        "minimumViewScore": 0.8921307044361552,
+        "views": [
+          {
+            "viewId": "broadside",
+            "score": 0.8921307044361552,
+            "reference": {
+              "method": "pixel-frame-v1",
+              "referenceFingerprint": "0e21c3ac",
+              "renderFingerprint": "235b8576",
+              "silhouetteIoU": 0.9373054979253111,
+              "interiorSimilarity": 0.8596080058917113,
+              "score": 0.9101113757135512,
+              "foregroundPixels": {
+                "reference": 28993,
+                "render": 30769,
+                "intersection": 28914,
+                "union": 30848
+              },
+              "regions": [
+                {
+                  "featureId": "whole-silhouette",
+                  "silhouetteIoU": 0.9373054979253111,
+                  "interiorSimilarity": 0.8596080058917113,
+                  "score": 0.9101113757135512,
+                  "foregroundPixels": {
+                    "reference": 28993,
+                    "render": 30769,
+                    "intersection": 28914,
+                    "union": 30848
+                  }
+                },
+                {
+                  "featureId": "blade-and-openings",
+                  "silhouetteIoU": 0.9658983050847457,
+                  "interiorSimilarity": 0.8887119911954862,
+                  "score": 0.9388830952235049,
+                  "foregroundPixels": {
+                    "reference": 14266,
+                    "render": 14731,
+                    "intersection": 14247,
+                    "union": 14750
+                  }
+                },
+                {
+                  "featureId": "grip-fasteners-and-ring",
+                  "silhouetteIoU": 0.911177347242921,
+                  "interiorSimilarity": 0.8314330979365904,
+                  "score": 0.8832668599857052,
+                  "foregroundPixels": {
+                    "reference": 15345,
+                    "render": 16715,
+                    "intersection": 15285,
+                    "union": 16775
+                  }
+                }
+              ]
+            },
+            "materialSimilarity": 0.8385478498819464,
+            "surfaceScaleSimilarity": 0.8741470812852328,
+            "irregularitySimilarity": 0.8810132600864617,
+            "material": {
+              "method": "material-region-v2",
+              "reference": {
+                "meanRgb": [
+                  147.84824902723736,
+                  92.68482490272373,
+                  91.81517509727627
+                ],
+                "meanLuma": 0.40921482413977267,
+                "lumaVariance": 0.05232188844791863,
+                "horizontalGradient": 0.0867383651416122,
+                "verticalGradient": 0.06874395474458767,
+                "anisotropyProxy": 1.2617598953083402,
+                "fineContrast": 0.04768305635148045,
+                "coarseContrast": 0.12311327413984453,
+                "gradientEntropy": 0.9588139759851471,
+                "periodicity": 0.9628518073612766,
+                "irregularity": 0.5717143469796491,
+                "gradientHistogram": [
+                  0.15160340198471847,
+                  0.058856582712863495,
+                  0.13124507638609148,
+                  0.1469321114251594,
+                  0.10258058372545792,
+                  0.056221257414275236,
+                  0.12594857780972515,
+                  0.22661240854170878
+                ],
+                "foregroundCoverage": 0.2230902777777778
+              },
+              "render": {
+                "meanRgb": [
+                  156.7888888888889,
+                  115.27222222222223,
+                  116.01666666666667
+                ],
+                "meanLuma": 0.4868722135076255,
+                "lumaVariance": 0.09551323957282096,
+                "horizontalGradient": 0.09752349241583426,
+                "verticalGradient": 0.07936559971010992,
+                "anisotropyProxy": 1.2287879480788615,
+                "fineContrast": 0.06192794143652157,
+                "coarseContrast": 0.14897160237865642,
+                "gradientEntropy": 0.9532381797989607,
+                "periodicity": 0.8135010174928072,
+                "irregularity": 0.6312077169364182,
+                "gradientHistogram": [
+                  0.18649629777783214,
+                  0.07098803897186225,
+                  0.0908605356488374,
+                  0.15271008601963307,
+                  0.12263198103763336,
+                  0.09278878313809233,
+                  0.05608512939848944,
+                  0.22743914800762
+                ],
+                "foregroundCoverage": 0.234375
+              },
+              "deltaE76": 10.235771567882006,
+              "scores": {
+                "baseColor": 0.7952845686423599,
+                "meanLuma": 0.8274280236269937,
+                "microstructure": 0.8148079284095988,
+                "surfaceScale": 0.8741470812852328,
+                "irregularity": 0.8810132600864617,
+                "directionalResponse": 0.9366330186183854,
+                "overall": 0.8385478498819464
+              },
+              "mismatches": [],
+              "passed": true,
+              "nextAction": "continue",
+              "limitation": "Image metrics constrain appearance but cannot uniquely identify physical material parameters without calibrated lighting."
+            }
+          }
+        ]
+      },
+      "img2threejs": {
+        "id": "img2threejs",
+        "score": 0.7962249127872962,
+        "silhouetteIoU": 0.7446938242211318,
+        "interiorSimilarity": 0.8681558067186117,
+        "materialSimilarity": 0.8769342206532289,
+        "surfaceScaleSimilarity": 0.7770192700536637,
+        "irregularitySimilarity": 0.7712629454002173,
+        "minimumFeatureScore": 0.7596942812229835,
+        "minimumViewScore": 0.7962249127872962,
+        "views": [
+          {
+            "viewId": "broadside",
+            "score": 0.7962249127872962,
+            "reference": {
+              "method": "pixel-frame-v1",
+              "referenceFingerprint": "0e21c3ac",
+              "renderFingerprint": "c5656de7",
+              "silhouetteIoU": 0.7446938242211318,
+              "interiorSimilarity": 0.8681558067186117,
+              "score": 0.7879055180952498,
+              "foregroundPixels": {
+                "reference": 28993,
+                "render": 31096,
+                "intersection": 25648,
+                "union": 34441
+              },
+              "regions": [
+                {
+                  "featureId": "whole-silhouette",
+                  "silhouetteIoU": 0.7446938242211318,
+                  "interiorSimilarity": 0.8681558067186117,
+                  "score": 0.7879055180952498,
+                  "foregroundPixels": {
+                    "reference": 28993,
+                    "render": 31096,
+                    "intersection": 25648,
+                    "union": 34441
+                  }
+                },
+                {
+                  "featureId": "blade-and-openings",
+                  "silhouetteIoU": 0.8047977130072711,
+                  "interiorSimilarity": 0.8607267771973655,
+                  "score": 0.8243728854738042,
+                  "foregroundPixels": {
+                    "reference": 14266,
+                    "render": 14775,
+                    "intersection": 12950,
+                    "union": 16091
+                  }
+                },
+                {
+                  "featureId": "grip-fasteners-and-ring",
+                  "silhouetteIoU": 0.6975389620611848,
+                  "interiorSimilarity": 0.8751255882377525,
+                  "score": 0.7596942812229835,
+                  "foregroundPixels": {
+                    "reference": 15345,
+                    "render": 17005,
+                    "intersection": 13293,
+                    "union": 19057
+                  }
+                }
+              ]
+            },
+            "materialSimilarity": 0.8769342206532289,
+            "surfaceScaleSimilarity": 0.7770192700536637,
+            "irregularitySimilarity": 0.7712629454002173,
+            "material": {
+              "method": "material-region-v2",
+              "reference": {
+                "meanRgb": [
+                  147.84824902723736,
+                  92.68482490272373,
+                  91.81517509727627
+                ],
+                "meanLuma": 0.40921482413977267,
+                "lumaVariance": 0.05232188844791863,
+                "horizontalGradient": 0.0867383651416122,
+                "verticalGradient": 0.06874395474458767,
+                "anisotropyProxy": 1.2617598953083402,
+                "fineContrast": 0.04768305635148045,
+                "coarseContrast": 0.12311327413984453,
+                "gradientEntropy": 0.9588139759851471,
+                "periodicity": 0.9628518073612766,
+                "irregularity": 0.5717143469796491,
+                "gradientHistogram": [
+                  0.15160340198471847,
+                  0.058856582712863495,
+                  0.13124507638609148,
+                  0.1469321114251594,
+                  0.10258058372545792,
+                  0.056221257414275236,
+                  0.12594857780972515,
+                  0.22661240854170878
+                ],
+                "foregroundCoverage": 0.2230902777777778
+              },
+              "render": {
+                "meanRgb": [
+                  133.67090909090908,
+                  93.36,
+                  89.54
+                ],
+                "meanLuma": 0.3986442951871656,
+                "lumaVariance": 0.051150606597703235,
+                "horizontalGradient": 0.09562569196973382,
+                "verticalGradient": 0.0753431095266389,
+                "anisotropyProxy": 1.2692028849157553,
+                "fineContrast": 0.05874886367145284,
+                "coarseContrast": 0.1068061963732862,
+                "gradientEntropy": 0.9762589261413459,
+                "periodicity": 0.7146364354343814,
+                "irregularity": 0.6860828742795404,
+                "gradientHistogram": [
+                  0.1562751068928142,
+                  0.09491426380197505,
+                  0.07422896226592055,
+                  0.14176174441428493,
+                  0.14369505394064108,
+                  0.13769239300108047,
+                  0.06886016762694333,
+                  0.18257230805634037
+                ],
+                "foregroundCoverage": 0.2387152777777778
+              },
+              "deltaE76": 6.850416081875821,
+              "scores": {
+                "baseColor": 0.8629916783624836,
+                "meanLuma": 0.9765099356608732,
+                "microstructure": 0.9311643303871342,
+                "surfaceScale": 0.7770192700536637,
+                "irregularity": 0.7712629454002173,
+                "directionalResponse": 0.9164817566985484,
+                "overall": 0.8769342206532289
+              },
+              "mismatches": [],
+              "passed": true,
+              "nextAction": "continue",
+              "limitation": "Image metrics constrain appearance but cannot uniquely identify physical material parameters without calibrated lighting."
+            }
+          }
+        ]
+      }
+    },
+    "blind": {
+      "eligible": false,
+      "ratings": 0,
+      "morphloomShare": 0,
+      "img2threejsShare": 0,
+      "tieShare": 0
+    },
+    "blockers": [
+      "morphloom: 1/2 required calibrated views",
+      "img2threejs: 1/2 required calibrated views",
+      "blind evaluation requires at least five unique raters and balanced presentation order"
+    ],
+    "limitation": "This audit ranks only the locked input, calibrated matched views, declared feature regions, renderer versions, and blind panel recorded in this report."
+  }
+}

@@ -284,6 +284,11 @@ describe('AssemblyIR product pipeline', () => {
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(239.99);
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeLessThan(242);
     const coreMesh = build.root.getObjectByName('continuous_steel_body') as THREE.Mesh;
+    expect(Array.isArray(coreMesh.material)).toBe(true);
+    expect(coreMesh.material).toHaveLength(2);
+    const [projectedCaps, authoredEdges] = coreMesh.material as THREE.MeshPhysicalMaterial[];
+    expect(projectedCaps).not.toBe(authoredEdges);
+    expect(authoredEdges.userData.morphloomSurface.referenceProjection).toBeUndefined();
     const positions = coreMesh.geometry.getAttribute('position');
     const halfThicknesses = Array.from({ length: positions.count }, (_, index) => Math.abs(positions.getZ(index)))
       .filter((value) => value > 1e-8);

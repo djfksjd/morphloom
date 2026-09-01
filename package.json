@@ -17,6 +17,7 @@
     "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
     "benchmark:fixtures": "vite-node scripts/export-cross-domain-fixtures.ts",
     "benchmark:blender-cross-domain": "vite-node scripts/blender-cross-domain-benchmark.ts",
+    "benchmark:visual-captures": "vite-node scripts/audit-visual-captures.ts",
     "surface:prepare": "vite-node scripts/prepare-surface-reference.ts",
     "gltf:validate": "vite-node scripts/validate-glb.ts",
     "gltf:repair": "vite-node scripts/repair-glb-interchange.ts",

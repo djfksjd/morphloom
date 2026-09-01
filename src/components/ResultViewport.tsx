@@ -1317,8 +1317,34 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const token = ++exportSequenceRef.current;
         const runtime = runtimeRef.current;
         if (!runtime) throw new Error('Viewport is not ready.');
-        runtime.renderer.render(runtime.scene, runtime.camera);
-        const blob = await new Promise<Blob | null>((resolve) => canvasRef.current?.toBlob(resolve, 'image/png', 1));
+        const previousBackground = runtime.scene.background;
+        const previousFog = runtime.scene.fog;
+        const previousClearAlpha = runtime.renderer.getClearAlpha();
+        const previousFloorVisibility = runtime.floor.visible;
+        const previousMeasurementVisibility = runtime.measurement.visible;
+        const previousAnnotationVisibility = runtime.annotation.visible;
+        const previousDimensionVisibility = runtime.dimensionOverview.visible;
+        let blob: Blob | null = null;
+        try {
+          runtime.scene.background = null;
+          runtime.scene.fog = null;
+          runtime.floor.visible = false;
+          runtime.measurement.visible = false;
+          runtime.annotation.visible = false;
+          runtime.dimensionOverview.visible = false;
+          runtime.renderer.setClearAlpha(0);
+          runtime.renderer.render(runtime.scene, runtime.camera);
+          blob = await new Promise<Blob | null>((resolve) => canvasRef.current?.toBlob(resolve, 'image/png', 1));
+        } finally {
+          runtime.scene.background = previousBackground;
+          runtime.scene.fog = previousFog;
+          runtime.floor.visible = previousFloorVisibility;
+          runtime.measurement.visible = previousMeasurementVisibility;
+          runtime.annotation.visible = previousAnnotationVisibility;
+          runtime.dimensionOverview.visible = previousDimensionVisibility;
+          runtime.renderer.setClearAlpha(previousClearAlpha);
+          runtime.renderer.render(runtime.scene, runtime.camera);
+        }
         if (!blob) throw new Error('PNG capture failed.');
         if (token !== exportSequenceRef.current) throw new Error('캡처가 취소되었습니다.');
         return downloadBlob(blob, 'morphloom-result.png');

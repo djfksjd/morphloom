@@ -18,6 +18,7 @@ import {
 } from './reference-surface';
 import type { QuantizedReferenceHeightField } from './reference-surface';
 import { auditPlanFootprint, validatePlanFootprintDescriptor } from './plan-footprint';
+import { extendOpaqueProjectionColors } from './reference-projection-image';
 
 const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
@@ -702,9 +703,58 @@ interface ProjectionLoadRecord {
   normalTexture?: THREE.Texture;
   roughnessTexture?: THREE.Texture;
   metrics?: ReferenceSurfaceMetrics;
+  alphaFillPixels?: number;
   materials: Set<THREE.MeshPhysicalMaterial>;
   state: 'loading' | 'loaded' | 'failed';
   promise: Promise<boolean>;
+}
+
+function createOpaqueCroppedProjectionTexture(
+  texture: THREE.Texture,
+  projection: ReferenceProjectionIR,
+): { texture: THREE.CanvasTexture; filledPixels: number } | undefined {
+  if (typeof document === 'undefined') return undefined;
+  const source = texture.image as CanvasImageSource & { naturalWidth?: number; naturalHeight?: number; width?: number; height?: number };
+  const sourceWidth = source.naturalWidth ?? source.width ?? 0;
+  const sourceHeight = source.naturalHeight ?? source.height ?? 0;
+  if (sourceWidth < 1 || sourceHeight < 1) return undefined;
+  const [cropX, cropY, cropWidth, cropHeight] = projection.crop;
+  const width = Math.max(1, Math.round(sourceWidth * cropWidth));
+  const height = Math.max(1, Math.round(sourceHeight * cropHeight));
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  if (!context) return undefined;
+  context.drawImage(
+    source,
+    Math.round(sourceWidth * cropX),
+    Math.round(sourceHeight * cropY),
+    width,
+    height,
+    0,
+    0,
+    width,
+    height,
+  );
+  let pixels: ImageData;
+  try {
+    pixels = context.getImageData(0, 0, width, height);
+  } catch {
+    return undefined;
+  }
+  const extended = extendOpaqueProjectionColors(pixels.data, width, height);
+  const opaqueImage = context.createImageData(width, height);
+  opaqueImage.data.set(extended.rgba);
+  context.putImageData(opaqueImage, 0, 0);
+  const result = new THREE.CanvasTexture(canvas);
+  result.name = `morphloom_reference_opaque_${projection.fingerprint ?? 'unverified'}`;
+  result.colorSpace = THREE.SRGBColorSpace;
+  result.wrapS = result.wrapT = THREE.ClampToEdgeWrapping;
+  result.userData.morphloomProjectionOwned = true;
+  result.userData.morphloomTransparentColorFill = extended.filledPixels;
+  result.needsUpdate = true;
+  return { texture: result, filledPixels: extended.filledPixels };
 }
 
 function projectionKey(projection: ReferenceProjectionIR): string {
@@ -829,11 +879,22 @@ function createProjectionRecord(
           resolveLoad(false);
           return;
         }
-        const derivedMaps = createReferenceSurfaceMaps(texture, projection);
+        const opaqueProjection = createOpaqueCroppedProjectionTexture(texture, projection);
+        if (!opaqueProjection) {
+          record.state = 'failed';
+          status.failed += 1;
+          status.errors.push(`Unable to prepare opaque reference projection: ${projection.uri}`);
+          texture.dispose();
+          resolveLoad(false);
+          return;
+        }
+        const croppedProjection = { ...projection, crop: [0, 0, 1, 1] as [number, number, number, number] };
+        const derivedMaps = createReferenceSurfaceMaps(opaqueProjection.texture, croppedProjection);
         if (projection.relief && !derivedMaps) {
           record.state = 'failed';
           status.failed += 1;
           status.errors.push(`Unable to derive local reference relief: ${projection.uri}`);
+          opaqueProjection.texture.dispose();
           texture.dispose();
           resolveLoad(false);
           return;
@@ -841,10 +902,13 @@ function createProjectionRecord(
         record.normalTexture = derivedMaps?.normal;
         record.roughnessTexture = derivedMaps?.roughness;
         record.metrics = derivedMaps?.metrics;
+        record.alphaFillPixels = opaqueProjection.filledPixels;
+        record.texture = opaqueProjection.texture;
+        texture.dispose();
         record.state = 'loaded';
         status.loaded += 1;
         for (const material of materials) {
-          material.map = texture;
+          material.map = record.texture;
           if (record.normalTexture) material.normalMap = record.normalTexture;
           if (record.roughnessTexture) material.roughnessMap = record.roughnessTexture;
           material.color.set('#ffffff');
@@ -853,6 +917,7 @@ function createProjectionRecord(
             referenceProjectionState: 'loaded',
             referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
             referenceIrregularity: record.metrics?.irregularity,
+            referenceAlphaFillPixels: record.alphaFillPixels,
           };
           material.needsUpdate = true;
         }
@@ -880,12 +945,9 @@ function createProjectionRecord(
       resolveLoad(false);
     },
   );
-  const [cropX, cropY, cropWidth, cropHeight] = projection.crop;
   texture.name = `morphloom_reference_${projection.fingerprint ?? 'unverified'}`;
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.offset.set(cropX, 1 - cropY - cropHeight);
-  texture.repeat.set(cropWidth, cropHeight);
   texture.userData.morphloomProjectionOwned = true;
   Object.assign(record, { texture, materials, state: 'loading' as const, promise });
   return record;
@@ -930,7 +992,8 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     });
     const projection = mode === 'beauty' ? component.material.referenceProjection : undefined;
     const projectedMaterial = projection ? baseMaterial : undefined;
-    const hasProjectedSurfaceCap = projection && component.geometry.op === 'surfacePatch';
+    const hasProjectedSurfaceCap = projection
+      && (component.geometry.op === 'surfacePatch' || component.geometry.op === 'extrude');
     const sideMaterial = hasProjectedSurfaceCap ? baseMaterial.clone() : undefined;
     if (sideMaterial) {
       sideMaterial.name = `${baseMaterial.name || component.id}_cut_edges`;
@@ -976,6 +1039,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
             referenceProjectionState: 'loaded',
             referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
             referenceIrregularity: record.metrics?.irregularity,
+            referenceAlphaFillPixels: record.alphaFillPixels,
           };
           projectedMaterial.needsUpdate = true;
         }

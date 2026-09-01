@@ -13,17 +13,23 @@ function frame(foreground: [number, number, number], offset = 0): ComparisonFram
 }
 
 function view(id: string, renderOffset: number, renderSha: string): VisualBenchmarkView {
+  const suffix = id === 'front' ? '1' : '2';
+  const referenceColor: [number, number, number] = id === 'front' ? [120, 30, 40] : [120, 31, 40];
   return {
     viewId: id,
     cameraFingerprint: 'abcddcba12345678',
     referenceSha256: sha('a'),
-    renderSha256: sha(renderSha),
-    sceneFingerprint: renderSha.repeat(64),
+    renderSha256: `${renderSha.repeat(63)}${suffix}`,
+    sceneFingerprint: `${renderSha.repeat(63)}${suffix}`,
     referenceOrigin: 'admitted-local-reference',
     renderOrigin: 'browser-webgl-canvas',
-    reference: frame([120, 30, 40]),
-    render: frame([120, 30, 40], renderOffset),
-    regions: [{ featureId: 'critical', x: 0, y: 0, width: 8, height: 8 }],
+    reference: frame(referenceColor),
+    render: frame(referenceColor, renderOffset),
+    regions: [
+      { featureId: 'silhouette', x: 0, y: 0, width: 8, height: 8 },
+      { featureId: 'primary-detail', x: 0, y: 0, width: 4, height: 8 },
+      { featureId: 'secondary-detail', x: 4, y: 0, width: 4, height: 8 },
+    ],
     materialExpectation: { family: 'coating', roughness: 0.5 },
   };
 }
@@ -86,7 +92,19 @@ describe('same-input blind visual benchmark contract', () => {
     const report = auditSameInputVisualBenchmark(input);
     expect(report.claimAllowed).toBe(false);
     expect(report.blockers.join(' ')).toMatch(/same calibrated camera/);
-    expect(report.blockers.join(' ')).toMatch(/no critical feature regions/);
+    expect(report.blockers.join(' ')).toMatch(/required critical feature regions/);
+  });
+
+  it('rejects reused renders, mismatched regions and identical candidate pixels', () => {
+    const input = benchmark(true);
+    input.candidates[0].views[1].renderSha256 = input.candidates[0].views[0].renderSha256;
+    input.candidates[1].views[0].regions[0] = { featureId: 'silhouette', x: 0, y: 0, width: 7, height: 8 };
+    input.candidates[1].views[1].render = input.candidates[0].views[1].render;
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/reused across calibrated views/);
+    expect(report.blockers.join(' ')).toMatch(/identical critical feature regions/);
+    expect(report.blockers.join(' ')).toMatch(/same rendered pixels/);
   });
 
   it('publishes multi-scale material evidence instead of treating equal mean colour as equal surface', () => {

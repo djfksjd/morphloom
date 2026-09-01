@@ -1,4 +1,4 @@
-import { compareMaterialFrames, type MaterialExpectation } from './material-comparison';
+import { compareMaterialFrames, type MaterialComparisonResult, type MaterialExpectation } from './material-comparison';
 import {
   compareReferenceFrames,
   type ComparisonFrame,
@@ -53,12 +53,15 @@ export interface CandidateVisualScore {
   surfaceScaleSimilarity: number;
   irregularitySimilarity: number;
   minimumFeatureScore: number;
+  minimumViewScore: number;
   views: Array<{
     viewId: string;
+    score: number;
     reference: ReferenceComparisonResult;
     materialSimilarity: number;
     surfaceScaleSimilarity: number;
     irregularitySimilarity: number;
+    material: MaterialComparisonResult;
   }>;
 }
 
@@ -87,6 +90,13 @@ const DOMAIN_MINIMUM_VIEWS: Record<VisualBenchmarkDomain, number> = {
   surface: 3,
 };
 
+const DOMAIN_MINIMUM_FEATURES: Record<VisualBenchmarkDomain, number> = {
+  'industrial-design': 3,
+  architecture: 4,
+  character: 5,
+  surface: 3,
+};
+
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$/;
 const SHA256 = /^[a-f0-9]{64}$/;
 const FINGERPRINT = /^[a-f0-9]{8,128}$/;
@@ -102,6 +112,8 @@ function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: Visua
     blockers.push(`${candidate.id}: ${candidate.views.length}/${DOMAIN_MINIMUM_VIEWS[benchmark.domain]} required calibrated views`);
   }
   const viewIds = new Set<string>();
+  const renderHashes = new Set<string>();
+  const sceneFingerprints = new Set<string>();
   for (const view of candidate.views) {
     if (!ID.test(view.viewId) || viewIds.has(view.viewId)) blockers.push(`${candidate.id}: invalid or duplicate view id ${view.viewId}`);
     viewIds.add(view.viewId);
@@ -109,9 +121,18 @@ function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: Visua
     if (!SHA256.test(view.referenceSha256) || !SHA256.test(view.renderSha256)) blockers.push(`${candidate.id}/${view.viewId}: capture SHA-256 missing`);
     if (view.referenceSha256 === view.renderSha256) blockers.push(`${candidate.id}/${view.viewId}: render is byte-identical to the reference plate`);
     if (!FINGERPRINT.test(view.sceneFingerprint)) blockers.push(`${candidate.id}/${view.viewId}: rendered scene fingerprint missing`);
+    if (renderHashes.has(view.renderSha256)) blockers.push(`${candidate.id}/${view.viewId}: render capture was reused across calibrated views`);
+    if (sceneFingerprints.has(view.sceneFingerprint)) blockers.push(`${candidate.id}/${view.viewId}: scene fingerprint was reused across calibrated views`);
+    renderHashes.add(view.renderSha256);
+    sceneFingerprints.add(view.sceneFingerprint);
     if (!['admitted-local-reference', 'redistributable-reference'].includes(view.referenceOrigin)) blockers.push(`${candidate.id}/${view.viewId}: reference provenance is not admitted`);
     if (view.renderOrigin !== 'browser-webgl-canvas') blockers.push(`${candidate.id}/${view.viewId}: capture is not a browser WebGL render`);
-    if (view.regions.length < 1) blockers.push(`${candidate.id}/${view.viewId}: no critical feature regions`);
+    if (view.reference.width !== view.render.width || view.reference.height !== view.render.height) {
+      blockers.push(`${candidate.id}/${view.viewId}: reference and render dimensions are not matched`);
+    }
+    if (view.regions.length < DOMAIN_MINIMUM_FEATURES[benchmark.domain]) {
+      blockers.push(`${candidate.id}/${view.viewId}: ${view.regions.length}/${DOMAIN_MINIMUM_FEATURES[benchmark.domain]} required critical feature regions`);
+    }
   }
 }
 
@@ -119,12 +140,17 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
   const views = candidate.views.map((view) => {
     const reference = compareReferenceFrames(view.reference, view.render, view.regions);
     const material = compareMaterialFrames(view.reference, view.render, view.materialExpectation);
+    const minimumFeature = reference.regions.length > 0 ? Math.min(...reference.regions.map((region) => region.score)) : 0;
+    const score = reference.silhouetteIoU * 0.4 + reference.interiorSimilarity * 0.2 + material.scores.overall * 0.16
+      + material.scores.surfaceScale * 0.08 + material.scores.irregularity * 0.06 + minimumFeature * 0.1;
     return {
       viewId: view.viewId,
+      score,
       reference,
       materialSimilarity: material.scores.overall,
       surfaceScaleSimilarity: material.scores.surfaceScale,
       irregularitySimilarity: material.scores.irregularity,
+      material,
     };
   });
   const silhouetteIoU = average(views.map((view) => view.reference.silhouetteIoU));
@@ -134,6 +160,7 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
   const irregularitySimilarity = average(views.map((view) => view.irregularitySimilarity));
   const featureScores = views.flatMap((view) => view.reference.regions.map((region) => region.score));
   const minimumFeatureScore = featureScores.length > 0 ? Math.min(...featureScores) : 0;
+  const minimumViewScore = views.length > 0 ? Math.min(...views.map((view) => view.score)) : 0;
   return {
     id: candidate.id,
     score: silhouetteIoU * 0.4 + interiorSimilarity * 0.2 + materialSimilarity * 0.16
@@ -144,6 +171,7 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
     surfaceScaleSimilarity,
     irregularitySimilarity,
     minimumFeatureScore,
+    minimumViewScore,
     views,
   };
 }
@@ -183,6 +211,12 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
     }
     if (view.referenceSha256 !== other.referenceSha256) blockers.push(`${viewId}: candidates did not use the same reference bytes`);
     if (view.cameraFingerprint !== other.cameraFingerprint) blockers.push(`${viewId}: candidates did not use the same calibrated camera`);
+    if (view.reference.width !== other.reference.width || view.reference.height !== other.reference.height) {
+      blockers.push(`${viewId}: candidates did not use the same reference dimensions`);
+    }
+    if (JSON.stringify(view.regions) !== JSON.stringify(other.regions)) {
+      blockers.push(`${viewId}: candidates did not use identical critical feature regions`);
+    }
   }
   for (const viewId of competitorViews.keys()) if (!morphloomViews.has(viewId)) blockers.push(`morphloom: missing matched view ${viewId}`);
 
@@ -194,9 +228,47 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
   } catch (error) {
     throw new Error(`Visual benchmark frames are invalid: ${error instanceof Error ? error.message : String(error)}`);
   }
+  const scoredMorphloomViews = new Map(morphloomScore.views.map((view) => [view.viewId, view]));
+  const scoredCompetitorViews = new Map(competitorScore.views.map((view) => [view.viewId, view]));
+  for (const score of [morphloomScore, competitorScore]) {
+    const renderFingerprints = new Set<string>();
+    for (const view of score.views) {
+      if (view.reference.referenceFingerprint === view.reference.renderFingerprint) {
+        blockers.push(`${score.id}/${view.viewId}: in-memory render pixels are identical to the reference`);
+      }
+      if (renderFingerprints.has(view.reference.renderFingerprint)) {
+        blockers.push(`${score.id}/${view.viewId}: in-memory render pixels were reused across calibrated views`);
+      }
+      renderFingerprints.add(view.reference.renderFingerprint);
+    }
+  }
+  for (const [viewId, view] of scoredMorphloomViews) {
+    const other = scoredCompetitorViews.get(viewId);
+    if (!other) continue;
+    if (view.reference.referenceFingerprint !== other.reference.referenceFingerprint) {
+      blockers.push(`${viewId}: in-memory reference pixels differ between candidates`);
+    }
+    if (view.reference.renderFingerprint === other.reference.renderFingerprint) {
+      blockers.push(`${viewId}: candidates supplied the same rendered pixels`);
+    }
+  }
   for (const score of [morphloomScore, competitorScore]) {
     if (score.silhouetteIoU < 0.65 || score.interiorSimilarity < 0.55 || score.materialSimilarity < 0.55 || score.minimumFeatureScore < 0.5) {
       blockers.push(`${score.id}: critical automatic visual threshold failed`);
+    }
+    if (score.minimumViewScore < 0.6) blockers.push(`${score.id}: at least one calibrated view failed the minimum score`);
+    for (const view of score.views) {
+      const input = byId.get(score.id)!.views.find((candidateView) => candidateView.viewId === view.viewId)!;
+      const minimumForeground = Math.max(4, Math.floor(input.reference.width * input.reference.height * 0.01));
+      if (view.reference.foregroundPixels.reference < minimumForeground
+        || view.reference.foregroundPixels.render < minimumForeground) {
+        blockers.push(`${score.id}/${view.viewId}: foreground evidence is blank or too small`);
+      }
+      for (const region of view.reference.regions) {
+        if (region.foregroundPixels.reference < 1 || region.foregroundPixels.render < 1) {
+          blockers.push(`${score.id}/${view.viewId}/${region.featureId}: critical region does not cover reference and render evidence`);
+        }
+      }
     }
     if (benchmark.domain === 'surface'
       && (score.surfaceScaleSimilarity < 0.65 || score.irregularitySimilarity < 0.65)) {
