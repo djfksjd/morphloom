@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import type { AssemblyGeometryIR } from './assembly-ir';
+import { sampleQuantizedReferenceHeight } from './reference-surface';
 
 type SurfacePatchIR = Extract<AssemblyGeometryIR, { op: 'surfacePatch' }>;
 
 export interface SurfaceReliefAudit {
-  method: 'deterministic-angular-aggregate-height-field-v2';
+  method: 'deterministic-angular-aggregate-height-field-v2' | 'reference-conditioned-aggregate-height-field-v3';
   seed: number;
   samples: number;
   minimumMm: number;
@@ -19,6 +20,10 @@ export interface SurfaceReliefAudit {
   coarseAggregateFeatures: number;
   fineAggregateFeatures: number;
   facetedNormals: true;
+  referenceFingerprint?: string;
+  referenceSamples?: number;
+  referenceBlend?: number;
+  referenceIrregularity?: number;
 }
 
 function latticeHash(x: number, z: number, seed: number): number {
@@ -160,11 +165,15 @@ function aggregateFeatureCount(spec: SurfacePatchIR, scale: number, seedOffset: 
   return count;
 }
 
-function elevationMm(xMm: number, zMm: number, spec: SurfacePatchIR): number {
+function elevationMm(xMm: number, zMm: number, u: number, v: number, spec: SurfacePatchIR): number {
   const aggregateScale = spec.aggregateScale;
   const macroScale = Math.max(aggregateScale * 10, Math.min(spec.size[0], spec.size[1]) * 0.18);
   const macro = fractalNoise(xMm / macroScale, zMm / macroScale, spec.seed) * spec.macroAmplitude;
-  return macro + aggregateRelief(xMm, zMm, spec);
+  const aggregate = aggregateRelief(xMm, zMm, spec);
+  if (!spec.referenceRelief) return macro + aggregate;
+  const blend = spec.referenceRelief.blend;
+  const reference = sampleQuantizedReferenceHeight(spec.referenceRelief, u, v);
+  return macro * (1 - blend * 0.45) + aggregate * (1 - blend) + reference;
 }
 
 /** Builds a closed, UV-mapped slab whose top surface carries real multi-scale displacement. */
@@ -187,7 +196,7 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
     for (let column = 0; column < columns; column += 1) {
       const u = column / segmentsX;
       const xMm = THREE.MathUtils.lerp(-halfWidthMm, halfWidthMm, u);
-      const elevation = elevationMm(xMm, zMm, spec);
+      const elevation = elevationMm(xMm, zMm, u, v, spec);
       elevations.push(elevation);
       const top = row * columns + column;
       const bottom = layerVertices + top;
@@ -198,21 +207,24 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
     }
   }
 
-  const indices: number[] = [];
+  const topIndices: number[] = [];
+  const baseIndices: number[] = [];
   for (let row = 0; row < segmentsZ; row += 1) {
     for (let column = 0; column < segmentsX; column += 1) {
       const a = row * columns + column;
       const b = a + 1;
       const c = a + columns;
       const d = c + 1;
-      indices.push(a, d, b, a, c, d);
+      topIndices.push(a, d, b, a, c, d);
       const ba = layerVertices + a;
       const bb = layerVertices + b;
       const bc = layerVertices + c;
       const bd = layerVertices + d;
-      indices.push(ba, bb, bd, ba, bd, bc);
+      baseIndices.push(ba, bb, bd, ba, bd, bc);
     }
   }
+
+  const indices = [...topIndices, ...baseIndices];
 
   const sideQuad = (topA: number, topB: number, reverse = false) => {
     const bottomA = layerVertices + topA;
@@ -221,13 +233,13 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
     else indices.push(topA, topB, bottomB, topA, bottomB, bottomA);
   };
   for (let column = 0; column < segmentsX; column += 1) {
-    sideQuad(column, column + 1, true);
+    sideQuad(column, column + 1);
     const rear = segmentsZ * columns + column;
-    sideQuad(rear, rear + 1);
+    sideQuad(rear, rear + 1, true);
   }
   for (let row = 0; row < segmentsZ; row += 1) {
-    sideQuad(row * columns, (row + 1) * columns);
-    sideQuad(row * columns + segmentsX, (row + 1) * columns + segmentsX, true);
+    sideQuad(row * columns, (row + 1) * columns, true);
+    sideQuad(row * columns + segmentsX, (row + 1) * columns + segmentsX);
   }
 
   const mean = elevations.reduce((sum, value) => sum + value, 0) / elevations.length;
@@ -237,7 +249,9 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
   const coarseAggregateFeatures = aggregateFeatureCount(spec, spec.aggregateScale, 0);
   const fineAggregateFeatures = aggregateFeatureCount(spec, spec.aggregateScale * 0.43, 8_311);
   const audit: SurfaceReliefAudit = {
-    method: 'deterministic-angular-aggregate-height-field-v2',
+    method: spec.referenceRelief
+      ? 'reference-conditioned-aggregate-height-field-v3'
+      : 'deterministic-angular-aggregate-height-field-v2',
     seed: spec.seed,
     samples: elevations.length,
     minimumMm: minimum,
@@ -252,11 +266,17 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
     coarseAggregateFeatures,
     fineAggregateFeatures,
     facetedNormals: true,
+    referenceFingerprint: spec.referenceRelief?.fingerprint,
+    referenceSamples: spec.referenceRelief?.samples.length,
+    referenceBlend: spec.referenceRelief?.blend,
+    referenceIrregularity: spec.referenceRelief?.irregularity,
   };
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
+  geometry.addGroup(0, topIndices.length, 0);
+  geometry.addGroup(topIndices.length, indices.length - topIndices.length, 1);
   geometry.computeVertexNormals();
   geometry.computeBoundingBox();
   geometry.computeBoundingSphere();

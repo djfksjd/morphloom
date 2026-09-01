@@ -20,6 +20,9 @@ export interface MeshTopologyReport {
   surfaceReliefMeshes?: number;
   surfaceReliefSamples?: number;
   surfaceAggregateFeatures?: number;
+  referenceReliefMeshes?: number;
+  referenceReliefSamples?: number;
+  maximumReferenceIrregularity?: number;
   maximumSurfaceRmsRoughnessMm?: number;
   maximumSurfacePeakToValleyMm?: number;
   pass: boolean;
@@ -50,6 +53,9 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
   let surfaceReliefMeshes = 0;
   let surfaceReliefSamples = 0;
   let surfaceAggregateFeatures = 0;
+  let referenceReliefMeshes = 0;
+  let referenceReliefSamples = 0;
+  let maximumReferenceIrregularity = 0;
   let maximumSurfaceRmsRoughnessMm = Number.NEGATIVE_INFINITY;
   let maximumSurfacePeakToValleyMm = Number.NEGATIVE_INFINITY;
   const details: MeshTopologyReport['details'] = [];
@@ -80,6 +86,9 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     const surfaceRelief = object.geometry.userData.morphloomSurfaceRelief as {
       samples?: number;
       aggregateFeatures?: number;
+      referenceFingerprint?: string;
+      referenceSamples?: number;
+      referenceIrregularity?: number;
       rmsRoughnessMm?: number;
       peakToValleyMm?: number;
     } | undefined;
@@ -88,6 +97,14 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
       if (typeof surfaceRelief.samples === 'number') surfaceReliefSamples += surfaceRelief.samples;
       if (typeof surfaceRelief.aggregateFeatures === 'number') {
         surfaceAggregateFeatures += surfaceRelief.aggregateFeatures;
+      }
+      if (typeof surfaceRelief.referenceFingerprint === 'string') {
+        referenceReliefMeshes += 1;
+        referenceReliefSamples += surfaceRelief.referenceSamples ?? 0;
+        maximumReferenceIrregularity = Math.max(
+          maximumReferenceIrregularity,
+          surfaceRelief.referenceIrregularity ?? 0,
+        );
       }
       if (typeof surfaceRelief.rmsRoughnessMm === 'number') {
         maximumSurfaceRmsRoughnessMm = Math.max(maximumSurfaceRmsRoughnessMm, surfaceRelief.rmsRoughnessMm);
@@ -166,6 +183,9 @@ export function analyzeTopology(root: THREE.Object3D): MeshTopologyReport {
     surfaceReliefMeshes,
     surfaceReliefSamples,
     surfaceAggregateFeatures,
+    referenceReliefMeshes,
+    referenceReliefSamples,
+    maximumReferenceIrregularity,
     maximumSurfaceRmsRoughnessMm: Number.isFinite(maximumSurfaceRmsRoughnessMm)
       ? maximumSurfaceRmsRoughnessMm
       : undefined,

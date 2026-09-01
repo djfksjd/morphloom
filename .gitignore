@@ -5,6 +5,7 @@ coverage/
 *.tsbuildinfo
 work/
 public/benchmark-input/
+public/local-references/
 .env
 .env.*
 !.env.example

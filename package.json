@@ -4,6 +4,9 @@
   "version": "0.4.0",
   "type": "module",
   "description": "Open-source, model-agnostic 3D asset foundry for editable humans, products, and assemblies.",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
@@ -12,6 +15,7 @@
     "test:watch": "vitest",
     "benchmark": "vite-node scripts/benchmark.ts",
     "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
+    "surface:prepare": "vite-node scripts/prepare-surface-reference.ts",
     "quality:gate": "vite-node scripts/quality-gate.ts && vite-node scripts/competitive-benchmark.ts",
     "preview": "vite preview --host 127.0.0.1"
   },

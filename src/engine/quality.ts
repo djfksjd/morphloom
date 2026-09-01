@@ -192,7 +192,7 @@ export function evaluateProductQuality(
       score: topologyScore,
       status: topology?.pass ? 'pass' : 'blocked',
       detail: topology
-        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm` : ''}`
+        ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm${topology.referenceReliefMeshes ? ` · 사진 높이장 ${topology.referenceReliefSamples ?? 0}점` : ''}` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
     },
     {
@@ -221,7 +221,7 @@ export function evaluateProductQuality(
       score: surfaceScore,
       status: status(surfaceScore),
       detail: surfaces
-        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · roughness-map ${surfaces.roughnessMappedMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ' · 입력 fingerprint 검증' : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
+        ? `${surfaces.distinctFinishes}종 finish · micro-normal ${surfaces.microNormalMaterials}/${surfaces.authoredMaterials} · roughness-map ${surfaces.roughnessMappedMaterials}/${surfaces.authoredMaterials} · 참조 투영 ${surfaces.referenceProjectedMaterials}개 · 사진 파생 normal+roughness ${surfaces.referenceReliefMaterials}개${surfaces.referenceProjectionFingerprints.length ? ` · 입력 fingerprint 검증 · 불규칙성 ${surfaces.maximumReferenceIrregularity.toFixed(2)}` : ''} · 이방성 ${surfaces.anisotropicMaterials}${detailAudit ? ` · IR 표면 ${Math.round(detailAudit.explicitSurfaceCoverage * 100)}%` : ''}`
         : '표면 재질을 컴파일한 뒤 roughness·normal·clearcoat를 검사합니다.',
     },
     {
@@ -238,7 +238,7 @@ export function evaluateProductQuality(
             ? '외곽·개구부·연속 지붕·실내 프로그램·배치 편집·조명 프리뷰 검증 통과'
             : `모델 범위 검증 BLOCKED · ${detailAudit?.modelBlockers.join(' · ') ?? '감사 정보 없음'}`
         : isSurfaceBenchmark
-          ? `실제 지오메트리 RMS ${topology?.maximumSurfaceRmsRoughnessMm?.toFixed(2) ?? '—'} mm · 최고–최저 ${topology?.maximumSurfacePeakToValleyMm?.toFixed(2) ?? '—'} mm · 골재 micro-normal·roughness-map 동시 검증`
+          ? `실제 지오메트리 RMS ${topology?.maximumSurfaceRmsRoughnessMm?.toFixed(2) ?? '—'} mm · 최고–최저 ${topology?.maximumSurfacePeakToValleyMm?.toFixed(2) ?? '—'} mm · ${topology?.referenceReliefMeshes ? `사진 높이장 ${topology.referenceReliefSamples}점 · 불규칙성 ${topology.maximumReferenceIrregularity?.toFixed(2)}` : '절차 골재'} · micro-normal·roughness-map 동시 검증`
         : isExteriorOnly
           ? '외관 전용 AssemblyIR · 내부 회로와 배선은 의도적으로 범위에서 제외'
         : connectivity

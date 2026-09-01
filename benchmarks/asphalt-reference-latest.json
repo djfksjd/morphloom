@@ -1,0 +1,43 @@
+{
+  "schema": "morphloom.surface-reference-benchmark/0.1",
+  "generatedAt": "2026-09-01T03:58:00.000Z",
+  "source": {
+    "redistributed": false,
+    "pixels": [508, 660],
+    "sha256": "1a7662782c874259cb3ff13df6d292b3e5a4991bbae91f204bb776836db9cb88",
+    "normalizedEntropy": 0.8789972596433167,
+    "meanGradient": 0.7479663047569867,
+    "periodicity": 0.009610953709502193,
+    "irregularity": 0.9520967679225599,
+    "confidence": 0.84,
+    "limitation": "Absolute height is photometric and estimated until scan- or measurement-calibrated."
+  },
+  "geometry": {
+    "heightField": [99, 128],
+    "heightSamples": 12672,
+    "aggregateFeatures": 13229,
+    "triangles": 124616,
+    "rmsHeightMm": 0.59,
+    "peakToValleyMm": 4.64,
+    "watertightMeshes": 1,
+    "meshes": 1,
+    "boundaryEdges": 0,
+    "nonManifoldEdges": 0,
+    "degenerateTriangles": 0
+  },
+  "appearance": {
+    "referenceProjection": 1,
+    "derivedNormalMaps": 1,
+    "derivedRoughnessMaps": 1,
+    "fingerprintVerified": true
+  },
+  "delivery": {
+    "browserGlbReopen": "pass",
+    "fingerprint": "283d2c988e8643c4",
+    "inputKey": "262dfff3184a1ec0",
+    "glbSizeMb": 15.21,
+    "boundsDriftMm": 0,
+    "namedNodes": 1
+  },
+  "testPolicy": "Nine focused tests cover deterministic analysis, irregularity discrimination, bounded PBR derivation, corrupted PNG rejection, sample budgets, coordinate orientation, closed topology, outward side normals, multi-material delivery primitives, and malformed IR rejection. Test count is not used as a quality score."
+}

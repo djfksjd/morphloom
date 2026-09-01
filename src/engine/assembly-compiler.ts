@@ -10,6 +10,12 @@ import { inspectEngineeringEvidence } from './engineering-audit';
 import { auditFidelityContract } from './fidelity-pipeline';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
 import { createLayeredSurfaceGeometry } from './layered-surface';
+import {
+  analyzeReferenceSurface,
+  MAX_REFERENCE_HEIGHT_SAMPLES,
+  type ReferenceSurfaceMetrics,
+} from './reference-surface';
+import type { QuantizedReferenceHeightField } from './reference-surface';
 
 const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
@@ -34,6 +40,33 @@ function validateReferenceProjection(projection: ReferenceProjectionIR, componen
       || projection.relief.maxResolution < 256
       || projection.relief.maxResolution > 2048)) {
     throw new Error(`Reference relief resolution is invalid in ${componentId}.`);
+  }
+}
+
+function validateReferenceRelief(reference: QuantizedReferenceHeightField, componentId: string): void {
+  if (reference.method !== 'image-highpass-height-v1') throw new Error(`Reference relief method is invalid in ${componentId}.`);
+  if (!Number.isInteger(reference.width) || !Number.isInteger(reference.height)
+    || reference.width < 2 || reference.height < 2
+    || reference.width * reference.height > MAX_REFERENCE_HEIGHT_SAMPLES) {
+    throw new Error(`Reference relief dimensions are invalid in ${componentId}.`);
+  }
+  if (reference.samples.length !== reference.width * reference.height) {
+    throw new Error(`Reference relief sample count is invalid in ${componentId}.`);
+  }
+  if (reference.samples.some((sample) => !Number.isInteger(sample) || sample < -32_767 || sample > 32_767)) {
+    throw new Error(`Reference relief sample range is invalid in ${componentId}.`);
+  }
+  if (!Number.isFinite(reference.amplitudeMm) || reference.amplitudeMm <= 0 || reference.amplitudeMm > 100) {
+    throw new Error(`Reference relief amplitude is invalid in ${componentId}.`);
+  }
+  if (!Number.isFinite(reference.blend) || reference.blend < 0 || reference.blend > 1) {
+    throw new Error(`Reference relief blend is invalid in ${componentId}.`);
+  }
+  if (!Number.isFinite(reference.irregularity) || reference.irregularity < 0 || reference.irregularity > 1) {
+    throw new Error(`Reference relief irregularity is invalid in ${componentId}.`);
+  }
+  if (!/^[a-f0-9]{8,128}$/i.test(reference.fingerprint)) {
+    throw new Error(`Reference relief fingerprint is invalid in ${componentId}.`);
   }
 }
 
@@ -71,7 +104,8 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       return;
     }
     if (Array.isArray(node)) {
-      if (node.length > 4096) throw new Error(`Array is too large at ${key}.`);
+      const arrayLimit = key.endsWith('.referenceRelief.samples') ? MAX_REFERENCE_HEIGHT_SAMPLES : 4096;
+      if (node.length > arrayLimit) throw new Error(`Array is too large at ${key}.`);
       node.forEach((item, index) => inspect(item, `${key}[${index}]`, depth + 1));
       return;
     }
@@ -151,6 +185,8 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       case 'surfacePatch': {
         const [segmentsX, segmentsZ] = component.geometry.segments;
         const gridVertices = (segmentsX + 1) * (segmentsZ + 1) * 2;
+        const reference = component.geometry.referenceRelief;
+        if (reference) validateReferenceRelief(reference, component.id);
         if (component.geometry.size.some((value) => value <= 0)
           || component.geometry.baseThickness <= 0
           || !Number.isInteger(segmentsX) || !Number.isInteger(segmentsZ)
@@ -161,7 +197,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
           || component.geometry.macroAmplitude < 0
           || component.geometry.aggregateAmplitude < 0
           || component.geometry.aggregateScale <= 0
-          || component.geometry.macroAmplitude + component.geometry.aggregateAmplitude
+          || component.geometry.macroAmplitude + component.geometry.aggregateAmplitude + (reference?.amplitudeMm ?? 0)
             >= component.geometry.baseThickness * 0.45) {
           throw new Error(`Surface patch is invalid in ${component.id}.`);
         }
@@ -626,15 +662,16 @@ function applyAssemblyProjectionUv(mesh: THREE.Mesh, projection: ReferenceProjec
   const position = mesh.geometry.getAttribute('position');
   if (!position) return;
   mesh.updateMatrix();
-  const [minX, minY, maxX, maxY] = projection.boundsMm;
+  const [minX, minSecondary, maxX, maxSecondary] = projection.boundsMm;
   const width = maxX - minX;
-  const height = maxY - minY;
+  const height = maxSecondary - minSecondary;
   const uv = new Float32Array(position.count * 2);
   const point = new THREE.Vector3();
   for (let index = 0; index < position.count; index += 1) {
     point.fromBufferAttribute(position, index).applyMatrix4(mesh.matrix).multiplyScalar(1000);
     uv[index * 2] = (point.x - minX) / width;
-    uv[index * 2 + 1] = (point.y - minY) / height;
+    const secondary = projection.mapping === 'assembly-xz' ? point.z : point.y;
+    uv[index * 2 + 1] = (secondary - minSecondary) / height;
   }
   mesh.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
@@ -643,13 +680,14 @@ interface ProjectionLoadRecord {
   texture: THREE.Texture;
   normalTexture?: THREE.Texture;
   roughnessTexture?: THREE.Texture;
+  metrics?: ReferenceSurfaceMetrics;
   materials: Set<THREE.MeshPhysicalMaterial>;
   state: 'loading' | 'loaded' | 'failed';
   promise: Promise<boolean>;
 }
 
 function projectionKey(projection: ReferenceProjectionIR): string {
-  return `${projection.uri}|${projection.crop.join(',')}|${projection.fingerprint ?? ''}|${projection.relief?.strength ?? ''}|${projection.relief?.maxResolution ?? ''}`;
+  return `${projection.uri}|${projection.mapping}|${projection.crop.join(',')}|${projection.boundsMm.join(',')}|${projection.fingerprint ?? ''}|${projection.relief?.strength ?? ''}|${projection.relief?.maxResolution ?? ''}`;
 }
 
 async function verifyReferenceFingerprint(projection: ReferenceProjectionIR): Promise<boolean> {
@@ -669,7 +707,7 @@ async function verifyReferenceFingerprint(projection: ReferenceProjectionIR): Pr
 function createReferenceSurfaceMaps(
   texture: THREE.Texture,
   projection: ReferenceProjectionIR,
-): { normal: THREE.CanvasTexture; roughness: THREE.CanvasTexture } | undefined {
+): { normal: THREE.CanvasTexture; roughness: THREE.CanvasTexture; metrics: ReferenceSurfaceMetrics } | undefined {
   if (!projection.relief || typeof document === 'undefined') return undefined;
   const source = texture.image as CanvasImageSource & { naturalWidth?: number; naturalHeight?: number; width?: number; height?: number };
   const sourceWidth = source.naturalWidth ?? source.width ?? 0;
@@ -711,40 +749,11 @@ function createReferenceSurfaceMaps(
   const normalContext = normalCanvas.getContext('2d');
   const roughnessContext = roughnessCanvas.getContext('2d');
   if (!normalContext || !roughnessContext) return undefined;
-  const normalPixels = normalContext.createImageData(width, height);
-  const roughnessPixels = roughnessContext.createImageData(width, height);
-  const sourcePixels = pixels.data;
-  const luminanceAt = (x: number, y: number): number => {
-    const clampedX = Math.max(0, Math.min(width - 1, x));
-    const clampedY = Math.max(0, Math.min(height - 1, y));
-    const offset = (clampedY * width + clampedX) * 4;
-    return (sourcePixels[offset]! * 0.2126 + sourcePixels[offset + 1]! * 0.7152 + sourcePixels[offset + 2]! * 0.0722) / 255;
-  };
-  const strength = projection.relief.strength ?? 0.72;
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      const offset = (y * width + x) * 4;
-      const center = luminanceAt(x, y);
-      const left = luminanceAt(x - 1, y);
-      const right = luminanceAt(x + 1, y);
-      const up = luminanceAt(x, y - 1);
-      const down = luminanceAt(x, y + 1);
-      const dx = (right - left) * strength * 5;
-      const dy = (down - up) * strength * 5;
-      const length = Math.hypot(dx, dy, 1);
-      normalPixels.data[offset] = Math.round(((-dx / length) * 0.5 + 0.5) * 255);
-      normalPixels.data[offset + 1] = Math.round(((dy / length) * 0.5 + 0.5) * 255);
-      normalPixels.data[offset + 2] = Math.round((1 / length) * 255);
-      normalPixels.data[offset + 3] = 255;
-      const localVariation = Math.min(1, (Math.abs(center - left) + Math.abs(center - right)
-        + Math.abs(center - up) + Math.abs(center - down)) * 1.6);
-      const roughness = Math.round(168 + localVariation * 87);
-      roughnessPixels.data[offset] = roughness;
-      roughnessPixels.data[offset + 1] = roughness;
-      roughnessPixels.data[offset + 2] = roughness;
-      roughnessPixels.data[offset + 3] = 255;
-    }
-  }
+  const analysis = analyzeReferenceSurface(pixels.data, width, height, projection.relief.strength ?? 0.72);
+  // ImageData requires an ArrayBuffer-backed view in newer DOM typings. Copying
+  // also prevents the canvas from sharing mutable analysis buffers.
+  const normalPixels = new ImageData(new Uint8ClampedArray(analysis.normalRgba), width, height);
+  const roughnessPixels = new ImageData(new Uint8ClampedArray(analysis.roughnessRgba), width, height);
   normalContext.putImageData(normalPixels, 0, 0);
   roughnessContext.putImageData(roughnessPixels, 0, 0);
   sourceCanvas.width = sourceCanvas.height = 1;
@@ -760,7 +769,9 @@ function createReferenceSurfaceMaps(
   const roughness = new THREE.CanvasTexture(roughnessCanvas);
   configure(normal, 'normal');
   configure(roughness, 'roughness');
-  return { normal, roughness };
+  normal.userData.morphloomReferenceMetrics = analysis.metrics;
+  roughness.userData.morphloomReferenceMetrics = analysis.metrics;
+  return { normal, roughness, metrics: analysis.metrics };
 }
 
 function createProjectionRecord(
@@ -808,6 +819,7 @@ function createProjectionRecord(
         }
         record.normalTexture = derivedMaps?.normal;
         record.roughnessTexture = derivedMaps?.roughness;
+        record.metrics = derivedMaps?.metrics;
         record.state = 'loaded';
         status.loaded += 1;
         for (const material of materials) {
@@ -819,6 +831,7 @@ function createProjectionRecord(
             ...material.userData.morphloomSurface,
             referenceProjectionState: 'loaded',
             referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
+            referenceIrregularity: record.metrics?.irregularity,
           };
           material.needsUpdate = true;
         }
@@ -896,9 +909,17 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     });
     const projection = mode === 'beauty' ? component.material.referenceProjection : undefined;
     const projectedMaterial = projection ? baseMaterial : undefined;
+    const hasProjectedSurfaceCap = projection && component.geometry.op === 'surfacePatch';
+    const sideMaterial = hasProjectedSurfaceCap ? baseMaterial.clone() : undefined;
+    if (sideMaterial) {
+      sideMaterial.name = `${baseMaterial.name || component.id}_cut_edges`;
+      sideMaterial.userData = structuredClone(baseMaterial.userData);
+    }
     const mesh = new THREE.Mesh(
       geometry,
-      projectedMaterial ?? baseMaterial,
+      hasProjectedSurfaceCap && projectedMaterial && sideMaterial
+        ? [projectedMaterial, sideMaterial]
+        : projectedMaterial ?? baseMaterial,
     );
     mesh.name = component.id;
     if (component.position) mesh.position.set(...component.position.map(mm) as [number, number, number]);
@@ -933,6 +954,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
             ...projectedMaterial.userData.morphloomSurface,
             referenceProjectionState: 'loaded',
             referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
+            referenceIrregularity: record.metrics?.irregularity,
           };
           projectedMaterial.needsUpdate = true;
         }

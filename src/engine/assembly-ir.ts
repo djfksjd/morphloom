@@ -1,5 +1,6 @@
 import type { FidelityContract } from './fidelity-pipeline';
 import type { VisualHullDescriptor } from './visual-hull';
+import type { QuantizedReferenceHeightField } from './reference-surface';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -37,6 +38,8 @@ export type AssemblyGeometryIR =
     macroAmplitude: number;
     aggregateAmplitude: number;
     aggregateScale: number;
+    /** Optional image-conditioned local relief. Physical height remains estimated until calibrated. */
+    referenceRelief?: QuantizedReferenceHeightField;
   }
   | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }
   | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] }
@@ -62,16 +65,13 @@ export interface AssemblyMaterialIR {
   textureScale?: [number, number];
   thicknessMm?: number;
   emissive?: string;
-  /**
-   * Optional local, user-owned reference plate projected in assembly XY space.
-   * Remote URLs are rejected so a local-only build never contacts a third party.
-   */
+  /** Optional local, user-owned reference plate projected in a declared assembly plane. */
   referenceProjection?: {
     uri: string;
-    mapping: 'assembly-xy';
+    mapping: 'assembly-xy' | 'assembly-xz';
     /** Source-image crop as normalized [x, y, width, height], y measured from the top. */
     crop: [number, number, number, number];
-    /** Assembly-space projection bounds [minX, minY, maxX, maxY] in millimetres. */
+    /** Assembly-plane bounds [minA, minB, maxA, maxB] in millimetres. */
     boundsMm: [number, number, number, number];
     fingerprint?: string;
     /** Derive tangent-space micro relief and local roughness from visible source detail. */

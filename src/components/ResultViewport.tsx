@@ -493,8 +493,13 @@ function createMeasurementField(height: number): THREE.Group {
   return group;
 }
 
-function viewDirection(view: CameraView, exteriorOnly: boolean, architectural: boolean): THREE.Vector3 {
-  if (view === 'top' && architectural) return new THREE.Vector3(0, 1, 0);
+function viewDirection(
+  view: CameraView,
+  exteriorOnly: boolean,
+  architectural: boolean,
+  horizontalSurface: boolean,
+): THREE.Vector3 {
+  if (view === 'top' && (architectural || horizontalSurface)) return new THREE.Vector3(0, 1, 0);
   if (view === 'front' || view === 'top') return new THREE.Vector3(0, 0, 1);
   if (view === 'rear') return new THREE.Vector3(0, 0, -1);
   if (architectural) return new THREE.Vector3(1.35, 0.9, 1.3);
@@ -513,14 +518,21 @@ function frameBuild(
   const referenceFront = assetKind === 'human' && spec.pose === 'reference-action' && runtime.view === 'front';
   const exteriorOnly = assetKind === 'product' && assemblyIR?.metadata?.scope === 'exterior-only';
   const architectural = assetKind === 'product' && assemblyIR?.metadata?.assetKind === 'building';
+  // Imported IR can be replaced without recreating the imperative viewer
+  // handle. Detect the compiled geometry itself so TOP remains stable across
+  // repeated local imports and hot reloads instead of depending on stale props.
+  let horizontalSurface = false;
+  if (assetKind === 'product') build.root.traverse((object) => {
+    if (object instanceof THREE.Mesh && object.geometry.userData.morphloomSurfaceRelief) horizontalSurface = true;
+  });
   const fov = referenceFront ? 40 : 31;
   const padding = exteriorOnly
     ? runtime.view === 'iso' ? 1.4 : 1.52
     : 1.24;
   const fit = fitPerspectiveCameraToBounds({
     bounds: build.metrics.bounds,
-    direction: viewDirection(runtime.view, exteriorOnly, architectural),
-    up: architectural && runtime.view === 'top'
+    direction: viewDirection(runtime.view, exteriorOnly, architectural, horizontalSurface),
+    up: (architectural || horizontalSurface) && runtime.view === 'top'
       ? new THREE.Vector3(0, 0, -1)
       : new THREE.Vector3(0, 1, 0),
     verticalFovDegrees: fov,

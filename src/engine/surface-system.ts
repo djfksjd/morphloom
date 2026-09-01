@@ -32,6 +32,7 @@ export interface SurfaceReport {
   referenceProjectedMaterials: number;
   referenceReliefMaterials: number;
   referenceProjectionFingerprints: string[];
+  maximumReferenceIrregularity: number;
   distinctFinishes: number;
   finishes: string[];
 }
@@ -386,11 +387,12 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
   let transmissionMaterials = 0;
   let referenceProjectedMaterials = 0;
   let referenceReliefMaterials = 0;
+  let maximumReferenceIrregularity = 0;
   const referenceProjectionFingerprints = new Set<string>();
   for (const material of materials) {
     if (!(material instanceof THREE.MeshPhysicalMaterial)) continue;
     physicalMaterials += 1;
-    const metadata = material.userData.morphloomSurface as { finish?: string } | undefined;
+    const metadata = material.userData.morphloomSurface as { finish?: string; referenceIrregularity?: number } | undefined;
     if (metadata?.finish) {
       authoredMaterials += 1;
       finishes.add(metadata.finish);
@@ -411,6 +413,9 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
       if (typeof referenceFingerprint === 'string' && referenceFingerprint.length > 0) {
         referenceProjectionFingerprints.add(referenceFingerprint);
       }
+      if (typeof metadata?.referenceIrregularity === 'number') {
+        maximumReferenceIrregularity = Math.max(maximumReferenceIrregularity, metadata.referenceIrregularity);
+      }
     }
   }
   return {
@@ -424,6 +429,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     referenceProjectedMaterials,
     referenceReliefMaterials,
     referenceProjectionFingerprints: [...referenceProjectionFingerprints].sort(),
+    maximumReferenceIrregularity,
     distinctFinishes: finishes.size,
     finishes: [...finishes].sort(),
   };

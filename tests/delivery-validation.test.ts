@@ -7,10 +7,11 @@ import {
   buildFigmaReferenceSvg,
   compareGlbRoundTrip,
   createLocalBuildTelemetry,
+  deliveryInputFingerprint,
   fingerprintJson,
   snapshotScene,
 } from '../src/engine/delivery-validation';
-import { DEFAULT_KNIFE_SPEC } from '../src/types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC } from '../src/types';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 
 describe('delivery validation and deterministic output', () => {
@@ -24,6 +25,7 @@ describe('delivery validation and deterministic output', () => {
     visible.add(hidden);
     const snapshot = snapshotScene(visible);
     expect(snapshot.meshes).toBe(16);
+    expect(snapshot.primitives).toBe(16);
     expect(snapshot.namedMeshes).toBe(16);
     expect(snapshot.boundsMeters).toEqual(baseline.boundsMeters);
   });
@@ -56,6 +58,22 @@ describe('delivery validation and deterministic output', () => {
     expect(fingerprintJson({ a: 2, b: { c: 2 } })).not.toBe(fingerprintJson({ a: 1, b: { c: 2 } }));
   });
 
+  it('binds an AssemblyIR proof only to the IR, not stale product controls', () => {
+    const shared = {
+      assetKind: 'product' as const,
+      assemblyIR: COOLING_ASSEMBLY_IR,
+      spec: undefined as never,
+      pack: undefined as never,
+    };
+    const first = deliveryInputFingerprint({ ...shared, productSpec: DEFAULT_PRODUCT_SPEC });
+    const second = deliveryInputFingerprint({ ...shared, productSpec: DEFAULT_KNIFE_SPEC });
+    expect(second).toBe(first);
+
+    const changed = structuredClone(COOLING_ASSEMBLY_IR);
+    changed.name = `${changed.name} revised`;
+    expect(deliveryInputFingerprint({ ...shared, assemblyIR: changed, productSpec: DEFAULT_PRODUCT_SPEC })).not.toBe(first);
+  });
+
   it('blocks interchange delivery when reopened geometry counts drift', () => {
     const build = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     const source = snapshotScene(build.root);
@@ -66,7 +84,7 @@ describe('delivery validation and deterministic output', () => {
     drifted.triangles -= 4;
     const blocked = compareGlbRoundTrip(source, drifted, 1024, 12);
     expect(blocked.status).toBe('blocked');
-    expect(blocked.blockers.join(' ')).toMatch(/mesh count changed/);
+    expect(blocked.blockers.join(' ')).toMatch(/primitive count changed/);
     expect(blocked.blockers.join(' ')).toMatch(/triangle count changed/);
   });
 

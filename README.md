@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-96%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-106%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -46,6 +46,14 @@ npm run dev
 ```
 
 브라우저에서 [http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다.
+
+사진 기반 표면 재질을 만들 때:
+
+```bash
+npm run surface:prepare -- --input ./reference.png --output ./outputs/surface.json
+```
+
+생성된 JSON은 로컬 뷰어의 `OPEN RESULT`로 확인합니다. 원본 사진은 외부로 전송되지 않으며, 색상 투영·normal·roughness와 최대 16,384점의 사진 기반 높이장이 한 좌표계로 정렬됩니다.
 
 Codex/Claude 요청 예시:
 
@@ -125,6 +133,8 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 원본 정면 색상을 조립 좌표계에 정렬해 투영하고, 같은 사진의 미세 밝기 변화에서 normal·roughness 맵을 파생해 빛에 반응하는 요철·마모를 보존합니다. 검신은 가짜 튜브가 아니라 실제 쐐기 형상이며, 외곽선 15점으로 정의한 절삭선 14/14구간 모두에서 최대 날끝 0.12 mm를 측정합니다. 해당 사례는 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm를 확인했습니다. 비교용 사진은 라이선스 경계 때문에 저장소에 재배포하지 않으며, 사용자가 소유한 로컬 파일이나 `blob:` URL만 허용합니다.
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
+
+사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.952를 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 결과는 124,616 삼각형, RMS 0.59 mm, 최고–최저 4.64 mm, 폐쇄 메시 1/1, GLB 재열기 포락 오차 0.000 mm였습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
 
 ## 현재 한계
 

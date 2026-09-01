@@ -17,3 +17,5 @@ The Galaxy Z Fold8 exterior case records Samsung's published folded and unfolded
 When a new baseline is added, store its public URL, version, visible metrics, and the date observed. Never copy a proprietary asset into this directory.
 
 `talon-same-reference-latest.json` is the first real same-input render case. It keeps the public URL and measured delivery facts only; the third-party reference bitmap and competitor render are not redistributed. The result deliberately separates photographic likeness from editable delivery quality.
+
+`asphalt-reference-latest.json` records the local-photo surface path without redistributing the bitmap. The gate binds the image fingerprint to the embedded height field, projected albedo, browser-derived normal/roughness maps, closed topology, and GLB reopen result. Its 100% model-completeness score means that declared visual-material checks passed; the separate source-confidence score remains below production measurement confidence because one photograph cannot determine absolute height.

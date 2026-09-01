@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-96%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-106%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -46,6 +46,14 @@ npm run dev
 ```
 
 Open [http://127.0.0.1:4173](http://127.0.0.1:4173).
+
+To prepare a photo-conditioned surface:
+
+```bash
+npm run surface:prepare -- --input ./reference.png --output ./outputs/surface.json
+```
+
+Open the generated JSON with `OPEN RESULT` in the local viewer. The source image is never uploaded. Albedo projection, normal, roughness, and a photo-conditioned height field of up to 16,384 samples stay aligned in one assembly coordinate system.
 
 Example Codex/Claude request:
 
@@ -125,6 +133,8 @@ Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) ·
 We also ran a real same-input Talon comparison. Morphloom aligns the admitted front image across independently editable parts and derives aligned normal and roughness maps from its local pixels. Its blade is a real closed wedge rather than a cosmetic tube: all 14 cutting-edge segments traced through 15 contour points are measured at no more than 0.12 mm. The case has 25 named parts, zero boundary/non-manifold edges or degenerate triangles, and 0.000 mm GLB round-trip drift. This establishes the inspected material response, editability, and delivery checks; it does not infer unseen depth or rear geometry from one photograph.
 
 Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
+
+The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.952 irregularity, then combines a 99×128 (12,672-sample) height field with 13,229 procedural aggregate features. The result has 124,616 triangles, 0.59 mm RMS height, 4.64 mm peak-to-valley relief, one of one closed meshes, and 0.000 mm bounds drift after GLB reopen. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
 
 ## Current limits
 

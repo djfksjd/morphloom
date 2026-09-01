@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.4.1';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.4.4';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -12,6 +12,8 @@ export interface SceneSnapshot {
   namedNodes: number;
   meshes: number;
   namedMeshes: number;
+  /** Render primitives expected after glTF splits a mesh by material group. */
+  primitives: number;
   materials: number;
   triangles: number;
   geometryBytes: number;
@@ -125,6 +127,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let namedNodes = 0;
   let meshes = 0;
   let namedMeshes = 0;
+  let primitives = 0;
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -147,6 +150,16 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       partIds.add(partId);
     }
     const geometry = object.geometry;
+    const groups = geometry.groups;
+    const materialCount = materialList(object.material).length;
+    const deliveryGroups = materialCount > 1 && groups.length > 0 ? groups : [{ start: 0, count: 0, materialIndex: 0 }];
+    primitives += deliveryGroups.length;
+    hasher.number(deliveryGroups.length);
+    for (const group of deliveryGroups) {
+      hasher.number(group.start);
+      hasher.number(group.count);
+      hasher.number(group.materialIndex ?? 0);
+    }
     if (!geometry.boundingBox) geometry.computeBoundingBox();
     if (geometry.boundingBox) visibleBounds.union(geometry.boundingBox.clone().applyMatrix4(object.matrixWorld));
     const position = geometry.getAttribute('position');
@@ -183,6 +196,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     namedNodes,
     meshes,
     namedMeshes,
+    primitives,
     materials: materials.size,
     triangles: Math.round(triangles),
     geometryBytes,
@@ -249,10 +263,16 @@ export function deliveryInputFingerprint(input: {
       },
     });
   }
+  if (input.assemblyIR) {
+    return fingerprintJson({
+      pipelineRevision: DELIVERY_PIPELINE_REVISION,
+      assetKind: input.assetKind,
+      assemblyIR: input.assemblyIR,
+    });
+  }
   return fingerprintJson({
     pipelineRevision: DELIVERY_PIPELINE_REVISION,
     assetKind: input.assetKind,
-    assemblyIR: input.assemblyIR,
     productSpec: input.productSpec,
   });
 }
@@ -276,12 +296,15 @@ export function compareGlbRoundTrip(
 ): DeliveryAudit {
   const blockers: string[] = [];
   const warnings: string[] = [];
-  const meshParity = source.meshes === reopened.meshes;
+  // GLTFExporter stores each material group as a primitive. GLTFLoader may
+  // reopen those primitives as sibling Mesh nodes, so source mesh-node count
+  // is not the correct parity target for multi-material geometry.
+  const meshParity = source.primitives === reopened.meshes;
   const triangleParity = source.triangles === reopened.triangles;
   const namedNodeCoverage = source.namedNodes > 0 ? Math.min(1, reopened.namedNodes / source.namedNodes) : 1;
   const boundsErrorMm = maximumBoundsErrorMm(source, reopened);
   if (!source.finiteTransforms || !reopened.finiteTransforms) blockers.push('non-finite transform detected');
-  if (!meshParity) blockers.push(`mesh count changed ${source.meshes}→${reopened.meshes}`);
+  if (!meshParity) blockers.push(`delivery primitive count changed ${source.primitives}→${reopened.meshes}`);
   if (!triangleParity) blockers.push(`triangle count changed ${source.triangles}→${reopened.triangles}`);
   if (boundsErrorMm > 0.1) blockers.push(`round-trip bounds drift ${boundsErrorMm.toFixed(3)} mm`);
   if (namedNodeCoverage < 0.95) blockers.push(`named node coverage ${Math.round(namedNodeCoverage * 100)}%`);
