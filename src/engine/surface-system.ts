@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { AssemblyMaterialIR, SurfaceFinishIR } from './assembly-ir';
 import type { ViewMode } from '../types';
+import { isReferenceDelightAccepted, type ReferenceDelightMetrics } from './reference-projection-image';
 
 interface SurfaceRecipe {
   roughness: number;
@@ -436,7 +437,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     const metadata = material.userData.morphloomSurface as {
       finish?: string;
       referenceIrregularity?: number;
-      referenceDelight?: { method?: string; confidence?: number };
+      referenceDelight?: ReferenceDelightMetrics;
     } | undefined;
     if (metadata?.finish) {
       authoredMaterials += 1;
@@ -451,7 +452,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     const referenceFingerprint = material.userData.morphloomSurface?.referenceFingerprint;
     if (projectedTexture) {
       referenceProjectedMaterials += 1;
-      if (metadata?.referenceDelight?.method === 'bounded-linear-illumination-field-v1') {
+      if (isReferenceDelightAccepted(metadata?.referenceDelight)) {
         referenceDelightedMaterials += 1;
       }
       if (material.normalMap?.userData.morphloomReferenceDerived === 'normal'

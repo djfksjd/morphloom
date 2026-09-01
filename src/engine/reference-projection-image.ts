@@ -28,6 +28,45 @@ export interface DelightedProjectionImage {
 const MAX_PROJECTION_PIXELS = 16_777_216;
 const MAX_LIGHTING_FIELD_EDGE = 384;
 
+/**
+ * Delivery acceptance for a single-image de-light estimate. Merely recording
+ * that a pass ran is not evidence that it was safe: the output must stay
+ * bounded, avoid broad-contrast regression and disclose its limited
+ * confidence. The surface gate reuses this predicate so malformed or
+ * hand-authored metadata cannot receive a projected-PBR pass.
+ */
+export function isReferenceDelightAccepted(
+  metrics: ReferenceDelightMetrics | undefined,
+): metrics is ReferenceDelightMetrics {
+  if (!metrics || metrics.method !== 'bounded-linear-illumination-field-v1') return false;
+  const values = [
+    metrics.strength,
+    ...metrics.lightingField,
+    metrics.radius,
+    metrics.targetLinearLuma,
+    metrics.lumaRangeBefore,
+    metrics.lumaRangeAfter,
+    metrics.meanCorrection,
+    metrics.minimumCorrection,
+    metrics.maximumCorrection,
+    metrics.clippedFraction,
+    metrics.confidence,
+  ];
+  return values.every(Number.isFinite)
+    && metrics.strength > 0 && metrics.strength <= 0.35
+    && metrics.lightingField.every((edge) => Number.isInteger(edge) && edge >= 2 && edge <= MAX_LIGHTING_FIELD_EDGE)
+    && Number.isInteger(metrics.radius) && metrics.radius >= 3 && metrics.radius <= 28
+    && metrics.targetLinearLuma >= 0.025 && metrics.targetLinearLuma <= 0.9
+    && metrics.lumaRangeBefore >= 0 && metrics.lumaRangeBefore <= 1
+    && metrics.lumaRangeAfter >= 0 && metrics.lumaRangeAfter <= metrics.lumaRangeBefore + 0.015
+    && metrics.minimumCorrection >= 0.55
+    && metrics.maximumCorrection <= 1.8
+    && metrics.meanCorrection >= metrics.minimumCorrection
+    && metrics.meanCorrection <= metrics.maximumCorrection
+    && metrics.clippedFraction >= 0 && metrics.clippedFraction <= 0.02
+    && metrics.confidence >= 0.32 && metrics.confidence <= 0.72;
+}
+
 function srgbToLinear(value: number): number {
   const normalized = value / 255;
   return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;

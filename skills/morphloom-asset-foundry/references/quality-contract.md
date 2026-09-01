@@ -45,7 +45,7 @@ Account for every source-visible feature using one treatment: `geometry`, `mater
 ## Surface response
 
 - Choose a finish from the Morphloom surface system instead of relying on base colour alone.
-- When a local photograph supplies base colour, require deterministic bounded de-light metadata on every projected material. Process in linear light on a bounded downsampled lighting field, preserve global exposure, and keep single-image confidence capped. Reject broad-colour drift, excessive correction clipping, or any same-view material regression.
+- When a local photograph supplies base colour, require deterministic bounded de-light metadata on every projected material. Process in linear light on a bounded downsampled lighting field, preserve global exposure, and keep single-image confidence capped. Reject broad-colour drift, correction clipping above 2%, robust-luminance regression above 0.015, or any same-view material regression.
 - Set roughness and metalness by material class. Use clearcoat for coated surfaces, transmission and IOR for glass, anisotropy for brushed metal/hair, and sheen for textile/leather/skin.
 - Add deterministic micro-normal and roughness variation at a scale appropriate to the real material. For photo-conditioned relief, preserve separate fine, medium, and coarse frequency bands and record their measured deviation and balance. Do not use one texture scale for every object size.
 - Check Beauty under grazing light, Clay for form, Wire for topology, and X-Ray for internal structure.

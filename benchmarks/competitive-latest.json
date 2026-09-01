@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T21:18:12.969Z",
+  "generatedAt": "2026-09-01T21:29:14.565Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1325,7 +1325,7 @@
     {
       "capability": "bounded reference-image de-lighting with recorded correction evidence",
       "img2threejs": "box-blurred luminance proxy, single-image confidence capped",
-      "morphloom": "linear-light bounded field, global-exposure preservation, correction metrics and capped confidence"
+      "morphloom": "linear-light bounded field, global-exposure preservation, <=2% clipping and <=0.015 robust-luminance regression fail-closed gate"
     },
     {
       "capability": "bounded correction and cost ceiling",

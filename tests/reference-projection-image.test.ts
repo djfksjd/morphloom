@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { delightReferenceProjection, extendOpaqueProjectionColors } from '../src/engine/reference-projection-image';
+import {
+  delightReferenceProjection,
+  extendOpaqueProjectionColors,
+  isReferenceDelightAccepted,
+  type ReferenceDelightMetrics,
+} from '../src/engine/reference-projection-image';
 
 describe('reference projection transparent-edge preparation', () => {
   it('extends nearest admitted colours without retaining black transparent fringes', () => {
@@ -53,6 +58,7 @@ describe('bounded reference de-lighting', () => {
     expect(first.metrics.confidence).toBeLessThanOrEqual(0.72);
     expect(first.metrics.minimumCorrection).toBeGreaterThanOrEqual(0.55);
     expect(first.metrics.maximumCorrection).toBeLessThanOrEqual(1.8);
+    expect(isReferenceDelightAccepted(first.metrics)).toBe(true);
     const marked = (20 * 96 + 16) * 4;
     const adjacent = (20 * 96 + 19) * 4;
     expect(first.rgba[marked]).toBeLessThan(first.rgba[adjacent]! * 0.8);
@@ -64,5 +70,16 @@ describe('bounded reference de-lighting', () => {
     expect(Array.from(delightReferenceProjection(source, 12, 8, 0).rgba)).toEqual(Array.from(source));
     expect(() => delightReferenceProjection(source, 12, 8, 1.01)).toThrow(/invalid/);
     expect(() => delightReferenceProjection(new Uint8ClampedArray(4), 1, 1)).toThrow(/invalid/);
+  });
+
+  it('fails closed on clipped, regressive, overconfident or malformed de-light evidence', () => {
+    const accepted = delightReferenceProjection(litPlate(96, 48), 96, 48).metrics;
+    const mutate = (patch: Partial<ReferenceDelightMetrics>) => ({ ...accepted, ...patch });
+    expect(isReferenceDelightAccepted(mutate({ clippedFraction: 0.021 }))).toBe(false);
+    expect(isReferenceDelightAccepted(mutate({ lumaRangeAfter: accepted.lumaRangeBefore + 0.016 }))).toBe(false);
+    expect(isReferenceDelightAccepted(mutate({ confidence: 0.9 }))).toBe(false);
+    expect(isReferenceDelightAccepted(mutate({ strength: 0 }))).toBe(false);
+    expect(isReferenceDelightAccepted(mutate({ lightingField: [385, 24] }))).toBe(false);
+    expect(isReferenceDelightAccepted(undefined)).toBe(false);
   });
 });
