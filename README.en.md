@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-164%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-170%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -50,7 +50,7 @@ Open [http://127.0.0.1:4173](http://127.0.0.1:4173).
 To prepare a photo-conditioned surface:
 
 ```bash
-npm run surface:prepare -- --input ./reference.png --output ./outputs/surface.json
+npm run surface:prepare -- --input ./reference.jpg --output ./outputs/surface.json
 ```
 
 Open the generated JSON with `OPEN RESULT` in the local viewer. The source image is never uploaded. Albedo projection, normal, roughness, and a photo-conditioned height field of up to 16,384 samples stay aligned in one assembly coordinate system.
@@ -146,6 +146,8 @@ We also ran a real same-input Talon comparison. Morphloom aligns the admitted fr
 Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
 
 The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.963 irregularity, then combines a 99×128 (12,672-sample) multi-band height field with 13,229 procedural aggregate features. Fine, medium, and coarse frequency bands are all measurably active, while the comparator rejects regular repeating patterns that merely match average colour or variance. The result has 124,616 triangles, 0.58 mm RMS height, 4.35 mm peak-to-valley relief, and one of one closed meshes; it also passed the compiler 0.10 browser GLB reopen with 0 mm bounds drift. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
+
+The surface preparation CLI accepts bounded PNG, JPEG, and WebP inputs after header-level size checks.
 
 ## Current limits
 

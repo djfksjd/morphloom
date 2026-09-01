@@ -2,7 +2,16 @@ import type { AssemblyIR, SurfaceFinishIR } from './assembly-ir';
 import type { SemiProfessionalProfile, SemiProfessionalReadinessReport } from './evidence-readiness';
 import { auditFidelityContract } from './fidelity-pipeline';
 
-export type AssetDomain = 'architecture' | 'product' | 'human' | 'unknown';
+export type AssetDomain =
+  | 'architecture'
+  | 'product'
+  | 'electronics'
+  | 'human'
+  | 'animation'
+  | 'game'
+  | '3d-print'
+  | 'surface'
+  | 'unknown';
 export type ReviewMode = 'source-camera' | 'orthographic' | 'clay' | 'grazing-light' | 'wire' | 'x-ray';
 
 export interface ExpandedGenerationBrief {
@@ -53,7 +62,12 @@ export function inferAssetDomains(request: string): AssetDomain[] {
   const domains: AssetDomain[] = [];
   if (/도면|평면도|입면도|건물|건축|아파트|원룸|floor\s*plan|building|architecture|cad/.test(normalized)) domains.push('architecture');
   if (/사람|인체|캐릭터|포즈|얼굴|코스튬|human|character|person|pose/.test(normalized)) domains.push('human');
-  if (/제품|부품|전자|회로|핸드폰|스마트폰|칼|에셋|product|assembly|phone|device|asset/.test(normalized)) domains.push('product');
+  if (/전자|회로|pcb|전선|배선|커넥터|단자|센서|electronic|circuit|wiring|wire|connector|terminal/.test(normalized)) domains.push('electronics');
+  if (/제품|부품|핸드폰|스마트폰|칼|product|assembly|phone|device|industrial\s*design/.test(normalized)) domains.push('product');
+  if (/애니메이션|리깅|스켈레톤|스킨\s*웨이트|모프|animation|rig(?:ging)?|skeleton|skin\s*weight|morph\s*target/.test(normalized)) domains.push('animation');
+  if (/게임|유니티|언리얼|고도|lod|충돌체|콜라이더|game|unity|unreal|godot|collision|collider/.test(normalized)) domains.push('game');
+  if (/3d\s*프린|삼디\s*프린|적층|슬라이서|출력물|3d\s*print|additive|slicer/.test(normalized)) domains.push('3d-print');
+  if (/표면|질감|재질|거칠|울퉁불퉁|아스팔트|직물|가죽|옷|주름|surface|texture|material|rough|asphalt|fabric|leather|cloth|wrinkle/.test(normalized)) domains.push('surface');
   return domains.length > 0 ? domains : ['unknown'];
 }
 
@@ -81,6 +95,9 @@ const COMMON_CHECKS = [
   'autonomous-refinement-loop',
   'bounded-cost-stop-policy',
   'attachment-integrity',
+  'same-input-determinism',
+  'exact-delivery-byte-validation',
+  'fail-closed-multi-view-proof',
 ];
 
 const REVIEW_MODES: ReviewMode[] = [
@@ -89,8 +106,8 @@ const REVIEW_MODES: ReviewMode[] = [
 
 function inferEvidenceProfile(request: string, domain: AssetDomain): SemiProfessionalProfile {
   if (domain === 'architecture') return 'architectural-review';
-  if (domain === 'human') return 'game-character';
-  return /분해|부품|수리|정비|내부|회로|service|repair|teardown|assembly/.test(request.toLowerCase())
+  if (domain === 'human' || /게임|애니메이션|리깅|캐릭터|game|animation|rig|character/.test(request.toLowerCase())) return 'game-character';
+  return /분해|부품|수리|정비|내부|회로|전자|전선|배선|service|repair|teardown|assembly|circuit|wiring/.test(request.toLowerCase())
     ? 'service-assembly'
     : 'product-visualization';
 }
@@ -115,14 +132,24 @@ export function expandGenerationBrief(
   const checksByDomain: Record<AssetDomain, string[]> = {
     architecture: ['drawing-orientation', 'footprint-voids', 'projection-and-entrance', 'opening-and-circulation-schedule', 'vertical-evidence-boundary', 'two-point-measurement'],
     product: ['multi-view-alignment', 'exterior-side-completeness', 'manufacturing-datums', 'edge-highlight-continuity', 'component-interfaces', 'fasteners-and-seams', 'connector-pin-and-wire-continuity'],
+    electronics: ['identified-bom', 'explicit-netlist', 'terminal-map', 'connector-mating', 'wire-route-continuity', 'clearance-and-interference', 'bench-evidence-boundary'],
     human: ['style-mode', 'anatomical-side-mapping', 'pose-landmarks', 'anatomical-sanity', 'face-hand-foot-closeups', 'garment-layer-intersections', 'single-view-depth-disclosure', 'game-topology-and-rig-scope'],
+    animation: ['rig-hierarchy', 'normalized-skin-weights', 'bind-pose-error', 'deformation-sampling', 'facial-controls', 'semantic-clip-coverage', 'loop-and-root-motion'],
+    game: ['runtime-triangle-budget', 'skinned-lod-preservation', 'collision-semantics', 'material-and-texture-budget', 'runtime-animation-bindings', 'target-engine-import'],
+    '3d-print': ['millimetre-units', 'watertight-manifold', 'positive-volume', 'minimum-wall-thickness', 'minimum-feature-size', 'overhang-analysis', 'slicer-reopen'],
+    surface: ['physical-texture-scale', 'macro-relief-geometry', 'multi-scale-microstructure', 'pbr-channel-separation', 'irregularity-and-periodicity', 'grazing-light-response'],
     unknown: ['asset-domain-classification'],
   };
   const requiredChecks = [...new Set([...domains.flatMap((item) => checksByDomain[item]), ...COMMON_CHECKS])];
   const instructionsByDomain: Record<AssetDomain, string> = {
     architecture: 'Treat the drawing outline, courtyards/voids, returns, projections, entrances, wall openings, circulation, and measured dimensions as first-class geometry. Never fill a visible void with a convenience slab.',
     product: 'Decompose the object into independently named manufacturable parts, interfaces, fasteners, seams, optical stacks, connectors, and conductors. Preserve electrical semantics when present.',
+    electronics: 'Compile an identified BOM, terminal-level netlist, connector mating map, and routed conductors with explicit 3D endpoints. A visually touching wire is not electrically verified; preserve bench-required boundaries.',
     human: 'Separate visible pose and silhouette evidence from inferred depth. Preserve style intent, anatomical left/right mapping, body proportions, face/hands/feet, garment layers, and material response.',
+    animation: 'Build a named deforming skeleton, normalized weights, bind-pose and sampled-deformation proof, facial controls, and semantic clips. Validate bindings, motion, loop seams, and root-motion intent from delivered bytes.',
+    game: 'Treat runtime budgets, skinned LOD silhouette preservation, collisions, material cost, animation bindings, and target-engine import as delivery gates rather than optional metadata.',
+    '3d-print': 'Use explicit millimetre units and verify closed manifold topology, positive volume, minimum walls/features, supported detail scale, overhangs, and slicer reopenability. Do not equate a renderable shell with a printable solid.',
+    surface: 'Recover physical-scale macro relief and separate base colour, normal/displacement, roughness, and directional response. Match fine, medium, and coarse structure plus natural irregularity under grazing light; do not bake all relief into colour.',
     unknown: 'Classify the asset before choosing geometry, evidence, and validation rules.',
   };
   const domainInstruction = domains.map((item) => instructionsByDomain[item]).join(' ');

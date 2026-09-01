@@ -400,7 +400,9 @@ export function auditFidelityContract(contract: FidelityContract, ir: AssemblyIR
   const passes = Array.isArray(contract.passes) ? contract.passes : [];
   const hardGates = Array.isArray(contract.hardGates) ? contract.hardGates : [];
   const validComplexities = new Set<FidelityComplexity>(['simple', 'moderate', 'complex', 'ultra-complex']);
-  const validDomains = new Set<AssetDomain>(['architecture', 'product', 'human', 'unknown']);
+  const validDomains = new Set<AssetDomain>([
+    'architecture', 'product', 'electronics', 'human', 'animation', 'game', '3d-print', 'surface', 'unknown',
+  ]);
   const validKinds = new Set<FidelityFeatureKind>(['silhouette', 'proportion', 'negative-space', 'component', 'interface', 'material', 'micro-surface', 'marking', 'pose', 'topology']);
   const validViews = new Set<ReviewMode>(['source-camera', 'orthographic', 'clay', 'grazing-light', 'wire', 'x-ray']);
   if (contract.schema !== 'morphloom.fidelity/0.1') blockers.push('unsupported fidelity schema');

@@ -1,11 +1,11 @@
 ---
 name: morphloom-asset-foundry
-description: Create or improve editable 3D humans, products, electronics, and buildings in Morphloom from short natural-language requests and visual or drawing evidence. Use for image-to-3D, drawing-to-3D, AssemblyIR/CharacterIR generation, material-detail improvement, or asset quality validation.
+description: Create or improve editable 3D humans, products, electronics, buildings, animation/game assets, printable solids, and physical surfaces in Morphloom from short natural-language requests and visual or drawing evidence. Use for image-to-3D, drawing-to-3D, AssemblyIR/CharacterIR generation, material-detail improvement, runtime/print delivery, or asset quality validation.
 ---
 
 # Morphloom Asset Foundry
 
-Treat a short modeling instruction as a complete statement of ordinary quality expectations, but do not treat one image or any fixed file count as the workflow target. Morphloom targets semi-professional editable assets from whatever combination of drawings, dimensions, datasheets, scans, existing CAD, and photographs resolves the required properties. Infer ordinary expectations about likeness, proportions, detail, topology, surfaces, editability, and validation so the user does not have to request them twice. Do not infer unsupported facts or a higher readiness claim than the evidence permits.
+Treat a short modeling instruction as a complete statement of ordinary quality expectations. Classify every applicable domain—including electronics, animation, games, 3D printing, and physical surface recovery—and apply all of their delivery gates without asking the user to repeat standard requirements, but do not treat one image or any fixed file count as the workflow target. Morphloom targets semi-professional editable assets from whatever combination of drawings, dimensions, datasheets, scans, existing CAD, and photographs resolves the required properties. Infer ordinary expectations about likeness, proportions, detail, topology, surfaces, editability, and validation so the user does not have to request them twice. Do not infer unsupported facts or a higher readiness claim than the evidence permits.
 
 ## Route by asset
 

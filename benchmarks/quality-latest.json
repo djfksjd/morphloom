@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-09-01T20:35:06.301Z",
+  "generatedAt": "2026-09-01T20:48:16.339Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,

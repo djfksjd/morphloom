@@ -900,10 +900,33 @@ describe('short-prompt generation contract', () => {
   it('applies human and product gates together for a held device', () => {
     const brief = expandGenerationBrief('사람이 스마트폰을 들고 있는 사진으로 게임 캐릭터를 만들어줘');
     expect(brief.domain).toBe('human');
-    expect(brief.domains).toEqual(['human', 'product']);
+    expect(brief.domains).toEqual(['human', 'product', 'game']);
     expect(brief.requiredChecks).toEqual(expect.arrayContaining([
       'anatomical-sanity', 'face-hand-foot-closeups', 'exterior-side-completeness', 'component-interfaces',
+      'skinned-lod-preservation', 'collision-semantics', 'target-engine-import',
     ]));
+  });
+
+  it('expands terse cross-domain requests into delivery-specific checks without requiring a second prompt', () => {
+    const electronics = expandGenerationBrief('PCB와 전선이 연결된 전자제품 분해 에셋');
+    expect(electronics.domains).toEqual(['electronics', 'product']);
+    expect(electronics.evidenceProfile).toBe('service-assembly');
+    expect(electronics.requiredChecks).toEqual(expect.arrayContaining([
+      'identified-bom', 'explicit-netlist', 'terminal-map', 'wire-route-continuity', 'bench-evidence-boundary',
+    ]));
+    expect(electronics.agentPrompt).toContain('A visually touching wire is not electrically verified');
+
+    const runtime = expandGenerationBrief('옷 주름이 있는 캐릭터를 리깅해서 애니메이션 게임 에셋과 3D 프린팅 출력물로');
+    expect(runtime.domains).toEqual(['human', 'animation', 'game', '3d-print', 'surface']);
+    expect(runtime.requiredChecks).toEqual(expect.arrayContaining([
+      'deformation-sampling', 'facial-controls', 'semantic-clip-coverage',
+      'runtime-triangle-budget', 'skinned-lod-preservation', 'collision-semantics',
+      'millimetre-units', 'minimum-wall-thickness', 'overhang-analysis',
+      'physical-texture-scale', 'multi-scale-microstructure', 'grazing-light-response',
+      'same-input-determinism', 'exact-delivery-byte-validation', 'fail-closed-multi-view-proof',
+    ]));
+    expect(runtime.agentPrompt).toContain('Do not equate a renderable shell with a printable solid');
+    expect(runtime.agentPrompt).toContain('do not bake all relief into colour');
   });
 
   it('passes the corrected plan footprint and blocks an unverified replacement', () => {

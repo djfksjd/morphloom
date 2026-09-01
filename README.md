@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-164%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-170%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -50,7 +50,7 @@ npm run dev
 사진 기반 표면 재질을 만들 때:
 
 ```bash
-npm run surface:prepare -- --input ./reference.png --output ./outputs/surface.json
+npm run surface:prepare -- --input ./reference.jpg --output ./outputs/surface.json
 ```
 
 생성된 JSON은 로컬 뷰어의 `OPEN RESULT`로 확인합니다. 원본 사진은 외부로 전송되지 않으며, 색상 투영·normal·roughness와 최대 16,384점의 사진 기반 높이장이 한 좌표계로 정렬됩니다.
@@ -157,6 +157,8 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 
 사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.963을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 높이장은 단일 블러가 아니라 미세·중간·큰 스케일 주파수 밴드를 결합하며 세 대역 모두 활성으로 측정됐고, 비교기는 반복 무늬가 같은 평균·분산으로 골재를 흉내 내는 경우도 차단합니다. 결과는 124,616 삼각형, RMS 0.58 mm, 최고–최저 4.35 mm, 폐쇄 메시 1/1이며 컴파일러 0.14 브라우저 GLB 재열기에서도 크기 오차 0 mm로 통과했습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
+
+표면 준비 CLI는 파일 헤더 단계에서 크기·해상도를 제한한 PNG·JPEG·WebP 입력을 받습니다.
 
 ## 현재 한계
 

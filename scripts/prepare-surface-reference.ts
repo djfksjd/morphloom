@@ -3,7 +3,7 @@ import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, relative, resolve } from 'node:path';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
 import { analyzeReferenceSurface, quantizeReferenceHeightField } from '../src/engine/reference-surface';
-import { decodePng } from './lib/png-decoder';
+import { decodeReferenceImage } from './lib/reference-image-decoder';
 
 interface Arguments {
   input: string;
@@ -19,7 +19,7 @@ function parseArguments(values: string[]): Arguments {
     if (value === '--output') output = values[index + 1] ?? '';
     if (value === '--input' || value === '--output') index += 1;
   }
-  if (!input || !output) throw new Error('Usage: npm run surface:prepare -- --input reference.png [--output outputs/reference-surface.json]');
+  if (!input || !output) throw new Error('Usage: npm run surface:prepare -- --input reference.(png|jpg|webp) [--output outputs/reference-surface.json]');
   return { input, output };
 }
 
@@ -33,9 +33,8 @@ function assertProjectOutput(projectRoot: string, output: string): string {
 async function main(): Promise<void> {
   const projectRoot = process.cwd();
   const args = parseArguments(process.argv.slice(2));
-  if (extname(args.input).toLowerCase() !== '.png') throw new Error('Reference preparation currently accepts non-interlaced 8-bit PNG input.');
   const sourceBytes = await readFile(resolve(args.input));
-  const decoded = decodePng(sourceBytes);
+  const decoded = await decodeReferenceImage(sourceBytes);
   const fingerprint = createHash('sha256').update(sourceBytes).digest('hex');
   const analysis = analyzeReferenceSurface(decoded.rgba, decoded.width, decoded.height, 1.25);
   const aspect = decoded.width / decoded.height;
@@ -55,7 +54,9 @@ async function main(): Promise<void> {
   );
   const assetDirectory = resolve(projectRoot, 'public/local-references');
   await mkdir(assetDirectory, { recursive: true });
-  const assetName = `${fingerprint.slice(0, 16)}-${basename(args.input).replaceAll(/[^a-zA-Z0-9._-]/g, '_')}`;
+  const extension = decoded.format === 'jpeg' ? 'jpg' : decoded.format;
+  const safeStem = basename(args.input, extname(args.input)).replaceAll(/[^a-zA-Z0-9._-]/g, '_') || 'reference';
+  const assetName = `${fingerprint.slice(0, 16)}-${safeStem}.${extension}`;
   await copyFile(resolve(args.input), resolve(assetDirectory, assetName));
   const ir = structuredClone(ASPHALT_SURFACE_BENCHMARK_IR);
   ir.name = 'Reference-conditioned asphalt surface';
@@ -99,6 +100,7 @@ async function main(): Promise<void> {
     output: relative(projectRoot, output),
     localReference: `public/local-references/${assetName}`,
     sourcePixels: [decoded.width, decoded.height],
+    sourceFormat: decoded.format,
     heightField: [fieldWidth, fieldHeight],
     fingerprint,
     metrics: analysis.metrics,
