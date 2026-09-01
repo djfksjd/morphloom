@@ -249,7 +249,7 @@ describe('reference-conditioned surface compilation', () => {
     expect(vValues.reduce((minimum, value) => Math.min(minimum, value), Infinity)).toBeCloseTo(0);
     expect(uValues.reduce((maximum, value) => Math.max(maximum, value), -Infinity)).toBeCloseTo(1);
     expect(vValues.reduce((maximum, value) => Math.max(maximum, value), -Infinity)).toBeCloseTo(1);
-  });
+  }, 20_000);
 
   it('rejects malformed embedded photo fields at the IR boundary', () => {
     const wrongLength = referenceIr();

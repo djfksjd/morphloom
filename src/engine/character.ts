@@ -52,7 +52,7 @@ export interface CharacterBuild {
 }
 
 interface GameDeliveryManifest {
-  schema: 'morphloom.game-delivery/0.3';
+  schema: 'morphloom.game-delivery/0.4';
   lods: Array<{ level: number; triangles: number; role: 'render' }>;
   collisionPrimitives: Array<{
     id: string;
@@ -60,6 +60,7 @@ interface GameDeliveryManifest {
     center: [number, number, number];
     radius: number;
     height?: number;
+    bone: string;
   }>;
   textureSets: number;
   animationSet: Array<{
@@ -83,14 +84,14 @@ function createGameDeliveryManifest(
   const bodyHeight = Math.max(bodyRadius * 2, metrics.heightMeters * 0.72);
   const headRadius = Math.max(0.06, Math.min(size.x, size.z) * 0.25);
   return {
-    schema: 'morphloom.game-delivery/0.3',
+    schema: 'morphloom.game-delivery/0.4',
     lods: [
       { level: 0, triangles: Math.round(metrics.triangles), role: 'render' },
       ...(lod1Triangles === undefined ? [] : [{ level: 1, triangles: lod1Triangles, role: 'render' as const }]),
     ],
     collisionPrimitives: [
-      { id: 'collision_body', shape: 'capsule', center: [center.x, metrics.heightMeters * 0.47, center.z], radius: bodyRadius, height: bodyHeight },
-      { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius },
+      { id: 'collision_body', shape: 'capsule', center: [center.x, metrics.heightMeters * 0.47, center.z], radius: bodyRadius, height: bodyHeight, bone: 'hips' },
+      { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius, bone: 'head' },
     ],
     textureSets: 1,
     animationSet: animations.map((clip) => {

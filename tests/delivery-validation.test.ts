@@ -121,6 +121,24 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers.join(' ')).toMatch(/collision primitive manifest changed/);
   });
 
+  it('blocks collision metadata whose dimensions or bindings change while the count stays equal', () => {
+    const root = new THREE.Group();
+    root.name = 'collision_semantics_fixture';
+    root.userData.gameDelivery = {
+      schema: 'morphloom.game-delivery/0.4',
+      lods: [],
+      collisionPrimitives: [{ id: 'body', shape: 'capsule', center: [0, 1, 0], radius: 0.3, height: 1.4, bone: 'hips' }],
+      animationSet: [],
+    };
+    const source = snapshotScene(root);
+    expect(source.collisionManifestFingerprint).not.toBe('none');
+    const reopened = structuredClone(source);
+    reopened.collisionManifestFingerprint = 'changed';
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers).toContain('collision primitive semantics changed during GLB round-trip');
+  });
+
   it('blocks a GLB that preserves animation counts but changes semantic bindings', () => {
     const root = new THREE.Group();
     root.name = 'animation_semantics_fixture';

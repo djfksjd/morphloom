@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.13.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.14.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -27,6 +27,7 @@ export interface SceneSnapshot {
   morphTargetNames: string[];
   gameLods: number;
   collisionPrimitives: number;
+  collisionManifestFingerprint: string;
   planFootprintAudits: number;
   planFootprintAuditFingerprint: string;
   materials: number;
@@ -150,6 +151,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let bones = 0;
   let gameLods = 0;
   let collisionPrimitives = 0;
+  let collisionManifestFingerprint = 'none';
   let planFootprintAudits = 0;
   let planFootprintAuditFingerprint = 'none';
   let animationManifestEntries = 0;
@@ -176,7 +178,11 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     } | undefined;
     if (gameDelivery) {
       gameLods = Math.max(gameLods, Array.isArray(gameDelivery.lods) ? gameDelivery.lods.length : 0);
-      collisionPrimitives = Math.max(collisionPrimitives, Array.isArray(gameDelivery.collisionPrimitives) ? gameDelivery.collisionPrimitives.length : 0);
+      if (Array.isArray(gameDelivery.collisionPrimitives) && gameDelivery.collisionPrimitives.length >= collisionPrimitives) {
+        collisionPrimitives = gameDelivery.collisionPrimitives.length;
+        collisionManifestFingerprint = fingerprintJson(gameDelivery.collisionPrimitives);
+        hasher.text(collisionManifestFingerprint);
+      }
       if (Array.isArray(gameDelivery.animationSet) && gameDelivery.animationSet.length >= animationManifestEntries) {
         animationManifestEntries = gameDelivery.animationSet.length;
         animationManifestFingerprint = fingerprintJson(gameDelivery.animationSet);
@@ -288,6 +294,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     morphTargetNames: morphTargetNames.sort(),
     gameLods,
     collisionPrimitives,
+    collisionManifestFingerprint,
     planFootprintAudits,
     planFootprintAuditFingerprint,
     materials: materials.size,
@@ -426,6 +433,9 @@ export function compareGlbRoundTrip(
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
   }
+  if (source.collisionManifestFingerprint !== reopened.collisionManifestFingerprint) {
+    blockers.push('collision primitive semantics changed during GLB round-trip');
+  }
   if (source.planFootprintAudits !== reopened.planFootprintAudits
     || source.planFootprintAuditFingerprint !== reopened.planFootprintAuditFingerprint) {
     blockers.push('plan-footprint audit metadata changed during GLB round-trip');
@@ -446,6 +456,7 @@ export function compareGlbRoundTrip(
     && source.morphTargets === reopened.morphTargets
     && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
+    && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
     && source.planFootprintAuditFingerprint === reopened.planFootprintAuditFingerprint
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;

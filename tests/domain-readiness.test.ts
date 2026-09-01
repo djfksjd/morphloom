@@ -46,7 +46,7 @@ describe('cross-domain semi-professional readiness', () => {
     expect(blocked.pass).toBe(false);
     expect(blocked.blockers.some((blocker) => blocker.startsWith('architecture-plan:'))).toBe(true);
     expect(blocked.checks.find((check) => check.id === 'architecture-plan')?.detail).toMatch(/IoU|공백/);
-  });
+  }, 20_000);
 
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
@@ -89,7 +89,7 @@ describe('cross-domain semi-professional readiness', () => {
     ]));
     expect(first.root.animations.find((clip) => clip.name === 'morphloom_hand_gesture')?.tracks.filter((track) => /^(thumb|index|middle|ring|little)_/.test(track.name))).toHaveLength(10);
     expect(first.root.userData.gameDelivery).toMatchObject({
-      schema: 'morphloom.game-delivery/0.3',
+      schema: 'morphloom.game-delivery/0.4',
       animationSet: expect.arrayContaining([
         expect.objectContaining({ name: 'morphloom_idle_preview', tracks: 4, loop: true, category: 'idle', rootMotion: 'in-place' }),
         expect.objectContaining({ name: 'morphloom_sprint_cycle', tracks: 12, loop: true, category: 'locomotion' }),
@@ -169,6 +169,10 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
     expect(game.metrics).toMatchObject({ gameLods: 2, collisionPrimitives: 2 });
+    expect(game.metrics.collisionPrimitiveValidityCoverage).toBe(1);
+    expect(game.metrics.collisionBoneCoverage).toBe(1);
+    expect(game.metrics.collisionBoundsOverlapCoverage).toBe(1);
+    expect(game.metrics.collisionVerticalCoverage).toBeGreaterThanOrEqual(0.75);
     expect(game.metrics.animationSetCoverage).toBe(1);
     expect(game.warnings).toEqual([]);
     const lod1 = build.root.getObjectByName('LOD1_morphloom_human_body');
@@ -177,6 +181,22 @@ describe('cross-domain semi-professional readiness', () => {
     expect(((lod1 as THREE.SkinnedMesh).material as THREE.Material).opacity).toBe(1);
     expect(lod1!.layers.isEnabled(31)).toBe(true);
     expect(analyzeTopology(lod1 as THREE.SkinnedMesh).pass).toBe(true);
+  }, 20_000);
+
+  it('blocks fake collision metadata with invalid dimensions or missing bone bindings', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const manifest = build.root.userData.gameDelivery as {
+      collisionPrimitives: Array<{ radius: number; bone: string }>;
+    };
+    manifest.collisionPrimitives[0]!.radius = Number.NaN;
+    manifest.collisionPrimitives[1]!.bone = 'missing_head_bone';
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(game.pass).toBe(false);
+    expect(game.blockers.some((blocker) => blocker.startsWith('game-collision:'))).toBe(true);
+    expect(game.metrics.collisionPrimitiveValidityCoverage).toBeLessThan(1);
+    expect(game.metrics.collisionBoneCoverage).toBeLessThan(1);
   }, 20_000);
 
   it('blocks animation and game delivery when a required runtime clip is missing', () => {

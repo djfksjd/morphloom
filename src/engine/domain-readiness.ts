@@ -71,6 +71,10 @@ export interface DomainReadinessReport {
     deformationFinite: boolean;
     gameLods: number;
     collisionPrimitives: number;
+    collisionPrimitiveValidityCoverage: number;
+    collisionBoneCoverage: number;
+    collisionBoundsOverlapCoverage: number;
+    collisionVerticalCoverage: number;
     fingerBones: number;
     fingerWeightedVertices: number;
     fingerAnimationTracks: number;
@@ -87,6 +91,84 @@ export interface DomainReadinessReport {
     enclosedVolumeMm3?: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
+  };
+}
+
+function inspectCollisionDelivery(root: THREE.Object3D): {
+  schemaValid: boolean;
+  primitives: number;
+  primitiveValidityCoverage: number;
+  boneCoverage: number;
+  boundsOverlapCoverage: number;
+  verticalCoverage: number;
+} {
+  type CollisionPrimitive = {
+    id?: unknown;
+    shape?: unknown;
+    center?: unknown;
+    radius?: unknown;
+    height?: unknown;
+    bone?: unknown;
+  };
+  type Manifest = { schema?: unknown; collisionPrimitives?: unknown };
+  let manifest: Manifest | undefined;
+  root.traverse((object) => {
+    const candidate = object.userData.gameDelivery as Manifest | undefined;
+    if (candidate && Array.isArray(candidate.collisionPrimitives)
+      && (!manifest || candidate.collisionPrimitives.length > (manifest.collisionPrimitives as unknown[]).length)) manifest = candidate;
+  });
+  const primitives = Array.isArray(manifest?.collisionPrimitives)
+    ? manifest.collisionPrimitives as CollisionPrimitive[] : [];
+  if (primitives.length === 0) return {
+    schemaValid: false, primitives: 0, primitiveValidityCoverage: 0,
+    boneCoverage: 0, boundsOverlapCoverage: 0, verticalCoverage: 0,
+  };
+  root.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(root);
+  const size = bounds.getSize(new THREE.Vector3());
+  const maximumAxis = Math.max(size.x, size.y, size.z, 1e-9);
+  const ids = new Set<string>();
+  let valid = 0;
+  let bound = 0;
+  let overlapping = 0;
+  let coveredMinY = Number.POSITIVE_INFINITY;
+  let coveredMaxY = Number.NEGATIVE_INFINITY;
+  for (const primitive of primitives) {
+    const center = primitive.center;
+    const radius = primitive.radius;
+    const height = primitive.height;
+    const idValid = typeof primitive.id === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(primitive.id) && !ids.has(primitive.id);
+    if (typeof primitive.id === 'string') ids.add(primitive.id);
+    const centerValid = Array.isArray(center) && center.length === 3 && center.every(Number.isFinite);
+    const radiusValid = typeof radius === 'number' && Number.isFinite(radius) && radius > 0 && radius <= maximumAxis * 0.75;
+    const shapeValid = primitive.shape === 'sphere' || primitive.shape === 'capsule';
+    const heightValid = primitive.shape === 'sphere'
+      ? height === undefined
+      : typeof height === 'number' && Number.isFinite(height) && radiusValid && height >= (radius as number) * 2 && height <= maximumAxis * 1.5;
+    if (idValid && centerValid && radiusValid && shapeValid && heightValid) valid += 1;
+    const bone = typeof primitive.bone === 'string' ? root.getObjectByName(primitive.bone) : undefined;
+    if (bone instanceof THREE.Bone) bound += 1;
+    if (!centerValid || !radiusValid || !shapeValid || !heightValid) continue;
+    const point = new THREE.Vector3(center[0], center[1], center[2]);
+    const halfY = primitive.shape === 'capsule' ? (height as number) / 2 : radius as number;
+    const primitiveBounds = new THREE.Box3(
+      new THREE.Vector3(point.x - (radius as number), point.y - halfY, point.z - (radius as number)),
+      new THREE.Vector3(point.x + (radius as number), point.y + halfY, point.z + (radius as number)),
+    );
+    if (primitiveBounds.intersectsBox(bounds)) overlapping += 1;
+    coveredMinY = Math.min(coveredMinY, primitiveBounds.min.y);
+    coveredMaxY = Math.max(coveredMaxY, primitiveBounds.max.y);
+  }
+  const count = primitives.length;
+  const verticalCoverage = bounds.isEmpty() || !Number.isFinite(coveredMinY) ? 0
+    : Math.max(0, Math.min(bounds.max.y, coveredMaxY) - Math.max(bounds.min.y, coveredMinY)) / Math.max(size.y, 1e-9);
+  return {
+    schemaValid: manifest?.schema === 'morphloom.game-delivery/0.4',
+    primitives: count,
+    primitiveValidityCoverage: valid / count,
+    boneCoverage: bound / count,
+    boundsOverlapCoverage: overlapping / count,
+    verticalCoverage,
   };
 }
 
@@ -473,6 +555,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const geometry = inspectGeometry(input.root);
   const deformation = inspectSkinDeformation(input.root);
   const animationDelivery = inspectAnimationDelivery(input.root);
+  const collisionDelivery = inspectCollisionDelivery(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
   const deliveredClipNames = new Set(snapshot.animationClipNames);
   const animationSetCoverage = REQUIRED_RUNTIME_CLIPS.filter((name) => deliveredClipNames.has(name)).length
@@ -573,7 +656,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       && animationDelivery.inPlaceCoverage === 1
       && animationDelivery.maximumQuaternionError <= 1e-5;
     add('game-motion-quality', '게임 동작 품질 계약', gameMotionQualityPass, gameMotionQualityPass ? 100 : 0, `binding ${Math.round(animationDelivery.bindingCoverage * 100)}% · motion ${Math.round(animationDelivery.motionCoverage * 100)}% · loop ${Math.round(animationDelivery.loopClosureCoverage * 100)}% · in-place ${Math.round(animationDelivery.inPlaceCoverage * 100)}%`);
-    add('game-collision', '충돌 프리미티브', snapshot.collisionPrimitives >= 1, snapshot.collisionPrimitives >= 1 ? 100 : 0, `${snapshot.collisionPrimitives} collision primitives`);
+    const collisionPass = snapshot.collisionPrimitives >= 2 && collisionDelivery.schemaValid
+      && collisionDelivery.primitiveValidityCoverage === 1 && collisionDelivery.boneCoverage === 1
+      && collisionDelivery.boundsOverlapCoverage === 1 && collisionDelivery.verticalCoverage >= 0.75;
+    add('game-collision', '실제 충돌 프리미티브', collisionPass, collisionPass ? 100 : 0,
+      `${snapshot.collisionPrimitives}개 · 유효 ${Math.round(collisionDelivery.primitiveValidityCoverage * 100)}% · 본 연결 ${Math.round(collisionDelivery.boneCoverage * 100)}% · 바디 교차 ${Math.round(collisionDelivery.boundsOverlapCoverage * 100)}% · 높이 커버 ${Math.round(collisionDelivery.verticalCoverage * 100)}%`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
     add('game-pbr', '게임 PBR 표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
@@ -629,6 +716,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       deformationFinite: deformation.finite,
       gameLods: snapshot.gameLods,
       collisionPrimitives: snapshot.collisionPrimitives,
+      collisionPrimitiveValidityCoverage: collisionDelivery.primitiveValidityCoverage,
+      collisionBoneCoverage: collisionDelivery.boneCoverage,
+      collisionBoundsOverlapCoverage: collisionDelivery.boundsOverlapCoverage,
+      collisionVerticalCoverage: collisionDelivery.verticalCoverage,
       fingerBones: geometry.fingerBones,
       fingerWeightedVertices: geometry.fingerWeightedVertices,
       fingerAnimationTracks: geometry.fingerAnimationTracks,
