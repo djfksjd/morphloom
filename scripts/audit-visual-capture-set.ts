@@ -1,3 +1,5 @@
+import { createReadStream } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { readFile, stat, writeFile } from 'node:fs/promises';
 import { basename, dirname, resolve } from 'node:path';
 import {
@@ -37,15 +39,40 @@ const morphloomViews: VisualBenchmarkView[] = [];
 const competitorViews: VisualBenchmarkView[] = [];
 const captureEvidence = [];
 const inputEvidence = [];
+const sceneHashCache = new Map<string, Promise<string>>();
+
+function sceneArtifactSha256(path: string): Promise<string> {
+  const cached = sceneHashCache.get(path);
+  if (cached) return cached;
+  const pending = (async () => {
+    const info = await stat(path);
+    if (!info.isFile() || info.size < 1 || info.size > 256 * 1024 * 1024) {
+      throw new Error(`Scene artifact must be a 1 byte..256 MB file: ${basename(path)}`);
+    }
+    return new Promise<string>((resolveHash, rejectHash) => {
+      const hash = createHash('sha256');
+      const stream = createReadStream(path);
+      stream.on('data', (chunk) => hash.update(chunk));
+      stream.on('error', rejectHash);
+      stream.on('end', () => resolveHash(hash.digest('hex')));
+    });
+  })();
+  sceneHashCache.set(path, pending);
+  return pending;
+}
 
 for (const view of manifest.views) {
   const referencePath = resolve(baseDirectory, view.reference);
   const morphloomPath = resolve(baseDirectory, view.morphloom);
   const competitorPath = resolve(baseDirectory, view.img2threejs);
+  const morphloomScenePath = resolve(baseDirectory, view.sceneArtifacts.morphloom);
+  const competitorScenePath = resolve(baseDirectory, view.sceneArtifacts.img2threejs);
   const reference = await normalizedFrame(referencePath, undefined, view.thresholds?.reference);
-  const [morphloom, competitor] = await Promise.all([
+  const [morphloom, competitor, morphloomSceneHash, competitorSceneHash] = await Promise.all([
     normalizedFrame(morphloomPath, reference.aspect, view.thresholds?.morphloom),
     normalizedFrame(competitorPath, reference.aspect, view.thresholds?.img2threejs),
+    sceneArtifactSha256(morphloomScenePath),
+    sceneArtifactSha256(competitorScenePath),
   ]);
   const referenceHash = sha256(reference.bytes);
   const morphloomHash = sha256(morphloom.bytes);
@@ -64,13 +91,13 @@ for (const view of manifest.views) {
   morphloomViews.push({
     ...shared,
     renderSha256: morphloomHash,
-    sceneFingerprint: view.sceneFingerprints.morphloom,
+    sceneFingerprint: morphloomSceneHash,
     render: morphloom.frame,
   });
   competitorViews.push({
     ...shared,
     renderSha256: competitorHash,
-    sceneFingerprint: view.sceneFingerprints.img2threejs,
+    sceneFingerprint: competitorSceneHash,
     render: competitor.frame,
   });
   inputEvidence.push({ viewId: view.viewId, cameraFingerprint, referenceSha256: referenceHash });
@@ -81,7 +108,10 @@ for (const view of manifest.views) {
     reference: { file: basename(referencePath), sha256: referenceHash },
     morphloom: { file: basename(morphloomPath), sha256: morphloomHash },
     img2threejs: { file: basename(competitorPath), sha256: competitorHash },
-    sceneFingerprints: view.sceneFingerprints,
+    sceneArtifacts: {
+      morphloom: { file: basename(morphloomScenePath), sha256: morphloomSceneHash },
+      img2threejs: { file: basename(competitorScenePath), sha256: competitorSceneHash },
+    },
     thresholds: {
       reference: reference.threshold,
       morphloom: morphloom.threshold,

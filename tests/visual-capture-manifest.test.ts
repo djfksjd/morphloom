@@ -14,9 +14,9 @@ function manifest() {
     reference: `${viewId}-reference.png`,
     morphloom: `${viewId}-morphloom.png`,
     img2threejs: `${viewId}-img2threejs.png`,
-    sceneFingerprints: {
-      morphloom: `${'a'.repeat(63)}${offset === 0 ? '1' : '2'}`,
-      img2threejs: `${'b'.repeat(63)}${offset === 0 ? '1' : '2'}`,
+    sceneArtifacts: {
+      morphloom: 'morphloom-scene.glb',
+      img2threejs: 'img2threejs-scene.glb',
     },
     referenceOrigin: 'admitted-local-reference',
     thresholds: { img2threejs: 48 },
@@ -28,7 +28,7 @@ function manifest() {
     materialExpectation: { family: 'metal', roughness: 0.3, surfaceCharacter: 'directional' },
   });
   return {
-    schema: 'morphloom.visual-capture-set/0.1',
+    schema: 'morphloom.visual-capture-set/0.2',
     id: 'two-view-product-proof',
     domain: 'industrial-design',
     rendererVersions: { morphloom: '0.21.0', img2threejs: 'pinned-commit' },
@@ -73,12 +73,15 @@ describe('multi-view capture manifest', () => {
     expect(() => validateVisualCaptureSetManifest(duplicate)).toThrow(/duplicated/);
   });
 
-  it('requires independent scene fingerprints and rejects their reuse across views', () => {
+  it('requires one stable local scene artifact across calibrated views', () => {
     const missing = manifest();
-    delete (missing.views[0] as Partial<(typeof missing.views)[number]>).sceneFingerprints;
-    expect(() => validateVisualCaptureSetManifest(missing)).toThrow(/sceneFingerprints/);
-    const reused = manifest();
-    reused.views[1]!.sceneFingerprints.morphloom = reused.views[0]!.sceneFingerprints.morphloom;
-    expect(() => validateVisualCaptureSetManifest(reused)).toThrow(/scene fingerprint was reused/);
+    delete (missing.views[0] as Partial<(typeof missing.views)[number]>).sceneArtifacts;
+    expect(() => validateVisualCaptureSetManifest(missing)).toThrow(/sceneArtifacts/);
+    const changed = manifest();
+    changed.views[1]!.sceneArtifacts.morphloom = 'different-scene.glb';
+    expect(() => validateVisualCaptureSetManifest(changed)).toThrow(/scene artifact changed/);
+    const screenshot = manifest();
+    screenshot.views[0]!.sceneArtifacts.morphloom = 'render.png';
+    expect(() => validateVisualCaptureSetManifest(screenshot)).toThrow(/GLB, glTF, or scene JSON/);
   });
 });

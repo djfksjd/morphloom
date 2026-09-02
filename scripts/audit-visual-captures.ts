@@ -57,6 +57,8 @@ const candidate = (
     cameraFingerprint,
     referenceSha256: referenceHash,
     renderSha256: sha256(capture.bytes),
+    // This legacy one-view diagnostic has no independent scene artifact.
+    // Reusing the screenshot hash intentionally keeps any superiority claim blocked.
     sceneFingerprint: sha256(capture.bytes),
     referenceOrigin: 'redistributable-reference',
     renderOrigin: 'browser-webgl-canvas',

@@ -18,7 +18,7 @@ function view(id: string, renderOffset: number, renderSha: string): VisualBenchm
     cameraFingerprint: 'abcddcba12345678',
     referenceSha256: `${'a'.repeat(63)}${suffix}`,
     renderSha256: `${renderSha.repeat(63)}${suffix}`,
-    sceneFingerprint: `${renderSha.repeat(63)}${suffix}`,
+    sceneFingerprint: (renderSha === 'b' ? 'd' : 'e').repeat(64),
     referenceOrigin: 'admitted-local-reference',
     renderOrigin: 'browser-webgl-canvas',
     reference: frame(referenceColor),
@@ -103,6 +103,16 @@ describe('same-input blind visual benchmark contract', () => {
     expect(report.blockers.join(' ')).toMatch(/reused across calibrated views/);
     expect(report.blockers.join(' ')).toMatch(/identical critical feature regions/);
     expect(report.blockers.join(' ')).toMatch(/same rendered pixels/);
+  });
+
+  it('requires one stable structural scene across views and rejects screenshot hashes as scene evidence', () => {
+    const changed = benchmark(true);
+    changed.candidates[0].views[1].sceneFingerprint = 'f'.repeat(64);
+    expect(auditSameInputVisualBenchmark(changed).blockers.join(' ')).toMatch(/structural scene changed/);
+
+    const screenshotAsScene = benchmark(true);
+    screenshotAsScene.candidates[0].views[0].sceneFingerprint = screenshotAsScene.candidates[0].views[0].renderSha256;
+    expect(auditSameInputVisualBenchmark(screenshotAsScene).blockers.join(' ')).toMatch(/screenshot hash cannot substitute/);
   });
 
   it('rejects the same reference image relabelled as multiple calibrated views', () => {

@@ -4,7 +4,7 @@ Use a capture-set manifest when two or more real reference views and matching br
 
 ```json
 {
-  "schema": "morphloom.visual-capture-set/0.1",
+  "schema": "morphloom.visual-capture-set/0.2",
   "id": "product-two-view-proof",
   "domain": "industrial-design",
   "rendererVersions": {
@@ -24,9 +24,9 @@ Use a capture-set manifest when two or more real reference views and matching br
       "reference": "captures/front-reference.png",
       "morphloom": "captures/front-morphloom.png",
       "img2threejs": "captures/front-img2threejs.png",
-      "sceneFingerprints": {
-        "morphloom": "0123456789abcdef",
-        "img2threejs": "fedcba9876543210"
+      "sceneArtifacts": {
+        "morphloom": "scenes/morphloom.glb",
+        "img2threejs": "scenes/img2threejs.glb"
       },
       "referenceOrigin": "admitted-local-reference",
       "regions": [
@@ -47,4 +47,4 @@ npm run benchmark:visual-set -- --manifest captures/manifest.json --output bench
 
 Use `--require-claim` in a release gate. It exits unsuccessfully unless the domain's minimum distinct views, automatic thresholds, and a balanced panel of at least five unique blind raters all permit a winner claim.
 
-The validator requires independent structural scene fingerprints exported by both engines; a screenshot hash is not accepted as a scene fingerprint. It refuses remote paths, oversized files, duplicate view IDs, reused file paths, reused reference/render content hashes, reused scene fingerprints, uncalibrated cameras, unsafe thresholds, out-of-frame regions, mismatched regions between engines, and identical candidate pixels. A copied front image renamed as a side view cannot satisfy the contract.
+The validator requires one local compiled scene artifact from each engine and streams the file itself to derive an independent 64-character structural SHA-256. Every calibrated view for that candidate must point to the same artifact; a changed path or hash means the supposedly matched views came from different scene builds. Scene files are bounded to 256 MB, and a screenshot hash is never accepted as structural scene evidence. The validator also refuses remote paths, duplicate view IDs, reused capture paths or content hashes, uncalibrated cameras, unsafe thresholds, out-of-frame regions, mismatched regions between engines, and identical candidate pixels. A copied front image renamed as a side view cannot satisfy the contract.

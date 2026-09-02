@@ -116,7 +116,7 @@ function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: Visua
   const viewIds = new Set<string>();
   const referenceHashes = new Set<string>();
   const renderHashes = new Set<string>();
-  const sceneFingerprints = new Set<string>();
+  let lockedSceneFingerprint: string | undefined;
   for (const view of candidate.views) {
     if (!ID.test(view.viewId) || viewIds.has(view.viewId)) blockers.push(`${candidate.id}: invalid or duplicate view id ${view.viewId}`);
     viewIds.add(view.viewId);
@@ -124,12 +124,17 @@ function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: Visua
     if (!SHA256.test(view.referenceSha256) || !SHA256.test(view.renderSha256)) blockers.push(`${candidate.id}/${view.viewId}: capture SHA-256 missing`);
     if (view.referenceSha256 === view.renderSha256) blockers.push(`${candidate.id}/${view.viewId}: render is byte-identical to the reference plate`);
     if (referenceHashes.has(view.referenceSha256)) blockers.push(`${candidate.id}/${view.viewId}: reference capture was reused across calibrated views`);
-    if (!FINGERPRINT.test(view.sceneFingerprint)) blockers.push(`${candidate.id}/${view.viewId}: rendered scene fingerprint missing`);
+    if (!SHA256.test(view.sceneFingerprint)) blockers.push(`${candidate.id}/${view.viewId}: structural scene SHA-256 missing`);
+    if (view.sceneFingerprint === view.renderSha256) {
+      blockers.push(`${candidate.id}/${view.viewId}: screenshot hash cannot substitute for a structural scene fingerprint`);
+    }
     if (renderHashes.has(view.renderSha256)) blockers.push(`${candidate.id}/${view.viewId}: render capture was reused across calibrated views`);
-    if (sceneFingerprints.has(view.sceneFingerprint)) blockers.push(`${candidate.id}/${view.viewId}: scene fingerprint was reused across calibrated views`);
+    if (lockedSceneFingerprint !== undefined && view.sceneFingerprint !== lockedSceneFingerprint) {
+      blockers.push(`${candidate.id}/${view.viewId}: structural scene changed across calibrated views`);
+    }
+    lockedSceneFingerprint ??= view.sceneFingerprint;
     referenceHashes.add(view.referenceSha256);
     renderHashes.add(view.renderSha256);
-    sceneFingerprints.add(view.sceneFingerprint);
     if (!['admitted-local-reference', 'redistributable-reference'].includes(view.referenceOrigin)) blockers.push(`${candidate.id}/${view.viewId}: reference provenance is not admitted`);
     if (view.renderOrigin !== 'browser-webgl-canvas') blockers.push(`${candidate.id}/${view.viewId}: capture is not a browser WebGL render`);
     if (view.reference.width !== view.render.width || view.reference.height !== view.render.height) {

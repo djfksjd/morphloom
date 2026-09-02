@@ -17,7 +17,8 @@ export interface VisualCaptureSetViewManifest {
   reference: string;
   morphloom: string;
   img2threejs: string;
-  sceneFingerprints: { morphloom: string; img2threejs: string };
+  /** Local compiled scene artifacts hashed by the audit runner, never caller-supplied hashes. */
+  sceneArtifacts: { morphloom: string; img2threejs: string };
   referenceOrigin: 'admitted-local-reference' | 'redistributable-reference';
   thresholds?: { reference?: number; morphloom?: number; img2threejs?: number };
   regions: ComparisonRegion[];
@@ -25,7 +26,7 @@ export interface VisualCaptureSetViewManifest {
 }
 
 export interface VisualCaptureSetManifest {
-  schema: 'morphloom.visual-capture-set/0.1';
+  schema: 'morphloom.visual-capture-set/0.2';
   id: string;
   domain: VisualBenchmarkDomain;
   rendererVersions: { morphloom: string; img2threejs: string };
@@ -57,6 +58,14 @@ function localPath(value: unknown, label: string): string {
     throw new Error(`${label} must be a bounded local path.`);
   }
   return value;
+}
+
+function sceneArtifactPath(value: unknown, label: string): string {
+  const path = localPath(value, label);
+  if (!/\.(?:glb|gltf|json)$/i.test(path)) {
+    throw new Error(`${label} must identify a GLB, glTF, or scene JSON artifact.`);
+  }
+  return path;
 }
 
 function threshold(value: unknown, label: string): number | undefined {
@@ -137,7 +146,7 @@ function validateExpectation(value: unknown, label: string): MaterialExpectation
 
 export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureSetManifest {
   const input = object(value, 'Capture manifest');
-  if (input.schema !== 'morphloom.visual-capture-set/0.1') throw new Error('Capture manifest schema is unsupported.');
+  if (input.schema !== 'morphloom.visual-capture-set/0.2') throw new Error('Capture manifest schema is unsupported.');
   if (typeof input.id !== 'string' || !ID.test(input.id)) throw new Error('Capture manifest id is invalid.');
   if (!DOMAINS.has(input.domain as VisualBenchmarkDomain)) throw new Error('Capture manifest domain is invalid.');
   const versions = object(input.rendererVersions, 'rendererVersions');
@@ -151,7 +160,7 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
   }
   const viewIds = new Set<string>();
   const pathSets = { reference: new Set<string>(), morphloom: new Set<string>(), img2threejs: new Set<string>() };
-  const sceneFingerprintSets = { morphloom: new Set<string>(), img2threejs: new Set<string>() };
+  const lockedSceneArtifacts: Partial<Record<'morphloom' | 'img2threejs', string>> = {};
   const views = input.views.map((entry, index): VisualCaptureSetViewManifest => {
     const view = object(entry, `views[${index}]`);
     if (typeof view.viewId !== 'string' || !ID.test(view.viewId) || viewIds.has(view.viewId)) {
@@ -171,26 +180,26 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
     if (view.referenceOrigin !== 'admitted-local-reference' && view.referenceOrigin !== 'redistributable-reference') {
       throw new Error(`views[${index}].referenceOrigin is invalid.`);
     }
-    const sceneFingerprintsInput = object(view.sceneFingerprints, `views[${index}].sceneFingerprints`);
-    const sceneFingerprints = {
-      morphloom: sceneFingerprintsInput.morphloom,
-      img2threejs: sceneFingerprintsInput.img2threejs,
+    const sceneArtifactsInput = object(view.sceneArtifacts, `views[${index}].sceneArtifacts`);
+    const sceneArtifacts = {
+      morphloom: sceneArtifactPath(sceneArtifactsInput.morphloom, `views[${index}].sceneArtifacts.morphloom`),
+      img2threejs: sceneArtifactPath(sceneArtifactsInput.img2threejs, `views[${index}].sceneArtifacts.img2threejs`),
     };
+    if (sceneArtifacts.morphloom === sceneArtifacts.img2threejs) {
+      throw new Error(`views[${index}] candidates must use distinct scene artifacts.`);
+    }
     for (const id of ['morphloom', 'img2threejs'] as const) {
-      if (typeof sceneFingerprints[id] !== 'string' || !HEX_FINGERPRINT.test(sceneFingerprints[id])) {
-        throw new Error(`views[${index}].sceneFingerprints.${id} is invalid.`);
+      if (lockedSceneArtifacts[id] !== undefined && lockedSceneArtifacts[id] !== sceneArtifacts[id]) {
+        throw new Error(`${id} scene artifact changed across calibrated views.`);
       }
-      if (sceneFingerprintSets[id].has(sceneFingerprints[id])) {
-        throw new Error(`${id} scene fingerprint was reused across calibrated views.`);
-      }
-      sceneFingerprintSets[id].add(sceneFingerprints[id]);
+      lockedSceneArtifacts[id] ??= sceneArtifacts[id];
     }
     const thresholds = view.thresholds === undefined ? undefined : object(view.thresholds, `views[${index}].thresholds`);
     return {
       viewId: view.viewId,
       camera: validateCamera(view.camera, `views[${index}].camera`),
       ...paths,
-      sceneFingerprints: sceneFingerprints as VisualCaptureSetViewManifest['sceneFingerprints'],
+      sceneArtifacts,
       referenceOrigin: view.referenceOrigin,
       ...(thresholds ? { thresholds: {
         reference: threshold(thresholds.reference, `views[${index}].thresholds.reference`),
