@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
 import { buildOrnateKnife } from '../src/engine/knife';
-import { compileAssemblyIR } from '../src/engine/assembly-compiler';
+import { compileAssemblyIR, waitForReferenceProjections } from '../src/engine/assembly-compiler';
 import { buildCharacter } from '../src/engine/character';
 import { parseOhpk } from '../src/engine/ohpk';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
@@ -14,6 +14,12 @@ import { auditAssemblyDetail } from '../src/engine/generation-policy';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 import { analyzeTopology } from '../src/engine/topology';
 import { auditDomainReadiness, DOMAIN_READINESS_REVISION } from '../src/engine/domain-readiness';
+import { preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
+import {
+  auditBrowserRoundTripProof,
+  browserProofAssetPassed,
+  type BrowserRoundTripProofExpectation,
+} from '../src/engine/browser-roundtrip-proof';
 
 const knifeA = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const knifeB = buildOrnateKnife(structuredClone(DEFAULT_KNIFE_SPEC), 'beauty');
@@ -34,39 +40,17 @@ const baseCharacterB = buildCharacter(humanPack, structuredClone(FIELD_HUMAN_SPE
 const asphaltA = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
 const asphaltB = compileAssemblyIR(structuredClone(ASPHALT_SURFACE_BENCHMARK_IR), 'beauty');
 
-type BrowserProof = {
-  id?: unknown;
-  status?: unknown;
-  sceneFingerprint?: unknown;
-  buildFingerprint?: unknown;
-  inputFingerprint?: unknown;
-  qualityReleaseReady?: unknown;
-};
-
-const browserProofs = (() => {
-  try {
-    const parsed = JSON.parse(readFileSync('benchmarks/browser-roundtrip-latest.json', 'utf8')) as {
-      compilerRevision?: unknown;
-      assets?: unknown;
-    };
-    if (parsed.compilerRevision !== DELIVERY_PIPELINE_REVISION || !Array.isArray(parsed.assets)) {
-      return new Map<string, BrowserProof>();
-    }
-    return new Map(parsed.assets
-      .filter((item): item is BrowserProof => Boolean(item) && typeof item === 'object' && typeof (item as BrowserProof).id === 'string')
-      .map((item) => [item.id as string, item]));
-  } catch {
-    return new Map<string, BrowserProof>();
-  }
-})();
-
-const hasMatchingBrowserProof = (id: string, inputFingerprint: string, _nodeSceneFingerprint: string): boolean => {
-  const proof = browserProofs.get(id);
-  return proof?.status === 'pass'
-    && proof.inputFingerprint === inputFingerprint
-    && typeof proof.sceneFingerprint === 'string' && /^[a-f0-9]{16}$/.test(proof.sceneFingerprint)
-    && typeof proof.buildFingerprint === 'string' && /^[a-f0-9]{16}$/.test(proof.buildFingerprint);
-};
+// Match the real browser export lifecycle. Reference projection can finish
+// asynchronously, and a pre-projection snapshot is not the delivery build.
+await Promise.all([
+  knifeA.root, knifeB.root,
+  architectureA.root, architectureB.root,
+  conceptArchitectureA.root, conceptArchitectureB.root,
+  coolingA.root, coolingB.root,
+  characterA.root, characterB.root,
+  baseCharacterA.root, baseCharacterB.root,
+  asphaltA.root, asphaltB.root,
+].map((root) => waitForReferenceProjections(root)));
 
 const surfaceCoverage = (build: { metrics: { surfaces: { authoredMaterials: number; microNormalMaterials: number } } }) => build.metrics.surfaces.authoredMaterials > 0
   ? build.metrics.surfaces.microNormalMaterials / build.metrics.surfaces.authoredMaterials
@@ -92,19 +76,56 @@ const inputFingerprints = {
   asphalt: deliveryInputFingerprint({ assetKind: 'product', assemblyIR: ASPHALT_SURFACE_BENCHMARK_IR, productSpec: DEFAULT_PRODUCT_SPEC, spec: DEFAULT_SPEC, pack: humanPack }),
 };
 
-const baseBrowserProof = hasMatchingBrowserProof('field-human-runtime-base', inputFingerprints.baseCharacter, fingerprints.baseCharacter[0]);
-const asphaltBrowserProof = hasMatchingBrowserProof('asphalt-print-surface', inputFingerprints.asphalt, fingerprints.asphalt[0]);
+// Browser receipts record both the pristine build and the exact scene after
+// deterministic normal/tangent preparation. Use the repeated builds for this
+// second fingerprint so the audited delivery builds remain untouched.
+const preparedFingerprint = (root: import('three').Object3D): string => {
+  preparePortableGltfGeometry(root);
+  return snapshotScene(root).fingerprint;
+};
+const preparedFingerprints = {
+  knife: preparedFingerprint(knifeB.root),
+  architecture: preparedFingerprint(architectureB.root),
+  conceptArchitecture: preparedFingerprint(conceptArchitectureB.root),
+  cooling: preparedFingerprint(coolingB.root),
+  character: preparedFingerprint(characterB.root),
+  baseCharacter: preparedFingerprint(baseCharacterB.root),
+  asphalt: preparedFingerprint(asphaltB.root),
+};
+const browserReport = JSON.parse(readFileSync('benchmarks/browser-roundtrip-latest.json', 'utf8')) as unknown;
+const browserExpectations: BrowserRoundTripProofExpectation[] = [
+  { id: 'ornate-knife-product-visualization', inputFingerprint: inputFingerprints.knife, buildFingerprint: fingerprints.knife[0], preparedSceneFingerprint: preparedFingerprints.knife, qualityReleaseReady: true },
+  { id: 'pinterest-concept-architectural-review', inputFingerprint: inputFingerprints.conceptArchitecture, buildFingerprint: fingerprints.conceptArchitecture[0], preparedSceneFingerprint: preparedFingerprints.conceptArchitecture, qualityReleaseReady: false },
+  { id: 'laurel-homes-architectural-review', inputFingerprint: inputFingerprints.architecture, buildFingerprint: fingerprints.architecture[0], preparedSceneFingerprint: preparedFingerprints.architecture, qualityReleaseReady: true },
+  { id: 'cooling-service-assembly', inputFingerprint: inputFingerprints.cooling, buildFingerprint: fingerprints.cooling[0], preparedSceneFingerprint: preparedFingerprints.cooling, qualityReleaseReady: false },
+  { id: 'single-view-character-previs', inputFingerprint: inputFingerprints.character, buildFingerprint: fingerprints.character[0], preparedSceneFingerprint: preparedFingerprints.character, qualityReleaseReady: false },
+  { id: 'field-human-runtime-base', inputFingerprint: inputFingerprints.baseCharacter, buildFingerprint: fingerprints.baseCharacter[0], preparedSceneFingerprint: preparedFingerprints.baseCharacter, qualityReleaseReady: true },
+  { id: 'asphalt-print-surface', inputFingerprint: inputFingerprints.asphalt, buildFingerprint: fingerprints.asphalt[0], preparedSceneFingerprint: preparedFingerprints.asphalt, qualityReleaseReady: true },
+];
+const browserProofAudit = auditBrowserRoundTripProof(
+  browserReport,
+  DELIVERY_PIPELINE_REVISION,
+  browserExpectations,
+);
+const releaseBrowserProofAudit = auditBrowserRoundTripProof(
+  browserReport,
+  DELIVERY_PIPELINE_REVISION,
+  browserExpectations.filter((expectation) => expectation.qualityReleaseReady),
+);
+const hasMatchingBrowserProof = (id: string): boolean => browserProofAssetPassed(browserProofAudit, id);
+const baseBrowserProof = hasMatchingBrowserProof('field-human-runtime-base');
+const asphaltBrowserProof = hasMatchingBrowserProof('asphalt-print-surface');
 const domainReports = {
   industrialDesign: auditDomainReadiness({
     domain: 'industrial-design', root: knifeA.root, topology: knifeA.metrics.topology,
     evidenceScore: 90, deterministic: fingerprints.knife[0] === fingerprints.knife[1],
-    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife, fingerprints.knife[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization'),
   }),
   architecture: auditDomainReadiness({
     domain: 'architecture', root: architectureA.root, topology: architectureA.metrics.topology,
     evidenceScore: architectureA.metrics.engineering?.evidenceScore ?? 0,
     deterministic: fingerprints.architecture[0] === fingerprints.architecture[1],
-    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture, fingerprints.architecture[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review'),
   }),
   animation: auditDomainReadiness({
     domain: 'animation', root: baseCharacterA.root, evidenceScore: 90,
@@ -129,7 +150,7 @@ const cases = [
     evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: domainReports.industrialDesign.pass,
     firstFingerprint: fingerprints.knife[0], repeatedFingerprint: fingerprints.knife[1],
     inputFingerprint: inputFingerprints.knife,
-    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization', inputFingerprints.knife, fingerprints.knife[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization'),
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
@@ -143,7 +164,7 @@ const cases = [
     firstFingerprint: fingerprints.conceptArchitecture[0],
     repeatedFingerprint: fingerprints.conceptArchitecture[1],
     inputFingerprint: inputFingerprints.conceptArchitecture,
-    browserGlbRoundTrip: hasMatchingBrowserProof('pinterest-concept-architectural-review', inputFingerprints.conceptArchitecture, fingerprints.conceptArchitecture[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('pinterest-concept-architectural-review'),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
@@ -152,7 +173,7 @@ const cases = [
     domainChecksPass: auditAssemblyDetail(LAUREL_HOMES_BUILDING_B_IR).pass,
     firstFingerprint: fingerprints.architecture[0], repeatedFingerprint: fingerprints.architecture[1],
     inputFingerprint: inputFingerprints.architecture,
-    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review', inputFingerprints.architecture, fingerprints.architecture[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review'),
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
@@ -161,7 +182,7 @@ const cases = [
     domainChecksPass: Boolean(coolingA.metrics.engineering?.digitalReady),
     firstFingerprint: fingerprints.cooling[0], repeatedFingerprint: fingerprints.cooling[1],
     inputFingerprint: inputFingerprints.cooling,
-    browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly', inputFingerprints.cooling, fingerprints.cooling[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly'),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
@@ -169,7 +190,7 @@ const cases = [
     evidenceScore: 35, surfaceCoverage: surfaceCoverage(characterA), domainChecksPass: characterA.metrics.poseLandmarkRmsMeters < 0.04,
     firstFingerprint: fingerprints.character[0], repeatedFingerprint: fingerprints.character[1],
     inputFingerprint: inputFingerprints.character,
-    browserGlbRoundTrip: hasMatchingBrowserProof('single-view-character-previs', inputFingerprints.character, fingerprints.character[0]),
+    browserGlbRoundTrip: hasMatchingBrowserProof('single-view-character-previs'),
     expectedDecision: 'block', expectedBlockerPrefix: 'evidence',
   }),
   evaluateBenchmarkCase({
@@ -219,6 +240,8 @@ const output = {
   },
   requiredRates,
   rates,
+  browserProofAudit,
+  releaseBrowserProofAudit,
   domainReports,
   cases,
 };
@@ -227,7 +250,8 @@ console.log(JSON.stringify(output, null, 2));
 const failedRates = Object.entries(requiredRates)
   .filter(([key, required]) => rates[key as keyof typeof rates] < required)
   .map(([key, required]) => `${key} ${Math.round(rates[key as keyof typeof rates] * 100)}%/${required * 100}%`);
-if (failedRates.length > 0) {
-  console.error(`Quality gate failed: ${failedRates.join(' · ')}`);
+if (failedRates.length > 0 || !releaseBrowserProofAudit.pass) {
+  const receiptFailure = releaseBrowserProofAudit.pass ? '' : ` · release browser proof ${releaseBrowserProofAudit.verifiedAssets}/${releaseBrowserProofAudit.expectedAssets}`;
+  console.error(`Quality gate failed: ${failedRates.join(' · ')}${receiptFailure}`);
   process.exitCode = 1;
 }

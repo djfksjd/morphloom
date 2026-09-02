@@ -20,6 +20,7 @@ import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 import { STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
+import { BROWSER_ROUNDTRIP_PROOF_SCHEMA } from '../src/engine/browser-roundtrip-proof';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import * as THREE from 'three';
 
@@ -273,6 +274,11 @@ const standardValidationAudit = {
 type BrowserRoundTripAsset = {
   id?: string;
   status?: string;
+  inputFingerprint?: string;
+  buildFingerprint?: string;
+  sceneFingerprint?: string;
+  boundsErrorMm?: number;
+  namedNodeCoverage?: number;
   morphTargetPayloadParity?: boolean;
   morphTargets?: number;
   reopenedMorphTargets?: number;
@@ -296,12 +302,20 @@ const requiredBrowserAssets = new Set([
   'implicit-surface-manifold-lab',
 ]);
 const browserAssets = browserRoundTrip.assets ?? [];
-const browserRoundTripPass = browserRoundTrip.compilerRevision === DELIVERY_PIPELINE_REVISION
+const browserAssetIds = browserAssets.map((asset) => asset.id ?? '');
+const browserRoundTripPass = browserRoundTrip.schema === BROWSER_ROUNDTRIP_PROOF_SCHEMA
+  && browserRoundTrip.compilerRevision === DELIVERY_PIPELINE_REVISION
   && browserRoundTrip.console?.errors === 0
   && browserRoundTrip.console?.warnings === 0
   && browserAssets.length === requiredBrowserAssets.size
+  && new Set(browserAssetIds).size === browserAssets.length
   && browserAssets.every((asset) => requiredBrowserAssets.has(asset.id ?? '')
     && asset.status === 'pass'
+    && /^[a-f0-9]{16}$/.test(asset.inputFingerprint ?? '')
+    && /^[a-f0-9]{16}$/.test(asset.buildFingerprint ?? '')
+    && /^[a-f0-9]{16}$/.test(asset.sceneFingerprint ?? '')
+    && Number.isFinite(asset.boundsErrorMm) && Number(asset.boundsErrorMm) >= 0 && Number(asset.boundsErrorMm) <= 0.1
+    && Number.isFinite(asset.namedNodeCoverage) && Number(asset.namedNodeCoverage) >= 0.95 && Number(asset.namedNodeCoverage) <= 1
     && asset.morphTargetPayloadParity === true)
   && browserAssets.filter((asset) => asset.id === 'single-view-character-previs' || asset.id === 'field-human-runtime-base')
     .every((asset) => asset.morphTargets === 10 && asset.reopenedMorphTargets === 10);
@@ -309,13 +323,16 @@ const browserRoundTripSummary = {
   schema: browserRoundTrip.schema,
   compilerRevision: browserRoundTrip.compilerRevision,
   observedAt: browserRoundTrip.observedAt,
-  pass: browserRoundTripPass,
+  receiptIntegrityPass: browserRoundTripPass,
   assets: browserAssets.map((asset) => ({
     id: asset.id,
     status: asset.status,
     morphTargetPayloadParity: asset.morphTargetPayloadParity,
     morphTargets: asset.morphTargets,
     reopenedMorphTargets: asset.reopenedMorphTargets,
+    inputFingerprint: asset.inputFingerprint,
+    buildFingerprint: asset.buildFingerprint,
+    preparedSceneFingerprint: asset.sceneFingerprint,
   })),
 };
 const blenderRoundTrip = JSON.parse(readFileSync('benchmarks/blender-roundtrip-latest.json', 'utf8')) as {
@@ -577,6 +594,18 @@ const contractAudit = auditFidelityContract(contract, ir);
 const deliveryAudit = auditFidelityDelivery(contract, state);
 const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json', 'utf8')) as {
   rates?: Record<string, number>;
+  browserProofAudit?: {
+    pass?: boolean;
+    expectedAssets?: number;
+    verifiedAssets?: number;
+    assets?: Array<{ id?: string; pass?: boolean; blockers?: string[] }>;
+  };
+  releaseBrowserProofAudit?: {
+    pass?: boolean;
+    expectedAssets?: number;
+    verifiedAssets?: number;
+    assets?: Array<{ id?: string; pass?: boolean; blockers?: string[] }>;
+  };
   domainReports?: Record<string, {
     pass?: boolean;
     score?: number;
@@ -593,6 +622,12 @@ const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json
   }>;
 };
 const domainProof = qualityBenchmark.domainReports ?? {};
+const currentBrowserBinding = qualityBenchmark.browserProofAudit;
+const releaseBrowserBinding = qualityBenchmark.releaseBrowserProofAudit;
+const qualityRatesPass = ['overall', 'technical', 'decision', 'modelRelease', 'deliveryRelease', 'rejectionSafety']
+  .every((key) => qualityBenchmark.rates?.[key] === 1);
+const releaseBrowserProofPass = releaseBrowserBinding?.pass === true
+  && releaseBrowserBinding.verifiedAssets === releaseBrowserBinding.expectedAssets;
 const visualDomains: VisualBenchmarkDomain[] = ['industrial-design', 'architecture', 'character', 'surface'];
 const output = {
   schema: 'morphloom.competitive-benchmark/0.1',
@@ -673,6 +708,7 @@ const output = {
     },
     crossDomainDelivery: {
       rates: qualityBenchmark.rates,
+      allRatesPass: qualityRatesPass,
       domains: domainProof,
     },
     browserValidationLifecycle: serializedValidationAudit,
@@ -680,7 +716,11 @@ const output = {
     anchorPitchContract: anchorPitchAudit,
     localAxisDimensionContract: localAxisAudit,
     rotatedLocalPitchContract: rotatedLocalPitchAudit,
-    browserRoundTrip: browserRoundTripSummary,
+    browserRoundTrip: {
+      ...browserRoundTripSummary,
+      currentEngineBinding: currentBrowserBinding,
+      releaseEngineBinding: releaseBrowserBinding,
+    },
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
     blenderCrossDomain: blenderCrossDomainSummary,
@@ -710,7 +750,7 @@ const output = {
     { capability: 'USDZ Apple conformance validation', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `pass—${staticDelivery?.usdz?.validator}` : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
-    { capability: 'bounded serialized browser GLB validation with morph-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass ? '9 actual Chromium assets pass; both characters preserve 10/10 morph payloads' : 'blocked' },
+    { capability: 'bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass && releaseBrowserProofPass ? `${releaseBrowserBinding?.verifiedAssets}/${releaseBrowserBinding?.expectedAssets} release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately` : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
     { capability: 'named editable facial controls with spatial and semantic delta localization preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphLocalizedTargets === 5 && domainProof.animation?.metrics?.facialMorphSemanticTargets === 5 ? '5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization' : 'blocked' },
     { capability: 'per-joint weighted deformation/localization, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? '10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization' : 'blocked' },
@@ -747,4 +787,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
   || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass
   || !localAxisAudit.pass || !rotatedLocalPitchAudit.pass || !standardValidationAudit.pass
+  || !browserRoundTripPass || !releaseBrowserProofPass || !qualityRatesPass
   || !blenderRoundTripPass || !blenderCrossDomainPass || !staticDeliveryPass) process.exitCode = 1;

@@ -7,9 +7,9 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-219%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-229%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
-![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
+![Benchmark](https://img.shields.io/badge/release%20gate-100%25-28a879?style=flat-square)
 
 </div>
 
@@ -125,13 +125,13 @@ npm run build
 
 Current locked benchmark:
 
-- Overall pass: **100% (8/8)**
-- Technical integrity: **100% (8/8)**
+- Overall pass: **87.5% (7/8)**
+- Technical integrity: **87.5% (7/8)**
 - Release/block decision accuracy: **100% (8/8)**
 - Release-intended model and browser GLB: **100% (5/5)**
-- Insufficient-evidence rejection safety: **100% (3/3)**
+- Insufficient-evidence rejection safety: **66.7% (2/3)**
 
-This means all eight locked contracts made the correct decision; it does not mean every possible input has perfect visual quality. Release cases now cover industrial design, drawing-based architecture, animation, games, and 3D printing. The concept residence, cooling assembly, and single-view character remain correctly blocked when evidence is insufficient.
+All five release-intended cases still pass across industrial design, drawing-based architecture, animation, games, and 3D printing. The total is intentionally 7/8 because the stored Chromium receipt for the evidence-blocked cooling assembly no longer matches its current deterministic build and tangent-prepared scene. Its release/block decision is still correct, but Morphloom no longer counts a stale reopen receipt as technical success. Browser proof now requires exact equality across `compiler + normalized input + projection-complete build + tangent-prepared scene`; hexadecimal shape alone cannot pass. Four release receipts exactly bind the five release domains to current builds. None of these rates means every input has perfect visual quality.
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|

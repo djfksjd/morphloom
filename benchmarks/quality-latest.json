@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
   "readinessRevision": "morphloom-domain-readiness/0.9.0",
-  "generatedAt": "2026-09-02T05:52:23.580Z",
+  "generatedAt": "2026-09-02T06:05:41.124Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -17,12 +17,101 @@
     "rejectionSafety": 1
   },
   "rates": {
-    "overall": 1,
-    "technical": 1,
+    "overall": 0.875,
+    "technical": 0.875,
     "decision": 1,
     "modelRelease": 1,
     "deliveryRelease": 1,
-    "rejectionSafety": 1
+    "rejectionSafety": 0.6666666666666666
+  },
+  "browserProofAudit": {
+    "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
+    "pass": false,
+    "expectedAssets": 7,
+    "verifiedAssets": 6,
+    "duplicateAssetIds": [],
+    "unexpectedAssetIds": [
+      "implicit-surface-manifold-lab",
+      "talon-same-reference-material-review"
+    ],
+    "blockers": [],
+    "assets": [
+      {
+        "id": "ornate-knife-product-visualization",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "pinterest-concept-architectural-review",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "laurel-homes-architectural-review",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "cooling-service-assembly",
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build"
+        ]
+      },
+      {
+        "id": "single-view-character-previs",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "field-human-runtime-base",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "blockers": []
+      }
+    ]
+  },
+  "releaseBrowserProofAudit": {
+    "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
+    "pass": true,
+    "expectedAssets": 4,
+    "verifiedAssets": 4,
+    "duplicateAssetIds": [],
+    "unexpectedAssetIds": [
+      "cooling-service-assembly",
+      "implicit-surface-manifold-lab",
+      "pinterest-concept-architectural-review",
+      "single-view-character-previs",
+      "talon-same-reference-material-review"
+    ],
+    "blockers": [],
+    "assets": [
+      {
+        "id": "ornate-knife-product-visualization",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "laurel-homes-architectural-review",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "field-human-runtime-base",
+        "pass": true,
+        "blockers": []
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "blockers": []
+      }
+    ]
   },
   "domainReports": {
     "industrialDesign": {
@@ -1192,15 +1281,15 @@
       "firstFingerprint": "152263e53a90e0e9",
       "repeatedFingerprint": "152263e53a90e0e9",
       "inputFingerprint": "5fcba7ad52e03423",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": false,
       "deliveryReady": false,
       "decisionCorrect": true,
-      "benchmarkPassed": true,
+      "benchmarkPassed": false,
       "score": 59,
       "blockers": [
         "evidence 52/85"

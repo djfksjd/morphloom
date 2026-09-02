@@ -7,9 +7,9 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-219%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-229%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
-![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
+![Benchmark](https://img.shields.io/badge/release%20gate-100%25-28a879?style=flat-square)
 
 </div>
 
@@ -130,13 +130,15 @@ npm run blender:validate -- source.glb roundtrip.glb report.json
 
 현재 잠금 벤치마크:
 
-- 전체 합격률: **100% (8/8)**
-- 기술 무결성: **100% (8/8)**
+- 전체 합격률: **87.5% (7/8)**
+- 기술 무결성: **87.5% (7/8)**
 - 승인·차단 판단 정확도: **100% (8/8)**
 - 납품 대상 모델·브라우저 GLB: **100% (5/5)**
-- 근거 부족 안전 차단: **100% (3/3)**
+- 근거 부족 안전 차단: **66.7% (2/3)**
 
-100%는 잠근 8개 계약을 모두 올바르게 판정했다는 뜻이며 모든 입력의 시각 품질이 100점이라는 뜻이 아닙니다. 승인 사례는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과해도 근거 부족으로 정확히 차단됩니다. 브라우저 GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 이름과 개수 외에도 각 대상의 비영 정점 수·변형 길이 합·제곱합·최대값을 비교하므로, 이름만 남고 표정 데이터가 축소되거나 손상된 GLB는 차단됩니다. compiler 0.23.0에서 실제 Chromium 대표 자산 9개와 캐릭터 모프 10/10 왕복을 다시 확인했습니다.
+승인 사례 5/5는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 전체가 7/8인 이유는 냉각 어셈블리의 저장된 Chromium 영수증이 현재 결정론적 빌드 및 tangent 준비 장면 지문과 달라졌기 때문입니다. 근거 부족 차단 결정 자체는 맞지만 낡은 재열기 증거를 기술 합격으로 세지 않으므로 전체 게이트가 의도적으로 실패합니다. 브라우저 증명은 이제 16자리 값의 형식만 보지 않고 `compiler + 입력 + 투영 완료 빌드 + tangent 준비 장면`을 모두 현재 결과와 정확히 비교합니다. 승인 자산 4개 영수증은 5개 납품 분야의 현재 빌드와 정확히 일치합니다. 모든 입력의 시각 품질이 100점이라는 뜻은 아닙니다.
+
+GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 이름과 개수 외에도 각 대상의 비영 정점 수·변형 길이 합·제곱합·최대값을 비교하므로, 이름만 남고 표정 데이터가 축소되거나 손상된 GLB는 차단됩니다. 저장된 실제 Chromium 보고서는 대표 자산 9개와 캐릭터 모프 10/10 왕복을 담지만, 현재 엔진과 다시 묶이지 않은 항목은 “현재 통과”로 주장하지 않습니다.
 
 Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 증거는 현재 컴파일러 revision과 묶이며 이전 엔진 결과를 재사용하면 차단됩니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장합니다. Unity 하네스는 같은 5개 GLB의 메시·재질·텍스처·스킨·모프·애니메이션·포락을 검사하도록 구현하고 Unity 6000.5 API 컴파일까지 확인했지만, [최신 실행 증거](./benchmarks/unity-cross-domain-latest.json)는 라이선싱 초기화 단계에서 차단됐습니다. Unity·Unreal을 검증 완료로 표시하지 않습니다.
 
