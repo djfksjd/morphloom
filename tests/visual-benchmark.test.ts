@@ -42,6 +42,7 @@ function benchmark(withBlind = false): SameInputVisualBenchmark {
       { id: 'morphloom', rendererVersion: 'morphloom-test', inputFingerprint: '1234567890abcdef', views: views.map((id) => view(id, 1, 'b')) },
       { id: 'img2threejs', rendererVersion: 'img2threejs-test', inputFingerprint: '1234567890abcdef', views: views.map((id) => view(id, 36, 'c')) },
     ],
+    captureProtocol: { verified: true, evidenceFingerprint: '9'.repeat(64) },
     blindRatings: withBlind ? [
       { raterFingerprint: '10000000', presentationOrder: 'morphloom-first', preferred: 'morphloom' },
       { raterFingerprint: '20000000', presentationOrder: 'img2threejs-first', preferred: 'morphloom' },
@@ -103,6 +104,24 @@ describe('same-input blind visual benchmark contract', () => {
     expect(report.blockers.join(' ')).toMatch(/reused across calibrated views/);
     expect(report.blockers.join(' ')).toMatch(/identical critical feature regions/);
     expect(report.blockers.join(' ')).toMatch(/same rendered pixels/);
+  });
+
+  it('rejects renamed copies of one critical region rectangle', () => {
+    const input = benchmark(true);
+    input.candidates[0].views[0].regions[1] = { ...input.candidates[0].views[0].regions[0], featureId: 'renamed-copy' };
+    input.candidates[1].views[0].regions[1] = { ...input.candidates[1].views[0].regions[0], featureId: 'renamed-copy' };
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/reuse the same rectangle/);
+  });
+
+  it('never releases a winner claim without verified locked render receipts', () => {
+    const input = benchmark(true);
+    delete input.captureProtocol;
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.status).toBe('unproven');
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/render protocol/);
   });
 
   it('requires one stable structural scene across views and rejects screenshot hashes as scene evidence', () => {

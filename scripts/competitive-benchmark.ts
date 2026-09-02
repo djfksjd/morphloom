@@ -605,7 +605,10 @@ const output = {
     requiredEvidence: {
       identicalInputFingerprint: true,
       matchedCalibratedCameras: true,
+      canonicalLockedRenderProtocol: true,
+      exactCanvasAndPixelRatio: true,
       actualBrowserWebglCaptures: true,
+      hashBoundCaptureReceipts: true,
       criticalFeatureRegions: true,
       minimumViews: Object.fromEntries(visualDomains.map((domain) => [domain, visualBenchmarkMinimumViews(domain)])),
       uniqueBlindRaters: 5,
@@ -688,6 +691,7 @@ const output = {
     { capability: 'locked staged passes', img2threejs: 'yes', morphloom: transitions.length === 8 ? 'yes' : 'blocked' },
     { capability: 'per-feature thresholds', img2threejs: 'yes', morphloom: contract.details.every((item) => item.threshold >= 0.5) ? 'yes' : 'blocked' },
     { capability: 'calibrated source-camera proof', img2threejs: 'yes', morphloom: contract.cameras.length > 0 ? 'yes' : 'blocked' },
+    { capability: 'fail-closed same-input visual protocol with exact canvas/pixel ratio, color/tone/light lock and hash-bound browser receipts', img2threejs: 'not established in pinned audit', morphloom: 'yes—winner claims are blocked on any protocol, receipt, scene, camera, or PNG mismatch' },
     { capability: 'bounded welded visual-hull carving', img2threejs: 'yes', morphloom: visualHull.status === 'carved' && visualHull.triangleCount > 0 ? 'yes' : 'blocked' },
     { capability: 'per-view visual-hull reprojection audit and bounded calibration tolerance', img2threejs: 'not established in pinned audit', morphloom: visualHull.minimumViewIoU >= 0.85 ? 'yes' : 'blocked' },
     { capability: 'smooth implicit Surface Nets with bounded manifold, positive-volume and outward-winding gates', img2threejs: 'Surface Nets', morphloom: implicitTopology.pass && implicitSurface.refinementSteps > 0 && implicitSurface.enclosedVolumeMm3 > 0 && implicitSurface.outwardFaceCoverage >= 0.995 ? 'yes + fail-closed manifold/winding refinement' : 'blocked' },

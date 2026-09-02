@@ -10,6 +10,7 @@ import {
 } from '../src/engine/visual-benchmark';
 import {
   canonicalCameraCalibration,
+  canonicalVisualRenderProtocol,
   validateBrowserCaptureReceipt,
   validateVisualCaptureSetManifest,
 } from '../src/engine/visual-capture-manifest';
@@ -50,18 +51,16 @@ const receiptInputs: Array<{
   cameraFingerprint: string;
   referenceSha256: string;
   renderSha256: string;
-  sourceWidth: number;
-  sourceHeight: number;
 }> = [];
 const sceneHashCache = new Map<string, Promise<string>>();
 
-function sceneArtifactSha256(path: string): Promise<string> {
+function artifactSha256(path: string, label: string, maximumBytes = 256 * 1024 * 1024): Promise<string> {
   const cached = sceneHashCache.get(path);
   if (cached) return cached;
   const pending = (async () => {
     const info = await stat(path);
-    if (!info.isFile() || info.size < 1 || info.size > 256 * 1024 * 1024) {
-      throw new Error(`Scene artifact must be a 1 byte..256 MB file: ${basename(path)}`);
+    if (!info.isFile() || info.size < 1 || info.size > maximumBytes) {
+      throw new Error(`${label} exceeds its bounded file budget: ${basename(path)}`);
     }
     return new Promise<string>((resolveHash, rejectHash) => {
       const hash = createHash('sha256');
@@ -95,6 +94,22 @@ async function evidencePath(path: string, label: string): Promise<string> {
   return canonical;
 }
 
+const lightingRigPath = await evidencePath(manifest.renderProtocol.lightingRigArtifact, 'render protocol lighting rig');
+const lightingRigSha256 = await artifactSha256(lightingRigPath, 'Lighting rig artifact', 16 * 1024 * 1024);
+if (lightingRigSha256 !== manifest.renderProtocol.lightingRigSha256) {
+  throw new Error('Render protocol lighting rig SHA-256 does not match the local artifact.');
+}
+let environmentEvidence: { file: string; sha256: string } | 'none' = 'none';
+if (manifest.renderProtocol.environmentArtifact !== 'none' && manifest.renderProtocol.environmentSha256 !== 'none') {
+  const environmentPath = await evidencePath(manifest.renderProtocol.environmentArtifact, 'render protocol environment');
+  const environmentSha256 = await artifactSha256(environmentPath, 'Environment artifact', 64 * 1024 * 1024);
+  if (environmentSha256 !== manifest.renderProtocol.environmentSha256) {
+    throw new Error('Render protocol environment SHA-256 does not match the local artifact.');
+  }
+  environmentEvidence = { file: basename(environmentPath), sha256: environmentSha256 };
+}
+const renderSettingsFingerprint = sha256(new TextEncoder().encode(canonicalVisualRenderProtocol(manifest.renderProtocol)));
+
 for (const view of manifest.views) {
   const [referencePath, morphloomPath, competitorPath, morphloomScenePath, competitorScenePath, morphloomReceiptPath, competitorReceiptPath] = await Promise.all([
     evidencePath(view.reference, `${view.viewId} reference`),
@@ -109,9 +124,15 @@ for (const view of manifest.views) {
   const [morphloom, competitor, morphloomSceneHash, competitorSceneHash] = await Promise.all([
     normalizedFrame(morphloomPath, reference.aspect, view.thresholds?.morphloom),
     normalizedFrame(competitorPath, reference.aspect, view.thresholds?.img2threejs),
-    sceneArtifactSha256(morphloomScenePath),
-    sceneArtifactSha256(competitorScenePath),
+    artifactSha256(morphloomScenePath, 'Morphloom scene artifact'),
+    artifactSha256(competitorScenePath, 'img2threejs scene artifact'),
   ]);
+  for (const [candidateId, capture] of [['morphloom', morphloom], ['img2threejs', competitor]] as const) {
+    if (capture.sourceWidth !== manifest.renderProtocol.canvas.width
+      || capture.sourceHeight !== manifest.renderProtocol.canvas.height) {
+      throw new Error(`${candidateId}/${view.viewId} PNG dimensions do not match the locked render protocol.`);
+    }
+  }
   const referenceHash = sha256(reference.bytes);
   const morphloomHash = sha256(morphloom.bytes);
   const competitorHash = sha256(competitor.bytes);
@@ -144,13 +165,11 @@ for (const view of manifest.views) {
       candidateId: 'morphloom', viewId: view.viewId, rendererVersion: manifest.rendererVersions.morphloom,
       receiptPath: morphloomReceiptPath, sceneSha256: morphloomSceneHash, cameraFingerprint,
       referenceSha256: referenceHash, renderSha256: morphloomHash,
-      sourceWidth: morphloom.sourceWidth, sourceHeight: morphloom.sourceHeight,
     },
     {
       candidateId: 'img2threejs', viewId: view.viewId, rendererVersion: manifest.rendererVersions.img2threejs,
       receiptPath: competitorReceiptPath, sceneSha256: competitorSceneHash, cameraFingerprint,
       referenceSha256: referenceHash, renderSha256: competitorHash,
-      sourceWidth: competitor.sourceWidth, sourceHeight: competitor.sourceHeight,
     },
   );
   captureEvidence.push({
@@ -172,7 +191,7 @@ for (const view of manifest.views) {
   });
 }
 
-const inputFingerprint = sha256(new TextEncoder().encode(JSON.stringify(inputEvidence)));
+const inputFingerprint = sha256(new TextEncoder().encode(JSON.stringify({ renderSettingsFingerprint, views: inputEvidence })));
 const receiptEvidence = [];
 for (const input of receiptInputs) {
   const { bytes, value } = await boundedJson(input.receiptPath, `${input.candidateId}/${input.viewId} capture receipt`);
@@ -185,10 +204,9 @@ for (const input of receiptInputs) {
     cameraFingerprint: input.cameraFingerprint,
     referenceSha256: input.referenceSha256,
     renderSha256: input.renderSha256,
+    canvas: manifest.renderProtocol.canvas,
+    renderSettingsFingerprint,
   });
-  if (receipt.canvas.width !== input.sourceWidth || receipt.canvas.height !== input.sourceHeight) {
-    throw new Error(`${input.candidateId}/${input.viewId} capture receipt canvas does not match the PNG dimensions.`);
-  }
   receiptEvidence.push({
     candidateId: input.candidateId,
     viewId: input.viewId,
@@ -211,12 +229,27 @@ const benchmark: SameInputVisualBenchmark = {
     candidate('morphloom', manifest.rendererVersions.morphloom, morphloomViews),
     candidate('img2threejs', manifest.rendererVersions.img2threejs, competitorViews),
   ],
+  captureProtocol: {
+    verified: true,
+    evidenceFingerprint: sha256(new TextEncoder().encode(JSON.stringify({
+      renderSettingsFingerprint,
+      receipts: receiptEvidence.map(({ candidateId, viewId, sha256: receiptSha256 }) => ({ candidateId, viewId, receiptSha256 })),
+    }))),
+  },
   blindRatings: manifest.blindRatings,
 };
 const report = auditSameInputVisualBenchmark(benchmark);
 await writeFile(outputPath, `${JSON.stringify({
   generatedAt: new Date().toISOString(),
   manifest: { file: basename(manifestPath), sha256: sha256(manifestBytes), schema: manifest.schema },
+  renderProtocol: {
+    ...manifest.renderProtocol,
+    fingerprint: renderSettingsFingerprint,
+    artifacts: {
+      lightingRig: { file: basename(lightingRigPath), sha256: lightingRigSha256 },
+      environment: environmentEvidence,
+    },
+  },
   normalization: { width: TARGET_WIDTH, height: TARGET_HEIGHT, method: 'coherent-connected-foreground-fit-v2' },
   inputFingerprint,
   captures: captureEvidence,

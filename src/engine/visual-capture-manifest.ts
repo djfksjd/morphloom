@@ -27,17 +27,31 @@ export interface VisualCaptureSetViewManifest {
   materialExpectation?: MaterialExpectation;
 }
 
+export interface VisualRenderProtocol {
+  canvas: { width: number; height: number; pixelRatio: number };
+  outputColorSpace: 'srgb';
+  toneMapping: 'none' | 'aces-filmic' | 'neutral';
+  exposure: number;
+  backgroundRgba: [number, number, number, number];
+  lightingRigArtifact: string;
+  lightingRigSha256: string;
+  environmentArtifact: string | 'none';
+  environmentSha256: string | 'none';
+  shadows: 'off' | 'on';
+}
+
 export interface VisualCaptureSetManifest {
-  schema: 'morphloom.visual-capture-set/0.3';
+  schema: 'morphloom.visual-capture-set/0.4';
   id: string;
   domain: VisualBenchmarkDomain;
   rendererVersions: { morphloom: string; img2threejs: string };
+  renderProtocol: VisualRenderProtocol;
   views: VisualCaptureSetViewManifest[];
   blindRatings?: BlindVisualRating[];
 }
 
 export interface BrowserCaptureReceipt {
-  schema: 'morphloom.browser-capture-receipt/0.1';
+  schema: 'morphloom.browser-capture-receipt/0.2';
   candidateId: 'morphloom' | 'img2threejs';
   viewId: string;
   rendererVersion: string;
@@ -56,6 +70,7 @@ const HEX_FINGERPRINT = /^[a-f0-9]{8,128}$/;
 const DOMAINS = new Set<VisualBenchmarkDomain>(['industrial-design', 'architecture', 'character', 'surface']);
 const FAMILIES = new Set(['metal', 'glass', 'gemstone', 'plastic', 'fabric', 'wood', 'coating', 'other']);
 const CHARACTERS = new Set(['smooth', 'directional', 'granular', 'woven', 'porous']);
+const MAX_CAPTURE_PIXELS = 16_777_216;
 
 function object(value: unknown, label: string): Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error(`${label} must be an object.`);
@@ -139,6 +154,7 @@ function validateCamera(value: unknown, label: string): CameraCalibrationManifes
 function validateRegions(value: unknown, label: string): ComparisonRegion[] {
   if (!Array.isArray(value) || value.length < 1 || value.length > 32) throw new Error(`${label} must contain 1..32 regions.`);
   const ids = new Set<string>();
+  const rectangles = new Set<string>();
   return value.map((entry, index) => {
     const region = object(entry, `${label}[${index}]`);
     if (typeof region.featureId !== 'string' || !ID.test(region.featureId) || ids.has(region.featureId)) {
@@ -151,8 +167,70 @@ function validateRegions(value: unknown, label: string): ComparisonRegion[] {
     if (x < 0 || y < 0 || width <= 0 || height <= 0 || x + width > 512 || y + height > 256) {
       throw new Error(`${label}[${index}] exceeds the normalized 512x256 frame.`);
     }
+    const rectangle = `${x}:${y}:${width}:${height}`;
+    if (rectangles.has(rectangle)) throw new Error(`${label}[${index}] duplicates another region rectangle.`);
+    rectangles.add(rectangle);
     return { featureId: region.featureId, x, y, width, height };
   });
+}
+
+function rgbaTuple(value: unknown, label: string): [number, number, number, number] {
+  if (!Array.isArray(value) || value.length !== 4
+    || value.some((item) => !Number.isInteger(item) || item < 0 || item > 255)) {
+    throw new Error(`${label} must contain four bytes.`);
+  }
+  return [...value] as [number, number, number, number];
+}
+
+function validateCanvas(value: unknown, label: string): VisualRenderProtocol['canvas'] {
+  const canvas = object(value, label);
+  const width = canvas.width;
+  const height = canvas.height;
+  const pixelRatio = canvas.pixelRatio;
+  const pixels = Number(width) * Number(height);
+  if (!Number.isInteger(width) || !Number.isInteger(height) || (width as number) < 64 || (height as number) < 64
+    || !Number.isSafeInteger(pixels) || pixels > MAX_CAPTURE_PIXELS
+    || typeof pixelRatio !== 'number' || !Number.isFinite(pixelRatio) || pixelRatio < 0.25 || pixelRatio > 8) {
+    throw new Error(`${label} is outside the safe render bounds.`);
+  }
+  return { width: width as number, height: height as number, pixelRatio };
+}
+
+function validateRenderProtocol(value: unknown): VisualRenderProtocol {
+  const protocol = object(value, 'renderProtocol');
+  if (protocol.outputColorSpace !== 'srgb') throw new Error('renderProtocol.outputColorSpace must be srgb.');
+  if (protocol.toneMapping !== 'none' && protocol.toneMapping !== 'aces-filmic' && protocol.toneMapping !== 'neutral') {
+    throw new Error('renderProtocol.toneMapping is invalid.');
+  }
+  if (typeof protocol.exposure !== 'number' || !Number.isFinite(protocol.exposure)
+    || protocol.exposure < 0.1 || protocol.exposure > 4) {
+    throw new Error('renderProtocol.exposure must be within 0.1..4.');
+  }
+  if (protocol.shadows !== 'off' && protocol.shadows !== 'on') throw new Error('renderProtocol.shadows is invalid.');
+  const lightingRigArtifact = localPath(protocol.lightingRigArtifact, 'renderProtocol.lightingRigArtifact');
+  const lightingRigSha256 = exactSha256(protocol.lightingRigSha256, 'renderProtocol.lightingRigSha256');
+  if ((protocol.environmentArtifact === 'none') !== (protocol.environmentSha256 === 'none')) {
+    throw new Error('renderProtocol environment artifact and SHA-256 must both be none or both be provided.');
+  }
+  const environmentDisabled = protocol.environmentArtifact === 'none' && protocol.environmentSha256 === 'none';
+  const environmentArtifact = environmentDisabled
+    ? 'none'
+    : localPath(protocol.environmentArtifact, 'renderProtocol.environmentArtifact');
+  const environmentSha256 = environmentDisabled
+    ? 'none'
+    : exactSha256(protocol.environmentSha256, 'renderProtocol.environmentSha256');
+  return {
+    canvas: validateCanvas(protocol.canvas, 'renderProtocol.canvas'),
+    outputColorSpace: protocol.outputColorSpace,
+    toneMapping: protocol.toneMapping,
+    exposure: protocol.exposure,
+    backgroundRgba: rgbaTuple(protocol.backgroundRgba, 'renderProtocol.backgroundRgba'),
+    lightingRigArtifact,
+    lightingRigSha256,
+    environmentArtifact,
+    environmentSha256,
+    shadows: protocol.shadows,
+  };
 }
 
 function validateExpectation(value: unknown, label: string): MaterialExpectation | undefined {
@@ -170,15 +248,16 @@ function validateExpectation(value: unknown, label: string): MaterialExpectation
 
 export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureSetManifest {
   const input = object(value, 'Capture manifest');
-  if (input.schema !== 'morphloom.visual-capture-set/0.3') throw new Error('Capture manifest schema is unsupported.');
+  if (input.schema !== 'morphloom.visual-capture-set/0.4') throw new Error('Capture manifest schema is unsupported.');
   if (typeof input.id !== 'string' || !ID.test(input.id)) throw new Error('Capture manifest id is invalid.');
   if (!DOMAINS.has(input.domain as VisualBenchmarkDomain)) throw new Error('Capture manifest domain is invalid.');
   const versions = object(input.rendererVersions, 'rendererVersions');
   for (const id of ['morphloom', 'img2threejs']) {
-    if (typeof versions[id] !== 'string' || versions[id].length < 1 || versions[id].length > 160) {
+    if (typeof versions[id] !== 'string' || versions[id].trim().length < 1 || versions[id].length > 160) {
       throw new Error(`rendererVersions.${id} is invalid.`);
     }
   }
+  const renderProtocol = validateRenderProtocol(input.renderProtocol);
   if (!Array.isArray(input.views) || input.views.length < 1 || input.views.length > 8) {
     throw new Error('Capture manifest must contain 1..8 calibrated views.');
   }
@@ -266,6 +345,7 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
     id: input.id,
     domain: input.domain as VisualBenchmarkDomain,
     rendererVersions: { morphloom: versions.morphloom as string, img2threejs: versions.img2threejs as string },
+    renderProtocol,
     views,
     ...(blindRatings ? { blindRatings } : {}),
   };
@@ -278,20 +358,12 @@ function exactSha256(value: unknown, label: string): string {
 
 export function validateBrowserCaptureReceipt(
   value: unknown,
-  expected: Omit<BrowserCaptureReceipt, 'schema' | 'captureMethod' | 'canvas' | 'renderSettingsFingerprint'>,
+  expected: Omit<BrowserCaptureReceipt, 'schema' | 'captureMethod'>,
 ): BrowserCaptureReceipt {
   const receipt = object(value, 'Capture receipt');
-  if (receipt.schema !== 'morphloom.browser-capture-receipt/0.1') throw new Error('Capture receipt schema is unsupported.');
+  if (receipt.schema !== 'morphloom.browser-capture-receipt/0.2') throw new Error('Capture receipt schema is unsupported.');
   if (receipt.captureMethod !== 'browser-webgl-canvas') throw new Error('Capture receipt method is not browser WebGL canvas.');
-  const canvas = object(receipt.canvas, 'Capture receipt canvas');
-  const width = canvas.width;
-  const height = canvas.height;
-  const pixelRatio = canvas.pixelRatio;
-  if (!Number.isInteger(width) || !Number.isInteger(height) || (width as number) < 16 || (height as number) < 16
-    || (width as number) > 16_384 || (height as number) > 16_384
-    || typeof pixelRatio !== 'number' || !Number.isFinite(pixelRatio) || pixelRatio < 0.25 || pixelRatio > 8) {
-    throw new Error('Capture receipt canvas is outside the safe render bounds.');
-  }
+  const canvas = validateCanvas(receipt.canvas, 'Capture receipt canvas');
   const normalized: BrowserCaptureReceipt = {
     schema: receipt.schema,
     candidateId: receipt.candidateId as BrowserCaptureReceipt['candidateId'],
@@ -303,11 +375,18 @@ export function validateBrowserCaptureReceipt(
     cameraFingerprint: exactSha256(receipt.cameraFingerprint, 'Capture receipt cameraFingerprint'),
     referenceSha256: exactSha256(receipt.referenceSha256, 'Capture receipt referenceSha256'),
     renderSha256: exactSha256(receipt.renderSha256, 'Capture receipt renderSha256'),
-    canvas: { width: width as number, height: height as number, pixelRatio },
+    canvas,
     renderSettingsFingerprint: exactSha256(receipt.renderSettingsFingerprint, 'Capture receipt renderSettingsFingerprint'),
   };
   for (const key of ['candidateId', 'viewId', 'rendererVersion', 'inputFingerprint', 'sceneSha256', 'cameraFingerprint', 'referenceSha256', 'renderSha256'] as const) {
     if (normalized[key] !== expected[key]) throw new Error(`Capture receipt ${key} does not match the audited files and calibration.`);
+  }
+  if (normalized.canvas.width !== expected.canvas.width || normalized.canvas.height !== expected.canvas.height
+    || normalized.canvas.pixelRatio !== expected.canvas.pixelRatio) {
+    throw new Error('Capture receipt canvas does not match the locked render protocol.');
+  }
+  if (normalized.renderSettingsFingerprint !== expected.renderSettingsFingerprint) {
+    throw new Error('Capture receipt renderSettingsFingerprint does not match the locked render protocol.');
   }
   return normalized;
 }
@@ -319,5 +398,18 @@ export function canonicalCameraCalibration(camera: CameraCalibrationManifest): s
     target: camera.target,
     up: camera.up,
     ...(camera.projection === 'perspective' ? { fovDegrees: camera.fovDegrees } : { orthographicHeight: camera.orthographicHeight }),
+  });
+}
+
+export function canonicalVisualRenderProtocol(protocol: VisualRenderProtocol): string {
+  return JSON.stringify({
+    canvas: protocol.canvas,
+    outputColorSpace: protocol.outputColorSpace,
+    toneMapping: protocol.toneMapping,
+    exposure: protocol.exposure,
+    backgroundRgba: protocol.backgroundRgba,
+    lightingRigSha256: protocol.lightingRigSha256,
+    environmentSha256: protocol.environmentSha256,
+    shadows: protocol.shadows,
   });
 }

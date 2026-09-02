@@ -41,6 +41,7 @@ export interface SameInputVisualBenchmark {
   domain: VisualBenchmarkDomain;
   lockedInputFingerprint: string;
   candidates: [VisualBenchmarkCandidate, VisualBenchmarkCandidate];
+  captureProtocol?: { verified: true; evidenceFingerprint: string };
   blindRatings?: BlindVisualRating[];
 }
 
@@ -81,6 +82,7 @@ export interface SameInputVisualBenchmarkReport {
     img2threejsShare: number;
     tieShare: number;
   };
+  captureProtocol: { verified: boolean; evidenceFingerprint?: string };
   blockers: string[];
   limitation: string;
 }
@@ -143,6 +145,14 @@ function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: Visua
     if (view.regions.length < DOMAIN_MINIMUM_FEATURES[benchmark.domain]) {
       blockers.push(`${candidate.id}/${view.viewId}: ${view.regions.length}/${DOMAIN_MINIMUM_FEATURES[benchmark.domain]} required critical feature regions`);
     }
+    const rectangleKeys = view.regions.map((region) => `${region.x}:${region.y}:${region.width}:${region.height}`);
+    if (new Set(rectangleKeys).size !== rectangleKeys.length) {
+      blockers.push(`${candidate.id}/${view.viewId}: critical feature regions reuse the same rectangle`);
+    }
+    const nearFullFrame = view.regions.filter((region) => (
+      region.width * region.height >= view.reference.width * view.reference.height * 0.9
+    ));
+    if (nearFullFrame.length > 1) blockers.push(`${candidate.id}/${view.viewId}: multiple critical regions cover the whole frame`);
   }
 }
 
@@ -209,6 +219,9 @@ function evaluateBlindRatings(ratings: BlindVisualRating[] | undefined, blockers
 export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmark): SameInputVisualBenchmarkReport {
   if (!ID.test(benchmark.id) || !FINGERPRINT.test(benchmark.lockedInputFingerprint)) throw new Error('Visual benchmark identity is invalid.');
   const blockers: string[] = [];
+  const captureProtocolVerified = benchmark.captureProtocol?.verified === true
+    && SHA256.test(benchmark.captureProtocol.evidenceFingerprint);
+  if (!captureProtocolVerified) blockers.push('locked render protocol and browser capture receipts are not verified');
   const byId = new Map(benchmark.candidates.map((candidate) => [candidate.id, candidate]));
   if (byId.size !== 2 || !byId.has('morphloom') || !byId.has('img2threejs')) throw new Error('Visual benchmark requires one candidate from each engine.');
   for (const candidate of benchmark.candidates) validateCandidate(benchmark, candidate, blockers);
@@ -310,6 +323,10 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
     claimAllowed,
     scores: { morphloom: morphloomScore, img2threejs: competitorScore },
     blind,
+    captureProtocol: {
+      verified: captureProtocolVerified,
+      ...(captureProtocolVerified ? { evidenceFingerprint: benchmark.captureProtocol!.evidenceFingerprint } : {}),
+    },
     blockers,
     limitation: 'This audit ranks only the locked input, calibrated matched views, declared feature regions, renderer versions, and blind panel recorded in this report.',
   };

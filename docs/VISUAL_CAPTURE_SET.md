@@ -4,12 +4,24 @@ Use a capture-set manifest when two or more real reference views and matching br
 
 ```json
 {
-  "schema": "morphloom.visual-capture-set/0.3",
+  "schema": "morphloom.visual-capture-set/0.4",
   "id": "product-two-view-proof",
   "domain": "industrial-design",
   "rendererVersions": {
     "morphloom": "morphloom-compiler/0.22.0",
     "img2threejs": "pinned-commit-or-build"
+  },
+  "renderProtocol": {
+    "canvas": { "width": 1024, "height": 1024, "pixelRatio": 2 },
+    "outputColorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "exposure": 1,
+    "backgroundRgba": [255, 255, 255, 0],
+    "lightingRigArtifact": "render/light-rig.json",
+    "lightingRigSha256": "<sha256>",
+    "environmentArtifact": "none",
+    "environmentSha256": "none",
+    "shadows": "on"
   },
   "views": [
     {
@@ -47,7 +59,7 @@ Each receipt has this bounded shape; every digest is a lowercase 64-character SH
 
 ```json
 {
-  "schema": "morphloom.browser-capture-receipt/0.1",
+  "schema": "morphloom.browser-capture-receipt/0.2",
   "candidateId": "morphloom",
   "viewId": "front",
   "rendererVersion": "0.4.0",
@@ -72,6 +84,8 @@ Use `--require-claim` in a release gate. It exits unsuccessfully unless the doma
 
 The validator requires one local compiled scene artifact from each engine and streams the file itself to derive an independent 64-character structural SHA-256. Every calibrated view for that candidate must point to the same artifact; a changed path or hash means the supposedly matched views came from different scene builds. Scene files are bounded to 256 MB, and a screenshot hash is never accepted as structural scene evidence.
 
-Each PNG also needs a `morphloom.browser-capture-receipt/0.1` JSON recorded by the instrumented capture harness. The receipt binds candidate and view IDs, renderer version, locked input, scene, camera, reference and PNG SHA-256 values, canvas dimensions/pixel ratio, and a render-settings fingerprint. The runner recomputes every file hash and camera/input fingerprint, checks the PNG dimensions, and rejects reused receipts. All evidence paths are relative to the manifest directory and cannot escape it. A receipt is tamper-evident consistency evidence, not a cryptographic attestation that makes an unsupervised third-party render trustworthy; winner claims still require retained capture provenance and blind review.
+Each PNG also needs a `morphloom.browser-capture-receipt/0.2` JSON recorded by the instrumented capture harness. The manifest locks source canvas size, pixel ratio, sRGB output, tone mapping, exposure, background, shadows, and lighting/environment artifacts once for both candidates. The runner reads those local artifacts, recomputes their declared SHA-256 values, derives one canonical render-settings fingerprint, requires every candidate PNG to match the exact locked source canvas, and requires every receipt to bind that fingerprint and exact canvas. The locked-input fingerprint includes this protocol, so changing presentation invalidates the entire comparison instead of silently changing the score.
 
-The validator also refuses remote or parent-traversing paths, duplicate view IDs, reused capture paths or content hashes, uncalibrated cameras, unsafe thresholds, out-of-frame regions, mismatched regions between engines, and identical candidate pixels. A copied front image renamed as a side view cannot satisfy the contract.
+The receipt also binds candidate and view IDs, renderer version, locked input, scene, camera, reference and PNG SHA-256 values. The runner recomputes every file hash and camera/input fingerprint and rejects reused receipts. All evidence paths are relative to the manifest directory and cannot escape it. A receipt is tamper-evident consistency evidence, not a cryptographic attestation that makes an unsupervised third-party render trustworthy; winner claims still require retained capture provenance and blind review.
+
+The validator also refuses remote or parent-traversing paths, duplicate view IDs, reused capture paths or content hashes, uncalibrated cameras, unsafe render sizes, out-of-frame regions, duplicated rectangles with renamed feature IDs, mismatched regions between engines, and identical candidate pixels. At most one region may cover almost the full normalized frame; other regions must isolate real critical details. A copied front image renamed as a side view cannot satisfy the contract.

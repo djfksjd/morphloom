@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-215%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-218%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -145,7 +145,7 @@ Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, 
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 
-Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes.
+Before generation, Morphloom locks detail, material, proof-view, and per-feature acceptance requirements, then enforces regression, repeated-defect, and cost ceilings across eight review passes. Cross-engine renders also lock canvas, pixel ratio, colour space, tone mapping, exposure, background, shadows, and lighting/environment hashes into one canonical protocol. Browser receipts bind that protocol to the actual PNG, scene, camera, reference, and renderer version; renamed copies of one scoring rectangle or captures made with different settings cannot release a winner claim.
 
 Topology checks now include bounded exact triangle self-intersection tests, not only boundary, non-manifold, and degenerate counts. This gate exposed and repaired overshooting wire splines and hard pelvis/neck pose transitions. Conductors use straight runs with corner fillets, anatomical regions use continuous weights, and a meshoptimizer index-only LOD is admitted only when topology, skin attributes, and silhouette preservation all pass.
 
