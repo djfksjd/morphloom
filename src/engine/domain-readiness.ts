@@ -120,6 +120,10 @@ function inspectCollisionDelivery(root: THREE.Object3D): {
     radius?: unknown;
     height?: unknown;
     bone?: unknown;
+    start?: unknown;
+    end?: unknown;
+    orientation?: unknown;
+    role?: unknown;
   };
   type Manifest = { schema?: unknown; collisionPrimitives?: unknown };
   let manifest: Manifest | undefined;
@@ -153,18 +157,42 @@ function inspectCollisionDelivery(root: THREE.Object3D): {
     const centerValid = Array.isArray(center) && center.length === 3 && center.every(Number.isFinite);
     const radiusValid = typeof radius === 'number' && Number.isFinite(radius) && radius > 0 && radius <= maximumAxis * 0.75;
     const shapeValid = primitive.shape === 'sphere' || primitive.shape === 'capsule';
-    const heightValid = primitive.shape === 'sphere'
-      ? height === undefined
-      : typeof height === 'number' && Number.isFinite(height) && radiusValid && height >= (radius as number) * 2 && height <= maximumAxis * 1.5;
-    if (idValid && centerValid && radiusValid && shapeValid && heightValid) valid += 1;
+    let capsuleValid = primitive.shape === 'sphere' && height === undefined;
+    let primitiveBounds: THREE.Box3 | undefined;
+    if (primitive.shape === 'capsule' && centerValid && radiusValid) {
+      const start = primitive.start;
+      const end = primitive.end;
+      const orientation = primitive.orientation;
+      const endpointsValid = Array.isArray(start) && start.length === 3 && start.every(Number.isFinite)
+        && Array.isArray(end) && end.length === 3 && end.every(Number.isFinite);
+      const orientationValid = Array.isArray(orientation) && orientation.length === 4 && orientation.every(Number.isFinite);
+      if (endpointsValid && orientationValid && typeof height === 'number' && Number.isFinite(height)) {
+        const startPoint = new THREE.Vector3(start[0], start[1], start[2]);
+        const endPoint = new THREE.Vector3(end[0], end[1], end[2]);
+        const axis = endPoint.clone().sub(startPoint);
+        const length = axis.length();
+        const expectedCenter = startPoint.clone().add(endPoint).multiplyScalar(0.5);
+        const declaredCenter = new THREE.Vector3(center[0], center[1], center[2]);
+        const quaternion = new THREE.Quaternion(orientation[0], orientation[1], orientation[2], orientation[3]);
+        const orientationError = length > 1e-9
+          ? 1 - new THREE.Vector3(0, 1, 0).applyQuaternion(quaternion).normalize().dot(axis.normalize())
+          : Number.POSITIVE_INFINITY;
+        capsuleValid = length > (radius as number) * 0.25 && length <= maximumAxis * 1.5
+          && Math.abs(height - (length + (radius as number) * 2)) <= maximumAxis * 1e-5
+          && expectedCenter.distanceTo(declaredCenter) <= maximumAxis * 1e-6
+          && Math.abs(quaternion.length() - 1) <= 1e-5 && orientationError <= 1e-5;
+        primitiveBounds = new THREE.Box3().setFromPoints([startPoint, endPoint]).expandByScalar(radius as number);
+      }
+    }
+    const roleValid = typeof primitive.role === 'string' && /^[a-z0-9-]{1,40}$/.test(primitive.role);
+    if (idValid && centerValid && radiusValid && shapeValid && capsuleValid && roleValid) valid += 1;
     const bone = typeof primitive.bone === 'string' ? root.getObjectByName(primitive.bone) : undefined;
     if (bone instanceof THREE.Bone) bound += 1;
-    if (!centerValid || !radiusValid || !shapeValid || !heightValid) continue;
+    if (!centerValid || !radiusValid || !shapeValid || !capsuleValid) continue;
     const point = new THREE.Vector3(center[0], center[1], center[2]);
-    const halfY = primitive.shape === 'capsule' ? (height as number) / 2 : radius as number;
-    const primitiveBounds = new THREE.Box3(
-      new THREE.Vector3(point.x - (radius as number), point.y - halfY, point.z - (radius as number)),
-      new THREE.Vector3(point.x + (radius as number), point.y + halfY, point.z + (radius as number)),
+    primitiveBounds ??= new THREE.Box3(
+      point.clone().addScalar(-(radius as number)),
+      point.clone().addScalar(radius as number),
     );
     if (primitiveBounds.intersectsBox(bounds)) overlapping += 1;
     coveredMinY = Math.min(coveredMinY, primitiveBounds.min.y);
@@ -174,7 +202,7 @@ function inspectCollisionDelivery(root: THREE.Object3D): {
   const verticalCoverage = bounds.isEmpty() || !Number.isFinite(coveredMinY) ? 0
     : Math.max(0, Math.min(bounds.max.y, coveredMaxY) - Math.max(bounds.min.y, coveredMinY)) / Math.max(size.y, 1e-9);
   return {
-    schemaValid: manifest?.schema === 'morphloom.game-delivery/0.4',
+    schemaValid: manifest?.schema === 'morphloom.game-delivery/0.5',
     primitives: count,
     primitiveValidityCoverage: valid / count,
     boneCoverage: bound / count,
@@ -677,11 +705,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       && animationDelivery.inPlaceCoverage === 1
       && animationDelivery.maximumQuaternionError <= 1e-5;
     add('game-motion-quality', '게임 동작 품질 계약', gameMotionQualityPass, gameMotionQualityPass ? 100 : 0, `binding ${Math.round(animationDelivery.bindingCoverage * 100)}% · motion ${Math.round(animationDelivery.motionCoverage * 100)}% · loop ${Math.round(animationDelivery.loopClosureCoverage * 100)}% · in-place ${Math.round(animationDelivery.inPlaceCoverage * 100)}%`);
-    const collisionPass = snapshot.collisionPrimitives >= 2 && collisionDelivery.schemaValid
+    const collisionPass = snapshot.collisionPrimitives >= 16 && collisionDelivery.schemaValid
       && collisionDelivery.primitiveValidityCoverage === 1 && collisionDelivery.boneCoverage === 1
       && collisionDelivery.boundsOverlapCoverage === 1 && collisionDelivery.verticalCoverage >= 0.75;
     add('game-collision', '실제 충돌 프리미티브', collisionPass, collisionPass ? 100 : 0,
-      `${snapshot.collisionPrimitives}개 · 유효 ${Math.round(collisionDelivery.primitiveValidityCoverage * 100)}% · 본 연결 ${Math.round(collisionDelivery.boneCoverage * 100)}% · 바디 교차 ${Math.round(collisionDelivery.boundsOverlapCoverage * 100)}% · 높이 커버 ${Math.round(collisionDelivery.verticalCoverage * 100)}%`);
+      `${snapshot.collisionPrimitives}개 포즈 정렬 · 유효 ${Math.round(collisionDelivery.primitiveValidityCoverage * 100)}% · 본 연결 ${Math.round(collisionDelivery.boneCoverage * 100)}% · 바디 교차 ${Math.round(collisionDelivery.boundsOverlapCoverage * 100)}% · 높이 커버 ${Math.round(collisionDelivery.verticalCoverage * 100)}%`);
     add('game-lod-profile', 'LOD 납품 프로필', snapshot.gameLods >= 1, snapshot.gameLods >= 1 ? 100 : 0, `${snapshot.gameLods} declared LOD levels`);
     add('game-additional-lods', '추가 LOD 메시', snapshot.gameLods >= 2, snapshot.gameLods >= 2 ? 100 : 60, snapshot.gameLods >= 2 ? `${snapshot.gameLods} LOD levels` : 'LOD0만 포함 · 대상 플랫폼 최적화에서 LOD1+ 생성 필요', false);
     const lodQualityRequired = snapshot.gameLods >= 2;

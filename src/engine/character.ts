@@ -56,16 +56,9 @@ export interface CharacterBuild {
 }
 
 interface GameDeliveryManifest {
-  schema: 'morphloom.game-delivery/0.4';
+  schema: 'morphloom.game-delivery/0.5';
   lods: Array<{ level: number; triangles: number; role: 'render' }>;
-  collisionPrimitives: Array<{
-    id: string;
-    shape: 'capsule' | 'sphere';
-    center: [number, number, number];
-    radius: number;
-    height?: number;
-    bone: string;
-  }>;
+  collisionPrimitives: GameCollisionPrimitive[];
   textureSets: number;
   animationSet: Array<{
     name: string;
@@ -77,26 +70,94 @@ interface GameDeliveryManifest {
   }>;
 }
 
+type VectorTuple = [number, number, number];
+type QuaternionTuple = [number, number, number, number];
+
+type GameCollisionPrimitive = {
+  id: string;
+  role: string;
+  bone: string;
+  radius: number;
+  center: VectorTuple;
+} & ({
+  shape: 'sphere';
+} | {
+  shape: 'capsule';
+  start: VectorTuple;
+  end: VectorTuple;
+  height: number;
+  orientation: QuaternionTuple;
+});
+
+function vectorTuple(value: THREE.Vector3): VectorTuple {
+  return [value.x, value.y, value.z];
+}
+
+function sphereCollider(id: string, role: string, bone: string, center: THREE.Vector3, radius: number): GameCollisionPrimitive {
+  return { id, role, bone, shape: 'sphere', center: vectorTuple(center), radius };
+}
+
+function capsuleCollider(
+  id: string,
+  role: string,
+  bone: string,
+  start: THREE.Vector3,
+  end: THREE.Vector3,
+  radius: number,
+): GameCollisionPrimitive {
+  const axis = end.clone().sub(start);
+  const length = axis.length();
+  if (length <= 1e-6) throw new Error(`Collision capsule ${id} has no longitudinal extent.`);
+  const orientation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis.multiplyScalar(1 / length));
+  return {
+    id,
+    role,
+    bone,
+    shape: 'capsule',
+    start: vectorTuple(start),
+    end: vectorTuple(end),
+    center: vectorTuple(start.clone().add(end).multiplyScalar(0.5)),
+    radius,
+    height: length + radius * 2,
+    orientation: [orientation.x, orientation.y, orientation.z, orientation.w],
+  };
+}
+
+function createHumanoidCollisionRig(heightMeters: number, pose: PoseStyle): GameCollisionPrimitive[] {
+  const joints = getPoseJoints(heightMeters, pose);
+  const toe = (side: 'L' | 'R') => joints[`ankle${side}`].clone().add(new THREE.Vector3(0, -heightMeters * 0.006, heightMeters * 0.085));
+  const colliders: GameCollisionPrimitive[] = [
+    sphereCollider('collision_pelvis', 'pelvis', 'hips', joints.hips, heightMeters * 0.105),
+    capsuleCollider('collision_torso', 'torso', 'spine', joints.hips, joints.chest, heightMeters * 0.1),
+    capsuleCollider('collision_upper_chest', 'upper-chest', 'chest', joints.chest, joints.neck, heightMeters * 0.072),
+    sphereCollider('collision_head', 'head', 'head', joints.head, heightMeters * 0.065),
+  ];
+  for (const side of ['L', 'R'] as const) {
+    colliders.push(
+      capsuleCollider(`collision_upper_arm_${side}`, 'upper-arm', `shoulder_${side}`, joints[`shoulder${side}`], joints[`elbow${side}`], heightMeters * 0.038),
+      capsuleCollider(`collision_forearm_${side}`, 'forearm', `elbow_${side}`, joints[`elbow${side}`], joints[`wrist${side}`], heightMeters * 0.032),
+      sphereCollider(`collision_hand_${side}`, 'hand', `wrist_${side}`, joints[`wrist${side}`], heightMeters * 0.036),
+      capsuleCollider(`collision_thigh_${side}`, 'thigh', `hip_${side}`, joints[`hip${side}`], joints[`knee${side}`], heightMeters * 0.06),
+      capsuleCollider(`collision_shin_${side}`, 'shin', `knee_${side}`, joints[`knee${side}`], joints[`ankle${side}`], heightMeters * 0.045),
+      capsuleCollider(`collision_foot_${side}`, 'foot', `ankle_${side}`, joints[`ankle${side}`], toe(side), heightMeters * 0.035),
+    );
+  }
+  return colliders;
+}
+
 function createGameDeliveryManifest(
   metrics: Pick<CharacterMetrics, 'bounds' | 'triangles' | 'heightMeters'>,
   animations: readonly THREE.AnimationClip[],
+  pose: PoseStyle,
   lod1Triangles?: number,
 ): GameDeliveryManifest {
-  const size = metrics.bounds.getSize(new THREE.Vector3());
-  const center = metrics.bounds.getCenter(new THREE.Vector3());
-  const bodyRadius = Math.max(0.08, Math.min(size.x, size.z) * 0.42);
-  const bodyHeight = Math.max(bodyRadius * 2, metrics.heightMeters * 0.72);
-  const headRadius = Math.max(0.06, Math.min(size.x, size.z) * 0.25);
   return {
-    schema: 'morphloom.game-delivery/0.4',
+    schema: 'morphloom.game-delivery/0.5',
     lods: [
       { level: 0, triangles: Math.round(metrics.triangles), role: 'render' },
       ...(lod1Triangles === undefined ? [] : [{ level: 1, triangles: lod1Triangles, role: 'render' as const }]),
     ],
-    collisionPrimitives: [
-      { id: 'collision_body', shape: 'capsule', center: [center.x, metrics.heightMeters * 0.47, center.z], radius: bodyRadius, height: bodyHeight, bone: 'hips' },
-      { id: 'collision_head', shape: 'sphere', center: [center.x, metrics.heightMeters * 0.91, center.z], radius: headRadius, bone: 'head' },
-    ],
+    collisionPrimitives: createHumanoidCollisionRig(metrics.heightMeters, pose),
     textureSets: 1,
     animationSet: animations.map((clip) => {
       const delivery = humanoidAnimationDelivery(clip.name);
@@ -595,6 +656,7 @@ export function buildCharacter(pack: HumanPack, spec: CharacterSpec, mode: ViewM
   root.userData.gameDelivery = createGameDeliveryManifest(
     completeMetrics,
     root.animations,
+    spec.pose,
     lod1 ? Math.round((lod1.geometry.getIndex()?.count ?? lod1.geometry.getAttribute('position').count) / 3) : undefined,
   );
   return { root, body, rig, metrics: completeMetrics };

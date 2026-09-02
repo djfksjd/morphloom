@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.21.0",
-  "generatedAt": "2026-09-01T23:17:52.354Z",
+  "compilerRevision": "morphloom-compiler/0.22.0",
+  "generatedAt": "2026-09-01T23:49:07.059Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -1068,8 +1068,8 @@
       "domain": "animation-game",
       "pass": true,
       "source": {
-        "bytes": 5061852,
-        "sha256": "294cf0a2574a7fa9a0782d37e73b268d4587e20ca33e5bd7035d158bb247ca3d",
+        "bytes": 5065544,
+        "sha256": "55cff478e17f864886723034086a572ee748b09bca5eba751e14515e5beeafa4",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1409,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "0c715b0ab7c0fa6e1eb81b72932678f112e97d38efb3119a274cbe6aed353348",
+          "outputSha256": "55bc8b3e910211e513e8bb1300897c30a9a4a5b487619f5f32184dfea89ffc3d",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",

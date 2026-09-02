@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-180%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-182%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -92,7 +92,7 @@ Codex/Claude 요청 예시:
 | PNG | UI·바닥·실측 보조선을 제외한 투명 배경 현재 렌더 |
 | ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
 
-OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격, 독립 glTF Transform 파싱, 로컬 Three.js 재열기를 자동 검사합니다. Blender 5.2.1 LTS는 아래 5개 분야에서 실제 임포트·재내보내기·재임포트를 검증했고, Unity·Unreal 자체 임포트는 아직 별도 검수 항목입니다.
+OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. GLB는 Khronos 규격, 독립 glTF Transform 파싱, 로컬 Three.js 재열기를 자동 검사합니다. Blender 5.2.1 LTS는 아래 5개 분야에서 실제 임포트·재내보내기·재임포트를 검증했습니다. Unity glTFast 실제 프리팹 임포트 하네스도 제공하지만, 현재 저장된 실행은 이 Mac의 Unity 라이선싱 초기화 실패로 임포트 전에 차단됐으며 통과로 표시하지 않습니다. Unreal 자체 임포트도 아직 별도 검수 항목입니다.
 
 ## 현재 제공되는 예제
 
@@ -102,7 +102,7 @@ OBJ/STL은 STEP/BREP 제조 솔리드가 아닙니다. `.blend`, `.uasset`, FBX�
 | 표면 | 각진 굵은·미세 골재와 역청 홈을 실제 변위+PBR로 결합한 아스팔트 |
 | 전자 조립 | 75개 도체와 150개 물리 포트를 가진 TEC 냉각 어셈블리 |
 | 건축 | HABS 실측 캐빈 · 9세대 공동주택 기준층 · 편집 가능한 2층 주택 콘셉트 |
-| 캐릭터 | 실제 49-bone 스켈레톤(30개 손가락 본)·손 형상 기반 스킨 웨이트·idle/이동/회전/앉기/점프/제스처/상호작용 22클립·185트랙·중립/관절 포즈 실루엣을 검증한 스킨 LOD1·충돌 프리미티브를 가진 인체 베이스 · 포즈 기반 Web Hero |
+| 캐릭터 | 실제 49-bone 스켈레톤(30개 손가락 본)·손 형상 기반 스킨 웨이트·idle/이동/회전/앉기/점프/제스처/상호작용 22클립·185트랙·중립/관절 포즈 실루엣을 검증한 스킨 LOD1·16부위 포즈 정렬 충돌 리그를 가진 인체 베이스 · 포즈 기반 Web Hero |
 
 제품·건축은 실측과 설계 근거가 충분할수록 정확도가 높아집니다. 캐릭터는 현재 게임 프리비즈와 후편집 베이스 단계입니다.
 
@@ -116,6 +116,7 @@ npm run benchmark:visual-captures -- --reference reference.webp --morphloom morp
 npm run benchmark:visual-set -- --manifest captures/manifest.json --output benchmarks/visual-set-latest.json --require-claim
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
+npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
 npm run build
 npm run gltf:validate -- path/to/asset.glb
 npm run gltf:repair -- blender-output.glb delivery.glb
@@ -132,7 +133,7 @@ npm run blender:validate -- source.glb roundtrip.glb report.json
 
 100%는 잠근 8개 계약을 모두 올바르게 판정했다는 뜻이며 모든 입력의 시각 품질이 100점이라는 뜻이 아닙니다. 승인 사례는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과해도 근거 부족으로 정확히 차단됩니다. 브라우저 GLB 증명은 Three.js 재열기 결과이며, 새 내보내기 경로는 여기에 Khronos 공식 Validator 오류·경고를 별도로 기록합니다.
 
-Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 증거는 현재 컴파일러 revision과 묶이며 이전 엔진 결과를 재사용하면 차단됩니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장하며 Unity·Unreal 자체 임포트는 아직 검증 완료로 표시하지 않습니다.
+Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 증거는 현재 컴파일러 revision과 묶이며 이전 엔진 결과를 재사용하면 차단됩니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장합니다. Unity 하네스는 같은 5개 GLB의 메시·재질·텍스처·스킨·모프·애니메이션·포락을 검사하도록 구현하고 Unity 6000.5 API 컴파일까지 확인했지만, [최신 실행 증거](./benchmarks/unity-cross-domain-latest.json)는 라이선싱 초기화 단계에서 차단됐습니다. Unity·Unreal을 검증 완료로 표시하지 않습니다.
 
 | 준실무 납품 계약 | 점수 | 실제 차단 조건 |
 |---|---:|---|

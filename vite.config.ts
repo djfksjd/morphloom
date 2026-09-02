@@ -7,6 +7,7 @@ export default defineConfig({
     // The exact triangle-intersection suites are intentionally CPU-heavy.
     // Serial file execution keeps CI results deterministic and prevents the
     // runner RPC from timing out while several geometry audits compete.
+    pool: 'threads',
     fileParallelism: false,
     maxWorkers: 1,
     minWorkers: 1,

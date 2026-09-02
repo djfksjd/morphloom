@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import {
   auditFidelityContract,
@@ -202,6 +202,27 @@ const blenderCrossDomainSummary = {
     finalStandard: item.blender?.deliveryRepair?.standard?.status,
   })),
 };
+const unityCrossDomain = existsSync('benchmarks/unity-cross-domain-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/unity-cross-domain-latest.json', 'utf8')) as {
+    schema?: string;
+    compilerRevision?: string;
+    pass?: boolean;
+    status?: string;
+    environment?: { requestedUnityVersion?: string; unityVersion?: string; glTFastVersion?: string };
+    blockers?: Array<{ code?: string; detail?: string }>;
+    cases?: unknown[];
+  }
+  : undefined;
+const unityCrossDomainSummary = unityCrossDomain && unityCrossDomain.compilerRevision === DELIVERY_PIPELINE_REVISION
+  ? unityCrossDomain
+  : {
+    schema: 'morphloom.unity-cross-domain-proof/0.1',
+    compilerRevision: DELIVERY_PIPELINE_REVISION,
+    pass: false,
+    status: 'not-run',
+    blockers: [{ code: 'no-revision-bound-report', detail: 'No Unity report exists for the current compiler revision.' }],
+    cases: [],
+  };
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -305,7 +326,11 @@ const contractAudit = auditFidelityContract(contract, ir);
 const deliveryAudit = auditFidelityDelivery(contract, state);
 const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json', 'utf8')) as {
   rates?: Record<string, number>;
-  domainReports?: Record<string, { pass?: boolean; score?: number; metrics?: { facialMorphTargets?: number } }>;
+  domainReports?: Record<string, {
+    pass?: boolean;
+    score?: number;
+    metrics?: { facialMorphTargets?: number; collisionPrimitives?: number };
+  }>;
 };
 const domainProof = qualityBenchmark.domainReports ?? {};
 const visualDomains: VisualBenchmarkDomain[] = ['industrial-design', 'architecture', 'character', 'surface'];
@@ -390,6 +415,7 @@ const output = {
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
     blenderCrossDomain: blenderCrossDomainSummary,
+    unityCrossDomain: unityCrossDomainSummary,
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -409,12 +435,13 @@ const output = {
     { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
     { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? `Blender ${blenderCrossDomainSummary.blenderVersions.join(', ')}: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation` : 'blocked' },
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
-    { capability: 'Unity/Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
+    { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
+    { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
     { capability: 'named editable facial controls preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphTargets === 5 ? '5 non-zero named morph targets' : 'blocked' },
     { capability: 'measured bone deformation, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
-    { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass ? 'yes' : 'blocked' },
+    { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.game?.metrics?.collisionPrimitives === 16 ? '16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates' : 'blocked' },
     { capability: 'finite non-degenerate UV triangles and near-unit normal delivery gate', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.industrialDesign?.pass ? 'yes' : 'blocked' },
     { capability: 'millimetre 3D-print topology, volume/surface thickness proxy, feature and 45-degree overhang audit', img2threejs: 'not established in pinned audit', morphloom: domainProof.print3d?.pass ? 'yes' : 'blocked' },
     { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },

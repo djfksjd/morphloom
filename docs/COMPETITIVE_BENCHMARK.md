@@ -74,12 +74,13 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 동일 입력 GLB 바이트 재현성 | 고정 커밋 감사에서 확인되지 않음 | 5분야 각각 2회 독립 생성 SHA-256 일치 |
 | Blender 앱 자체 임포트·재내보내기·재임포트 | 공개 자동 증명 없음 | Blender 5.2.1 LTS에서 현재 compiler revision과 결합된 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5/5 통과 |
 | DCC 재출력 바이트 정화·재검증 | 고정 커밋 감사에서 확인되지 않음 | Blender가 재생성한 비정상 탄젠트를 기록·복구하고 최종 바이트를 Khronos 오류/경고/정보 0 + glTF Transform 재파싱으로 차단 |
-| Unity/Unreal 앱 자체 임포트 | 공개 자동 증명 없음 | 아직 별도 검수—실행하지 않은 앱을 검증 완료로 표시하지 않음 |
+| Unity 앱 자체 임포트 | 공개 자동 증명 없음 | glTFast 6.20 고정 5분야 프리팹 임포트 하네스 구현·Unity 6000.5 API 컴파일 통과; 최신 실제 실행은 로컬 라이선싱 초기화 실패로 임포트 전 차단 |
+| Unreal 앱 자체 임포트 | 공개 자동 증명 없음 | 아직 별도 검수—실행하지 않은 앱을 검증 완료로 표시하지 않음 |
 | 실제 스켈레톤·스킨·애니메이션 GLB | 최신 쇼케이스 41–42 bones, 10–27 clips | 지원—49 bones(손가락 30), 실제 손가락 가중 정점·관절 변형, 22 clips/185 tracks의 이름·바인딩·동작·루프·루트모션·메타데이터 재열기 |
-| 게임 LOD·충돌·예산·UV·노멀 게이트 | 고정 커밋 감사에서 확인되지 않음 | 지원—실제 스킨 LOD0/1의 중립/관절 포즈 3축 실루엣·포락·가중치 보존, 충돌체 치수/본/바디 교차/높이 커버, GLB 충돌 지문, 유한/비퇴화 UV·단위 노멀 검사 |
+| 게임 LOD·충돌·예산·UV·노멀 게이트 | 고정 커밋 감사에서 확인되지 않음 | 지원—실제 스킨 LOD0/1의 중립/관절 포즈 3축 실루엣·포락·가중치 보존, 16부위 충돌 캡슐/구의 양끝점·중심·높이·회전·본·바디 교차·높이 커버, GLB 충돌 지문, 유한/비퇴화 UV·단위 노멀 검사 |
 | 3D 프린팅 mm·폐쇄 체적·최소 형상·45° 오버행 | 고정 커밋 감사에서 확인되지 않음 | 지원 |
 | 실제 삼각형 자기 교차 | 고정 커밋에 ray-parity 검사 존재 | 공간 격자 broadphase + 정확 삼각형 교차 + 검사예산 초과 차단; 제품·전선·포즈·LOD·프린트 계약에 연결 |
-| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 180개—개수보다 납품 계약 회귀·실제 삼각형 자기교차·손상/경고 GLB 공식 규격 차단·오목 다각형 건축 평면 반전/공백 침범·가짜 LOD/충돌체·UV/노멀 위장·브라우저 검증 중복/경쟁·빈 동작/루프 단절·표면 스케일/공간 셔플 위장·다중 시점 불일치·암시적 곡면 결함·위험한 de-light 증거·거짓 우위 차단에 집중 |
+| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 182개—개수보다 납품 계약 회귀·실제 삼각형 자기교차·손상/경고 GLB 공식 규격 차단·오목 다각형 건축 평면 반전/공백 침범·가짜 LOD/충돌체·충돌 리그 포즈 정렬·UV/노멀 위장·브라우저 검증 중복/경쟁·빈 동작/루프 단절·표면 스케일/공간 셔플 위장·다중 시점 불일치·암시적 곡면 결함·위험한 de-light 증거·거짓 우위 차단에 집중 |
 | 동일 Talon 이미지 정면 색상 | 원본 plate 투영 | 원본 plate 투영 |
 | 동일 Talon 이미지 표면 PBR 반응 | 상수 roughness, normal map 없음 | 우세—사진 파생 normal+roughness |
 | 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—25개 부품, 실제 wedge 날, 폐쇄 토폴로지, GLB 재열기 |
@@ -91,9 +92,10 @@ npm run benchmark:competitive
 npm run benchmark:visual-captures -- --reference public/benchmark-input/talon-doppler-ruby.webp --morphloom morphloom-result.png --competitor img2threejs-talon-live.png --competitor-threshold 48 --output benchmarks/talon-visual-broadside-latest.json
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
+npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
 ```
 
-결과는 `benchmarks/competitive-latest.json`과 `benchmarks/blender-cross-domain-latest.json`에 저장됩니다. 5분야 Blender 증명은 실제 상호운용성과 납품 바이트 무결성을 확인하지만 동일 입력의 시각적 우승을 뜻하지 않습니다. 실제 시각 품질의 우열은 동일 입력 지문, 동일 목표, 동일 보정 카메라, 실제 WebGL 캡처, 중요 특징 영역, 최소 5명의 중복 없는 균형 블라인드 평가가 있어야 확정됩니다. 이 증거가 없으면 자동 지표가 앞서도 보고서는 `claimAllowed: false`를 유지합니다.
+결과는 `benchmarks/competitive-latest.json`, `benchmarks/blender-cross-domain-latest.json`, `benchmarks/unity-cross-domain-latest.json`에 저장됩니다. 5분야 Blender 증명은 실제 상호운용성과 납품 바이트 무결성을 확인하지만 동일 입력의 시각적 우승을 뜻하지 않습니다. Unity 보고서는 라이선스나 에디터 실패도 구조화해 기록하며 임포트하지 못한 실행을 통과로 바꾸지 않습니다. 실제 시각 품질의 우열은 동일 입력 지문, 동일 목표, 동일 보정 카메라, 실제 WebGL 캡처, 중요 특징 영역, 최소 5명의 중복 없는 균형 블라인드 평가가 있어야 확정됩니다. 이 증거가 없으면 자동 지표가 앞서도 보고서는 `claimAllowed: false`를 유지합니다.
 
 ## 참고한 img2threejs 근거
 

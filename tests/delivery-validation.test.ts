@@ -131,7 +131,7 @@ describe('delivery validation and deterministic output', () => {
     const root = new THREE.Group();
     root.name = 'collision_semantics_fixture';
     root.userData.gameDelivery = {
-      schema: 'morphloom.game-delivery/0.4',
+      schema: 'morphloom.game-delivery/0.5',
       lods: [],
       collisionPrimitives: [{ id: 'body', shape: 'capsule', center: [0, 1, 0], radius: 0.3, height: 1.4, bone: 'hips' }],
       animationSet: [],

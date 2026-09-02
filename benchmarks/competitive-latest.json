@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-01T23:15:51.208Z",
+  "generatedAt": "2026-09-02T00:09:49.065Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -708,11 +708,11 @@
             "lodNeutralSilhouetteEnvelopeError": 0,
             "lodPosedBoundsError": 0,
             "lodPosedSilhouetteEnvelopeError": 0,
-            "collisionPrimitives": 2,
+            "collisionPrimitives": 16,
             "collisionPrimitiveValidityCoverage": 1,
             "collisionBoneCoverage": 1,
             "collisionBoundsOverlapCoverage": 1,
-            "collisionVerticalCoverage": 0.8534365050320034,
+            "collisionVerticalCoverage": 0.9694119539088362,
             "fingerBones": 30,
             "fingerWeightedVertices": 7524,
             "fingerAnimationTracks": 19,
@@ -846,7 +846,7 @@
               "label": "실제 충돌 프리미티브",
               "pass": true,
               "score": 100,
-              "detail": "2개 · 유효 100% · 본 연결 100% · 바디 교차 100% · 높이 커버 85%",
+              "detail": "16개 포즈 정렬 · 유효 100% · 본 연결 100% · 바디 교차 100% · 높이 커버 97%",
               "blocking": true
             },
             {
@@ -918,11 +918,11 @@
             "lodNeutralSilhouetteEnvelopeError": 0,
             "lodPosedBoundsError": 0,
             "lodPosedSilhouetteEnvelopeError": 0,
-            "collisionPrimitives": 2,
+            "collisionPrimitives": 16,
             "collisionPrimitiveValidityCoverage": 1,
             "collisionBoneCoverage": 1,
             "collisionBoundsOverlapCoverage": 1,
-            "collisionVerticalCoverage": 0.8534365050320034,
+            "collisionVerticalCoverage": 0.9694119539088362,
             "fingerBones": 30,
             "fingerWeightedVertices": 7524,
             "fingerAnimationTracks": 19,
@@ -1198,9 +1198,9 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.19.0",
+      "compilerRevision": "morphloom-compiler/0.22.0",
       "pass": true,
-      "benchmarkAccepted": false,
+      "benchmarkAccepted": true,
       "blenderVersions": [
         "5.2.1 LTS"
       ],
@@ -1244,7 +1244,7 @@
           "boundsToleranceMm": 0.1,
           "rawReexportStandard": "blocked",
           "repairApplied": true,
-          "repairedTangents": 1409,
+          "repairedTangents": 1410,
           "finalStandard": "pass"
         },
         {
@@ -1276,6 +1276,26 @@
           "finalStandard": "pass"
         }
       ]
+    },
+    "unityCrossDomain": {
+      "schema": "morphloom.unity-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.22.0",
+      "generatedAt": "2026-09-02T00:04:42.762Z",
+      "pass": false,
+      "status": "blocked",
+      "scope": "actual Unity Editor + Unity glTFast native prefab import",
+      "environment": {
+        "requestedUnityVersion": "6000.5.3f1",
+        "glTFastVersion": "6.20.0",
+        "unityBinary": "/Applications/Unity/Hub/Editor/6000.5.3f1/Unity.app/Contents/MacOS/Unity"
+      },
+      "blockers": [
+        {
+          "code": "unity-licensing-unavailable",
+          "detail": "Unity licensing could not initialize on this host, so the Editor was stopped before asset import."
+        }
+      ],
+      "cases": []
     }
   },
   "capabilityMatrix": [
@@ -1352,20 +1372,25 @@
     {
       "capability": "same-input GLB byte reproducibility",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "blocked"
+      "morphloom": "five domains, two independent exports per fixture, identical SHA-256"
     },
     {
       "capability": "Blender application import/export/reimport execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "blocked"
+      "morphloom": "Blender 5.2.1 LTS: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation"
     },
     {
       "capability": "DCC re-export sanitation with final-byte conformance gate",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "blocked"
+      "morphloom": "yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes"
     },
     {
-      "capability": "Unity/Unreal application import execution",
+      "capability": "Unity application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "blocked: unity-licensing-unavailable"
+    },
+    {
+      "capability": "Unreal application import execution",
       "img2threejs": "not established in pinned audit",
       "morphloom": "application-import-not-run"
     },
@@ -1390,9 +1415,9 @@
       "morphloom": "yes"
     },
     {
-      "capability": "real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus collision semantics",
+      "capability": "real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "yes"
+      "morphloom": "16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates"
     },
     {
       "capability": "finite non-degenerate UV triangles and near-unit normal delivery gate",

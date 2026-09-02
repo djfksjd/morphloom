@@ -11,7 +11,7 @@ import { parseOhpk } from '../src/engine/ohpk';
 import { snapshotScene } from '../src/engine/delivery-validation';
 import { analyzeTopology } from '../src/engine/topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from '../src/engine/humanoid-rig';
-import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, type HumanPack } from '../src/types';
+import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC, type HumanPack } from '../src/types';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 
@@ -89,7 +89,12 @@ describe('cross-domain semi-professional readiness', () => {
     ]));
     expect(first.root.animations.find((clip) => clip.name === 'morphloom_hand_gesture')?.tracks.filter((track) => /^(thumb|index|middle|ring|little)_/.test(track.name))).toHaveLength(10);
     expect(first.root.userData.gameDelivery).toMatchObject({
-      schema: 'morphloom.game-delivery/0.4',
+      schema: 'morphloom.game-delivery/0.5',
+      collisionPrimitives: expect.arrayContaining([
+        expect.objectContaining({ id: 'collision_pelvis', role: 'pelvis', shape: 'sphere', bone: 'hips' }),
+        expect.objectContaining({ id: 'collision_upper_arm_L', role: 'upper-arm', shape: 'capsule', bone: 'shoulder_L' }),
+        expect.objectContaining({ id: 'collision_foot_R', role: 'foot', shape: 'capsule', bone: 'ankle_R' }),
+      ]),
       animationSet: expect.arrayContaining([
         expect.objectContaining({ name: 'morphloom_idle_preview', tracks: 4, loop: true, category: 'idle', rootMotion: 'in-place' }),
         expect.objectContaining({ name: 'morphloom_sprint_cycle', tracks: 12, loop: true, category: 'locomotion' }),
@@ -168,7 +173,7 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
-    expect(game.metrics).toMatchObject({ gameLods: 2, collisionPrimitives: 2 });
+    expect(game.metrics).toMatchObject({ gameLods: 2, collisionPrimitives: 16 });
     expect(game.metrics.collisionPrimitiveValidityCoverage).toBe(1);
     expect(game.metrics.collisionBoneCoverage).toBe(1);
     expect(game.metrics.collisionBoundsOverlapCoverage).toBe(1);
@@ -249,6 +254,43 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.blockers.some((blocker) => blocker.startsWith('game-collision:'))).toBe(true);
     expect(game.metrics.collisionPrimitiveValidityCoverage).toBeLessThan(1);
     expect(game.metrics.collisionBoneCoverage).toBeLessThan(1);
+  }, 20_000);
+
+  it('blocks a pose-aligned capsule whose endpoints, midpoint or orientation no longer agree', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const manifest = build.root.userData.gameDelivery as {
+      collisionPrimitives: Array<{
+        shape: 'capsule' | 'sphere';
+        center: [number, number, number];
+        start?: [number, number, number];
+        end?: [number, number, number];
+        orientation?: [number, number, number, number];
+      }>;
+    };
+    const capsule = manifest.collisionPrimitives.find((item) => item.shape === 'capsule');
+    if (!capsule?.start || !capsule.end || !capsule.orientation) throw new Error('Missing collision capsule fixture.');
+    capsule.center[0] += 0.25;
+    capsule.orientation = [0, 0, 0, 1];
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(game.pass).toBe(false);
+    expect(game.blockers.some((blocker) => blocker.startsWith('game-collision:'))).toBe(true);
+    expect(game.metrics.collisionPrimitiveValidityCoverage).toBeLessThan(1);
+  }, 20_000);
+
+  it('keeps the collision rig valid in the asymmetric reference-action pose', () => {
+    const build = buildCharacter(humanPack, WEB_HERO_SPEC, 'beauty');
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 35, deterministic: true, browserGlbRoundTrip: true,
+    });
+    const collision = game.checks.find((check) => check.id === 'game-collision');
+    expect(collision).toMatchObject({ pass: true, score: 100 });
+    expect(game.metrics.collisionPrimitives).toBe(16);
+    expect(game.metrics.collisionPrimitiveValidityCoverage).toBe(1);
+    expect(game.metrics.collisionBoneCoverage).toBe(1);
+    expect(game.metrics.collisionBoundsOverlapCoverage).toBe(1);
+    expect(game.metrics.collisionVerticalCoverage).toBeGreaterThanOrEqual(0.9);
   }, 20_000);
 
   it('blocks animation and game delivery when a required runtime clip is missing', () => {

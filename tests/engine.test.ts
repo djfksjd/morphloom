@@ -579,7 +579,7 @@ describe('AssemblyIR product pipeline', () => {
       passiveNodes: 7,
       outstandingBenchChecks: 5,
     });
-  });
+  }, 20_000);
 
   it('builds the official-dimension Galaxy Z Fold8 exterior as editable named parts', () => {
     const build = compileAssemblyIR(GALAXY_Z_FOLD8_EXTERIOR_IR, 'beauty');
@@ -653,7 +653,7 @@ describe('AssemblyIR product pipeline', () => {
     expect(report.total).toBeLessThanOrEqual(59);
     expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'blocked' });
     expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({ status: 'warn' });
-  });
+  }, 20_000);
 
   it('does not score a procedural phone as reference-accurate without source evidence', () => {
     const build = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');

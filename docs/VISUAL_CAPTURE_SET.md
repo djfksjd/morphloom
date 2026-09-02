@@ -8,7 +8,7 @@ Use a capture-set manifest when two or more real reference views and matching br
   "id": "product-two-view-proof",
   "domain": "industrial-design",
   "rendererVersions": {
-    "morphloom": "morphloom-compiler/0.21.0",
+    "morphloom": "morphloom-compiler/0.22.0",
     "img2threejs": "pinned-commit-or-build"
   },
   "views": [

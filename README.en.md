@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-180%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-182%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -91,7 +91,7 @@ PBR surfaces, wiring connectivity, and topology.
 | PNG | Transparent current render without UI, floor, or measurement helpers |
 | ZIP | GLB, OBJ/STL/PLY, IR, quality report, and preview |
 
-OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, and FBX files require conversion in the target application.
+OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, and FBX files require conversion in the target application. Blender 5.2.1 has passed the five-domain import/export/reimport proof. A real Unity glTFast prefab-import harness is included, but the stored run is truthfully blocked before import because Unity licensing could not initialize on this Mac; Unreal import is also not yet proven.
 
 ## Included examples
 
@@ -101,7 +101,7 @@ OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, 
 | Surface | Asphalt with real displaced angular coarse/fine aggregate and binder troughs |
 | Electronics | TEC cooling assembly with 75 conductors and 150 physical ports |
 | Architecture | Measured HABS cabin · nine-unit apartment floor · editable two-storey concept residence |
-| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, 22 idle/locomotion/turn/stance/airborne/gesture/interaction clips with 185 tracks, a real skinned LOD1, and collision primitives · posed Web Hero |
+| Character | Human base with a real 49-bone skeleton (30 finger bones), hand-geometry-derived skin weights, 22 idle/locomotion/turn/stance/airborne/gesture/interaction clips with 185 tracks, a real skinned LOD1, and a 16-part pose-aligned collision rig · posed Web Hero |
 
 Product and architecture accuracy improves with measured drawings and datasheets. Characters currently target game previs and editable post-production bases.
 
@@ -112,6 +112,9 @@ npm test
 npm run quality:gate
 npm run benchmark:competitive
 npm run benchmark:visual-set -- --manifest captures/manifest.json --output benchmarks/visual-set-latest.json --require-claim
+npm run benchmark:fixtures -- /tmp/morphloom-fixtures
+npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
+npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
 npm run build
 ```
 
@@ -130,7 +133,7 @@ This means all eight locked contracts made the correct decision; it does not mea
 | Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
 | Architecture | 99 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
 | Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · 22 motions/185 tracks · finger weights/19 tracks · loop/in-place/semantic GLB preservation |
-| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · collision primitives · UV/normals · PBR |
+| Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · volume/area thickness proxy ≥0.8 mm · positive volume · measured 45° overhang |
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
