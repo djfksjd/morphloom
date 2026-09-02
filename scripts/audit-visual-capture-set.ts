@@ -15,7 +15,7 @@ import {
   validateVisualCaptureSetManifest,
 } from '../src/engine/visual-capture-manifest';
 import {
-  normalizedFrame,
+  lockedCanvasFrame,
   sha256,
   TARGET_HEIGHT,
   TARGET_WIDTH,
@@ -120,14 +120,14 @@ for (const view of manifest.views) {
     evidencePath(view.captureReceipts.morphloom, `${view.viewId} Morphloom receipt`),
     evidencePath(view.captureReceipts.img2threejs, `${view.viewId} img2threejs receipt`),
   ]);
-  const reference = await normalizedFrame(referencePath, undefined, view.thresholds?.reference);
+  const reference = await lockedCanvasFrame(referencePath, view.thresholds?.reference);
   const [morphloom, competitor, morphloomSceneHash, competitorSceneHash] = await Promise.all([
-    normalizedFrame(morphloomPath, reference.aspect, view.thresholds?.morphloom),
-    normalizedFrame(competitorPath, reference.aspect, view.thresholds?.img2threejs),
+    lockedCanvasFrame(morphloomPath, view.thresholds?.morphloom),
+    lockedCanvasFrame(competitorPath, view.thresholds?.img2threejs),
     artifactSha256(morphloomScenePath, 'Morphloom scene artifact'),
     artifactSha256(competitorScenePath, 'img2threejs scene artifact'),
   ]);
-  for (const [candidateId, capture] of [['morphloom', morphloom], ['img2threejs', competitor]] as const) {
+  for (const [candidateId, capture] of [['reference', reference], ['morphloom', morphloom], ['img2threejs', competitor]] as const) {
     if (capture.sourceWidth !== manifest.renderProtocol.canvas.width
       || capture.sourceHeight !== manifest.renderProtocol.canvas.height) {
       throw new Error(`${candidateId}/${view.viewId} PNG dimensions do not match the locked render protocol.`);
@@ -250,7 +250,7 @@ await writeFile(outputPath, `${JSON.stringify({
       environment: environmentEvidence,
     },
   },
-  normalization: { width: TARGET_WIDTH, height: TARGET_HEIGHT, method: 'coherent-connected-foreground-fit-v2' },
+  normalization: { width: TARGET_WIDTH, height: TARGET_HEIGHT, method: 'locked-full-canvas-v1' },
   inputFingerprint,
   captures: captureEvidence,
   captureReceipts: receiptEvidence,

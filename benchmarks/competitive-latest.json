@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T05:40:47.773Z",
+  "generatedAt": "2026-09-02T05:52:24.855Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -10,6 +10,7 @@
       "identicalInputFingerprint": true,
       "matchedCalibratedCameras": true,
       "canonicalLockedRenderProtocol": true,
+      "sharedFullCanvasCoordinates": true,
       "exactCanvasAndPixelRatio": true,
       "actualBrowserWebglCaptures": true,
       "hashBoundCaptureReceipts": true,
@@ -1959,9 +1960,9 @@
       "morphloom": "yes"
     },
     {
-      "capability": "fail-closed same-input visual protocol with exact canvas/pixel ratio, color/tone/light lock and hash-bound browser receipts",
+      "capability": "fail-closed same-input visual protocol with exact full-canvas framing, pixel ratio, color/tone/light lock and hash-bound browser receipts",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "yes—winner claims are blocked on any protocol, receipt, scene, camera, or PNG mismatch"
+      "morphloom": "yes—independent foreground fitting cannot hide offset/scale errors; claims block on any protocol, receipt, scene, camera, or PNG mismatch"
     },
     {
       "capability": "bounded welded visual-hull carving",

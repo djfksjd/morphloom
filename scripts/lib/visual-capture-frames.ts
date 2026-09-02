@@ -120,11 +120,22 @@ export function validateCaptureThreshold(value: unknown, label: string): number 
   return value as number;
 }
 
-export async function normalizedFrame(
+interface DecodedCapture {
+  bytes: Uint8Array;
+  sourceCanvas: ReturnType<typeof createCanvas>;
+  mask: Uint8Array;
+  bounds: [number, number, number, number];
+  aspect: number;
+  threshold: number;
+  sourceWidth: number;
+  sourceHeight: number;
+}
+
+async function decodeCapture(
   path: string,
   expectedAspect?: number,
   forcedThreshold?: number,
-): Promise<NormalizedCapture> {
+): Promise<DecodedCapture> {
   const metadata = await stat(path);
   if (!metadata.isFile() || metadata.size < 1 || metadata.size > MAX_CAPTURE_BYTES) {
     throw new Error(`${basename(path)} exceeds the 64 MB capture budget.`);
@@ -170,7 +181,46 @@ export async function normalizedFrame(
     }
   }).sort((a, b) => a.rank - b.rank);
   if (candidates.length === 0) throw new Error(`${basename(path)} foreground segmentation failed.`);
-  const { mask, bounds: [x0, y0, x1, y1], aspect, threshold } = candidates[0]!;
+  const { mask, bounds, aspect, threshold } = candidates[0]!;
+  return { bytes, sourceCanvas, mask, bounds, aspect, threshold, sourceWidth: image.width, sourceHeight: image.height };
+}
+
+function resizeMask(
+  mask: Uint8Array,
+  sourceWidth: number,
+  sourceHeight: number,
+  source: [number, number, number, number],
+  target: [number, number, number, number],
+): Uint8Array {
+  const maskCanvas = createCanvas(sourceWidth, sourceHeight);
+  const maskContext = maskCanvas.getContext('2d');
+  const maskImage = maskContext.createImageData(sourceWidth, sourceHeight);
+  for (let pixel = 0; pixel < mask.length; pixel += 1) {
+    const value = mask[pixel] ? 255 : 0;
+    const offset = pixel * 4;
+    maskImage.data[offset] = value;
+    maskImage.data[offset + 1] = value;
+    maskImage.data[offset + 2] = value;
+    maskImage.data[offset + 3] = 255;
+  }
+  maskContext.putImageData(maskImage, 0, 0);
+  const normalizedMaskCanvas = createCanvas(TARGET_WIDTH, TARGET_HEIGHT);
+  const normalizedMaskContext = normalizedMaskCanvas.getContext('2d');
+  normalizedMaskContext.imageSmoothingEnabled = false;
+  normalizedMaskContext.drawImage(maskCanvas, ...source, ...target);
+  const normalizedMaskPixels = normalizedMaskContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data;
+  const normalizedMask = new Uint8Array(TARGET_WIDTH * TARGET_HEIGHT);
+  for (let pixel = 0; pixel < normalizedMask.length; pixel += 1) normalizedMask[pixel] = Number(normalizedMaskPixels[pixel * 4] > 127);
+  return normalizedMask;
+}
+
+export async function normalizedFrame(
+  path: string,
+  expectedAspect?: number,
+  forcedThreshold?: number,
+): Promise<NormalizedCapture> {
+  const decoded = await decodeCapture(path, expectedAspect, forcedThreshold);
+  const { bytes, sourceCanvas, mask, bounds: [x0, y0, x1, y1], aspect, threshold, sourceWidth, sourceHeight } = decoded;
   const padding = 12;
   const scale = Math.min((TARGET_WIDTH - padding * 2) / (x1 - x0), (TARGET_HEIGHT - padding * 2) / (y1 - y0));
   const drawWidth = (x1 - x0) * scale;
@@ -182,21 +232,8 @@ export async function normalizedFrame(
   targetContext.fillStyle = '#ffffff';
   targetContext.fillRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
   targetContext.drawImage(sourceCanvas, x0, y0, x1 - x0, y1 - y0, drawX, drawY, drawWidth, drawHeight);
-  const maskCanvas = createCanvas(image.width, image.height);
-  const maskContext = maskCanvas.getContext('2d');
-  const maskImage = maskContext.createImageData(image.width, image.height);
-  for (let pixel = 0; pixel < count; pixel += 1) {
-    const value = mask[pixel] ? 255 : 0;
-    maskImage.data.set([value, value, value, 255], pixel * 4);
-  }
-  maskContext.putImageData(maskImage, 0, 0);
-  const normalizedMaskCanvas = createCanvas(TARGET_WIDTH, TARGET_HEIGHT);
-  const normalizedMaskContext = normalizedMaskCanvas.getContext('2d');
-  normalizedMaskContext.imageSmoothingEnabled = false;
-  normalizedMaskContext.drawImage(maskCanvas, x0, y0, x1 - x0, y1 - y0, drawX, drawY, drawWidth, drawHeight);
-  const normalizedMaskPixels = normalizedMaskContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data;
-  const normalizedMask = new Uint8Array(TARGET_WIDTH * TARGET_HEIGHT);
-  for (let pixel = 0; pixel < normalizedMask.length; pixel += 1) normalizedMask[pixel] = Number(normalizedMaskPixels[pixel * 4] > 127);
+  const normalizedMask = resizeMask(mask, sourceWidth, sourceHeight,
+    [x0, y0, x1 - x0, y1 - y0], [drawX, drawY, drawWidth, drawHeight]);
   return {
     frame: {
       width: TARGET_WIDTH,
@@ -207,7 +244,37 @@ export async function normalizedFrame(
     bytes,
     aspect,
     threshold,
-    sourceWidth: image.width,
-    sourceHeight: image.height,
+    sourceWidth,
+    sourceHeight,
+  };
+}
+
+/**
+ * Resizes the complete source canvas without independently fitting its foreground.
+ * Use this for calibrated same-camera comparisons so translation, scale, and
+ * framing errors remain measurable instead of being normalized away.
+ */
+export async function lockedCanvasFrame(path: string, forcedThreshold?: number): Promise<NormalizedCapture> {
+  const decoded = await decodeCapture(path, undefined, forcedThreshold);
+  const { bytes, sourceCanvas, mask, aspect, threshold, sourceWidth, sourceHeight } = decoded;
+  const target = createCanvas(TARGET_WIDTH, TARGET_HEIGHT);
+  const targetContext = target.getContext('2d');
+  targetContext.fillStyle = '#ffffff';
+  targetContext.fillRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+  targetContext.drawImage(sourceCanvas, 0, 0, sourceWidth, sourceHeight, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+  const normalizedMask = resizeMask(mask, sourceWidth, sourceHeight,
+    [0, 0, sourceWidth, sourceHeight], [0, 0, TARGET_WIDTH, TARGET_HEIGHT]);
+  return {
+    frame: {
+      width: TARGET_WIDTH,
+      height: TARGET_HEIGHT,
+      rgba: targetContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data,
+      mask: normalizedMask,
+    },
+    bytes,
+    aspect,
+    threshold,
+    sourceWidth,
+    sourceHeight,
   };
 }

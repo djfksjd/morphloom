@@ -37,7 +37,7 @@ function manifest() {
     materialExpectation: { family: 'metal', roughness: 0.3, surfaceCharacter: 'directional' },
   });
   return {
-    schema: 'morphloom.visual-capture-set/0.4',
+    schema: 'morphloom.visual-capture-set/0.5',
     id: 'two-view-product-proof',
     domain: 'industrial-design',
     rendererVersions: { morphloom: '0.21.0', img2threejs: 'pinned-commit' },
@@ -105,7 +105,7 @@ describe('multi-view capture manifest', () => {
     oversized.renderProtocol.canvas = { width: 5000, height: 5000, pixelRatio: 1 };
     expect(() => validateVisualCaptureSetManifest(oversized)).toThrow(/safe render bounds/);
     const legacy = manifest();
-    legacy.schema = 'morphloom.visual-capture-set/0.3';
+    legacy.schema = 'morphloom.visual-capture-set/0.4';
     expect(() => validateVisualCaptureSetManifest(legacy)).toThrow(/unsupported/);
     const incompleteEnvironment = manifest();
     incompleteEnvironment.renderProtocol.environmentArtifact = 'render/studio.hdr';

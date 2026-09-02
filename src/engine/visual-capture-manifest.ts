@@ -41,7 +41,7 @@ export interface VisualRenderProtocol {
 }
 
 export interface VisualCaptureSetManifest {
-  schema: 'morphloom.visual-capture-set/0.4';
+  schema: 'morphloom.visual-capture-set/0.5';
   id: string;
   domain: VisualBenchmarkDomain;
   rendererVersions: { morphloom: string; img2threejs: string };
@@ -248,7 +248,7 @@ function validateExpectation(value: unknown, label: string): MaterialExpectation
 
 export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureSetManifest {
   const input = object(value, 'Capture manifest');
-  if (input.schema !== 'morphloom.visual-capture-set/0.4') throw new Error('Capture manifest schema is unsupported.');
+  if (input.schema !== 'morphloom.visual-capture-set/0.5') throw new Error('Capture manifest schema is unsupported.');
   if (typeof input.id !== 'string' || !ID.test(input.id)) throw new Error('Capture manifest id is invalid.');
   if (!DOMAINS.has(input.domain as VisualBenchmarkDomain)) throw new Error('Capture manifest domain is invalid.');
   const versions = object(input.rendererVersions, 'rendererVersions');

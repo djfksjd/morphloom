@@ -4,7 +4,7 @@ Use a capture-set manifest when two or more real reference views and matching br
 
 ```json
 {
-  "schema": "morphloom.visual-capture-set/0.4",
+  "schema": "morphloom.visual-capture-set/0.5",
   "id": "product-two-view-proof",
   "domain": "industrial-design",
   "rendererVersions": {
@@ -84,7 +84,7 @@ Use `--require-claim` in a release gate. It exits unsuccessfully unless the doma
 
 The validator requires one local compiled scene artifact from each engine and streams the file itself to derive an independent 64-character structural SHA-256. Every calibrated view for that candidate must point to the same artifact; a changed path or hash means the supposedly matched views came from different scene builds. Scene files are bounded to 256 MB, and a screenshot hash is never accepted as structural scene evidence.
 
-Each PNG also needs a `morphloom.browser-capture-receipt/0.2` JSON recorded by the instrumented capture harness. The manifest locks source canvas size, pixel ratio, sRGB output, tone mapping, exposure, background, shadows, and lighting/environment artifacts once for both candidates. The runner reads those local artifacts, recomputes their declared SHA-256 values, derives one canonical render-settings fingerprint, requires every candidate PNG to match the exact locked source canvas, and requires every receipt to bind that fingerprint and exact canvas. The locked-input fingerprint includes this protocol, so changing presentation invalidates the entire comparison instead of silently changing the score.
+Each PNG also needs a `morphloom.browser-capture-receipt/0.2` JSON recorded by the instrumented capture harness. The manifest locks source canvas size, pixel ratio, sRGB output, tone mapping, exposure, background, shadows, and lighting/environment artifacts once for both candidates. The runner reads those local artifacts, recomputes their declared SHA-256 values, derives one canonical render-settings fingerprint, and requires the reference plus both candidate PNGs to match the exact locked source canvas. It downsamples the complete shared canvas without independently centering or resizing each foreground, so a wrong scale, offset, framing, pose, or silhouette remains visible to the score. Every receipt must bind the protocol fingerprint and exact canvas. The locked-input fingerprint includes this protocol, so changing presentation invalidates the entire comparison instead of silently changing the score.
 
 The receipt also binds candidate and view IDs, renderer version, locked input, scene, camera, reference and PNG SHA-256 values. The runner recomputes every file hash and camera/input fingerprint and rejects reused receipts. All evidence paths are relative to the manifest directory and cannot escape it. A receipt is tamper-evident consistency evidence, not a cryptographic attestation that makes an unsupervised third-party render trustworthy; winner claims still require retained capture provenance and blind review.
 
