@@ -1000,8 +1000,8 @@ function createReferenceSurfaceMaps(
   const roughnessCanvas = document.createElement('canvas');
   normalCanvas.width = roughnessCanvas.width = width;
   normalCanvas.height = roughnessCanvas.height = height;
-  const normalContext = normalCanvas.getContext('2d');
-  const roughnessContext = roughnessCanvas.getContext('2d');
+  const normalContext = normalCanvas.getContext('2d', { willReadFrequently: true });
+  const roughnessContext = roughnessCanvas.getContext('2d', { willReadFrequently: true });
   if (!normalContext || !roughnessContext) return undefined;
   const analysis = analyzeReferenceSurface(pixels.data, width, height, projection.relief.strength ?? 0.72);
   // ImageData requires an ArrayBuffer-backed view in newer DOM typings. Copying

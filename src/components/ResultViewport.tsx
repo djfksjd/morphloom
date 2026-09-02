@@ -334,7 +334,7 @@ function annotationLabel(
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 128;
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d', { willReadFrequently: true });
   if (!context) throw new Error('Measurement label canvas is unavailable.');
   context.fillStyle = background;
   context.fillRect(0, 0, canvas.width, canvas.height);

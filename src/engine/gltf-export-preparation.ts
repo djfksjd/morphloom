@@ -3,6 +3,8 @@ import * as THREE from 'three';
 export interface GltfExportPreparationReport {
   visibleMeshes: number;
   normalizedNormalAttributes: number;
+  /** Three supports a scalar sheen multiplier, while KHR_materials_sheen does not. */
+  normalizedSheenMaterials: number;
   tangentSpacesGenerated: number;
   indexedForTangents: number;
   unresolvedNormalMappedMeshes: string[];
@@ -53,9 +55,11 @@ export function preparePortableGltfGeometry(root: THREE.Object3D): GltfExportPre
   const fallbackAxis = new THREE.Vector3();
   const normalized = new Set<THREE.BufferGeometry>();
   const tangentReady = new Set<THREE.BufferGeometry>();
+  const normalizedMaterials = new Set<THREE.Material>();
   const report: GltfExportPreparationReport = {
     visibleMeshes: 0,
     normalizedNormalAttributes: 0,
+    normalizedSheenMaterials: 0,
     tangentSpacesGenerated: 0,
     indexedForTangents: 0,
     unresolvedNormalMappedMeshes: [],
@@ -64,6 +68,19 @@ export function preparePortableGltfGeometry(root: THREE.Object3D): GltfExportPre
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     report.visibleMeshes += 1;
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      if (normalizedMaterials.has(material)) continue;
+      normalizedMaterials.add(material);
+      if (!(material instanceof THREE.MeshPhysicalMaterial) || material.sheen <= 0 || material.sheen === 1) continue;
+      // Three.js evaluates sheenColor * sheen. glTF's KHR_materials_sheen has
+      // no independent intensity scalar and GLTFExporter otherwise drops it,
+      // reopening every positive value as 1. Bake the multiplier into the
+      // color before export so both the rendered energy and audit survive.
+      material.sheenColor.multiplyScalar(THREE.MathUtils.clamp(material.sheen, 0, 1));
+      material.sheen = 1;
+      material.needsUpdate = true;
+      report.normalizedSheenMaterials += 1;
+    }
     const geometry = object.geometry;
     const normalAttribute = geometry.getAttribute('normal');
 

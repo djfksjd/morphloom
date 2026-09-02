@@ -848,6 +848,23 @@ describe('PBR micro-surface system', () => {
     }
   });
 
+  it('bakes Three-only sheen intensity into the glTF sheen color', () => {
+    const root = new THREE.Group();
+    const material = new THREE.MeshPhysicalMaterial({
+      sheen: 0.2,
+      sheenColor: new THREE.Color(0.5, 0.25, 0.125),
+      sheenRoughness: 0.7,
+    });
+    root.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material));
+    const report = preparePortableGltfGeometry(root);
+    expect(report.normalizedSheenMaterials).toBe(1);
+    expect(material.sheen).toBe(1);
+    expect(material.sheenColor.toArray()).toEqual([0.1, 0.05, 0.025]);
+    const second = preparePortableGltfGeometry(root);
+    expect(second.normalizedSheenMaterials).toBe(0);
+    expect(material.sheenColor.toArray()).toEqual([0.1, 0.05, 0.025]);
+  });
+
   it('keeps unused humanoid joint slots zero and flattens skinned roots for glTF', async () => {
     const pack = await loadPack();
     const build = buildCharacter(pack, FIELD_HUMAN_SPEC, 'beauty');

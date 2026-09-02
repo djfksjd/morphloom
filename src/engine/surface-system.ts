@@ -218,7 +218,7 @@ function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) throw new Error('Surface texture canvas is unavailable.');
     context.putImageData(new ImageData(new Uint8ClampedArray(data), size, size), 0, 0);
     return new THREE.CanvasTexture(canvas);

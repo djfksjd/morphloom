@@ -3,7 +3,7 @@ import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.24.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.25.0';
 export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.4.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
