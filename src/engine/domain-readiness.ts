@@ -9,7 +9,14 @@ import type { PlanFootprintAudit } from './plan-footprint';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.4.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.5.0';
+
+const CRITICAL_DEFORMATION_JOINTS = [
+  'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
+  'hip_L', 'hip_R', 'knee_L', 'knee_R', 'ankle_L', 'ankle_R',
+] as const;
+const MINIMUM_CRITICAL_JOINT_VERTICES = 8;
+const MAXIMUM_CRITICAL_JOINT_SAMPLES = 128;
 
 export type ProductionDomain =
   | 'architecture'
@@ -73,6 +80,15 @@ export interface DomainReadinessReport {
     deformationMovedVertices: number;
     deformationMaximumMm: number;
     deformationFinite: boolean;
+    criticalDeformationJoints: number;
+    criticalWeightedJoints: number;
+    criticalMovingJoints: number;
+    criticalJointWeightCoverage: number;
+    criticalJointMotionCoverage: number;
+    minimumCriticalJointWeightedVertices: number;
+    minimumCriticalJointMotionMm: number;
+    criticalUnweightedJoints: string[];
+    criticalNonMovingJoints: string[];
     gameLods: number;
     lodTriangleRatio: number;
     lodMonotonicTriangleReduction: boolean;
@@ -541,6 +557,13 @@ function inspectSkinDeformation(root: THREE.Object3D): {
   movedVertices: number;
   maximumMm: number;
   finite: boolean;
+  criticalJoints: number;
+  weightedJoints: number;
+  movingJoints: number;
+  minimumWeightedVertices: number;
+  minimumJointMotionMm: number;
+  unweightedJoints: string[];
+  nonMovingJoints: string[];
 } {
   let squaredError = 0;
   let samples = 0;
@@ -550,14 +573,16 @@ function inspectSkinDeformation(root: THREE.Object3D): {
   const source = new THREE.Vector3();
   const transformed = new THREE.Vector3();
   root.updateMatrixWorld(true);
+  let primarySkin: THREE.SkinnedMesh | undefined;
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.SkinnedMesh)) return;
     const position = object.geometry.getAttribute('position');
-    const elbow = object.skeleton.bones.find((bone) => bone.name === 'elbow_L');
-    if (!position || !elbow) {
+    if (!position) {
       finite = false;
       return;
     }
+    const primaryPosition = primarySkin?.geometry.getAttribute('position');
+    if (!primarySkin || position.count > (primaryPosition?.count ?? 0)) primarySkin = object;
     object.skeleton.update();
     const stride = Math.max(1, Math.floor(position.count / 2_048));
     for (let index = 0; index < position.count; index += stride) {
@@ -569,31 +594,126 @@ function inspectSkinDeformation(root: THREE.Object3D): {
       samples += 1;
       finite = finite && Number.isFinite(transformed.x) && Number.isFinite(transformed.y) && Number.isFinite(transformed.z);
     }
-    const originalRotation = elbow.quaternion.clone();
-    try {
-      elbow.quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0.18)));
-      root.updateMatrixWorld(true);
-      object.skeleton.update();
-      for (let index = 0; index < position.count; index += stride) {
-        source.fromBufferAttribute(position, index);
-        transformed.copy(source);
-        object.applyBoneTransform(index, transformed);
-        const movementMm = transformed.distanceTo(source) * 1_000;
-        if (movementMm > 0.1) movedVertices += 1;
-        maximumMm = Math.max(maximumMm, movementMm);
-        finite = finite && Number.isFinite(transformed.x) && Number.isFinite(transformed.y) && Number.isFinite(transformed.z);
-      }
-    } finally {
-      elbow.quaternion.copy(originalRotation);
-      root.updateMatrixWorld(true);
-      object.skeleton.update();
-    }
   });
+
+  const criticalJoints = primarySkin ? CRITICAL_DEFORMATION_JOINTS.length : 0;
+  let weightedJoints = 0;
+  let movingJoints = 0;
+  let minimumWeightedVertices = Number.POSITIVE_INFINITY;
+  let minimumJointMotionMm = Number.POSITIVE_INFINITY;
+  const unweightedJoints: string[] = [];
+  const nonMovingJoints: string[] = [];
+  if (primarySkin) {
+    const position = primarySkin.geometry.getAttribute('position');
+    const skinIndex = primarySkin.geometry.getAttribute('skinIndex');
+    const skinWeight = primarySkin.geometry.getAttribute('skinWeight');
+    const boneIndexByName = new Map(primarySkin.skeleton.bones.map((bone, index) => [bone.name, index]));
+    const jointByBoneIndex = new Map<number, string>();
+    const weightedVertexCounts = new Map<string, number>();
+    const sampledVertices = new Map<string, number[]>();
+    for (const jointName of CRITICAL_DEFORMATION_JOINTS) {
+      const boneIndex = boneIndexByName.get(jointName);
+      if (boneIndex !== undefined) jointByBoneIndex.set(boneIndex, jointName);
+      weightedVertexCounts.set(jointName, 0);
+      sampledVertices.set(jointName, []);
+    }
+    if (!position || !skinIndex || !skinWeight
+      || skinIndex.itemSize < 4 || skinWeight.itemSize < 4
+      || skinIndex.count !== position.count || skinWeight.count !== position.count) {
+      finite = false;
+      unweightedJoints.push(...CRITICAL_DEFORMATION_JOINTS);
+      nonMovingJoints.push(...CRITICAL_DEFORMATION_JOINTS);
+    } else {
+      for (let vertex = 0; vertex < position.count; vertex += 1) {
+        for (let slot = 0; slot < 4; slot += 1) {
+          const weight = skinWeight.getComponent(vertex, slot);
+          if (!Number.isFinite(weight)) {
+            finite = false;
+            continue;
+          }
+          if (weight <= 0.001) continue;
+          const boneIndex = skinIndex.getComponent(vertex, slot);
+          const jointName = jointByBoneIndex.get(boneIndex);
+          if (!jointName) continue;
+          let duplicate = false;
+          for (let previous = 0; previous < slot; previous += 1) {
+            if (skinWeight.getComponent(vertex, previous) > 0.001
+              && skinIndex.getComponent(vertex, previous) === boneIndex) duplicate = true;
+          }
+          if (duplicate) continue;
+          weightedVertexCounts.set(jointName, weightedVertexCounts.get(jointName)! + 1);
+          const jointSamples = sampledVertices.get(jointName)!;
+          if (jointSamples.length < MAXIMUM_CRITICAL_JOINT_SAMPLES) jointSamples.push(vertex);
+        }
+      }
+
+      const probeRotation = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0.37, 0.71, 0.59).normalize(), 0.12,
+      );
+      for (const jointName of CRITICAL_DEFORMATION_JOINTS) {
+        const weightedVertices = weightedVertexCounts.get(jointName) ?? 0;
+        minimumWeightedVertices = Math.min(minimumWeightedVertices, weightedVertices);
+        if (weightedVertices >= MINIMUM_CRITICAL_JOINT_VERTICES) weightedJoints += 1;
+        else unweightedJoints.push(jointName);
+        const joint = primarySkin.skeleton.bones[boneIndexByName.get(jointName) ?? -1];
+        const jointSamples = sampledVertices.get(jointName) ?? [];
+        let jointMaximumMm = 0;
+        let jointMovedVertices = 0;
+        if (joint && jointSamples.length > 0) {
+          const originalRotation = joint.quaternion.clone();
+          const baseline = jointSamples.map((vertex) => {
+            source.fromBufferAttribute(position, vertex);
+            transformed.copy(source);
+            primarySkin!.applyBoneTransform(vertex, transformed);
+            return transformed.clone();
+          });
+          try {
+            joint.quaternion.multiply(probeRotation);
+            root.updateMatrixWorld(true);
+            primarySkin.skeleton.update();
+            jointSamples.forEach((vertex, sampleIndex) => {
+              source.fromBufferAttribute(position, vertex);
+              transformed.copy(source);
+              primarySkin!.applyBoneTransform(vertex, transformed);
+              const movementMm = transformed.distanceTo(baseline[sampleIndex]!) * 1_000;
+              if (movementMm > 0.1) {
+                jointMovedVertices += 1;
+                movedVertices += 1;
+              }
+              jointMaximumMm = Math.max(jointMaximumMm, movementMm);
+              maximumMm = Math.max(maximumMm, movementMm);
+              finite = finite && Number.isFinite(transformed.x)
+                && Number.isFinite(transformed.y) && Number.isFinite(transformed.z);
+            });
+          } finally {
+            joint.quaternion.copy(originalRotation);
+            root.updateMatrixWorld(true);
+            primarySkin.skeleton.update();
+          }
+        }
+        minimumJointMotionMm = Math.min(minimumJointMotionMm, jointMaximumMm);
+        const jointMoves = weightedVertices >= MINIMUM_CRITICAL_JOINT_VERTICES
+          && jointMaximumMm > 1
+          && jointMovedVertices >= Math.min(4, jointSamples.length);
+        if (jointMoves) movingJoints += 1;
+        else nonMovingJoints.push(jointName);
+      }
+    }
+  } else {
+    finite = false;
+  }
   return {
     bindPoseRmsErrorMm: samples > 0 ? Math.sqrt(squaredError / samples) * 1_000 : undefined,
     movedVertices,
     maximumMm,
     finite,
+    criticalJoints,
+    weightedJoints,
+    movingJoints,
+    minimumWeightedVertices: Number.isFinite(minimumWeightedVertices) ? minimumWeightedVertices : 0,
+    minimumJointMotionMm: Number.isFinite(minimumJointMotionMm) ? minimumJointMotionMm : 0,
+    unweightedJoints,
+    nonMovingJoints,
   };
 }
 
@@ -676,6 +796,11 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const deformationPass = deformation.finite && bindPoseRmsErrorMm <= 0.01
       && deformation.movedVertices > 0 && deformation.maximumMm > 1 && deformation.maximumMm < 500;
     add('animation-deformation', '실제 뼈 변형 검증', deformationPass, deformationPass ? 100 : 0, `bind RMS ${Number.isFinite(bindPoseRmsErrorMm) ? bindPoseRmsErrorMm.toFixed(4) : '없음'} mm · 이동 표본 ${deformation.movedVertices} · 최대 ${deformation.maximumMm.toFixed(1)} mm`);
+    const criticalJointPass = deformation.weightedJoints === deformation.criticalJoints
+      && deformation.movingJoints === deformation.criticalJoints;
+    add('animation-joint-deformation', '주요 관절별 실제 변형', criticalJointPass,
+      deformation.criticalJoints > 0 ? deformation.movingJoints / deformation.criticalJoints * 100 : 0,
+      `${deformation.movingJoints}/${deformation.criticalJoints} 관절 변형 · 웨이트 ${deformation.weightedJoints}/${deformation.criticalJoints} · 최소 ${deformation.minimumWeightedVertices} vertices · 최소 이동 ${deformation.minimumJointMotionMm.toFixed(2)} mm${deformation.nonMovingJoints.length > 0 ? ` · 실패 ${deformation.nonMovingJoints.join(', ')}` : ''}`);
     const fingerRigPass = geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 && geometry.fingerAnimationTracks >= 16;
     add('animation-finger-rig', '손가락 리그·가중치', fingerRigPass, fingerRigPass ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices · ${geometry.fingerAnimationTracks} animated tracks`);
     const facialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
@@ -709,6 +834,12 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
     add('game-normals', '게임 노멀 무결성', normalPass, normalIntegrityScore, `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
     add('game-skeleton', '게임용 스켈레톤', snapshot.skeletons >= 1 && snapshot.bones >= 45, Math.min(100, snapshot.bones / 45 * 100), `${snapshot.skeletons} skeleton · ${snapshot.bones} bones`);
+    const gameJointDeformationPass = deformation.finite
+      && deformation.weightedJoints === deformation.criticalJoints
+      && deformation.movingJoints === deformation.criticalJoints;
+    add('game-joint-deformation', '게임 주요 관절 실제 변형', gameJointDeformationPass,
+      deformation.criticalJoints > 0 ? deformation.movingJoints / deformation.criticalJoints * 100 : 0,
+      `${deformation.movingJoints}/${deformation.criticalJoints} 관절 변형 · 웨이트 ${deformation.weightedJoints}/${deformation.criticalJoints} · 최소 ${deformation.minimumWeightedVertices} vertices${deformation.nonMovingJoints.length > 0 ? ` · 실패 ${deformation.nonMovingJoints.join(', ')}` : ''}`);
     add('game-finger-rig', '게임 손가락 리그', geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0, geometry.fingerBones >= 30 && geometry.fingerWeightedVertices > 0 ? 100 : 0, `${geometry.fingerBones} finger bones · ${geometry.fingerWeightedVertices} weighted vertices`);
     const gameFacialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
       && geometry.facialMorphAffectedVertices >= 100;
@@ -799,6 +930,15 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       deformationMovedVertices: deformation.movedVertices,
       deformationMaximumMm: deformation.maximumMm,
       deformationFinite: deformation.finite,
+      criticalDeformationJoints: deformation.criticalJoints,
+      criticalWeightedJoints: deformation.weightedJoints,
+      criticalMovingJoints: deformation.movingJoints,
+      criticalJointWeightCoverage: deformation.weightedJoints / Math.max(1, deformation.criticalJoints),
+      criticalJointMotionCoverage: deformation.movingJoints / Math.max(1, deformation.criticalJoints),
+      minimumCriticalJointWeightedVertices: deformation.minimumWeightedVertices,
+      minimumCriticalJointMotionMm: deformation.minimumJointMotionMm,
+      criticalUnweightedJoints: deformation.unweightedJoints,
+      criticalNonMovingJoints: deformation.nonMovingJoints,
       gameLods: snapshot.gameLods,
       lodTriangleRatio: lodQuality.triangleRatio,
       lodMonotonicTriangleReduction: lodQuality.monotonicTriangleReduction,

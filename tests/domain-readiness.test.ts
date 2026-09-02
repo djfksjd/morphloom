@@ -167,6 +167,13 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.metrics.bindPoseRmsErrorMm).toBeLessThanOrEqual(0.01);
     expect(animation.metrics.deformationMovedVertices).toBeGreaterThan(0);
     expect(animation.metrics.deformationMaximumMm).toBeGreaterThan(1);
+    expect(animation.metrics.criticalDeformationJoints).toBe(10);
+    expect(animation.metrics.criticalWeightedJoints).toBe(10);
+    expect(animation.metrics.criticalMovingJoints).toBe(10);
+    expect(animation.metrics.criticalJointWeightCoverage).toBe(1);
+    expect(animation.metrics.criticalJointMotionCoverage).toBe(1);
+    expect(animation.metrics.minimumCriticalJointWeightedVertices).toBeGreaterThanOrEqual(8);
+    expect(animation.metrics.minimumCriticalJointMotionMm).toBeGreaterThan(1);
     expect(animation.metrics.fingerBones).toBe(30);
     expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
     expect(animation.metrics.fingerAnimationTracks).toBeGreaterThanOrEqual(19);
@@ -201,6 +208,45 @@ describe('cross-domain semi-professional readiness', () => {
       selfIntersections: 0,
       selfIntersectionComplete: true,
     });
+  }, 20_000);
+
+  it('blocks a humanoid whose lower-body joints exist but no longer deform the primary skin', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const skinIndex = build.body.geometry.getAttribute('skinIndex');
+    const bones = build.body.skeleton.bones;
+    const hips = bones.findIndex((bone) => bone.name === 'hips');
+    const disconnected = new Set(['knee_L', 'knee_R', 'ankle_L', 'ankle_R']
+      .map((name) => bones.findIndex((bone) => bone.name === name)));
+    if (hips < 0 || disconnected.has(-1)) throw new Error('Missing lower-body rig fixture.');
+    for (let vertex = 0; vertex < skinIndex.count; vertex += 1) {
+      for (let slot = 0; slot < skinIndex.itemSize; slot += 1) {
+        if (disconnected.has(skinIndex.getComponent(vertex, slot))) {
+          skinIndex.setComponent(vertex, slot, hips);
+        }
+      }
+    }
+    skinIndex.needsUpdate = true;
+
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-joint-deformation/);
+    expect(animation.metrics.criticalWeightedJoints).toBe(6);
+    expect(animation.metrics.criticalMovingJoints).toBe(6);
+    expect(animation.metrics.criticalJointWeightCoverage).toBe(0.6);
+    expect(animation.metrics.criticalJointMotionCoverage).toBe(0.6);
+    expect(animation.metrics.criticalUnweightedJoints).toEqual(['knee_L', 'knee_R', 'ankle_L', 'ankle_R']);
+    expect(animation.metrics.criticalNonMovingJoints).toEqual(['knee_L', 'knee_R', 'ankle_L', 'ankle_R']);
+    expect(animation.checks.find((check) => check.id === 'animation-joint-deformation')?.detail)
+      .toMatch(/knee_L.*ankle_R/);
+    expect(game.pass).toBe(false);
+    expect(game.blockers.join(' ')).toMatch(/game-joint-deformation/);
   }, 20_000);
 
   it('blocks a declared LOD that collapses the silhouette or loses valid skin weights', () => {
