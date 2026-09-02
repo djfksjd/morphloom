@@ -16,6 +16,7 @@ import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC, type
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { auditSampledWallThickness } from '../src/engine/print-thickness';
+import { REQUIRED_FACIAL_MORPH_NAMES } from '../src/engine/facial-morphs';
 
 let humanPack: HumanPack;
 
@@ -182,6 +183,8 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.metrics.fingerAnimationTracks).toBeGreaterThanOrEqual(19);
     expect(animation.metrics.facialMorphTargets).toBe(5);
     expect(animation.metrics.facialMorphAffectedVertices).toBeGreaterThanOrEqual(100);
+    expect(animation.metrics.facialMorphLocalizedTargets).toBe(5);
+    expect(animation.metrics.minimumFacialMorphLocalizationCoverage).toBeGreaterThanOrEqual(0.98);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
@@ -421,6 +424,41 @@ describe('cross-domain semi-professional readiness', () => {
     expect(game.pass).toBe(false);
     expect(animation.blockers.join(' ')).toMatch(/animation-facial-morphs/);
     expect(game.blockers.join(' ')).toMatch(/game-facial-morphs/);
+  }, 20_000);
+
+  it('blocks facial morph names whose actual deltas were moved onto the lower body', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const geometry = build.body.geometry;
+    const position = geometry.getAttribute('position');
+    const lowestVertices = Array.from({ length: position.count }, (_, vertex) => vertex)
+      .sort((first, second) => position.getY(first) - position.getY(second));
+    for (const attribute of geometry.morphAttributes.position ?? []) {
+      const deltas: Array<[number, number, number]> = [];
+      for (let vertex = 0; vertex < attribute.count; vertex += 1) {
+        const delta: [number, number, number] = [attribute.getX(vertex), attribute.getY(vertex), attribute.getZ(vertex)];
+        if (Math.hypot(...delta) > 1e-7) deltas.push(delta);
+        attribute.setXYZ(vertex, 0, 0, 0);
+      }
+      deltas.forEach((delta, index) => attribute.setXYZ(lowestVertices[index]!, ...delta));
+      attribute.needsUpdate = true;
+    }
+
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.metrics.facialMorphTargets).toBe(5);
+    expect(animation.metrics.facialMorphAffectedVertices).toBeGreaterThanOrEqual(100);
+    expect(animation.metrics.facialMorphLocalizedTargets).toBe(0);
+    expect(animation.metrics.facialMorphMislocalizedTargets).toEqual([...REQUIRED_FACIAL_MORPH_NAMES]);
+    expect(animation.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-facial-morph-localization/);
+    expect(game.pass).toBe(false);
+    expect(game.blockers.join(' ')).toMatch(/game-facial-morph-localization/);
   }, 20_000);
 
   it('blocks a clip set whose loop seam is visually discontinuous even when names and counts remain intact', () => {

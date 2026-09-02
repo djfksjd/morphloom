@@ -9,7 +9,7 @@ import type { PlanFootprintAudit } from './plan-footprint';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.6.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.7.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -19,6 +19,8 @@ const MINIMUM_CRITICAL_JOINT_VERTICES = 8;
 const MAXIMUM_CRITICAL_JOINT_SAMPLES = 128;
 const MINIMUM_CRITICAL_JOINT_LOCALIZATION_COVERAGE = 0.98;
 const CRITICAL_JOINT_LOCALIZATION_RADIUS_RATIO = 0.15;
+const MINIMUM_FACIAL_MORPH_LOCALIZATION_COVERAGE = 0.98;
+const FACIAL_MORPH_HEAD_RADIUS_RATIO = 0.15;
 
 export type ProductionDomain =
   | 'architecture'
@@ -115,6 +117,9 @@ export interface DomainReadinessReport {
     facialMorphTargets: number;
     facialMorphAffectedVertices: number;
     facialMorphMaximumMm: number;
+    facialMorphLocalizedTargets: number;
+    minimumFacialMorphLocalizationCoverage: number;
+    facialMorphMislocalizedTargets: string[];
     maximumSkinWeightError: number;
     maximumSkinInfluences: number;
     visualHullMeshes: number;
@@ -358,6 +363,9 @@ function inspectGeometry(root: THREE.Object3D): {
   facialMorphTargets: number;
   facialMorphAffectedVertices: number;
   facialMorphMaximumMm: number;
+  facialMorphLocalizedTargets: number;
+  minimumFacialMorphLocalizationCoverage: number;
+  facialMorphMislocalizedTargets: string[];
   visualHullMeshes: number;
   minimumVisualHullViewIoU: number;
   confidenceWeightedVisualHullIoU: number;
@@ -387,6 +395,12 @@ function inspectGeometry(root: THREE.Object3D): {
   const facialMorphNames = new Set<string>();
   const facialMorphVertices = new Set<string>();
   let facialMorphMaximumMm = 0;
+  const facialMorphAffectedByTarget = new Map<string, number>();
+  const facialMorphLocalizedByTarget = new Map<string, number>();
+  for (const name of REQUIRED_FACIAL_MORPH_NAMES) {
+    facialMorphAffectedByTarget.set(name, 0);
+    facialMorphLocalizedByTarget.set(name, 0);
+  }
   let visualHullMeshes = 0;
   let minimumVisualHullViewIoU = 1;
   let confidenceWeightedVisualHullIoU = 1;
@@ -400,6 +414,9 @@ function inspectGeometry(root: THREE.Object3D): {
   const edgeA = new THREE.Vector3();
   const edgeB = new THREE.Vector3();
   const faceNormal = new THREE.Vector3();
+  const morphPoint = new THREE.Vector3();
+  const morphOffset = new THREE.Vector3();
+  const morphClosest = new THREE.Vector3();
   root.updateMatrixWorld(true);
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
@@ -418,6 +435,31 @@ function inspectGeometry(root: THREE.Object3D): {
     }
     const position = geometry.getAttribute('position');
     if (!position) return;
+    let faceStart: THREE.Vector3 | undefined;
+    let faceDelta: THREE.Vector3 | undefined;
+    let faceLengthSq = 0;
+    let faceRadiusSq = 0;
+    if (object instanceof THREE.SkinnedMesh) {
+      const neck = object.skeleton.bones.find((bone) => bone.name === 'neck');
+      const head = object.skeleton.bones.find((bone) => bone.name === 'head');
+      if (neck && head) {
+        let minimumY = Number.POSITIVE_INFINITY;
+        let maximumY = Number.NEGATIVE_INFINITY;
+        for (let vertex = 0; vertex < position.count; vertex += 1) {
+          minimumY = Math.min(minimumY, position.getY(vertex));
+          maximumY = Math.max(maximumY, position.getY(vertex));
+        }
+        const bodyHeight = Math.max(0, maximumY - minimumY);
+        const neckLocal = object.worldToLocal(neck.getWorldPosition(new THREE.Vector3()));
+        const headLocal = object.worldToLocal(head.getWorldPosition(new THREE.Vector3()));
+        const neckToHead = headLocal.clone().sub(neckLocal);
+        faceStart = neckLocal.clone().addScaledVector(neckToHead, -0.25);
+        const faceEnd = headLocal.clone().addScaledVector(neckToHead, 1.25);
+        faceDelta = faceEnd.sub(faceStart);
+        faceLengthSq = faceDelta.lengthSq();
+        faceRadiusSq = Math.max(0.06, bodyHeight * FACIAL_MORPH_HEAD_RADIUS_RATIO) ** 2;
+      }
+    }
     const morphDictionary = object.morphTargetDictionary ?? {};
     for (const requiredName of REQUIRED_FACIAL_MORPH_NAMES) {
       const morphIndex = morphDictionary[requiredName];
@@ -427,6 +469,17 @@ function inspectGeometry(root: THREE.Object3D): {
       for (let vertex = 0; vertex < attribute.count; vertex += 1) {
         const displacement = Math.hypot(attribute.getX(vertex), attribute.getY(vertex), attribute.getZ(vertex)) * 1_000;
         if (displacement <= 0.0001) continue;
+        facialMorphAffectedByTarget.set(requiredName, facialMorphAffectedByTarget.get(requiredName)! + 1);
+        if (faceStart && faceDelta) {
+          morphPoint.fromBufferAttribute(position, vertex);
+          const t = faceLengthSq > 1e-12
+            ? THREE.MathUtils.clamp(morphOffset.copy(morphPoint).sub(faceStart).dot(faceDelta) / faceLengthSq, 0, 1)
+            : 0;
+          morphClosest.copy(faceStart).addScaledVector(faceDelta, t);
+          if (morphClosest.distanceToSquared(morphPoint) <= faceRadiusSq) {
+            facialMorphLocalizedByTarget.set(requiredName, facialMorphLocalizedByTarget.get(requiredName)! + 1);
+          }
+        }
         facialMorphVertices.add(`${object.uuid}:${vertex}`);
         facialMorphMaximumMm = Math.max(facialMorphMaximumMm, displacement);
       }
@@ -529,6 +582,20 @@ function inspectGeometry(root: THREE.Object3D): {
   });
   const enclosedVolumeMm3 = Math.abs(enclosedVolumeM3) * 1e9;
   const surfaceAreaMm2 = totalSurfaceAreaM2 * 1e6;
+  let facialMorphLocalizedTargets = 0;
+  let minimumFacialMorphLocalizationCoverage = Number.POSITIVE_INFINITY;
+  const facialMorphMislocalizedTargets: string[] = [];
+  for (const name of REQUIRED_FACIAL_MORPH_NAMES) {
+    const affected = facialMorphAffectedByTarget.get(name) ?? 0;
+    const localized = facialMorphLocalizedByTarget.get(name) ?? 0;
+    const coverage = localized / Math.max(1, affected);
+    minimumFacialMorphLocalizationCoverage = Math.min(minimumFacialMorphLocalizationCoverage, coverage);
+    if (affected > 0 && coverage >= MINIMUM_FACIAL_MORPH_LOCALIZATION_COVERAGE) {
+      facialMorphLocalizedTargets += 1;
+    } else {
+      facialMorphMislocalizedTargets.push(name);
+    }
+  }
   return {
     uvMeshes,
     normalMeshes,
@@ -548,6 +615,10 @@ function inspectGeometry(root: THREE.Object3D): {
     facialMorphTargets: facialMorphNames.size,
     facialMorphAffectedVertices: facialMorphVertices.size,
     facialMorphMaximumMm,
+    facialMorphLocalizedTargets,
+    minimumFacialMorphLocalizationCoverage: Number.isFinite(minimumFacialMorphLocalizationCoverage)
+      ? minimumFacialMorphLocalizationCoverage : 0,
+    facialMorphMislocalizedTargets,
     visualHullMeshes,
     minimumVisualHullViewIoU,
     confidenceWeightedVisualHullIoU,
@@ -886,6 +957,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       && geometry.facialMorphAffectedVertices >= 100
       && geometry.facialMorphMaximumMm >= 0.5 && geometry.facialMorphMaximumMm <= 30;
     add('animation-facial-morphs', '얼굴 표정 모프', facialMorphPass, facialMorphPass ? 100 : 0, `${geometry.facialMorphTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · ${geometry.facialMorphAffectedVertices} affected vertices · max ${geometry.facialMorphMaximumMm.toFixed(2)} mm`);
+    const facialMorphLocalizationPass = geometry.facialMorphLocalizedTargets === REQUIRED_FACIAL_MORPH_NAMES.length;
+    add('animation-facial-morph-localization', '얼굴 모프 영향 위치', facialMorphLocalizationPass,
+      geometry.facialMorphLocalizedTargets / REQUIRED_FACIAL_MORPH_NAMES.length * 100,
+      `${geometry.facialMorphLocalizedTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · 최소 머리영역 일치 ${(geometry.minimumFacialMorphLocalizationCoverage * 100).toFixed(1)}%${geometry.facialMorphMislocalizedTargets.length > 0 ? ` · 실패 ${geometry.facialMorphMislocalizedTargets.join(', ')}` : ''}`);
     const animationSetPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
       && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
     add('animation-clips', '납품용 기본 동작 세트', animationSetPass, animationSetPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · ${snapshot.animationTracks} tracks · 필수 동작 ${Math.round(animationSetCoverage * 100)}%`);
@@ -928,6 +1003,10 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const gameFacialMorphPass = geometry.facialMorphTargets === REQUIRED_FACIAL_MORPH_NAMES.length
       && geometry.facialMorphAffectedVertices >= 100;
     add('game-facial-morphs', '게임 얼굴 표정 모프', gameFacialMorphPass, gameFacialMorphPass ? 100 : 0, `${geometry.facialMorphTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · ${geometry.facialMorphAffectedVertices} affected vertices`);
+    const gameFacialLocalizationPass = geometry.facialMorphLocalizedTargets === REQUIRED_FACIAL_MORPH_NAMES.length;
+    add('game-facial-morph-localization', '게임 얼굴 모프 영향 위치', gameFacialLocalizationPass,
+      geometry.facialMorphLocalizedTargets / REQUIRED_FACIAL_MORPH_NAMES.length * 100,
+      `${geometry.facialMorphLocalizedTargets}/${REQUIRED_FACIAL_MORPH_NAMES.length} targets · 최소 머리영역 일치 ${(geometry.minimumFacialMorphLocalizationCoverage * 100).toFixed(1)}%${geometry.facialMorphMislocalizedTargets.length > 0 ? ` · 실패 ${geometry.facialMorphMislocalizedTargets.join(', ')}` : ''}`);
     const runtimeMotionPass = snapshot.animationClips >= REQUIRED_RUNTIME_CLIPS.length
       && snapshot.animationTracks >= 180 && animationSetCoverage === 1;
     add('game-runtime-motion', '게임 런타임 동작 세트', runtimeMotionPass, runtimeMotionPass ? 100 : animationSetCoverage * 100, `${snapshot.animationClips} clips · 이동/점프/제스처/상호작용 ${Math.round(animationSetCoverage * 100)}%`);
@@ -1047,6 +1126,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       facialMorphTargets: geometry.facialMorphTargets,
       facialMorphAffectedVertices: geometry.facialMorphAffectedVertices,
       facialMorphMaximumMm: geometry.facialMorphMaximumMm,
+      facialMorphLocalizedTargets: geometry.facialMorphLocalizedTargets,
+      minimumFacialMorphLocalizationCoverage: geometry.minimumFacialMorphLocalizationCoverage,
+      facialMorphMislocalizedTargets: geometry.facialMorphMislocalizedTargets,
       maximumSkinWeightError: geometry.maximumSkinWeightError,
       maximumSkinInfluences: geometry.maximumSkinInfluences,
       visualHullMeshes: geometry.visualHullMeshes,
