@@ -1006,6 +1006,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceAnimationTrackNames: sourceSnapshot.animationTrackNames,
           sourceAnimationManifestEntries: sourceSnapshot.animationManifestEntries,
           sourceAnimationManifestFingerprint: sourceSnapshot.animationManifestFingerprint,
+          sourceMorphTargets: sourceSnapshot.morphTargets,
           sourceGameLods: sourceSnapshot.gameLods,
           sourceCollisionPrimitives: sourceSnapshot.collisionPrimitives,
           compilerRevision: DELIVERY_PIPELINE_REVISION,
@@ -1034,6 +1035,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.glbBytes = audit.glbBytes;
               diagnostic.__MORPHLOOM__.boundsErrorMm = audit.boundsErrorMm;
               diagnostic.__MORPHLOOM__.namedNodeCoverage = audit.namedNodeCoverage;
+              diagnostic.__MORPHLOOM__.morphTargetPayloadParity = audit.morphTargetPayloadParity;
               diagnostic.__MORPHLOOM__.gltfValidator = audit.standardValidation?.validator;
               diagnostic.__MORPHLOOM__.gltfValidatorVersion = audit.standardValidation?.validatorVersion;
               diagnostic.__MORPHLOOM__.gltfValidationStatus = audit.standardValidation?.status;
@@ -1050,6 +1052,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedAnimationTrackNames = audit.reopened?.animationTrackNames;
               diagnostic.__MORPHLOOM__.reopenedAnimationManifestEntries = audit.reopened?.animationManifestEntries;
               diagnostic.__MORPHLOOM__.reopenedAnimationManifestFingerprint = audit.reopened?.animationManifestFingerprint;
+              diagnostic.__MORPHLOOM__.reopenedMorphTargets = audit.reopened?.morphTargets;
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }

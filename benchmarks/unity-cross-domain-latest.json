@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.unity-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.22.0",
-  "generatedAt": "2026-09-02T00:41:24.951Z",
+  "compilerRevision": "morphloom-compiler/0.23.0",
+  "generatedAt": "2026-09-02T02:22:19.286Z",
   "pass": false,
   "status": "blocked",
   "scope": "actual Unity Editor + Unity glTFast native prefab import",

@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T02:07:09.640Z",
+  "generatedAt": "2026-09-02T02:26:23.206Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1368,6 +1368,63 @@
       "failureReleasedQueue": true,
       "capacityRejected": true
     },
+    "browserRoundTrip": {
+      "schema": "morphloom.browser-roundtrip/0.2",
+      "compilerRevision": "morphloom-compiler/0.23.0",
+      "observedAt": "2026-09-02T02:16:05Z",
+      "pass": true,
+      "assets": [
+        {
+          "id": "pinterest-concept-architectural-review",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "laurel-homes-architectural-review",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "cooling-service-assembly",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "ornate-knife-product-visualization",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "talon-same-reference-material-review",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "single-view-character-previs",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "morphTargets": 10,
+          "reopenedMorphTargets": 10
+        },
+        {
+          "id": "field-human-runtime-base",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "morphTargets": 10,
+          "reopenedMorphTargets": 10
+        },
+        {
+          "id": "asphalt-print-surface",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        },
+        {
+          "id": "implicit-surface-manifold-lab",
+          "status": "pass",
+          "morphTargetPayloadParity": true
+        }
+      ]
+    },
     "gltfStandardValidation": {
       "pass": true,
       "validator": "Khronos glTF Validator",
@@ -1461,7 +1518,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.22.0",
+      "compilerRevision": "morphloom-compiler/0.23.0",
       "pass": true,
       "benchmarkAccepted": true,
       "blenderVersions": [
@@ -1542,8 +1599,8 @@
     },
     "unityCrossDomain": {
       "schema": "morphloom.unity-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.22.0",
-      "generatedAt": "2026-09-02T00:41:24.951Z",
+      "compilerRevision": "morphloom-compiler/0.23.0",
+      "generatedAt": "2026-09-02T02:22:19.286Z",
       "pass": false,
       "status": "blocked",
       "scope": "actual Unity Editor + Unity glTFast native prefab import",
@@ -1658,9 +1715,9 @@
       "morphloom": "application-import-not-run"
     },
     {
-      "capability": "bounded serialized browser GLB validation with same-input deduplication and stale-result guard",
+      "capability": "bounded serialized browser GLB validation with morph-payload parity, same-input deduplication, and stale-result guard",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "yes"
+      "morphloom": "9 actual Chromium assets pass; both characters preserve 10/10 morph payloads"
     },
     {
       "capability": "skeletal animation breadth",

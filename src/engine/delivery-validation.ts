@@ -3,7 +3,7 @@ import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.22.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.23.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -26,6 +26,13 @@ export interface SceneSnapshot {
   animationManifestFingerprint: string;
   morphTargets: number;
   morphTargetNames: string[];
+  morphTargetPayloads: Array<{
+    id: string;
+    affectedVertices: number;
+    displacementSumMm: number;
+    displacementSquaredSumMm2: number;
+    maximumDisplacementMm: number;
+  }>;
   gameLods: number;
   collisionPrimitives: number;
   collisionManifestFingerprint: string;
@@ -56,6 +63,7 @@ export interface DeliveryAudit {
   durationMs: number;
   meshParity: boolean;
   triangleParity: boolean;
+  morphTargetPayloadParity: boolean;
   namedNodeCoverage: number;
   boundsErrorMm: number;
   source?: SceneSnapshot;
@@ -161,6 +169,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let animationManifestFingerprint = 'none';
   let morphTargets = 0;
   const morphTargetNames: string[] = [];
+  const morphTargetPayloads: SceneSnapshot['morphTargetPayloads'] = [];
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -209,6 +218,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       partIds.add(partId);
     }
     const geometry = object.geometry;
+    const position = geometry.getAttribute('position');
     const targetEntries = Object.entries(object.morphTargetDictionary ?? {})
       .sort((left, right) => left[1] - right[1]);
     morphTargets += targetEntries.length;
@@ -219,6 +229,34 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       const target = geometry.morphAttributes.position?.[targetIndex];
       hasher.array(target?.array);
       geometryBytes += target?.array.byteLength ?? 0;
+      let affectedVertices = 0;
+      let displacementSumMm = 0;
+      let displacementSquaredSumMm2 = 0;
+      let maximumDisplacementMm = 0;
+      if (target && target.itemSize === 3 && position && target.count === position.count) {
+        for (let vertex = 0; vertex < target.count; vertex += 1) {
+          const baseX = geometry.morphTargetsRelative ? 0 : position.getX(vertex);
+          const baseY = geometry.morphTargetsRelative ? 0 : position.getY(vertex);
+          const baseZ = geometry.morphTargetsRelative ? 0 : position.getZ(vertex);
+          const displacementMm = Math.hypot(
+            target.getX(vertex) - baseX,
+            target.getY(vertex) - baseY,
+            target.getZ(vertex) - baseZ,
+          ) * 1_000;
+          if (displacementMm <= 0.0001) continue;
+          affectedVertices += 1;
+          displacementSumMm += displacementMm;
+          displacementSquaredSumMm2 += displacementMm * displacementMm;
+          maximumDisplacementMm = Math.max(maximumDisplacementMm, displacementMm);
+        }
+      }
+      morphTargetPayloads.push({
+        id: `${object.name}:${name}`,
+        affectedVertices,
+        displacementSumMm,
+        displacementSquaredSumMm2,
+        maximumDisplacementMm,
+      });
     }
     const groups = geometry.groups;
     const materialCount = materialList(object.material).length;
@@ -230,7 +268,6 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       hasher.number(group.count);
       hasher.number(group.materialIndex ?? 0);
     }
-    const position = geometry.getAttribute('position');
     // GLTFLoader expands BufferGeometry.boundingBox to include morph extrema.
     // Delivery dimensions are compared in the neutral/base pose; morph ranges
     // are audited independently by identity and payload below.
@@ -295,6 +332,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     animationManifestFingerprint,
     morphTargets,
     morphTargetNames: morphTargetNames.sort(),
+    morphTargetPayloads: morphTargetPayloads.sort((left, right) => left.id.localeCompare(right.id)),
     gameLods,
     collisionPrimitives,
     collisionManifestFingerprint,
@@ -390,6 +428,23 @@ function maximumBoundsErrorMm(source: SceneSnapshot, reopened: SceneSnapshot): n
   return maximum;
 }
 
+function morphTargetPayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot): boolean {
+  if (source.morphTargetPayloads.length !== reopened.morphTargetPayloads.length) return false;
+  const close = (left: number, right: number): boolean => (
+    Number.isFinite(left) && Number.isFinite(right)
+    && Math.abs(left - right) <= Math.max(1e-4, Math.abs(left) * 1e-5, Math.abs(right) * 1e-5)
+  );
+  return source.morphTargetPayloads.every((left, index) => {
+    const right = reopened.morphTargetPayloads[index];
+    return right !== undefined
+      && left.id === right.id
+      && left.affectedVertices === right.affectedVertices
+      && close(left.displacementSumMm, right.displacementSumMm)
+      && close(left.displacementSquaredSumMm2, right.displacementSquaredSumMm2)
+      && close(left.maximumDisplacementMm, right.maximumDisplacementMm);
+  });
+}
+
 export function compareGlbRoundTrip(
   source: SceneSnapshot,
   reopened: SceneSnapshot,
@@ -408,6 +463,7 @@ export function compareGlbRoundTrip(
   const triangleParity = source.triangles === reopened.triangles;
   const namedNodeCoverage = source.namedNodes > 0 ? Math.min(1, reopened.namedNodes / source.namedNodes) : 1;
   const boundsErrorMm = maximumBoundsErrorMm(source, reopened);
+  const morphTargetPayloadParity = morphTargetPayloadsMatch(source, reopened);
   if (!source.finiteTransforms || !reopened.finiteTransforms) blockers.push('non-finite transform detected');
   if (!meshParity) blockers.push(`delivery primitive count changed ${source.primitives}→${reopened.meshes}`);
   if (!triangleParity) blockers.push(`triangle count changed ${source.triangles}→${reopened.triangles}`);
@@ -433,6 +489,7 @@ export function compareGlbRoundTrip(
   if (source.morphTargetNames.join('|') !== reopened.morphTargetNames.join('|')) {
     blockers.push('morph target identities changed during GLB round-trip');
   }
+  if (!morphTargetPayloadParity) blockers.push('morph target deformation payload changed during GLB round-trip');
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -466,6 +523,7 @@ export function compareGlbRoundTrip(
     && source.animationManifestFingerprint === reopened.animationManifestFingerprint
     && source.morphTargets === reopened.morphTargets
     && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
+    && morphTargetPayloadParity
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
@@ -486,6 +544,7 @@ export function compareGlbRoundTrip(
     durationMs,
     meshParity,
     triangleParity,
+    morphTargetPayloadParity,
     namedNodeCoverage,
     boundsErrorMm,
     source,
@@ -519,6 +578,7 @@ export function blockedDeliveryAudit(error: unknown, fingerprint = 'unavailable'
     durationMs: 0,
     meshParity: false,
     triangleParity: false,
+    morphTargetPayloadParity: false,
     namedNodeCoverage: 0,
     boundsErrorMm: Number.POSITIVE_INFINITY,
     blockers: [detail.slice(0, 240)],

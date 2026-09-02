@@ -178,6 +178,31 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers.join(' ')).toMatch(/morph target/);
   });
 
+  it('blocks a GLB that keeps facial morph names but changes their deformation payload', () => {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const deltas = new Float32Array(geometry.getAttribute('position').count * 3);
+    deltas[0] = 0.004;
+    deltas[4] = -0.002;
+    geometry.morphAttributes.position = [new THREE.Float32BufferAttribute(deltas, 3)];
+    geometry.morphTargetsRelative = true;
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+    mesh.name = 'face';
+    mesh.updateMorphTargets();
+    mesh.morphTargetDictionary = { jaw_open: 0 };
+    const source = snapshotScene(mesh);
+    expect(source.morphTargetPayloads).toEqual([
+      expect.objectContaining({ id: 'face:jaw_open', affectedVertices: 2, maximumDisplacementMm: expect.closeTo(4, 4) }),
+    ]);
+    const reopened = structuredClone(source);
+    reopened.morphTargetPayloads[0]!.maximumDisplacementMm *= 0.5;
+    reopened.morphTargetPayloads[0]!.displacementSumMm *= 0.5;
+    reopened.morphTargetPayloads[0]!.displacementSquaredSumMm2 *= 0.25;
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.morphTargetPayloadParity).toBe(false);
+    expect(audit.blockers).toContain('morph target deformation payload changed during GLB round-trip');
+  });
+
   it('blocks a GLB that keeps clip names but loses loop, category or root-motion delivery metadata', () => {
     const root = new THREE.Group();
     root.name = 'animation_manifest_fixture';

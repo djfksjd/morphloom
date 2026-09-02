@@ -107,6 +107,54 @@ const standardValidationAudit = {
   validFixture: validGlb,
   corruptFixture: corruptGlb,
 };
+type BrowserRoundTripAsset = {
+  id?: string;
+  status?: string;
+  morphTargetPayloadParity?: boolean;
+  morphTargets?: number;
+  reopenedMorphTargets?: number;
+};
+const browserRoundTrip = JSON.parse(readFileSync('benchmarks/browser-roundtrip-latest.json', 'utf8')) as {
+  schema?: string;
+  compilerRevision?: string;
+  observedAt?: string;
+  console?: { errors?: number; warnings?: number };
+  assets?: BrowserRoundTripAsset[];
+};
+const requiredBrowserAssets = new Set([
+  'pinterest-concept-architectural-review',
+  'laurel-homes-architectural-review',
+  'cooling-service-assembly',
+  'ornate-knife-product-visualization',
+  'talon-same-reference-material-review',
+  'single-view-character-previs',
+  'field-human-runtime-base',
+  'asphalt-print-surface',
+  'implicit-surface-manifold-lab',
+]);
+const browserAssets = browserRoundTrip.assets ?? [];
+const browserRoundTripPass = browserRoundTrip.compilerRevision === DELIVERY_PIPELINE_REVISION
+  && browserRoundTrip.console?.errors === 0
+  && browserRoundTrip.console?.warnings === 0
+  && browserAssets.length === requiredBrowserAssets.size
+  && browserAssets.every((asset) => requiredBrowserAssets.has(asset.id ?? '')
+    && asset.status === 'pass'
+    && asset.morphTargetPayloadParity === true)
+  && browserAssets.filter((asset) => asset.id === 'single-view-character-previs' || asset.id === 'field-human-runtime-base')
+    .every((asset) => asset.morphTargets === 10 && asset.reopenedMorphTargets === 10);
+const browserRoundTripSummary = {
+  schema: browserRoundTrip.schema,
+  compilerRevision: browserRoundTrip.compilerRevision,
+  observedAt: browserRoundTrip.observedAt,
+  pass: browserRoundTripPass,
+  assets: browserAssets.map((asset) => ({
+    id: asset.id,
+    status: asset.status,
+    morphTargetPayloadParity: asset.morphTargetPayloadParity,
+    morphTargets: asset.morphTargets,
+    reopenedMorphTargets: asset.reopenedMorphTargets,
+  })),
+};
 const blenderRoundTrip = JSON.parse(readFileSync('benchmarks/blender-roundtrip-latest.json', 'utf8')) as {
   pass?: boolean;
   blenderVersion?: string;
@@ -421,6 +469,7 @@ const output = {
       domains: domainProof,
     },
     browserValidationLifecycle: serializedValidationAudit,
+    browserRoundTrip: browserRoundTripSummary,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
     blenderCrossDomain: blenderCrossDomainSummary,
@@ -446,7 +495,7 @@ const output = {
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
-    { capability: 'bounded serialized browser GLB validation with same-input deduplication and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass ? 'yes' : 'blocked' },
+    { capability: 'bounded serialized browser GLB validation with morph-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass ? '9 actual Chromium assets pass; both characters preserve 10/10 morph payloads' : 'blocked' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainProof.animation?.pass ? '49 bones and 22 semantic delivery clips / 185 tracks' : 'blocked' },
     { capability: 'named editable facial controls with spatial and semantic delta localization preserved through GLB', img2threejs: 'not established in pinned audit', morphloom: domainProof.animation?.pass && domainProof.animation?.metrics?.facialMorphLocalizedTargets === 5 && domainProof.animation?.metrics?.facialMorphSemanticTargets === 5 ? '5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization' : 'blocked' },
     { capability: 'per-joint weighted deformation/localization, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? '10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization' : 'blocked' },

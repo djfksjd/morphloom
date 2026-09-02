@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-192%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-193%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -131,7 +131,7 @@ npm run blender:validate -- source.glb roundtrip.glb report.json
 - 납품 대상 모델·브라우저 GLB: **100% (5/5)**
 - 근거 부족 안전 차단: **100% (3/3)**
 
-100%는 잠근 8개 계약을 모두 올바르게 판정했다는 뜻이며 모든 입력의 시각 품질이 100점이라는 뜻이 아닙니다. 승인 사례는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과해도 근거 부족으로 정확히 차단됩니다. 브라우저 GLB 증명은 Three.js 재열기 결과이며, 새 내보내기 경로는 여기에 Khronos 공식 Validator 오류·경고를 별도로 기록합니다.
+100%는 잠근 8개 계약을 모두 올바르게 판정했다는 뜻이며 모든 입력의 시각 품질이 100점이라는 뜻이 아닙니다. 승인 사례는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 콘셉트 주택·냉각 어셈블리·단일 사진 캐릭터는 기술 검사를 통과해도 근거 부족으로 정확히 차단됩니다. 브라우저 GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 이름과 개수 외에도 각 대상의 비영 정점 수·변형 길이 합·제곱합·최대값을 비교하므로, 이름만 남고 표정 데이터가 축소되거나 손상된 GLB는 차단됩니다. compiler 0.23.0에서 실제 Chromium 대표 자산 9개와 캐릭터 모프 10/10 왕복을 다시 확인했습니다.
 
 Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 증거는 현재 컴파일러 revision과 묶이며 이전 엔진 결과를 재사용하면 차단됩니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장합니다. Unity 하네스는 같은 5개 GLB의 메시·재질·텍스처·스킨·모프·애니메이션·포락을 검사하도록 구현하고 Unity 6000.5 API 컴파일까지 확인했지만, [최신 실행 증거](./benchmarks/unity-cross-domain-latest.json)는 라이선싱 초기화 단계에서 차단됐습니다. Unity·Unreal을 검증 완료로 표시하지 않습니다.
 
@@ -163,7 +163,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 
-사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.963을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 높이장은 단일 블러가 아니라 미세·중간·큰 스케일 주파수 밴드를 결합하며 세 대역 모두 활성으로 측정됐고, 비교기는 반복 무늬가 같은 평균·분산으로 골재를 흉내 내는 경우도 차단합니다. 결과는 124,616 삼각형, RMS 0.58 mm, 최고–최저 4.35 mm, 폐쇄 메시 1/1이며 컴파일러 0.14 브라우저 GLB 재열기에서도 크기 오차 0 mm로 통과했습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
+사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.963을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. 높이장은 단일 블러가 아니라 미세·중간·큰 스케일 주파수 밴드를 결합하며 세 대역 모두 활성으로 측정됐고, 비교기는 반복 무늬가 같은 평균·분산으로 골재를 흉내 내는 경우도 차단합니다. 결과는 124,616 삼각형, RMS 0.58 mm, 최고–최저 4.35 mm, 폐쇄 메시 1/1이며 컴파일러 0.23.0 실제 Chromium GLB 재열기에서도 크기 오차 0 mm로 통과했습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
 
 표면 준비 CLI는 파일 헤더 단계에서 크기·해상도를 제한한 PNG·JPEG·WebP 입력을 받습니다.
 
