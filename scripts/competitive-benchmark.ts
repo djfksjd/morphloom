@@ -161,6 +161,44 @@ const auditAnchorPitchContract = () => {
 
 const anchorPitchAudit = auditAnchorPitchContract();
 
+const auditLocalAxisContract = () => {
+  const fixture: AssemblyIR = {
+    schema: 'morphloom.assembly/0.1', name: 'Rotated local-axis fixture', units: 'mm',
+    components: [{
+      id: 'rotated_member', name: 'Rotated member', category: 'mechanical',
+      materialName: 'Review metal', detail: 'Synthetic local-axis member.',
+      geometry: { op: 'roundedBox', size: [100, 10, 2], radius: 0 },
+      rotation: [0, 0, Math.PI / 4], material: { color: '#808080', metalness: 1, roughness: 0.3 },
+      evidence: { status: 'datasheet', source: 'deterministic benchmark fixture' },
+    }],
+    dimensionContracts: [{
+      id: 'member_length', label: 'Rotated member local length',
+      target: { kind: 'component', componentId: 'rotated_member' },
+      axis: 'x', measurement: 'size', space: 'component-local', expectedMm: 100, toleranceMm: 0.05,
+      evidence: { status: 'datasheet', source: 'deterministic benchmark fixture' },
+    }],
+  };
+  const baselineBuild = compileAssemblyIR(fixture, 'beauty');
+  const baseline = baselineBuild.metrics.dimensionAudit;
+  const worldAabbMm = baselineBuild.metrics.bounds.getSize(new THREE.Vector3()).x * 1_000;
+  const regressed = structuredClone(fixture);
+  const member = regressed.components[0]!;
+  if (member.geometry.op !== 'roundedBox') throw new Error('Unexpected local-axis benchmark primitive.');
+  member.geometry.size[0] = 90;
+  const failed = compileAssemblyIR(regressed, 'beauty').metrics.dimensionAudit;
+  return {
+    pass: baseline?.pass === true && failed?.pass === false
+      && Math.abs((baseline.checks[0]?.actualMm ?? 0) - 100) <= 0.001
+      && Math.abs((failed.checks[0]?.actualMm ?? 0) - 90) <= 0.001
+      && worldAabbMm > 77 && worldAabbMm < 79,
+    worldAabbMm,
+    baseline: baseline?.checks[0],
+    regressed: failed?.checks[0],
+  };
+};
+
+const localAxisAudit = auditLocalAxisContract();
+
 const minimalGlb = (): ArrayBuffer => {
   const json = JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{}] });
   const jsonBytes = new TextEncoder().encode(json);
@@ -554,6 +592,7 @@ const output = {
     browserValidationLifecycle: serializedValidationAudit,
     dimensionContract: dimensionContractAudit,
     anchorPitchContract: anchorPitchAudit,
+    localAxisDimensionContract: localAxisAudit,
     browserRoundTrip: browserRoundTripSummary,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
@@ -601,6 +640,7 @@ const output = {
     { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation', img2threejs: 'not established in pinned audit', morphloom: dimensionContractAudit.pass ? 'yes' : 'blocked' },
     { capability: 'evidence-bound hole, pin, lens and connector pitch between transformed component-local datums', img2threejs: 'not established in pinned audit', morphloom: anchorPitchAudit.pass ? 'yes' : 'blocked' },
+    { capability: 'rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation', img2threejs: 'not established in pinned audit', morphloom: localAxisAudit.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },
   ],
 };
@@ -613,5 +653,6 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
-  || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass || !standardValidationAudit.pass
+  || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass
+  || !localAxisAudit.pass || !standardValidationAudit.pass
   || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;

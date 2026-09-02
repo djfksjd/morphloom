@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 export type DimensionAxis = 'x' | 'y' | 'z' | 'spatial';
 export type DimensionMeasurement = 'size' | 'min' | 'max' | 'center' | 'distance';
+export type DimensionSpace = 'world' | 'component-local';
 export interface DimensionAnchorRef {
   componentId: string;
   anchorId: string;
@@ -18,6 +19,8 @@ export interface DimensionContract {
   target: DimensionTarget;
   axis: DimensionAxis;
   measurement: DimensionMeasurement;
+  /** World axes by default; component-local is available for rotated part size. */
+  space?: DimensionSpace;
   expectedMm: number;
   toleranceMm: number;
   evidence: {
@@ -33,6 +36,7 @@ export interface DimensionAuditCheck {
   target: DimensionContract['target'];
   axis: DimensionAxis;
   measurement: DimensionMeasurement;
+  space: DimensionSpace;
   expectedMm: number;
   actualMm: number | null;
   deviationMm: number | null;
@@ -70,6 +74,12 @@ export function validateDimensionContracts(
     if (!['x', 'y', 'z', 'spatial'].includes(contract.axis)
       || !['size', 'min', 'max', 'center', 'distance'].includes(contract.measurement)) {
       throw new Error(`Invalid dimension axis or measurement in ${contract.id}.`);
+    }
+    const space = contract.space ?? 'world';
+    if (!['world', 'component-local'].includes(space)
+      || (space === 'component-local'
+        && (contract.target?.kind !== 'component' || contract.measurement !== 'size' || contract.axis === 'spatial'))) {
+      throw new Error(`Invalid dimension space in ${contract.id}.`);
     }
     const isAnchorPair = contract.target?.kind === 'anchorPair';
     if ((isAnchorPair && contract.measurement !== 'distance')
@@ -155,12 +165,23 @@ function anchorDistanceMm(
   return Math.abs(to[axis] - from[axis]) * 1_000;
 }
 
+function componentLocalSizeMm(component: THREE.Mesh, axis: Exclude<DimensionAxis, 'spatial'>): number | null {
+  component.geometry.computeBoundingBox();
+  const box = component.geometry.boundingBox;
+  if (!box || box.isEmpty()) return null;
+  const localSize = box.getSize(new THREE.Vector3());
+  const worldScale = component.getWorldScale(new THREE.Vector3());
+  const size = localSize[axis] * Math.abs(worldScale[axis]) * 1_000;
+  return Number.isFinite(size) ? size : null;
+}
+
 export function auditDimensionContracts(
   root: THREE.Object3D,
   contracts: readonly DimensionContract[],
 ): DimensionAudit {
   root.updateMatrixWorld(true);
   const checks = contracts.map<DimensionAuditCheck>((contract) => {
+    const space = contract.space ?? 'world';
     let actualMm: number | null = null;
     if (contract.target.kind === 'anchorPair') {
       actualMm = anchorDistanceMm(root, contract.target, contract.axis);
@@ -169,20 +190,25 @@ export function auditDimensionContracts(
       const target = componentId === undefined
         ? root
         : root.children.find((object) => object.userData.part?.id === componentId);
-      const box = target ? new THREE.Box3().setFromObject(target) : undefined;
-      const valid = box !== undefined && !box.isEmpty()
-        && [box.min.x, box.min.y, box.min.z, box.max.x, box.max.y, box.max.z].every(Number.isFinite);
-      actualMm = valid
-        ? measuredValue(
-          box,
-          contract.axis as Exclude<DimensionAxis, 'spatial'>,
-          contract.measurement as Exclude<DimensionMeasurement, 'distance'>,
-        )
-        : null;
+      if (space === 'component-local' && target instanceof THREE.Mesh) {
+        actualMm = componentLocalSizeMm(target, contract.axis as Exclude<DimensionAxis, 'spatial'>);
+      } else {
+        const box = target ? new THREE.Box3().setFromObject(target) : undefined;
+        const valid = box !== undefined && !box.isEmpty()
+          && [box.min.x, box.min.y, box.min.z, box.max.x, box.max.y, box.max.z].every(Number.isFinite);
+        actualMm = valid
+          ? measuredValue(
+            box,
+            contract.axis as Exclude<DimensionAxis, 'spatial'>,
+            contract.measurement as Exclude<DimensionMeasurement, 'distance'>,
+          )
+          : null;
+      }
     }
     const deviationMm = actualMm === null ? null : Math.abs(actualMm - contract.expectedMm);
     return {
       ...structuredClone(contract),
+      space,
       actualMm,
       deviationMm,
       pass: deviationMm !== null && deviationMm <= contract.toleranceMm + 1e-6,

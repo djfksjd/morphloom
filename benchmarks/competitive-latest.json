@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T03:17:36.397Z",
+  "generatedAt": "2026-09-02T03:24:50.488Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1385,6 +1385,7 @@
           "status": "measured",
           "source": "deterministic benchmark fixture"
         },
+        "space": "world",
         "actualMm": 2700.000047683716,
         "deviationMm": 0.0000476837158203125,
         "pass": true
@@ -1404,6 +1405,7 @@
           "status": "measured",
           "source": "deterministic benchmark fixture"
         },
+        "space": "world",
         "actualMm": 2400.0000953674316,
         "deviationMm": 299.99990463256836,
         "pass": false
@@ -1434,6 +1436,7 @@
           "status": "datasheet",
           "source": "deterministic benchmark fixture"
         },
+        "space": "world",
         "actualMm": 25,
         "deviationMm": 0,
         "pass": true
@@ -1460,8 +1463,53 @@
           "status": "datasheet",
           "source": "deterministic benchmark fixture"
         },
+        "space": "world",
         "actualMm": 24.5,
         "deviationMm": 0.5,
+        "pass": false
+      }
+    },
+    "localAxisDimensionContract": {
+      "pass": true,
+      "worldAabbMm": 77.78174682614075,
+      "baseline": {
+        "id": "member_length",
+        "label": "Rotated member local length",
+        "target": {
+          "kind": "component",
+          "componentId": "rotated_member"
+        },
+        "axis": "x",
+        "measurement": "size",
+        "space": "component-local",
+        "expectedMm": 100,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 100.00000149011612,
+        "deviationMm": 0.0000014901161193847656,
+        "pass": true
+      },
+      "regressed": {
+        "id": "member_length",
+        "label": "Rotated member local length",
+        "target": {
+          "kind": "component",
+          "componentId": "rotated_member"
+        },
+        "axis": "x",
+        "measurement": "size",
+        "space": "component-local",
+        "expectedMm": 100,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 90.00000357627869,
+        "deviationMm": 9.999996423721313,
         "pass": false
       }
     },
@@ -1863,6 +1911,11 @@
     },
     {
       "capability": "evidence-bound hole, pin, lens and connector pitch between transformed component-local datums",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },

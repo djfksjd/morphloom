@@ -152,6 +152,40 @@ describe('cross-domain semi-professional readiness', () => {
     expect(report.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
   });
 
+  it('measures a rotated member in its own axes instead of its inflated world AABB', () => {
+    const fixture: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'Rotated member dimension fixture', units: 'mm',
+      components: [{
+        id: 'blade_blank', name: 'Blade blank', category: 'mechanical', materialName: 'Steel',
+        detail: 'Rotated measured member.',
+        geometry: { op: 'roundedBox', size: [100, 10, 2], radius: 0 },
+        rotation: [0, 0, Math.PI / 4],
+        material: { color: '#808080', metalness: 1, roughness: 0.3 },
+        evidence: { status: 'datasheet', source: 'synthetic local-axis regression fixture' },
+      }],
+      dimensionContracts: [{
+        id: 'blade_length', label: 'Blade local length',
+        target: { kind: 'component', componentId: 'blade_blank' },
+        axis: 'x', measurement: 'size', space: 'component-local', expectedMm: 100, toleranceMm: 0.05,
+        evidence: { status: 'datasheet', source: 'synthetic local-axis regression fixture' },
+      }],
+    };
+    const baseline = compileAssemblyIR(fixture, 'beauty');
+    expect(baseline.metrics.dimensionAudit?.checks[0]).toMatchObject({ pass: true, space: 'component-local' });
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(100, 5);
+    const worldWidth = baseline.metrics.bounds.getSize(new THREE.Vector3()).x * 1_000;
+    expect(worldWidth).toBeGreaterThan(77);
+    expect(worldWidth).toBeLessThan(79);
+
+    const shortened = structuredClone(fixture);
+    const blade = shortened.components[0]!;
+    if (blade.geometry.op !== 'roundedBox') throw new Error('Missing blade dimension fixture.');
+    blade.geometry.size[0] = 90;
+    const regressed = compileAssemblyIR(shortened, 'beauty');
+    expect(regressed.metrics.dimensionAudit?.checks[0]).toMatchObject({ pass: false });
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(90, 5);
+  });
+
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');
