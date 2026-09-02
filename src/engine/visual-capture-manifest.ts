@@ -19,6 +19,8 @@ export interface VisualCaptureSetViewManifest {
   img2threejs: string;
   /** Local compiled scene artifacts hashed by the audit runner, never caller-supplied hashes. */
   sceneArtifacts: { morphloom: string; img2threejs: string };
+  /** Capture-harness hash-chain receipts binding the browser scene, camera, reference and PNG. */
+  captureReceipts: { morphloom: string; img2threejs: string };
   referenceOrigin: 'admitted-local-reference' | 'redistributable-reference';
   thresholds?: { reference?: number; morphloom?: number; img2threejs?: number };
   regions: ComparisonRegion[];
@@ -26,12 +28,27 @@ export interface VisualCaptureSetViewManifest {
 }
 
 export interface VisualCaptureSetManifest {
-  schema: 'morphloom.visual-capture-set/0.2';
+  schema: 'morphloom.visual-capture-set/0.3';
   id: string;
   domain: VisualBenchmarkDomain;
   rendererVersions: { morphloom: string; img2threejs: string };
   views: VisualCaptureSetViewManifest[];
   blindRatings?: BlindVisualRating[];
+}
+
+export interface BrowserCaptureReceipt {
+  schema: 'morphloom.browser-capture-receipt/0.1';
+  candidateId: 'morphloom' | 'img2threejs';
+  viewId: string;
+  rendererVersion: string;
+  captureMethod: 'browser-webgl-canvas';
+  inputFingerprint: string;
+  sceneSha256: string;
+  cameraFingerprint: string;
+  referenceSha256: string;
+  renderSha256: string;
+  canvas: { width: number; height: number; pixelRatio: number };
+  renderSettingsFingerprint: string;
 }
 
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$/;
@@ -54,10 +71,17 @@ function finiteTuple(value: unknown, label: string): [number, number, number] {
 
 function localPath(value: unknown, label: string): string {
   if (typeof value !== 'string' || value.length < 1 || value.length > 1_000 || value.includes('\0')
-    || /^(?:https?:|data:|blob:)/i.test(value)) {
-    throw new Error(`${label} must be a bounded local path.`);
+    || /^(?:https?:|data:|blob:|[a-z]:[\\/]|[\\/])/i.test(value)
+    || value.split(/[\\/]+/).includes('..')) {
+    throw new Error(`${label} must be a bounded manifest-relative path.`);
   }
   return value;
+}
+
+function receiptPath(value: unknown, label: string): string {
+  const path = localPath(value, label);
+  if (!/\.json$/i.test(path)) throw new Error(`${label} must identify a JSON capture receipt.`);
+  return path;
 }
 
 function sceneArtifactPath(value: unknown, label: string): string {
@@ -146,7 +170,7 @@ function validateExpectation(value: unknown, label: string): MaterialExpectation
 
 export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureSetManifest {
   const input = object(value, 'Capture manifest');
-  if (input.schema !== 'morphloom.visual-capture-set/0.2') throw new Error('Capture manifest schema is unsupported.');
+  if (input.schema !== 'morphloom.visual-capture-set/0.3') throw new Error('Capture manifest schema is unsupported.');
   if (typeof input.id !== 'string' || !ID.test(input.id)) throw new Error('Capture manifest id is invalid.');
   if (!DOMAINS.has(input.domain as VisualBenchmarkDomain)) throw new Error('Capture manifest domain is invalid.');
   const versions = object(input.rendererVersions, 'rendererVersions');
@@ -160,6 +184,7 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
   }
   const viewIds = new Set<string>();
   const pathSets = { reference: new Set<string>(), morphloom: new Set<string>(), img2threejs: new Set<string>() };
+  const receiptPathSets = { morphloom: new Set<string>(), img2threejs: new Set<string>() };
   const lockedSceneArtifacts: Partial<Record<'morphloom' | 'img2threejs', string>> = {};
   const views = input.views.map((entry, index): VisualCaptureSetViewManifest => {
     const view = object(entry, `views[${index}]`);
@@ -194,12 +219,25 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
       }
       lockedSceneArtifacts[id] ??= sceneArtifacts[id];
     }
+    const captureReceiptsInput = object(view.captureReceipts, `views[${index}].captureReceipts`);
+    const captureReceipts = {
+      morphloom: receiptPath(captureReceiptsInput.morphloom, `views[${index}].captureReceipts.morphloom`),
+      img2threejs: receiptPath(captureReceiptsInput.img2threejs, `views[${index}].captureReceipts.img2threejs`),
+    };
+    if (captureReceipts.morphloom === captureReceipts.img2threejs) {
+      throw new Error(`views[${index}] candidates must use distinct capture receipts.`);
+    }
+    for (const id of ['morphloom', 'img2threejs'] as const) {
+      if (receiptPathSets[id].has(captureReceipts[id])) throw new Error(`${id} capture receipt was reused across calibrated views.`);
+      receiptPathSets[id].add(captureReceipts[id]);
+    }
     const thresholds = view.thresholds === undefined ? undefined : object(view.thresholds, `views[${index}].thresholds`);
     return {
       viewId: view.viewId,
       camera: validateCamera(view.camera, `views[${index}].camera`),
       ...paths,
       sceneArtifacts,
+      captureReceipts,
       referenceOrigin: view.referenceOrigin,
       ...(thresholds ? { thresholds: {
         reference: threshold(thresholds.reference, `views[${index}].thresholds.reference`),
@@ -231,6 +269,47 @@ export function validateVisualCaptureSetManifest(value: unknown): VisualCaptureS
     views,
     ...(blindRatings ? { blindRatings } : {}),
   };
+}
+
+function exactSha256(value: unknown, label: string): string {
+  if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) throw new Error(`${label} must be a SHA-256 digest.`);
+  return value;
+}
+
+export function validateBrowserCaptureReceipt(
+  value: unknown,
+  expected: Omit<BrowserCaptureReceipt, 'schema' | 'captureMethod' | 'canvas' | 'renderSettingsFingerprint'>,
+): BrowserCaptureReceipt {
+  const receipt = object(value, 'Capture receipt');
+  if (receipt.schema !== 'morphloom.browser-capture-receipt/0.1') throw new Error('Capture receipt schema is unsupported.');
+  if (receipt.captureMethod !== 'browser-webgl-canvas') throw new Error('Capture receipt method is not browser WebGL canvas.');
+  const canvas = object(receipt.canvas, 'Capture receipt canvas');
+  const width = canvas.width;
+  const height = canvas.height;
+  const pixelRatio = canvas.pixelRatio;
+  if (!Number.isInteger(width) || !Number.isInteger(height) || (width as number) < 16 || (height as number) < 16
+    || (width as number) > 16_384 || (height as number) > 16_384
+    || typeof pixelRatio !== 'number' || !Number.isFinite(pixelRatio) || pixelRatio < 0.25 || pixelRatio > 8) {
+    throw new Error('Capture receipt canvas is outside the safe render bounds.');
+  }
+  const normalized: BrowserCaptureReceipt = {
+    schema: receipt.schema,
+    candidateId: receipt.candidateId as BrowserCaptureReceipt['candidateId'],
+    viewId: String(receipt.viewId ?? ''),
+    rendererVersion: String(receipt.rendererVersion ?? ''),
+    captureMethod: receipt.captureMethod,
+    inputFingerprint: exactSha256(receipt.inputFingerprint, 'Capture receipt inputFingerprint'),
+    sceneSha256: exactSha256(receipt.sceneSha256, 'Capture receipt sceneSha256'),
+    cameraFingerprint: exactSha256(receipt.cameraFingerprint, 'Capture receipt cameraFingerprint'),
+    referenceSha256: exactSha256(receipt.referenceSha256, 'Capture receipt referenceSha256'),
+    renderSha256: exactSha256(receipt.renderSha256, 'Capture receipt renderSha256'),
+    canvas: { width: width as number, height: height as number, pixelRatio },
+    renderSettingsFingerprint: exactSha256(receipt.renderSettingsFingerprint, 'Capture receipt renderSettingsFingerprint'),
+  };
+  for (const key of ['candidateId', 'viewId', 'rendererVersion', 'inputFingerprint', 'sceneSha256', 'cameraFingerprint', 'referenceSha256', 'renderSha256'] as const) {
+    if (normalized[key] !== expected[key]) throw new Error(`Capture receipt ${key} does not match the audited files and calibration.`);
+  }
+  return normalized;
 }
 
 export function canonicalCameraCalibration(camera: CameraCalibrationManifest): string {

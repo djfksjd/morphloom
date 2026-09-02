@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { canonicalCameraCalibration, validateVisualCaptureSetManifest } from '../src/engine/visual-capture-manifest';
+import {
+  canonicalCameraCalibration,
+  validateBrowserCaptureReceipt,
+  validateVisualCaptureSetManifest,
+} from '../src/engine/visual-capture-manifest';
 
 function manifest() {
   const view = (viewId: string, offset: number) => ({
@@ -18,6 +22,10 @@ function manifest() {
       morphloom: 'morphloom-scene.glb',
       img2threejs: 'img2threejs-scene.glb',
     },
+    captureReceipts: {
+      morphloom: `${viewId}-morphloom-receipt.json`,
+      img2threejs: `${viewId}-img2threejs-receipt.json`,
+    },
     referenceOrigin: 'admitted-local-reference',
     thresholds: { img2threejs: 48 },
     regions: [
@@ -28,7 +36,7 @@ function manifest() {
     materialExpectation: { family: 'metal', roughness: 0.3, surfaceCharacter: 'directional' },
   });
   return {
-    schema: 'morphloom.visual-capture-set/0.2',
+    schema: 'morphloom.visual-capture-set/0.3',
     id: 'two-view-product-proof',
     domain: 'industrial-design',
     rendererVersions: { morphloom: '0.21.0', img2threejs: 'pinned-commit' },
@@ -52,7 +60,7 @@ describe('multi-view capture manifest', () => {
     expect(() => validateVisualCaptureSetManifest(reused)).toThrow(/reused/);
     const remote = manifest();
     remote.views[0]!.reference = 'https://example.com/reference.png';
-    expect(() => validateVisualCaptureSetManifest(remote)).toThrow(/local path/);
+    expect(() => validateVisualCaptureSetManifest(remote)).toThrow(/manifest-relative path/);
   });
 
   it('rejects uncalibrated cameras and regions outside the normalized frame', () => {
@@ -83,5 +91,41 @@ describe('multi-view capture manifest', () => {
     const screenshot = manifest();
     screenshot.views[0]!.sceneArtifacts.morphloom = 'render.png';
     expect(() => validateVisualCaptureSetManifest(screenshot)).toThrow(/GLB, glTF, or scene JSON/);
+  });
+
+  it('confines all evidence to manifest-relative paths and requires unique receipts', () => {
+    const escaped = manifest();
+    escaped.views[0]!.reference = '../outside.png';
+    expect(() => validateVisualCaptureSetManifest(escaped)).toThrow(/manifest-relative/);
+    const absolute = manifest();
+    absolute.views[0]!.sceneArtifacts.morphloom = '/tmp/scene.glb';
+    expect(() => validateVisualCaptureSetManifest(absolute)).toThrow(/manifest-relative/);
+    const reused = manifest();
+    reused.views[1]!.captureReceipts.morphloom = reused.views[0]!.captureReceipts.morphloom;
+    expect(() => validateVisualCaptureSetManifest(reused)).toThrow(/receipt was reused/);
+  });
+
+  it('binds a browser receipt to the exact candidate, input, scene, camera, reference and render', () => {
+    const digest = (value: string) => value.repeat(64);
+    const expected = {
+      candidateId: 'morphloom' as const,
+      viewId: 'front',
+      rendererVersion: '0.4.0',
+      inputFingerprint: digest('a'),
+      sceneSha256: digest('b'),
+      cameraFingerprint: digest('c'),
+      referenceSha256: digest('d'),
+      renderSha256: digest('e'),
+    };
+    const receipt = {
+      schema: 'morphloom.browser-capture-receipt/0.1',
+      captureMethod: 'browser-webgl-canvas',
+      ...expected,
+      canvas: { width: 1024, height: 1024, pixelRatio: 2 },
+      renderSettingsFingerprint: digest('f'),
+    };
+    expect(validateBrowserCaptureReceipt(receipt, expected).canvas.pixelRatio).toBe(2);
+    expect(() => validateBrowserCaptureReceipt({ ...receipt, renderSha256: digest('0') }, expected)).toThrow(/renderSha256/);
+    expect(() => validateBrowserCaptureReceipt({ ...receipt, canvas: { width: 1, height: 1, pixelRatio: 1 } }, expected)).toThrow(/safe render bounds/);
   });
 });

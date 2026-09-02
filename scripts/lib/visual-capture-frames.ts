@@ -14,6 +14,8 @@ export interface NormalizedCapture {
   bytes: Uint8Array;
   aspect: number;
   threshold: number;
+  sourceWidth: number;
+  sourceHeight: number;
 }
 
 export function sha256(bytes: Uint8Array): string {
@@ -205,5 +207,7 @@ export async function normalizedFrame(
     bytes,
     aspect,
     threshold,
+    sourceWidth: image.width,
+    sourceHeight: image.height,
   };
 }
