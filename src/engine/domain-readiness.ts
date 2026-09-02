@@ -108,6 +108,8 @@ export interface DomainReadinessReport {
     sampledWallThicknessP05Mm: number;
     sampledWallThicknessRays: number;
     sampledWallThicknessHitCoverage: number;
+    sampledWallThicknessTriangles: number;
+    sampledWallThicknessTriangleLimit: number;
     sampledWallThicknessTriangleTests: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
@@ -829,6 +831,8 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       sampledWallThicknessP05Mm: sampledWallThickness?.percentile05Mm ?? 0,
       sampledWallThicknessRays: sampledWallThickness?.sampledRays ?? 0,
       sampledWallThicknessHitCoverage: sampledWallThickness?.hitCoverage ?? 0,
+      sampledWallThicknessTriangles: sampledWallThickness?.triangles ?? 0,
+      sampledWallThicknessTriangleLimit: sampledWallThickness?.maximumTriangles ?? 0,
       sampledWallThicknessTriangleTests: sampledWallThickness?.triangleTests ?? 0,
       unsupportedOverhangAreaMm2: geometry.unsupportedOverhangAreaMm2,
       unsupportedOverhangRatio: geometry.unsupportedOverhangRatio,

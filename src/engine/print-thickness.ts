@@ -8,6 +8,8 @@ export interface SampledWallThicknessAudit {
   hitCoverage: number;
   minimumMm: number;
   percentile05Mm: number;
+  triangles: number;
+  maximumTriangles: number;
   triangleTests: number;
   maximumTriangleTests: number;
   blockers: string[];
@@ -16,6 +18,7 @@ export interface SampledWallThicknessAudit {
 export interface SampledWallThicknessOptions {
   maximumMeshes?: number;
   maximumSamplesPerMesh?: number;
+  maximumTriangles?: number;
   maximumTriangleTests?: number;
 }
 
@@ -29,6 +32,7 @@ interface TriangleMesh {
 const TRIANGLE_STRIDE = 12;
 const DEFAULT_MAXIMUM_MESHES = 256;
 const DEFAULT_MAXIMUM_SAMPLES_PER_MESH = 96;
+const DEFAULT_MAXIMUM_TRIANGLES = 500_000;
 const DEFAULT_MAXIMUM_TRIANGLE_TESTS = 24_000_000;
 
 function finitePositiveInteger(value: number | undefined, fallback: number, maximum: number): number {
@@ -39,12 +43,18 @@ function finitePositiveInteger(value: number | undefined, fallback: number, maxi
   return value;
 }
 
-function collectMeshTriangles(mesh: THREE.Mesh): TriangleMesh | undefined {
+function meshTriangleCount(mesh: THREE.Mesh): number {
   const position = mesh.geometry.getAttribute('position');
-  if (!position || position.itemSize < 3 || position.count < 3) return undefined;
+  if (!position || position.itemSize < 3 || position.count < 3) return 0;
   const index = mesh.geometry.getIndex();
-  const triangleCount = Math.floor((index?.count ?? position.count) / 3);
+  return Math.floor((index?.count ?? position.count) / 3);
+}
+
+function collectMeshTriangles(mesh: THREE.Mesh, triangleCount: number): TriangleMesh | undefined {
   if (triangleCount === 0) return undefined;
+  const position = mesh.geometry.getAttribute('position');
+  if (!position || position.itemSize < 3) return undefined;
+  const index = mesh.geometry.getIndex();
   const triangles = new Float64Array(triangleCount * TRIANGLE_STRIDE);
   const validTriangles: number[] = [];
   const a = new THREE.Vector3();
@@ -134,6 +144,11 @@ export function auditSampledWallThickness(
     DEFAULT_MAXIMUM_SAMPLES_PER_MESH,
     512,
   );
+  const maximumTriangles = finitePositiveInteger(
+    options.maximumTriangles,
+    DEFAULT_MAXIMUM_TRIANGLES,
+    5_000_000,
+  );
   const maximumTriangleTests = finitePositiveInteger(
     options.maximumTriangleTests,
     DEFAULT_MAXIMUM_TRIANGLE_TESTS,
@@ -142,15 +157,29 @@ export function auditSampledWallThickness(
   root.updateMatrixWorld(true);
   const meshes: TriangleMesh[] = [];
   let visibleMeshCount = 0;
+  let observedTriangles = 0;
+  let collectedTriangles = 0;
+  let triangleCollectionBudgetExceeded = false;
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     visibleMeshCount += 1;
     if (meshes.length >= maximumMeshes) return;
-    const collected = collectMeshTriangles(object);
+    const triangleCount = meshTriangleCount(object);
+    observedTriangles += triangleCount;
+    if (triangleCount <= 0) return;
+    if (collectedTriangles + triangleCount > maximumTriangles) {
+      triangleCollectionBudgetExceeded = true;
+      return;
+    }
+    const collected = collectMeshTriangles(object, triangleCount);
+    collectedTriangles += triangleCount;
     if (collected) meshes.push(collected);
   });
   const blockers: string[] = [];
   if (visibleMeshCount > maximumMeshes) blockers.push(`mesh budget exceeded: ${visibleMeshCount}/${maximumMeshes}`);
+  if (triangleCollectionBudgetExceeded) {
+    blockers.push(`triangle collection budget exceeded: ${observedTriangles}/${maximumTriangles}`);
+  }
   if (meshes.length === 0) blockers.push('no triangle mesh available for local wall-thickness sampling');
   const distancesMm: number[] = [];
   let sampledRays = 0;
@@ -206,6 +235,8 @@ export function auditSampledWallThickness(
     hitCoverage,
     minimumMm: distancesMm[0] ?? 0,
     percentile05Mm: distancesMm[percentileIndex] ?? 0,
+    triangles: collectedTriangles,
+    maximumTriangles,
     triangleTests,
     maximumTriangleTests,
     blockers,

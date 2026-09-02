@@ -521,6 +521,24 @@ describe('cross-domain semi-professional readiness', () => {
     }
   });
 
+  it('blocks oversized print geometry before allocating an unbounded triangle audit buffer', () => {
+    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const material = new THREE.MeshStandardMaterial();
+    const root = new THREE.Group();
+    root.add(new THREE.Mesh(geometry, material));
+    try {
+      const audit = auditSampledWallThickness(root, { maximumTriangles: 10 });
+      expect(audit.triangles).toBe(0);
+      expect(audit.maximumTriangles).toBe(10);
+      expect(audit.triangleTests).toBe(0);
+      expect(audit.complete).toBe(false);
+      expect(audit.blockers.join(' ')).toMatch(/triangle collection budget exceeded/);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
+  });
+
   it('blocks a watertight visual hull when its source-view reprojection remains inconsistent', () => {
     const left = Array.from({ length: 16 }, () => '1'.repeat(8) + '0'.repeat(8));
     const right = Array.from({ length: 16 }, () => '0'.repeat(8) + '1'.repeat(8));

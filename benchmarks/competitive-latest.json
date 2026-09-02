@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T00:41:52.964Z",
+  "generatedAt": "2026-09-02T00:48:17.768Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -409,6 +409,8 @@
             "sampledWallThicknessP05Mm": 0,
             "sampledWallThicknessRays": 0,
             "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 4040.379605627806,
             "unsupportedOverhangRatio": 0.06320888744678257
@@ -553,6 +555,8 @@
             "sampledWallThicknessP05Mm": 0,
             "sampledWallThicknessRays": 0,
             "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 512845854.9532662,
             "unsupportedOverhangRatio": 0.1481512964921408
@@ -745,6 +749,8 @@
             "sampledWallThicknessP05Mm": 0,
             "sampledWallThicknessRays": 0,
             "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 195859.29683757343,
             "unsupportedOverhangRatio": 0.05385488873995824
@@ -961,6 +967,8 @@
             "sampledWallThicknessP05Mm": 0,
             "sampledWallThicknessRays": 0,
             "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 195859.29683757343,
             "unsupportedOverhangRatio": 0.05385488873995824
@@ -1129,6 +1137,8 @@
             "sampledWallThicknessP05Mm": 38.637879615028695,
             "sampledWallThicknessRays": 96,
             "sampledWallThicknessHitCoverage": 1,
+            "sampledWallThicknessTriangles": 111936,
+            "sampledWallThicknessTriangleLimit": 500000,
             "sampledWallThicknessTriangleTests": 10745856,
             "unsupportedOverhangAreaMm2": 0,
             "unsupportedOverhangRatio": 0
