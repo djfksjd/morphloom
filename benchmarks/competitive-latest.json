@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T04:57:27.528Z",
+  "generatedAt": "2026-09-02T05:18:05.177Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1821,14 +1821,15 @@
     },
     "staticDelivery": {
       "schema": "morphloom.static-delivery-proof/0.3",
-      "generatedAt": "2026-09-02T04:57:26.443Z",
+      "generatedAt": "2026-09-02T05:18:03.740Z",
       "compilerRevision": "morphloom-compiler/0.23.0",
-      "assetId": "moderncat-concept-residence",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.4.0",
+      "assetId": "moderncat-concept",
       "expectedSourceTriangles": 81768,
       "assetPack": {
         "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
-        "bytes": 8114831,
-        "sha256": "2de2386f8bcdb063eec7a8de2c73375a0cf17029ad46fe7100c1f42ce6d58b4b",
+        "bytes": 8121120,
+        "sha256": "a0f678878e54b5424db38535f0808038a5327302f1a6634623a2b0b5fcabf36e",
         "inputFingerprint": "1252c08c0593cc58",
         "browserRoundTrip": "pass"
       },
@@ -1842,6 +1843,8 @@
           "meshes": 147,
           "vertices": 242181,
           "triangles": 81768,
+          "coordinateUnit": "m",
+          "coordinateScaleFromMeters": 1,
           "bounds": {
             "min": [
               -6.769999980926514,
@@ -1863,25 +1866,27 @@
         "stl": {
           "source": "morphloom-cad-mesh.stl",
           "bytes": 4088484,
-          "sha256": "a632fb165fe08561d8f74c7d7e8dc0c4f279ba0aa43c462c0c35a21a5d631a83",
+          "sha256": "71d9f9bb51cb24207dacc22cb05eebfdcc39bc552126bda2034388583d8ed0d3",
           "meshes": 1,
           "vertices": 41178,
           "triangles": 81768,
+          "coordinateUnit": "mm",
+          "coordinateScaleFromMeters": 1000,
           "bounds": {
             "min": [
-              -6.769999980926514,
-              -0.2199999988079071,
-              -5.044999599456787
+              -6770,
+              -220,
+              -5045
             ],
             "max": [
-              6.769999980926514,
-              7.09499979019165,
-              6.190000057220459
+              6770,
+              7095,
+              6190
             ],
             "size": [
-              13.539999961853027,
-              7.314999580383301,
-              11.234999656677246
+              13540,
+              7315,
+              11235
             ]
           }
         },
@@ -1892,6 +1897,8 @@
           "meshes": 1,
           "vertices": 242181,
           "triangles": 81768,
+          "coordinateUnit": "m",
+          "coordinateScaleFromMeters": 1,
           "bounds": {
             "min": [
               -6.769999980926514,
@@ -2016,7 +2023,7 @@
     {
       "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "81,768 triangles preserved in all formats; axis-normalized envelope drift 0.000954 mm"
+      "morphloom": "81,768 triangles preserved; STL uses explicit millimetre coordinates; unit-normalized envelope drift 0.000954 mm"
     },
     {
       "capability": "USDZ Apple conformance validation",

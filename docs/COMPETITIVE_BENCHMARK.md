@@ -36,7 +36,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 폐쇄 메시 | 공개 화면에서 수치 미표시 | 25/25, 경계 0, 비매니폴드 0 |
 | GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 포락 오차 0.000 mm, 명명 노드 100% |
 | 동일 Blender 3시점 중립 렌더 | 감사용 장면 GLB 3/3 렌더, 규격 검사는 차단 | GLB 규격·독립 파서 PASS, 중립 렌더 3/3 |
-| OBJ/STL/PLY 실제 정적 메시 납품 | 고정 커밋 감사에서 확인되지 않음 | 브라우저 재열기 + Blender 5.2.1 임포트, 81,768 tris 일치, 포락 오차 0.001mm 이하 |
+| OBJ/STL/PLY 실제 정적 메시 납품 | 고정 커밋 감사에서 확인되지 않음 | 브라우저 재열기 + Blender 5.2.1 임포트, 81,768 tris 일치, STL 13,540mm 폭, 단위 정규화 포락 오차 0.001mm 이하 |
 | USDZ 규격 검사 | 고정 커밋 감사에서 확인되지 않음 | Apple usdchecker PASS |
 | 준실무 납품성 | Three.js 전시 강점 | 우세—IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG |
 
@@ -94,7 +94,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 회전 부품 자체축 치수 | 고정 커밋 감사에서 확인되지 않음 | 지원—45° 회전 부재의 월드 AABB 약 77.78 mm와 실제 로컬 길이 100 mm를 구분하고, 실제 길이 100→90 mm 회귀를 차단 |
 | 회전 부품 내부 피치 | 고정 커밋 감사에서 확인되지 않음 | 지원—회전된 카메라/PCB 플레이트의 홀·핀·렌즈 중심 피치를 부품 자체축으로 투영해 25.0→24.5 mm 회귀 차단 |
 | 실제 삼각형 자기 교차 | 고정 커밋에 ray-parity 검사 존재 | 공간 격자 broadphase + 정확 삼각형 교차 + 검사예산 초과 차단; 제품·전선·포즈·LOD·프린트 계약에 연결 |
-| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 214개—개수보다 납품 계약 회귀와 중립 렌더의 카메라·조명·정규화·같은 GLB·실제 파일 해시 위조 차단에 집중 |
+| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 215개—개수보다 납품 계약 회귀와 중립 렌더의 카메라·조명·정규화·같은 GLB·실제 파일 해시 위조 차단에 집중 |
 | 동일 Talon 이미지 정면 색상 | 원본 plate 투영 | 원본 plate 투영 |
 | 동일 Talon 이미지 표면 PBR 반응 | 상수 roughness, normal map 없음 | 우세—사진 파생 normal+roughness |
 | 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—25개 부품, 실제 wedge 날, 폐쇄 토폴로지, GLB 재열기 |
@@ -109,7 +109,7 @@ npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-re
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
-npm run benchmark:static-delivery -- --asset-id moderncat-concept-residence --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
+npm run benchmark:static-delivery -- --asset-id moderncat-concept --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
 ```
 
 결과는 `benchmarks/competitive-latest.json`, `benchmarks/blender-cross-domain-latest.json`, `benchmarks/unity-cross-domain-latest.json`, `benchmarks/static-delivery-latest.json`에 저장됩니다. 5분야 Blender와 정적 포맷 증명은 실제 상호운용성과 납품 바이트 무결성을 확인하지만 동일 입력의 시각적 우승을 뜻하지 않습니다. Unity 보고서는 라이선스나 에디터 실패도 구조화해 기록하며 임포트하지 못한 실행을 통과로 바꾸지 않습니다. 실제 시각 품질의 우열은 동일 입력 지문, 동일 목표, 동일 보정 카메라, 실제 WebGL 캡처, 중요 특징 영역, 최소 5명의 중복 없는 균형 블라인드 평가가 있어야 확정됩니다. 이 증거가 없으면 자동 지표가 앞서도 보고서는 `claimAllowed: false`를 유지합니다.

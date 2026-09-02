@@ -5,6 +5,7 @@ import { readFile, stat, writeFile } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { strFromU8, unzipSync } from 'fflate';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
+import { STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
 
 type Format = 'obj' | 'stl' | 'ply';
 
@@ -91,6 +92,9 @@ if ([...wantedEntries].some((name) => !packedFiles[name])) throw new Error('Brow
 const manifestBytes = packedFiles['metadata/asset-manifest.json']!;
 if (manifestBytes.byteLength > 2 * 1024 * 1024) throw new Error('Browser asset manifest exceeds the 2 MB budget.');
 const manifest = JSON.parse(strFromU8(manifestBytes)) as {
+  schema?: string;
+  staticDeliveryRevision?: string;
+  assetId?: string;
   deliveryAudit?: {
     status?: string;
     inputFingerprint?: string;
@@ -98,7 +102,10 @@ const manifest = JSON.parse(strFromU8(manifestBytes)) as {
     standardValidation?: { status?: string; errors?: number; warnings?: number; independentRead?: { status?: string } };
   };
   staticMeshAudits?: Array<{
+    schema?: string;
     format?: Format;
+    coordinateUnit?: 'm' | 'mm';
+    coordinateScaleFromMeters?: number;
     status?: string;
     bytes?: number;
     triangleParity?: boolean;
@@ -119,6 +126,13 @@ if (!Number.isInteger(expectedTriangles) || Number(expectedTriangles) < 1 || Num
   throw new Error('Browser asset-pack GLB receipt is invalid.');
 }
 const blockers: string[] = [];
+if (manifest.schema !== 'morphloom.asset-pack/0.1') blockers.push('Asset pack manifest schema is invalid.');
+if (manifest.staticDeliveryRevision !== STATIC_DELIVERY_REVISION) {
+  blockers.push(`Asset pack static-delivery revision ${manifest.staticDeliveryRevision ?? 'missing'} does not match ${STATIC_DELIVERY_REVISION}.`);
+}
+if (manifest.assetId !== assetId) {
+  blockers.push(`Asset pack id ${manifest.assetId ?? 'missing'} does not match requested asset ${assetId}.`);
+}
 const triangleCounts = new Set(formats.map(({ report }) => report.triangles));
 if (triangleCounts.size !== 1) blockers.push('OBJ/STL/PLY triangle counts differ after Blender import.');
 if (formats.some(({ report }) => report.triangles !== expectedTriangles)) {
@@ -129,7 +143,11 @@ for (const format of ['obj', 'stl', 'ply'] as const) {
   const packedName = format === 'ply' ? 'model/morphloom-static-mesh.ply' : `model/morphloom-cad-mesh.${format}`;
   const packed = packedFiles[packedName]!;
   const external = formats.find(({ report }) => report.format === format)!;
-  if (!audit || audit.status !== 'pass' || audit.triangleParity !== true
+  const expectedScale = format === 'stl' ? 1_000 : 1;
+  if (!audit || audit.schema !== 'morphloom.static-mesh-roundtrip/0.2'
+    || audit.coordinateScaleFromMeters !== expectedScale
+    || audit.coordinateUnit !== (format === 'stl' ? 'mm' : 'm')
+    || audit.status !== 'pass' || audit.triangleParity !== true
     || audit.sourceTriangles !== expectedTriangles || audit.reopenedTriangles !== expectedTriangles
     || Number(audit.boundsErrorMm) > 0.1 || (audit.blockers?.length ?? 0) !== 0
     || audit.bytes !== packed.byteLength || sha256Bytes(packed) !== external.report.sourceSha256) {
@@ -138,7 +156,9 @@ for (const format of ['obj', 'stl', 'ply'] as const) {
 }
 const blenderVersions = new Set(formats.map(({ report }) => report.blenderVersion));
 if (blenderVersions.size !== 1) blockers.push('OBJ/STL/PLY were not audited by one Blender version.');
-const canonicalSizes = formats.map(({ report }) => [...report.bounds.size].sort((left, right) => left - right));
+const canonicalSizes = formats.map(({ report }) => report.bounds.size
+  .map((value) => value / (report.format === 'stl' ? 1_000 : 1))
+  .sort((left, right) => left - right));
 const baselineSize = canonicalSizes[0]!;
 let maximumEnvelopeDriftMm = 0;
 for (const size of canonicalSizes.slice(1)) {
@@ -159,6 +179,7 @@ const report = {
   schema: 'morphloom.static-delivery-proof/0.3',
   generatedAt: new Date().toISOString(),
   compilerRevision: DELIVERY_PIPELINE_REVISION,
+  staticDeliveryRevision: STATIC_DELIVERY_REVISION,
   assetId,
   expectedSourceTriangles: expectedTriangles,
   assetPack: {
@@ -177,6 +198,8 @@ const report = {
     meshes: report.meshes,
     vertices: report.vertices,
     triangles: report.triangles,
+    coordinateUnit: report.format === 'stl' ? 'mm' : 'm',
+    coordinateScaleFromMeters: report.format === 'stl' ? 1_000 : 1,
     bounds: report.bounds,
   }])),
   parity: {

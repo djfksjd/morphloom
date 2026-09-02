@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { snapshotScene } from '../src/engine/delivery-validation';
-import { compareStaticMeshRoundTrip } from '../src/engine/static-mesh-roundtrip';
+import { compareStaticMeshRoundTrip, exportMillimetreStlBytes } from '../src/engine/static-mesh-roundtrip';
 
 function snapshot() {
   const root = new THREE.Group();
@@ -12,11 +13,32 @@ function snapshot() {
 }
 
 describe('static mesh delivery round-trip', () => {
+  it('writes binary STL coordinates in millimetres with an exact byte contract', () => {
+    const root = new THREE.Group();
+    root.add(new THREE.Mesh(new THREE.BoxGeometry(1, 2, 3), new THREE.MeshStandardMaterial()));
+    const bytes = exportMillimetreStlBytes(root);
+    const geometry = new STLLoader().parse(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));
+    geometry.computeBoundingBox();
+    const size = geometry.boundingBox!.getSize(new THREE.Vector3());
+    expect(bytes.byteLength).toBe(84 + 12 * 50);
+    expect(size.toArray()).toEqual([1_000, 2_000, 3_000]);
+  });
+
   it('accepts triangle and bounds parity while recording format limits', () => {
     const source = snapshot();
     for (const format of ['obj', 'stl', 'ply'] as const) {
-      const audit = compareStaticMeshRoundTrip(source, structuredClone(source), format, 512);
-      expect(audit).toMatchObject({ status: 'pass', format, triangleParity: true, boundsErrorMm: 0 });
+      const reopened = structuredClone(source);
+      if (format === 'stl') {
+        reopened.boundsMeters.min = reopened.boundsMeters.min.map((value) => value * 1_000);
+        reopened.boundsMeters.max = reopened.boundsMeters.max.map((value) => value * 1_000);
+        reopened.boundsMeters.size = reopened.boundsMeters.size.map((value) => value * 1_000);
+      }
+      const audit = compareStaticMeshRoundTrip(source, reopened, format, 512);
+      expect(audit).toMatchObject({
+        status: 'pass', format, triangleParity: true, boundsErrorMm: 0,
+        coordinateUnit: format === 'stl' ? 'mm' : 'm',
+        coordinateScaleFromMeters: format === 'stl' ? 1_000 : 1,
+      });
       expect(audit.warnings).toHaveLength(1);
     }
   });
@@ -38,5 +60,6 @@ describe('static mesh delivery round-trip', () => {
     const source = snapshot();
     expect(() => compareStaticMeshRoundTrip(source, source, 'stl', 0)).toThrow(/payload/);
     expect(() => compareStaticMeshRoundTrip(source, source, 'ply', 512, 11)).toThrow(/tolerance/);
+    expect(() => compareStaticMeshRoundTrip(source, source, 'obj', 512, 0.1, 10)).toThrow(/coordinate scale/);
   });
 });

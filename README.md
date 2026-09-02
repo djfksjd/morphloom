@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-214%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-215%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -87,12 +87,12 @@ Codex/Claude 요청 예시:
 | OBJ | Maya · 3ds Max · Cinema 4D 등 범용 메시 |
 | PLY | Blender · MeshLab · CloudCompare |
 | USDZ | Apple AR Quick Look · Reality Composer |
-| STL | Fusion 360과 3D 프린팅용 메시 참조 |
+| STL (mm 좌표) | Fusion 360과 3D 프린팅용 메시 참조 |
 | SVG | Figma용 2D 부품·포락 검수 시트 |
 | PNG | UI·바닥·실측 보조선을 제외한 투명 배경 현재 렌더 |
 | ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
 
-내보내기 전에 GLB는 Khronos·glTF Transform·Three.js, OBJ/STL/PLY는 각 로더로 다시 엽니다. ModernCat 건축물의 실제 브라우저 출력은 Blender 5.2.1에서 세 포맷 모두 81,768개 삼각형과 같은 포락을 유지했고 최대 축 오차는 0.001mm였습니다. USDZ는 Three.js 출력의 잘못된 셰이더 타입과 노멀맵 디코딩을 보정한 뒤 Apple `usdchecker`를 통과합니다. [실제 파일 해시와 결과](./benchmarks/static-delivery-latest.json)를 공개합니다.
+내보내기 전에 GLB는 Khronos·glTF Transform·Three.js, OBJ/STL/PLY는 각 로더로 다시 엽니다. STL은 단위 메타데이터가 없는 규격 특성상 좌표 자체를 mm로 기록합니다. ModernCat 건축물의 실제 브라우저 출력은 Blender 5.2.1에서 세 포맷 모두 81,768개 삼각형과 같은 포락을 유지했고, 13.54m 폭은 STL에서 13,540mm로 확인됐으며 최대 정규화 오차는 0.001mm였습니다. USDZ는 Three.js 출력의 잘못된 셰이더 타입과 노멀맵 디코딩을 보정한 뒤 Apple `usdchecker`를 통과합니다. [실제 파일 해시와 결과](./benchmarks/static-delivery-latest.json)를 공개합니다.
 
 OBJ/STL은 STEP/BREP 제조 솔리드가 아니며 PBR·리깅·애니메이션은 GLB가 기준입니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. Blender 5.2.1 LTS는 아래 5개 분야 GLB 왕복을 검증했습니다. Unity 실행은 이 Mac의 라이선싱 초기화 실패로 차단됐고 Unreal 자체 임포트도 아직 검증하지 않았습니다.
 
@@ -121,7 +121,7 @@ npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-re
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
-npm run benchmark:static-delivery -- --asset-id moderncat-concept-residence --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
+npm run benchmark:static-delivery -- --asset-id moderncat-concept --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
 npm run build
 npm run gltf:validate -- path/to/asset.glb
 npm run gltf:repair -- blender-output.glb delivery.glb

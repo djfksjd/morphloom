@@ -19,6 +19,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
+import { STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import * as THREE from 'three';
 
@@ -438,6 +439,7 @@ const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
   ? JSON.parse(readFileSync('benchmarks/static-delivery-latest.json', 'utf8')) as {
     schema?: string;
     compilerRevision?: string;
+    staticDeliveryRevision?: string;
     assetId?: string;
     expectedSourceTriangles?: number;
     status?: string;
@@ -452,7 +454,8 @@ const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
 const staticFormats = staticDelivery?.formats ?? {};
 const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery-proof/0.3'
   && staticDelivery.compilerRevision === DELIVERY_PIPELINE_REVISION
-  && staticDelivery.assetId === 'moderncat-concept-residence'
+  && staticDelivery.staticDeliveryRevision === STATIC_DELIVERY_REVISION
+  && staticDelivery.assetId === 'moderncat-concept'
   && staticDelivery.status === 'pass'
   && staticDelivery.assetPack?.browserRoundTrip === 'pass'
   && /^[a-f0-9]{16}$/.test(staticDelivery.assetPack.inputFingerprint ?? '')
@@ -468,6 +471,7 @@ const staticDeliverySummary = staticDelivery
   ? { ...staticDelivery, benchmarkAccepted: staticDeliveryPass }
   : {
     schema: 'morphloom.static-delivery-proof/0.3', compilerRevision: DELIVERY_PIPELINE_REVISION,
+    staticDeliveryRevision: STATIC_DELIVERY_REVISION,
     status: 'not-run', benchmarkAccepted: false, blockers: ['No revision-bound static delivery report exists.'],
   };
 
@@ -697,7 +701,7 @@ const output = {
     { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
     { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? `Blender ${blenderCrossDomainSummary.blenderVersions.join(', ')}: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation` : 'blocked' },
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
-    { capability: 'OBJ/STL/PLY browser export, loader reopen and independent Blender import parity', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `81,768 triangles preserved in all formats; axis-normalized envelope drift ${staticDelivery?.parity?.maximumAxisNormalizedEnvelopeDriftMm?.toFixed(6)} mm` : 'blocked' },
+    { capability: 'OBJ/STL/PLY browser export, loader reopen and independent Blender import parity', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `81,768 triangles preserved; STL uses explicit millimetre coordinates; unit-normalized envelope drift ${staticDelivery?.parity?.maximumAxisNormalizedEnvelopeDriftMm?.toFixed(6)} mm` : 'blocked' },
     { capability: 'USDZ Apple conformance validation', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `pass—${staticDelivery?.usdz?.validator}` : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },

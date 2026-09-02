@@ -873,6 +873,7 @@ export function ViewerApp() {
 
           <div className="export-actions">
             <button className="export-primary" disabled={!pack || qualityBlocked || deliveryAudit?.status === 'blocked'} onClick={() => runAction('ASSET PACK', () => viewportRef.current!.exportAssetPack({
+              assetId: activeAssetId,
               assetName: activeName,
               sourceIr: sourcePayload,
               qualityReport: quality,
@@ -882,7 +883,7 @@ export function ViewerApp() {
             </button>
             <button disabled={!pack} title="PBR scene exchange for Blender, Unity glTF workflows, Unreal, Godot and web viewers" onClick={() => runAction('GLB', () => viewportRef.current!.exportGlb())}>GLB · BLENDER/UNITY/UNREAL/GODOT</button>
             <button disabled={!pack} title="Mesh reference only; not STEP/BREP" onClick={() => runAction('OBJ', () => viewportRef.current!.exportObj())}>CAD MESH · OBJ</button>
-            <button disabled={!pack} title="Mesh reference only; not STEP/BREP" onClick={() => runAction('STL', () => viewportRef.current!.exportStl())}>CAD MESH · STL</button>
+            <button disabled={!pack} title="Millimetre-valued print/CAD mesh; not STEP/BREP" onClick={() => runAction('STL', () => viewportRef.current!.exportStl())}>PRINT MESH · STL (MM)</button>
             <button disabled={!pack} title="Static mesh with positions, normals, vertex colors and UVs; textures are not embedded" onClick={() => runAction('PLY', () => viewportRef.current!.exportPly())}>PLY · MESHLAB/CLOUDCOMPARE</button>
             <button disabled={!pack} title="Apple AR Quick Look / Reality Composer handoff" onClick={() => runAction('USDZ', () => viewportRef.current!.exportUsdz())}>USDZ · APPLE AR</button>
             <button disabled={!pack} title="2D inspection sheet; not a 3D Figma object" onClick={() => runAction('FIGMA SVG', () => viewportRef.current!.exportFigmaSvg())}>FIGMA · SVG SHEET</button>
@@ -933,7 +934,7 @@ export function ViewerApp() {
             <span className="eyebrow">handoff scope</span>
             <p><b>GLB</b> Blender · Unity · Unreal · Godot · web</p>
             <p><b>OBJ / PLY</b> Maya · Cinema 4D · 3ds Max · MeshLab · CloudCompare</p>
-            <p><b>STL / SVG / USDZ</b> Fusion 메시 · Figma 2D · Apple AR</p>
+            <p><b>STL (MM) / SVG / USDZ</b> Fusion·슬라이서 메시 · Figma 2D · Apple AR</p>
             <small>STEP/BREP·FBX·.blend·.uasset 네이티브 파일은 아니며 필요 시 대상 프로그램에서 변환합니다.</small>
           </section>
           {jobs.length > 0 && (

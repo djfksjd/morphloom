@@ -6,7 +6,6 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
 import { PLYExporter } from 'three/addons/exporters/PLYExporter.js';
-import { STLExporter } from 'three/addons/exporters/STLExporter.js';
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
@@ -43,7 +42,14 @@ import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../e
 import { canonicalizeGlbBufferViews } from '../engine/glb-canonicalization';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 import { SerializedTaskQueue } from '../engine/serialized-task-queue';
-import { assertStaticMeshPayloadBytes, compareStaticMeshRoundTrip, type StaticMeshFormat, type StaticMeshRoundTripAudit } from '../engine/static-mesh-roundtrip';
+import {
+  assertStaticMeshPayloadBytes,
+  compareStaticMeshRoundTrip,
+  exportMillimetreStlBytes,
+  STATIC_DELIVERY_REVISION,
+  type StaticMeshFormat,
+  type StaticMeshRoundTripAudit,
+} from '../engine/static-mesh-roundtrip';
 import { repairThreeUsdz } from '../engine/usdz-conformance';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
@@ -84,6 +90,7 @@ export interface ViewportHandle {
 }
 
 export interface AssetPackContext {
+  assetId: string;
   assetName: string;
   sourceIr: unknown;
   qualityReport: unknown;
@@ -491,11 +498,6 @@ async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inpu
   }
 }
 
-function stlBytes(root: THREE.Object3D): Uint8Array {
-  const view = new STLExporter().parse(root, { binary: true });
-  return new Uint8Array(view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength));
-}
-
 function staticMeshRoundTrip(
   root: THREE.Object3D,
   format: StaticMeshFormat,
@@ -520,7 +522,14 @@ function staticMeshRoundTrip(
     reopened = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
   }
   try {
-    const audit = compareStaticMeshRoundTrip(source, snapshotScene(reopened), format, bytes);
+    const audit = compareStaticMeshRoundTrip(
+      source,
+      snapshotScene(reopened),
+      format,
+      bytes,
+      0.1,
+      format === 'stl' ? 1_000 : 1,
+    );
     if (audit.status !== 'pass') throw new Error(`${format.toUpperCase()} round-trip blocked: ${audit.blockers.join('; ')}`);
     return audit;
   } finally {
@@ -1223,7 +1232,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const deliveryBuild = createBeautyBuild();
         try {
           removeInvisibleBranches(deliveryBuild.root);
-          const result = stlBytes(deliveryBuild.root);
+          const result = exportMillimetreStlBytes(deliveryBuild.root);
           staticMeshRoundTrip(deliveryBuild.root, 'stl', result);
           await Promise.resolve();
           if (token !== exportSequenceRef.current) throw new Error('내보내기가 취소되었습니다.');
@@ -1301,7 +1310,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         let staticMeshAudits: StaticMeshRoundTripAudit[];
         try {
           obj = new OBJExporter().parse(deliveryBuild.root);
-          stl = stlBytes(deliveryBuild.root);
+          stl = exportMillimetreStlBytes(deliveryBuild.root);
           const plyResult = new PLYExporter().parse(deliveryBuild.root, () => undefined, { binary: true });
           if (!(plyResult instanceof ArrayBuffer)) throw new Error('Asset pack PLY exporter returned an empty payload.');
           ply = plyResult;
@@ -1317,6 +1326,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         if (token !== exportSequenceRef.current) throw new Error('에셋 팩 저장이 취소되었습니다.');
         const manifest = {
           schema: 'morphloom.asset-pack/0.1',
+          staticDeliveryRevision: STATIC_DELIVERY_REVISION,
+          assetId: context.assetId,
           generatedAt: new Date().toISOString(),
           assetName: context.assetName,
           evidenceBoundary: context.evidenceBoundary,
@@ -1333,7 +1344,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           formatScope: {
             glb: 'authoritative editable mesh for Blender, Unity and Unreal glTF importers',
             obj: 'geometry-only CAD/DCC mesh interchange; no PBR material guarantee',
-            stl: 'unit-bearing mesh reference for CAD/printing; not STEP/BREP manufacturing geometry',
+            stl: 'millimetre-valued static mesh for CAD/printing; unit contract is recorded here because STL has no native unit metadata',
             ply: 'static dense-mesh interchange for Blender, MeshLab and CloudCompare; textures/materials are not embedded',
             svg: '2D Figma inspection/reference sheet; not a 3D Figma object',
           },
