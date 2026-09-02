@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-182%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-184%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -141,7 +141,9 @@ Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립
 | 건축 | 99 | 오목 다각형·자기교차 차단 · 실제 상부 메시 재투영 IoU·과잉/누락·중정 공백 · 폐쇄 셸 · 유한/비퇴화 UV · 80% 이상 미세표면 · 실측/도면 근거 |
 | 애니메이션 | 99 | 49본 스켈레톤 · 정규화 웨이트 · 관절 변형 실측 · 22개 동작/185트랙 · 손가락 웨이트/19트랙 · loop/in-place/GLB 의미 보존 |
 | 게임 | 100 | 10만 tris 예산 · 실제 스킨 LOD0/1 · 이동/점프/제스처/상호작용 22클립 · 유한 치수/본 연결/바디 교차 충돌체 · 유한/비퇴화 UV · 단위 노멀 · PBR |
-| 3D 프린팅 | 100 | 폐쇄 메시 · mm 단위 · 선언 형상 ≥0.8 mm · 체적/표면적 두께 지표 ≥0.8 mm · 양의 체적 · 45° 오버행 실측 |
+| 3D 프린팅 | 100 | 폐쇄 메시 · mm 단위 · 선언 형상/전역 두께 지표 ≥0.8 mm · 제한된 국부 두께 레이 ≥0.8 mm · 양의 체적 · 45° 오버행 실측 |
+
+전역 `2V/A`만으로는 작은 얇은 셸이 두꺼운 본체에 숨을 수 있어, 폐쇄 메시의 분산된 면 중심에서 안쪽으로 실제 반대편까지 레이를 쏘는 국부 두께 감사를 추가했습니다. 이 판정기는 `morphloom-domain-readiness/0.2.0`으로 별도 추적해 GLB 바이트가 바뀌지 않은 판정 개선이 기존 브라우저 왕복 증거를 불필요하게 무효화하지 않습니다. 기본 상한은 256메시·메시당 96레이·2,400만 삼각형 검사이며, 히트 누락·0 체적·예산 소진은 합격시키지 않습니다. 현재 아스팔트 프린트 시편은 96/96레이, 최소 37.310 mm, 5백분위 38.638 mm로 통과했습니다.
 
 일반 45° 기준의 비지지 오버행 면적은 실제 삼각형 노멀로 계산합니다. 다만 최종 방향·서포트·수축·공차는 프린터와 슬라이서에 따라 달라지므로 별도 공정 검수 없이 제조 적합성을 자동 승인하지 않습니다.
 

@@ -1,6 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "generatedAt": "2026-09-02T00:09:47.668Z",
+  "readinessRevision": "morphloom-domain-readiness/0.2.0",
+  "generatedAt": "2026-09-02T00:39:21.834Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -158,6 +159,12 @@
         "enclosedVolumeMm3": 144033.92680712207,
         "surfaceAreaMm2": 63921.0682046812,
         "volumeThicknessProxyMm": 4.506618266951111,
+        "sampledWallThicknessComplete": false,
+        "sampledWallThicknessMm": 0,
+        "sampledWallThicknessP05Mm": 0,
+        "sampledWallThicknessRays": 0,
+        "sampledWallThicknessHitCoverage": 0,
+        "sampledWallThicknessTriangleTests": 0,
         "unsupportedOverhangAreaMm2": 4040.379605627806,
         "unsupportedOverhangRatio": 0.06320888744678257
       }
@@ -296,6 +303,12 @@
         "enclosedVolumeMm3": 254482354093.11646,
         "surfaceAreaMm2": 3461635956.5943584,
         "volumeThicknessProxyMm": 147.03010789354198,
+        "sampledWallThicknessComplete": false,
+        "sampledWallThicknessMm": 0,
+        "sampledWallThicknessP05Mm": 0,
+        "sampledWallThicknessRays": 0,
+        "sampledWallThicknessHitCoverage": 0,
+        "sampledWallThicknessTriangleTests": 0,
         "unsupportedOverhangAreaMm2": 512845854.9532662,
         "unsupportedOverhangRatio": 0.1481512964921408
       }
@@ -482,6 +495,12 @@
         "enclosedVolumeMm3": 156582531.80762315,
         "surfaceAreaMm2": 3636796.9820398763,
         "volumeThicknessProxyMm": 86.1101307446621,
+        "sampledWallThicknessComplete": false,
+        "sampledWallThicknessMm": 0,
+        "sampledWallThicknessP05Mm": 0,
+        "sampledWallThicknessRays": 0,
+        "sampledWallThicknessHitCoverage": 0,
+        "sampledWallThicknessTriangleTests": 0,
         "unsupportedOverhangAreaMm2": 195859.29683757343,
         "unsupportedOverhangRatio": 0.05385488873995824
       }
@@ -692,6 +711,12 @@
         "enclosedVolumeMm3": 156582531.80762315,
         "surfaceAreaMm2": 3636796.9820398763,
         "volumeThicknessProxyMm": 86.1101307446621,
+        "sampledWallThicknessComplete": false,
+        "sampledWallThicknessMm": 0,
+        "sampledWallThicknessP05Mm": 0,
+        "sampledWallThicknessRays": 0,
+        "sampledWallThicknessHitCoverage": 0,
+        "sampledWallThicknessTriangleTests": 0,
         "unsupportedOverhangAreaMm2": 195859.29683757343,
         "unsupportedOverhangRatio": 0.05385488873995824
       }
@@ -782,6 +807,14 @@
           "blocking": true
         },
         {
+          "id": "print-local-thickness",
+          "label": "국부 벽 두께 표본",
+          "pass": true,
+          "score": 100,
+          "detail": "최소 37.310 mm · P05 38.638 mm · 96/96 rays · 10,745,856/24,000,000 tests",
+          "blocking": true
+        },
+        {
           "id": "print-overhang",
           "label": "45° 오버행 분석",
           "pass": true,
@@ -846,6 +879,12 @@
         "enclosedVolumeMm3": 10762674.26790627,
         "surfaceAreaMm2": 636534.8951200972,
         "volumeThicknessProxyMm": 33.816446986384435,
+        "sampledWallThicknessComplete": true,
+        "sampledWallThicknessMm": 37.309891741824366,
+        "sampledWallThicknessP05Mm": 38.637879615028695,
+        "sampledWallThicknessRays": 96,
+        "sampledWallThicknessHitCoverage": 1,
+        "sampledWallThicknessTriangleTests": 10745856,
         "unsupportedOverhangAreaMm2": 0,
         "unsupportedOverhangRatio": 0
       }

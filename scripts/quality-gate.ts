@@ -13,7 +13,7 @@ import { DELIVERY_PIPELINE_REVISION, deliveryInputFingerprint, snapshotScene } f
 import { auditAssemblyDetail } from '../src/engine/generation-policy';
 import { benchmarkPassRates, evaluateBenchmarkCase } from '../src/engine/benchmark-policy';
 import { analyzeTopology } from '../src/engine/topology';
-import { auditDomainReadiness } from '../src/engine/domain-readiness';
+import { auditDomainReadiness, DOMAIN_READINESS_REVISION } from '../src/engine/domain-readiness';
 
 const knifeA = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
 const knifeB = buildOrnateKnife(structuredClone(DEFAULT_KNIFE_SPEC), 'beauty');
@@ -209,6 +209,7 @@ const requiredRates = {
 
 const output = {
   schema: 'morphloom.quality-benchmark/0.2',
+  readinessRevision: DOMAIN_READINESS_REVISION,
   generatedAt: new Date().toISOString(),
   note: 'Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.',
   counts: {

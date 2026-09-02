@@ -329,7 +329,13 @@ const qualityBenchmark = JSON.parse(readFileSync('benchmarks/quality-latest.json
   domainReports?: Record<string, {
     pass?: boolean;
     score?: number;
-    metrics?: { facialMorphTargets?: number; collisionPrimitives?: number };
+    metrics?: {
+      facialMorphTargets?: number;
+      collisionPrimitives?: number;
+      sampledWallThicknessComplete?: boolean;
+      sampledWallThicknessRays?: number;
+      sampledWallThicknessMm?: number;
+    };
   }>;
 };
 const domainProof = qualityBenchmark.domainReports ?? {};
@@ -443,7 +449,14 @@ const output = {
     { capability: 'measured bone deformation, motion/loop/root-motion checks, and exact GLB animation-metadata preservation', img2threejs: 'not established in pinned core audit', morphloom: domainProof.animation?.pass ? 'yes' : 'blocked' },
     { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.game?.metrics?.collisionPrimitives === 16 ? '16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates' : 'blocked' },
     { capability: 'finite non-degenerate UV triangles and near-unit normal delivery gate', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.industrialDesign?.pass ? 'yes' : 'blocked' },
-    { capability: 'millimetre 3D-print topology, volume/surface thickness proxy, feature and 45-degree overhang audit', img2threejs: 'not established in pinned audit', morphloom: domainProof.print3d?.pass ? 'yes' : 'blocked' },
+    {
+      capability: 'millimetre 3D-print topology, global thickness screening, bounded local wall rays, feature and 45-degree overhang audit',
+      img2threejs: 'not established in pinned audit',
+      morphloom: domainProof.print3d?.pass
+        && domainProof.print3d.metrics?.sampledWallThicknessComplete
+        && (domainProof.print3d.metrics.sampledWallThicknessRays ?? 0) > 0
+        && (domainProof.print3d.metrics.sampledWallThicknessMm ?? 0) >= 0.8 ? 'yes' : 'blocked',
+    },
     { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },

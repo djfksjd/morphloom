@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-182%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-184%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -134,7 +134,9 @@ This means all eight locked contracts made the correct decision; it does not mea
 | Architecture | 99 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
 | Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · 22 motions/185 tracks · finger weights/19 tracks · loop/in-place/semantic GLB preservation |
 | Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
-| 3D print | 100 | closed mesh · millimetres · declared feature ≥0.8 mm · volume/area thickness proxy ≥0.8 mm · positive volume · measured 45° overhang |
+| 3D print | 100 | closed mesh · millimetres · declared/global thickness ≥0.8 mm · bounded local wall rays ≥0.8 mm · positive volume · measured 45° overhang |
+
+Because global `2V/A` can hide a small thin shell beside a thick body, Morphloom now casts inward rays from distributed face centroids to the actual opposite wall. The decision policy is tracked separately as `morphloom-domain-readiness/0.2.0`, so a gate-only improvement that leaves GLB bytes unchanged does not invalidate existing browser round-trip evidence. Defaults are bounded at 256 meshes, 96 rays per mesh, and 24 million triangle tests; missing hits, zero volume, and budget exhaustion fail closed. The current asphalt print specimen passes 96/96 rays with a 37.310 mm minimum and 38.638 mm fifth percentile.
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 

@@ -18,7 +18,7 @@ Apply only the contract matching the requested destination. Never award one univ
 ## 3D printing
 
 - Require a closed positive-volume mesh, explicit millimetres, and a source-IR declared minimum feature of at least 0.8 mm unless the target process provides a stricter verified limit.
-- Mesh bounding-box width is only a sanity check, not wall-thickness proof. Block print readiness when no physical feature dimension is declared. Also compute the compiled-mesh volume/surface-area thickness proxy `2V/A`; block below 0.8 mm. Report it as a conservative screening signal, not a local ray-cast wall-thickness measurement.
+- Mesh bounding-box width is only a sanity check, not wall-thickness proof. Block print readiness when no physical feature dimension is declared. Use compiled-mesh `2V/A` only as global screening, then run the bounded inward-ray local wall audit. Block any sampled thickness below 0.8 mm and fail closed on missing hits, zero-volume components, mesh/test-budget exhaustion, or an incomplete audit. Do not raise the default 256-mesh, 96-ray-per-mesh, 24-million-test limits merely to turn a report green; simplify or partition the deliverable and rerun it.
 - Check boundary, non-manifold and degenerate counts before export, then reopen the exported mesh. Measure generic 45° unsupported area from world-space triangle normals after excluding the build-plate contact band. Keep printer-specific thresholds, orientation, supports, shrinkage, tolerances, and material process as downstream checks until a target printer/slicer profile is provided.
 
 ## Shared delivery proof

@@ -7,6 +7,9 @@ import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humano
 import { REQUIRED_FACIAL_MORPH_NAMES } from './facial-morphs';
 import type { PlanFootprintAudit } from './plan-footprint';
 import { auditSkinnedLodQuality } from './lod-quality';
+import { auditSampledWallThickness } from './print-thickness';
+
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.2.0';
 
 export type ProductionDomain =
   | 'architecture'
@@ -100,6 +103,12 @@ export interface DomainReadinessReport {
     enclosedVolumeMm3?: number;
     surfaceAreaMm2: number;
     volumeThicknessProxyMm: number;
+    sampledWallThicknessComplete: boolean;
+    sampledWallThicknessMm: number;
+    sampledWallThicknessP05Mm: number;
+    sampledWallThicknessRays: number;
+    sampledWallThicknessHitCoverage: number;
+    sampledWallThicknessTriangleTests: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
   };
@@ -603,6 +612,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   const collisionDelivery = inspectCollisionDelivery(input.root);
   const lodQuality = auditSkinnedLodQuality(input.root);
   const declaredMinimumFeatureMm = inspectDeclaredMinimumFeature(input.root);
+  const sampledWallThickness = input.domain === '3d-print'
+    ? auditSampledWallThickness(input.root)
+    : undefined;
   const deliveredClipNames = new Set(snapshot.animationClipNames);
   const animationSetCoverage = REQUIRED_RUNTIME_CLIPS.filter((name) => deliveredClipNames.has(name)).length
     / REQUIRED_RUNTIME_CLIPS.length;
@@ -734,6 +746,13 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('print-volume-thickness', '체적·표면적 두께 지표', thicknessProxyPass,
       thicknessProxyPass ? 100 : geometry.volumeThicknessProxyMm / 0.8 * 100,
       `${geometry.volumeThicknessProxyMm.toFixed(3)} mm / 최소 0.800 mm`);
+    const sampledThicknessPass = sampledWallThickness?.complete === true
+      && sampledWallThickness.minimumMm >= 0.8;
+    add('print-local-thickness', '국부 벽 두께 표본', sampledThicknessPass,
+      sampledThicknessPass ? 100 : (sampledWallThickness?.minimumMm ?? 0) / 0.8 * 100,
+      sampledWallThickness
+        ? `최소 ${sampledWallThickness.minimumMm.toFixed(3)} mm · P05 ${sampledWallThickness.percentile05Mm.toFixed(3)} mm · ${sampledWallThickness.hitRays}/${sampledWallThickness.sampledRays} rays · ${sampledWallThickness.triangleTests.toLocaleString()}/${sampledWallThickness.maximumTriangleTests.toLocaleString()} tests${sampledWallThickness.blockers.length > 0 ? ` · ${sampledWallThickness.blockers.join('; ')}` : ''}`
+        : '국부 벽 두께 검사를 실행하지 못함');
     const supportFree = geometry.unsupportedOverhangRatio <= 0.01;
     add('print-overhang', '45° 오버행 분석', supportFree, supportFree ? 100 : Math.max(0, 100 - geometry.unsupportedOverhangRatio * 500), `${geometry.unsupportedOverhangAreaMm2.toFixed(1)} mm² · 표면의 ${(geometry.unsupportedOverhangRatio * 100).toFixed(2)}%`, false);
   }
@@ -805,6 +824,12 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       enclosedVolumeMm3: geometry.enclosedVolumeMm3,
       surfaceAreaMm2: geometry.surfaceAreaMm2,
       volumeThicknessProxyMm: geometry.volumeThicknessProxyMm,
+      sampledWallThicknessComplete: sampledWallThickness?.complete ?? false,
+      sampledWallThicknessMm: sampledWallThickness?.minimumMm ?? 0,
+      sampledWallThicknessP05Mm: sampledWallThickness?.percentile05Mm ?? 0,
+      sampledWallThicknessRays: sampledWallThickness?.sampledRays ?? 0,
+      sampledWallThicknessHitCoverage: sampledWallThickness?.hitCoverage ?? 0,
+      sampledWallThicknessTriangleTests: sampledWallThickness?.triangleTests ?? 0,
       unsupportedOverhangAreaMm2: geometry.unsupportedOverhangAreaMm2,
       unsupportedOverhangRatio: geometry.unsupportedOverhangRatio,
     },

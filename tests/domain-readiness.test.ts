@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
@@ -14,6 +15,7 @@ import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from '../src/e
 import { DEFAULT_KNIFE_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC, type HumanPack } from '../src/types';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
+import { auditSampledWallThickness } from '../src/engine/print-thickness';
 
 let humanPack: HumanPack;
 
@@ -379,6 +381,11 @@ describe('cross-domain semi-professional readiness', () => {
     expect(print.metrics.enclosedVolumeMm3).toBeGreaterThan(1);
     expect(print.metrics.surfaceAreaMm2).toBeGreaterThan(1);
     expect(print.metrics.volumeThicknessProxyMm).toBeGreaterThanOrEqual(0.8);
+    expect(print.metrics.sampledWallThicknessComplete).toBe(true);
+    expect(print.metrics.sampledWallThicknessMm).toBeGreaterThanOrEqual(0.8);
+    expect(print.metrics.sampledWallThicknessP05Mm).toBeGreaterThanOrEqual(0.8);
+    expect(print.metrics.sampledWallThicknessHitCoverage).toBe(1);
+    expect(print.metrics.sampledWallThicknessTriangleTests).toBeLessThanOrEqual(24_000_000);
     expect(print.metrics.unsupportedOverhangRatio).toBeLessThanOrEqual(0.01);
     expect(print.warnings).toEqual([]);
   }, 20_000);
@@ -452,6 +459,66 @@ describe('cross-domain semi-professional readiness', () => {
     expect(report.pass).toBe(false);
     expect(report.metrics.volumeThicknessProxyMm).toBeLessThan(0.8);
     expect(report.blockers.join(' ')).toMatch(/print-volume-thickness/);
+  });
+
+  it('blocks a localized thin shell that a global volume-to-area proxy would miss', () => {
+    const thick = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const thin = new THREE.BoxGeometry(0.02, 0.0003, 0.02);
+    thin.applyMatrix4(new THREE.Matrix4().makeTranslation(0.08, 0, 0));
+    const geometry = mergeGeometries([thick, thin], false);
+    thick.dispose();
+    thin.dispose();
+    if (!geometry) throw new Error('Failed to merge localized-thickness fixture.');
+    const material = new THREE.MeshStandardMaterial();
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = 'thick_body_with_undeclared_thin_shell';
+    const root = new THREE.Group();
+    root.name = 'localized_thickness_fixture';
+    root.add(mesh);
+    root.userData.assemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'declared thick print body', units: 'mm',
+      components: [{
+        id: 'declared_body', name: 'Declared body', category: 'mechanical', materialName: 'polymer',
+        detail: 'The declaration omits the thin shell so compiled geometry must still catch it.',
+        geometry: { op: 'roundedBox', size: [100, 100, 100], radius: 1 },
+        material: { color: '#888888', surface: 'molded-polymer' },
+        evidence: { status: 'measured', source: 'localized wall-thickness regression fixture' },
+      }],
+    } satisfies AssemblyIR;
+    try {
+      const topology = analyzeTopology(root);
+      const report = auditDomainReadiness({
+        domain: '3d-print', root, topology, evidenceScore: 100,
+        deterministic: true, browserGlbRoundTrip: true, sourceUnitMm: 1,
+      });
+      expect(topology.pass).toBe(true);
+      expect(report.metrics.volumeThicknessProxyMm).toBeGreaterThan(0.8);
+      expect(report.metrics.minimumMeshAxisMm).toBeGreaterThan(0.8);
+      expect(report.metrics.declaredMinimumFeatureMm).toBeGreaterThan(0.8);
+      expect(report.metrics.sampledWallThicknessComplete).toBe(true);
+      expect(report.metrics.sampledWallThicknessMm).toBeCloseTo(0.3, 1);
+      expect(report.pass).toBe(false);
+      expect(report.blockers.join(' ')).toMatch(/print-local-thickness/);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
+  });
+
+  it('fails the local wall-thickness gate when its bounded triangle budget cannot complete', () => {
+    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1, 8, 8, 8);
+    const material = new THREE.MeshStandardMaterial();
+    const root = new THREE.Group();
+    root.add(new THREE.Mesh(geometry, material));
+    try {
+      const audit = auditSampledWallThickness(root, { maximumTriangleTests: 100 });
+      expect(audit.triangleTests).toBeLessThanOrEqual(100);
+      expect(audit.complete).toBe(false);
+      expect(audit.blockers.join(' ')).toMatch(/triangle-test budget exhausted/);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
   });
 
   it('blocks a watertight visual hull when its source-view reprojection remains inconsistent', () => {
