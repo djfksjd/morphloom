@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
-import { snapshotScene } from '../src/engine/delivery-validation';
-import { compareStaticMeshRoundTrip, exportMillimetreStlBytes } from '../src/engine/static-mesh-roundtrip';
+import { DELIVERY_PIPELINE_REVISION, snapshotScene } from '../src/engine/delivery-validation';
+import {
+  auditAssetPackRevision,
+  compareStaticMeshRoundTrip,
+  exportMillimetreStlBytes,
+  STATIC_DELIVERY_REVISION,
+} from '../src/engine/static-mesh-roundtrip';
 
 function snapshot() {
   const root = new THREE.Group();
@@ -61,5 +66,20 @@ describe('static mesh delivery round-trip', () => {
     expect(() => compareStaticMeshRoundTrip(source, source, 'stl', 0)).toThrow(/payload/);
     expect(() => compareStaticMeshRoundTrip(source, source, 'ply', 512, 11)).toThrow(/tolerance/);
     expect(() => compareStaticMeshRoundTrip(source, source, 'obj', 512, 0.1, 10)).toThrow(/coordinate scale/);
+  });
+
+  it('accepts only an asset pack bound to both current delivery revisions', () => {
+    expect(auditAssetPackRevision({
+      compilerRevision: DELIVERY_PIPELINE_REVISION,
+      staticDeliveryRevision: STATIC_DELIVERY_REVISION,
+    })).toEqual([]);
+  });
+
+  it('blocks a stale or unversioned browser asset pack instead of relabelling it', () => {
+    expect(auditAssetPackRevision({ staticDeliveryRevision: 'morphloom-static-delivery/0.4.0' }))
+      .toEqual(expect.arrayContaining([
+        expect.stringMatching(/compiler revision missing/),
+        expect.stringMatching(/static-delivery revision .*0\.4\.0/),
+      ]));
   });
 });

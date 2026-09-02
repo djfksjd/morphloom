@@ -6,6 +6,7 @@ import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benc
 import { snapshotScene } from '../src/engine/delivery-validation';
 import {
   analyzeReferenceSurface,
+  auditReferenceSurfaceEvidence,
   quantizeReferenceHeightField,
   sampleQuantizedReferenceHeight,
 } from '../src/engine/reference-surface';
@@ -35,6 +36,17 @@ function deterministicIrregularRgba(width = 32, height = 32): Uint8ClampedArray 
     const angular = ((x * 17 + y * 29 + Math.floor(random() * 211)) % 256);
     const pit = ((x - 9) ** 2 + (y - 21) ** 2 < 18) ? -72 : 0;
     return angular + pit;
+  });
+}
+
+function normalizedPatternRgba(size: number): Uint8ClampedArray {
+  return makeRgba(size, size, (x, y) => {
+    const u = x / (size - 1);
+    const v = y / (size - 1);
+    return 128
+      + 42 * Math.sin(u * Math.PI * 8)
+      + 27 * Math.cos(v * Math.PI * 6)
+      + 18 * Math.sin((u + v) * Math.PI * 14);
   });
 }
 
@@ -118,6 +130,39 @@ describe('reference-conditioned surface analysis', () => {
     expect(Math.max(...analysis.roughnessRgba)).toBeLessThanOrEqual(255);
   });
 
+  it('keeps normal slope and roughness response stable when the same surface is uniformly resampled', () => {
+    const low = analyzeReferenceSurface(normalizedPatternRgba(65), 65, 65, 1.25);
+    const high = analyzeReferenceSurface(normalizedPatternRgba(129), 129, 129, 1.25);
+    expect(Math.abs(low.metrics.normalSlopeRms - high.metrics.normalSlopeRms)).toBeLessThan(0.04);
+    expect(Math.abs(low.metrics.roughnessDeviation - high.metrics.roughnessDeviation)).toBeLessThan(0.005);
+    expect(Math.abs(low.metrics.meanGradient - high.metrics.meanGradient)).toBeLessThan(0.04);
+    expect(low.metrics.surfaceSignalConfidence).toBe(1);
+    expect(high.metrics.surfaceSignalConfidence).toBe(1);
+  });
+
+  it('does not amplify one-code-value image noise into a rough physical surface', () => {
+    const pixels = makeRgba(65, 65, (x, y) => (x + y) % 2 === 0 ? 127 : 128);
+    const analysis = analyzeReferenceSurface(pixels, 65, 65, 1.25);
+    expect(analysis.metrics.surfaceSignalConfidence).toBeLessThan(0.1);
+    expect(analysis.metrics.normalSlopeRms).toBeLessThan(0.03);
+    expect(analysis.metrics.roughnessDeviation).toBeLessThan(0.005);
+    expect(analysis.metrics.irregularity).toBeLessThan(0.1);
+  });
+
+  it('accepts irregular granular evidence and rejects flat or periodic impostors', () => {
+    const irregular = auditReferenceSurfaceEvidence(analyzeReferenceSurface(deterministicIrregularRgba(64, 64), 64, 64, 1.25));
+    const flat = auditReferenceSurfaceEvidence(analyzeReferenceSurface(makeRgba(64, 64, () => 110), 64, 64, 1.25));
+    const stripes = auditReferenceSurfaceEvidence(analyzeReferenceSurface(
+      makeRgba(64, 64, (x) => x % 4 < 2 ? 60 : 190), 64, 64, 1.25,
+    ));
+    expect(irregular.pass).toBe(true);
+    expect(irregular.score).toBeGreaterThan(70);
+    expect(flat.pass).toBe(false);
+    expect(flat.blockers).toEqual(expect.arrayContaining([expect.stringMatching(/^signal /), expect.stringMatching(/^normal-response /)]));
+    expect(stripes.pass).toBe(false);
+    expect(stripes.blockers).toContainEqual(expect.stringMatching(/^aperiodic /));
+  });
+
   it('rejects malformed or unbounded image analysis requests before allocating large fields', () => {
     expect(() => analyzeReferenceSurface(new Uint8Array(4), 2, 2)).toThrow(/RGBA length/);
     expect(() => analyzeReferenceSurface(new Uint8Array(4), 4097, 4097)).toThrow(/pixel budget/);
@@ -129,7 +174,7 @@ describe('reference-conditioned surface analysis', () => {
     const first = quantizeReferenceHeightField(analysis, 8, 6, 4.2, 0.9, 'a1b2c3d4');
     const second = quantizeReferenceHeightField(analysis, 8, 6, 4.2, 0.9, 'A1B2C3D4');
     expect(first).toEqual(second);
-    expect(first.method).toBe('image-multiscale-height-v2');
+    expect(first.method).toBe('image-multiscale-height-v3');
     expect(first.samples).toHaveLength(48);
     expect(Math.max(...first.samples)).toBeLessThanOrEqual(32_767);
     expect(Math.min(...first.samples)).toBeGreaterThanOrEqual(-32_767);
@@ -199,7 +244,7 @@ describe('reference-conditioned surface compilation', () => {
     const secondMesh = second.root.getObjectByName('asphalt_core_sample') as THREE.Mesh;
     const audit = firstMesh.geometry.userData.morphloomSurfaceRelief as Record<string, unknown>;
     expect(audit).toMatchObject({
-      method: 'reference-conditioned-multiscale-aggregate-height-field-v4',
+      method: 'reference-conditioned-linear-multiscale-aggregate-height-field-v5',
       referenceFingerprint: '1234abcd',
       referenceSamples: 1024,
       referenceBlend: 0.9,

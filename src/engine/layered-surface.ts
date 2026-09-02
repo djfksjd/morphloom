@@ -7,7 +7,8 @@ type SurfacePatchIR = Extract<AssemblyGeometryIR, { op: 'surfacePatch' }>;
 export interface SurfaceReliefAudit {
   method: 'deterministic-angular-aggregate-height-field-v2'
     | 'reference-conditioned-aggregate-height-field-v3'
-    | 'reference-conditioned-multiscale-aggregate-height-field-v4';
+    | 'reference-conditioned-multiscale-aggregate-height-field-v4'
+    | 'reference-conditioned-linear-multiscale-aggregate-height-field-v5';
   seed: number;
   samples: number;
   minimumMm: number;
@@ -252,9 +253,11 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
   const fineAggregateFeatures = aggregateFeatureCount(spec, spec.aggregateScale * 0.43, 8_311);
   const audit: SurfaceReliefAudit = {
     method: spec.referenceRelief
-      ? spec.referenceRelief.method === 'image-multiscale-height-v2'
-        ? 'reference-conditioned-multiscale-aggregate-height-field-v4'
-        : 'reference-conditioned-aggregate-height-field-v3'
+      ? spec.referenceRelief.method === 'image-multiscale-height-v3'
+        ? 'reference-conditioned-linear-multiscale-aggregate-height-field-v5'
+        : spec.referenceRelief.method === 'image-multiscale-height-v2'
+          ? 'reference-conditioned-multiscale-aggregate-height-field-v4'
+          : 'reference-conditioned-aggregate-height-field-v3'
       : 'deterministic-angular-aggregate-height-field-v2',
     seed: spec.seed,
     samples: elevations.length,

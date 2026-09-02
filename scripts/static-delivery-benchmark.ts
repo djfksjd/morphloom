@@ -5,7 +5,7 @@ import { readFile, stat, writeFile } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 import { strFromU8, unzipSync } from 'fflate';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
-import { STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
+import { auditAssetPackRevision, STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
 
 type Format = 'obj' | 'stl' | 'ply';
 
@@ -93,6 +93,7 @@ const manifestBytes = packedFiles['metadata/asset-manifest.json']!;
 if (manifestBytes.byteLength > 2 * 1024 * 1024) throw new Error('Browser asset manifest exceeds the 2 MB budget.');
 const manifest = JSON.parse(strFromU8(manifestBytes)) as {
   schema?: string;
+  compilerRevision?: string;
   staticDeliveryRevision?: string;
   assetId?: string;
   deliveryAudit?: {
@@ -127,9 +128,7 @@ if (!Number.isInteger(expectedTriangles) || Number(expectedTriangles) < 1 || Num
 }
 const blockers: string[] = [];
 if (manifest.schema !== 'morphloom.asset-pack/0.1') blockers.push('Asset pack manifest schema is invalid.');
-if (manifest.staticDeliveryRevision !== STATIC_DELIVERY_REVISION) {
-  blockers.push(`Asset pack static-delivery revision ${manifest.staticDeliveryRevision ?? 'missing'} does not match ${STATIC_DELIVERY_REVISION}.`);
-}
+blockers.push(...auditAssetPackRevision(manifest));
 if (manifest.assetId !== assetId) {
   blockers.push(`Asset pack id ${manifest.assetId ?? 'missing'} does not match requested asset ${assetId}.`);
 }
@@ -176,7 +175,7 @@ const usdPass = usdchecker.status === 0 && /Validation Result[\s\S]*Success!/i.t
 if (!usdPass) blockers.push(`usdchecker failed with status ${String(usdchecker.status)}${usdchecker.error ? `: ${usdchecker.error.message}` : ''}.`);
 
 const report = {
-  schema: 'morphloom.static-delivery-proof/0.3',
+  schema: 'morphloom.static-delivery-proof/0.4',
   generatedAt: new Date().toISOString(),
   compilerRevision: DELIVERY_PIPELINE_REVISION,
   staticDeliveryRevision: STATIC_DELIVERY_REVISION,
@@ -186,6 +185,7 @@ const report = {
     source: basename(assetPackPath),
     bytes: assetPackInfo.size,
     sha256: sha256Bytes(assetPackBytes),
+    compilerRevision: manifest.compilerRevision ?? null,
     inputFingerprint: manifest.deliveryAudit.inputFingerprint,
     browserRoundTrip: 'pass',
   },

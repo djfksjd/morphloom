@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T07:50:25.055Z",
+  "generatedAt": "2026-09-02T08:44:02.115Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1770,6 +1770,7 @@
         ],
         "blockers": [
           "browser proof schema mismatch",
+          "browser proof compiler revision mismatch",
           "browser proof scene-fingerprint revision mismatch"
         ],
         "assets": [
@@ -1777,6 +1778,7 @@
             "id": "ornate-knife-product-visualization",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1787,6 +1789,7 @@
             "id": "pinterest-concept-architectural-review",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1797,6 +1800,7 @@
             "id": "laurel-homes-architectural-review",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1807,6 +1811,7 @@
             "id": "cooling-service-assembly",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1817,6 +1822,7 @@
             "id": "single-view-character-previs",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1827,6 +1833,7 @@
             "id": "field-human-runtime-base",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1837,6 +1844,7 @@
             "id": "asphalt-print-surface",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1860,6 +1868,7 @@
         ],
         "blockers": [
           "browser proof schema mismatch",
+          "browser proof compiler revision mismatch",
           "browser proof scene-fingerprint revision mismatch"
         ],
         "assets": [
@@ -1867,6 +1876,7 @@
             "id": "ornate-knife-product-visualization",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1877,6 +1887,7 @@
             "id": "laurel-homes-architectural-review",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1887,6 +1898,7 @@
             "id": "field-human-runtime-base",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1897,6 +1909,7 @@
             "id": "asphalt-print-surface",
             "pass": false,
             "blockers": [
+              "input fingerprint does not match the current deterministic build",
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
               "texture-payload parity is not proven",
@@ -1999,7 +2012,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.23.0",
+      "compilerRevision": "morphloom-compiler/0.24.0",
       "pass": true,
       "benchmarkAccepted": true,
       "blenderVersions": [
@@ -2080,39 +2093,41 @@
     },
     "unityCrossDomain": {
       "schema": "morphloom.unity-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.23.0",
-      "generatedAt": "2026-09-02T02:22:19.286Z",
+      "compilerRevision": "morphloom-compiler/0.24.0",
+      "generatedAt": "2026-09-02T08:39:00.223Z",
       "pass": false,
       "status": "blocked",
       "scope": "actual Unity Editor + Unity glTFast native prefab import",
       "environment": {
         "requestedUnityVersion": "6000.5.3f1",
         "glTFastVersion": "6.20.0",
-        "unityBinary": "/Applications/Unity/Hub/Editor/6000.5.3f1/Unity.app/Contents/MacOS/Unity"
+        "unityBinary": "/Applications/Unity/Hub/Editor/6000.5.3f1/Unity.app/Contents/MacOS/Unity",
+        "attempts": 2
       },
       "blockers": [
         {
           "code": "unity-licensing-unavailable",
-          "detail": "Unity licensing could not initialize on this host, so the Editor was stopped before asset import."
+          "detail": "Unity licensing could not initialize on this host after 2 bounded attempt(s), so the Editor was stopped before asset import."
         }
       ],
       "cases": []
     },
     "staticDelivery": {
-      "schema": "morphloom.static-delivery-proof/0.3",
-      "generatedAt": "2026-09-02T05:18:03.740Z",
-      "compilerRevision": "morphloom-compiler/0.23.0",
-      "staticDeliveryRevision": "morphloom-static-delivery/0.4.0",
+      "schema": "morphloom.static-delivery-proof/0.4",
+      "generatedAt": "2026-09-02T08:26:31.685Z",
+      "compilerRevision": "morphloom-compiler/0.24.0",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.5.0",
       "assetId": "moderncat-concept",
       "expectedSourceTriangles": 81768,
       "assetPack": {
         "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
         "bytes": 8121120,
         "sha256": "a0f678878e54b5424db38535f0808038a5327302f1a6634623a2b0b5fcabf36e",
+        "compilerRevision": null,
         "inputFingerprint": "1252c08c0593cc58",
         "browserRoundTrip": "pass"
       },
-      "status": "pass",
+      "status": "blocked",
       "blenderVersion": "5.2.1 LTS",
       "formats": {
         "obj": {
@@ -2208,9 +2223,12 @@
         "validator": "/usr/bin/usdchecker",
         "status": "pass"
       },
-      "blockers": [],
+      "blockers": [
+        "Asset pack compiler revision missing does not match morphloom-compiler/0.24.0.",
+        "Asset pack static-delivery revision morphloom-static-delivery/0.4.0 does not match morphloom-static-delivery/0.5.0."
+      ],
       "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": false
     }
   },
   "capabilityMatrix": [
@@ -2307,12 +2325,12 @@
     {
       "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "81,768 triangles preserved; STL uses explicit millimetre coordinates; unit-normalized envelope drift 0.000954 mm"
+      "morphloom": "blocked"
     },
     {
       "capability": "USDZ Apple conformance validation",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "pass—/usr/bin/usdchecker"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unity application import execution",

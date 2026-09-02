@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.23.0",
-  "generatedAt": "2026-09-02T02:20:21.481Z",
+  "compilerRevision": "morphloom-compiler/0.24.0",
+  "generatedAt": "2026-09-02T08:24:58.369Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [

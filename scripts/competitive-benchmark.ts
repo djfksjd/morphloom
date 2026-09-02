@@ -470,7 +470,7 @@ const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
     expectedSourceTriangles?: number;
     status?: string;
     blenderVersion?: string;
-    assetPack?: { inputFingerprint?: string; browserRoundTrip?: string; sha256?: string };
+    assetPack?: { compilerRevision?: string; inputFingerprint?: string; browserRoundTrip?: string; sha256?: string };
     formats?: Record<string, StaticDeliveryFormat>;
     parity?: { triangles?: number; maximumAxisNormalizedEnvelopeDriftMm?: number };
     usdz?: { status?: string; validator?: string; sha256?: string };
@@ -478,11 +478,12 @@ const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
   }
   : undefined;
 const staticFormats = staticDelivery?.formats ?? {};
-const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery-proof/0.3'
+const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery-proof/0.4'
   && staticDelivery.compilerRevision === DELIVERY_PIPELINE_REVISION
   && staticDelivery.staticDeliveryRevision === STATIC_DELIVERY_REVISION
   && staticDelivery.assetId === 'moderncat-concept'
   && staticDelivery.status === 'pass'
+  && staticDelivery.assetPack?.compilerRevision === DELIVERY_PIPELINE_REVISION
   && staticDelivery.assetPack?.browserRoundTrip === 'pass'
   && /^[a-f0-9]{16}$/.test(staticDelivery.assetPack.inputFingerprint ?? '')
   && /^[a-f0-9]{64}$/.test(staticDelivery.assetPack.sha256 ?? '')
@@ -496,7 +497,7 @@ const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery
 const staticDeliverySummary = staticDelivery
   ? { ...staticDelivery, benchmarkAccepted: staticDeliveryPass }
   : {
-    schema: 'morphloom.static-delivery-proof/0.3', compilerRevision: DELIVERY_PIPELINE_REVISION,
+    schema: 'morphloom.static-delivery-proof/0.4', compilerRevision: DELIVERY_PIPELINE_REVISION,
     staticDeliveryRevision: STATIC_DELIVERY_REVISION,
     status: 'not-run', benchmarkAccepted: false, blockers: ['No revision-bound static delivery report exists.'],
   };

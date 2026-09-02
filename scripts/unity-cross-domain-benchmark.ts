@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, resolve, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { NodeIO } from '@gltf-transform/core';
@@ -111,15 +111,35 @@ writeFileSync(resolve(projectDirectory, 'ProjectSettings/ProjectVersion.txt'), [
   '',
 ].join('\n'), 'utf8');
 
-const unity = spawnSync(unityBinary, [
+const unityArguments = [
   '-batchmode', '-nographics', '-quit',
   '-projectPath', projectDirectory,
   '-executeMethod', 'Morphloom.Editor.CrossDomainImportProof.Run',
   '-morphloomReport', rawReportPath,
   '-logFile', unityLogPath,
-], { encoding: 'utf8', timeout: 100_000, maxBuffer: 64 * 1024 * 1024 });
+];
+const launchUnity = (timeout: number) => {
+  if (existsSync(rawReportPath)) unlinkSync(rawReportPath);
+  return spawnSync(unityBinary, unityArguments, {
+    encoding: 'utf8', timeout, maxBuffer: 64 * 1024 * 1024,
+  });
+};
+let unity = launchUnity(180_000);
+let unityLog = existsSync(unityLogPath) ? readFileSync(unityLogPath, 'utf8') : '';
+let unityAttempts = 1;
+const retryableStartupFailure = unity.status !== 0 && (
+  unity.signal === 'SIGTERM'
+  || /Licensing initialization failed|connection with the Unity Licensing Client has been lost|Could not connect to IPC stream|Package Manager/i.test(unityLog)
+);
+if (retryableStartupFailure) {
+  // Reuse the partially warmed package/library cache. A fresh project would
+  // repeat the same startup cost and hide whether recovery actually worked.
+  unity = launchUnity(240_000);
+  unityLog = existsSync(unityLogPath) ? readFileSync(unityLogPath, 'utf8') : '';
+  unityAttempts += 1;
+}
 if (unity.status !== 0) {
-  const log = existsSync(unityLogPath) ? readFileSync(unityLogPath, 'utf8') : '';
+  const log = unityLog;
   const licensingUnavailable = /No valid Unity Editor license found|Licensing initialization failed|connection with the Unity Licensing Client has been lost/i.test(log);
   const blockedReport = {
     schema: 'morphloom.unity-cross-domain-proof/0.1',
@@ -132,12 +152,13 @@ if (unity.status !== 0) {
       requestedUnityVersion: '6000.5.3f1',
       glTFastVersion: '6.20.0',
       unityBinary,
+      attempts: unityAttempts,
     },
     blockers: [{
       code: licensingUnavailable ? 'unity-licensing-unavailable' : 'unity-editor-failed',
       detail: licensingUnavailable
-        ? 'Unity licensing could not initialize on this host, so the Editor was stopped before asset import.'
-        : `Unity Editor exited before a complete import report (status ${String(unity.status)}, signal ${String(unity.signal)}).`,
+        ? `Unity licensing could not initialize on this host after ${unityAttempts} bounded attempt(s), so the Editor was stopped before asset import.`
+        : `Unity Editor exited before a complete import report after ${unityAttempts} attempt(s) (status ${String(unity.status)}, signal ${String(unity.signal)}).`,
     }],
     cases: [],
   };
@@ -255,6 +276,7 @@ const report = {
     unityVersion: raw.unityVersion,
     glTFastVersion: '6.20.0',
     unityBinary,
+    attempts: unityAttempts,
   },
   blockers: [],
   cases,

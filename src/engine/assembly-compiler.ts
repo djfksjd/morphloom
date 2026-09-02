@@ -52,7 +52,7 @@ function validateReferenceProjection(projection: ReferenceProjectionIR, componen
 }
 
 function validateReferenceRelief(reference: QuantizedReferenceHeightField, componentId: string): void {
-  if (!['image-highpass-height-v1', 'image-multiscale-height-v2'].includes(reference.method)) {
+  if (!['image-highpass-height-v1', 'image-multiscale-height-v2', 'image-multiscale-height-v3'].includes(reference.method)) {
     throw new Error(`Reference relief method is invalid in ${componentId}.`);
   }
   if (!Number.isInteger(reference.width) || !Number.isInteger(reference.height)

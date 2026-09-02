@@ -1339,6 +1339,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         if (token !== exportSequenceRef.current) throw new Error('에셋 팩 저장이 취소되었습니다.');
         const manifest = {
           schema: 'morphloom.asset-pack/0.1',
+          compilerRevision: DELIVERY_PIPELINE_REVISION,
           staticDeliveryRevision: STATIC_DELIVERY_REVISION,
           assetId: context.assetId,
           generatedAt: new Date().toISOString(),

@@ -1,29 +1,63 @@
 {
-  "schema": "morphloom.surface-reference-benchmark/0.2",
-  "generatedAt": "2026-09-01T16:01:02Z",
+  "schema": "morphloom.surface-reference-benchmark/0.3",
+  "generatedAt": "2026-09-02T17:08:28+09:00",
   "source": {
     "redistributed": false,
     "pixels": [508, 660],
     "sha256": "1a7662782c874259cb3ff13df6d292b3e5a4991bbae91f204bb776836db9cb88",
-    "normalizedEntropy": 0.8789972596433167,
-    "meanGradient": 0.7675042657106678,
-    "heightDeviation": 0.10363456146618097,
-    "fineDeviation": 0.16175078320213676,
-    "mediumDeviation": 0.0916230225099904,
-    "coarseDeviation": 0.031161692341720535,
+    "analysisColourSpace": "linear-srgb",
+    "normalizedEntropy": 0.5781602420339822,
+    "meanGradient": 0.37036942568932535,
+    "heightDeviation": 0.07010477139078582,
+    "fineDeviation": 0.11242182387336401,
+    "mediumDeviation": 0.054167320514684564,
+    "coarseDeviation": 0.016607102880367326,
     "multiScaleBalance": 1,
-    "periodicity": 0.005543286282399112,
-    "irregularity": 0.9625905206365152,
+    "periodicity": 0.0023399160208157316,
+    "irregularity": 0.8729800894060316,
+    "normalGradientP90": 1.0648196234338598,
+    "normalSlopeRms": 0.6148163800971169,
+    "roughnessDeviation": 0.05846105696589238,
+    "surfaceSignalConfidence": 1,
     "confidence": 0.84,
+    "delight": {
+      "method": "bounded-linear-illumination-field-v1",
+      "strength": 0.2,
+      "lightingField": [296, 384],
+      "radius": 16,
+      "targetLinearLuma": 0.09431457951282261,
+      "lumaRangeBefore": 0.39215686274509803,
+      "lumaRangeAfter": 0.39215686274509803,
+      "meanCorrection": 1.0053960755979978,
+      "minimumCorrection": 0.8895981908167822,
+      "maximumCorrection": 1.1549025422677703,
+      "clippedFraction": 0,
+      "confidence": 0.6473529411764706
+    },
     "limitation": "Absolute height is photometric and estimated until scan- or measurement-calibrated."
+  },
+  "surfaceEvidenceAudit": {
+    "schema": "morphloom.reference-surface-evidence/0.1",
+    "expectation": "irregular-granular",
+    "pass": true,
+    "score": 97.8440028897536,
+    "checks": [
+      { "id": "signal", "measured": 1, "pass": true, "score": 100, "threshold": ">=0.65" },
+      { "id": "multiscale", "measured": 1, "pass": true, "score": 100, "threshold": ">=0.667" },
+      { "id": "irregularity", "measured": 0.8729800894060316, "pass": true, "score": 87.29800894060315, "threshold": ">=0.65" },
+      { "id": "aperiodic", "measured": 0.0023399160208157316, "pass": true, "score": 99.76600839791843, "threshold": "<=0.65" },
+      { "id": "normal-response", "measured": 0.6148163800971169, "pass": true, "score": 100, "threshold": "0.15..1.8" },
+      { "id": "roughness-variation", "measured": 0.05846105696589238, "pass": true, "score": 100, "threshold": ">=0.015" }
+    ],
+    "blockers": []
   },
   "geometry": {
     "heightField": [99, 128],
     "heightSamples": 12672,
     "aggregateFeatures": 13229,
     "triangles": 124616,
-    "rmsHeightMm": 0.5770698039239935,
-    "peakToValleyMm": 4.352079947778916,
+    "rmsHeightMm": 0.5147759714688649,
+    "peakToValleyMm": 4.374932833886447,
     "watertightMeshes": 1,
     "meshes": 1,
     "boundaryEdges": 0,
@@ -31,17 +65,19 @@
     "degenerateTriangles": 0
   },
   "appearance": {
-    "reliefMethod": "image-multiscale-height-v2",
+    "reliefMethod": "image-multiscale-height-v3",
+    "heightNormalRoughnessShareDelitPixels": true,
     "referenceProjection": 1,
     "derivedNormalMaps": 1,
     "derivedRoughnessMaps": 1,
     "fingerprintVerified": true
   },
   "delivery": {
+    "compilerRevision": "morphloom-compiler/0.24.0",
     "nodeCompile": "pass",
-    "sceneFingerprint": "f9fb95e7ee7f33d8",
+    "sceneFingerprint": "1587bb333cfd8ca9",
     "browserGlbReopen": "reverification-required",
-    "reason": "The compiler 0.8.0 multiscale upgrade invalidated the older browser proof. The local source bitmap and generated IR are intentionally not redistributed; browser delivery must be rerun from that local evidence before this exact photo-conditioned asset is released. The repository's procedural asphalt release case has a separate current browser proof."
+    "reason": "The compiler 0.24.0 linear-light, resolution-normalized surface upgrade invalidated the older browser proof. The local source bitmap and generated IR are intentionally not redistributed; browser delivery must be rerun from that local evidence before this exact photo-conditioned asset is released. The repository's procedural asphalt release case has a separate current browser proof."
   },
-  "testPolicy": "Nine focused tests cover deterministic multiscale analysis, irregularity discrimination, bounded PBR derivation, corrupted PNG rejection, sample budgets, coordinate orientation, closed topology, outward side normals, multi-material delivery primitives, and malformed IR rejection. A separate comparator regression rejects periodic stripes that imitate aggregate variance. Test count is not used as a quality score."
+  "testPolicy": "Twelve focused tests cover deterministic multiscale analysis, resolution-stable normal/roughness response, single-code-value noise suppression, irregular evidence acceptance, flat/periodic evidence rejection, bounded PBR derivation, sample budgets, coordinate orientation, closed topology, outward side normals, multi-material delivery primitives, and malformed IR rejection. Test count is not used as a quality score."
 }

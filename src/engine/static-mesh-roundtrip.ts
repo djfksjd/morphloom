@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { STLExporter } from 'three/addons/exporters/STLExporter.js';
-import { snapshotScene, type SceneSnapshot } from './delivery-validation';
+import { DELIVERY_PIPELINE_REVISION, snapshotScene, type SceneSnapshot } from './delivery-validation';
 
 export type StaticMeshFormat = 'obj' | 'stl' | 'ply';
-export const STATIC_DELIVERY_REVISION = 'morphloom-static-delivery/0.4.0';
+export const STATIC_DELIVERY_REVISION = 'morphloom-static-delivery/0.5.0';
 
 export interface StaticMeshRoundTripAudit {
   schema: 'morphloom.static-mesh-roundtrip/0.2';
@@ -21,6 +21,23 @@ export interface StaticMeshRoundTripAudit {
 }
 
 export const MAX_STATIC_EXPORT_BYTES = 256 * 1024 * 1024;
+
+export interface AssetPackRevisionClaim {
+  compilerRevision?: string;
+  staticDeliveryRevision?: string;
+}
+
+/** Prevents an old browser export from being relabelled as current proof. */
+export function auditAssetPackRevision(claim: AssetPackRevisionClaim): string[] {
+  const blockers: string[] = [];
+  if (claim.compilerRevision !== DELIVERY_PIPELINE_REVISION) {
+    blockers.push(`Asset pack compiler revision ${claim.compilerRevision ?? 'missing'} does not match ${DELIVERY_PIPELINE_REVISION}.`);
+  }
+  if (claim.staticDeliveryRevision !== STATIC_DELIVERY_REVISION) {
+    blockers.push(`Asset pack static-delivery revision ${claim.staticDeliveryRevision ?? 'missing'} does not match ${STATIC_DELIVERY_REVISION}.`);
+  }
+  return blockers;
+}
 
 export function assertStaticMeshPayloadBytes(bytes: number): void {
   if (!Number.isInteger(bytes) || bytes < 1 || bytes > MAX_STATIC_EXPORT_BYTES) {

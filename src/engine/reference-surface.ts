@@ -14,6 +14,14 @@ export interface ReferenceSurfaceMetrics {
   multiScaleBalance: number;
   periodicity: number;
   irregularity: number;
+  /** Robust image-space gradient used to normalize tangent-space normals. */
+  normalGradientP90: number;
+  /** RMS tangent slope after robust normalization; stable across source resolution. */
+  normalSlopeRms: number;
+  /** Standard deviation of the generated roughness signal in normalized units. */
+  roughnessDeviation: number;
+  /** Bounded confidence that local contrast exceeds the absolute noise floor. */
+  surfaceSignalConfidence: number;
 }
 
 export interface ReferenceSurfaceAnalysis {
@@ -25,8 +33,17 @@ export interface ReferenceSurfaceAnalysis {
   metrics: ReferenceSurfaceMetrics;
 }
 
+export interface ReferenceSurfaceEvidenceAudit {
+  schema: 'morphloom.reference-surface-evidence/0.1';
+  expectation: 'irregular-granular';
+  pass: boolean;
+  score: number;
+  checks: Array<{ id: string; pass: boolean; score: number; measured: number; threshold: string }>;
+  blockers: string[];
+}
+
 export interface QuantizedReferenceHeightField {
-  method: 'image-highpass-height-v1' | 'image-multiscale-height-v2';
+  method: 'image-highpass-height-v1' | 'image-multiscale-height-v2' | 'image-multiscale-height-v3';
   width: number;
   height: number;
   samples: number[];
@@ -34,6 +51,23 @@ export interface QuantizedReferenceHeightField {
   blend: number;
   fingerprint: string;
   irregularity: number;
+}
+
+function srgbByteToLinear(value: number): number {
+  const normalized = value / 255;
+  return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+}
+
+function percentileFromHistogram(histogram: Uint32Array, fraction: number, maximum: number): number {
+  const total = histogram.reduce((sum, value) => sum + value, 0);
+  if (total === 0) return 0;
+  const target = Math.max(0, Math.min(total - 1, Math.round(fraction * (total - 1))));
+  let seen = 0;
+  for (let index = 0; index < histogram.length; index += 1) {
+    seen += histogram[index]!;
+    if (seen > target) return index / (histogram.length - 1) * maximum;
+  }
+  return maximum;
 }
 
 function rms(values: Float32Array): number {
@@ -124,7 +158,14 @@ export function analyzeReferenceSurface(
   for (let index = 0; index < count; index += 1) {
     const offset = index * 4;
     const alpha = pixels[offset + 3]! / 255;
-    const value = ((pixels[offset]! * 0.2126 + pixels[offset + 1]! * 0.7152 + pixels[offset + 2]! * 0.0722) / 255) * alpha;
+    // Surface gradients are a lighting calculation. Work in linear light so
+    // an sRGB gamma curve cannot turn the same physical contrast into a
+    // different height or normal response.
+    const value = (
+      srgbByteToLinear(pixels[offset]!) * 0.2126
+      + srgbByteToLinear(pixels[offset + 1]!) * 0.7152
+      + srgbByteToLinear(pixels[offset + 2]!) * 0.0722
+    ) * alpha;
     luminance[index] = value;
     histogram[Math.min(31, Math.floor(value * 32))] += 1;
   }
@@ -158,7 +199,8 @@ export function analyzeReferenceSurface(
   const mediumDeviation = rms(mediumBand);
   const coarseDeviation = rms(coarseBand);
   const deviation = rms(highpass);
-  const normalizer = Math.max(deviation * 2.8, 1 / 255);
+  // Do not amplify one-code-value sensor/compression noise into full relief.
+  const normalizer = Math.max(deviation * 2.8, 0.012);
   const heights = new Float32Array(count);
   for (let index = 0; index < count; index += 1) {
     heights[index] = THREE.MathUtils.clamp(highpass[index]! / normalizer, -1, 1);
@@ -166,23 +208,74 @@ export function analyzeReferenceSurface(
 
   const normalRgba = new Uint8ClampedArray(count * 4);
   const roughnessRgba = new Uint8ClampedArray(count * 4);
-  let gradientSum = 0;
   const heightAt = (x: number, y: number) => heights[Math.max(0, Math.min(height - 1, y)) * width + Math.max(0, Math.min(width - 1, x))]!;
+  // Reuse the no-longer-needed high-pass buffer to keep the maximum image
+  // analysis allocation bounded. A robust percentile makes normal strength
+  // invariant to uniform source resampling and prevents a handful of hot
+  // pixels from flattening the rest of the surface.
+  const gradientMagnitudes = highpass;
+  const gradientHistogram = new Uint32Array(256);
+  const maximumGradient = Math.SQRT2 * 2;
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const magnitude = Math.hypot(
+        heightAt(x + 1, y) - heightAt(x - 1, y),
+        heightAt(x, y + 1) - heightAt(x, y - 1),
+      );
+      gradientMagnitudes[y * width + x] = magnitude;
+      gradientHistogram[Math.min(255, Math.round(magnitude / maximumGradient * 255))] += 1;
+    }
+  }
+  const normalGradientP90 = percentileFromHistogram(gradientHistogram, 0.9, maximumGradient);
+  // A fixed lower bound prevents two-level checker/JPEG noise (whose central
+  // differences cancel over most pixels) from making a few boundary samples
+  // define an almost vertical normal field.
+  const gradientNormalizer = Math.max(normalGradientP90, 0.25);
+  const surfaceSignalConfidence = THREE.MathUtils.clamp(deviation / 0.012, 0, 1);
+  const fineNormalizer = Math.max(fineDeviation * 2.8, 0.006);
+  const mediumNormalizer = Math.max(mediumDeviation * 2.8, 0.006);
+  const coarseNormalizer = Math.max(coarseDeviation * 2.8, 0.006);
+  let gradientSum = 0;
+  let slopeSquaredSum = 0;
+  let roughnessSum = 0;
+  let roughnessSquaredSum = 0;
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const index = y * width + x;
       const offset = index * 4;
-      const dx = (heightAt(x + 1, y) - heightAt(x - 1, y)) * strength * 1.9;
-      const dy = (heightAt(x, y + 1) - heightAt(x, y - 1)) * strength * 1.9;
+      const dx = THREE.MathUtils.clamp(
+        (heightAt(x + 1, y) - heightAt(x - 1, y)) / gradientNormalizer
+          * strength * 0.9 * surfaceSignalConfidence,
+        -3,
+        3,
+      );
+      const dy = THREE.MathUtils.clamp(
+        (heightAt(x, y + 1) - heightAt(x, y - 1)) / gradientNormalizer
+          * strength * 0.9 * surfaceSignalConfidence,
+        -3,
+        3,
+      );
       const length = Math.hypot(dx, dy, 1);
       normalRgba[offset] = Math.round(((-dx / length) * 0.5 + 0.5) * 255);
       normalRgba[offset + 1] = Math.round(((dy / length) * 0.5 + 0.5) * 255);
       normalRgba[offset + 2] = Math.round(1 / length * 255);
       normalRgba[offset + 3] = 255;
-      const gradient = Math.min(1, Math.hypot(dx, dy));
+      const gradient = Math.min(1, gradientMagnitudes[index]! / gradientNormalizer) * surfaceSignalConfidence;
       gradientSum += gradient;
-      const roughness = Math.round(THREE.MathUtils.lerp(184, 255, gradient));
+      slopeSquaredSum += dx * dx + dy * dy;
+      const localStructure = THREE.MathUtils.clamp(
+        Math.abs(fineBand[index]!) / fineNormalizer * 0.5
+          + Math.abs(mediumBand[index]!) / mediumNormalizer * 0.32
+          + Math.abs(coarseBand[index]!) / coarseNormalizer * 0.18,
+        0,
+        1,
+      ) * surfaceSignalConfidence;
+      const roughnessSignal = gradient * 0.52 + localStructure * 0.48;
+      const roughness = Math.round(THREE.MathUtils.lerp(184, 255, roughnessSignal));
       roughnessRgba.set([roughness, roughness, roughness, 255], offset);
+      const normalizedRoughness = roughness / 255;
+      roughnessSum += normalizedRoughness;
+      roughnessSquaredSum += normalizedRoughness * normalizedRoughness;
     }
   }
 
@@ -198,6 +291,9 @@ export function analyzeReferenceSurface(
     normalizedCorrelation(heights, width, height, 0, Math.max(1, Math.floor(height / 4))),
   );
   const meanGradient = gradientSum / count;
+  const normalSlopeRms = Math.sqrt(slopeSquaredSum / count);
+  const meanRoughness = roughnessSum / count;
+  const roughnessDeviation = Math.sqrt(Math.max(0, roughnessSquaredSum / count - meanRoughness * meanRoughness));
   const scaleTotal = fineDeviation + mediumDeviation + coarseDeviation;
   const activeScales = scaleTotal <= 1e-12 ? 0 : [fineDeviation, mediumDeviation, coarseDeviation]
     .filter((value) => value / scaleTotal >= 0.08).length;
@@ -226,7 +322,43 @@ export function analyzeReferenceSurface(
       multiScaleBalance,
       periodicity,
       irregularity,
+      normalGradientP90,
+      normalSlopeRms,
+      roughnessDeviation,
+      surfaceSignalConfidence,
     },
+  };
+}
+
+/**
+ * Fails closed when a claimed crushed-stone or porous reference is actually
+ * flat, single-scale, periodic, or too weak to support derived physical maps.
+ * This gate evaluates evidence in the admitted photograph; it does not claim
+ * measured millimetre height or material identity from one image.
+ */
+export function auditReferenceSurfaceEvidence(
+  analysis: ReferenceSurfaceAnalysis,
+  expectation: ReferenceSurfaceEvidenceAudit['expectation'] = 'irregular-granular',
+): ReferenceSurfaceEvidenceAudit {
+  const metrics = analysis.metrics;
+  const definitions = [
+    { id: 'signal', measured: metrics.surfaceSignalConfidence, pass: metrics.surfaceSignalConfidence >= 0.65, score: metrics.surfaceSignalConfidence, threshold: '>=0.65' },
+    { id: 'multiscale', measured: metrics.multiScaleBalance, pass: metrics.multiScaleBalance >= 2 / 3, score: metrics.multiScaleBalance, threshold: '>=0.667' },
+    { id: 'irregularity', measured: metrics.irregularity, pass: metrics.irregularity >= 0.65, score: metrics.irregularity, threshold: '>=0.65' },
+    { id: 'aperiodic', measured: metrics.periodicity, pass: metrics.periodicity <= 0.65, score: 1 - metrics.periodicity, threshold: '<=0.65' },
+    { id: 'normal-response', measured: metrics.normalSlopeRms, pass: metrics.normalSlopeRms >= 0.15 && metrics.normalSlopeRms <= 1.8, score: THREE.MathUtils.clamp(metrics.normalSlopeRms / 0.6, 0, 1), threshold: '0.15..1.8' },
+    { id: 'roughness-variation', measured: metrics.roughnessDeviation, pass: metrics.roughnessDeviation >= 0.015, score: THREE.MathUtils.clamp(metrics.roughnessDeviation / 0.05, 0, 1), threshold: '>=0.015' },
+  ];
+  const checks = definitions.map((check) => ({ ...check, score: check.score * 100 }));
+  const blockers = checks.filter((check) => !check.pass)
+    .map((check) => `${check.id} ${check.measured.toFixed(4)} does not satisfy ${check.threshold}`);
+  return {
+    schema: 'morphloom.reference-surface-evidence/0.1',
+    expectation,
+    pass: blockers.length === 0,
+    score: checks.reduce((sum, check) => sum + check.score, 0) / checks.length,
+    checks,
+    blockers,
   };
 }
 
@@ -268,7 +400,7 @@ export function quantizeReferenceHeightField(
     }
   }
   return {
-    method: 'image-multiscale-height-v2',
+    method: 'image-multiscale-height-v3',
     width,
     height,
     samples,

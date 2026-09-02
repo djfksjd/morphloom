@@ -2,7 +2,16 @@ import { createHash } from 'node:crypto';
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, extname, relative, resolve } from 'node:path';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
-import { analyzeReferenceSurface, quantizeReferenceHeightField } from '../src/engine/reference-surface';
+import {
+  analyzeReferenceSurface,
+  auditReferenceSurfaceEvidence,
+  quantizeReferenceHeightField,
+} from '../src/engine/reference-surface';
+import {
+  delightReferenceProjection,
+  extendOpaqueProjectionColors,
+  isReferenceDelightAccepted,
+} from '../src/engine/reference-projection-image';
 import { decodeReferenceImage } from './lib/reference-image-decoder';
 
 interface Arguments {
@@ -36,7 +45,19 @@ async function main(): Promise<void> {
   const sourceBytes = await readFile(resolve(args.input));
   const decoded = await decodeReferenceImage(sourceBytes);
   const fingerprint = createHash('sha256').update(sourceBytes).digest('hex');
-  const analysis = analyzeReferenceSurface(decoded.rgba, decoded.width, decoded.height, 1.25);
+  // Geometry relief and runtime normal/roughness must describe the same
+  // de-lit surface. Previously the CLI displaced raw photographed lighting
+  // while the viewer derived PBR maps from a corrected plate.
+  const opaque = extendOpaqueProjectionColors(decoded.rgba, decoded.width, decoded.height);
+  const delighted = delightReferenceProjection(opaque.rgba, decoded.width, decoded.height);
+  if (!isReferenceDelightAccepted(delighted.metrics)) {
+    throw new Error('Reference de-lighting did not satisfy the bounded surface evidence contract.');
+  }
+  const analysis = analyzeReferenceSurface(delighted.rgba, decoded.width, decoded.height, 1.25);
+  const surfaceAudit = auditReferenceSurfaceEvidence(analysis);
+  if (!surfaceAudit.pass) {
+    throw new Error(`Reference does not prove an irregular granular surface: ${surfaceAudit.blockers.join('; ')}`);
+  }
   const aspect = decoded.width / decoded.height;
   // A 128-sample long edge preserves individual 3–6 mm aggregate clusters in
   // a 600 mm swatch while staying far below the geometry and JSON budgets.
@@ -66,6 +87,9 @@ async function main(): Promise<void> {
     sourceBoundary: 'local user-supplied photograph; relief is photometric and remains estimated until height-calibrated',
     referenceFingerprint: fingerprint,
     referenceSurfaceMetrics: analysis.metrics,
+    referenceDelight: delighted.metrics,
+    referenceAlphaFillPixels: opaque.filledPixels,
+    referenceSurfaceAudit: surfaceAudit,
   };
   const component = ir.components[0]!;
   component.name = 'Photo-conditioned coarse asphalt sample';
@@ -104,6 +128,9 @@ async function main(): Promise<void> {
     heightField: [fieldWidth, fieldHeight],
     fingerprint,
     metrics: analysis.metrics,
+    delight: delighted.metrics,
+    alphaFillPixels: opaque.filledPixels,
+    surfaceAudit,
   }, null, 2)}\n`);
 }
 

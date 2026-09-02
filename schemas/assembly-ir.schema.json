@@ -217,7 +217,7 @@
           "additionalProperties": false,
           "required": ["method", "width", "height", "samples", "amplitudeMm", "blend", "fingerprint", "irregularity"],
           "properties": {
-            "method": { "enum": ["image-highpass-height-v1", "image-multiscale-height-v2"] },
+            "method": { "enum": ["image-highpass-height-v1", "image-multiscale-height-v2", "image-multiscale-height-v3"] },
             "width": { "type": "integer", "minimum": 2, "maximum": 128 },
             "height": { "type": "integer", "minimum": 2, "maximum": 128 },
             "samples": { "type": "array", "minItems": 4, "maxItems": 16384, "items": { "type": "integer", "minimum": -32767, "maximum": 32767 } },

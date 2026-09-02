@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
   "readinessRevision": "morphloom-domain-readiness/0.12.0",
-  "generatedAt": "2026-09-02T07:50:10.044Z",
+  "generatedAt": "2026-09-02T08:43:48.984Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -36,6 +36,7 @@
     ],
     "blockers": [
       "browser proof schema mismatch",
+      "browser proof compiler revision mismatch",
       "browser proof scene-fingerprint revision mismatch"
     ],
     "assets": [
@@ -43,6 +44,7 @@
         "id": "ornate-knife-product-visualization",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -53,6 +55,7 @@
         "id": "pinterest-concept-architectural-review",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -63,6 +66,7 @@
         "id": "laurel-homes-architectural-review",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -73,6 +77,7 @@
         "id": "cooling-service-assembly",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -83,6 +88,7 @@
         "id": "single-view-character-previs",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -93,6 +99,7 @@
         "id": "field-human-runtime-base",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -103,6 +110,7 @@
         "id": "asphalt-print-surface",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -126,6 +134,7 @@
     ],
     "blockers": [
       "browser proof schema mismatch",
+      "browser proof compiler revision mismatch",
       "browser proof scene-fingerprint revision mismatch"
     ],
     "assets": [
@@ -133,6 +142,7 @@
         "id": "ornate-knife-product-visualization",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -143,6 +153,7 @@
         "id": "laurel-homes-architectural-review",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -153,6 +164,7 @@
         "id": "field-human-runtime-base",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -163,6 +175,7 @@
         "id": "asphalt-print-surface",
         "pass": false,
         "blockers": [
+          "input fingerprint does not match the current deterministic build",
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
           "texture-payload parity is not proven",
@@ -1372,7 +1385,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "a3beb64c56385aba",
       "repeatedFingerprint": "a3beb64c56385aba",
-      "inputFingerprint": "fc2f8f89b09dbd0f",
+      "inputFingerprint": "3b2dbf32febb4af2",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
@@ -1395,7 +1408,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "a51a78f2185ee189",
       "repeatedFingerprint": "a51a78f2185ee189",
-      "inputFingerprint": "1252c08c0593cc58",
+      "inputFingerprint": "7732d835088ab193",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -1419,7 +1432,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "659ac3e6f50ed5d0",
       "repeatedFingerprint": "659ac3e6f50ed5d0",
-      "inputFingerprint": "3112aae51f72ed54",
+      "inputFingerprint": "caf55ebc2c849d0f",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
@@ -1442,7 +1455,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "8be51d903d744953",
       "repeatedFingerprint": "8be51d903d744953",
-      "inputFingerprint": "5fcba7ad52e03423",
+      "inputFingerprint": "faeb900445ce8468",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -1466,7 +1479,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "4db007f33582f5c9",
       "repeatedFingerprint": "4db007f33582f5c9",
-      "inputFingerprint": "295e762e5f28a1d5",
+      "inputFingerprint": "a800cd19ddcec290",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
@@ -1490,7 +1503,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "fa5e961719cc8e0e",
       "repeatedFingerprint": "fa5e961719cc8e0e",
-      "inputFingerprint": "a84dc3c941e01b74",
+      "inputFingerprint": "0b43ff028c153901",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
@@ -1513,7 +1526,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "fa5e961719cc8e0e",
       "repeatedFingerprint": "fa5e961719cc8e0e",
-      "inputFingerprint": "a84dc3c941e01b74",
+      "inputFingerprint": "0b43ff028c153901",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
@@ -1536,7 +1549,7 @@
       "domainChecksPass": true,
       "firstFingerprint": "59ab2351955baa46",
       "repeatedFingerprint": "59ab2351955baa46",
-      "inputFingerprint": "1e6d498c419c3da5",
+      "inputFingerprint": "834d613549c62d02",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
