@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T04:23:55.025Z",
+  "generatedAt": "2026-09-02T04:57:27.528Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1818,6 +1818,113 @@
         }
       ],
       "cases": []
+    },
+    "staticDelivery": {
+      "schema": "morphloom.static-delivery-proof/0.3",
+      "generatedAt": "2026-09-02T04:57:26.443Z",
+      "compilerRevision": "morphloom-compiler/0.23.0",
+      "assetId": "moderncat-concept-residence",
+      "expectedSourceTriangles": 81768,
+      "assetPack": {
+        "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
+        "bytes": 8114831,
+        "sha256": "2de2386f8bcdb063eec7a8de2c73375a0cf17029ad46fe7100c1f42ce6d58b4b",
+        "inputFingerprint": "1252c08c0593cc58",
+        "browserRoundTrip": "pass"
+      },
+      "status": "pass",
+      "blenderVersion": "5.2.1 LTS",
+      "formats": {
+        "obj": {
+          "source": "morphloom-cad-mesh.obj",
+          "bytes": 43197734,
+          "sha256": "7d6b755ea12c0980077190d4d2f9ae01cb04ecad7fca1b34f0aad460467b3b84",
+          "meshes": 147,
+          "vertices": 242181,
+          "triangles": 81768,
+          "bounds": {
+            "min": [
+              -6.769999980926514,
+              -6.190000057220459,
+              -0.22000037133693695
+            ],
+            "max": [
+              6.769999980926514,
+              5.045000076293945,
+              7.09499979019165
+            ],
+            "size": [
+              13.539999961853027,
+              11.235000610351562,
+              7.315000057220459
+            ]
+          }
+        },
+        "stl": {
+          "source": "morphloom-cad-mesh.stl",
+          "bytes": 4088484,
+          "sha256": "a632fb165fe08561d8f74c7d7e8dc0c4f279ba0aa43c462c0c35a21a5d631a83",
+          "meshes": 1,
+          "vertices": 41178,
+          "triangles": 81768,
+          "bounds": {
+            "min": [
+              -6.769999980926514,
+              -0.2199999988079071,
+              -5.044999599456787
+            ],
+            "max": [
+              6.769999980926514,
+              7.09499979019165,
+              6.190000057220459
+            ],
+            "size": [
+              13.539999961853027,
+              7.314999580383301,
+              11.234999656677246
+            ]
+          }
+        },
+        "ply": {
+          "source": "morphloom-static-mesh.ply",
+          "bytes": 8813037,
+          "sha256": "8d7673c4bf5e474b7650fa63c0eac27a5c409f0a35c7348be6025980ad21e70b",
+          "meshes": 1,
+          "vertices": 242181,
+          "triangles": 81768,
+          "bounds": {
+            "min": [
+              -6.769999980926514,
+              -0.2199999988079071,
+              -5.044999599456787
+            ],
+            "max": [
+              6.769999980926514,
+              7.09499979019165,
+              6.190000057220459
+            ],
+            "size": [
+              13.539999961853027,
+              7.314999580383301,
+              11.234999656677246
+            ]
+          }
+        }
+      },
+      "parity": {
+        "triangles": 81768,
+        "maximumAxisNormalizedEnvelopeDriftMm": 0.00095367431640625
+      },
+      "usdz": {
+        "source": "morphloom-apple-ar.usdz",
+        "bytes": 27419288,
+        "sha256": "84f6f45161e2fa42e977c4afb174efc7908e2c91017bcfc4d4ecbe9466a163cb",
+        "validator": "/usr/bin/usdchecker",
+        "status": "pass"
+      },
+      "blockers": [],
+      "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
+      "benchmarkAccepted": true
     }
   },
   "capabilityMatrix": [
@@ -1905,6 +2012,16 @@
       "capability": "DCC re-export sanitation with final-byte conformance gate",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes"
+    },
+    {
+      "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "81,768 triangles preserved in all formats; axis-normalized envelope drift 0.000954 mm"
+    },
+    {
+      "capability": "USDZ Apple conformance validation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "pass—/usr/bin/usdchecker"
     },
     {
       "capability": "Unity application import execution",

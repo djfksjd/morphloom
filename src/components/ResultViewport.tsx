@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import * as THREE from 'three';
+import { strToU8, zipSync } from 'fflate';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
@@ -8,6 +9,9 @@ import { PLYExporter } from 'three/addons/exporters/PLYExporter.js';
 import { STLExporter } from 'three/addons/exporters/STLExporter.js';
 import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import type { CharacterBuild } from '../engine/character';
 import { buildCharacter } from '../engine/character';
 import { buildProduct, type ProductBuild, type ProductPartInfo } from '../engine/product';
@@ -39,6 +43,8 @@ import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../e
 import { canonicalizeGlbBufferViews } from '../engine/glb-canonicalization';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from '../types';
 import { SerializedTaskQueue } from '../engine/serialized-task-queue';
+import { assertStaticMeshPayloadBytes, compareStaticMeshRoundTrip, type StaticMeshFormat, type StaticMeshRoundTripAudit } from '../engine/static-mesh-roundtrip';
+import { repairThreeUsdz } from '../engine/usdz-conformance';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
 export type BuildingLevel = 'all' | 'L1' | 'L2';
@@ -488,6 +494,38 @@ async function verifyGlbRoundTrip(root: THREE.Object3D, bytes: ArrayBuffer, inpu
 function stlBytes(root: THREE.Object3D): Uint8Array {
   const view = new STLExporter().parse(root, { binary: true });
   return new Uint8Array(view.buffer.slice(view.byteOffset, view.byteOffset + view.byteLength));
+}
+
+function staticMeshRoundTrip(
+  root: THREE.Object3D,
+  format: StaticMeshFormat,
+  payload: string | ArrayBuffer | Uint8Array,
+): StaticMeshRoundTripAudit {
+  const source = snapshotScene(root);
+  let reopened: THREE.Object3D;
+  let bytes: number;
+  if (format === 'obj') {
+    if (typeof payload !== 'string') throw new Error('OBJ round-trip requires text payload.');
+    bytes = new TextEncoder().encode(payload).byteLength;
+    assertStaticMeshPayloadBytes(bytes);
+    reopened = new OBJLoader().parse(payload);
+  } else {
+    if (typeof payload === 'string') throw new Error(`${format.toUpperCase()} round-trip requires binary payload.`);
+    const buffer = payload instanceof Uint8Array
+      ? payload.buffer.slice(payload.byteOffset, payload.byteOffset + payload.byteLength) as ArrayBuffer
+      : payload;
+    bytes = buffer.byteLength;
+    assertStaticMeshPayloadBytes(bytes);
+    const geometry = format === 'stl' ? new STLLoader().parse(buffer) : new PLYLoader().parse(buffer);
+    reopened = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial());
+  }
+  try {
+    const audit = compareStaticMeshRoundTrip(source, snapshotScene(reopened), format, bytes);
+    if (audit.status !== 'pass') throw new Error(`${format.toUpperCase()} round-trip blocked: ${audit.blockers.join('; ')}`);
+    return audit;
+  } finally {
+    disposeObject(reopened);
+  }
 }
 
 function textBlob(text: string, type: string): Blob {
@@ -1171,6 +1209,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         try {
           removeInvisibleBranches(deliveryBuild.root);
           const result = new OBJExporter().parse(deliveryBuild.root);
+          staticMeshRoundTrip(deliveryBuild.root, 'obj', result);
           await Promise.resolve();
           if (token !== exportSequenceRef.current) throw new Error('내보내기가 취소되었습니다.');
           return downloadBlob(textBlob(result, 'text/plain;charset=utf-8'), 'morphloom-cad-mesh.obj');
@@ -1185,6 +1224,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         try {
           removeInvisibleBranches(deliveryBuild.root);
           const result = stlBytes(deliveryBuild.root);
+          staticMeshRoundTrip(deliveryBuild.root, 'stl', result);
           await Promise.resolve();
           if (token !== exportSequenceRef.current) throw new Error('내보내기가 취소되었습니다.');
           return downloadBlob(new Blob([result.buffer as ArrayBuffer], { type: 'model/stl' }), 'morphloom-cad-mesh.stl');
@@ -1200,6 +1240,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           removeInvisibleBranches(deliveryBuild.root);
           const result = new PLYExporter().parse(deliveryBuild.root, () => undefined, { binary: true });
           if (!(result instanceof ArrayBuffer)) throw new Error('PLY exporter returned an empty payload.');
+          staticMeshRoundTrip(deliveryBuild.root, 'ply', result);
           await Promise.resolve();
           if (token !== exportSequenceRef.current) throw new Error('내보내기가 취소되었습니다.');
           return downloadBlob(new Blob([result], { type: 'application/octet-stream' }), 'morphloom-static-mesh.ply');
@@ -1218,8 +1259,9 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
             maxTextureSize: 1024,
           });
           if (token !== exportSequenceRef.current) throw new Error('내보내기가 취소되었습니다.');
-          const bytes = result.buffer.slice(result.byteOffset, result.byteOffset + result.byteLength) as ArrayBuffer;
-          return downloadBlob(new Blob([bytes], { type: 'model/vnd.usdz+zip' }), 'morphloom-apple-ar.usdz');
+          const repaired = repairThreeUsdz(result);
+          if (repaired.audit.status !== 'pass') throw new Error(`USDZ conformance blocked: ${repaired.audit.blockers.join('; ')}`);
+          return downloadBlob(new Blob([repaired.bytes.buffer as ArrayBuffer], { type: 'model/vnd.usdz+zip' }), 'morphloom-apple-ar.usdz');
         } finally {
           disposeObject(deliveryBuild.root);
         }
@@ -1256,17 +1298,22 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         let stl: Uint8Array;
         let ply: ArrayBuffer;
         let svg: string;
+        let staticMeshAudits: StaticMeshRoundTripAudit[];
         try {
           obj = new OBJExporter().parse(deliveryBuild.root);
           stl = stlBytes(deliveryBuild.root);
           const plyResult = new PLYExporter().parse(deliveryBuild.root, () => undefined, { binary: true });
           if (!(plyResult instanceof ArrayBuffer)) throw new Error('Asset pack PLY exporter returned an empty payload.');
           ply = plyResult;
+          staticMeshAudits = [
+            staticMeshRoundTrip(deliveryBuild.root, 'obj', obj),
+            staticMeshRoundTrip(deliveryBuild.root, 'stl', stl),
+            staticMeshRoundTrip(deliveryBuild.root, 'ply', ply),
+          ];
           svg = buildFigmaReferenceSvg(deliveryBuild.root, context.assetName);
         } finally {
           disposeObject(deliveryBuild.root);
         }
-        const { strToU8, zipSync } = await import('fflate');
         if (token !== exportSequenceRef.current) throw new Error('에셋 팩 저장이 취소되었습니다.');
         const manifest = {
           schema: 'morphloom.asset-pack/0.1',
@@ -1276,6 +1323,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceIr: context.sourceIr,
           qualityReport: context.qualityReport,
           deliveryAudit: audit,
+          staticMeshAudits,
           localTelemetry: telemetryRef.current,
           privacy: {
             uploadedToServer: false,

@@ -433,6 +433,43 @@ const unityCrossDomainSummary = unityCrossDomain && unityCrossDomain.compilerRev
     blockers: [{ code: 'no-revision-bound-report', detail: 'No Unity report exists for the current compiler revision.' }],
     cases: [],
   };
+type StaticDeliveryFormat = { triangles?: number; sha256?: string; bounds?: { size?: number[] } };
+const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/static-delivery-latest.json', 'utf8')) as {
+    schema?: string;
+    compilerRevision?: string;
+    assetId?: string;
+    expectedSourceTriangles?: number;
+    status?: string;
+    blenderVersion?: string;
+    assetPack?: { inputFingerprint?: string; browserRoundTrip?: string; sha256?: string };
+    formats?: Record<string, StaticDeliveryFormat>;
+    parity?: { triangles?: number; maximumAxisNormalizedEnvelopeDriftMm?: number };
+    usdz?: { status?: string; validator?: string; sha256?: string };
+    blockers?: string[];
+  }
+  : undefined;
+const staticFormats = staticDelivery?.formats ?? {};
+const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery-proof/0.3'
+  && staticDelivery.compilerRevision === DELIVERY_PIPELINE_REVISION
+  && staticDelivery.assetId === 'moderncat-concept-residence'
+  && staticDelivery.status === 'pass'
+  && staticDelivery.assetPack?.browserRoundTrip === 'pass'
+  && /^[a-f0-9]{16}$/.test(staticDelivery.assetPack.inputFingerprint ?? '')
+  && /^[a-f0-9]{64}$/.test(staticDelivery.assetPack.sha256 ?? '')
+  && staticDelivery.expectedSourceTriangles === 81_768
+  && staticDelivery.parity?.triangles === 81_768
+  && Number(staticDelivery.parity.maximumAxisNormalizedEnvelopeDriftMm) <= 0.1
+  && ['obj', 'stl', 'ply'].every((format) => staticFormats[format]?.triangles === 81_768 && /^[a-f0-9]{64}$/.test(staticFormats[format]?.sha256 ?? ''))
+  && staticDelivery.usdz?.status === 'pass'
+  && /^[a-f0-9]{64}$/.test(staticDelivery.usdz.sha256 ?? '')
+  && (staticDelivery.blockers?.length ?? 0) === 0;
+const staticDeliverySummary = staticDelivery
+  ? { ...staticDelivery, benchmarkAccepted: staticDeliveryPass }
+  : {
+    schema: 'morphloom.static-delivery-proof/0.3', compilerRevision: DELIVERY_PIPELINE_REVISION,
+    status: 'not-run', benchmarkAccepted: false, blockers: ['No revision-bound static delivery report exists.'],
+  };
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
 const contract = createFidelityContract(ir, {
@@ -640,6 +677,7 @@ const output = {
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
     blenderCrossDomain: blenderCrossDomainSummary,
     unityCrossDomain: unityCrossDomainSummary,
+    staticDelivery: staticDeliverySummary,
   },
   capabilityMatrix: [
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
@@ -659,6 +697,8 @@ const output = {
     { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
     { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? `Blender ${blenderCrossDomainSummary.blenderVersions.join(', ')}: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation` : 'blocked' },
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
+    { capability: 'OBJ/STL/PLY browser export, loader reopen and independent Blender import parity', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `81,768 triangles preserved in all formats; axis-normalized envelope drift ${staticDelivery?.parity?.maximumAxisNormalizedEnvelopeDriftMm?.toFixed(6)} mm` : 'blocked' },
+    { capability: 'USDZ Apple conformance validation', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `pass—${staticDelivery?.usdz?.validator}` : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with morph-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass ? '9 actual Chromium assets pass; both characters preserve 10/10 morph payloads' : 'blocked' },
@@ -698,4 +738,4 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
   || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass
   || !localAxisAudit.pass || !rotatedLocalPitchAudit.pass || !standardValidationAudit.pass
-  || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;
+  || !blenderRoundTripPass || !blenderCrossDomainPass || !staticDeliveryPass) process.exitCode = 1;

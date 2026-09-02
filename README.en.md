@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-203%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-214%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -91,7 +91,9 @@ PBR surfaces, wiring connectivity, and topology.
 | PNG | Transparent current render without UI, floor, or measurement helpers |
 | ZIP | GLB, OBJ/STL/PLY, IR, quality report, and preview |
 
-OBJ and STL are not STEP/BREP manufacturing solids. Native `.blend`, `.uasset`, and FBX files require conversion in the target application. Blender 5.2.1 has passed the five-domain import/export/reimport proof. A real Unity glTFast prefab-import harness is included, but the stored run is truthfully blocked before import because Unity licensing could not initialize on this Mac; Unreal import is also not yet proven.
+Before download, GLB is reopened with Khronos, glTF Transform, and Three.js; OBJ/STL/PLY are reopened with their matching loaders. Real browser exports of the 81,768-triangle ModernCat building retained all triangles and the same envelope in Blender 5.2.1, with at most 0.001 mm axis-normalized drift. USDZ repairs Three.js shader typing and normal-map decoding, then passes Apple's `usdchecker`. [File hashes and receipts](./benchmarks/static-delivery-latest.json) are stored.
+
+OBJ/STL are not STEP/BREP manufacturing solids, and GLB remains authoritative for PBR, rigs, and animation. Native `.blend`, `.uasset`, and FBX files require target-app conversion. Blender 5.2.1 passed the five-domain GLB round trip. Unity is blocked by local licensing initialization; Unreal import is not yet proven.
 
 ## Included examples
 
@@ -117,6 +119,7 @@ npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-re
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
+npm run benchmark:static-delivery -- --asset-id moderncat-concept-residence --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
 npm run build
 ```
 
