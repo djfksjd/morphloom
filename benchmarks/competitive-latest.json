@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T06:53:11.840Z",
+  "generatedAt": "2026-09-02T07:19:46.582Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -278,7 +278,7 @@
         "industrialDesign": {
           "domain": "industrial-design",
           "pass": false,
-          "score": 89,
+          "score": 90,
           "checks": [
             {
               "id": "determinism",
@@ -310,6 +310,14 @@
               "pass": true,
               "score": 100,
               "detail": "49/49 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "16/16 material payloads serializable",
               "blocking": true
             },
             {
@@ -377,6 +385,7 @@
             "maximumNormalUnitError": 4.087549942966007e-8,
             "pbrSurfaceCoverage": 1,
             "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -470,7 +479,7 @@
         "architecture": {
           "domain": "architecture",
           "pass": false,
-          "score": 89,
+          "score": 90,
           "checks": [
             {
               "id": "determinism",
@@ -502,6 +511,14 @@
               "pass": true,
               "score": 100,
               "detail": "1010/1010 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "321/321 material payloads serializable",
               "blocking": true
             },
             {
@@ -569,6 +586,7 @@
             "maximumNormalUnitError": 3.3657002740383746e-8,
             "pbrSurfaceCoverage": 1,
             "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -694,6 +712,14 @@
               "pass": true,
               "score": 100,
               "detail": "9/9 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 material payloads serializable",
               "blocking": true
             },
             {
@@ -841,6 +867,7 @@
             "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
             "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
             "skeletons": 2,
             "bones": 49,
             "animationClips": 22,
@@ -922,7 +949,7 @@
         "game": {
           "domain": "game",
           "pass": false,
-          "score": 95,
+          "score": 96,
           "checks": [
             {
               "id": "determinism",
@@ -954,6 +981,14 @@
               "pass": true,
               "score": 100,
               "detail": "9/9 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 material payloads serializable",
               "blocking": true
             },
             {
@@ -1125,6 +1160,7 @@
             "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
             "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
             "skeletons": 2,
             "bones": 49,
             "animationClips": 22,
@@ -1206,7 +1242,7 @@
         "print3d": {
           "domain": "3d-print",
           "pass": false,
-          "score": 91,
+          "score": 92,
           "checks": [
             {
               "id": "determinism",
@@ -1238,6 +1274,14 @@
               "pass": true,
               "score": 100,
               "detail": "4/4 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 material payloads serializable",
               "blocking": true
             },
             {
@@ -1329,6 +1373,7 @@
             "maximumNormalUnitError": 3.983618057645799e-8,
             "pbrSurfaceCoverage": 1,
             "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -1734,7 +1779,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1743,7 +1789,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1752,7 +1799,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1761,7 +1809,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1770,7 +1819,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1779,7 +1829,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1788,7 +1839,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           }
         ]
@@ -1817,7 +1869,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1826,7 +1879,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1835,7 +1889,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           },
           {
@@ -1844,7 +1899,8 @@
             "blockers": [
               "build fingerprint does not match the current deterministic build",
               "prepared-scene fingerprint does not match the current deterministic build",
-              "texture-payload parity is not proven"
+              "texture-payload parity is not proven",
+              "material scalar/optical parity is not proven"
             ]
           }
         ]
@@ -2269,14 +2325,19 @@
       "morphloom": "application-import-not-run"
     },
     {
-      "capability": "bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph- and texture-payload parity, same-input deduplication, and stale-result guard",
+      "capability": "bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-, texture-, and material-payload parity, same-input deduplication, and stale-result guard",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "implemented; current schema-0.3 browser receipts required"
+      "morphloom": "implemented; current morphloom.browser-roundtrip/0.4 browser receipts required"
     },
     {
       "capability": "pixel-level texture-content and sampler-state fingerprint with fail-closed GLB parity",
       "img2threejs": "not established in pinned audit",
       "morphloom": "implemented; same-size pixel, UV transform, sampler, or inspectability drift changes the scene fingerprint and blocks delivery"
+    },
+    {
+      "capability": "glTF scalar and optical material fingerprint with fail-closed GLB parity",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented; opacity, emission, normal/AO strength, clearcoat, transmission/volume, IOR, specular, sheen, iridescence, anisotropy, or unsupported semantics block drift"
     },
     {
       "capability": "skeletal animation breadth",

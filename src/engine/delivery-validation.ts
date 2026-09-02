@@ -4,7 +4,7 @@ import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types'
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
 export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.23.0';
-export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.2.0';
+export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.3.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -42,6 +42,13 @@ export interface SceneSnapshot {
   dimensionAudits: number;
   dimensionAuditFingerprint: string;
   materials: number;
+  materialPayloads: Array<{
+    id: string;
+    fingerprint: string;
+    serializable: boolean;
+    unsupportedSemantics: string[];
+  }>;
+  materialPayloadCoverage: number;
   triangles: number;
   geometryBytes: number;
   textureBytes: number;
@@ -77,6 +84,7 @@ export interface DeliveryAudit {
   triangleParity: boolean;
   morphTargetPayloadParity: boolean;
   texturePayloadParity: boolean;
+  materialPayloadParity: boolean;
   namedNodeCoverage: number;
   boundsErrorMm: number;
   source?: SceneSnapshot;
@@ -264,6 +272,94 @@ function materialList(material: THREE.Material | THREE.Material[]): THREE.Materi
   return Array.isArray(material) ? material : [material];
 }
 
+function colorTuple(color: THREE.Color | undefined, fallback: THREE.ColorRepresentation): [number, number, number] {
+  const value = color ?? new THREE.Color(fallback);
+  return [value.r, value.g, value.b];
+}
+
+/**
+ * Canonicalizes the render semantics that Three's GLTFExporter is expected to
+ * preserve. It deliberately ignores the runtime material class: a default
+ * MeshPhysicalMaterial may reopen as MeshStandardMaterial while retaining the
+ * same glTF appearance. Unsupported source semantics are reported separately
+ * instead of being silently accepted.
+ */
+function materialPayload(material: THREE.Material): SceneSnapshot['materialPayloads'][number] {
+  const candidate = material as THREE.MeshPhysicalMaterial & THREE.MeshBasicMaterial;
+  const standard = candidate.isMeshStandardMaterial === true;
+  const physical = candidate.isMeshPhysicalMaterial === true;
+  const unlit = candidate.isMeshBasicMaterial === true;
+  const unsupportedSemantics: string[] = [];
+  if (!standard && !unlit) unsupportedSemantics.push(`unsupported material class ${material.type}`);
+  if (material.side === THREE.BackSide) unsupportedSemantics.push('back-side-only rendering is not representable in glTF');
+  if (material.blending !== THREE.NormalBlending) unsupportedSemantics.push('custom blending is not representable in glTF');
+  if (candidate.normalMap && candidate.normalScale
+    && Math.abs(Math.abs(candidate.normalScale.x) - Math.abs(candidate.normalScale.y)) > 1e-9) {
+    unsupportedSemantics.push('asymmetric normal-map scale is not representable in glTF');
+  }
+
+  const alphaMode = material.transparent ? 'BLEND' : material.alphaTest > 0 ? 'MASK' : 'OPAQUE';
+  const clearcoat = physical ? candidate.clearcoat : 0;
+  const iridescence = physical ? candidate.iridescence : 0;
+  const transmission = physical ? candidate.transmission : 0;
+  const sheen = physical ? candidate.sheen : 0;
+  const anisotropy = physical ? candidate.anisotropy : 0;
+  const dispersion = physical ? candidate.dispersion : 0;
+  const semantics = {
+    schema: 'morphloom.gltf-material-semantics/0.1',
+    name: material.name,
+    unlit,
+    pbrMetallicRoughness: {
+      baseColorFactor: [...colorTuple(candidate.color, 0xffffff), material.opacity],
+      metallicFactor: standard ? candidate.metalness : 0,
+      roughnessFactor: standard ? candidate.roughness : 1,
+    },
+    alphaMode,
+    alphaCutoff: alphaMode === 'MASK' ? material.alphaTest : null,
+    doubleSided: material.side === THREE.DoubleSide,
+    emissiveFactor: standard ? colorTuple(candidate.emissive, 0x000000) : [0, 0, 0],
+    emissiveStrength: standard ? candidate.emissiveIntensity : 1,
+    normalScale: candidate.normalMap ? candidate.normalScale?.x ?? 1 : null,
+    occlusionStrength: candidate.aoMap ? candidate.aoMapIntensity : null,
+    clearcoat: clearcoat > 0 ? {
+      factor: clearcoat,
+      roughnessFactor: candidate.clearcoatRoughness,
+      normalScale: candidate.clearcoatNormalMap ? candidate.clearcoatNormalScale.x : null,
+    } : null,
+    iridescence: iridescence > 0 ? {
+      factor: iridescence,
+      ior: candidate.iridescenceIOR,
+      thicknessMinimum: candidate.iridescenceThicknessRange[0],
+      thicknessMaximum: candidate.iridescenceThicknessRange[1],
+    } : null,
+    transmission: transmission > 0 ? {
+      factor: transmission,
+      thicknessFactor: candidate.thickness,
+      attenuationDistance: Number.isFinite(candidate.attenuationDistance) ? candidate.attenuationDistance : 'infinite',
+      attenuationColor: colorTuple(candidate.attenuationColor, 0xffffff),
+    } : null,
+    ior: physical ? candidate.ior : 1.5,
+    specular: physical ? {
+      factor: candidate.specularIntensity,
+      colorFactor: colorTuple(candidate.specularColor, 0xffffff),
+    } : { factor: 1, colorFactor: [1, 1, 1] },
+    sheen: sheen > 0 ? {
+      activation: sheen,
+      roughnessFactor: candidate.sheenRoughness,
+      colorFactor: colorTuple(candidate.sheenColor, 0x000000),
+    } : null,
+    anisotropy: anisotropy !== 0 ? { strength: anisotropy, rotation: candidate.anisotropyRotation } : null,
+    dispersion: dispersion !== 0 ? dispersion : null,
+    surfaceMetadata: material.userData?.morphloomSurface ?? null,
+  };
+  return {
+    id: material.name || 'unnamed-material',
+    fingerprint: fingerprintJson(semantics),
+    serializable: unsupportedSemantics.length === 0,
+    unsupportedSemantics,
+  };
+}
+
 function textureEstimate(texture: THREE.Texture): number {
   const source = texture.source?.data as { width?: number; height?: number } | undefined;
   const width = Number(source?.width ?? 0);
@@ -281,7 +377,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   root.updateMatrixWorld(true);
   const hasher = new StableHasher();
   hasher.text(SCENE_FINGERPRINT_REVISION);
-  const materials = new Set<string>();
+  const materialPayloadMap = new Map<string, SceneSnapshot['materialPayloads'][number]>();
   const textures = new Set<THREE.Texture>();
   const texturePayloadCache = new Map<THREE.Texture, Omit<SceneSnapshot['texturePayloads'][number], 'id'>>();
   const texturePayloadMap = new Map<string, SceneSnapshot['texturePayloads'][number]>();
@@ -428,14 +524,11 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       hasher.array(index.array);
     }
     for (const material of materialList(object.material)) {
-      const physical = material as THREE.MeshPhysicalMaterial;
-      const materialKey = [
-        material.type, material.name, physical.color?.getHexString(), physical.roughness,
-        physical.metalness, physical.transmission, physical.ior, physical.clearcoat,
-        physical.anisotropy, material.userData?.morphloomSurface?.finish,
-      ].join('|');
-      materials.add(materialKey);
-      hasher.text(materialKey);
+      const payload = materialPayload(material);
+      materialPayloadMap.set(`${payload.id}|${payload.fingerprint}`, payload);
+      hasher.text(payload.id);
+      hasher.text(payload.fingerprint);
+      hasher.text(payload.serializable ? 'serializable' : 'unsupported');
       for (const [slot, value] of Object.entries(material).sort(([left], [right]) => left.localeCompare(right))) {
         if (!(value instanceof THREE.Texture)) continue;
         textures.add(value);
@@ -448,6 +541,16 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   if (visibleBounds.isEmpty()) visibleBounds.set(new THREE.Vector3(), new THREE.Vector3());
   const size = visibleBounds.getSize(new THREE.Vector3());
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
+  const materialPayloads = [...materialPayloadMap.values()].sort((left, right) => (
+    left.id.localeCompare(right.id) || left.fingerprint.localeCompare(right.fingerprint)
+  ));
+  for (const payload of materialPayloads) {
+    hasher.text(payload.id);
+    hasher.text(payload.fingerprint);
+    hasher.text(payload.serializable ? 'serializable' : 'unsupported');
+    for (const issue of payload.unsupportedSemantics) hasher.text(issue);
+  }
+  const serializableMaterialPayloads = materialPayloads.filter((payload) => payload.serializable).length;
   const texturePayloads = [...texturePayloadMap.values()].sort((left, right) => (
     left.id.localeCompare(right.id)
     || left.contentFingerprint.localeCompare(right.contentFingerprint)
@@ -503,7 +606,9 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     planFootprintAuditFingerprint,
     dimensionAudits,
     dimensionAuditFingerprint,
-    materials: materials.size,
+    materials: materialPayloads.length,
+    materialPayloads,
+    materialPayloadCoverage: materialPayloads.length > 0 ? serializableMaterialPayloads / materialPayloads.length : 1,
     triangles: Math.round(triangles),
     geometryBytes,
     textureBytes,
@@ -627,6 +732,19 @@ function texturePayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot): b
   });
 }
 
+function materialPayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot): boolean {
+  if (source.materialPayloadCoverage !== 1 || reopened.materialPayloadCoverage !== 1
+    || source.materialPayloads.length !== reopened.materialPayloads.length) return false;
+  return source.materialPayloads.every((left, index) => {
+    const right = reopened.materialPayloads[index];
+    return right !== undefined
+      && left.id === right.id
+      && left.fingerprint === right.fingerprint
+      && left.serializable === right.serializable
+      && left.unsupportedSemantics.join('|') === right.unsupportedSemantics.join('|');
+  });
+}
+
 export function compareGlbRoundTrip(
   source: SceneSnapshot,
   reopened: SceneSnapshot,
@@ -647,6 +765,7 @@ export function compareGlbRoundTrip(
   const boundsErrorMm = maximumBoundsErrorMm(source, reopened);
   const morphTargetPayloadParity = morphTargetPayloadsMatch(source, reopened);
   const texturePayloadParity = texturePayloadsMatch(source, reopened);
+  const materialPayloadParity = materialPayloadsMatch(source, reopened);
   if (!source.finiteTransforms || !reopened.finiteTransforms) blockers.push('non-finite transform detected');
   if (!meshParity) blockers.push(`delivery primitive count changed ${source.primitives}→${reopened.meshes}`);
   if (!triangleParity) blockers.push(`triangle count changed ${source.triangles}→${reopened.triangles}`);
@@ -676,6 +795,9 @@ export function compareGlbRoundTrip(
   if (source.texturePayloadCoverage < 1) blockers.push('source texture pixels are not fully inspectable');
   if (reopened.texturePayloadCoverage < 1) blockers.push('reopened GLB texture pixels are not fully inspectable');
   if (!texturePayloadParity) blockers.push('texture content or sampling semantics changed during GLB round-trip');
+  if (source.materialPayloadCoverage < 1) blockers.push('source material contains glTF-incompatible render semantics');
+  if (reopened.materialPayloadCoverage < 1) blockers.push('reopened GLB material contains unsupported render semantics');
+  if (!materialPayloadParity) blockers.push('material scalar or optical semantics changed during GLB round-trip');
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -715,6 +837,7 @@ export function compareGlbRoundTrip(
     && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
     && morphTargetPayloadParity
     && texturePayloadParity
+    && materialPayloadParity
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
@@ -739,6 +862,7 @@ export function compareGlbRoundTrip(
     triangleParity,
     morphTargetPayloadParity,
     texturePayloadParity,
+    materialPayloadParity,
     namedNodeCoverage,
     boundsErrorMm,
     source,
@@ -774,6 +898,7 @@ export function blockedDeliveryAudit(error: unknown, fingerprint = 'unavailable'
     triangleParity: false,
     morphTargetPayloadParity: false,
     texturePayloadParity: false,
+    materialPayloadParity: false,
     namedNodeCoverage: 0,
     boundsErrorMm: Number.POSITIVE_INFINITY,
     blockers: [detail.slice(0, 240)],

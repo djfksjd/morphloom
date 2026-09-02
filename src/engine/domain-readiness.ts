@@ -10,7 +10,7 @@ import type { DimensionAudit } from './dimension-contract';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.10.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.11.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -74,6 +74,7 @@ export interface DomainReadinessReport {
     maximumNormalUnitError: number;
     pbrSurfaceCoverage: number;
     texturePayloadCoverage: number;
+    materialPayloadCoverage: number;
     skeletons: number;
     bones: number;
     animationClips: number;
@@ -997,6 +998,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   add('texture-payload', '검증 가능한 질감 픽셀', snapshot.texturePayloadCoverage === 1,
     snapshot.texturePayloadCoverage * 100,
     `${snapshot.texturePayloads.filter((payload) => payload.inspectable).length}/${snapshot.texturePayloads.length} payloads inspectable`);
+  add('material-payload', 'glTF 재질 의미 보존 가능', snapshot.materialPayloadCoverage === 1,
+    snapshot.materialPayloadCoverage * 100,
+    `${snapshot.materialPayloads.filter((payload) => payload.serializable).length}/${snapshot.materialPayloads.length} material payloads serializable`);
   add('glb-roundtrip', '실제 GLB 재열기', input.browserGlbRoundTrip, input.browserGlbRoundTrip ? 100 : 0, input.browserGlbRoundTrip ? '브라우저 GLTFLoader 재열기 통과' : '동일 입력 브라우저 증명 없음');
   const dimensions = input.root.userData.dimensionAudit as DimensionAudit | undefined;
   if (dimensions) {
@@ -1188,6 +1192,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       maximumNormalUnitError: geometry.maximumNormalUnitError,
       pbrSurfaceCoverage,
       texturePayloadCoverage: snapshot.texturePayloadCoverage,
+      materialPayloadCoverage: snapshot.materialPayloadCoverage,
       skeletons: snapshot.skeletons,
       bones: snapshot.bones,
       animationClips: snapshot.animationClips,

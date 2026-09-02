@@ -281,6 +281,7 @@ type BrowserRoundTripAsset = {
   namedNodeCoverage?: number;
   morphTargetPayloadParity?: boolean;
   texturePayloadParity?: boolean;
+  materialPayloadParity?: boolean;
   morphTargets?: number;
   reopenedMorphTargets?: number;
 };
@@ -321,6 +322,7 @@ const browserRoundTripPass = browserRoundTrip.schema === BROWSER_ROUNDTRIP_PROOF
     && Number.isFinite(asset.namedNodeCoverage) && Number(asset.namedNodeCoverage) >= 0.95 && Number(asset.namedNodeCoverage) <= 1
     && asset.morphTargetPayloadParity === true
     && asset.texturePayloadParity === true)
+    && browserAssets.every((asset) => asset.materialPayloadParity === true)
   && browserAssets.filter((asset) => asset.id === 'single-view-character-previs' || asset.id === 'field-human-runtime-base')
     .every((asset) => asset.morphTargets === 10 && asset.reopenedMorphTargets === 10);
 const browserRoundTripSummary = {
@@ -334,6 +336,7 @@ const browserRoundTripSummary = {
     status: asset.status,
     morphTargetPayloadParity: asset.morphTargetPayloadParity,
     texturePayloadParity: asset.texturePayloadParity,
+    materialPayloadParity: asset.materialPayloadParity,
     morphTargets: asset.morphTargets,
     reopenedMorphTargets: asset.reopenedMorphTargets,
     inputFingerprint: asset.inputFingerprint,
@@ -762,8 +765,9 @@ const output = {
     { capability: 'USDZ Apple conformance validation', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `pass—${staticDelivery?.usdz?.validator}` : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
-    { capability: 'bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph- and texture-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass && releaseBrowserProofPass ? `${releaseBrowserBinding?.verifiedAssets}/${releaseBrowserBinding?.expectedAssets} release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately` : 'implemented; current schema-0.3 browser receipts required' },
+    { capability: 'bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-, texture-, and material-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass && releaseBrowserProofPass ? `${releaseBrowserBinding?.verifiedAssets}/${releaseBrowserBinding?.expectedAssets} release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately` : `implemented; current ${BROWSER_ROUNDTRIP_PROOF_SCHEMA} browser receipts required` },
     { capability: 'pixel-level texture-content and sampler-state fingerprint with fail-closed GLB parity', img2threejs: 'not established in pinned audit', morphloom: 'implemented; same-size pixel, UV transform, sampler, or inspectability drift changes the scene fingerprint and blocks delivery' },
+    { capability: 'glTF scalar and optical material fingerprint with fail-closed GLB parity', img2threejs: 'not established in pinned audit', morphloom: 'implemented; opacity, emission, normal/AO strength, clearcoat, transmission/volume, IOR, specular, sheen, iridescence, anisotropy, or unsupported semantics block drift' },
     { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainModelPass('animation') ? '49 bones and 22 semantic delivery clips / 185 tracks; current browser delivery proof pending refresh' : 'blocked' },
     { capability: 'named editable facial controls with spatial and semantic delta localization', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('animation') && domainProof.animation?.metrics?.facialMorphLocalizedTargets === 5 && domainProof.animation?.metrics?.facialMorphSemanticTargets === 5 ? '5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization; current browser delivery proof pending refresh' : 'blocked' },
     { capability: 'per-joint weighted deformation/localization and motion/loop/root-motion checks', img2threejs: 'not established in pinned core audit', morphloom: domainModelPass('animation') ? '10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization; current browser delivery proof pending refresh' : 'blocked' },

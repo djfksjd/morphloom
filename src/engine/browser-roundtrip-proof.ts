@@ -1,6 +1,6 @@
 import { SCENE_FINGERPRINT_REVISION } from './delivery-validation';
 
-export const BROWSER_ROUNDTRIP_PROOF_SCHEMA = 'morphloom.browser-roundtrip/0.3';
+export const BROWSER_ROUNDTRIP_PROOF_SCHEMA = 'morphloom.browser-roundtrip/0.4';
 
 const FINGERPRINT = /^[a-f0-9]{16}$/;
 const SAFE_ASSET_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
@@ -102,6 +102,7 @@ export function auditBrowserRoundTripProof(
     exactFingerprint(asset.sceneFingerprint, expectation.preparedSceneFingerprint, 'prepared-scene fingerprint', assetBlockers);
     if (asset.morphTargetPayloadParity !== true) assetBlockers.push('morph-target payload parity is not proven');
     if (asset.texturePayloadParity !== true) assetBlockers.push('texture-payload parity is not proven');
+    if (asset.materialPayloadParity !== true) assetBlockers.push('material scalar/optical parity is not proven');
     if (typeof asset.boundsErrorMm !== 'number' || !Number.isFinite(asset.boundsErrorMm)
       || asset.boundsErrorMm < 0 || asset.boundsErrorMm > 0.1) {
       assetBlockers.push('round-trip bounds error is missing or exceeds 0.1 mm');

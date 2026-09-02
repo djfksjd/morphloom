@@ -1061,6 +1061,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sceneFingerprintRevision: SCENE_FINGERPRINT_REVISION,
           sourceTexturePayloads: sourceSnapshot.texturePayloads.length,
           sourceTexturePayloadCoverage: sourceSnapshot.texturePayloadCoverage,
+          sourceMaterialPayloads: sourceSnapshot.materialPayloads.length,
+          sourceMaterialPayloadCoverage: sourceSnapshot.materialPayloadCoverage,
         },
       });
       runtime.syncDiagnostics();
@@ -1089,6 +1091,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.namedNodeCoverage = audit.namedNodeCoverage;
               diagnostic.__MORPHLOOM__.morphTargetPayloadParity = audit.morphTargetPayloadParity;
               diagnostic.__MORPHLOOM__.texturePayloadParity = audit.texturePayloadParity;
+              diagnostic.__MORPHLOOM__.materialPayloadParity = audit.materialPayloadParity;
               diagnostic.__MORPHLOOM__.gltfValidator = audit.standardValidation?.validator;
               diagnostic.__MORPHLOOM__.gltfValidatorVersion = audit.standardValidation?.validatorVersion;
               diagnostic.__MORPHLOOM__.gltfValidationStatus = audit.standardValidation?.status;
@@ -1108,6 +1111,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedMorphTargets = audit.reopened?.morphTargets;
               diagnostic.__MORPHLOOM__.reopenedTexturePayloads = audit.reopened?.texturePayloads.length;
               diagnostic.__MORPHLOOM__.reopenedTexturePayloadCoverage = audit.reopened?.texturePayloadCoverage;
+              diagnostic.__MORPHLOOM__.reopenedMaterialPayloads = audit.reopened?.materialPayloads.length;
+              diagnostic.__MORPHLOOM__.reopenedMaterialPayloadCoverage = audit.reopened?.materialPayloadCoverage;
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }

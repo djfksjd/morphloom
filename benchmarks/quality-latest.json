@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "readinessRevision": "morphloom-domain-readiness/0.10.0",
-  "generatedAt": "2026-09-02T06:53:02.160Z",
+  "readinessRevision": "morphloom-domain-readiness/0.11.0",
+  "generatedAt": "2026-09-02T07:19:34.669Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -45,7 +45,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -54,7 +55,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -63,7 +65,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -72,7 +75,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -81,7 +85,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -90,7 +95,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -99,7 +105,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       }
     ]
@@ -128,7 +135,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -137,7 +145,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -146,7 +155,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       },
       {
@@ -155,7 +165,8 @@
         "blockers": [
           "build fingerprint does not match the current deterministic build",
           "prepared-scene fingerprint does not match the current deterministic build",
-          "texture-payload parity is not proven"
+          "texture-payload parity is not proven",
+          "material scalar/optical parity is not proven"
         ]
       }
     ]
@@ -164,7 +175,7 @@
     "industrialDesign": {
       "domain": "industrial-design",
       "pass": false,
-      "score": 89,
+      "score": 90,
       "checks": [
         {
           "id": "determinism",
@@ -196,6 +207,14 @@
           "pass": true,
           "score": 100,
           "detail": "49/49 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "material-payload",
+          "label": "glTF 재질 의미 보존 가능",
+          "pass": true,
+          "score": 100,
+          "detail": "16/16 material payloads serializable",
           "blocking": true
         },
         {
@@ -263,6 +282,7 @@
         "maximumNormalUnitError": 4.087549942966007e-8,
         "pbrSurfaceCoverage": 1,
         "texturePayloadCoverage": 1,
+        "materialPayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -356,7 +376,7 @@
     "architecture": {
       "domain": "architecture",
       "pass": false,
-      "score": 89,
+      "score": 90,
       "checks": [
         {
           "id": "determinism",
@@ -388,6 +408,14 @@
           "pass": true,
           "score": 100,
           "detail": "1010/1010 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "material-payload",
+          "label": "glTF 재질 의미 보존 가능",
+          "pass": true,
+          "score": 100,
+          "detail": "321/321 material payloads serializable",
           "blocking": true
         },
         {
@@ -455,6 +483,7 @@
         "maximumNormalUnitError": 3.3657002740383746e-8,
         "pbrSurfaceCoverage": 1,
         "texturePayloadCoverage": 1,
+        "materialPayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -580,6 +609,14 @@
           "pass": true,
           "score": 100,
           "detail": "9/9 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "material-payload",
+          "label": "glTF 재질 의미 보존 가능",
+          "pass": true,
+          "score": 100,
+          "detail": "3/3 material payloads serializable",
           "blocking": true
         },
         {
@@ -727,6 +764,7 @@
         "maximumNormalUnitError": 4.589581759084638e-8,
         "pbrSurfaceCoverage": 1,
         "texturePayloadCoverage": 1,
+        "materialPayloadCoverage": 1,
         "skeletons": 2,
         "bones": 49,
         "animationClips": 22,
@@ -808,7 +846,7 @@
     "game": {
       "domain": "game",
       "pass": false,
-      "score": 95,
+      "score": 96,
       "checks": [
         {
           "id": "determinism",
@@ -840,6 +878,14 @@
           "pass": true,
           "score": 100,
           "detail": "9/9 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "material-payload",
+          "label": "glTF 재질 의미 보존 가능",
+          "pass": true,
+          "score": 100,
+          "detail": "3/3 material payloads serializable",
           "blocking": true
         },
         {
@@ -1011,6 +1057,7 @@
         "maximumNormalUnitError": 4.589581759084638e-8,
         "pbrSurfaceCoverage": 1,
         "texturePayloadCoverage": 1,
+        "materialPayloadCoverage": 1,
         "skeletons": 2,
         "bones": 49,
         "animationClips": 22,
@@ -1092,7 +1139,7 @@
     "print3d": {
       "domain": "3d-print",
       "pass": false,
-      "score": 91,
+      "score": 92,
       "checks": [
         {
           "id": "determinism",
@@ -1124,6 +1171,14 @@
           "pass": true,
           "score": 100,
           "detail": "4/4 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "material-payload",
+          "label": "glTF 재질 의미 보존 가능",
+          "pass": true,
+          "score": 100,
+          "detail": "1/1 material payloads serializable",
           "blocking": true
         },
         {
@@ -1215,6 +1270,7 @@
         "maximumNormalUnitError": 3.983618057645799e-8,
         "pbrSurfaceCoverage": 1,
         "texturePayloadCoverage": 1,
+        "materialPayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -1314,8 +1370,8 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "9258ff072934f80e",
-      "repeatedFingerprint": "9258ff072934f80e",
+      "firstFingerprint": "bb2bb8dadd037b80",
+      "repeatedFingerprint": "bb2bb8dadd037b80",
       "inputFingerprint": "fc2f8f89b09dbd0f",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
@@ -1337,8 +1393,8 @@
       "evidenceScore": 63,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "130cff728e9dad22",
-      "repeatedFingerprint": "130cff728e9dad22",
+      "firstFingerprint": "2bdd2ddecc6d8517",
+      "repeatedFingerprint": "2bdd2ddecc6d8517",
       "inputFingerprint": "1252c08c0593cc58",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
@@ -1361,8 +1417,8 @@
       "evidenceScore": 87,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "c5fa04721de1de8b",
-      "repeatedFingerprint": "c5fa04721de1de8b",
+      "firstFingerprint": "fb7d09b0842ef75e",
+      "repeatedFingerprint": "fb7d09b0842ef75e",
       "inputFingerprint": "3112aae51f72ed54",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
@@ -1384,8 +1440,8 @@
       "evidenceScore": 52,
       "surfaceCoverage": 0.9285714285714286,
       "domainChecksPass": true,
-      "firstFingerprint": "af446f1541f9a436",
-      "repeatedFingerprint": "af446f1541f9a436",
+      "firstFingerprint": "aaac6dda12534ca3",
+      "repeatedFingerprint": "aaac6dda12534ca3",
       "inputFingerprint": "5fcba7ad52e03423",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
@@ -1408,8 +1464,8 @@
       "evidenceScore": 35,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "332429b7419421ea",
-      "repeatedFingerprint": "332429b7419421ea",
+      "firstFingerprint": "85a8a3f4e5ab194e",
+      "repeatedFingerprint": "85a8a3f4e5ab194e",
       "inputFingerprint": "295e762e5f28a1d5",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
@@ -1432,8 +1488,8 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "34f102e584694bcd",
-      "repeatedFingerprint": "34f102e584694bcd",
+      "firstFingerprint": "ad448f5f11a73a20",
+      "repeatedFingerprint": "ad448f5f11a73a20",
       "inputFingerprint": "a84dc3c941e01b74",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
@@ -1455,8 +1511,8 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "34f102e584694bcd",
-      "repeatedFingerprint": "34f102e584694bcd",
+      "firstFingerprint": "ad448f5f11a73a20",
+      "repeatedFingerprint": "ad448f5f11a73a20",
       "inputFingerprint": "a84dc3c941e01b74",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",
@@ -1478,8 +1534,8 @@
       "evidenceScore": 84,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "388298483ea566f9",
-      "repeatedFingerprint": "388298483ea566f9",
+      "firstFingerprint": "64401aa777f89e98",
+      "repeatedFingerprint": "64401aa777f89e98",
       "inputFingerprint": "1e6d498c419c3da5",
       "browserGlbRoundTrip": false,
       "expectedDecision": "release",

@@ -17,7 +17,7 @@ const expectation: BrowserRoundTripProofExpectation = {
 
 function report() {
   return {
-    schema: 'morphloom.browser-roundtrip/0.3',
+    schema: 'morphloom.browser-roundtrip/0.4',
     compilerRevision: revision,
     fingerprintRevision: SCENE_FINGERPRINT_REVISION,
     console: { errors: 0, warnings: 0 },
@@ -31,6 +31,7 @@ function report() {
       namedNodeCoverage: 1,
       morphTargetPayloadParity: true,
       texturePayloadParity: true,
+      materialPayloadParity: true,
       qualityReleaseReady: true,
     }],
   };
@@ -52,6 +53,7 @@ describe('browser round-trip proof binding', () => {
     ['namedNodeCoverage', 0.94, /named-node coverage/],
     ['morphTargetPayloadParity', false, /morph-target payload/],
     ['texturePayloadParity', false, /texture-payload parity/],
+    ['materialPayloadParity', false, /material scalar\/optical parity/],
     ['qualityReleaseReady', false, /release decision/],
   ])('rejects a stale or incomplete %s receipt', (field, value, message) => {
     const changed = report();
