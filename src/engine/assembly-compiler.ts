@@ -237,6 +237,21 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     inspect(component.position, `${component.id}.position`);
     inspect(component.rotation, `${component.id}.rotation`);
     inspect(component.scale, `${component.id}.scale`);
+    if (component.dimensionAnchors) {
+      if (!Array.isArray(component.dimensionAnchors) || component.dimensionAnchors.length < 1
+        || component.dimensionAnchors.length > 128) {
+        throw new Error(`Dimension anchors must contain 1–128 points in ${component.id}.`);
+      }
+      const anchorIds = new Set<string>();
+      for (const anchor of component.dimensionAnchors) {
+        if (!anchor || !/^[a-zA-Z0-9_-]{1,80}$/.test(anchor.id) || anchorIds.has(anchor.id)
+          || !Array.isArray(anchor.position) || anchor.position.length !== 3
+          || anchor.position.some((value) => !Number.isFinite(value) || Math.abs(value) > 1_000_000)) {
+          throw new Error(`Invalid or duplicate dimension anchor in ${component.id}.`);
+        }
+        anchorIds.add(anchor.id);
+      }
+    }
     if (!component.material || typeof component.material !== 'object' || !/^#[0-9a-fA-F]{6}$/.test(component.material.color)) {
       throw new Error(`Invalid material in ${component.id}.`);
     }
@@ -288,7 +303,13 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     const missingFootprintIds = candidate.planFootprint.componentIds.filter((id) => !ids.has(id));
     if (missingFootprintIds.length > 0) throw new Error(`Plan-footprint references missing components: ${missingFootprintIds.join(', ')}`);
   }
-  if (candidate.dimensionContracts) validateDimensionContracts(candidate.dimensionContracts, ids);
+  if (candidate.dimensionContracts) {
+    const anchorIds = new Map((candidate.components as AssemblyComponentIR[]).map((component) => [
+      component.id,
+      new Set(component.dimensionAnchors?.map((anchor) => anchor.id) ?? []),
+    ]));
+    validateDimensionContracts(candidate.dimensionContracts, ids, anchorIds);
+  }
   if (candidate.fidelity) {
     const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
     if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
@@ -1210,6 +1231,9 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       level: component.level,
     };
     mesh.userData.part = info;
+    if (component.dimensionAnchors) {
+      mesh.userData.dimensionAnchors = structuredClone(component.dimensionAnchors);
+    }
     if (component.light && mode === 'beauty') {
       const fixtureLight = new THREE.PointLight(
         component.light.color,

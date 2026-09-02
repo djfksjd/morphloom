@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-197%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-198%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -130,7 +130,7 @@ This means all eight locked contracts made the correct decision; it does not mea
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|
-| Industrial design | 99 | closed topology · world-space remeasurement of evidence-bound dimensions · UV/normals · at least 75% PBR micro-surface · evidence |
+| Industrial design | 99 | closed topology · evidence-bound dimensions plus hole/pin/lens/connector pitch remeasurement · UV/normals · at least 75% PBR micro-surface · evidence |
 | Architecture | 99 | projected plan/void audit · world-space remeasurement of evidence-bound dimensions · closed shell · finite/non-degenerate UV · at least 80% micro-surface · drawing/measurement evidence |
 | Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · 22 motions/185 tracks · finger weights/19 tracks · loop/in-place/semantic GLB preservation |
 | Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
@@ -146,7 +146,7 @@ Topology checks now include bounded exact triangle self-intersection tests, not 
 
 With two or more compatible orthographic silhouettes, Morphloom carves a welded, closed visual hull and reprojects it into every source view for an explicit fit audit. Organic blockouts and continuous forms use an editable `implicitSurface` graph with smooth-union/subtract/intersect operations and Surface Nets; ambiguous cells receive at most four deterministic resolution refinements, then fail closed if the mesh is still non-manifold. Morphloom also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, fine/medium/coarse-scale contrast, gradient orientation, periodicity, and irregularity separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
 
-Drawing-based architecture does not trust a `planFootprintVerified` flag alone. It projects the compiled top surface back into source-derived occupied and protected-void regions, then measures IoU, overbuild, underbuild, and void intrusion. Strong written dimensions are separately locked to the assembly or a named component and re-measured from final world-space X/Y/Z bounds as size/min/max/center. A correct plan with a wrong storey, opening, sill, slab, parapet, or roof datum is therefore blocked. Laurel's undimensioned 2700 mm cutaway height remains explicitly estimated and is not promoted into a measured contract.
+Drawing-based architecture does not trust a `planFootprintVerified` flag alone. It projects the compiled top surface back into source-derived occupied and protected-void regions, then measures IoU, overbuild, underbuild, and void intrusion. Strong written dimensions are separately locked to the assembly or a named component and re-measured from final world-space X/Y/Z bounds as size/min/max/center. Two component-local datum points can also lock the transformed X/Y/Z or spatial pitch between hole, pin, lens, and connector centres; each datum must remain within its compiled part bounds. A correct plan with a wrong storey, opening, sill, slab, parapet, roof datum, or interface pitch is therefore blocked. The audit fingerprint must survive GLB reopening. Laurel's undimensioned 2700 mm cutaway height remains explicitly estimated and is not promoted into a measured contract.
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [multi-view capture format](./docs/VISUAL_CAPTURE_SET.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 

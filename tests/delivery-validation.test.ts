@@ -50,12 +50,21 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.blockers).toContain('dimension audit metadata changed during GLB round-trip');
   }, 20_000);
 
-  it('preserves the compiled dimension audit through an actual binary GLB export and reopen', async () => {
+  it('preserves a compiled datum-pitch audit through an actual binary GLB export and reopen', async () => {
     const measured = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    const west = measured.components.find((component) => component.id === 'west_outer_end_wall');
+    const east = measured.components.find((component) => component.id === 'east_outer_end_wall');
+    if (!west || !east) throw new Error('Missing datum-pitch fixtures.');
+    west.dimensionAnchors = [{ id: 'facade_center', position: [0, 0, 0] }];
+    east.dimensionAnchors = [{ id: 'facade_center', position: [0, 0, 0] }];
     measured.dimensionContracts = [{
-      id: 'west_wall_height', label: 'Synthetic measured west wall height',
-      target: { kind: 'component', componentId: 'west_outer_end_wall' },
-      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 0.1,
+      id: 'facade_center_pitch', label: 'Synthetic measured façade centre pitch',
+      target: {
+        kind: 'anchorPair',
+        from: { componentId: 'west_outer_end_wall', anchorId: 'facade_center' },
+        to: { componentId: 'east_outer_end_wall', anchorId: 'facade_center' },
+      },
+      axis: 'x', measurement: 'distance', expectedMm: 42_367.2, toleranceMm: 0.1,
       evidence: { status: 'measured', source: 'synthetic binary round-trip fixture' },
     }];
     const build = compileAssemblyIR(measured, 'beauty');
@@ -87,6 +96,7 @@ describe('delivery validation and deterministic output', () => {
       const source = snapshotScene(build.root);
       const reopenedSnapshot = snapshotScene(reopened.scene);
       expect(reopenedSnapshot.dimensionAudits).toBe(1);
+      expect(build.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(42_367.2, 2);
       expect(reopenedSnapshot.dimensionAuditFingerprint).toBe(source.dimensionAuditFingerprint);
       expect(compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, 1)).toMatchObject({
         status: 'pass', score: 100,

@@ -14,6 +14,7 @@ import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-
 import { MODERNCAT_CONCEPT_RESIDENCE_IR } from '../src/engine/moderncat-concept-residence';
 import { TALON_REFERENCE_BENCHMARK_IR } from '../src/engine/talon-reference-benchmark';
 import { ASPHALT_SURFACE_BENCHMARK_IR } from '../src/engine/asphalt-surface-benchmark';
+import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { analyzeTopology } from '../src/engine/topology';
 import { auditDomainReadiness } from '../src/engine/domain-readiness';
 import { validateElectricalHarness } from '../src/engine/connectivity';
@@ -1042,6 +1043,50 @@ describe('short-prompt generation contract', () => {
       evidence: { status: 'estimated', source: 'regression fixture' },
     }];
     expect(() => validateAssemblyIR(inferred)).toThrow(/dimension evidence/);
+
+    const missingAnchor = structuredClone(LAUREL_HOMES_BUILDING_B_IR) as unknown as {
+      components: Array<Record<string, unknown>>;
+      dimensionContracts: Array<Record<string, unknown>>;
+    };
+    missingAnchor.components[0]!.dimensionAnchors = [{ id: 'datum_a', position: [0, 0, 0] }];
+    missingAnchor.dimensionContracts = [{
+      id: 'missing_anchor_pitch', label: 'Missing second datum',
+      target: {
+        kind: 'anchorPair',
+        from: { componentId: missingAnchor.components[0]!.id, anchorId: 'datum_a' },
+        to: { componentId: missingAnchor.components[0]!.id, anchorId: 'datum_b' },
+      },
+      axis: 'x', measurement: 'distance', expectedMm: 10, toleranceMm: 0.1,
+      evidence: { status: 'measured', source: 'regression fixture' },
+    }];
+    expect(() => validateAssemblyIR(missingAnchor)).toThrow(/missing anchor/);
+
+    const outsideGeometry: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'Off-geometry datum fixture', units: 'mm',
+      components: [{
+        id: 'body', name: 'Body', category: 'mechanical', materialName: 'Polymer',
+        detail: 'Bounded anchor validation fixture.',
+        geometry: { op: 'roundedBox', size: [10, 10, 10], radius: 0.5 },
+        dimensionAnchors: [
+          { id: 'inside', position: [0, 0, 0] },
+          { id: 'outside', position: [100, 0, 0] },
+        ],
+        material: { color: '#404040', roughness: 0.7 },
+      }],
+      dimensionContracts: [{
+        id: 'fabricated_pitch', label: 'Fabricated off-geometry datum',
+        target: {
+          kind: 'anchorPair',
+          from: { componentId: 'body', anchorId: 'inside' },
+          to: { componentId: 'body', anchorId: 'outside' },
+        },
+        axis: 'x', measurement: 'distance', expectedMm: 100, toleranceMm: 0.1,
+        evidence: { status: 'measured', source: 'regression fixture' },
+      }],
+    };
+    const offGeometryAudit = compileAssemblyIR(outsideGeometry, 'beauty').metrics.dimensionAudit;
+    expect(offGeometryAudit).toMatchObject({ pass: false });
+    expect(offGeometryAudit?.checks[0]?.actualMm).toBeNull();
   });
 
   it('blocks duplicate edit-unit ids and non-finite transforms in the optimized detail audit', () => {

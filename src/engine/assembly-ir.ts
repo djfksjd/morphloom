@@ -122,6 +122,13 @@ export interface ComponentEvidenceIR {
   notes?: string[];
 }
 
+export interface AssemblyDimensionAnchorIR {
+  /** Stable CAD-style datum name local to the owning component. */
+  id: string;
+  /** Point in the owning component's local coordinate system, in millimetres. */
+  position: [number, number, number];
+}
+
 export interface AssemblyComponentIR {
   id: string;
   name: string;
@@ -134,6 +141,8 @@ export interface AssemblyComponentIR {
   position?: [number, number, number];
   rotation?: [number, number, number];
   scale?: [number, number, number];
+  /** Evidence-addressable local datum points for pitches and interface spacing. */
+  dimensionAnchors?: AssemblyDimensionAnchorIR[];
   material: AssemblyMaterialIR;
   /** Optional physically inspectable light source compiled with the fixture. */
   light?: {

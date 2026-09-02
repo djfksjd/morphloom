@@ -123,6 +123,44 @@ const auditDimensionContract = () => {
 
 const dimensionContractAudit = auditDimensionContract();
 
+const auditAnchorPitchContract = () => {
+  const fixture: AssemblyIR = {
+    schema: 'morphloom.assembly/0.1', name: 'Measured datum pitch fixture', units: 'mm',
+    components: [0, 25].map((x, index) => ({
+      id: `socket_${index}`, name: `Socket ${index}`, category: 'interconnect' as const,
+      materialName: 'Review polymer', detail: 'Synthetic evidence-bound connector.',
+      geometry: { op: 'roundedBox' as const, size: [10, 8, 6] as [number, number, number], radius: 0.5 },
+      position: [x, 0, 0] as [number, number, number],
+      dimensionAnchors: [{ id: 'pin_center', position: [0, 0, 0] as [number, number, number] }],
+      material: { color: '#404040', roughness: 0.7 },
+      evidence: { status: 'datasheet' as const, source: 'deterministic benchmark fixture' },
+    })),
+    dimensionContracts: [{
+      id: 'socket_pitch', label: 'Socket centre pitch',
+      target: {
+        kind: 'anchorPair',
+        from: { componentId: 'socket_0', anchorId: 'pin_center' },
+        to: { componentId: 'socket_1', anchorId: 'pin_center' },
+      },
+      axis: 'x', measurement: 'distance', expectedMm: 25, toleranceMm: 0.05,
+      evidence: { status: 'datasheet', source: 'deterministic benchmark fixture' },
+    }],
+  };
+  const baseline = compileAssemblyIR(fixture, 'beauty').metrics.dimensionAudit;
+  const regressed = structuredClone(fixture);
+  regressed.components[1]!.position![0] = 24.5;
+  const failed = compileAssemblyIR(regressed, 'beauty').metrics.dimensionAudit;
+  return {
+    pass: baseline?.pass === true && failed?.pass === false
+      && Math.abs((baseline.checks[0]?.actualMm ?? 0) - 25) <= 0.001
+      && Math.abs((failed.checks[0]?.actualMm ?? 0) - 24.5) <= 0.001,
+    baseline: baseline?.checks[0],
+    regressed: failed?.checks[0],
+  };
+};
+
+const anchorPitchAudit = auditAnchorPitchContract();
+
 const minimalGlb = (): ArrayBuffer => {
   const json = JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{}] });
   const jsonBytes = new TextEncoder().encode(json);
@@ -515,6 +553,7 @@ const output = {
     },
     browserValidationLifecycle: serializedValidationAudit,
     dimensionContract: dimensionContractAudit,
+    anchorPitchContract: anchorPitchAudit,
     browserRoundTrip: browserRoundTripSummary,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
@@ -561,6 +600,7 @@ const output = {
     { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation', img2threejs: 'not established in pinned audit', morphloom: dimensionContractAudit.pass ? 'yes' : 'blocked' },
+    { capability: 'evidence-bound hole, pin, lens and connector pitch between transformed component-local datums', img2threejs: 'not established in pinned audit', morphloom: anchorPitchAudit.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },
   ],
 };
@@ -573,5 +613,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
-  || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !standardValidationAudit.pass
+  || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass || !standardValidationAudit.pass
   || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;

@@ -212,7 +212,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       hasher.text(planFootprintAuditFingerprint);
     }
     const dimensionAudit = object.userData.dimensionAudit as { schema?: string } | undefined;
-    if (dimensionAudit?.schema === 'morphloom.dimension-audit/0.1') {
+    if (dimensionAudit?.schema === 'morphloom.dimension-audit/0.1'
+      || dimensionAudit?.schema === 'morphloom.dimension-audit/0.2') {
       dimensionAudits += 1;
       dimensionAuditFingerprint = fingerprintJson(dimensionAudit);
       hasher.text(dimensionAuditFingerprint);

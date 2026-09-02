@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T03:00:49.391Z",
+  "generatedAt": "2026-09-02T03:17:36.397Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1410,6 +1410,61 @@
       },
       "horizontalEnvelopeUnchanged": true
     },
+    "anchorPitchContract": {
+      "pass": true,
+      "baseline": {
+        "id": "socket_pitch",
+        "label": "Socket centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "socket_0",
+            "anchorId": "pin_center"
+          },
+          "to": {
+            "componentId": "socket_1",
+            "anchorId": "pin_center"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 25,
+        "deviationMm": 0,
+        "pass": true
+      },
+      "regressed": {
+        "id": "socket_pitch",
+        "label": "Socket centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "socket_0",
+            "anchorId": "pin_center"
+          },
+          "to": {
+            "componentId": "socket_1",
+            "anchorId": "pin_center"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 24.5,
+        "deviationMm": 0.5,
+        "pass": false
+      }
+    },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.2",
       "compilerRevision": "morphloom-compiler/0.23.0",
@@ -1803,6 +1858,11 @@
     },
     {
       "capability": "evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "evidence-bound hole, pin, lens and connector pitch between transformed component-local datums",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },

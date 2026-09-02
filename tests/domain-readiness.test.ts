@@ -103,6 +103,55 @@ describe('cross-domain semi-professional readiness', () => {
     expect(productReport.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
   }, 20_000);
 
+  it('blocks a measured connector pitch when either compiled datum moves', () => {
+    const fixture: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'Measured connector pitch fixture', units: 'mm',
+      components: [
+        {
+          id: 'socket_a', name: 'Socket A', category: 'interconnect', materialName: 'Polymer',
+          detail: 'First measured connector body.',
+          geometry: { op: 'roundedBox', size: [10, 8, 6], radius: 0.5 },
+          position: [0, 0, 0], dimensionAnchors: [{ id: 'pin_center', position: [0, 0, 0] }],
+          material: { color: '#404040', roughness: 0.7 },
+          evidence: { status: 'datasheet', source: 'synthetic pitch regression fixture' },
+        },
+        {
+          id: 'socket_b', name: 'Socket B', category: 'interconnect', materialName: 'Polymer',
+          detail: 'Second measured connector body.',
+          geometry: { op: 'roundedBox', size: [10, 8, 6], radius: 0.5 },
+          position: [25, 0, 0], dimensionAnchors: [{ id: 'pin_center', position: [0, 0, 0] }],
+          material: { color: '#404040', roughness: 0.7 },
+          evidence: { status: 'datasheet', source: 'synthetic pitch regression fixture' },
+        },
+      ],
+      dimensionContracts: [{
+        id: 'socket_pitch', label: 'Socket centre pitch',
+        target: {
+          kind: 'anchorPair',
+          from: { componentId: 'socket_a', anchorId: 'pin_center' },
+          to: { componentId: 'socket_b', anchorId: 'pin_center' },
+        },
+        axis: 'x', measurement: 'distance', expectedMm: 25, toleranceMm: 0.05,
+        evidence: { status: 'datasheet', source: 'synthetic pitch regression fixture' },
+      }],
+    };
+    const baseline = compileAssemblyIR(fixture, 'beauty');
+    expect(baseline.metrics.dimensionAudit).toMatchObject({ pass: true });
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(25, 5);
+
+    const shifted = structuredClone(fixture);
+    shifted.components[1]!.position![0] = 24.5;
+    const regressed = compileAssemblyIR(shifted, 'beauty');
+    expect(regressed.metrics.dimensionAudit).toMatchObject({ pass: false });
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(24.5, 5);
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: regressed.root, topology: regressed.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.checks.find((check) => check.id === 'evidence-dimensions')).toMatchObject({ pass: false });
+    expect(report.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
+  });
+
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');
