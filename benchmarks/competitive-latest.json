@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T03:24:50.488Z",
+  "generatedAt": "2026-09-02T03:31:02.776Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1513,6 +1513,63 @@
         "pass": false
       }
     },
+    "rotatedLocalPitchContract": {
+      "pass": true,
+      "baseline": {
+        "id": "lens_pitch",
+        "label": "Rotated lens centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_left"
+          },
+          "to": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_right"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "space": "component-local",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 25,
+        "deviationMm": 0,
+        "pass": true
+      },
+      "regressed": {
+        "id": "lens_pitch",
+        "label": "Rotated lens centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_left"
+          },
+          "to": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_right"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "space": "component-local",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 24.5,
+        "deviationMm": 0.5,
+        "pass": false
+      }
+    },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.2",
       "compilerRevision": "morphloom-compiler/0.23.0",
@@ -1916,6 +1973,11 @@
     },
     {
       "capability": "rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "rotation-safe same-part hole, pin and lens pitch along component-local axes",
       "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },

@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-199%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-200%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -155,7 +155,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 두 개 이상의 직교 실루엣이 있으면 시각 외피를 폐쇄형 메시로 복원하고 각 입력 시점으로 역투영해 정확도를 다시 검사합니다. 유기형·인체 블록아웃·연속 곡면은 `implicitSurface`와 Surface Nets로 만들며, 결정론적 보정 후에도 비매니폴드이면 차단합니다. 사진 투영은 원본을 향한 삼각형에만 적용하고 측면·후면은 근거 없는 반복 무늬 없이 별도 재질로 둡니다. 재질 검사는 색과 통계뿐 아니라 미세·중간·큰 스케일 및 실제 공간 배치를 비교해 픽셀을 뒤섞은 가짜 질감도 차단합니다. Apache-2.0인 img2threejs에서 참고한 부분과 변경 내용은 [`NOTICE`](./NOTICE)에 기록했습니다.
 
-도면 기반 건축은 `planFootprintVerified` 표시만 믿지 않습니다. 소스 도면에서 잠근 점유 영역과 중정·후퇴부 같은 보호 공백을 실제 컴파일 메시 위에서 수직 광선으로 다시 샘플링해 IoU, 과잉 시공, 누락, 공백 침범을 계산합니다. 중앙 돌출부가 반대편으로 뒤집히거나 U자 중정이 메워지면 토폴로지가 멀쩡해도 품질 점수와 납품 판정이 차단됩니다. 또한 실측·데이터시트 치수는 전체 또는 이름 있는 부재의 X/Y/Z 크기·최소·최대·중심값으로 잠그고, 완성 메시의 월드 좌표를 다시 측정합니다. 회전된 칼날·경사 보·브래킷은 월드 AABB가 아니라 부품 자체 축의 길이·폭·두께로 검사할 수 있습니다. 부품 로컬 기준점 두 개를 지정하면 변환된 최종 메시에서 홀·핀·렌즈·커넥터 중심의 X/Y/Z 또는 3차원 피치도 다시 계산합니다. 기준점은 실제 부품 형상 경계 안에 있어야 하며, 평면이 맞아도 층고·문/창 높이·슬래브 레벨이나 인터페이스 피치가 허용오차를 벗어나면 차단합니다. 감사 지문은 GLB 재열기까지 보존되어야 합니다. 도면에 없는 Laurel의 2700 mm 절개 높이는 계속 추정값으로 표시하며 치수 계약으로 승격하지 않습니다.
+도면 기반 건축은 `planFootprintVerified` 표시만 믿지 않습니다. 소스 도면에서 잠근 점유 영역과 중정·후퇴부 같은 보호 공백을 실제 컴파일 메시 위에서 수직 광선으로 다시 샘플링해 IoU, 과잉 시공, 누락, 공백 침범을 계산합니다. 중앙 돌출부가 반대편으로 뒤집히거나 U자 중정이 메워지면 토폴로지가 멀쩡해도 품질 점수와 납품 판정이 차단됩니다. 또한 실측·데이터시트 치수는 전체 또는 이름 있는 부재의 X/Y/Z 크기·최소·최대·중심값으로 잠그고, 완성 메시의 월드 좌표를 다시 측정합니다. 회전된 칼날·경사 보·브래킷은 월드 AABB가 아니라 부품 자체 축의 길이·폭·두께로 검사할 수 있습니다. 부품 로컬 기준점 두 개를 지정하면 변환된 최종 메시에서 홀·핀·렌즈·커넥터 중심의 X/Y/Z 또는 3차원 피치도 다시 계산하며, 같은 회전 부품 안의 피치는 부품 자체 축으로 잠글 수 있습니다. 기준점은 실제 부품 형상 경계 안에 있어야 하며, 평면이 맞아도 층고·문/창 높이·슬래브 레벨이나 인터페이스 피치가 허용오차를 벗어나면 차단합니다. 감사 지문은 GLB 재열기까지 보존되어야 합니다. 도면에 없는 Laurel의 2700 mm 절개 높이는 계속 추정값으로 표시하며 치수 계약으로 승격하지 않습니다.
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [다중 시점 캡처 규격](./docs/VISUAL_CAPTURE_SET.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 

@@ -199,6 +199,47 @@ const auditLocalAxisContract = () => {
 
 const localAxisAudit = auditLocalAxisContract();
 
+const auditRotatedLocalPitchContract = () => {
+  const fixture: AssemblyIR = {
+    schema: 'morphloom.assembly/0.1', name: 'Rotated local pitch fixture', units: 'mm',
+    components: [{
+      id: 'camera_plate', name: 'Camera plate', category: 'camera', materialName: 'Review metal',
+      detail: 'Synthetic rotated datum carrier.',
+      geometry: { op: 'roundedBox', size: [40, 20, 4], radius: 1 },
+      rotation: [0, 0, Math.PI / 4],
+      dimensionAnchors: [
+        { id: 'lens_left', position: [-12.5, 0, 0] },
+        { id: 'lens_right', position: [12.5, 0, 0] },
+      ],
+      material: { color: '#808080', metalness: 1, roughness: 0.3 },
+      evidence: { status: 'datasheet', source: 'deterministic benchmark fixture' },
+    }],
+    dimensionContracts: [{
+      id: 'lens_pitch', label: 'Rotated lens centre pitch',
+      target: {
+        kind: 'anchorPair',
+        from: { componentId: 'camera_plate', anchorId: 'lens_left' },
+        to: { componentId: 'camera_plate', anchorId: 'lens_right' },
+      },
+      axis: 'x', measurement: 'distance', space: 'component-local', expectedMm: 25, toleranceMm: 0.05,
+      evidence: { status: 'datasheet', source: 'deterministic benchmark fixture' },
+    }],
+  };
+  const baseline = compileAssemblyIR(fixture, 'beauty').metrics.dimensionAudit;
+  const regressed = structuredClone(fixture);
+  regressed.components[0]!.dimensionAnchors![1]!.position[0] = 12;
+  const failed = compileAssemblyIR(regressed, 'beauty').metrics.dimensionAudit;
+  return {
+    pass: baseline?.pass === true && failed?.pass === false
+      && Math.abs((baseline.checks[0]?.actualMm ?? 0) - 25) <= 0.001
+      && Math.abs((failed.checks[0]?.actualMm ?? 0) - 24.5) <= 0.001,
+    baseline: baseline?.checks[0],
+    regressed: failed?.checks[0],
+  };
+};
+
+const rotatedLocalPitchAudit = auditRotatedLocalPitchContract();
+
 const minimalGlb = (): ArrayBuffer => {
   const json = JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{}] });
   const jsonBytes = new TextEncoder().encode(json);
@@ -593,6 +634,7 @@ const output = {
     dimensionContract: dimensionContractAudit,
     anchorPitchContract: anchorPitchAudit,
     localAxisDimensionContract: localAxisAudit,
+    rotatedLocalPitchContract: rotatedLocalPitchAudit,
     browserRoundTrip: browserRoundTripSummary,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
@@ -641,6 +683,7 @@ const output = {
     { capability: 'evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation', img2threejs: 'not established in pinned audit', morphloom: dimensionContractAudit.pass ? 'yes' : 'blocked' },
     { capability: 'evidence-bound hole, pin, lens and connector pitch between transformed component-local datums', img2threejs: 'not established in pinned audit', morphloom: anchorPitchAudit.pass ? 'yes' : 'blocked' },
     { capability: 'rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation', img2threejs: 'not established in pinned audit', morphloom: localAxisAudit.pass ? 'yes' : 'blocked' },
+    { capability: 'rotation-safe same-part hole, pin and lens pitch along component-local axes', img2threejs: 'not established in pinned audit', morphloom: rotatedLocalPitchAudit.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },
   ],
 };
@@ -654,5 +697,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
   || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass
-  || !localAxisAudit.pass || !standardValidationAudit.pass
+  || !localAxisAudit.pass || !rotatedLocalPitchAudit.pass || !standardValidationAudit.pass
   || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;

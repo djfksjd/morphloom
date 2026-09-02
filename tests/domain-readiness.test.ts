@@ -186,6 +186,43 @@ describe('cross-domain semi-professional readiness', () => {
     expect(regressed.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(90, 5);
   });
 
+  it('measures same-part datum pitch along a rotated component axis', () => {
+    const fixture: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'Rotated datum pitch fixture', units: 'mm',
+      components: [{
+        id: 'camera_plate', name: 'Camera plate', category: 'camera', materialName: 'Aluminium',
+        detail: 'Rotated two-lens centre-pitch carrier.',
+        geometry: { op: 'roundedBox', size: [40, 20, 4], radius: 1 },
+        rotation: [0, 0, Math.PI / 4],
+        dimensionAnchors: [
+          { id: 'lens_left', position: [-12.5, 0, 0] },
+          { id: 'lens_right', position: [12.5, 0, 0] },
+        ],
+        material: { color: '#808080', metalness: 1, roughness: 0.35 },
+        evidence: { status: 'datasheet', source: 'synthetic rotated-pitch fixture' },
+      }],
+      dimensionContracts: [{
+        id: 'lens_pitch', label: 'Lens centre pitch',
+        target: {
+          kind: 'anchorPair',
+          from: { componentId: 'camera_plate', anchorId: 'lens_left' },
+          to: { componentId: 'camera_plate', anchorId: 'lens_right' },
+        },
+        axis: 'x', measurement: 'distance', space: 'component-local', expectedMm: 25, toleranceMm: 0.05,
+        evidence: { status: 'datasheet', source: 'synthetic rotated-pitch fixture' },
+      }],
+    };
+    const baseline = compileAssemblyIR(fixture, 'beauty');
+    expect(baseline.metrics.dimensionAudit?.checks[0]).toMatchObject({ pass: true, space: 'component-local' });
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(25, 5);
+
+    const shifted = structuredClone(fixture);
+    shifted.components[0]!.dimensionAnchors![1]!.position[0] = 12;
+    const regressed = compileAssemblyIR(shifted, 'beauty');
+    expect(regressed.metrics.dimensionAudit?.checks[0]).toMatchObject({ pass: false });
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(24.5, 5);
+  });
+
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');

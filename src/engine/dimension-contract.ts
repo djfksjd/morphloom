@@ -76,9 +76,13 @@ export function validateDimensionContracts(
       throw new Error(`Invalid dimension axis or measurement in ${contract.id}.`);
     }
     const space = contract.space ?? 'world';
+    const validLocalComponent = contract.target?.kind === 'component'
+      && contract.measurement === 'size' && contract.axis !== 'spatial';
+    const validLocalAnchorPair = contract.target?.kind === 'anchorPair'
+      && contract.measurement === 'distance' && contract.axis !== 'spatial'
+      && contract.target.from.componentId === contract.target.to.componentId;
     if (!['world', 'component-local'].includes(space)
-      || (space === 'component-local'
-        && (contract.target?.kind !== 'component' || contract.measurement !== 'size' || contract.axis === 'spatial'))) {
+      || (space === 'component-local' && !validLocalComponent && !validLocalAnchorPair)) {
       throw new Error(`Invalid dimension space in ${contract.id}.`);
     }
     const isAnchorPair = contract.target?.kind === 'anchorPair';
@@ -157,11 +161,23 @@ function anchorDistanceMm(
   root: THREE.Object3D,
   target: Extract<DimensionTarget, { kind: 'anchorPair' }>,
   axis: DimensionAxis,
+  space: DimensionSpace,
 ): number | null {
   const from = resolveAnchor(root, target.from);
   const to = resolveAnchor(root, target.to);
   if (!from || !to) return null;
   if (axis === 'spatial') return from.distanceTo(to) * 1_000;
+  if (space === 'component-local') {
+    const component = root.children.find((object) => object.userData.part?.id === target.from.componentId);
+    if (!component || target.from.componentId !== target.to.componentId) return null;
+    const xBasis = new THREE.Vector3();
+    const yBasis = new THREE.Vector3();
+    const zBasis = new THREE.Vector3();
+    component.matrixWorld.extractBasis(xBasis, yBasis, zBasis);
+    const basis = axis === 'x' ? xBasis : axis === 'y' ? yBasis : zBasis;
+    if (basis.lengthSq() <= 1e-20) return null;
+    return Math.abs(to.clone().sub(from).dot(basis.normalize())) * 1_000;
+  }
   return Math.abs(to[axis] - from[axis]) * 1_000;
 }
 
@@ -184,7 +200,7 @@ export function auditDimensionContracts(
     const space = contract.space ?? 'world';
     let actualMm: number | null = null;
     if (contract.target.kind === 'anchorPair') {
-      actualMm = anchorDistanceMm(root, contract.target, contract.axis);
+      actualMm = anchorDistanceMm(root, contract.target, contract.axis, space);
     } else {
       const componentId = contract.target.kind === 'component' ? contract.target.componentId : undefined;
       const target = componentId === undefined
