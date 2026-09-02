@@ -63,6 +63,15 @@ describe('material scalar and optical delivery payloads', () => {
     expect(audit.blockers).toContain('source material contains glTF-incompatible render semantics');
   });
 
+  it('does not deduplicate an unsupported material behind a supported material with the same identity', () => {
+    const root = new THREE.Group();
+    root.add(fixture(physical({ side: THREE.BackSide })), fixture(physical()));
+    const snapshot = snapshotScene(root);
+    expect(snapshot.materialPayloads).toHaveLength(2);
+    expect(snapshot.materialPayloadCoverage).toBe(0.5);
+    expect(snapshot.materialPayloads.some((payload) => !payload.serializable)).toBe(true);
+  });
+
   it('preserves physical optical scalars through an actual binary GLB export and reopen', async () => {
     const material = physical({
       color: '#6f7882',

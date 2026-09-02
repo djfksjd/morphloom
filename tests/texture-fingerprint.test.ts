@@ -1,8 +1,11 @@
-import { createCanvas } from '@napi-rs/canvas';
+import { Canvas, createCanvas, ImageData, loadImage } from '@napi-rs/canvas';
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { compareGlbRoundTrip, snapshotScene } from '../src/engine/delivery-validation';
 import { auditDomainReadiness } from '../src/engine/domain-readiness';
+import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
 
 function texturedScene(texture: THREE.Texture): THREE.Group {
   texture.name = 'surface_payload';
@@ -12,6 +15,15 @@ function texturedScene(texture: THREE.Texture): THREE.Group {
   material.name = 'measured_surface';
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
   mesh.name = 'textured_part';
+  root.add(mesh);
+  return root;
+}
+
+function materialScene(material: THREE.Material): THREE.Group {
+  const root = new THREE.Group();
+  root.name = 'pbr_texture_roundtrip_fixture';
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+  mesh.name = 'painted_shell_mesh';
   root.add(mesh);
   return root;
 }
@@ -93,7 +105,7 @@ describe('scene texture-content fingerprint', () => {
     expect(source.texturePayloadCoverage).toBe(0);
     const audit = compareGlbRoundTrip(source, structuredClone(source), 4_096, 2);
     expect(audit.status).toBe('blocked');
-    expect(audit.blockers).toContain('source texture pixels are not fully inspectable');
+    expect(audit.blockers).toContain('source texture payload is not fully inspectable or glTF-serializable');
   });
 
   it('blocks model readiness when an authored texture is not inspectable', () => {
@@ -104,5 +116,103 @@ describe('scene texture-content fingerprint', () => {
     });
     expect(report.checks).toContainEqual(expect.objectContaining({ id: 'texture-payload', pass: false, blocking: true }));
     expect(report.blockers.join(' ')).toMatch(/texture-payload/);
+  });
+
+  it('blocks model readiness when sampler semantics cannot survive glTF', () => {
+    const texture = dataTexture(10);
+    texture.anisotropy = 8;
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: texturedScene(texture), evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.checks).toContainEqual(expect.objectContaining({ id: 'texture-payload', pass: false, blocking: true }));
+    expect(snapshotScene(texturedScene(texture)).texturePayloads[0]?.unsupportedSemantics).toContain(
+      'texture anisotropy is not serialized by the glTF exporter',
+    );
+  });
+
+  it('does not deduplicate an unsupported sampler behind a supported texture with the same identity', () => {
+    const unsupported = dataTexture(10);
+    unsupported.anisotropy = 8;
+    const root = new THREE.Group();
+    root.add(texturedScene(unsupported), texturedScene(dataTexture(10)));
+    const snapshot = snapshotScene(root);
+    expect(snapshot.texturePayloads).toHaveLength(2);
+    expect(snapshot.texturePayloadCoverage).toBe(0.5);
+    expect(snapshot.texturePayloads.some((payload) => !payload.samplerSerializable)).toBe(true);
+  });
+
+  it('preserves lossless PBR texture pixels, slots and sampling through an actual binary GLB', async () => {
+    const albedo = dataTexture(17);
+    albedo.name = 'paint_albedo';
+    albedo.repeat.set(2, 3);
+    albedo.offset.set(0.125, 0.25);
+    albedo.rotation = 0.2;
+    albedo.updateMatrix();
+    const normal = dataTexture(128);
+    normal.name = 'paint_normal';
+    normal.colorSpace = THREE.NoColorSpace;
+    const packedMetalRough = dataTexture(0);
+    packedMetalRough.name = 'paint_metal_rough';
+    packedMetalRough.colorSpace = THREE.NoColorSpace;
+    const material = new THREE.MeshPhysicalMaterial({
+      color: '#8a929a', map: albedo, normalMap: normal,
+      normalScale: new THREE.Vector2(0.72, 0.72),
+      roughness: 0.61, roughnessMap: packedMetalRough,
+      metalness: 0.23, metalnessMap: packedMetalRough,
+      clearcoat: 0.38, clearcoatRoughness: 0.27,
+    });
+    material.name = 'painted_shell';
+    const root = materialScene(material);
+    preparePortableGltfGeometry(root);
+
+    class TestFileReader {
+      result: ArrayBuffer | string | null = null;
+      onloadend: (() => void) | null = null;
+      readAsArrayBuffer(blob: Blob): void {
+        void blob.arrayBuffer().then((result) => {
+          this.result = result;
+          queueMicrotask(() => this.onloadend?.());
+        });
+      }
+    }
+    const globals = {
+      document: globalThis.document,
+      FileReader: globalThis.FileReader,
+      ImageData: globalThis.ImageData,
+      HTMLCanvasElement: globalThis.HTMLCanvasElement,
+      createImageBitmap: globalThis.createImageBitmap,
+      self: globalThis.self,
+    };
+    Object.assign(globalThis, {
+      document: { createElement: (tag: string) => {
+        if (tag !== 'canvas') throw new Error(`Unexpected element request: ${tag}`);
+        return createCanvas(1, 1);
+      } },
+      FileReader: TestFileReader,
+      ImageData,
+      HTMLCanvasElement: Canvas,
+      createImageBitmap: async (blob: Blob) => {
+        const image = await loadImage(Buffer.from(await blob.arrayBuffer()));
+        Object.assign(image, { close: () => undefined });
+        return image;
+      },
+      self: globalThis,
+    });
+    try {
+      const result = await new GLTFExporter().parseAsync(createPortableGltfExportInput(root), {
+        binary: true, onlyVisible: true, includeCustomExtensions: true,
+      });
+      if (!(result instanceof ArrayBuffer)) throw new Error('Expected binary GLB output.');
+      const reopened = await new GLTFLoader().parseAsync(result.slice(0), '');
+      const sourceSnapshot = snapshotScene(root);
+      const reopenedSnapshot = snapshotScene(reopened.scene);
+      expect(reopenedSnapshot.texturePayloads).toEqual(sourceSnapshot.texturePayloads);
+      expect(compareGlbRoundTrip(sourceSnapshot, reopenedSnapshot, result.byteLength, 1)).toMatchObject({
+        status: 'pass', texturePayloadParity: true, materialPayloadParity: true,
+      });
+    } finally {
+      Object.assign(globalThis, globals);
+    }
   });
 });

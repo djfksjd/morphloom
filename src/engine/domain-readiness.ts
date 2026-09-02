@@ -10,7 +10,7 @@ import type { DimensionAudit } from './dimension-contract';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.11.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.12.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -997,7 +997,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   add('named-parts', '이름 있는 편집 단위', namedMeshCoverage === 1, namedMeshCoverage * 100, `${snapshot.namedMeshes}/${snapshot.meshes} 메시 명명`);
   add('texture-payload', '검증 가능한 질감 픽셀', snapshot.texturePayloadCoverage === 1,
     snapshot.texturePayloadCoverage * 100,
-    `${snapshot.texturePayloads.filter((payload) => payload.inspectable).length}/${snapshot.texturePayloads.length} payloads inspectable`);
+    `${snapshot.texturePayloads.filter((payload) => payload.inspectable && payload.samplerSerializable).length}/${snapshot.texturePayloads.length} payloads inspectable and glTF-serializable`);
   add('material-payload', 'glTF 재질 의미 보존 가능', snapshot.materialPayloadCoverage === 1,
     snapshot.materialPayloadCoverage * 100,
     `${snapshot.materialPayloads.filter((payload) => payload.serializable).length}/${snapshot.materialPayloads.length} material payloads serializable`);

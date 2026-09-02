@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T07:19:46.582Z",
+  "generatedAt": "2026-09-02T07:50:25.055Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -309,7 +309,7 @@
               "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "49/49 payloads inspectable",
+              "detail": "49/49 payloads inspectable and glTF-serializable",
               "blocking": true
             },
             {
@@ -510,7 +510,7 @@
               "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "1010/1010 payloads inspectable",
+              "detail": "1010/1010 payloads inspectable and glTF-serializable",
               "blocking": true
             },
             {
@@ -711,7 +711,7 @@
               "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "9/9 payloads inspectable",
+              "detail": "9/9 payloads inspectable and glTF-serializable",
               "blocking": true
             },
             {
@@ -980,7 +980,7 @@
               "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "9/9 payloads inspectable",
+              "detail": "9/9 payloads inspectable and glTF-serializable",
               "blocking": true
             },
             {
@@ -1273,7 +1273,7 @@
               "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "4/4 payloads inspectable",
+              "detail": "4/4 payloads inspectable and glTF-serializable",
               "blocking": true
             },
             {
@@ -2330,9 +2330,9 @@
       "morphloom": "implemented; current morphloom.browser-roundtrip/0.4 browser receipts required"
     },
     {
-      "capability": "pixel-level texture-content and sampler-state fingerprint with fail-closed GLB parity",
+      "capability": "pixel-level texture content and glTF-semantic sampler fingerprint with actual binary round-trip",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "implemented; same-size pixel, UV transform, sampler, or inspectability drift changes the scene fingerprint and blocks delivery"
+      "morphloom": "implemented; lossless PNG pixels, slot identity, UV channel/transform, color space, wrapping and filtering survive an actual textured GLB reopen; glTF-inexpressible mapping, format, type, anisotropy, transform or mip state fails closed while GPU-only upload state is ignored"
     },
     {
       "capability": "glTF scalar and optical material fingerprint with fail-closed GLB parity",

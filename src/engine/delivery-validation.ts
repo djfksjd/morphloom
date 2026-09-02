@@ -4,7 +4,7 @@ import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types'
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
 export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.23.0';
-export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.3.0';
+export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.4.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -59,6 +59,8 @@ export interface SceneSnapshot {
     contentFingerprint: string;
     samplerFingerprint: string;
     inspectable: boolean;
+    samplerSerializable: boolean;
+    unsupportedSemantics: string[];
   }>;
   texturePayloadCoverage: number;
   finiteTransforms: boolean;
@@ -241,26 +243,52 @@ function texturePayload(
     if (content.bytes) contentHasher.bytes(content.bytes, content.width, content.height, texture.flipY);
     else contentHasher.text('uninspectable');
     const samplerHasher = new StableHasher();
-    samplerHasher.text('texture-sampler');
+    samplerHasher.text('texture-sampler-gltf/0.2');
+    const unsupportedSemantics: string[] = [];
+    const supportedWrap = new Set<number>([THREE.RepeatWrapping, THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping]);
+    const supportedMagFilter = new Set<number>([THREE.NearestFilter, THREE.LinearFilter]);
+    const supportedMinFilter = new Set<number>([
+      THREE.NearestFilter, THREE.LinearFilter, THREE.NearestMipmapNearestFilter,
+      THREE.LinearMipmapNearestFilter, THREE.NearestMipmapLinearFilter, THREE.LinearMipmapLinearFilter,
+    ]);
+    const mipmappedFilters = new Set<number>([
+      THREE.NearestMipmapNearestFilter, THREE.LinearMipmapNearestFilter,
+      THREE.NearestMipmapLinearFilter, THREE.LinearMipmapLinearFilter,
+    ]);
+    if (texture.mapping !== THREE.UVMapping) unsupportedSemantics.push('non-UV texture mapping is not representable in glTF');
+    if (!Number.isInteger(texture.channel) || texture.channel < 0 || texture.channel > 3) {
+      unsupportedSemantics.push('texture coordinate channel must be an integer from 0 to 3');
+    }
+    if (texture.format !== THREE.RGBAFormat) unsupportedSemantics.push('non-RGBA texture payload is not losslessly exported');
+    if (texture.type !== THREE.UnsignedByteType) unsupportedSemantics.push('non-8-bit texture payload is not losslessly exported');
+    if (!supportedWrap.has(texture.wrapS) || !supportedWrap.has(texture.wrapT)) unsupportedSemantics.push('texture wrapping mode is not representable in glTF');
+    if (!supportedMagFilter.has(texture.magFilter) || !supportedMinFilter.has(texture.minFilter)) unsupportedSemantics.push('texture filter is not representable in glTF');
+    if (texture.anisotropy !== 1) unsupportedSemantics.push('texture anisotropy is not serialized by the glTF exporter');
+    if (texture.premultiplyAlpha) unsupportedSemantics.push('premultiplied texture alpha is not serialized by the glTF exporter');
+    if (texture.center.x !== 0 || texture.center.y !== 0) unsupportedSemantics.push('texture transform center is not serialized by KHR_texture_transform');
+    if (!texture.matrixAutoUpdate) unsupportedSemantics.push('manual texture matrices are not serialized by KHR_texture_transform');
+    if (texture.internalFormat !== null) unsupportedSemantics.push('custom GPU internal texture format is not serialized by glTF');
+    if (!texture.generateMipmaps && mipmappedFilters.has(texture.minFilter)) {
+      unsupportedSemantics.push('mipmapped minification filter requires generated mipmaps');
+    }
     for (const value of [
       texture.mapping, texture.channel, texture.format, texture.type,
       texture.wrapS, texture.wrapT,
-      texture.magFilter, texture.minFilter, texture.anisotropy,
-      texture.rotation, texture.premultiplyAlpha ? 1 : 0,
-      texture.unpackAlignment, texture.generateMipmaps ? 1 : 0,
+      texture.magFilter, texture.minFilter,
+      texture.rotation,
+      mipmappedFilters.has(texture.minFilter) ? 1 : 0,
     ]) samplerHasher.number(Number(value));
-    samplerHasher.text(String(texture.internalFormat ?? 'default'));
     samplerHasher.text(texture.colorSpace);
     samplerHasher.array(texture.offset.toArray());
     samplerHasher.array(texture.repeat.toArray());
-    samplerHasher.array(texture.center.toArray());
-    samplerHasher.array(texture.matrix.toArray());
     core = {
       width: content.width,
       height: content.height,
       contentFingerprint: contentHasher.digest(),
       samplerFingerprint: samplerHasher.digest(),
       inspectable: content.bytes !== undefined,
+      samplerSerializable: unsupportedSemantics.length === 0,
+      unsupportedSemantics,
     };
     cache.set(texture, core);
   }
@@ -525,7 +553,12 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     }
     for (const material of materialList(object.material)) {
       const payload = materialPayload(material);
-      materialPayloadMap.set(`${payload.id}|${payload.fingerprint}`, payload);
+      materialPayloadMap.set([
+        payload.id,
+        payload.fingerprint,
+        payload.serializable ? 'serializable' : 'unsupported',
+        ...payload.unsupportedSemantics,
+      ].join('|'), payload);
       hasher.text(payload.id);
       hasher.text(payload.fingerprint);
       hasher.text(payload.serializable ? 'serializable' : 'unsupported');
@@ -533,7 +566,13 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
         if (!(value instanceof THREE.Texture)) continue;
         textures.add(value);
         const payload = texturePayload(material, slot, value, texturePayloadCache);
-        texturePayloadMap.set(`${payload.id}|${payload.contentFingerprint}|${payload.samplerFingerprint}`, payload);
+        texturePayloadMap.set([
+          payload.id,
+          payload.contentFingerprint,
+          payload.samplerFingerprint,
+          payload.samplerSerializable ? 'serializable' : 'unsupported',
+          ...payload.unsupportedSemantics,
+        ].join('|'), payload);
       }
     }
   });
@@ -542,7 +581,10 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   const size = visibleBounds.getSize(new THREE.Vector3());
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
   const materialPayloads = [...materialPayloadMap.values()].sort((left, right) => (
-    left.id.localeCompare(right.id) || left.fingerprint.localeCompare(right.fingerprint)
+    left.id.localeCompare(right.id)
+    || left.fingerprint.localeCompare(right.fingerprint)
+    || Number(left.serializable) - Number(right.serializable)
+    || left.unsupportedSemantics.join('|').localeCompare(right.unsupportedSemantics.join('|'))
   ));
   for (const payload of materialPayloads) {
     hasher.text(payload.id);
@@ -555,6 +597,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     left.id.localeCompare(right.id)
     || left.contentFingerprint.localeCompare(right.contentFingerprint)
     || left.samplerFingerprint.localeCompare(right.samplerFingerprint)
+    || Number(left.samplerSerializable) - Number(right.samplerSerializable)
+    || left.unsupportedSemantics.join('|').localeCompare(right.unsupportedSemantics.join('|'))
   ));
   for (const payload of texturePayloads) {
     hasher.text(payload.id);
@@ -563,8 +607,10 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     hasher.text(payload.contentFingerprint);
     hasher.text(payload.samplerFingerprint);
     hasher.text(payload.inspectable ? 'inspectable' : 'uninspectable');
+    hasher.text(payload.samplerSerializable ? 'sampler-serializable' : 'sampler-unsupported');
+    for (const issue of payload.unsupportedSemantics) hasher.text(issue);
   }
-  const inspectableTexturePayloads = texturePayloads.filter((payload) => payload.inspectable).length;
+  const inspectableTexturePayloads = texturePayloads.filter((payload) => payload.inspectable && payload.samplerSerializable).length;
   const animations = root.animations ?? [];
   let animationTracks = 0;
   const animationClipNames: string[] = [];
@@ -728,7 +774,9 @@ function texturePayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot): b
       && left.height === right.height
       && left.contentFingerprint === right.contentFingerprint
       && left.samplerFingerprint === right.samplerFingerprint
-      && left.inspectable === right.inspectable;
+      && left.inspectable === right.inspectable
+      && left.samplerSerializable === right.samplerSerializable
+      && left.unsupportedSemantics.join('|') === right.unsupportedSemantics.join('|');
   });
 }
 
@@ -792,8 +840,8 @@ export function compareGlbRoundTrip(
     blockers.push('morph target identities changed during GLB round-trip');
   }
   if (!morphTargetPayloadParity) blockers.push('morph target deformation payload changed during GLB round-trip');
-  if (source.texturePayloadCoverage < 1) blockers.push('source texture pixels are not fully inspectable');
-  if (reopened.texturePayloadCoverage < 1) blockers.push('reopened GLB texture pixels are not fully inspectable');
+  if (source.texturePayloadCoverage < 1) blockers.push('source texture payload is not fully inspectable or glTF-serializable');
+  if (reopened.texturePayloadCoverage < 1) blockers.push('reopened GLB texture payload is not fully inspectable or supported');
   if (!texturePayloadParity) blockers.push('texture content or sampling semantics changed during GLB round-trip');
   if (source.materialPayloadCoverage < 1) blockers.push('source material contains glTF-incompatible render semantics');
   if (reopened.materialPayloadCoverage < 1) blockers.push('reopened GLB material contains unsupported render semantics');
