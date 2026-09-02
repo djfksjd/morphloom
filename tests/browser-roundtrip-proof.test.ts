@@ -4,6 +4,7 @@ import {
   browserProofAssetPassed,
   type BrowserRoundTripProofExpectation,
 } from '../src/engine/browser-roundtrip-proof';
+import { SCENE_FINGERPRINT_REVISION } from '../src/engine/delivery-validation';
 
 const revision = 'morphloom-compiler/test';
 const expectation: BrowserRoundTripProofExpectation = {
@@ -16,8 +17,9 @@ const expectation: BrowserRoundTripProofExpectation = {
 
 function report() {
   return {
-    schema: 'morphloom.browser-roundtrip/0.2',
+    schema: 'morphloom.browser-roundtrip/0.3',
     compilerRevision: revision,
+    fingerprintRevision: SCENE_FINGERPRINT_REVISION,
     console: { errors: 0, warnings: 0 },
     assets: [{
       id: expectation.id,
@@ -28,6 +30,7 @@ function report() {
       boundsErrorMm: 0,
       namedNodeCoverage: 1,
       morphTargetPayloadParity: true,
+      texturePayloadParity: true,
       qualityReleaseReady: true,
     }],
   };
@@ -48,6 +51,7 @@ describe('browser round-trip proof binding', () => {
     ['boundsErrorMm', 0.101, /bounds error/],
     ['namedNodeCoverage', 0.94, /named-node coverage/],
     ['morphTargetPayloadParity', false, /morph-target payload/],
+    ['texturePayloadParity', false, /texture-payload parity/],
     ['qualityReleaseReady', false, /release decision/],
   ])('rejects a stale or incomplete %s receipt', (field, value, message) => {
     const changed = report();
@@ -72,5 +76,13 @@ describe('browser round-trip proof binding', () => {
     const audit = auditBrowserRoundTripProof(report(), 'morphloom-compiler/new', [expectation]);
     expect(audit.pass).toBe(false);
     expect(audit.blockers.join(' ')).toMatch(/compiler revision/);
+  });
+
+  it('rejects a report using an obsolete scene-fingerprint contract', () => {
+    const changed = report();
+    changed.fingerprintRevision = 'morphloom-scene-fingerprint/old';
+    const audit = auditBrowserRoundTripProof(changed, revision, [expectation]);
+    expect(audit.pass).toBe(false);
+    expect(audit.blockers.join(' ')).toMatch(/scene-fingerprint revision/);
   });
 });

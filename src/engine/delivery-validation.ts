@@ -4,6 +4,7 @@ import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types'
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
 export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.23.0';
+export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.2.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -44,6 +45,15 @@ export interface SceneSnapshot {
   triangles: number;
   geometryBytes: number;
   textureBytes: number;
+  texturePayloads: Array<{
+    id: string;
+    width: number;
+    height: number;
+    contentFingerprint: string;
+    samplerFingerprint: string;
+    inspectable: boolean;
+  }>;
+  texturePayloadCoverage: number;
   finiteTransforms: boolean;
   duplicatePartIds: string[];
   boundsMeters: {
@@ -66,6 +76,7 @@ export interface DeliveryAudit {
   meshParity: boolean;
   triangleParity: boolean;
   morphTargetPayloadParity: boolean;
+  texturePayloadParity: boolean;
   namedNodeCoverage: number;
   boundsErrorMm: number;
   source?: SceneSnapshot;
@@ -125,9 +136,128 @@ class StableHasher {
     for (let index = 0; index < value.length; index += 1) this.number(value[index]);
   }
 
+  bytes(value: Uint8Array, width = 0, height = 0, flipRows = false): void {
+    this.number(value.byteLength);
+    const rowBytes = height > 0 && value.byteLength % height === 0 ? value.byteLength / height : 0;
+    const normalizeRows = flipRows && width > 0 && height > 1 && rowBytes > 0;
+    for (let index = 0; index < value.byteLength; index += 1) {
+      const sourceIndex = normalizeRows
+        ? (height - 1 - Math.floor(index / rowBytes)) * rowBytes + (index % rowBytes)
+        : index;
+      const byte = value[sourceIndex]!;
+      this.a = Math.imul(this.a ^ byte, FNV_PRIME) >>> 0;
+      this.b = Math.imul(this.b ^ (byte + index), 0x85ebca6b) >>> 0;
+    }
+  }
+
   digest(): string {
     return `${this.a.toString(16).padStart(8, '0')}${this.b.toString(16).padStart(8, '0')}`;
   }
+}
+
+const MAX_INSPECTABLE_TEXTURE_BYTES = 64 * 1024 * 1024;
+
+interface TextureContent {
+  width: number;
+  height: number;
+  bytes?: Uint8Array;
+}
+
+function textureDimensions(value: unknown): { width: number; height: number } | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const candidate = value as { naturalWidth?: number; naturalHeight?: number; videoWidth?: number; videoHeight?: number; width?: number; height?: number };
+  const width = Number(candidate.naturalWidth ?? candidate.videoWidth ?? candidate.width ?? 0);
+  const height = Number(candidate.naturalHeight ?? candidate.videoHeight ?? candidate.height ?? 0);
+  return Number.isInteger(width) && Number.isInteger(height) && width > 0 && height > 0
+    ? { width, height }
+    : undefined;
+}
+
+function textureContent(texture: THREE.Texture): TextureContent {
+  const source = texture.source?.data ?? texture.image;
+  const dimensions = textureDimensions(source) ?? { width: 0, height: 0 };
+  if (!source || typeof source !== 'object') return dimensions;
+  const direct = (source as { data?: unknown }).data;
+  if (ArrayBuffer.isView(direct)) {
+    if (direct.byteLength > MAX_INSPECTABLE_TEXTURE_BYTES) return dimensions;
+    return {
+      ...dimensions,
+      bytes: new Uint8Array(direct.buffer, direct.byteOffset, direct.byteLength),
+    };
+  }
+  const pixelBytes = dimensions.width * dimensions.height * 4;
+  if (!Number.isSafeInteger(pixelBytes) || pixelBytes > MAX_INSPECTABLE_TEXTURE_BYTES) return dimensions;
+  const canvasLike = source as { getContext?: (type: string, options?: { willReadFrequently?: boolean }) => unknown };
+  if (typeof canvasLike.getContext === 'function') {
+    try {
+      const context = canvasLike.getContext('2d', { willReadFrequently: true }) as { getImageData?: (x: number, y: number, width: number, height: number) => { data: Uint8ClampedArray } } | null;
+      const pixels = context?.getImageData?.(0, 0, dimensions.width, dimensions.height).data;
+      if (pixels) return { ...dimensions, bytes: new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength) };
+    } catch {
+      return dimensions;
+    }
+  }
+  if (typeof document !== 'undefined' && dimensions.width > 0 && dimensions.height > 0) {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = dimensions.width;
+      canvas.height = dimensions.height;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      if (!context) return dimensions;
+      context.drawImage(source as CanvasImageSource, 0, 0, dimensions.width, dimensions.height);
+      const pixels = context.getImageData(0, 0, dimensions.width, dimensions.height).data;
+      return { ...dimensions, bytes: new Uint8Array(pixels.buffer, pixels.byteOffset, pixels.byteLength) };
+    } catch {
+      return dimensions;
+    }
+  }
+  return dimensions;
+}
+
+function texturePayload(
+  material: THREE.Material,
+  slot: string,
+  texture: THREE.Texture,
+  cache: Map<THREE.Texture, Omit<SceneSnapshot['texturePayloads'][number], 'id'>>,
+): SceneSnapshot['texturePayloads'][number] {
+  let core = cache.get(texture);
+  if (!core) {
+    const content = textureContent(texture);
+    const contentHasher = new StableHasher();
+    contentHasher.text('texture-content');
+    contentHasher.number(content.width);
+    contentHasher.number(content.height);
+    // glTF stores image rows in its own orientation and GLTFLoader reopens
+    // those textures with flipY=false. Hash logical sampled pixels so a
+    // CanvasTexture flip during export is not mistaken for visual damage.
+    if (content.bytes) contentHasher.bytes(content.bytes, content.width, content.height, texture.flipY);
+    else contentHasher.text('uninspectable');
+    const samplerHasher = new StableHasher();
+    samplerHasher.text('texture-sampler');
+    for (const value of [
+      texture.mapping, texture.channel, texture.format, texture.type,
+      texture.wrapS, texture.wrapT,
+      texture.magFilter, texture.minFilter, texture.anisotropy,
+      texture.rotation, texture.premultiplyAlpha ? 1 : 0,
+      texture.unpackAlignment, texture.generateMipmaps ? 1 : 0,
+    ]) samplerHasher.number(Number(value));
+    samplerHasher.text(String(texture.internalFormat ?? 'default'));
+    samplerHasher.text(texture.colorSpace);
+    samplerHasher.array(texture.offset.toArray());
+    samplerHasher.array(texture.repeat.toArray());
+    samplerHasher.array(texture.center.toArray());
+    samplerHasher.array(texture.matrix.toArray());
+    core = {
+      width: content.width,
+      height: content.height,
+      contentFingerprint: contentHasher.digest(),
+      samplerFingerprint: samplerHasher.digest(),
+      inspectable: content.bytes !== undefined,
+    };
+    cache.set(texture, core);
+  }
+  const id = `${material.name || material.type}:${slot}:${texture.name || texture.type}`;
+  return { id, ...core };
 }
 
 function materialList(material: THREE.Material | THREE.Material[]): THREE.Material[] {
@@ -150,8 +280,11 @@ function boxTuple(vector: THREE.Vector3): [number, number, number] {
 export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   root.updateMatrixWorld(true);
   const hasher = new StableHasher();
+  hasher.text(SCENE_FINGERPRINT_REVISION);
   const materials = new Set<string>();
   const textures = new Set<THREE.Texture>();
+  const texturePayloadCache = new Map<THREE.Texture, Omit<SceneSnapshot['texturePayloads'][number], 'id'>>();
+  const texturePayloadMap = new Map<string, SceneSnapshot['texturePayloads'][number]>();
   const partIds = new Set<string>();
   const duplicatePartIds = new Set<string>();
   const visibleBounds = new THREE.Box3();
@@ -303,13 +436,32 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       ].join('|');
       materials.add(materialKey);
       hasher.text(materialKey);
-      for (const value of Object.values(material)) if (value instanceof THREE.Texture) textures.add(value);
+      for (const [slot, value] of Object.entries(material).sort(([left], [right]) => left.localeCompare(right))) {
+        if (!(value instanceof THREE.Texture)) continue;
+        textures.add(value);
+        const payload = texturePayload(material, slot, value, texturePayloadCache);
+        texturePayloadMap.set(`${payload.id}|${payload.contentFingerprint}|${payload.samplerFingerprint}`, payload);
+      }
     }
   });
 
   if (visibleBounds.isEmpty()) visibleBounds.set(new THREE.Vector3(), new THREE.Vector3());
   const size = visibleBounds.getSize(new THREE.Vector3());
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
+  const texturePayloads = [...texturePayloadMap.values()].sort((left, right) => (
+    left.id.localeCompare(right.id)
+    || left.contentFingerprint.localeCompare(right.contentFingerprint)
+    || left.samplerFingerprint.localeCompare(right.samplerFingerprint)
+  ));
+  for (const payload of texturePayloads) {
+    hasher.text(payload.id);
+    hasher.number(payload.width);
+    hasher.number(payload.height);
+    hasher.text(payload.contentFingerprint);
+    hasher.text(payload.samplerFingerprint);
+    hasher.text(payload.inspectable ? 'inspectable' : 'uninspectable');
+  }
+  const inspectableTexturePayloads = texturePayloads.filter((payload) => payload.inspectable).length;
   const animations = root.animations ?? [];
   let animationTracks = 0;
   const animationClipNames: string[] = [];
@@ -355,6 +507,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     triangles: Math.round(triangles),
     geometryBytes,
     textureBytes,
+    texturePayloads,
+    texturePayloadCoverage: texturePayloads.length > 0 ? inspectableTexturePayloads / texturePayloads.length : 1,
     finiteTransforms,
     duplicatePartIds: [...duplicatePartIds].sort(),
     boundsMeters: { min: boxTuple(visibleBounds.min), max: boxTuple(visibleBounds.max), size: boxTuple(size) },
@@ -458,6 +612,21 @@ function morphTargetPayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot
   });
 }
 
+function texturePayloadsMatch(source: SceneSnapshot, reopened: SceneSnapshot): boolean {
+  if (source.texturePayloadCoverage !== 1 || reopened.texturePayloadCoverage !== 1
+    || source.texturePayloads.length !== reopened.texturePayloads.length) return false;
+  return source.texturePayloads.every((left, index) => {
+    const right = reopened.texturePayloads[index];
+    return right !== undefined
+      && left.id === right.id
+      && left.width === right.width
+      && left.height === right.height
+      && left.contentFingerprint === right.contentFingerprint
+      && left.samplerFingerprint === right.samplerFingerprint
+      && left.inspectable === right.inspectable;
+  });
+}
+
 export function compareGlbRoundTrip(
   source: SceneSnapshot,
   reopened: SceneSnapshot,
@@ -477,6 +646,7 @@ export function compareGlbRoundTrip(
   const namedNodeCoverage = source.namedNodes > 0 ? Math.min(1, reopened.namedNodes / source.namedNodes) : 1;
   const boundsErrorMm = maximumBoundsErrorMm(source, reopened);
   const morphTargetPayloadParity = morphTargetPayloadsMatch(source, reopened);
+  const texturePayloadParity = texturePayloadsMatch(source, reopened);
   if (!source.finiteTransforms || !reopened.finiteTransforms) blockers.push('non-finite transform detected');
   if (!meshParity) blockers.push(`delivery primitive count changed ${source.primitives}→${reopened.meshes}`);
   if (!triangleParity) blockers.push(`triangle count changed ${source.triangles}→${reopened.triangles}`);
@@ -503,6 +673,9 @@ export function compareGlbRoundTrip(
     blockers.push('morph target identities changed during GLB round-trip');
   }
   if (!morphTargetPayloadParity) blockers.push('morph target deformation payload changed during GLB round-trip');
+  if (source.texturePayloadCoverage < 1) blockers.push('source texture pixels are not fully inspectable');
+  if (reopened.texturePayloadCoverage < 1) blockers.push('reopened GLB texture pixels are not fully inspectable');
+  if (!texturePayloadParity) blockers.push('texture content or sampling semantics changed during GLB round-trip');
   if (source.gameLods !== reopened.gameLods) blockers.push(`game LOD manifest changed ${source.gameLods}→${reopened.gameLods}`);
   if (source.collisionPrimitives !== reopened.collisionPrimitives) {
     blockers.push(`collision primitive manifest changed ${source.collisionPrimitives}→${reopened.collisionPrimitives}`);
@@ -541,6 +714,7 @@ export function compareGlbRoundTrip(
     && source.morphTargets === reopened.morphTargets
     && source.morphTargetNames.join('|') === reopened.morphTargetNames.join('|')
     && morphTargetPayloadParity
+    && texturePayloadParity
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
@@ -564,6 +738,7 @@ export function compareGlbRoundTrip(
     meshParity,
     triangleParity,
     morphTargetPayloadParity,
+    texturePayloadParity,
     namedNodeCoverage,
     boundsErrorMm,
     source,
@@ -598,6 +773,7 @@ export function blockedDeliveryAudit(error: unknown, fingerprint = 'unavailable'
     meshParity: false,
     triangleParity: false,
     morphTargetPayloadParity: false,
+    texturePayloadParity: false,
     namedNodeCoverage: 0,
     boundsErrorMm: Number.POSITIVE_INFINITY,
     blockers: [detail.slice(0, 240)],

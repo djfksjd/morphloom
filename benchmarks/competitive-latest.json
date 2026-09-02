@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T06:09:26.357Z",
+  "generatedAt": "2026-09-02T06:53:11.840Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -266,19 +266,19 @@
     },
     "crossDomainDelivery": {
       "rates": {
-        "overall": 0.875,
-        "technical": 0.875,
-        "decision": 1,
+        "overall": 0,
+        "technical": 0,
+        "decision": 0.375,
         "modelRelease": 1,
-        "deliveryRelease": 1,
-        "rejectionSafety": 0.6666666666666666
+        "deliveryRelease": 0,
+        "rejectionSafety": 0
       },
       "allRatesPass": false,
       "domains": {
         "industrialDesign": {
           "domain": "industrial-design",
-          "pass": true,
-          "score": 99,
+          "pass": false,
+          "score": 89,
           "checks": [
             {
               "id": "determinism",
@@ -305,11 +305,19 @@
               "blocking": true
             },
             {
-              "id": "glb-roundtrip",
-              "label": "실제 GLB 재열기",
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "detail": "49/49 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": false,
+              "score": 0,
+              "detail": "동일 입력 브라우저 증명 없음",
               "blocking": true
             },
             {
@@ -353,7 +361,9 @@
               "blocking": true
             }
           ],
-          "blockers": [],
+          "blockers": [
+            "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+          ],
           "warnings": [],
           "metrics": {
             "meshes": 16,
@@ -366,6 +376,7 @@
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 4.087549942966007e-8,
             "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -458,8 +469,8 @@
         },
         "architecture": {
           "domain": "architecture",
-          "pass": true,
-          "score": 99,
+          "pass": false,
+          "score": 89,
           "checks": [
             {
               "id": "determinism",
@@ -486,11 +497,19 @@
               "blocking": true
             },
             {
-              "id": "glb-roundtrip",
-              "label": "실제 GLB 재열기",
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "detail": "1010/1010 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": false,
+              "score": 0,
+              "detail": "동일 입력 브라우저 증명 없음",
               "blocking": true
             },
             {
@@ -534,7 +553,9 @@
               "blocking": true
             }
           ],
-          "blockers": [],
+          "blockers": [
+            "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+          ],
           "warnings": [],
           "metrics": {
             "meshes": 321,
@@ -547,6 +568,7 @@
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 3.3657002740383746e-8,
             "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -639,8 +661,8 @@
         },
         "animation": {
           "domain": "animation",
-          "pass": true,
-          "score": 99,
+          "pass": false,
+          "score": 95,
           "checks": [
             {
               "id": "determinism",
@@ -667,11 +689,19 @@
               "blocking": true
             },
             {
-              "id": "glb-roundtrip",
-              "label": "실제 GLB 재열기",
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "detail": "9/9 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": false,
+              "score": 0,
+              "detail": "동일 입력 브라우저 증명 없음",
               "blocking": true
             },
             {
@@ -795,7 +825,9 @@
               "blocking": true
             }
           ],
-          "blockers": [],
+          "blockers": [
+            "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+          ],
           "warnings": [],
           "metrics": {
             "meshes": 3,
@@ -808,6 +840,7 @@
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
             "skeletons": 2,
             "bones": 49,
             "animationClips": 22,
@@ -888,8 +921,8 @@
         },
         "game": {
           "domain": "game",
-          "pass": true,
-          "score": 100,
+          "pass": false,
+          "score": 95,
           "checks": [
             {
               "id": "determinism",
@@ -916,11 +949,19 @@
               "blocking": true
             },
             {
-              "id": "glb-roundtrip",
-              "label": "실제 GLB 재열기",
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "detail": "9/9 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": false,
+              "score": 0,
+              "detail": "동일 입력 브라우저 증명 없음",
               "blocking": true
             },
             {
@@ -1068,7 +1109,9 @@
               "blocking": true
             }
           ],
-          "blockers": [],
+          "blockers": [
+            "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+          ],
           "warnings": [],
           "metrics": {
             "meshes": 3,
@@ -1081,6 +1124,7 @@
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 4.589581759084638e-8,
             "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
             "skeletons": 2,
             "bones": 49,
             "animationClips": 22,
@@ -1161,8 +1205,8 @@
         },
         "print3d": {
           "domain": "3d-print",
-          "pass": true,
-          "score": 100,
+          "pass": false,
+          "score": 91,
           "checks": [
             {
               "id": "determinism",
@@ -1189,11 +1233,19 @@
               "blocking": true
             },
             {
-              "id": "glb-roundtrip",
-              "label": "실제 GLB 재열기",
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
               "pass": true,
               "score": 100,
-              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "detail": "4/4 payloads inspectable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": false,
+              "score": 0,
+              "detail": "동일 입력 브라우저 증명 없음",
               "blocking": true
             },
             {
@@ -1261,7 +1313,9 @@
               "blocking": false
             }
           ],
-          "blockers": [],
+          "blockers": [
+            "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+          ],
           "warnings": [],
           "metrics": {
             "meshes": 1,
@@ -1274,6 +1328,7 @@
             "normalValidityCoverage": 1,
             "maximumNormalUnitError": 3.983618057645799e-8,
             "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
             "skeletons": 0,
             "bones": 0,
             "animationClips": 0,
@@ -1579,7 +1634,7 @@
       "schema": "morphloom.browser-roundtrip/0.2",
       "compilerRevision": "morphloom-compiler/0.23.0",
       "observedAt": "2026-09-02T02:16:05Z",
-      "receiptIntegrityPass": true,
+      "receiptIntegrityPass": false,
       "assets": [
         {
           "id": "pinterest-concept-architectural-review",
@@ -1662,59 +1717,87 @@
         "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
         "pass": false,
         "expectedAssets": 7,
-        "verifiedAssets": 6,
+        "verifiedAssets": 0,
         "duplicateAssetIds": [],
         "unexpectedAssetIds": [
           "implicit-surface-manifold-lab",
           "talon-same-reference-material-review"
         ],
-        "blockers": [],
+        "blockers": [
+          "browser proof schema mismatch",
+          "browser proof scene-fingerprint revision mismatch"
+        ],
         "assets": [
           {
             "id": "ornate-knife-product-visualization",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "pinterest-concept-architectural-review",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "laurel-homes-architectural-review",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "cooling-service-assembly",
             "pass": false,
             "blockers": [
               "build fingerprint does not match the current deterministic build",
-              "prepared-scene fingerprint does not match the current deterministic build"
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
             ]
           },
           {
             "id": "single-view-character-previs",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "field-human-runtime-base",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "asphalt-print-surface",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           }
         ]
       },
       "releaseEngineBinding": {
         "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
-        "pass": true,
+        "pass": false,
         "expectedAssets": 4,
-        "verifiedAssets": 4,
+        "verifiedAssets": 0,
         "duplicateAssetIds": [],
         "unexpectedAssetIds": [
           "cooling-service-assembly",
@@ -1723,27 +1806,46 @@
           "single-view-character-previs",
           "talon-same-reference-material-review"
         ],
-        "blockers": [],
+        "blockers": [
+          "browser proof schema mismatch",
+          "browser proof scene-fingerprint revision mismatch"
+        ],
         "assets": [
           {
             "id": "ornate-knife-product-visualization",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "laurel-homes-architectural-review",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "field-human-runtime-base",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           },
           {
             "id": "asphalt-print-surface",
-            "pass": true,
-            "blockers": []
+            "pass": false,
+            "blockers": [
+              "build fingerprint does not match the current deterministic build",
+              "prepared-scene fingerprint does not match the current deterministic build",
+              "texture-payload parity is not proven"
+            ]
           }
         ]
       }
@@ -2167,34 +2269,39 @@
       "morphloom": "application-import-not-run"
     },
     {
-      "capability": "bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-payload parity, same-input deduplication, and stale-result guard",
+      "capability": "bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph- and texture-payload parity, same-input deduplication, and stale-result guard",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "4/4 release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately"
+      "morphloom": "implemented; current schema-0.3 browser receipts required"
+    },
+    {
+      "capability": "pixel-level texture-content and sampler-state fingerprint with fail-closed GLB parity",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented; same-size pixel, UV transform, sampler, or inspectability drift changes the scene fingerprint and blocks delivery"
     },
     {
       "capability": "skeletal animation breadth",
       "img2threejs": "latest showcase: 41–42 bones and 10–27 clips",
-      "morphloom": "49 bones and 22 semantic delivery clips / 185 tracks"
+      "morphloom": "49 bones and 22 semantic delivery clips / 185 tracks; current browser delivery proof pending refresh"
     },
     {
-      "capability": "named editable facial controls with spatial and semantic delta localization preserved through GLB",
+      "capability": "named editable facial controls with spatial and semantic delta localization",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization"
+      "morphloom": "5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization; current browser delivery proof pending refresh"
     },
     {
-      "capability": "per-joint weighted deformation/localization, motion/loop/root-motion checks, and exact GLB animation-metadata preservation",
+      "capability": "per-joint weighted deformation/localization and motion/loop/root-motion checks",
       "img2threejs": "not established in pinned core audit",
-      "morphloom": "10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization"
+      "morphloom": "10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization; current browser delivery proof pending refresh"
     },
     {
       "capability": "real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates"
+      "morphloom": "16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates; current browser delivery proof pending refresh"
     },
     {
-      "capability": "finite non-degenerate UV triangles and near-unit normal delivery gate",
+      "capability": "finite non-degenerate UV triangles and near-unit normal model gate",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "yes"
+      "morphloom": "yes; current browser delivery proof pending refresh"
     },
     {
       "capability": "millimetre 3D-print topology, global thickness screening, connected-shell feature-space wall rays, feature and 45-degree overhang audit",
@@ -2204,12 +2311,12 @@
     {
       "capability": "compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate",
       "img2threejs": "roadmap",
-      "morphloom": "yes"
+      "morphloom": "yes; current browser delivery proof pending refresh"
     },
     {
       "capability": "concave polygon plan contract with self-intersection rejection and protected courtyard audit",
       "img2threejs": "roadmap",
-      "morphloom": "yes"
+      "morphloom": "yes; current browser delivery proof pending refresh"
     },
     {
       "capability": "evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation",

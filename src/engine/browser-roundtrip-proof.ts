@@ -1,4 +1,6 @@
-export const BROWSER_ROUNDTRIP_PROOF_SCHEMA = 'morphloom.browser-roundtrip/0.2';
+import { SCENE_FINGERPRINT_REVISION } from './delivery-validation';
+
+export const BROWSER_ROUNDTRIP_PROOF_SCHEMA = 'morphloom.browser-roundtrip/0.3';
 
 const FINGERPRINT = /^[a-f0-9]{16}$/;
 const SAFE_ASSET_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
@@ -60,6 +62,7 @@ export function auditBrowserRoundTripProof(
   if (!report) blockers.push('browser proof report is not an object');
   if (report?.schema !== BROWSER_ROUNDTRIP_PROOF_SCHEMA) blockers.push('browser proof schema mismatch');
   if (report?.compilerRevision !== compilerRevision) blockers.push('browser proof compiler revision mismatch');
+  if (report?.fingerprintRevision !== SCENE_FINGERPRINT_REVISION) blockers.push('browser proof scene-fingerprint revision mismatch');
   const consoleEvidence = record(report?.console);
   if (consoleEvidence?.errors !== 0 || consoleEvidence?.warnings !== 0) {
     blockers.push('browser console is not clean');
@@ -98,6 +101,7 @@ export function auditBrowserRoundTripProof(
     exactFingerprint(asset.buildFingerprint, expectation.buildFingerprint, 'build fingerprint', assetBlockers);
     exactFingerprint(asset.sceneFingerprint, expectation.preparedSceneFingerprint, 'prepared-scene fingerprint', assetBlockers);
     if (asset.morphTargetPayloadParity !== true) assetBlockers.push('morph-target payload parity is not proven');
+    if (asset.texturePayloadParity !== true) assetBlockers.push('texture-payload parity is not proven');
     if (typeof asset.boundsErrorMm !== 'number' || !Number.isFinite(asset.boundsErrorMm)
       || asset.boundsErrorMm < 0 || asset.boundsErrorMm > 0.1) {
       assetBlockers.push('round-trip bounds error is missing or exceeds 0.1 mm');

@@ -10,7 +10,7 @@ import type { DimensionAudit } from './dimension-contract';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.9.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.10.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -73,6 +73,7 @@ export interface DomainReadinessReport {
     normalValidityCoverage: number;
     maximumNormalUnitError: number;
     pbrSurfaceCoverage: number;
+    texturePayloadCoverage: number;
     skeletons: number;
     bones: number;
     animationClips: number;
@@ -993,6 +994,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   add('determinism', '동일 입력 재현성', input.deterministic, input.deterministic ? 100 : 0, input.deterministic ? '구조 fingerprint 일치' : '동일 입력 결과가 달라짐');
   add('finite-scene', '유한 장면 데이터', snapshot.finiteTransforms, snapshot.finiteTransforms ? 100 : 0, snapshot.finiteTransforms ? '모든 변환값이 유한함' : 'NaN/Infinity 변환 발견');
   add('named-parts', '이름 있는 편집 단위', namedMeshCoverage === 1, namedMeshCoverage * 100, `${snapshot.namedMeshes}/${snapshot.meshes} 메시 명명`);
+  add('texture-payload', '검증 가능한 질감 픽셀', snapshot.texturePayloadCoverage === 1,
+    snapshot.texturePayloadCoverage * 100,
+    `${snapshot.texturePayloads.filter((payload) => payload.inspectable).length}/${snapshot.texturePayloads.length} payloads inspectable`);
   add('glb-roundtrip', '실제 GLB 재열기', input.browserGlbRoundTrip, input.browserGlbRoundTrip ? 100 : 0, input.browserGlbRoundTrip ? '브라우저 GLTFLoader 재열기 통과' : '동일 입력 브라우저 증명 없음');
   const dimensions = input.root.userData.dimensionAudit as DimensionAudit | undefined;
   if (dimensions) {
@@ -1183,6 +1187,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       normalValidityCoverage: geometry.normalValidityCoverage,
       maximumNormalUnitError: geometry.maximumNormalUnitError,
       pbrSurfaceCoverage,
+      texturePayloadCoverage: snapshot.texturePayloadCoverage,
       skeletons: snapshot.skeletons,
       bones: snapshot.bones,
       animationClips: snapshot.animationClips,

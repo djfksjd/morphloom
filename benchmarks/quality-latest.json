@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "readinessRevision": "morphloom-domain-readiness/0.9.0",
-  "generatedAt": "2026-09-02T06:05:41.124Z",
+  "readinessRevision": "morphloom-domain-readiness/0.10.0",
+  "generatedAt": "2026-09-02T06:53:02.160Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -17,70 +17,98 @@
     "rejectionSafety": 1
   },
   "rates": {
-    "overall": 0.875,
-    "technical": 0.875,
-    "decision": 1,
+    "overall": 0,
+    "technical": 0,
+    "decision": 0.375,
     "modelRelease": 1,
-    "deliveryRelease": 1,
-    "rejectionSafety": 0.6666666666666666
+    "deliveryRelease": 0,
+    "rejectionSafety": 0
   },
   "browserProofAudit": {
     "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
     "pass": false,
     "expectedAssets": 7,
-    "verifiedAssets": 6,
+    "verifiedAssets": 0,
     "duplicateAssetIds": [],
     "unexpectedAssetIds": [
       "implicit-surface-manifold-lab",
       "talon-same-reference-material-review"
     ],
-    "blockers": [],
+    "blockers": [
+      "browser proof schema mismatch",
+      "browser proof scene-fingerprint revision mismatch"
+    ],
     "assets": [
       {
         "id": "ornate-knife-product-visualization",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "pinterest-concept-architectural-review",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "laurel-homes-architectural-review",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "cooling-service-assembly",
         "pass": false,
         "blockers": [
           "build fingerprint does not match the current deterministic build",
-          "prepared-scene fingerprint does not match the current deterministic build"
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
         ]
       },
       {
         "id": "single-view-character-previs",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "field-human-runtime-base",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "asphalt-print-surface",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       }
     ]
   },
   "releaseBrowserProofAudit": {
     "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
-    "pass": true,
+    "pass": false,
     "expectedAssets": 4,
-    "verifiedAssets": 4,
+    "verifiedAssets": 0,
     "duplicateAssetIds": [],
     "unexpectedAssetIds": [
       "cooling-service-assembly",
@@ -89,35 +117,54 @@
       "single-view-character-previs",
       "talon-same-reference-material-review"
     ],
-    "blockers": [],
+    "blockers": [
+      "browser proof schema mismatch",
+      "browser proof scene-fingerprint revision mismatch"
+    ],
     "assets": [
       {
         "id": "ornate-knife-product-visualization",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "laurel-homes-architectural-review",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "field-human-runtime-base",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       },
       {
         "id": "asphalt-print-surface",
-        "pass": true,
-        "blockers": []
+        "pass": false,
+        "blockers": [
+          "build fingerprint does not match the current deterministic build",
+          "prepared-scene fingerprint does not match the current deterministic build",
+          "texture-payload parity is not proven"
+        ]
       }
     ]
   },
   "domainReports": {
     "industrialDesign": {
       "domain": "industrial-design",
-      "pass": true,
-      "score": 99,
+      "pass": false,
+      "score": 89,
       "checks": [
         {
           "id": "determinism",
@@ -144,11 +191,19 @@
           "blocking": true
         },
         {
-          "id": "glb-roundtrip",
-          "label": "실제 GLB 재열기",
+          "id": "texture-payload",
+          "label": "검증 가능한 질감 픽셀",
           "pass": true,
           "score": 100,
-          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "detail": "49/49 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": false,
+          "score": 0,
+          "detail": "동일 입력 브라우저 증명 없음",
           "blocking": true
         },
         {
@@ -192,7 +247,9 @@
           "blocking": true
         }
       ],
-      "blockers": [],
+      "blockers": [
+        "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+      ],
       "warnings": [],
       "metrics": {
         "meshes": 16,
@@ -205,6 +262,7 @@
         "normalValidityCoverage": 1,
         "maximumNormalUnitError": 4.087549942966007e-8,
         "pbrSurfaceCoverage": 1,
+        "texturePayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -297,8 +355,8 @@
     },
     "architecture": {
       "domain": "architecture",
-      "pass": true,
-      "score": 99,
+      "pass": false,
+      "score": 89,
       "checks": [
         {
           "id": "determinism",
@@ -325,11 +383,19 @@
           "blocking": true
         },
         {
-          "id": "glb-roundtrip",
-          "label": "실제 GLB 재열기",
+          "id": "texture-payload",
+          "label": "검증 가능한 질감 픽셀",
           "pass": true,
           "score": 100,
-          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "detail": "1010/1010 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": false,
+          "score": 0,
+          "detail": "동일 입력 브라우저 증명 없음",
           "blocking": true
         },
         {
@@ -373,7 +439,9 @@
           "blocking": true
         }
       ],
-      "blockers": [],
+      "blockers": [
+        "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+      ],
       "warnings": [],
       "metrics": {
         "meshes": 321,
@@ -386,6 +454,7 @@
         "normalValidityCoverage": 1,
         "maximumNormalUnitError": 3.3657002740383746e-8,
         "pbrSurfaceCoverage": 1,
+        "texturePayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -478,8 +547,8 @@
     },
     "animation": {
       "domain": "animation",
-      "pass": true,
-      "score": 99,
+      "pass": false,
+      "score": 95,
       "checks": [
         {
           "id": "determinism",
@@ -506,11 +575,19 @@
           "blocking": true
         },
         {
-          "id": "glb-roundtrip",
-          "label": "실제 GLB 재열기",
+          "id": "texture-payload",
+          "label": "검증 가능한 질감 픽셀",
           "pass": true,
           "score": 100,
-          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "detail": "9/9 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": false,
+          "score": 0,
+          "detail": "동일 입력 브라우저 증명 없음",
           "blocking": true
         },
         {
@@ -634,7 +711,9 @@
           "blocking": true
         }
       ],
-      "blockers": [],
+      "blockers": [
+        "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+      ],
       "warnings": [],
       "metrics": {
         "meshes": 3,
@@ -647,6 +726,7 @@
         "normalValidityCoverage": 1,
         "maximumNormalUnitError": 4.589581759084638e-8,
         "pbrSurfaceCoverage": 1,
+        "texturePayloadCoverage": 1,
         "skeletons": 2,
         "bones": 49,
         "animationClips": 22,
@@ -727,8 +807,8 @@
     },
     "game": {
       "domain": "game",
-      "pass": true,
-      "score": 100,
+      "pass": false,
+      "score": 95,
       "checks": [
         {
           "id": "determinism",
@@ -755,11 +835,19 @@
           "blocking": true
         },
         {
-          "id": "glb-roundtrip",
-          "label": "실제 GLB 재열기",
+          "id": "texture-payload",
+          "label": "검증 가능한 질감 픽셀",
           "pass": true,
           "score": 100,
-          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "detail": "9/9 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": false,
+          "score": 0,
+          "detail": "동일 입력 브라우저 증명 없음",
           "blocking": true
         },
         {
@@ -907,7 +995,9 @@
           "blocking": true
         }
       ],
-      "blockers": [],
+      "blockers": [
+        "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+      ],
       "warnings": [],
       "metrics": {
         "meshes": 3,
@@ -920,6 +1010,7 @@
         "normalValidityCoverage": 1,
         "maximumNormalUnitError": 4.589581759084638e-8,
         "pbrSurfaceCoverage": 1,
+        "texturePayloadCoverage": 1,
         "skeletons": 2,
         "bones": 49,
         "animationClips": 22,
@@ -1000,8 +1091,8 @@
     },
     "print3d": {
       "domain": "3d-print",
-      "pass": true,
-      "score": 100,
+      "pass": false,
+      "score": 91,
       "checks": [
         {
           "id": "determinism",
@@ -1028,11 +1119,19 @@
           "blocking": true
         },
         {
-          "id": "glb-roundtrip",
-          "label": "실제 GLB 재열기",
+          "id": "texture-payload",
+          "label": "검증 가능한 질감 픽셀",
           "pass": true,
           "score": 100,
-          "detail": "브라우저 GLTFLoader 재열기 통과",
+          "detail": "4/4 payloads inspectable",
+          "blocking": true
+        },
+        {
+          "id": "glb-roundtrip",
+          "label": "실제 GLB 재열기",
+          "pass": false,
+          "score": 0,
+          "detail": "동일 입력 브라우저 증명 없음",
           "blocking": true
         },
         {
@@ -1100,7 +1199,9 @@
           "blocking": false
         }
       ],
-      "blockers": [],
+      "blockers": [
+        "glb-roundtrip: 동일 입력 브라우저 증명 없음"
+      ],
       "warnings": [],
       "metrics": {
         "meshes": 1,
@@ -1113,6 +1214,7 @@
         "normalValidityCoverage": 1,
         "maximumNormalUnitError": 3.983618057645799e-8,
         "pbrSurfaceCoverage": 1,
+        "texturePayloadCoverage": 1,
         "skeletons": 0,
         "bones": 0,
         "animationClips": 0,
@@ -1212,19 +1314,21 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "9f5cf9c1a1a9a9a0",
-      "repeatedFingerprint": "9f5cf9c1a1a9a9a0",
+      "firstFingerprint": "9258ff072934f80e",
+      "repeatedFingerprint": "9258ff072934f80e",
       "inputFingerprint": "fc2f8f89b09dbd0f",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": true,
-      "deliveryReady": true,
-      "decisionCorrect": true,
-      "benchmarkPassed": true,
-      "score": 98,
-      "blockers": []
+      "deliveryReady": false,
+      "decisionCorrect": false,
+      "benchmarkPassed": false,
+      "score": 79,
+      "blockers": [
+        "browser GLB round-trip required"
+      ]
     },
     {
       "id": "pinterest-concept-architectural-review",
@@ -1233,18 +1337,18 @@
       "evidenceScore": 63,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "ba584248c3b475ed",
-      "repeatedFingerprint": "ba584248c3b475ed",
+      "firstFingerprint": "130cff728e9dad22",
+      "repeatedFingerprint": "130cff728e9dad22",
       "inputFingerprint": "1252c08c0593cc58",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": false,
       "deliveryReady": false,
       "decisionCorrect": true,
-      "benchmarkPassed": true,
+      "benchmarkPassed": false,
       "score": 59,
       "blockers": [
         "evidence 63/85"
@@ -1257,19 +1361,21 @@
       "evidenceScore": 87,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "bd720239628cdab6",
-      "repeatedFingerprint": "bd720239628cdab6",
+      "firstFingerprint": "c5fa04721de1de8b",
+      "repeatedFingerprint": "c5fa04721de1de8b",
       "inputFingerprint": "3112aae51f72ed54",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": true,
-      "deliveryReady": true,
-      "decisionCorrect": true,
-      "benchmarkPassed": true,
-      "score": 98,
-      "blockers": []
+      "deliveryReady": false,
+      "decisionCorrect": false,
+      "benchmarkPassed": false,
+      "score": 79,
+      "blockers": [
+        "browser GLB round-trip required"
+      ]
     },
     {
       "id": "cooling-service-assembly",
@@ -1278,8 +1384,8 @@
       "evidenceScore": 52,
       "surfaceCoverage": 0.9285714285714286,
       "domainChecksPass": true,
-      "firstFingerprint": "152263e53a90e0e9",
-      "repeatedFingerprint": "152263e53a90e0e9",
+      "firstFingerprint": "af446f1541f9a436",
+      "repeatedFingerprint": "af446f1541f9a436",
       "inputFingerprint": "5fcba7ad52e03423",
       "browserGlbRoundTrip": false,
       "expectedDecision": "block",
@@ -1302,18 +1408,18 @@
       "evidenceScore": 35,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "8cd58db89301e1bc",
-      "repeatedFingerprint": "8cd58db89301e1bc",
+      "firstFingerprint": "332429b7419421ea",
+      "repeatedFingerprint": "332429b7419421ea",
       "inputFingerprint": "295e762e5f28a1d5",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "block",
       "expectedBlockerPrefix": "evidence",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": false,
       "deliveryReady": false,
       "decisionCorrect": true,
-      "benchmarkPassed": true,
+      "benchmarkPassed": false,
       "score": 59,
       "blockers": [
         "evidence 35/85"
@@ -1326,19 +1432,21 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "fedd0d9a6c873184",
-      "repeatedFingerprint": "fedd0d9a6c873184",
+      "firstFingerprint": "34f102e584694bcd",
+      "repeatedFingerprint": "34f102e584694bcd",
       "inputFingerprint": "a84dc3c941e01b74",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": true,
-      "deliveryReady": true,
-      "decisionCorrect": true,
-      "benchmarkPassed": true,
-      "score": 98,
-      "blockers": []
+      "deliveryReady": false,
+      "decisionCorrect": false,
+      "benchmarkPassed": false,
+      "score": 79,
+      "blockers": [
+        "browser GLB round-trip required"
+      ]
     },
     {
       "id": "field-human-game-base",
@@ -1347,19 +1455,21 @@
       "evidenceScore": 90,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "fedd0d9a6c873184",
-      "repeatedFingerprint": "fedd0d9a6c873184",
+      "firstFingerprint": "34f102e584694bcd",
+      "repeatedFingerprint": "34f102e584694bcd",
       "inputFingerprint": "a84dc3c941e01b74",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": true,
-      "deliveryReady": true,
-      "decisionCorrect": true,
-      "benchmarkPassed": true,
-      "score": 98,
-      "blockers": []
+      "deliveryReady": false,
+      "decisionCorrect": false,
+      "benchmarkPassed": false,
+      "score": 79,
+      "blockers": [
+        "browser GLB round-trip required"
+      ]
     },
     {
       "id": "asphalt-3d-print-surface",
@@ -1368,19 +1478,21 @@
       "evidenceScore": 84,
       "surfaceCoverage": 1,
       "domainChecksPass": true,
-      "firstFingerprint": "cf0bc53d5fa7e992",
-      "repeatedFingerprint": "cf0bc53d5fa7e992",
+      "firstFingerprint": "388298483ea566f9",
+      "repeatedFingerprint": "388298483ea566f9",
       "inputFingerprint": "1e6d498c419c3da5",
-      "browserGlbRoundTrip": true,
+      "browserGlbRoundTrip": false,
       "expectedDecision": "release",
       "reproducible": true,
-      "technicalReady": true,
+      "technicalReady": false,
       "modelReady": true,
-      "deliveryReady": true,
-      "decisionCorrect": true,
-      "benchmarkPassed": true,
-      "score": 97,
-      "blockers": []
+      "deliveryReady": false,
+      "decisionCorrect": false,
+      "benchmarkPassed": false,
+      "score": 79,
+      "blockers": [
+        "browser GLB round-trip required"
+      ]
     }
   ]
 }

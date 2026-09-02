@@ -31,6 +31,7 @@ import {
   compareGlbRoundTrip,
   createLocalBuildTelemetry,
   DELIVERY_PIPELINE_REVISION,
+  SCENE_FINGERPRINT_REVISION,
   deliveryInputFingerprint,
   snapshotScene,
   withDeliveryAudit,
@@ -1057,6 +1058,9 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           sourceGameLods: sourceSnapshot.gameLods,
           sourceCollisionPrimitives: sourceSnapshot.collisionPrimitives,
           compilerRevision: DELIVERY_PIPELINE_REVISION,
+          sceneFingerprintRevision: SCENE_FINGERPRINT_REVISION,
+          sourceTexturePayloads: sourceSnapshot.texturePayloads.length,
+          sourceTexturePayloadCoverage: sourceSnapshot.texturePayloadCoverage,
         },
       });
       runtime.syncDiagnostics();
@@ -1076,6 +1080,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
             if (diagnostic.__MORPHLOOM__) {
               diagnostic.__MORPHLOOM__.inputFingerprint = audit.inputFingerprint;
               diagnostic.__MORPHLOOM__.sceneFingerprint = audit.fingerprint;
+              diagnostic.__MORPHLOOM__.sceneFingerprintRevision = SCENE_FINGERPRINT_REVISION;
               diagnostic.__MORPHLOOM__.deliveryStatus = audit.status;
               diagnostic.__MORPHLOOM__.deliveryScore = audit.score;
               diagnostic.__MORPHLOOM__.buildFingerprint = audit.buildFingerprint;
@@ -1083,6 +1088,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.boundsErrorMm = audit.boundsErrorMm;
               diagnostic.__MORPHLOOM__.namedNodeCoverage = audit.namedNodeCoverage;
               diagnostic.__MORPHLOOM__.morphTargetPayloadParity = audit.morphTargetPayloadParity;
+              diagnostic.__MORPHLOOM__.texturePayloadParity = audit.texturePayloadParity;
               diagnostic.__MORPHLOOM__.gltfValidator = audit.standardValidation?.validator;
               diagnostic.__MORPHLOOM__.gltfValidatorVersion = audit.standardValidation?.validatorVersion;
               diagnostic.__MORPHLOOM__.gltfValidationStatus = audit.standardValidation?.status;
@@ -1100,6 +1106,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedAnimationManifestEntries = audit.reopened?.animationManifestEntries;
               diagnostic.__MORPHLOOM__.reopenedAnimationManifestFingerprint = audit.reopened?.animationManifestFingerprint;
               diagnostic.__MORPHLOOM__.reopenedMorphTargets = audit.reopened?.morphTargets;
+              diagnostic.__MORPHLOOM__.reopenedTexturePayloads = audit.reopened?.texturePayloads.length;
+              diagnostic.__MORPHLOOM__.reopenedTexturePayloadCoverage = audit.reopened?.texturePayloadCoverage;
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }

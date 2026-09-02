@@ -143,11 +143,14 @@ const domainReports = {
 };
 
 const checkPassed = (report: { checks: Array<{ id: string; pass: boolean }> }, id: string): boolean => report.checks.some((check) => check.id === id && check.pass);
+const modelChecksPass = (report: { checks: Array<{ id: string; pass: boolean; blocking?: boolean }> }): boolean => report.checks
+  .filter((check) => check.blocking !== false && check.id !== 'glb-roundtrip')
+  .every((check) => check.pass);
 
 const cases = [
   evaluateBenchmarkCase({
     id: 'ornate-knife-product-visualization', domain: 'industrial-design', topologyPass: knifeA.metrics.topology.pass,
-    evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: domainReports.industrialDesign.pass,
+    evidenceScore: 90, surfaceCoverage: surfaceCoverage(knifeA), domainChecksPass: modelChecksPass(domainReports.industrialDesign),
     firstFingerprint: fingerprints.knife[0], repeatedFingerprint: fingerprints.knife[1],
     inputFingerprint: inputFingerprints.knife,
     browserGlbRoundTrip: hasMatchingBrowserProof('ornate-knife-product-visualization'),
@@ -196,7 +199,7 @@ const cases = [
   evaluateBenchmarkCase({
     id: 'field-human-animation-base', domain: 'animation',
     topologyPass: checkPassed(domainReports.animation, 'animation-topology'), evidenceScore: 90,
-    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: domainReports.animation.pass,
+    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: modelChecksPass(domainReports.animation),
     firstFingerprint: fingerprints.baseCharacter[0], repeatedFingerprint: fingerprints.baseCharacter[1],
     inputFingerprint: inputFingerprints.baseCharacter, browserGlbRoundTrip: baseBrowserProof,
     expectedDecision: 'release',
@@ -204,14 +207,14 @@ const cases = [
   evaluateBenchmarkCase({
     id: 'field-human-game-base', domain: 'game',
     topologyPass: checkPassed(domainReports.game, 'game-topology'), evidenceScore: 90,
-    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: domainReports.game.pass,
+    surfaceCoverage: surfaceCoverage(baseCharacterA), domainChecksPass: modelChecksPass(domainReports.game),
     firstFingerprint: fingerprints.baseCharacter[0], repeatedFingerprint: fingerprints.baseCharacter[1],
     inputFingerprint: inputFingerprints.baseCharacter, browserGlbRoundTrip: baseBrowserProof,
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
     id: 'asphalt-3d-print-surface', domain: '3d-print', topologyPass: asphaltA.metrics.topology.pass,
-    evidenceScore: 84, surfaceCoverage: surfaceCoverage(asphaltA), domainChecksPass: domainReports.print3d.pass,
+    evidenceScore: 84, surfaceCoverage: surfaceCoverage(asphaltA), domainChecksPass: modelChecksPass(domainReports.print3d),
     firstFingerprint: fingerprints.asphalt[0], repeatedFingerprint: fingerprints.asphalt[1],
     inputFingerprint: inputFingerprints.asphalt, browserGlbRoundTrip: asphaltBrowserProof,
     expectedDecision: 'release',

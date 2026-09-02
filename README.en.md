@@ -7,9 +7,9 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-229%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-238%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
-![Benchmark](https://img.shields.io/badge/release%20gate-100%25-28a879?style=flat-square)
+![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
 </div>
 
@@ -123,15 +123,15 @@ npm run benchmark:static-delivery -- --asset-id moderncat-concept --asset-pack a
 npm run build
 ```
 
-Current locked benchmark:
+Current locked benchmark immediately after adding pixel-level texture round-trip proof:
 
-- Overall pass: **87.5% (7/8)**
-- Technical integrity: **87.5% (7/8)**
-- Release/block decision accuracy: **100% (8/8)**
-- Release-intended model and browser GLB: **100% (5/5)**
-- Insufficient-evidence rejection safety: **66.7% (2/3)**
+- Release-intended model readiness: **100% (5/5)**
+- Current browser delivery proof: **0% (0/5)**
+- Overall pass and technical integrity: **0% (0/8)**
+- Release/block decision match: **37.5% (3/8)**
+- Rejection safety including current browser proof: **0% (0/3)**
 
-All five release-intended cases still pass across industrial design, drawing-based architecture, animation, games, and 3D printing. The total is intentionally 7/8 because the stored Chromium receipt for the evidence-blocked cooling assembly no longer matches its current deterministic build and tangent-prepared scene. Its release/block decision is still correct, but Morphloom no longer counts a stale reopen receipt as technical success. Browser proof now requires exact equality across `compiler + normalized input + projection-complete build + tangent-prepared scene`; hexadecimal shape alone cannot pass. Four release receipts exactly bind the five release domains to current builds. None of these rates means every input has perfect visual quality.
+All five model-readiness cases pass across industrial design, drawing-based architecture, animation, games, and 3D printing. The new verifier fingerprints the actual pixels, resolution, colour space, filters, wrapping, and UV repeat/offset/rotation of colour, normal, and roughness maps, then requires the reopened GLB to preserve that payload. Existing Chromium receipts do not contain `texturePayloadParity`, so they are intentionally rejected as stale instead of being patched to 100%. Browser delivery remains 0/5 until fresh schema-compatible runs are captured. Model readiness and delivery proof are reported separately; neither claims perfect visual quality for arbitrary input.
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|
@@ -141,7 +141,7 @@ All five release-intended cases still pass across industrial design, drawing-bas
 | Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared/global thickness ≥0.8 mm · connected-shell local wall rays ≥0.8 mm · positive volume · measured 45° overhang |
 
-Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, or rib beside a dense body. Policy `morphloom-domain-readiness/0.9.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, and reserves ±X/±Y/±Z face probes for every shell. Remaining probes use deterministic farthest-point selection in a six-dimensional centroid-plus-normal feature space, so a low-triangle but spatially distinct feature is represented; each ray intersects only its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The engine now detects both a detached 12-triangle 0.3 mm shell beside a 19,200-triangle body and a 0.3 mm tab attached to one closed dense solid, including after arbitrary three-axis rotation. The broader asphalt sampling passes one connected shell and 96/96 rays with a 3.499 mm minimum and 17.683 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
+Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, or rib beside a dense body. Policy `morphloom-domain-readiness/0.10.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, and reserves ±X/±Y/±Z face probes for every shell. Remaining probes use deterministic farthest-point selection in a six-dimensional centroid-plus-normal feature space, so a low-triangle but spatially distinct feature is represented; each ray intersects only its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The engine now detects both a detached 12-triangle 0.3 mm shell beside a 19,200-triangle body and a 0.3 mm tab attached to one closed dense solid, including after arbitrary three-axis rotation. The broader asphalt sampling passes one connected shell and 96/96 rays with a 3.499 mm minimum and 17.683 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 
@@ -159,7 +159,7 @@ We also ran a real same-input Talon comparison. Morphloom aligns the admitted fr
 
 Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
 
-The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.963 irregularity, then combines a 99×128 (12,672-sample) multi-band height field with 13,229 procedural aggregate features. Fine, medium, and coarse frequency bands are all measurably active, while the comparator rejects regular repeating patterns that merely match average colour or variance. The result has 124,616 triangles, 0.58 mm RMS height, 4.35 mm peak-to-valley relief, and one of one closed meshes; it also passed the compiler 0.10 browser GLB reopen with 0 mm bounds drift. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
+The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.963 irregularity, then combines a 99×128 (12,672-sample) multi-band height field with 13,229 procedural aggregate features. Fine, medium, and coarse frequency bands are all measurably active, while the comparator rejects regular repeating patterns that merely match average colour or variance. The result has 124,616 triangles, 0.58 mm RMS height, 4.35 mm peak-to-valley relief, and one of one closed meshes. A previous Chromium reopen measured 0 mm bounds drift, but it is not counted as current delivery proof until recaptured under the new pixel-payload contract. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
 
 The surface preparation CLI accepts bounded PNG, JPEG, and WebP inputs after header-level size checks.
 
