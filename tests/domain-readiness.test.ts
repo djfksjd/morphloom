@@ -170,10 +170,13 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.metrics.criticalDeformationJoints).toBe(10);
     expect(animation.metrics.criticalWeightedJoints).toBe(10);
     expect(animation.metrics.criticalMovingJoints).toBe(10);
+    expect(animation.metrics.criticalLocalizedJoints).toBe(10);
     expect(animation.metrics.criticalJointWeightCoverage).toBe(1);
     expect(animation.metrics.criticalJointMotionCoverage).toBe(1);
+    expect(animation.metrics.criticalJointLocalizationCoverage).toBe(1);
     expect(animation.metrics.minimumCriticalJointWeightedVertices).toBeGreaterThanOrEqual(8);
     expect(animation.metrics.minimumCriticalJointMotionMm).toBeGreaterThan(1);
+    expect(animation.metrics.minimumCriticalJointLocalizationCoverage).toBeGreaterThanOrEqual(0.98);
     expect(animation.metrics.fingerBones).toBe(30);
     expect(animation.metrics.fingerWeightedVertices).toBeGreaterThan(0);
     expect(animation.metrics.fingerAnimationTracks).toBeGreaterThanOrEqual(19);
@@ -247,6 +250,49 @@ describe('cross-domain semi-professional readiness', () => {
       .toMatch(/knee_L.*ankle_R/);
     expect(game.pass).toBe(false);
     expect(game.blockers.join(' ')).toMatch(/game-joint-deformation/);
+  }, 20_000);
+
+  it('blocks anatomically misplaced joint weights even when every critical joint still moves vertices', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const skinIndex = build.body.geometry.getAttribute('skinIndex');
+    const bones = build.body.skeleton.bones;
+    const swappedNames = [
+      ['shoulder_L', 'knee_L'], ['shoulder_R', 'knee_R'],
+    ] as const;
+    const swaps = new Map<number, number>();
+    for (const [firstName, secondName] of swappedNames) {
+      const first = bones.findIndex((bone) => bone.name === firstName);
+      const second = bones.findIndex((bone) => bone.name === secondName);
+      if (first < 0 || second < 0) throw new Error('Missing anatomical-weight fixture.');
+      swaps.set(first, second);
+      swaps.set(second, first);
+    }
+    for (let vertex = 0; vertex < skinIndex.count; vertex += 1) {
+      for (let slot = 0; slot < skinIndex.itemSize; slot += 1) {
+        const replacement = swaps.get(skinIndex.getComponent(vertex, slot));
+        if (replacement !== undefined) skinIndex.setComponent(vertex, slot, replacement);
+      }
+    }
+    skinIndex.needsUpdate = true;
+
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.metrics.criticalWeightedJoints).toBe(10);
+    expect(animation.metrics.criticalMovingJoints).toBe(10);
+    expect(animation.metrics.criticalLocalizedJoints).toBe(6);
+    expect(animation.metrics.criticalJointLocalizationCoverage).toBe(0.6);
+    expect(animation.metrics.criticalMislocalizedJoints)
+      .toEqual(['shoulder_L', 'shoulder_R', 'knee_L', 'knee_R']);
+    expect(animation.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-joint-localization/);
+    expect(game.pass).toBe(false);
+    expect(game.blockers.join(' ')).toMatch(/game-joint-localization/);
   }, 20_000);
 
   it('blocks a declared LOD that collapses the silhouette or loses valid skin weights', () => {
