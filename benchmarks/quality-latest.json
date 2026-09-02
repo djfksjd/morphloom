@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "readinessRevision": "morphloom-domain-readiness/0.3.0",
-  "generatedAt": "2026-09-02T01:06:46.190Z",
+  "readinessRevision": "morphloom-domain-readiness/0.4.0",
+  "generatedAt": "2026-09-02T01:11:18.898Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -831,7 +831,7 @@
           "label": "국부 벽 두께 표본",
           "pass": true,
           "score": 100,
-          "detail": "최소 38.435 mm · P05 38.610 mm · 연결 외피 1 · 96/96 rays · 10,745,856/24,000,000 tests",
+          "detail": "최소 3.499 mm · P05 17.683 mm · 연결 외피 1 · 96/96 rays · 10,745,856/24,000,000 tests",
           "blocking": true
         },
         {
@@ -900,8 +900,8 @@
         "surfaceAreaMm2": 636534.8951200972,
         "volumeThicknessProxyMm": 33.816446986384435,
         "sampledWallThicknessComplete": true,
-        "sampledWallThicknessMm": 38.434552028775215,
-        "sampledWallThicknessP05Mm": 38.609947121109606,
+        "sampledWallThicknessMm": 3.498834088188106,
+        "sampledWallThicknessP05Mm": 17.683479418987368,
         "sampledWallThicknessRays": 96,
         "sampledWallThicknessHitCoverage": 1,
         "sampledWallThicknessConnectedShells": 1,

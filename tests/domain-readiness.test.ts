@@ -532,6 +532,50 @@ describe('cross-domain semi-professional readiness', () => {
     }
   });
 
+  it('finds a small thin tab attached to one densely tessellated closed shell', () => {
+    const shape = new THREE.Shape();
+    shape.moveTo(0.05, 0.00015);
+    const subdivide = (fromX: number, fromY: number, toX: number, toY: number, segments: number): void => {
+      for (let index = 1; index <= segments; index += 1) {
+        const amount = index / segments;
+        shape.lineTo(fromX + (toX - fromX) * amount, fromY + (toY - fromY) * amount);
+      }
+    };
+    subdivide(0.05, 0.00015, 0.05, 0.05, 1_000);
+    subdivide(0.05, 0.05, -0.05, 0.05, 2_000);
+    subdivide(-0.05, 0.05, -0.05, -0.05, 2_000);
+    subdivide(-0.05, -0.05, 0.05, -0.05, 2_000);
+    subdivide(0.05, -0.05, 0.05, -0.00015, 1_000);
+    shape.lineTo(0.07, -0.00015);
+    shape.lineTo(0.07, 0.00015);
+    shape.lineTo(0.05, 0.00015);
+    const geometry = new THREE.ExtrudeGeometry(shape, {
+      depth: 0.02,
+      steps: 1,
+      bevelEnabled: false,
+      curveSegments: 1,
+    });
+    const material = new THREE.MeshStandardMaterial();
+    const root = new THREE.Group();
+    const mesh = new THREE.Mesh(geometry, material);
+    root.add(mesh);
+    try {
+      const audit = auditSampledWallThickness(root);
+      const repeat = auditSampledWallThickness(root);
+      expect(audit.complete).toBe(true);
+      expect(audit.connectedShells).toBe(1);
+      expect(audit.minimumMm).toBeCloseTo(0.3, 1);
+      expect(repeat).toEqual(audit);
+      mesh.rotation.set(0.37, 0.51, 0.23);
+      const rotated = auditSampledWallThickness(root);
+      expect(rotated.complete).toBe(true);
+      expect(rotated.minimumMm).toBeCloseTo(0.3, 1);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
+  });
+
   it('fails the local wall-thickness gate when its bounded triangle budget cannot complete', () => {
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1, 8, 8, 8);
     const material = new THREE.MeshStandardMaterial();

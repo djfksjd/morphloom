@@ -453,7 +453,7 @@ const output = {
     { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.game?.metrics?.collisionPrimitives === 16 ? '16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates' : 'blocked' },
     { capability: 'finite non-degenerate UV triangles and near-unit normal delivery gate', img2threejs: 'not established in pinned audit', morphloom: domainProof.game?.pass && domainProof.industrialDesign?.pass ? 'yes' : 'blocked' },
     {
-      capability: 'millimetre 3D-print topology, global thickness screening, connected-shell local wall rays, feature and 45-degree overhang audit',
+      capability: 'millimetre 3D-print topology, global thickness screening, connected-shell feature-space wall rays, feature and 45-degree overhang audit',
       img2threejs: 'not established in pinned audit',
       morphloom: domainProof.print3d?.pass
         && domainProof.print3d.metrics?.sampledWallThicknessComplete

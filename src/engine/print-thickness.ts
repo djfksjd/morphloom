@@ -255,13 +255,6 @@ function rayTriangleDistance(
   return Number.isFinite(distance) && distance > minimumDistance ? distance : undefined;
 }
 
-function evenlyDistributedSamples(triangles: readonly number[], count: number): number[] {
-  if (count >= triangles.length) return [...triangles];
-  return Array.from({ length: count }, (_, index) => (
-    triangles[Math.min(triangles.length - 1, Math.floor((index + 0.5) * triangles.length / count))]!
-  ));
-}
-
 function directionalSamples(triangles: Float64Array, component: TriangleComponent): number[] {
   const directions = [
     [1, 0, 0], [-1, 0, 0],
@@ -285,6 +278,91 @@ function directionalSamples(triangles: Float64Array, component: TriangleComponen
   return [...selected];
 }
 
+function featureSpaceSamples(
+  triangles: Float64Array,
+  component: TriangleComponent,
+  required: readonly number[],
+  targetCount: number,
+): number[] {
+  if (targetCount >= component.triangles.length) return [...component.triangles];
+  const featureStride = 6;
+  const features = new Float32Array(component.triangles.length * featureStride);
+  let minimumX = Number.POSITIVE_INFINITY;
+  let minimumY = Number.POSITIVE_INFINITY;
+  let minimumZ = Number.POSITIVE_INFINITY;
+  let maximumX = Number.NEGATIVE_INFINITY;
+  let maximumY = Number.NEGATIVE_INFINITY;
+  let maximumZ = Number.NEGATIVE_INFINITY;
+  for (let index = 0; index < component.triangles.length; index += 1) {
+    const triangle = component.triangles[index]!;
+    const offset = triangle * TRIANGLE_STRIDE;
+    const featureOffset = index * featureStride;
+    const x = (triangles[offset]! + triangles[offset + 3]! + triangles[offset + 6]!) / 3;
+    const y = (triangles[offset + 1]! + triangles[offset + 4]! + triangles[offset + 7]!) / 3;
+    const z = (triangles[offset + 2]! + triangles[offset + 5]! + triangles[offset + 8]!) / 3;
+    features[featureOffset] = x;
+    features[featureOffset + 1] = y;
+    features[featureOffset + 2] = z;
+    features[featureOffset + 3] = triangles[offset + 9]!;
+    features[featureOffset + 4] = triangles[offset + 10]!;
+    features[featureOffset + 5] = triangles[offset + 11]!;
+    minimumX = Math.min(minimumX, x); maximumX = Math.max(maximumX, x);
+    minimumY = Math.min(minimumY, y); maximumY = Math.max(maximumY, y);
+    minimumZ = Math.min(minimumZ, z); maximumZ = Math.max(maximumZ, z);
+  }
+  const extentX = Math.max(1e-12, maximumX - minimumX);
+  const extentY = Math.max(1e-12, maximumY - minimumY);
+  const extentZ = Math.max(1e-12, maximumZ - minimumZ);
+  const normalWeight = 0.35;
+  for (let index = 0; index < component.triangles.length; index += 1) {
+    const offset = index * featureStride;
+    features[offset] = (features[offset]! - minimumX) / extentX;
+    features[offset + 1] = (features[offset + 1]! - minimumY) / extentY;
+    features[offset + 2] = (features[offset + 2]! - minimumZ) / extentZ;
+    features[offset + 3] *= normalWeight;
+    features[offset + 4] *= normalWeight;
+    features[offset + 5] *= normalWeight;
+  }
+  const selected = [...required];
+  const selectedSet = new Set(selected);
+  const minimumDistance = new Float32Array(component.triangles.length);
+  minimumDistance.fill(Number.POSITIVE_INFINITY);
+  const updateDistances = (sampleIndex: number): void => {
+    const sampleOffset = sampleIndex * featureStride;
+    for (let index = 0; index < component.triangles.length; index += 1) {
+      const offset = index * featureStride;
+      let distance = 0;
+      for (let axis = 0; axis < featureStride; axis += 1) {
+        const delta = features[offset + axis]! - features[sampleOffset + axis]!;
+        distance += delta * delta;
+      }
+      if (distance < minimumDistance[index]!) minimumDistance[index] = distance;
+    }
+  };
+  for (const triangle of selected) {
+    const sampleIndex = component.triangles.indexOf(triangle);
+    if (sampleIndex >= 0) updateDistances(sampleIndex);
+  }
+  while (selected.length < targetCount) {
+    let nextIndex = -1;
+    let nextDistance = Number.NEGATIVE_INFINITY;
+    for (let index = 0; index < component.triangles.length; index += 1) {
+      const triangle = component.triangles[index]!;
+      if (selectedSet.has(triangle)) continue;
+      if (minimumDistance[index]! > nextDistance) {
+        nextIndex = index;
+        nextDistance = minimumDistance[index]!;
+      }
+    }
+    if (nextIndex < 0) break;
+    const triangle = component.triangles[nextIndex]!;
+    selected.push(triangle);
+    selectedSet.add(triangle);
+    updateDistances(nextIndex);
+  }
+  return selected;
+}
+
 function allocateComponentSamples(
   mesh: TriangleMesh,
   maximumSamples: number,
@@ -294,7 +372,6 @@ function allocateComponentSamples(
   if (requiredCount > maximumSamples) return { samples: requiredSamples, requiredSamples, complete: false };
   const targetCount = Math.min(maximumSamples, mesh.validTriangles.length);
   const samples = requiredSamples.map((selected) => [...selected]);
-  const selectedSets = samples.map((selected) => new Set(selected));
   let remaining = targetCount - requiredCount;
   const capacities = mesh.components.map((component, index) => component.triangles.length - samples[index]!.length);
   const totalCapacity = capacities.reduce((total, capacity) => total + capacity, 0);
@@ -309,22 +386,12 @@ function allocateComponentSamples(
   for (let componentIndex = 0; componentIndex < mesh.components.length; componentIndex += 1) {
     const component = mesh.components[componentIndex]!;
     const extraCount = extras[componentIndex]!;
-    const selected = samples[componentIndex]!;
-    const selectedSet = selectedSets[componentIndex]!;
-    for (const triangle of evenlyDistributedSamples(component.triangles, Math.min(component.triangles.length, extraCount))) {
-      if (!selectedSet.has(triangle)) {
-        selected.push(triangle);
-        selectedSet.add(triangle);
-      }
-    }
-    if (selected.length < requiredSamples[componentIndex]!.length + extraCount) {
-      for (const triangle of component.triangles) {
-        if (selectedSet.has(triangle)) continue;
-        selected.push(triangle);
-        selectedSet.add(triangle);
-        if (selected.length >= requiredSamples[componentIndex]!.length + extraCount) break;
-      }
-    }
+    samples[componentIndex] = featureSpaceSamples(
+      mesh.triangles,
+      component,
+      requiredSamples[componentIndex]!,
+      requiredSamples[componentIndex]!.length + extraCount,
+    );
   }
   remaining -= extras.reduce((total, count) => total + count, 0);
   return { samples, requiredSamples, complete: remaining === 0 };

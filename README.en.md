@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-187%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-188%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -136,7 +136,7 @@ This means all eight locked contracts made the correct decision; it does not mea
 | Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared/global thickness ≥0.8 mm · connected-shell local wall rays ≥0.8 mm · positive volume · measured 45° overhang |
 
-Global `2V/A` and whole-mesh uniform sampling can both hide a tiny thin shell beside a dense body. Policy `morphloom-domain-readiness/0.3.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, reserves ±X/±Y/±Z face probes for every shell, and intersects each ray only with its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The regression that previously reported 100 mm for a 12-triangle, 0.3 mm shell hidden beside a 19,200-triangle body now detects 0.3 mm. The asphalt specimen passes one connected shell and 96/96 rays with a 38.435 mm minimum and 38.610 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
+Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, or rib beside a dense body. Policy `morphloom-domain-readiness/0.4.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, and reserves ±X/±Y/±Z face probes for every shell. Remaining probes use deterministic farthest-point selection in a six-dimensional centroid-plus-normal feature space, so a low-triangle but spatially distinct feature is represented; each ray intersects only its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The engine now detects both a detached 12-triangle 0.3 mm shell beside a 19,200-triangle body and a 0.3 mm tab attached to one closed dense solid, including after arbitrary three-axis rotation. The broader asphalt sampling passes one connected shell and 96/96 rays with a 3.499 mm minimum and 17.683 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 

@@ -9,7 +9,7 @@ import type { PlanFootprintAudit } from './plan-footprint';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.3.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.4.0';
 
 export type ProductionDomain =
   | 'architecture'
