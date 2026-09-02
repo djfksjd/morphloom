@@ -114,6 +114,8 @@ npm run quality:gate
 npm run benchmark:competitive
 npm run benchmark:visual-captures -- --reference reference.webp --morphloom morphloom.png --competitor img2threejs.png --competitor-threshold 48 --output benchmarks/visual-latest.json
 npm run benchmark:visual-set -- --manifest captures/manifest.json --output benchmarks/visual-set-latest.json --require-claim
+npm run benchmark:neutral-render -- candidate.glb candidate-front.png candidate-front.json front
+npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-rear.json --competitor competitor-front.json,competitor-rear.json --output benchmarks/neutral-latest.json
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
@@ -159,7 +161,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 상세 결과: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [벤치마크 정책](./benchmarks/README.md) · [다중 시점 캡처 규격](./docs/VISUAL_CAPTURE_SET.md) · [img2threejs 실제 비교](./docs/COMPETITIVE_BENCHMARK.md)
 
-동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 조립 좌표계의 source-facing 삼각형에 원본을 정렬하고, 선형 색공간에서 넓은 조명 변화만 제한적으로 제거한 뒤 normal·roughness 맵을 만듭니다. 검신은 실제 쐐기 형상이며 절삭선 14/14구간에서 최대 날끝 0.12 mm를 측정합니다. 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm도 확인했습니다. 실제 투명 WebGL 정면 진단에서 Morphloom은 종합 0.911 대 0.785, 실루엣 0.937 대 0.745, 내부 디테일 0.929 대 0.868, 재질·질감 0.851 대 0.805, 공간 질감 0.602 대 0.470으로 앞섰습니다. 비교 렌더는 공간 질감 게이트에서 탈락했고 Morphloom은 통과했습니다. 정면 한 뷰뿐이고 블라인드 패널이 없으므로 결과는 여전히 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [기계 판독 결과](./benchmarks/talon-visual-broadside-latest.json)를 공개합니다. 비교용 경쟁 렌더는 재배포하지 않고 해시만 기록합니다.
+동일한 Talon 사진으로 실제 비교했습니다. Morphloom은 조립 좌표계의 source-facing 삼각형에 원본을 정렬하고, 선형 색공간에서 넓은 조명 변화만 제한적으로 제거한 뒤 normal·roughness 맵을 만듭니다. 검신은 실제 쐐기 형상이며 절삭선 14/14구간에서 최대 날끝 0.12 mm를 측정합니다. 25개 편집 부품, 경계·비매니폴드·퇴화 삼각형 0, GLB 포락 오차 0.000 mm도 확인했습니다. 실제 투명 WebGL 정면 진단에서 Morphloom은 종합 0.911 대 0.785로 앞섰습니다. 추가로 양쪽 실제 장면 GLB를 Blender 5.2.1 LTS의 동일 카메라·조명·크기로 정면/후면/등각 3시점 렌더했고, 같은 GLB와 실제 파일 해시가 유지된 3/3 감사가 통과했습니다. 중립 정면에서는 종합 0.924 대 0.877, 내부 디테일 0.906 대 0.783, 재질 0.885 대 0.748이었습니다. 정면 한 장 기준이고 블라인드 패널이 없으므로 `unproven`, `claimAllowed: false`이며 전 분야 우세 주장이 아닙니다. [중립 렌더 감사](./benchmarks/talon-neutral-render-latest.json)와 [정면 진단](./benchmarks/talon-neutral-front-latest.json)을 공개합니다. 비교용 경쟁 렌더는 재배포하지 않고 해시만 기록합니다.
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 

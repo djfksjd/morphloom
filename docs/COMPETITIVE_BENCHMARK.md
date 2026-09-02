@@ -20,6 +20,12 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. 사진의 넓은 조명 변화는 메모리 상한이 있는 선형 색공간 lighting field로 제한적으로 제거하고, 원본의 미세·중간 표면 신호는 normal·roughness 입력으로 유지했습니다. Morphloom은 종합 0.911 대 0.785, 실루엣 0.937 대 0.745, 내부 디테일 0.929 대 0.868, 재질·질감 0.851 대 0.805, 표면 스케일 0.873 대 0.777, 불규칙성 0.849 대 0.771, 공간 질감 0.602 대 0.470으로 앞섰습니다. 색상 0.870 대 0.863과 미세구조 0.940 대 0.931도 Morphloom이 앞섰으며, 비교 렌더는 새 공간 질감 게이트에서 탈락했습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 보정 시점과 5명 블라인드 패널을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
 
+뷰어 연출 편향도 분리했습니다. 두 실행 중인 브라우저 장면에서 실제 GLB를 추출한 뒤 Blender 5.2.1 LTS의 동일한 1024×512 Eevee 스튜디오, 직교 카메라, 가로·세로 최대 포락 2.000 정규화로 정면·후면·등각을 다시 렌더했습니다. 감사기는 양쪽의 Blender 버전·카메라·조명·렌더 설정을 바이트 수준 계약으로 비교하고, 각 후보가 세 시점 모두 같은 GLB를 사용했는지와 PNG/GLB 실제 SHA-256을 다시 계산합니다. 3/3 시점이 통과했으며 증거 해시는 [`../benchmarks/talon-neutral-render-latest.json`](../benchmarks/talon-neutral-render-latest.json)에 있습니다.
+
+중립 정면을 같은 원본과 비교하면 Morphloom은 종합 0.924 대 0.877, 내부 디테일 0.906 대 0.783, 재질 0.885 대 0.748, 표면 스케일 0.903 대 0.847, 공간 질감 0.729 대 0.653으로 앞섰습니다. 비교 모델은 실루엣만 0.968 대 0.948로 앞섰습니다. 후면에서는 비교 모델의 정면 플레이트가 관측되지 않은 칼날까지 번졌고, Morphloom은 후면을 별도 authored 재질로 유지했습니다. 정면 진단은 여전히 한 장 기준이라 [`../benchmarks/talon-neutral-front-latest.json`](../benchmarks/talon-neutral-front-latest.json)의 상태를 `unproven`으로 유지합니다.
+
+동일 브라우저 세션에서 추출한 Morphloom GLB는 Khronos 오류/경고 0과 독립 파서 재열기를 통과했습니다. img2threejs 실행 장면을 감사용으로 내보낸 GLB는 필수 `EXT_mesh_gpu_instancing`과 관련된 Khronos 오류 5개로 차단됐습니다. 이것은 img2threejs의 공식 배포 GLB가 아니라 실행 중 Three.js 장면을 동일 절차로 감사한 결과이므로, 공식 내보내기 제품 전체에 일반화하지 않습니다.
+
 | 실제 결과 | img2threejs | Morphloom |
 |---|---:|---:|
 | 정면 색상 재현 | 원본 플레이트 투영 | 조립 좌표계 원본 투영 |
@@ -29,6 +35,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 독립 편집 부품 | 데모 표시 5개 | 25개 명명 부품 |
 | 폐쇄 메시 | 공개 화면에서 수치 미표시 | 25/25, 경계 0, 비매니폴드 0 |
 | GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 포락 오차 0.000 mm, 명명 노드 100% |
+| 동일 Blender 3시점 중립 렌더 | 감사용 장면 GLB 3/3 렌더, 규격 검사는 차단 | GLB 규격·독립 파서 PASS, 중립 렌더 3/3 |
 | 준실무 납품성 | Three.js 전시 강점 | 우세—IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG |
 
 정면 색상 투영은 양쪽 모두 지원합니다. 검증한 img2threejs Talon 재질은 base-color plate와 상수 roughness를 사용하고, Morphloom은 같은 입력에서 파생한 normal·roughness를 GLB에 포함합니다. 따라서 이 사례에서 **표면 반응 기능과 편집·토폴로지·납품 범위는 Morphloom 쪽이 더 넓음**을 확인했습니다. 이것은 블라인드 지각 품질 우승 판정이 아닙니다. 단일 사진에서 안 보이는 깊이와 후면도 실측했다고 판정하지 않습니다. 상세 수치는 [`../benchmarks/talon-same-reference-latest.json`](../benchmarks/talon-same-reference-latest.json)에 고정했습니다.
@@ -84,7 +91,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 회전 부품 자체축 치수 | 고정 커밋 감사에서 확인되지 않음 | 지원—45° 회전 부재의 월드 AABB 약 77.78 mm와 실제 로컬 길이 100 mm를 구분하고, 실제 길이 100→90 mm 회귀를 차단 |
 | 회전 부품 내부 피치 | 고정 커밋 감사에서 확인되지 않음 | 지원—회전된 카메라/PCB 플레이트의 홀·핀·렌즈 중심 피치를 부품 자체축으로 투영해 25.0→24.5 mm 회귀 차단 |
 | 실제 삼각형 자기 교차 | 고정 커밋에 ray-parity 검사 존재 | 공간 격자 broadphase + 정확 삼각형 교차 + 검사예산 초과 차단; 제품·전선·포즈·LOD·프린트 계약에 연결 |
-| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 203개—개수보다 납품 계약 회귀·본 이름은 남았지만 무릎/발목 웨이트가 끊긴 리그·모든 관절이 움직여도 어깨/무릎 영향 위치가 바뀐 리그·이름/개수/크기는 유지한 얼굴 모프를 하체로 옮기거나 좌우 눈/턱/눈썹 의미를 맞바꾼 리그·GLB 모프 이름은 남았지만 변형 데이터가 축소된 납품물·평면은 맞지만 부재 높이가 틀린 건축·홀/핀/커넥터 피치 이동·회전 부품의 AABB/실제 길이 및 자체축 피치 혼동·스크린샷 해시를 장면 증거로 위장하거나 시점마다 다른 장면을 쓴 비교·GLB 치수감사 유실·고밀도 본체에 숨은 분리 0.3 mm 외피/단일 폐쇄 외피의 회전된 0.3 mm 탭/연결 인덱스 메모리 상한/할당 전 삼각형 상한/두께 검사 예산 소진·실제 삼각형 자기교차·손상/경고 GLB 공식 규격 차단·오목 다각형 건축 평면 반전/공백 침범·가짜 LOD/충돌체·충돌 리그 포즈 정렬·UV/노멀 위장·브라우저 검증 중복/경쟁·빈 동작/루프 단절·표면 스케일/공간 셔플 위장·다중 시점 불일치·암시적 곡면 결함·위험한 de-light 증거·거짓 우위 차단에 집중 |
+| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 208개—개수보다 납품 계약 회귀와 중립 렌더의 카메라·조명·정규화·같은 GLB·실제 파일 해시 위조 차단에 집중 |
 | 동일 Talon 이미지 정면 색상 | 원본 plate 투영 | 원본 plate 투영 |
 | 동일 Talon 이미지 표면 PBR 반응 | 상수 roughness, normal map 없음 | 우세—사진 파생 normal+roughness |
 | 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—25개 부품, 실제 wedge 날, 폐쇄 토폴로지, GLB 재열기 |
@@ -94,6 +101,8 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 ```bash
 npm run benchmark:competitive
 npm run benchmark:visual-captures -- --reference public/benchmark-input/talon-doppler-ruby.webp --morphloom morphloom-result.png --competitor img2threejs-talon-live.png --competitor-threshold 48 --output benchmarks/talon-visual-broadside-latest.json
+npm run benchmark:neutral-render -- candidate.glb candidate-front.png candidate-front.json front
+npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-rear.json,morphloom-iso.json --competitor competitor-front.json,competitor-rear.json,competitor-iso.json --output benchmarks/neutral-latest.json
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures

@@ -17,6 +17,8 @@
     "benchmark:competitive": "vite-node scripts/competitive-benchmark.ts",
     "benchmark:fixtures": "vite-node scripts/export-cross-domain-fixtures.ts",
     "benchmark:blender-cross-domain": "vite-node scripts/blender-cross-domain-benchmark.ts",
+    "benchmark:neutral-render": "blender --background --python-exit-code 1 --python scripts/blender-neutral-render.py --",
+    "benchmark:neutral-audit": "vite-node scripts/audit-neutral-render-set.ts",
     "benchmark:unity-cross-domain": "vite-node scripts/unity-cross-domain-benchmark.ts",
     "benchmark:visual-captures": "vite-node scripts/audit-visual-captures.ts",
     "benchmark:visual-set": "vite-node scripts/audit-visual-capture-set.ts",
