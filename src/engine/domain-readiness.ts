@@ -9,7 +9,7 @@ import type { PlanFootprintAudit } from './plan-footprint';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.2.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.3.0';
 
 export type ProductionDomain =
   | 'architecture'
@@ -108,6 +108,9 @@ export interface DomainReadinessReport {
     sampledWallThicknessP05Mm: number;
     sampledWallThicknessRays: number;
     sampledWallThicknessHitCoverage: number;
+    sampledWallThicknessConnectedShells: number;
+    sampledWallThicknessWeldedVertices: number;
+    sampledWallThicknessComponentEdges: number;
     sampledWallThicknessTriangles: number;
     sampledWallThicknessTriangleLimit: number;
     sampledWallThicknessTriangleTests: number;
@@ -753,7 +756,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     add('print-local-thickness', '국부 벽 두께 표본', sampledThicknessPass,
       sampledThicknessPass ? 100 : (sampledWallThickness?.minimumMm ?? 0) / 0.8 * 100,
       sampledWallThickness
-        ? `최소 ${sampledWallThickness.minimumMm.toFixed(3)} mm · P05 ${sampledWallThickness.percentile05Mm.toFixed(3)} mm · ${sampledWallThickness.hitRays}/${sampledWallThickness.sampledRays} rays · ${sampledWallThickness.triangleTests.toLocaleString()}/${sampledWallThickness.maximumTriangleTests.toLocaleString()} tests${sampledWallThickness.blockers.length > 0 ? ` · ${sampledWallThickness.blockers.join('; ')}` : ''}`
+        ? `최소 ${sampledWallThickness.minimumMm.toFixed(3)} mm · P05 ${sampledWallThickness.percentile05Mm.toFixed(3)} mm · 연결 외피 ${sampledWallThickness.connectedShells} · ${sampledWallThickness.hitRays}/${sampledWallThickness.sampledRays} rays · ${sampledWallThickness.triangleTests.toLocaleString()}/${sampledWallThickness.maximumTriangleTests.toLocaleString()} tests${sampledWallThickness.blockers.length > 0 ? ` · ${sampledWallThickness.blockers.join('; ')}` : ''}`
         : '국부 벽 두께 검사를 실행하지 못함');
     const supportFree = geometry.unsupportedOverhangRatio <= 0.01;
     add('print-overhang', '45° 오버행 분석', supportFree, supportFree ? 100 : Math.max(0, 100 - geometry.unsupportedOverhangRatio * 500), `${geometry.unsupportedOverhangAreaMm2.toFixed(1)} mm² · 표면의 ${(geometry.unsupportedOverhangRatio * 100).toFixed(2)}%`, false);
@@ -831,6 +834,9 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       sampledWallThicknessP05Mm: sampledWallThickness?.percentile05Mm ?? 0,
       sampledWallThicknessRays: sampledWallThickness?.sampledRays ?? 0,
       sampledWallThicknessHitCoverage: sampledWallThickness?.hitCoverage ?? 0,
+      sampledWallThicknessConnectedShells: sampledWallThickness?.connectedShells ?? 0,
+      sampledWallThicknessWeldedVertices: sampledWallThickness?.weldedVertices ?? 0,
+      sampledWallThicknessComponentEdges: sampledWallThickness?.componentEdges ?? 0,
       sampledWallThicknessTriangles: sampledWallThickness?.triangles ?? 0,
       sampledWallThicknessTriangleLimit: sampledWallThickness?.maximumTriangles ?? 0,
       sampledWallThicknessTriangleTests: sampledWallThickness?.triangleTests ?? 0,

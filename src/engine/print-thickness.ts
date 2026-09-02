@@ -3,6 +3,11 @@ import * as THREE from 'three';
 export interface SampledWallThicknessAudit {
   complete: boolean;
   meshes: number;
+  connectedShells: number;
+  weldedVertices: number;
+  maximumWeldedVertices: number;
+  componentEdges: number;
+  maximumComponentEdges: number;
   sampledRays: number;
   hitRays: number;
   hitCoverage: number;
@@ -20,13 +25,25 @@ export interface SampledWallThicknessOptions {
   maximumSamplesPerMesh?: number;
   maximumTriangles?: number;
   maximumTriangleTests?: number;
+  maximumWeldedVertices?: number;
+  maximumComponentEdges?: number;
+}
+
+interface TriangleComponent {
+  triangles: number[];
+  signedVolumeM3: number;
 }
 
 interface TriangleMesh {
   name: string;
   triangles: Float64Array;
   validTriangles: number[];
-  signedVolumeM3: number;
+  components: TriangleComponent[];
+  weldedVertices: number;
+  componentEdges: number;
+  componentCollectionComplete: boolean;
+  weldedVertexBudgetExceeded: boolean;
+  componentEdgeBudgetExceeded: boolean;
 }
 
 const TRIANGLE_STRIDE = 12;
@@ -34,6 +51,11 @@ const DEFAULT_MAXIMUM_MESHES = 256;
 const DEFAULT_MAXIMUM_SAMPLES_PER_MESH = 96;
 const DEFAULT_MAXIMUM_TRIANGLES = 500_000;
 const DEFAULT_MAXIMUM_TRIANGLE_TESTS = 24_000_000;
+const DEFAULT_MAXIMUM_WELDED_VERTICES = 500_000;
+const DEFAULT_MAXIMUM_COMPONENT_EDGES = 1_000_000;
+// Match the topology gate's 1e-6-metre weld tolerance so UV seams do not
+// masquerade as disconnected printable shells.
+const WELD_QUANTIZATION_PER_METRE = 1_000_000;
 
 function finitePositiveInteger(value: number | undefined, fallback: number, maximum: number): number {
   if (value === undefined) return fallback;
@@ -50,13 +72,28 @@ function meshTriangleCount(mesh: THREE.Mesh): number {
   return Math.floor((index?.count ?? position.count) / 3);
 }
 
-function collectMeshTriangles(mesh: THREE.Mesh, triangleCount: number): TriangleMesh | undefined {
+function weldKey(x: number, y: number, z: number): string {
+  return `${Math.round(x * WELD_QUANTIZATION_PER_METRE)}:${Math.round(y * WELD_QUANTIZATION_PER_METRE)}:${Math.round(z * WELD_QUANTIZATION_PER_METRE)}`;
+}
+
+function collectMeshTriangles(
+  mesh: THREE.Mesh,
+  triangleCount: number,
+  maximumWeldedVertices: number,
+  maximumComponentEdges: number,
+): TriangleMesh | undefined {
   if (triangleCount === 0) return undefined;
   const position = mesh.geometry.getAttribute('position');
   if (!position || position.itemSize < 3) return undefined;
   const index = mesh.geometry.getIndex();
   const triangles = new Float64Array(triangleCount * TRIANGLE_STRIDE);
   const validTriangles: number[] = [];
+  const triangleVolumes = new Float64Array(triangleCount);
+  const parents = new Int32Array(triangleCount);
+  parents.fill(-1);
+  const ranks = new Uint8Array(triangleCount);
+  const vertexIds = new Map<string, number>();
+  const edgeOwners = new Map<number, number>();
   const a = new THREE.Vector3();
   const b = new THREE.Vector3();
   const c = new THREE.Vector3();
@@ -64,7 +101,29 @@ function collectMeshTriangles(mesh: THREE.Mesh, triangleCount: number): Triangle
   const edgeB = new THREE.Vector3();
   const normal = new THREE.Vector3();
   const cross = new THREE.Vector3();
-  let signedVolumeM3 = 0;
+  let componentCollectionComplete = true;
+  let weldedVertexBudgetExceeded = false;
+  let componentEdgeBudgetExceeded = false;
+  let collectedWeldedVertices = 0;
+  let collectedComponentEdges = 0;
+  const find = (triangle: number): number => {
+    let root = triangle;
+    while (parents[root] !== root) root = parents[root]!;
+    while (parents[triangle] !== triangle) {
+      const next = parents[triangle]!;
+      parents[triangle] = root;
+      triangle = next;
+    }
+    return root;
+  };
+  const union = (left: number, right: number): void => {
+    let leftRoot = find(left);
+    let rightRoot = find(right);
+    if (leftRoot === rightRoot) return;
+    if (ranks[leftRoot]! < ranks[rightRoot]!) [leftRoot, rightRoot] = [rightRoot, leftRoot];
+    parents[rightRoot] = leftRoot;
+    if (ranks[leftRoot] === ranks[rightRoot]) ranks[leftRoot] += 1;
+  };
   for (let triangle = 0; triangle < triangleCount; triangle += 1) {
     const ia = index ? index.getX(triangle * 3) : triangle * 3;
     const ib = index ? index.getX(triangle * 3 + 1) : triangle * 3 + 1;
@@ -80,9 +139,83 @@ function collectMeshTriangles(mesh: THREE.Mesh, triangleCount: number): Triangle
     normal.multiplyScalar(1 / doubledArea);
     triangles.set([normal.x, normal.y, normal.z], offset + 9);
     validTriangles.push(triangle);
-    signedVolumeM3 += a.dot(cross.crossVectors(b, c)) / 6;
+    parents[triangle] = triangle;
+    triangleVolumes[triangle] = a.dot(cross.crossVectors(b, c)) / 6;
+    if (componentCollectionComplete) {
+      const triangleVertexIds: number[] = [];
+      for (const vertex of [a, b, c]) {
+        const key = weldKey(vertex.x, vertex.y, vertex.z);
+        let vertexId = vertexIds.get(key);
+        if (vertexId === undefined) {
+          if (vertexIds.size >= maximumWeldedVertices) {
+            componentCollectionComplete = false;
+            weldedVertexBudgetExceeded = true;
+            collectedWeldedVertices = vertexIds.size;
+            collectedComponentEdges = edgeOwners.size;
+            vertexIds.clear();
+            edgeOwners.clear();
+            break;
+          }
+          vertexId = vertexIds.size;
+          vertexIds.set(key, vertexId);
+        }
+        triangleVertexIds.push(vertexId);
+      }
+      if (componentCollectionComplete) {
+        const edgeBase = maximumWeldedVertices + 1;
+        for (const [from, to] of [
+          [triangleVertexIds[0]!, triangleVertexIds[1]!],
+          [triangleVertexIds[1]!, triangleVertexIds[2]!],
+          [triangleVertexIds[2]!, triangleVertexIds[0]!],
+        ]) {
+          const edge = Math.min(from, to) * edgeBase + Math.max(from, to);
+          const owner = edgeOwners.get(edge);
+          if (owner === undefined) {
+            if (edgeOwners.size >= maximumComponentEdges) {
+              componentCollectionComplete = false;
+              componentEdgeBudgetExceeded = true;
+              collectedWeldedVertices = vertexIds.size;
+              collectedComponentEdges = edgeOwners.size;
+              vertexIds.clear();
+              edgeOwners.clear();
+              break;
+            }
+            edgeOwners.set(edge, triangle);
+          } else {
+            union(triangle, owner);
+          }
+        }
+      }
+    }
   }
-  return { name: mesh.name || mesh.uuid, triangles, validTriangles, signedVolumeM3 };
+  const components: TriangleComponent[] = [];
+  if (componentCollectionComplete) {
+    collectedWeldedVertices = vertexIds.size;
+    collectedComponentEdges = edgeOwners.size;
+    const byRoot = new Map<number, TriangleComponent>();
+    for (const triangle of validTriangles) {
+      const root = find(triangle);
+      let component = byRoot.get(root);
+      if (!component) {
+        component = { triangles: [], signedVolumeM3: 0 };
+        byRoot.set(root, component);
+        components.push(component);
+      }
+      component.triangles.push(triangle);
+      component.signedVolumeM3 += triangleVolumes[triangle]!;
+    }
+  }
+  return {
+    name: mesh.name || mesh.uuid,
+    triangles,
+    validTriangles,
+    components,
+    weldedVertices: collectedWeldedVertices,
+    componentEdges: collectedComponentEdges,
+    componentCollectionComplete,
+    weldedVertexBudgetExceeded,
+    componentEdgeBudgetExceeded,
+  };
 }
 
 function rayTriangleDistance(
@@ -129,6 +262,74 @@ function evenlyDistributedSamples(triangles: readonly number[], count: number): 
   ));
 }
 
+function directionalSamples(triangles: Float64Array, component: TriangleComponent): number[] {
+  const directions = [
+    [1, 0, 0], [-1, 0, 0],
+    [0, 1, 0], [0, -1, 0],
+    [0, 0, 1], [0, 0, -1],
+  ] as const;
+  const selected = new Set<number>();
+  for (const [dx, dy, dz] of directions) {
+    let bestTriangle = component.triangles[0]!;
+    let bestAlignment = Number.NEGATIVE_INFINITY;
+    for (const triangle of component.triangles) {
+      const offset = triangle * TRIANGLE_STRIDE + 9;
+      const alignment = triangles[offset]! * dx + triangles[offset + 1]! * dy + triangles[offset + 2]! * dz;
+      if (alignment > bestAlignment) {
+        bestAlignment = alignment;
+        bestTriangle = triangle;
+      }
+    }
+    selected.add(bestTriangle);
+  }
+  return [...selected];
+}
+
+function allocateComponentSamples(
+  mesh: TriangleMesh,
+  maximumSamples: number,
+): { samples: number[][]; requiredSamples: number[][]; complete: boolean } {
+  const requiredSamples = mesh.components.map((component) => directionalSamples(mesh.triangles, component));
+  const requiredCount = requiredSamples.reduce((total, samples) => total + samples.length, 0);
+  if (requiredCount > maximumSamples) return { samples: requiredSamples, requiredSamples, complete: false };
+  const targetCount = Math.min(maximumSamples, mesh.validTriangles.length);
+  const samples = requiredSamples.map((selected) => [...selected]);
+  const selectedSets = samples.map((selected) => new Set(selected));
+  let remaining = targetCount - requiredCount;
+  const capacities = mesh.components.map((component, index) => component.triangles.length - samples[index]!.length);
+  const totalCapacity = capacities.reduce((total, capacity) => total + capacity, 0);
+  const extras = capacities.map((capacity) => totalCapacity > 0 ? Math.floor(remaining * capacity / totalCapacity) : 0);
+  let assigned = extras.reduce((total, count) => total + count, 0);
+  for (let index = 0; assigned < remaining && index < capacities.length; index = (index + 1) % capacities.length) {
+    if (extras[index]! < capacities[index]!) {
+      extras[index] += 1;
+      assigned += 1;
+    }
+  }
+  for (let componentIndex = 0; componentIndex < mesh.components.length; componentIndex += 1) {
+    const component = mesh.components[componentIndex]!;
+    const extraCount = extras[componentIndex]!;
+    const selected = samples[componentIndex]!;
+    const selectedSet = selectedSets[componentIndex]!;
+    for (const triangle of evenlyDistributedSamples(component.triangles, Math.min(component.triangles.length, extraCount))) {
+      if (!selectedSet.has(triangle)) {
+        selected.push(triangle);
+        selectedSet.add(triangle);
+      }
+    }
+    if (selected.length < requiredSamples[componentIndex]!.length + extraCount) {
+      for (const triangle of component.triangles) {
+        if (selectedSet.has(triangle)) continue;
+        selected.push(triangle);
+        selectedSet.add(triangle);
+        if (selected.length >= requiredSamples[componentIndex]!.length + extraCount) break;
+      }
+    }
+  }
+  remaining -= extras.reduce((total, count) => total + count, 0);
+  return { samples, requiredSamples, complete: remaining === 0 };
+}
+
 /**
  * Deterministic, bounded local wall-thickness proxy for closed print meshes.
  * Rays start at distributed face centroids and travel inward according to the
@@ -154,12 +355,27 @@ export function auditSampledWallThickness(
     DEFAULT_MAXIMUM_TRIANGLE_TESTS,
     100_000_000,
   );
+  const maximumWeldedVertices = finitePositiveInteger(
+    options.maximumWeldedVertices,
+    DEFAULT_MAXIMUM_WELDED_VERTICES,
+    2_000_000,
+  );
+  const maximumComponentEdges = finitePositiveInteger(
+    options.maximumComponentEdges,
+    DEFAULT_MAXIMUM_COMPONENT_EDGES,
+    3_000_000,
+  );
   root.updateMatrixWorld(true);
   const meshes: TriangleMesh[] = [];
   let visibleMeshCount = 0;
   let observedTriangles = 0;
   let collectedTriangles = 0;
   let triangleCollectionBudgetExceeded = false;
+  let connectedShells = 0;
+  let weldedVertices = 0;
+  let componentEdges = 0;
+  let weldedVertexCollectionBudgetExceeded = false;
+  let componentEdgeCollectionBudgetExceeded = false;
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     visibleMeshCount += 1;
@@ -171,14 +387,37 @@ export function auditSampledWallThickness(
       triangleCollectionBudgetExceeded = true;
       return;
     }
-    const collected = collectMeshTriangles(object, triangleCount);
+    if (weldedVertices >= maximumWeldedVertices || componentEdges >= maximumComponentEdges) {
+      weldedVertexCollectionBudgetExceeded ||= weldedVertices >= maximumWeldedVertices;
+      componentEdgeCollectionBudgetExceeded ||= componentEdges >= maximumComponentEdges;
+      return;
+    }
+    const remainingWeldedVertices = Math.max(1, maximumWeldedVertices - weldedVertices);
+    const remainingComponentEdges = Math.max(1, maximumComponentEdges - componentEdges);
+    const collected = collectMeshTriangles(
+      object,
+      triangleCount,
+      remainingWeldedVertices,
+      remainingComponentEdges,
+    );
     collectedTriangles += triangleCount;
-    if (collected) meshes.push(collected);
+    if (collected) {
+      meshes.push(collected);
+      weldedVertices += collected.weldedVertices;
+      componentEdges += collected.componentEdges;
+      connectedShells += collected.components.length;
+    }
   });
   const blockers: string[] = [];
   if (visibleMeshCount > maximumMeshes) blockers.push(`mesh budget exceeded: ${visibleMeshCount}/${maximumMeshes}`);
   if (triangleCollectionBudgetExceeded) {
     blockers.push(`triangle collection budget exceeded: ${observedTriangles}/${maximumTriangles}`);
+  }
+  if (weldedVertexCollectionBudgetExceeded) {
+    blockers.push(`welded-vertex collection budget exceeded: ${weldedVertices}/${maximumWeldedVertices}`);
+  }
+  if (componentEdgeCollectionBudgetExceeded) {
+    blockers.push(`connected-edge collection budget exceeded: ${componentEdges}/${maximumComponentEdges}`);
   }
   if (meshes.length === 0) blockers.push('no triangle mesh available for local wall-thickness sampling');
   const distancesMm: number[] = [];
@@ -186,40 +425,69 @@ export function auditSampledWallThickness(
   let hitRays = 0;
   let triangleTests = 0;
   for (const mesh of meshes) {
-    if (mesh.validTriangles.length === 0 || Math.abs(mesh.signedVolumeM3) <= 1e-15) {
-      blockers.push(`${mesh.name}: degenerate or zero-volume mesh`);
+    if (!mesh.componentCollectionComplete || weldedVertices > maximumWeldedVertices
+      || componentEdges > maximumComponentEdges) {
+      if (mesh.weldedVertexBudgetExceeded || weldedVertices > maximumWeldedVertices) {
+        blockers.push(`${mesh.name}: welded-vertex budget exhausted`);
+      }
+      if (mesh.componentEdgeBudgetExceeded || componentEdges > maximumComponentEdges) {
+        blockers.push(`${mesh.name}: connected-edge budget exhausted`);
+      }
       continue;
     }
+    if (mesh.validTriangles.length === 0 || mesh.components.length === 0) {
+      blockers.push(`${mesh.name}: degenerate mesh`);
+      continue;
+    }
+    if (mesh.components.some((component) => Math.abs(component.signedVolumeM3) <= 1e-15)) {
+      blockers.push(`${mesh.name}: degenerate or zero-volume connected shell`);
+      continue;
+    }
+    const allocation = allocateComponentSamples(mesh, maximumSamplesPerMesh);
+    if (!allocation.complete) {
+      blockers.push(`${mesh.name}: connected-shell sampling budget exhausted`);
+      continue;
+    }
+    const requestedTestCount = allocation.samples.reduce((total, samples, index) => (
+      total + samples.length * mesh.components[index]!.triangles.length
+    ), 0);
+    const requiredTestCount = allocation.requiredSamples.reduce((total, samples, index) => (
+      total + samples.length * mesh.components[index]!.triangles.length
+    ), 0);
     const remainingTests = maximumTriangleTests - triangleTests;
-    const affordableSamples = Math.floor(remainingTests / mesh.validTriangles.length);
-    const requestedSamples = Math.min(maximumSamplesPerMesh, mesh.validTriangles.length);
-    const sampleCount = Math.min(requestedSamples, affordableSamples);
-    if (sampleCount < requestedSamples) blockers.push(`${mesh.name}: triangle-test budget exhausted`);
-    if (sampleCount <= 0) continue;
-    const windingSign = Math.sign(mesh.signedVolumeM3);
-    for (const sourceTriangle of evenlyDistributedSamples(mesh.validTriangles, sampleCount)) {
-      const offset = sourceTriangle * TRIANGLE_STRIDE;
-      const cx = (mesh.triangles[offset]! + mesh.triangles[offset + 3]! + mesh.triangles[offset + 6]!) / 3;
-      const cy = (mesh.triangles[offset + 1]! + mesh.triangles[offset + 4]! + mesh.triangles[offset + 7]!) / 3;
-      const cz = (mesh.triangles[offset + 2]! + mesh.triangles[offset + 5]! + mesh.triangles[offset + 8]!) / 3;
-      const dx = -mesh.triangles[offset + 9]! * windingSign;
-      const dy = -mesh.triangles[offset + 10]! * windingSign;
-      const dz = -mesh.triangles[offset + 11]! * windingSign;
-      const epsilon = 1e-8;
-      const ox = cx + dx * epsilon;
-      const oy = cy + dy * epsilon;
-      const oz = cz + dz * epsilon;
-      sampledRays += 1;
-      let nearest = Number.POSITIVE_INFINITY;
-      for (const candidate of mesh.validTriangles) {
-        triangleTests += 1;
-        if (candidate === sourceTriangle) continue;
-        const distance = rayTriangleDistance(mesh.triangles, candidate, ox, oy, oz, dx, dy, dz, epsilon * 2);
-        if (distance !== undefined && distance < nearest) nearest = distance;
-      }
-      if (Number.isFinite(nearest)) {
-        hitRays += 1;
-        distancesMm.push((nearest + epsilon) * 1_000);
+    let samples = allocation.samples;
+    if (requestedTestCount > remainingTests) {
+      blockers.push(`${mesh.name}: triangle-test budget exhausted`);
+      if (requiredTestCount > remainingTests) continue;
+      samples = allocation.requiredSamples;
+    }
+    for (let componentIndex = 0; componentIndex < mesh.components.length; componentIndex += 1) {
+      const component = mesh.components[componentIndex]!;
+      const windingSign = Math.sign(component.signedVolumeM3);
+      for (const sourceTriangle of samples[componentIndex]!) {
+        const offset = sourceTriangle * TRIANGLE_STRIDE;
+        const cx = (mesh.triangles[offset]! + mesh.triangles[offset + 3]! + mesh.triangles[offset + 6]!) / 3;
+        const cy = (mesh.triangles[offset + 1]! + mesh.triangles[offset + 4]! + mesh.triangles[offset + 7]!) / 3;
+        const cz = (mesh.triangles[offset + 2]! + mesh.triangles[offset + 5]! + mesh.triangles[offset + 8]!) / 3;
+        const dx = -mesh.triangles[offset + 9]! * windingSign;
+        const dy = -mesh.triangles[offset + 10]! * windingSign;
+        const dz = -mesh.triangles[offset + 11]! * windingSign;
+        const epsilon = 1e-8;
+        const ox = cx + dx * epsilon;
+        const oy = cy + dy * epsilon;
+        const oz = cz + dz * epsilon;
+        sampledRays += 1;
+        let nearest = Number.POSITIVE_INFINITY;
+        for (const candidate of component.triangles) {
+          triangleTests += 1;
+          if (candidate === sourceTriangle) continue;
+          const distance = rayTriangleDistance(mesh.triangles, candidate, ox, oy, oz, dx, dy, dz, epsilon * 2);
+          if (distance !== undefined && distance < nearest) nearest = distance;
+        }
+        if (Number.isFinite(nearest)) {
+          hitRays += 1;
+          distancesMm.push((nearest + epsilon) * 1_000);
+        }
       }
     }
   }
@@ -230,6 +498,11 @@ export function auditSampledWallThickness(
   return {
     complete: blockers.length === 0 && sampledRays > 0 && hitCoverage === 1,
     meshes: meshes.length,
+    connectedShells,
+    weldedVertices,
+    maximumWeldedVertices,
+    componentEdges,
+    maximumComponentEdges,
     sampledRays,
     hitRays,
     hitCoverage,

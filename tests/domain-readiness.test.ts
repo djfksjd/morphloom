@@ -385,6 +385,9 @@ describe('cross-domain semi-professional readiness', () => {
     expect(print.metrics.sampledWallThicknessMm).toBeGreaterThanOrEqual(0.8);
     expect(print.metrics.sampledWallThicknessP05Mm).toBeGreaterThanOrEqual(0.8);
     expect(print.metrics.sampledWallThicknessHitCoverage).toBe(1);
+    expect(print.metrics.sampledWallThicknessConnectedShells).toBe(1);
+    expect(print.metrics.sampledWallThicknessWeldedVertices).toBeLessThanOrEqual(500_000);
+    expect(print.metrics.sampledWallThicknessComponentEdges).toBeLessThanOrEqual(1_000_000);
     expect(print.metrics.sampledWallThicknessTriangleTests).toBeLessThanOrEqual(24_000_000);
     expect(print.metrics.unsupportedOverhangRatio).toBeLessThanOrEqual(0.01);
     expect(print.warnings).toEqual([]);
@@ -505,6 +508,30 @@ describe('cross-domain semi-professional readiness', () => {
     }
   });
 
+  it('samples every disconnected shell even when a dense body dominates one merged mesh', () => {
+    const denseBody = new THREE.BoxGeometry(0.1, 0.1, 0.1, 40, 40, 40);
+    const tinyThinShell = new THREE.BoxGeometry(0.02, 0.0003, 0.02);
+    tinyThinShell.applyMatrix4(new THREE.Matrix4().makeTranslation(0.08, 0, 0));
+    const geometry = mergeGeometries([denseBody, tinyThinShell], false);
+    denseBody.dispose();
+    tinyThinShell.dispose();
+    if (!geometry) throw new Error('Failed to merge dense-body thickness fixture.');
+    const material = new THREE.MeshStandardMaterial();
+    const root = new THREE.Group();
+    root.add(new THREE.Mesh(geometry, material));
+    try {
+      const audit = auditSampledWallThickness(root);
+      expect(audit.complete).toBe(true);
+      expect(audit.connectedShells).toBe(2);
+      expect(audit.weldedVertices).toBeLessThanOrEqual(audit.maximumWeldedVertices);
+      expect(audit.componentEdges).toBeLessThanOrEqual(audit.maximumComponentEdges);
+      expect(audit.minimumMm).toBeCloseTo(0.3, 1);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
+  });
+
   it('fails the local wall-thickness gate when its bounded triangle budget cannot complete', () => {
     const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1, 8, 8, 8);
     const material = new THREE.MeshStandardMaterial();
@@ -533,6 +560,28 @@ describe('cross-domain semi-professional readiness', () => {
       expect(audit.triangleTests).toBe(0);
       expect(audit.complete).toBe(false);
       expect(audit.blockers.join(' ')).toMatch(/triangle collection budget exceeded/);
+    } finally {
+      geometry.dispose();
+      material.dispose();
+    }
+  });
+
+  it('fails closed when connected-shell indexing exceeds its vertex or edge memory budgets', () => {
+    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+    const material = new THREE.MeshStandardMaterial();
+    const root = new THREE.Group();
+    root.add(new THREE.Mesh(geometry, material));
+    try {
+      const vertexBound = auditSampledWallThickness(root, { maximumWeldedVertices: 4 });
+      const edgeBound = auditSampledWallThickness(root, { maximumComponentEdges: 4 });
+      expect(vertexBound.complete).toBe(false);
+      expect(vertexBound.blockers.join(' ')).toMatch(/welded-vertex budget exhausted/);
+      expect(vertexBound.weldedVertices).toBe(4);
+      expect(vertexBound.componentEdges).toBeLessThan(vertexBound.maximumComponentEdges);
+      expect(edgeBound.complete).toBe(false);
+      expect(edgeBound.blockers.join(' ')).toMatch(/connected-edge budget exhausted/);
+      expect(edgeBound.componentEdges).toBe(4);
+      expect(edgeBound.weldedVertices).toBeLessThan(edgeBound.maximumWeldedVertices);
     } finally {
       geometry.dispose();
       material.dispose();
