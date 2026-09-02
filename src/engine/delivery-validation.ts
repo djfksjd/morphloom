@@ -3,8 +3,8 @@ import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.25.0';
-export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.4.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.28.0';
+export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.5.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -33,6 +33,13 @@ export interface SceneSnapshot {
     displacementSumMm: number;
     displacementSquaredSumMm2: number;
     maximumDisplacementMm: number;
+  }>;
+  /** Per-mesh diagnostics for locating cross-runtime drift without storing raw geometry. */
+  meshPayloads: Array<{
+    id: string;
+    geometryFingerprint: string;
+    transformFingerprint: string;
+    materialFingerprint: string;
   }>;
   gameLods: number;
   collisionPrimitives: number;
@@ -166,6 +173,13 @@ class StableHasher {
 }
 
 const MAX_INSPECTABLE_TEXTURE_BYTES = 64 * 1024 * 1024;
+
+/** Locale collation differs between a Korean browser and Node. Fingerprints
+ * must use Unicode code-point order so mixed Korean/Latin part names remain
+ * byte-identical in every runtime. */
+function compareStableText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
 
 interface TextureContent {
   width: number;
@@ -431,6 +445,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let morphTargets = 0;
   const morphTargetNames: string[] = [];
   const morphTargetPayloads: SceneSnapshot['morphTargetPayloads'] = [];
+  const meshPayloads: SceneSnapshot['meshPayloads'] = [];
   let triangles = 0;
   let geometryBytes = 0;
   let finiteTransforms = true;
@@ -562,7 +577,7 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       hasher.text(payload.id);
       hasher.text(payload.fingerprint);
       hasher.text(payload.serializable ? 'serializable' : 'unsupported');
-      for (const [slot, value] of Object.entries(material).sort(([left], [right]) => left.localeCompare(right))) {
+      for (const [slot, value] of Object.entries(material).sort(([left], [right]) => compareStableText(left, right))) {
         if (!(value instanceof THREE.Texture)) continue;
         textures.add(value);
         const payload = texturePayload(material, slot, value, texturePayloadCache);
@@ -575,16 +590,49 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
         ].join('|'), payload);
       }
     }
+    const geometryHasher = new StableHasher();
+    geometryHasher.text('morphloom.mesh-geometry/0.1');
+    for (const [attributeName, attribute] of (Object.entries(geometry.attributes) as Array<[
+      string,
+      THREE.BufferAttribute,
+    ]>).sort(([left], [right]) => compareStableText(left, right))) {
+      geometryHasher.text(attributeName);
+      geometryHasher.number(attribute.itemSize);
+      geometryHasher.text(attribute.normalized ? 'normalized' : 'raw');
+      geometryHasher.array(attribute.array);
+    }
+    geometryHasher.array(index?.array);
+    for (const group of deliveryGroups) {
+      geometryHasher.number(group.start);
+      geometryHasher.number(group.count);
+      geometryHasher.number(group.materialIndex ?? 0);
+    }
+    const transformHasher = new StableHasher();
+    transformHasher.text('morphloom.mesh-transform/0.1');
+    transformHasher.array(object.matrixWorld.elements);
+    const materialHasher = new StableHasher();
+    materialHasher.text('morphloom.mesh-materials/0.1');
+    for (const material of materialList(object.material)) {
+      const payload = materialPayload(material);
+      materialHasher.text(payload.id);
+      materialHasher.text(payload.fingerprint);
+    }
+    meshPayloads.push({
+      id: object.name || `unnamed-mesh-${meshes}`,
+      geometryFingerprint: geometryHasher.digest(),
+      transformFingerprint: transformHasher.digest(),
+      materialFingerprint: materialHasher.digest(),
+    });
   });
 
   if (visibleBounds.isEmpty()) visibleBounds.set(new THREE.Vector3(), new THREE.Vector3());
   const size = visibleBounds.getSize(new THREE.Vector3());
   const textureBytes = [...textures].reduce((sum, texture) => sum + textureEstimate(texture), 0);
   const materialPayloads = [...materialPayloadMap.values()].sort((left, right) => (
-    left.id.localeCompare(right.id)
-    || left.fingerprint.localeCompare(right.fingerprint)
+    compareStableText(left.id, right.id)
+    || compareStableText(left.fingerprint, right.fingerprint)
     || Number(left.serializable) - Number(right.serializable)
-    || left.unsupportedSemantics.join('|').localeCompare(right.unsupportedSemantics.join('|'))
+    || compareStableText(left.unsupportedSemantics.join('|'), right.unsupportedSemantics.join('|'))
   ));
   for (const payload of materialPayloads) {
     hasher.text(payload.id);
@@ -594,11 +642,11 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   }
   const serializableMaterialPayloads = materialPayloads.filter((payload) => payload.serializable).length;
   const texturePayloads = [...texturePayloadMap.values()].sort((left, right) => (
-    left.id.localeCompare(right.id)
-    || left.contentFingerprint.localeCompare(right.contentFingerprint)
-    || left.samplerFingerprint.localeCompare(right.samplerFingerprint)
+    compareStableText(left.id, right.id)
+    || compareStableText(left.contentFingerprint, right.contentFingerprint)
+    || compareStableText(left.samplerFingerprint, right.samplerFingerprint)
     || Number(left.samplerSerializable) - Number(right.samplerSerializable)
-    || left.unsupportedSemantics.join('|').localeCompare(right.unsupportedSemantics.join('|'))
+    || compareStableText(left.unsupportedSemantics.join('|'), right.unsupportedSemantics.join('|'))
   ));
   for (const payload of texturePayloads) {
     hasher.text(payload.id);
@@ -644,7 +692,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     animationManifestFingerprint,
     morphTargets,
     morphTargetNames: morphTargetNames.sort(),
-    morphTargetPayloads: morphTargetPayloads.sort((left, right) => left.id.localeCompare(right.id)),
+    morphTargetPayloads: morphTargetPayloads.sort((left, right) => compareStableText(left.id, right.id)),
+    meshPayloads: meshPayloads.sort((left, right) => compareStableText(left.id, right.id)),
     gameLods,
     collisionPrimitives,
     collisionManifestFingerprint,

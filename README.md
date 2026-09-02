@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-257%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-263%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
@@ -46,6 +46,8 @@ npm run dev
 ```
 
 브라우저에서 [http://127.0.0.1:4173](http://127.0.0.1:4173)을 엽니다.
+
+특정 결과는 `?asset=cooler`, `?asset=laurel-homes`처럼 바로 열 수 있어 CLI 결과 링크로 쓰기 좋습니다.
 
 사진 기반 표면 재질을 만들 때:
 
@@ -92,7 +94,7 @@ Codex/Claude 요청 예시:
 | PNG | UI·바닥·실측 보조선을 제외한 투명 배경 현재 렌더 |
 | ZIP | GLB, OBJ/STL/PLY, IR, 품질 보고서, 미리보기 묶음 |
 
-내보내기 전에 GLB는 Khronos·glTF Transform·Three.js, OBJ/STL/PLY는 각 로더로 다시 엽니다. STL은 단위 메타데이터가 없는 규격 특성상 좌표 자체를 mm로 기록합니다. 이전 ModernCat 브라우저 출력은 Blender 5.2.1에서 세 포맷 모두 81,768개 삼각형과 같은 포락을 유지했고, 13.54m 폭은 STL에서 13,540mm로 확인됐으며 최대 정규화 오차는 0.001mm였습니다. USDZ도 Apple `usdchecker`를 통과했습니다. 그러나 그 ZIP에는 현재 컴파일러 지문이 없으므로 0.25.0 납품 증거로 재사용하지 않습니다. [최신 차단 사유와 역사적 파일 해시](./benchmarks/static-delivery-latest.json)를 함께 공개합니다.
+내보내기 전에 GLB는 Khronos·glTF Transform·Three.js, OBJ/STL/PLY는 각 로더로 다시 엽니다. STL은 단위 메타데이터가 없는 규격 특성상 좌표 자체를 mm로 기록합니다. 컴파일러 0.28.0의 ModernCat 자산팩과 USDZ를 Aside CLI에서 실제 저장한 뒤 Blender 5.2.1과 Apple `usdchecker`로 다시 검사했습니다. 세 정적 포맷은 모두 81,768개 삼각형을 유지했고, 13.54m 폭은 STL에서 13,540mm였으며 최대 정규화 포락 오차는 0.001mm 미만입니다. 결정적 RGBA8 질감은 USDZ 전용 캔버스 브리지로 변환하므로 표면 맵을 조용히 버리지 않고 실패 시 차단합니다. [현재 revision-bound 파일 해시와 검사 결과](./benchmarks/static-delivery-latest.json)를 공개합니다.
 
 OBJ/STL은 STEP/BREP 제조 솔리드가 아니며 PBR·리깅·애니메이션은 GLB가 기준입니다. `.blend`, `.uasset`, FBX도 대상 프로그램에서 변환해야 합니다. Blender 5.2.1 LTS는 아래 5개 분야 GLB 왕복을 검증했습니다. Unity 실행은 이 Mac의 라이선싱 초기화 실패로 차단됐고 Unreal 자체 임포트도 아직 검증하지 않았습니다.
 
@@ -128,17 +130,16 @@ npm run gltf:repair -- blender-output.glb delivery.glb
 npm run blender:validate -- source.glb roundtrip.glb report.json
 ```
 
-현재 잠금 벤치마크(질감 픽셀 왕복 규칙 추가 직후):
+현재 잠금 벤치마크:
 
-- 납품 대상 모델 자체 준비도: **100% (5/5)**
-- 현재 브라우저 납품 증명: **0% (0/5)**
-- 전체 합격률·기술 무결성: **0% (0/8)**
-- 승인·차단 판단 일치: **37.5% (3/8)**
-- 브라우저 증명까지 포함한 근거 부족 안전 차단: **0% (0/3)**
+- 전체·기술·판단 합격률: **100% (8/8)**
+- 납품 대상 모델·브라우저 납품: **100% (5/5)**
+- 근거 부족 결과의 안전 차단: **100% (3/3)**
+- Aside 실제 브라우저 GLB 증명: **100% (7/7), 콘솔 오류·경고 0**
 
-모델 준비도 5/5는 산업디자인, 도면 기반 건축, 애니메이션, 게임, 3D 프린팅을 포함합니다. 새 검증기는 실제 질감 픽셀과 샘플러뿐 아니라 불투명도·발광·노멀 강도·클리어코트·투과/감쇠·IOR·스페큘러·쉬인·무지갯빛·이방성 재질 값을 지문에 넣고 GLB 재열기 뒤 동일성을 요구합니다. 지원되지 않는 셰이더, 뒷면 전용 재질, 비대칭 노멀 강도도 조용히 통과시키지 않습니다. 기존 Chromium 보고서는 `texturePayloadParity`와 `materialPayloadParity`를 기록하지 않았으므로 전부 오래된 증거로 차단됐습니다. 이것을 임의로 100점으로 보정하지 않으며, 새 스키마로 실제 브라우저 재열기를 다시 수행하기 전까지 납품 준비도는 0/5입니다. 모델 자체 준비도와 납품 증명을 분리해 표시하며, 어느 쪽도 모든 입력의 시각 품질이 완벽하다는 뜻은 아닙니다.
+7개 증명은 산업디자인, 실측/콘셉트 건축, 전자 조립, 캐릭터 프리비즈, 애니메이션·게임, 3D 프린팅 표면을 포함합니다. 품질 점수 59인 세 사례는 기술 실패가 아니라 입력 근거가 부족해 의도대로 납품을 막은 사례입니다. 검증기는 실제 질감 픽셀·샘플러와 PBR/광학 값을 지문에 넣고 GLB 재열기 뒤 동일성을 요구합니다. 브라우저와 Node의 색 변환·문자 정렬·전선 곡선 부동소수점 차이도 같은 입력 지문을 흔들지 않도록 고정했습니다. 이 100%는 잠근 8개 계약의 통과율이며 임의 입력의 시각적 완벽함을 뜻하지 않습니다.
 
-GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 이름과 개수 외에도 각 대상의 비영 정점 수·변형 길이 합·제곱합·최대값을 비교합니다. 질감은 재질 숫자만 세지 않고 픽셀 내용과 glTF 샘플링 의미를 비교합니다. PNG로 재열어도 픽셀·슬롯·UV 변환이 같은 실제 바이너리 왕복 시편을 통과하며, `unpackAlignment`나 갱신 전 내부 행렬 같은 GPU 구현 상태는 오탐 근거로 쓰지 않습니다. 반대로 glTF가 보존하지 못하는 텍스처 이방성·중심축/수동 행렬·비표준 포맷은 모델 단계에서 차단합니다. 저장된 실제 Chromium 보고서는 대표 자산 9개와 캐릭터 모프 10/10 왕복을 담지만, 새 질감 계약과 다시 묶이지 않았으므로 “현재 통과”로 주장하지 않습니다.
+GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 실제 변형 페이로드를, 질감은 픽셀·슬롯·UV 변환과 샘플링 의미를 비교합니다. glTF가 보존하지 못하는 텍스처·재질 의미는 조용히 버리지 않고 모델 단계에서 차단합니다. 최신 Aside 영수증은 [`benchmarks/browser-roundtrip-latest.json`](./benchmarks/browser-roundtrip-latest.json)에 저장됩니다.
 
 Blender 5.2.1 LTS 실제 왕복 검증은 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5개를 모두 통과했습니다. 증거는 현재 컴파일러 revision과 묶이며 이전 엔진 결과를 재사용하면 차단됩니다. 각 입력을 두 번 독립 생성한 GLB의 SHA-256도 분야별로 일치합니다. 메시·재질·이미지·형상 모멘트·스킨·49본·22개 액션·5개 얼굴 모프를 해당 분야에 맞춰 비교했고, 강체 포락 오차는 0.000 mm, 스킨 캐릭터는 0.366 mm였습니다. Blender가 일부 미세 베벨에서 잘못 만든 탄젠트는 숨기지 않고 원본 실패를 기록한 뒤 자동 복구하며, 최종 납품 바이트를 Khronos 오류·경고·정보 0 및 glTF Transform 재파싱으로 다시 막습니다. [5분야 기계 판독 결과](./benchmarks/blender-cross-domain-latest.json)를 저장합니다. Unity 하네스는 같은 5개 GLB의 메시·재질·텍스처·스킨·모프·애니메이션·포락을 검사하도록 구현하고 Unity 6000.5 API 컴파일까지 확인했지만, [최신 실행 증거](./benchmarks/unity-cross-domain-latest.json)는 라이선싱 초기화 단계에서 차단됐습니다. Unity·Unreal을 검증 완료로 표시하지 않습니다.
 
@@ -170,7 +171,7 @@ Morphloom은 생성 전에 디테일·재질·검수 시점과 특징별 합격�
 
 거친 표면은 색 노이즈만 입히지 않습니다. `surfacePatch`가 큰 굴곡과 2단 입도의 각진 골재를 닫힌 메시로 만들고, 같은 골재 규칙에서 albedo·normal·roughness를 생성합니다. 아스팔트 회귀 샘플은 6,959개 골재 특징, 111,936개 삼각형, RMS 높이 0.98 mm, 최고–최저 6.20 mm이며 경계·비매니폴드·퇴화 삼각형은 모두 0입니다. 이 수치는 절차형 표면 검증값이며 특정 도로의 실측·스캔 정확도를 뜻하지 않습니다.
 
-사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.873을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. v3 분석기는 sRGB를 선형광으로 바꾼 뒤 제한적으로 조명을 제거하고, 같은 보정 픽셀에서 형상 높이·노멀·거칠기를 함께 도출합니다. 미세·중간·큰 스케일을 모두 요구하며, 해상도가 달라도 기울기 세기가 안정적인지와 1코드값 잡음이 과장되지 않는지를 회귀 검증합니다. 실제 사진 증거 게이트는 신호·다중 스케일·불규칙성·비주기성·노멀 반응·거칠기 편차를 모두 통과해 97.84점입니다. 결과는 124,616 삼각형, RMS 0.51 mm, 최고–최저 4.37 mm, 폐쇄 메시 1/1입니다. 이전 Chromium 재열기에서 크기 오차 0 mm였지만 컴파일러 0.25.0 영수증을 다시 캡처하기 전까지 현재 납품 증명으로 세지 않습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
+사진 조건부 아스팔트 검증은 제공된 508×660 PNG의 SHA-256과 불규칙성 0.873을 기록하고, 99×128(12,672점) 높이장과 13,229개 절차 골재 특징을 결합했습니다. v3 분석기는 제한적으로 조명을 제거하고 같은 보정 픽셀에서 형상 높이·노멀·거칠기를 함께 도출합니다. 실제 사진 증거 게이트는 97.84점이고 결과는 124,616 삼각형, RMS 0.51 mm, 최고–최저 4.37 mm, 폐쇄 메시 1/1입니다. 컴파일러 0.28.0의 Aside 재열기에서도 크기 오차 0 mm와 질감·재질 페이로드 동일성을 통과했습니다. 사진 명암에서 추정한 높이는 실측이 아니므로 현장 특화 재질에는 스캔 또는 높이 보정값이 필요합니다. 상세 기록은 [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json)에 있습니다.
 
 표면 준비 CLI는 파일 헤더 단계에서 크기·해상도를 제한한 PNG·JPEG·WebP 입력을 받습니다.
 

@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-257%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-263%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
@@ -46,6 +46,8 @@ npm run dev
 ```
 
 Open [http://127.0.0.1:4173](http://127.0.0.1:4173).
+
+Open a specific result directly with `?asset=cooler` or `?asset=laurel-homes`, which is convenient for CLI handoff.
 
 To prepare a photo-conditioned surface:
 
@@ -91,7 +93,7 @@ PBR surfaces, wiring connectivity, and topology.
 | PNG | Transparent current render without UI, floor, or measurement helpers |
 | ZIP | GLB, OBJ/STL/PLY, IR, quality report, and preview |
 
-Before download, GLB is reopened with Khronos, glTF Transform, and Three.js; OBJ/STL/PLY are reopened with their matching loaders. Because STL has no unit metadata, Morphloom writes millimetre-valued coordinates. A previous real browser export of the 81,768-triangle ModernCat building retained all triangles and the same envelope in Blender 5.2.1; its 13.54 m width was 13,540 mm in STL, with at most 0.001 mm normalized drift, and USDZ passed Apple's `usdchecker`. That ZIP did not bind its compiler revision, so it is not reused as 0.25.0 delivery proof. [The current blocker and historical file hashes](./benchmarks/static-delivery-latest.json) are stored together.
+Before download, GLB is reopened with Khronos, glTF Transform, and Three.js; OBJ/STL/PLY are reopened with their matching loaders. Because STL has no unit metadata, Morphloom writes millimetre-valued coordinates. The compiler 0.28.0 ModernCat asset pack and USDZ were saved through the real viewer with Aside CLI, then reopened in Blender 5.2.1 and checked by Apple's `usdchecker`. All three static formats retain 81,768 triangles; the 13.54 m width is 13,540 mm in STL and normalized envelope drift stays below 0.001 mm. A USDZ-only canvas bridge converts deterministic RGBA8 texture payloads, so surface maps are not silently dropped and unsupported payloads fail closed. [Current revision-bound hashes and results](./benchmarks/static-delivery-latest.json) are published.
 
 OBJ/STL are not STEP/BREP manufacturing solids, and GLB remains authoritative for PBR, rigs, and animation. Native `.blend`, `.uasset`, and FBX files require target-app conversion. Blender 5.2.1 passed the five-domain GLB round trip. Unity is blocked by local licensing initialization; Unreal import is not yet proven.
 
@@ -123,15 +125,14 @@ npm run benchmark:static-delivery -- --asset-id moderncat-concept --asset-pack a
 npm run build
 ```
 
-Current locked benchmark immediately after adding pixel-level texture round-trip proof:
+Current locked benchmark:
 
-- Release-intended model readiness: **100% (5/5)**
-- Current browser delivery proof: **0% (0/5)**
-- Overall pass and technical integrity: **0% (0/8)**
-- Release/block decision match: **37.5% (3/8)**
-- Rejection safety including current browser proof: **0% (0/3)**
+- Overall, technical, and decision pass rates: **100% (8/8)**
+- Release model and browser delivery rates: **100% (5/5)**
+- Safe rejection of insufficient evidence: **100% (3/3)**
+- Actual Aside browser GLB receipts: **100% (7/7), zero console errors or warnings**
 
-All five model-readiness cases pass across industrial design, drawing-based architecture, animation, games, and 3D printing. The verifier fingerprints actual texture pixels and sampling state as well as opacity, emission, normal strength, clearcoat, transmission/attenuation, IOR, specular, sheen, iridescence, and anisotropy semantics, then requires the reopened GLB to preserve them. A binary textured-GLB regression proves lossless PNG pixels, slots, and UV transforms through reopen. GPU upload alignment and stale derived matrices are excluded from appearance parity, while glTF-inexpressible texture anisotropy, transform centres/manual matrices, and non-standard formats fail closed. Existing Chromium receipts contain neither the current `texturePayloadParity` nor `materialPayloadParity`, so they are intentionally rejected as stale instead of being patched to 100%. Browser delivery remains 0/5 until fresh schema-compatible runs are captured. Model readiness and delivery proof are reported separately; neither claims perfect visual quality for arbitrary input.
+The seven receipts cover industrial design, measured/concept architecture, an electromechanical assembly, character previs, animation/game delivery, and a 3D-print surface. Three score-59 cases are intentional evidence rejections rather than technical failures. Texture pixels, samplers, and PBR/optical semantics must survive an actual GLB reopen. Browser-versus-Node colour conversion, script ordering, and wire-curve floating-point differences are normalized deterministically. These rates describe the eight locked contracts, not perfect visual quality for arbitrary input.
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|
@@ -159,7 +160,7 @@ We also ran a real same-input Talon comparison. Morphloom aligns the admitted fr
 
 Rough surfaces are not colour noise alone. `surfacePatch` builds a closed mesh with macro relief, two deterministic sizes of angular aggregate, and binder troughs, then produces albedo, normal, and roughness maps from the same aggregate rule. The asphalt regression sample contains 6,959 aggregate features and 111,936 triangles, with 0.98 mm RMS height, 6.20 mm peak-to-valley relief, and zero boundary/non-manifold edges or degenerate triangles. These are procedural regression values, not measurements of a particular road.
 
-The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.873 irregularity, then combines a 99×128 (12,672-sample) height field with 13,229 procedural aggregate features. The v3 analyzer converts sRGB to linear light, removes only bounded broad illumination, and derives geometry height, normals, and roughness from the same corrected pixels. Fine, medium, and coarse bands are all required; regressions also verify resolution-stable slope response and prevent one-code-value noise from becoming strong relief. The real-photo evidence gate passes signal, scale balance, irregularity, aperiodicity, normal response, and roughness variation at 97.84. The result has 124,616 triangles, 0.51 mm RMS height, 4.37 mm peak-to-valley relief, and one of one closed meshes. A previous Chromium reopen measured 0 mm bounds drift, but it is not counted as current delivery proof until recaptured for compiler 0.25.0. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
+The photo-conditioned asphalt audit records the supplied 508×660 PNG SHA-256 and 0.873 irregularity, then combines a 99×128 (12,672-sample) height field with 13,229 procedural aggregate features. The v3 analyzer removes only bounded broad illumination and derives geometry height, normals, and roughness from the same corrected pixels. The real-photo evidence gate scores 97.84. The result has 124,616 triangles, 0.51 mm RMS height, 4.37 mm peak-to-valley relief, and one of one closed meshes. Compiler 0.28.0 also passes the Aside reopen with zero bounds drift and matching texture/material payloads. Image-derived height is not a scan, so site-specific materials still require calibrated height or scan evidence. See [`benchmarks/asphalt-reference-latest.json`](./benchmarks/asphalt-reference-latest.json).
 
 The surface preparation CLI accepts bounded PNG, JPEG, and WebP inputs after header-level size checks.
 

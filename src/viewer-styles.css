@@ -514,6 +514,11 @@ h2 { margin: 0; font-size: 24px; font-weight: 610; letter-spacing: -0.04em; }
 .delivery-grid span:nth-child(2n), .local-telemetry > div span:nth-child(2n) { border-right: 0; }
 .delivery-grid b, .local-telemetry > div b { display: block; margin-top: 3px; overflow: hidden; color: var(--ink); font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
 .delivery-console > p, .local-telemetry > p { margin: 0; padding: 7px 9px; color: var(--muted); font-size: 7px; line-height: 1.45; }
+.browser-proof-progress { min-height: 34px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: stretch; border-top: 1px solid var(--hairline); }
+.browser-proof-progress > span { padding: 7px 9px; color: var(--muted); font-family: var(--mono); font-size: 6px; line-height: 1.45; }
+.browser-proof-progress > span b { display: block; color: var(--ink); font-size: 6.5px; }
+.browser-proof-progress > button { min-width: 74px; border: 0; border-left: 1px solid var(--hairline); color: var(--blue); background: transparent; font-family: var(--mono); font-size: 6.5px; cursor: pointer; }
+.browser-proof-progress > button:disabled { color: var(--muted); cursor: wait; opacity: 0.45; }
 .local-telemetry > button { width: 100%; min-height: 28px; border: 0; border-top: 1px solid var(--hairline); color: var(--red); background: transparent; font-family: var(--mono); font-size: 6.5px; cursor: pointer; }
 
 .export-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }

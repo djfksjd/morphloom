@@ -214,16 +214,12 @@ const MAX_SHARED_SURFACE_MAPS = 96;
 let iridescenceThicknessTexture: THREE.Texture | undefined;
 
 function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
-  if (typeof document !== 'undefined') {
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const context = canvas.getContext('2d', { willReadFrequently: true });
-    if (!context) throw new Error('Surface texture canvas is unavailable.');
-    context.putImageData(new ImageData(new Uint8ClampedArray(data), size, size), 0, 0);
-    return new THREE.CanvasTexture(canvas);
-  }
-  return new THREE.DataTexture(data, size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
+  // Keep authored bytes identical in browsers, Node benchmarks and the GLB.
+  // Canvas put/getImageData applies implementation-specific color conversion,
+  // so the same procedural surface previously acquired different fingerprints
+  // even though its geometry and input were identical. GLTFExporter supports
+  // RGBA8 DataTexture directly and therefore needs no browser-only canvas hop.
+  return new THREE.DataTexture(data.slice(), size, size, THREE.RGBAFormat, THREE.UnsignedByteType);
 }
 
 function getIridescenceThicknessTexture(): THREE.Texture {

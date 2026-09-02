@@ -33,6 +33,13 @@ import {
 } from './components/ResultViewport';
 import { ViewportErrorBoundary } from './components/ViewportErrorBoundary';
 import { bytesLabel, type DeliveryAudit, type LocalBuildTelemetry } from './engine/delivery-validation';
+import {
+  createBrowserRoundTripAssetReceipt,
+  createBrowserRoundTripReport,
+  getBrowserConsoleEvidence,
+  type BrowserProofDefinition,
+  type BrowserRoundTripAssetReceipt,
+} from './engine/browser-proof-recorder';
 import { auditFidelityContract } from './engine/fidelity-pipeline';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec, ViewMode } from './types';
 import { DEFAULT_KNIFE_SPEC, DEFAULT_PRODUCT_SPEC, DEFAULT_SPEC, FIELD_HUMAN_SPEC, WEB_HERO_SPEC } from './types';
@@ -124,6 +131,24 @@ const VIEWER_ASSETS: ViewerAsset[] = [
   },
 ];
 
+function resolveInitialViewerAsset(): ViewerAsset {
+  const requested = new URLSearchParams(window.location.search).get('asset');
+  return VIEWER_ASSETS.find((asset) => asset.id === requested)
+    ?? VIEWER_ASSETS.find((asset) => asset.id === 'moderncat-concept')!;
+}
+
+const BROWSER_PROOF_ASSETS: Record<string, BrowserProofDefinition> = {
+  'asphalt-surface': { id: 'asphalt-print-surface', scope: '3d-print-surface-material', qualityReleaseReady: true },
+  'moderncat-concept': { id: 'pinterest-concept-architectural-review', scope: 'concept-architecture', qualityReleaseReady: false },
+  'laurel-homes': { id: 'laurel-homes-architectural-review', scope: 'measured-architecture', qualityReleaseReady: true },
+  cooler: { id: 'cooling-service-assembly', scope: 'electromechanical-service-model', qualityReleaseReady: false },
+  blade: { id: 'ornate-knife-product-visualization', scope: 'industrial-design', qualityReleaseReady: true },
+  'web-hero': { id: 'single-view-character-previs', scope: 'single-view-character-previs', qualityReleaseReady: false },
+  'field-human': { id: 'field-human-runtime-base', scope: 'animation-game-runtime', qualityReleaseReady: true },
+};
+
+const BROWSER_PROOF_EXPECTED_COUNT = Object.keys(BROWSER_PROOF_ASSETS).length;
+
 function AppIcon() {
   return (
     <svg viewBox="0 0 36 36" aria-hidden="true">
@@ -147,13 +172,14 @@ function downloadJson(payload: unknown, fileName: string): void {
 }
 
 export function ViewerApp() {
+  const initialAsset = useMemo(resolveInitialViewerAsset, []);
   const [pack, setPack] = useState<HumanPack>();
   const [packError, setPackError] = useState<string>();
-  const [assetKind, setAssetKind] = useState<AssetKind>('product');
-  const [activeAssetId, setActiveAssetId] = useState('moderncat-concept');
-  const [spec, setSpec] = useState<CharacterSpec>(DEFAULT_SPEC);
-  const [productSpec, setProductSpec] = useState<ProductSpec>(DEFAULT_PRODUCT_SPEC);
-  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(MODERNCAT_CONCEPT_RESIDENCE_IR);
+  const [assetKind, setAssetKind] = useState<AssetKind>(initialAsset.kind);
+  const [activeAssetId, setActiveAssetId] = useState(initialAsset.id);
+  const [spec, setSpec] = useState<CharacterSpec>(initialAsset.kind === 'human' ? initialAsset.spec : DEFAULT_SPEC);
+  const [productSpec, setProductSpec] = useState<ProductSpec>(initialAsset.kind === 'product' ? initialAsset.spec : DEFAULT_PRODUCT_SPEC);
+  const [assemblyIR, setAssemblyIR] = useState<AssemblyIR | undefined>(initialAsset.kind === 'product' ? initialAsset.assemblyIR : undefined);
   const [mode, setMode] = useState<ViewMode>('beauty');
   const [buildMetrics, setBuildMetrics] = useState<CharacterBuild['metrics'] | ProductBuild['metrics']>();
   const [selectedPart, setSelectedPart] = useState<InspectablePart>();
@@ -161,6 +187,7 @@ export function ViewerApp() {
   const [jobs, setJobs] = useState<LocalJob[]>([]);
   const [deliveryAudit, setDeliveryAudit] = useState<DeliveryAudit>();
   const [deliveryVerifying, setDeliveryVerifying] = useState(true);
+  const [browserProofReceipts, setBrowserProofReceipts] = useState<Record<string, BrowserRoundTripAssetReceipt>>({});
   const [telemetry, setTelemetry] = useState<LocalBuildTelemetry>();
   const [importedExpiresAt, setImportedExpiresAt] = useState<number>();
   const [viewerNote, setViewerNote] = useState('CLI/Codex에서 생성한 결과를 검수하는 읽기 전용 화면입니다.');
@@ -295,6 +322,20 @@ export function ViewerApp() {
     setDeliveryAudit(audit);
     setDeliveryVerifying(audit === undefined);
   }, []);
+
+  useEffect(() => {
+    const definition = BROWSER_PROOF_ASSETS[activeAssetId];
+    if (!definition || !deliveryAudit || deliveryAudit.status === 'running') return;
+    const receipt = createBrowserRoundTripAssetReceipt(definition, deliveryAudit);
+    setBrowserProofReceipts((current) => {
+      const previous = current[definition.id];
+      if (previous
+        && previous.sceneFingerprint === receipt.sceneFingerprint
+        && previous.status === receipt.status
+        && previous.glbBytes === receipt.glbBytes) return current;
+      return { ...current, [definition.id]: receipt };
+    });
+  }, [activeAssetId, deliveryAudit]);
 
   const clearMeasurement = useCallback(() => {
     viewportRef.current?.clearMeasurement();
@@ -857,6 +898,20 @@ export function ViewerApp() {
             <p>{deliveryAudit?.status === 'blocked'
               ? deliveryAudit.blockers.join(' · ')
               : 'GLB를 메모리에서 다시 열어 메시·삼각형·명명 노드·포락을 원본과 비교합니다.'}</p>
+            <div className="browser-proof-progress" aria-label="브라우저 왕복 검증 수집 현황">
+              <span><b>ASIDE BROWSER PROOF</b>{Object.keys(browserProofReceipts).length}/{BROWSER_PROOF_EXPECTED_COUNT} ASSETS</span>
+              <button
+                disabled={Object.keys(browserProofReceipts).length === 0}
+                onClick={() => {
+                  const report = createBrowserRoundTripReport(
+                    Object.values(browserProofReceipts),
+                    getBrowserConsoleEvidence(),
+                  );
+                  downloadJson(report, 'morphloom-browser-roundtrip.json');
+                  setViewerNote(`Aside 브라우저 왕복 증빙 ${report.assets.length}/${BROWSER_PROOF_EXPECTED_COUNT}개를 저장했습니다.`);
+                }}
+              >SAVE PROOF</button>
+            </div>
           </section>
 
           <section className="local-telemetry" aria-label="로컬 비용 및 개인정보 추적">

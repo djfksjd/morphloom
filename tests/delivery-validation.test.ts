@@ -138,6 +138,23 @@ describe('delivery validation and deterministic output', () => {
     expect(firstSnapshot.duplicatePartIds).toEqual([]);
   });
 
+  it('orders mixed-script material evidence by code point instead of host locale', () => {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    geometry.clearGroups();
+    geometry.addGroup(0, 12, 0);
+    geometry.addGroup(12, 12, 1);
+    geometry.addGroup(24, 12, 2);
+    const materials = ['가죽', 'Zeta', 'Alpha'].map((name) => {
+      const material = new THREE.MeshStandardMaterial();
+      material.name = name;
+      return material;
+    });
+    const mesh = new THREE.Mesh(geometry, materials);
+    mesh.name = 'mixed-script-material-order';
+    expect(snapshotScene(mesh).materialPayloads.map((payload) => payload.id))
+      .toEqual(['Alpha', 'Zeta', '가죽']);
+  });
+
   it('changes the fingerprint when a geometry-driving input changes', () => {
     const first = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty');
     const second = buildOrnateKnife({ ...DEFAULT_KNIFE_SPEC, heightMm: DEFAULT_KNIFE_SPEC.heightMm + 4 }, 'beauty');

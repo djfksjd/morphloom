@@ -1,19 +1,19 @@
 {
   "schema": "morphloom.static-delivery-proof/0.4",
-  "generatedAt": "2026-09-02T08:26:31.685Z",
-  "compilerRevision": "morphloom-compiler/0.24.0",
+  "generatedAt": "2026-09-02T11:54:13.068Z",
+  "compilerRevision": "morphloom-compiler/0.28.0",
   "staticDeliveryRevision": "morphloom-static-delivery/0.5.0",
   "assetId": "moderncat-concept",
   "expectedSourceTriangles": 81768,
   "assetPack": {
     "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
-    "bytes": 8121120,
-    "sha256": "a0f678878e54b5424db38535f0808038a5327302f1a6634623a2b0b5fcabf36e",
-    "compilerRevision": null,
-    "inputFingerprint": "1252c08c0593cc58",
+    "bytes": 8327774,
+    "sha256": "0b4c8b53b379e47420a232595a18669db67add84725a5698b13154c703338d3d",
+    "compilerRevision": "morphloom-compiler/0.28.0",
+    "inputFingerprint": "9a8dd45120b6eeff",
     "browserRoundTrip": "pass"
   },
-  "status": "blocked",
+  "status": "pass",
   "blenderVersion": "5.2.1 LTS",
   "formats": {
     "obj": {
@@ -103,15 +103,12 @@
     "maximumAxisNormalizedEnvelopeDriftMm": 0.00095367431640625
   },
   "usdz": {
-    "source": "morphloom-apple-ar.usdz",
-    "bytes": 27419288,
-    "sha256": "84f6f45161e2fa42e977c4afb174efc7908e2c91017bcfc4d4ecbe9466a163cb",
+    "source": "morphloom-moderncat.usdz",
+    "bytes": 27420208,
+    "sha256": "20383113893ef0a6cd1e09913fc2c3cdda70650707d53d3a9265308906092132",
     "validator": "/usr/bin/usdchecker",
     "status": "pass"
   },
-  "blockers": [
-    "Asset pack compiler revision missing does not match morphloom-compiler/0.24.0.",
-    "Asset pack static-delivery revision morphloom-static-delivery/0.4.0 does not match morphloom-static-delivery/0.5.0."
-  ],
+  "blockers": [],
   "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange."
 }

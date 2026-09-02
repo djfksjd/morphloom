@@ -261,8 +261,38 @@ function createRoundedRoute(points: THREE.Vector3[], radius: number): THREE.Curv
   return curve;
 }
 
+/**
+ * TubeGeometry chooses its initial cross-section axis from the smallest tangent
+ * component. Diagonal routes can land either side of an equality after the
+ * browser and Node perform the curve math, rotating an otherwise identical
+ * tube ring and breaking deterministic delivery fingerprints. Snap tangents to
+ * a precision comfortably below Float32 geometry resolution before Three.js
+ * constructs the parallel-transport frames.
+ */
+function stabilizeCurveTangents(curve: THREE.Curve<THREE.Vector3>): THREE.Curve<THREE.Vector3> {
+  const getTangentAt = curve.getTangentAt.bind(curve);
+  curve.getTangentAt = (u: number, optionalTarget?: THREE.Vector3) => {
+    const tangent = getTangentAt(u, optionalTarget);
+    const snap = 1e12;
+    tangent.set(
+      Math.round(tangent.x * snap) / snap,
+      Math.round(tangent.y * snap) / snap,
+      Math.round(tangent.z * snap) / snap,
+    );
+    if (tangent.lengthSq() < 1e-20) tangent.set(0, 0, 1);
+    return tangent.normalize();
+  };
+  return curve;
+}
+
+function snapFloat32Geometry(values: Float32Array, scale: number): void {
+  for (let index = 0; index < values.length; index += 1) {
+    values[index] = Math.fround(Math.round(values[index]! * scale) / scale);
+  }
+}
+
 function createCappedTube(points: THREE.Vector3[], radius: number): THREE.BufferGeometry {
-  const curve = createRoundedRoute(points, radius);
+  const curve = stabilizeCurveTangents(createRoundedRoute(points, radius));
   const tubularSegments = Math.max(36, Math.min(192, points.length * 14));
   const radialSegments = 10;
   const tube = new THREE.TubeGeometry(curve, tubularSegments, radius, radialSegments, false);
@@ -275,6 +305,10 @@ function createCappedTube(points: THREE.Vector3[], radius: number): THREE.Buffer
   position.set(sourcePosition.array as Float32Array);
   normal.set(sourceNormal.array as Float32Array);
   uv.set(sourceUv.array as Float32Array);
+  // One micrometre in scene metres is below delivery tolerance and removes
+  // cross-runtime libm ULP drift from the generated tube rings. Cap centres
+  // are written afterwards so electrical endpoints retain their exact ports.
+  snapFloat32Geometry(position, 1e6);
   const startCenter = sourcePosition.count;
   const endCenter = sourcePosition.count + 1;
   position.set(points[0].toArray(), startCenter * 3);
@@ -283,6 +317,8 @@ function createCappedTube(points: THREE.Vector3[], radius: number): THREE.Buffer
   normal.set(curve.getTangentAt(1).normalize().toArray(), endCenter * 3);
   uv.set([0.5, 0.5], startCenter * 2);
   uv.set([0.5, 0.5], endCenter * 2);
+  // One part per million is likewise below visible normal resolution.
+  snapFloat32Geometry(normal, 1e6);
   const indices = tube.getIndex() ? Array.from(tube.getIndex()!.array) : [];
   const ring = radialSegments + 1;
   const endRing = tubularSegments * ring;

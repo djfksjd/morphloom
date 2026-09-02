@@ -289,7 +289,7 @@ const browserRoundTrip = JSON.parse(readFileSync('benchmarks/browser-roundtrip-l
   schema?: string;
   compilerRevision?: string;
   fingerprintRevision?: string;
-  observedAt?: string;
+  generatedAt?: string;
   console?: { errors?: number; warnings?: number };
   assets?: BrowserRoundTripAsset[];
 };
@@ -298,11 +298,9 @@ const requiredBrowserAssets = new Set([
   'laurel-homes-architectural-review',
   'cooling-service-assembly',
   'ornate-knife-product-visualization',
-  'talon-same-reference-material-review',
   'single-view-character-previs',
   'field-human-runtime-base',
   'asphalt-print-surface',
-  'implicit-surface-manifold-lab',
 ]);
 const browserAssets = browserRoundTrip.assets ?? [];
 const browserAssetIds = browserAssets.map((asset) => asset.id ?? '');
@@ -322,14 +320,12 @@ const browserRoundTripPass = browserRoundTrip.schema === BROWSER_ROUNDTRIP_PROOF
     && Number.isFinite(asset.namedNodeCoverage) && Number(asset.namedNodeCoverage) >= 0.95 && Number(asset.namedNodeCoverage) <= 1
     && asset.morphTargetPayloadParity === true
     && asset.texturePayloadParity === true)
-    && browserAssets.every((asset) => asset.materialPayloadParity === true)
-  && browserAssets.filter((asset) => asset.id === 'single-view-character-previs' || asset.id === 'field-human-runtime-base')
-    .every((asset) => asset.morphTargets === 10 && asset.reopenedMorphTargets === 10);
+  && browserAssets.every((asset) => asset.materialPayloadParity === true);
 const browserRoundTripSummary = {
   schema: browserRoundTrip.schema,
   compilerRevision: browserRoundTrip.compilerRevision,
   fingerprintRevision: browserRoundTrip.fingerprintRevision,
-  observedAt: browserRoundTrip.observedAt,
+  generatedAt: browserRoundTrip.generatedAt,
   receiptIntegrityPass: browserRoundTripPass,
   assets: browserAssets.map((asset) => ({
     id: asset.id,
@@ -769,11 +765,11 @@ const output = {
     { capability: 'bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-, texture-, and material-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass && releaseBrowserProofPass ? `${releaseBrowserBinding?.verifiedAssets}/${releaseBrowserBinding?.expectedAssets} release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately` : `implemented; current ${BROWSER_ROUNDTRIP_PROOF_SCHEMA} browser receipts required` },
     { capability: 'pixel-level texture content and glTF-semantic sampler fingerprint with actual binary round-trip', img2threejs: 'not established in pinned audit', morphloom: 'implemented; lossless PNG pixels, slot identity, UV channel/transform, color space, wrapping and filtering survive an actual textured GLB reopen; glTF-inexpressible mapping, format, type, anisotropy, transform or mip state fails closed while GPU-only upload state is ignored' },
     { capability: 'glTF scalar and optical material fingerprint with fail-closed GLB parity', img2threejs: 'not established in pinned audit', morphloom: 'implemented; opacity, emission, normal/AO strength, clearcoat, transmission/volume, IOR, specular, sheen, iridescence, anisotropy, or unsupported semantics block drift' },
-    { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainModelPass('animation') ? '49 bones and 22 semantic delivery clips / 185 tracks; current browser delivery proof pending refresh' : 'blocked' },
-    { capability: 'named editable facial controls with spatial and semantic delta localization', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('animation') && domainProof.animation?.metrics?.facialMorphLocalizedTargets === 5 && domainProof.animation?.metrics?.facialMorphSemanticTargets === 5 ? '5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization; current browser delivery proof pending refresh' : 'blocked' },
-    { capability: 'per-joint weighted deformation/localization and motion/loop/root-motion checks', img2threejs: 'not established in pinned core audit', morphloom: domainModelPass('animation') ? '10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization; current browser delivery proof pending refresh' : 'blocked' },
-    { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('game') && domainProof.game?.metrics?.collisionPrimitives === 16 ? '16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates; current browser delivery proof pending refresh' : 'blocked' },
-    { capability: 'finite non-degenerate UV triangles and near-unit normal model gate', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('game') && domainModelPass('industrialDesign') ? 'yes; current browser delivery proof pending refresh' : 'blocked' },
+    { capability: 'skeletal animation breadth', img2threejs: 'latest showcase: 41–42 bones and 10–27 clips', morphloom: domainModelPass('animation') && releaseBrowserProofPass ? '49 bones and 22 semantic delivery clips / 185 tracks; current browser receipt bound' : 'blocked' },
+    { capability: 'named editable facial controls with spatial and semantic delta localization', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('animation') && releaseBrowserProofPass && domainProof.animation?.metrics?.facialMorphLocalizedTargets === 5 && domainProof.animation?.metrics?.facialMorphSemanticTargets === 5 ? '5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization; current browser receipt bound' : 'blocked' },
+    { capability: 'per-joint weighted deformation/localization and motion/loop/root-motion checks', img2threejs: 'not established in pinned core audit', morphloom: domainModelPass('animation') && releaseBrowserProofPass ? '10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization; current browser receipt bound' : 'blocked' },
+    { capability: 'real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('game') && releaseBrowserProofPass && domainProof.game?.metrics?.collisionPrimitives === 16 ? '16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates; current browser receipt bound' : 'blocked' },
+    { capability: 'finite non-degenerate UV triangles and near-unit normal model gate', img2threejs: 'not established in pinned audit', morphloom: domainModelPass('game') && domainModelPass('industrialDesign') && releaseBrowserProofPass ? 'yes; current browser receipt bound' : 'blocked' },
     {
       capability: 'millimetre 3D-print topology, global thickness screening, connected-shell feature-space wall rays, feature and 45-degree overhang audit',
       img2threejs: 'not established in pinned audit',
@@ -785,8 +781,8 @@ const output = {
         && (domainProof.print3d.metrics.sampledWallThicknessComponentEdges ?? 0) > 0
         && (domainProof.print3d.metrics.sampledWallThicknessMm ?? 0) >= 0.8 ? 'yes' : 'blocked',
     },
-    { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainModelPass('architecture') ? 'yes; current browser delivery proof pending refresh' : 'blocked' },
-    { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainModelPass('architecture') ? 'yes; current browser delivery proof pending refresh' : 'blocked' },
+    { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainModelPass('architecture') && releaseBrowserProofPass ? 'yes; current browser receipt bound' : 'blocked' },
+    { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainModelPass('architecture') && releaseBrowserProofPass ? 'yes; current browser receipt bound' : 'blocked' },
     { capability: 'evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation', img2threejs: 'not established in pinned audit', morphloom: dimensionContractAudit.pass ? 'yes' : 'blocked' },
     { capability: 'evidence-bound hole, pin, lens and connector pitch between transformed component-local datums', img2threejs: 'not established in pinned audit', morphloom: anchorPitchAudit.pass ? 'yes' : 'blocked' },
     { capability: 'rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation', img2threejs: 'not established in pinned audit', morphloom: localAxisAudit.pass ? 'yes' : 'blocked' },

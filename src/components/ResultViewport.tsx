@@ -52,6 +52,7 @@ import {
   type StaticMeshRoundTripAudit,
 } from '../engine/static-mesh-roundtrip';
 import { repairThreeUsdz } from '../engine/usdz-conformance';
+import { bridgeDataTexturesForUsdz } from '../engine/usdz-texture-bridge';
 
 export type CameraView = 'front' | 'iso' | 'top' | 'rear';
 export type BuildingLevel = 'all' | 'L1' | 'L2';
@@ -1275,6 +1276,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         const token = ++exportSequenceRef.current;
         const deliveryBuild = createBeautyBuild();
         try {
+          bridgeDataTexturesForUsdz(deliveryBuild.root);
           const result = await new USDZExporter().parseAsync(deliveryBuild.root, {
             onlyVisible: true,
             quickLookCompatible: true,

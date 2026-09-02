@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.24.0",
-  "generatedAt": "2026-09-02T08:24:58.369Z",
+  "compilerRevision": "morphloom-compiler/0.28.0",
+  "generatedAt": "2026-09-02T11:16:55.581Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -10,8 +10,8 @@
       "domain": "architecture",
       "pass": true,
       "source": {
-        "bytes": 29549656,
-        "sha256": "9234e79d897349b6f242d9c942cbdbad369895ad1504c98917a04ce6721938d8",
+        "bytes": 29549740,
+        "sha256": "ccbdae460c278d7791405190b727527cdcfdc81310287c819104a5d3109a5bf1",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -373,7 +373,7 @@
           "applied": true,
           "repairedTangents": 432,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "aa9add0e4d4f799af530cb4c29575c6895f2c19ee857170992f9f69e66dee562",
+          "outputSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -402,8 +402,8 @@
       "domain": "industrial-design",
       "pass": true,
       "source": {
-        "bytes": 1148288,
-        "sha256": "a4e016736e27a4c65fc2f321c5cdb85a668ef972bda5a33b0653f0cfb14daf4e",
+        "bytes": 1148324,
+        "sha256": "df27f0a7a9d27d51242015b0a22ca3513e3335eeb170d4c8e453f194b3a7500a",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -684,7 +684,7 @@
           "applied": true,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "e2300a7766ef333fc6acbd9e049b44d7d85500b8cd3600b5a9367947ced42575",
+          "outputSha256": "361ad82d69946666bc4e35e2bdb8d1764f93d56385f1026d35a57c051a7fb1f1",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -713,8 +713,8 @@
       "domain": "electronics",
       "pass": true,
       "source": {
-        "bytes": 18463520,
-        "sha256": "7663d3339cb4fb2d8716fc939c245abbd2dacc9c01b296ead0c45e0601089ca3",
+        "bytes": 18462860,
+        "sha256": "0ca35c68fa2365a3ef718c69c9ca5ae4979fb3a6316d173dc7ea22ff010adefd",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -858,16 +858,16 @@
             "geometryMoments": {
               "cornerCount": 817680,
               "cornerSum": [
-                16807.501643399235,
-                -38934.96860254302,
-                13944.686374850633
+                16807.50120269876,
+                -38934.96997694036,
+                13944.686152380975
               ],
               "cornerSumSquares": [
-                4498.672995376345,
-                3476.7964035314963,
-                706.8739706057384
+                4498.67307332926,
+                3476.796357779931,
+                706.8739627644054
               ],
-              "surfaceAreaSquareMeters": 1.1373191291253686
+              "surfaceAreaSquareMeters": 1.1373246047048433
             },
             "boundsMeters": {
               "min": [
@@ -986,16 +986,16 @@
             "geometryMoments": {
               "cornerCount": 817680,
               "cornerSum": [
-                16807.50164376803,
-                -38934.96860312139,
-                13944.686374850635
+                16807.50120306755,
+                -38934.96997751847,
+                13944.686152380948
               ],
               "cornerSumSquares": [
-                4498.672995061233,
-                3476.7963975304683,
-                706.8739705771702
+                4498.673073014831,
+                3476.7963517797516,
+                706.8739627344812
               ],
-              "surfaceAreaSquareMeters": 1.137319126198161
+              "surfaceAreaSquareMeters": 1.1373246017783682
             },
             "boundsMeters": {
               "min": [
@@ -1037,9 +1037,9 @@
         },
         "deliveryRepair": {
           "applied": true,
-          "repairedTangents": 1410,
+          "repairedTangents": 1428,
           "removedUnusedTangentAccessors": 23,
-          "outputSha256": "079a903366cfd9bc1509081b532a98e2d16205fe193ddd0ecc11e376dafe2230",
+          "outputSha256": "16fc58d050ce72ee46860bad218cc0be1e5ed88bade04c9ee7f4050933b72847",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1068,8 +1068,8 @@
       "domain": "animation-game",
       "pass": true,
       "source": {
-        "bytes": 5065544,
-        "sha256": "55cff478e17f864886723034086a572ee748b09bca5eba751e14515e5beeafa4",
+        "bytes": 5065592,
+        "sha256": "270d3a149d3a8d43d6a016df2a539f2d1d23393d1f43841077e9dad4adfbfbee",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1409,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "0c715b0ab7c0fa6e1eb81b72932678f112e97d38efb3119a274cbe6aed353348",
+          "outputSha256": "694ddc972fc2c416d2ed0cbfeea2aee60bb40883db301f2c197046e53b0fc359",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1438,8 +1438,8 @@
       "domain": "3d-printing",
       "pass": true,
       "source": {
-        "bytes": 17745148,
-        "sha256": "c68792f9c9f9c0a9793b5bb8b4b7df496cd70b33237200641c2f4a3aa26e6de5",
+        "bytes": 17745176,
+        "sha256": "71e0dfa7458f08d5bd9acf580eb316dd4b45bde0d3136f9e972b5f01954f9af2",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
