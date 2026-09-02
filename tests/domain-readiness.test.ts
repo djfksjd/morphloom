@@ -185,6 +185,9 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.metrics.facialMorphAffectedVertices).toBeGreaterThanOrEqual(100);
     expect(animation.metrics.facialMorphLocalizedTargets).toBe(5);
     expect(animation.metrics.minimumFacialMorphLocalizationCoverage).toBeGreaterThanOrEqual(0.98);
+    expect(animation.metrics.facialMorphSemanticTargets).toBe(5);
+    expect(animation.metrics.minimumFacialMorphSemanticRegionCoverage).toBeGreaterThanOrEqual(0.9);
+    expect(animation.metrics.minimumFacialMorphBlinkSideCoverage).toBeGreaterThanOrEqual(0.9);
     expect(game.pass).toBe(true);
     expect(game.metrics.triangles).toBeLessThanOrEqual(100_000);
     expect(game.metrics.maximumSkinInfluences).toBeLessThanOrEqual(4);
@@ -459,6 +462,33 @@ describe('cross-domain semi-professional readiness', () => {
     expect(animation.blockers.join(' ')).toMatch(/animation-facial-morph-localization/);
     expect(game.pass).toBe(false);
     expect(game.blockers.join(' ')).toMatch(/game-facial-morph-localization/);
+  }, 20_000);
+
+  it('blocks facial morph dictionaries whose left-right and vertical meanings were swapped', () => {
+    const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
+    const dictionary = build.body.morphTargetDictionary;
+    if (!dictionary) throw new Error('Missing facial morph dictionary.');
+    [dictionary.blink_L, dictionary.blink_R] = [dictionary.blink_R!, dictionary.blink_L!];
+    [dictionary.jaw_open, dictionary.brow_raise] = [dictionary.brow_raise!, dictionary.jaw_open!];
+
+    const animation = auditDomainReadiness({
+      domain: 'animation', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    const game = auditDomainReadiness({
+      domain: 'game', root: build.root, evidenceScore: 90,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(animation.metrics.facialMorphTargets).toBe(5);
+    expect(animation.metrics.facialMorphLocalizedTargets).toBe(5);
+    expect(animation.metrics.facialMorphSemanticTargets).toBeLessThan(5);
+    expect(animation.metrics.facialMorphSemanticFailures).toEqual(expect.arrayContaining([
+      'jaw_open', 'blink_L', 'blink_R', 'brow_raise',
+    ]));
+    expect(animation.pass).toBe(false);
+    expect(animation.blockers.join(' ')).toMatch(/animation-facial-morph-semantics/);
+    expect(game.pass).toBe(false);
+    expect(game.blockers.join(' ')).toMatch(/game-facial-morph-semantics/);
   }, 20_000);
 
   it('blocks a clip set whose loop seam is visually discontinuous even when names and counts remain intact', () => {

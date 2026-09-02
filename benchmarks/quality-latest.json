@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.quality-benchmark/0.2",
-  "readinessRevision": "morphloom-domain-readiness/0.7.0",
-  "generatedAt": "2026-09-02T01:57:32.952Z",
+  "readinessRevision": "morphloom-domain-readiness/0.8.0",
+  "generatedAt": "2026-09-02T02:07:08.457Z",
   "note": "Overall pass requires technical integrity plus the correct release/block decision. Release rates remain separate and are never inflated by an expected rejection.",
   "counts": {
     "lockedCases": 8,
@@ -165,6 +165,16 @@
         "facialMorphLocalizedTargets": 0,
         "minimumFacialMorphLocalizationCoverage": 0,
         "facialMorphMislocalizedTargets": [
+          "jaw_open",
+          "smile",
+          "blink_L",
+          "blink_R",
+          "brow_raise"
+        ],
+        "facialMorphSemanticTargets": 0,
+        "minimumFacialMorphSemanticRegionCoverage": 0,
+        "minimumFacialMorphBlinkSideCoverage": 0,
+        "facialMorphSemanticFailures": [
           "jaw_open",
           "smile",
           "blink_L",
@@ -342,6 +352,16 @@
           "blink_R",
           "brow_raise"
         ],
+        "facialMorphSemanticTargets": 0,
+        "minimumFacialMorphSemanticRegionCoverage": 0,
+        "minimumFacialMorphBlinkSideCoverage": 0,
+        "facialMorphSemanticFailures": [
+          "jaw_open",
+          "smile",
+          "blink_L",
+          "blink_R",
+          "brow_raise"
+        ],
         "maximumSkinWeightError": 0,
         "maximumSkinInfluences": 0,
         "visualHullMeshes": 0,
@@ -477,6 +497,14 @@
           "blocking": true
         },
         {
+          "id": "animation-facial-morph-semantics",
+          "label": "얼굴 모프 의미 위치",
+          "pass": true,
+          "score": 100,
+          "detail": "5/5 targets · 최소 의미 구역 100.0% · 최소 눈깜박임 좌우 100.0%",
+          "blocking": true
+        },
+        {
           "id": "animation-clips",
           "label": "납품용 기본 동작 세트",
           "pass": true,
@@ -580,6 +608,10 @@
         "facialMorphLocalizedTargets": 5,
         "minimumFacialMorphLocalizationCoverage": 1,
         "facialMorphMislocalizedTargets": [],
+        "facialMorphSemanticTargets": 5,
+        "minimumFacialMorphSemanticRegionCoverage": 1,
+        "minimumFacialMorphBlinkSideCoverage": 1,
+        "facialMorphSemanticFailures": [],
         "maximumSkinWeightError": 2.9802322387695312e-8,
         "maximumSkinInfluences": 2,
         "visualHullMeshes": 0,
@@ -722,6 +754,14 @@
           "blocking": true
         },
         {
+          "id": "game-facial-morph-semantics",
+          "label": "게임 얼굴 모프 의미 위치",
+          "pass": true,
+          "score": 100,
+          "detail": "5/5 targets · 최소 의미 구역 100.0% · 최소 눈깜박임 좌우 100.0%",
+          "blocking": true
+        },
+        {
           "id": "game-runtime-motion",
           "label": "게임 런타임 동작 세트",
           "pass": true,
@@ -841,6 +881,10 @@
         "facialMorphLocalizedTargets": 5,
         "minimumFacialMorphLocalizationCoverage": 1,
         "facialMorphMislocalizedTargets": [],
+        "facialMorphSemanticTargets": 5,
+        "minimumFacialMorphSemanticRegionCoverage": 1,
+        "minimumFacialMorphBlinkSideCoverage": 1,
+        "facialMorphSemanticFailures": [],
         "maximumSkinWeightError": 2.9802322387695312e-8,
         "maximumSkinInfluences": 2,
         "visualHullMeshes": 0,
@@ -1029,6 +1073,16 @@
         "facialMorphLocalizedTargets": 0,
         "minimumFacialMorphLocalizationCoverage": 0,
         "facialMorphMislocalizedTargets": [
+          "jaw_open",
+          "smile",
+          "blink_L",
+          "blink_R",
+          "brow_raise"
+        ],
+        "facialMorphSemanticTargets": 0,
+        "minimumFacialMorphSemanticRegionCoverage": 0,
+        "minimumFacialMorphBlinkSideCoverage": 0,
+        "facialMorphSemanticFailures": [
           "jaw_open",
           "smile",
           "blink_L",
