@@ -38,6 +38,8 @@ export interface SceneSnapshot {
   collisionManifestFingerprint: string;
   planFootprintAudits: number;
   planFootprintAuditFingerprint: string;
+  dimensionAudits: number;
+  dimensionAuditFingerprint: string;
   materials: number;
   triangles: number;
   geometryBytes: number;
@@ -165,6 +167,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let collisionManifestFingerprint = 'none';
   let planFootprintAudits = 0;
   let planFootprintAuditFingerprint = 'none';
+  let dimensionAudits = 0;
+  let dimensionAuditFingerprint = 'none';
   let animationManifestEntries = 0;
   let animationManifestFingerprint = 'none';
   let morphTargets = 0;
@@ -206,6 +210,12 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
       planFootprintAudits += 1;
       planFootprintAuditFingerprint = fingerprintJson(planFootprintAudit);
       hasher.text(planFootprintAuditFingerprint);
+    }
+    const dimensionAudit = object.userData.dimensionAudit as { schema?: string } | undefined;
+    if (dimensionAudit?.schema === 'morphloom.dimension-audit/0.1') {
+      dimensionAudits += 1;
+      dimensionAuditFingerprint = fingerprintJson(dimensionAudit);
+      hasher.text(dimensionAuditFingerprint);
     }
     if (object instanceof THREE.Bone) bones += 1;
     if (!(object instanceof THREE.Mesh)) return;
@@ -338,6 +348,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     collisionManifestFingerprint,
     planFootprintAudits,
     planFootprintAuditFingerprint,
+    dimensionAudits,
+    dimensionAuditFingerprint,
     materials: materials.size,
     triangles: Math.round(triangles),
     geometryBytes,
@@ -501,6 +513,10 @@ export function compareGlbRoundTrip(
     || source.planFootprintAuditFingerprint !== reopened.planFootprintAuditFingerprint) {
     blockers.push('plan-footprint audit metadata changed during GLB round-trip');
   }
+  if (source.dimensionAudits !== reopened.dimensionAudits
+    || source.dimensionAuditFingerprint !== reopened.dimensionAuditFingerprint) {
+    blockers.push('dimension audit metadata changed during GLB round-trip');
+  }
   if (boundsErrorMm > 0.1) blockers.push(`round-trip bounds drift ${boundsErrorMm.toFixed(3)} mm`);
   if (namedNodeCoverage < 0.95) blockers.push(`named node coverage ${Math.round(namedNodeCoverage * 100)}%`);
   if (source.duplicatePartIds.length > 0) blockers.push(`duplicate source part ids: ${source.duplicatePartIds.join(', ')}`);
@@ -528,6 +544,8 @@ export function compareGlbRoundTrip(
     && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
     && source.planFootprintAuditFingerprint === reopened.planFootprintAuditFingerprint
+    && source.dimensionAudits === reopened.dimensionAudits
+    && source.dimensionAuditFingerprint === reopened.dimensionAuditFingerprint
     && namedNodeCoverage === 1 && boundsErrorMm <= 0.01 && warnings.length === 0;
   const score = status === 'blocked'
     ? Math.max(0, 58 - blockers.length * 8)

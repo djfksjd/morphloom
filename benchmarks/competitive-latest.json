@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T02:26:23.206Z",
+  "generatedAt": "2026-09-02T03:00:49.391Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -1368,6 +1368,48 @@
       "failureReleasedQueue": true,
       "capacityRejected": true
     },
+    "dimensionContract": {
+      "pass": true,
+      "baseline": {
+        "id": "wall_height",
+        "label": "Measured wall height",
+        "target": {
+          "kind": "component",
+          "componentId": "measured_wall"
+        },
+        "axis": "y",
+        "measurement": "size",
+        "expectedMm": 2700,
+        "toleranceMm": 0.1,
+        "evidence": {
+          "status": "measured",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 2700.000047683716,
+        "deviationMm": 0.0000476837158203125,
+        "pass": true
+      },
+      "regressed": {
+        "id": "wall_height",
+        "label": "Measured wall height",
+        "target": {
+          "kind": "component",
+          "componentId": "measured_wall"
+        },
+        "axis": "y",
+        "measurement": "size",
+        "expectedMm": 2700,
+        "toleranceMm": 0.1,
+        "evidence": {
+          "status": "measured",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 2400.0000953674316,
+        "deviationMm": 299.99990463256836,
+        "pass": false
+      },
+      "horizontalEnvelopeUnchanged": true
+    },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.2",
       "compilerRevision": "morphloom-compiler/0.23.0",
@@ -1757,6 +1799,11 @@
     {
       "capability": "concave polygon plan contract with self-intersection rejection and protected courtyard audit",
       "img2threejs": "roadmap",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation",
+      "img2threejs": "not established in pinned audit",
       "morphloom": "yes"
     },
     {

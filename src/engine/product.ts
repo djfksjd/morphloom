@@ -8,6 +8,7 @@ import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem, type S
 import { analyzeTopology, type MeshTopologyReport } from './topology';
 import type { EngineeringAuditReport } from './engineering-audit';
 import type { PlanFootprintAudit } from './plan-footprint';
+import type { DimensionAudit } from './dimension-contract';
 
 export interface ProductPartInfo {
   id: string;
@@ -31,6 +32,7 @@ export interface ProductMetrics {
   topology: MeshTopologyReport;
   engineering?: EngineeringAuditReport;
   planFootprint?: PlanFootprintAudit;
+  dimensionAudit?: DimensionAudit;
 }
 
 export interface ProductBuild {

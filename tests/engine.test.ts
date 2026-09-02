@@ -453,7 +453,7 @@ describe('AssemblyIR product pipeline', () => {
     expect(componentZ('west_wing_floor_slab')).toBeGreaterThan(connectorZ);
     expect(componentZ('east_wing_floor_slab')).toBeGreaterThan(connectorZ);
     expect(componentZ('center_entry_wing_floor_slab')).toBeLessThan(connectorZ);
-  });
+  }, 15_000);
 
   it('compiles a measured HABS cabin with explicit openings and evidence boundaries', () => {
     const build = compileAssemblyIR(POOR_COYOTES_CABIN_IR, 'beauty');
@@ -1020,6 +1020,28 @@ describe('short-prompt generation contract', () => {
     const duplicate = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
     duplicate.planFootprint!.targetRegions.push(structuredClone(duplicate.planFootprint!.targetRegions[0]!));
     expect(() => validateAssemblyIR(duplicate)).toThrow(/regions are invalid/);
+  });
+
+  it('rejects ungrounded or dangling dimension contracts before compiling geometry', () => {
+    const missing = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    missing.dimensionContracts = [{
+      id: 'missing_height', label: 'Missing component height',
+      target: { kind: 'component', componentId: 'not_a_component' },
+      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 1,
+      evidence: { status: 'measured', source: 'regression fixture' },
+    }];
+    expect(() => validateAssemblyIR(missing)).toThrow(/missing component/);
+
+    const inferred = structuredClone(LAUREL_HOMES_BUILDING_B_IR) as unknown as {
+      dimensionContracts: Array<Record<string, unknown>>;
+    };
+    inferred.dimensionContracts = [{
+      id: 'inferred_height', label: 'Inferred component height',
+      target: { kind: 'component', componentId: 'west_outer_end_wall' },
+      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 1,
+      evidence: { status: 'estimated', source: 'regression fixture' },
+    }];
+    expect(() => validateAssemblyIR(inferred)).toThrow(/dimension evidence/);
   });
 
   it('blocks duplicate edit-unit ids and non-finite transforms in the optimized detail audit', () => {

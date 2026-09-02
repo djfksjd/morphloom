@@ -51,6 +51,58 @@ describe('cross-domain semi-professional readiness', () => {
     expect(blocked.checks.find((check) => check.id === 'architecture-plan')?.detail).toMatch(/IoU|공백/);
   }, 20_000);
 
+  it('re-measures evidence-bound vertical dimensions and blocks a height regression that leaves the plan intact', () => {
+    const measured = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    measured.dimensionContracts = [{
+      id: 'west_wall_height',
+      label: 'Synthetic measured west end-wall height',
+      target: { kind: 'component', componentId: 'west_outer_end_wall' },
+      axis: 'y',
+      measurement: 'size',
+      expectedMm: 2_700,
+      toleranceMm: 0.1,
+      evidence: {
+        status: 'measured',
+        source: 'synthetic regression fixture; not a Laurel Homes source claim',
+      },
+    }];
+    const baseline = compileAssemblyIR(measured, 'beauty');
+    const baselineReport = auditDomainReadiness({
+      domain: 'architecture', root: baseline.root, topology: baseline.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(baseline.metrics.dimensionAudit).toMatchObject({ pass: true });
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.pass).toBe(true);
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(2_700, 3);
+    expect(baseline.metrics.dimensionAudit?.checks[0]?.deviationMm).toBeLessThan(0.001);
+    expect(baselineReport.pass).toBe(true);
+    expect(baselineReport.checks.find((check) => check.id === 'evidence-dimensions')).toMatchObject({
+      pass: true, score: 100,
+    });
+
+    const wrongHeight = structuredClone(measured);
+    const westWall = wrongHeight.components.find((component) => component.id === 'west_outer_end_wall');
+    if (!westWall || westWall.geometry.op !== 'roundedBox') throw new Error('Missing west-wall regression fixture.');
+    westWall.geometry.size[1] = 2_400;
+    const regressed = compileAssemblyIR(wrongHeight, 'beauty');
+    const regressedReport = auditDomainReadiness({
+      domain: 'architecture', root: regressed.root, topology: regressed.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(regressed.metrics.planFootprint?.pass).toBe(true);
+    expect(regressed.metrics.dimensionAudit).toMatchObject({ pass: false });
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.pass).toBe(false);
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.actualMm).toBeCloseTo(2_400, 3);
+    expect(regressed.metrics.dimensionAudit?.checks[0]?.deviationMm).toBeCloseTo(300, 3);
+    expect(regressedReport.pass).toBe(false);
+    expect(regressedReport.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
+    const productReport = auditDomainReadiness({
+      domain: 'industrial-design', root: regressed.root, topology: regressed.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(productReport.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
+  }, 20_000);
+
   it('exports a real weighted humanoid skeleton with a deterministic delivery animation set', () => {
     const first = buildCharacter(humanPack, DEFAULT_SPEC, 'beauty');
     const second = buildCharacter(humanPack, structuredClone(DEFAULT_SPEC), 'beauty');

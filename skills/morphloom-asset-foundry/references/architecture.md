@@ -27,12 +27,15 @@ Before compiling, account for every source-visible item in these groups:
 
 If only a plan exists, vertical construction remains estimated. Do not let a detailed floor plan imply surveyed heights, structure, MEP, code compliance, or as-built tolerances.
 
+For every written or datasheet dimension that affects delivery, attach a `dimensionContracts` entry instead of copying the number only into prose or metadata. Target either the compiled assembly or one named component, choose X/Y/Z, and lock the intended world-space `size`, `min`, `max`, or `center` value plus a source tolerance. Only `measured` and `datasheet` evidence may create a blocking contract. The compiler must re-measure the final world-space mesh, emit `morphloom.dimension-audit/0.1`, and block architectural readiness when any contract is outside tolerance. Preserve this audit fingerprint through GLB export and reopening. Use Y-size for storey or member height and Y-min/Y-max for slab datums, sill levels, opening heads, parapets, and roof levels. Do not turn image-scaled or assumed vertical values into measured contracts; keep them estimated and visibly outside this gate.
+
 For evidence-bearing façades, maintain an opening schedule by façade and level: type, count, center position, width/height, sill/head, reveal depth, and proof view. Reconcile plans, elevations, and sections to shared level datums and wall/slab coordinates. When interiors are in scope, validate a circulation graph: entrances reach intended occupied zones, doors create real wall apertures, and stairs/lifts connect declared levels. Unreachable rooms or floating landings block delivery.
 
 ## Dimensions and viewer inspection
 
 - Keep drawing dimensions in their source units and convert once into AssemblyIR millimetres.
 - Distinguish documented dimensions from image-scaled estimates and assumed vertical values.
+- Re-measure every admitted dimension from compiled geometry; an IR number, label, or unchanged plan projection is not proof that the built mesh has the correct height or datum.
 - Provide two-point surface measurement for distance and vertical height. Show signed ΔX, ΔY, and ΔZ and allow mm, cm, and m display without changing model geometry.
 - Keep the measurement tool enabled and discoverable in architectural review. Two surface picks must produce visible A/B markers, a dimension line, numeric result, and a clear reset/new-measurement path.
 - Browser measurement reports the compiled model coordinates; it is not a site survey or construction certification.

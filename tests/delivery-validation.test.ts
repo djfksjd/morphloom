@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { buildOrnateKnife } from '../src/engine/knife';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
@@ -28,6 +30,71 @@ describe('delivery validation and deterministic output', () => {
     expect(audit.status).toBe('blocked');
     expect(audit.blockers).toContain('plan-footprint audit metadata changed during GLB round-trip');
   }, 20_000);
+
+  it('fingerprints compiled dimension evidence and blocks a GLB that drops it', () => {
+    const measured = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    measured.dimensionContracts = [{
+      id: 'west_wall_height', label: 'Synthetic measured west wall height',
+      target: { kind: 'component', componentId: 'west_outer_end_wall' },
+      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 0.1,
+      evidence: { status: 'measured', source: 'synthetic delivery regression fixture' },
+    }];
+    const source = snapshotScene(compileAssemblyIR(measured, 'beauty').root);
+    expect(source.dimensionAudits).toBe(1);
+    expect(source.dimensionAuditFingerprint).not.toBe('none');
+    const reopened = structuredClone(source);
+    reopened.dimensionAudits = 0;
+    reopened.dimensionAuditFingerprint = 'none';
+    const audit = compareGlbRoundTrip(source, reopened, 1024, 4);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers).toContain('dimension audit metadata changed during GLB round-trip');
+  }, 20_000);
+
+  it('preserves the compiled dimension audit through an actual binary GLB export and reopen', async () => {
+    const measured = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
+    measured.dimensionContracts = [{
+      id: 'west_wall_height', label: 'Synthetic measured west wall height',
+      target: { kind: 'component', componentId: 'west_outer_end_wall' },
+      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 0.1,
+      evidence: { status: 'measured', source: 'synthetic binary round-trip fixture' },
+    }];
+    const build = compileAssemblyIR(measured, 'beauty');
+    build.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const source = Array.isArray(object.material) ? object.material[0] : object.material;
+      const color = source instanceof THREE.MeshStandardMaterial ? source.color : new THREE.Color('#808080');
+      object.material = new THREE.MeshStandardMaterial({ color, roughness: 0.7, metalness: 0 });
+    });
+    class TestFileReader {
+      result: ArrayBuffer | string | null = null;
+      onloadend: (() => void) | null = null;
+
+      readAsArrayBuffer(blob: Blob): void {
+        void blob.arrayBuffer().then((result) => {
+          this.result = result;
+          queueMicrotask(() => this.onloadend?.());
+        });
+      }
+    }
+    const previousFileReader = globalThis.FileReader;
+    Object.assign(globalThis, { FileReader: TestFileReader });
+    try {
+      const bytes = await new GLTFExporter().parseAsync(build.root, {
+        binary: true, onlyVisible: true, includeCustomExtensions: true,
+      });
+      if (!(bytes instanceof ArrayBuffer)) throw new Error('Expected binary GLB output.');
+      const reopened = await new GLTFLoader().parseAsync(bytes.slice(0), '');
+      const source = snapshotScene(build.root);
+      const reopenedSnapshot = snapshotScene(reopened.scene);
+      expect(reopenedSnapshot.dimensionAudits).toBe(1);
+      expect(reopenedSnapshot.dimensionAuditFingerprint).toBe(source.dimensionAuditFingerprint);
+      expect(compareGlbRoundTrip(source, reopenedSnapshot, bytes.byteLength, 1)).toMatchObject({
+        status: 'pass', score: 100,
+      });
+    } finally {
+      Object.assign(globalThis, { FileReader: previousFileReader });
+    }
+  }, 30_000);
 
   it('excludes hidden editor helpers from the delivery snapshot', () => {
     const visible = buildOrnateKnife(DEFAULT_KNIFE_SPEC, 'beauty').root;

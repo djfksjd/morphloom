@@ -3,6 +3,7 @@ import type { VisualHullDescriptor } from './visual-hull';
 import type { QuantizedReferenceHeightField } from './reference-surface';
 import type { ImplicitSurfaceDescriptor } from './implicit-surface';
 import type { PlanFootprintDescriptor } from './plan-footprint';
+import type { DimensionContract } from './dimension-contract';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -214,5 +215,7 @@ export interface AssemblyIR {
   fidelity?: FidelityContract;
   /** Source-derived plan regions checked against the compiled top-down mesh projection. */
   planFootprint?: PlanFootprintDescriptor;
+  /** Evidence-bound dimensions re-measured from compiled world-space geometry. */
+  dimensionContracts?: DimensionContract[];
   metadata?: Record<string, string | number | boolean>;
 }

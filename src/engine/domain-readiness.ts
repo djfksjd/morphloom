@@ -6,10 +6,11 @@ import { analyzeTopology, type MeshTopologyReport } from './topology';
 import { HUMANOID_RUNTIME_CLIP_NAMES, humanoidAnimationDelivery } from './humanoid-rig';
 import { REQUIRED_FACIAL_MORPH_NAMES } from './facial-morphs';
 import type { PlanFootprintAudit } from './plan-footprint';
+import type { DimensionAudit } from './dimension-contract';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.8.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.9.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -993,6 +994,14 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   add('finite-scene', '유한 장면 데이터', snapshot.finiteTransforms, snapshot.finiteTransforms ? 100 : 0, snapshot.finiteTransforms ? '모든 변환값이 유한함' : 'NaN/Infinity 변환 발견');
   add('named-parts', '이름 있는 편집 단위', namedMeshCoverage === 1, namedMeshCoverage * 100, `${snapshot.namedMeshes}/${snapshot.meshes} 메시 명명`);
   add('glb-roundtrip', '실제 GLB 재열기', input.browserGlbRoundTrip, input.browserGlbRoundTrip ? 100 : 0, input.browserGlbRoundTrip ? '브라우저 GLTFLoader 재열기 통과' : '동일 입력 브라우저 증명 없음');
+  const dimensions = input.root.userData.dimensionAudit as DimensionAudit | undefined;
+  if (dimensions) {
+    const passed = dimensions.checks.filter((check) => check.pass).length;
+    const maximumDeviation = Math.max(0, ...dimensions.checks.map((check) => check.deviationMm ?? Number.POSITIVE_INFINITY));
+    add('evidence-dimensions', '근거 치수 재실측', dimensions.pass,
+      dimensions.checks.length > 0 ? passed / dimensions.checks.length * 100 : 0,
+      `${passed}/${dimensions.checks.length} 계약 · 최대 오차 ${Number.isFinite(maximumDeviation) ? maximumDeviation.toFixed(3) : '측정 불가'} mm${dimensions.blockers.length ? ` · ${dimensions.blockers.join('; ')}` : ''}`);
+  }
   if (geometry.visualHullMeshes > 0) {
     const projectionPass = geometry.minimumVisualHullViewIoU >= 0.75
       && geometry.confidenceWeightedVisualHullIoU >= 0.85;

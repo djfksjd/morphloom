@@ -19,6 +19,7 @@ import { analyzeTopology } from '../src/engine/topology';
 import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
+import type { AssemblyIR } from '../src/engine/assembly-ir';
 import * as THREE from 'three';
 
 const auditSerializedValidation = async () => {
@@ -77,6 +78,50 @@ const auditSerializedValidation = async () => {
 };
 
 const serializedValidationAudit = await auditSerializedValidation();
+
+const auditDimensionContract = () => {
+  const fixture: AssemblyIR = {
+    schema: 'morphloom.assembly/0.1', name: 'Measured vertical regression fixture', units: 'mm',
+    components: [{
+      id: 'measured_wall', name: 'Measured wall', category: 'enclosure',
+      materialName: 'Review material', detail: 'Synthetic evidence-bound vertical member.',
+      geometry: { op: 'roundedBox', size: [1_000, 2_700, 200], radius: 10, segments: 3 },
+      position: [0, 1_350, 0], material: { color: '#808080', roughness: 0.7 },
+      evidence: { status: 'measured', source: 'deterministic benchmark fixture' },
+    }],
+    dimensionContracts: [{
+      id: 'wall_height', label: 'Measured wall height',
+      target: { kind: 'component', componentId: 'measured_wall' },
+      axis: 'y', measurement: 'size', expectedMm: 2_700, toleranceMm: 0.1,
+      evidence: { status: 'measured', source: 'deterministic benchmark fixture' },
+    }],
+  };
+  const baselineBuild = compileAssemblyIR(fixture, 'beauty');
+  const baseline = baselineBuild.metrics.dimensionAudit;
+  const regressed = structuredClone(fixture);
+  const wall = regressed.components[0];
+  if (wall.geometry.op !== 'roundedBox') throw new Error('Unexpected dimension benchmark primitive.');
+  wall.geometry.size[1] = 2_400;
+  const failedBuild = compileAssemblyIR(regressed, 'beauty');
+  const failed = failedBuild.metrics.dimensionAudit;
+  const baselineCheck = baseline?.checks[0];
+  const failedCheck = failed?.checks[0];
+  const baselineEnvelope = baselineBuild.metrics.bounds.getSize(new THREE.Vector3());
+  const failedEnvelope = failedBuild.metrics.bounds.getSize(new THREE.Vector3());
+  const horizontalEnvelopeUnchanged = Math.abs(baselineEnvelope.x - failedEnvelope.x) <= 1e-9
+    && Math.abs(baselineEnvelope.z - failedEnvelope.z) <= 1e-9;
+  return {
+    pass: baseline?.pass === true && failed?.pass === false
+      && (baselineCheck?.deviationMm ?? Number.POSITIVE_INFINITY) <= 0.1
+      && Math.abs((failedCheck?.deviationMm ?? 0) - 300) <= 0.1
+      && horizontalEnvelopeUnchanged,
+    baseline: baselineCheck,
+    regressed: failedCheck,
+    horizontalEnvelopeUnchanged,
+  };
+};
+
+const dimensionContractAudit = auditDimensionContract();
 
 const minimalGlb = (): ArrayBuffer => {
   const json = JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{}] });
@@ -469,6 +514,7 @@ const output = {
       domains: domainProof,
     },
     browserValidationLifecycle: serializedValidationAudit,
+    dimensionContract: dimensionContractAudit,
     browserRoundTrip: browserRoundTripSummary,
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
@@ -514,6 +560,7 @@ const output = {
     },
     { capability: 'compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
     { capability: 'concave polygon plan contract with self-intersection rejection and protected courtyard audit', img2threejs: 'roadmap', morphloom: domainProof.architecture?.pass ? 'yes' : 'blocked' },
+    { capability: 'evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation', img2threejs: 'not established in pinned audit', morphloom: dimensionContractAudit.pass ? 'yes' : 'blocked' },
     { capability: 'same-reference perceptual winner', img2threejs: 'not established here', morphloom: 'not established here' },
   ],
 };
@@ -526,5 +573,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
   || interiorBands.aggregateSimilarity !== 1 || !materialComparison.passed
-  || !serializedValidationAudit.pass || !standardValidationAudit.pass
+  || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !standardValidationAudit.pass
   || !blenderRoundTripPass || !blenderCrossDomainPass) process.exitCode = 1;

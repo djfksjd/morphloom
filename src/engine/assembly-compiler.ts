@@ -18,6 +18,7 @@ import {
 } from './reference-surface';
 import type { QuantizedReferenceHeightField } from './reference-surface';
 import { auditPlanFootprint, validatePlanFootprintDescriptor } from './plan-footprint';
+import { auditDimensionContracts, validateDimensionContracts } from './dimension-contract';
 import {
   delightReferenceProjection,
   extendOpaqueProjectionColors,
@@ -132,6 +133,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   inspect(candidate.metadata, 'metadata');
   inspect(candidate.fidelity, 'fidelity');
   inspect(candidate.planFootprint, 'planFootprint');
+  inspect(candidate.dimensionContracts, 'dimensionContracts');
   for (const component of candidate.components as AssemblyComponentIR[]) {
     if (!component || typeof component !== 'object') throw new Error('AssemblyIR component is invalid.');
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(component.id) || ids.has(component.id)) throw new Error(`Invalid or duplicate component id: ${component.id}`);
@@ -286,6 +288,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     const missingFootprintIds = candidate.planFootprint.componentIds.filter((id) => !ids.has(id));
     if (missingFootprintIds.length > 0) throw new Error(`Plan-footprint references missing components: ${missingFootprintIds.join(', ')}`);
   }
+  if (candidate.dimensionContracts) validateDimensionContracts(candidate.dimensionContracts, ids);
   if (candidate.fidelity) {
     const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
     if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
@@ -1252,10 +1255,14 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const topology = analyzeTopology(root);
   const engineering = inspectEngineeringEvidence(ir, connectivity);
   const planFootprint = ir.planFootprint ? auditPlanFootprint(root, ir.planFootprint) : undefined;
+  const dimensionAudit = ir.dimensionContracts
+    ? auditDimensionContracts(root, ir.dimensionContracts)
+    : undefined;
   root.userData.surfaceSystem = structuredClone(surfaces);
   root.userData.topology = structuredClone(topology);
   root.userData.engineeringAudit = structuredClone(engineering);
   if (planFootprint) root.userData.planFootprintAudit = structuredClone(planFootprint);
+  if (dimensionAudit) root.userData.dimensionAudit = structuredClone(dimensionAudit);
   if (ir.fidelity) root.userData.fidelityContract = structuredClone(ir.fidelity);
   return {
     root,
@@ -1272,6 +1279,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       topology,
       engineering,
       planFootprint,
+      dimensionAudit,
     },
   };
 }

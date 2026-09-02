@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-188%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-197%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/locked%20benchmark-100%25-28a879?style=flat-square)
 
@@ -130,13 +130,13 @@ This means all eight locked contracts made the correct decision; it does not mea
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|
-| Industrial design | 99 | closed topology · UV · at least 75% PBR micro-surface · evidence |
-| Architecture | 99 | verified plan · closed shell · at least 80% micro-surface · drawing/measurement evidence |
+| Industrial design | 99 | closed topology · world-space remeasurement of evidence-bound dimensions · UV/normals · at least 75% PBR micro-surface · evidence |
+| Architecture | 99 | projected plan/void audit · world-space remeasurement of evidence-bound dimensions · closed shell · finite/non-degenerate UV · at least 80% micro-surface · drawing/measurement evidence |
 | Animation | 99 | 49-bone skeleton · normalized weights · measured joint deformation · 22 motions/185 tracks · finger weights/19 tracks · loop/in-place/semantic GLB preservation |
 | Game | 100 | 100k-triangle budget · real skinned LOD0/1 · 22 locomotion/jump/gesture/interaction clips · 16-part pose-aligned collision rig · UV/normals · PBR |
 | 3D print | 100 | closed mesh · millimetres · declared/global thickness ≥0.8 mm · connected-shell local wall rays ≥0.8 mm · positive volume · measured 45° overhang |
 
-Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, or rib beside a dense body. Policy `morphloom-domain-readiness/0.4.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, and reserves ±X/±Y/±Z face probes for every shell. Remaining probes use deterministic farthest-point selection in a six-dimensional centroid-plus-normal feature space, so a low-triangle but spatially distinct feature is represented; each ray intersects only its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The engine now detects both a detached 12-triangle 0.3 mm shell beside a 19,200-triangle body and a 0.3 mm tab attached to one closed dense solid, including after arbitrary three-axis rotation. The broader asphalt sampling passes one connected shell and 96/96 rays with a 3.499 mm minimum and 17.683 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
+Global `2V/A` and triangle-order sampling can both hide a tiny thin shell, tab, or rib beside a dense body. Policy `morphloom-domain-readiness/0.9.0` welds UV-seam vertices at a 0.001 mm tolerance, separates edge-connected shells, and reserves ±X/±Y/±Z face probes for every shell. Remaining probes use deterministic farthest-point selection in a six-dimensional centroid-plus-normal feature space, so a low-triangle but spatially distinct feature is represented; each ray intersects only its own shell. Defaults are bounded at 256 meshes, 500,000 collected triangles, 500,000 welded vertices, one million connected edges, 96 rays per mesh, and 24 million triangle tests. A shell, memory, hit, volume, or test budget shortage fails closed. The engine now detects both a detached 12-triangle 0.3 mm shell beside a 19,200-triangle body and a 0.3 mm tab attached to one closed dense solid, including after arbitrary three-axis rotation. The broader asphalt sampling passes one connected shell and 96/96 rays with a 3.499 mm minimum and 17.683 mm fifth percentile. This decision revision remains separate from compiler bytes, so gate-only changes do not invalidate browser round-trip evidence.
 
 Morphloom measures generally unsupported 45° overhang area from real triangle normals. Final orientation, supports, shrinkage, and tolerances still depend on the target printer and slicer, so it does not auto-approve manufacturing suitability.
 
@@ -145,6 +145,8 @@ Before generation, Morphloom locks detail, material, proof-view, and per-feature
 Topology checks now include bounded exact triangle self-intersection tests, not only boundary, non-manifold, and degenerate counts. This gate exposed and repaired overshooting wire splines and hard pelvis/neck pose transitions. Conductors use straight runs with corner fillets, anatomical regions use continuous weights, and a meshoptimizer index-only LOD is admitted only when topology, skin attributes, and silhouette preservation all pass.
 
 With two or more compatible orthographic silhouettes, Morphloom carves a welded, closed visual hull and reprojects it into every source view for an explicit fit audit. Organic blockouts and continuous forms use an editable `implicitSurface` graph with smooth-union/subtract/intersect operations and Surface Nets; ambiguous cells receive at most four deterministic resolution refinements, then fail closed if the mesh is still non-manifold. Morphloom also aligns reference/render foreground bounds for banded interior checks and compares material colour, luminance, fine/medium/coarse-scale contrast, gradient orientation, periodicity, and irregularity separately. These implementations adapt and modify strong Apache-2.0 img2threejs components for bounded TypeScript execution; provenance and modifications are recorded in [`NOTICE`](./NOTICE).
+
+Drawing-based architecture does not trust a `planFootprintVerified` flag alone. It projects the compiled top surface back into source-derived occupied and protected-void regions, then measures IoU, overbuild, underbuild, and void intrusion. Strong written dimensions are separately locked to the assembly or a named component and re-measured from final world-space X/Y/Z bounds as size/min/max/center. A correct plan with a wrong storey, opening, sill, slab, parapet, or roof datum is therefore blocked. Laurel's undimensioned 2700 mm cutaway height remains explicitly estimated and is not promoted into a measured contract.
 
 Details: [`benchmarks/quality-latest.json`](./benchmarks/quality-latest.json) · [benchmark policy](./benchmarks/README.md) · [multi-view capture format](./docs/VISUAL_CAPTURE_SET.md) · [verified img2threejs comparison](./docs/COMPETITIVE_BENCHMARK.md)
 
