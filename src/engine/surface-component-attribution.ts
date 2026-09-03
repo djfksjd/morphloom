@@ -1,4 +1,5 @@
 import type { SurfacePoint3 } from './surface-geometry-fidelity';
+import { fingerprintJson } from './delivery-validation';
 
 export interface SurfaceComponentPointSet {
   componentId: string;
@@ -24,6 +25,7 @@ export interface SurfaceComponentAttribution {
 
 export interface SurfaceComponentAttributionReport {
   schema: 'morphloom.surface-component-attribution/0.1';
+  evidenceFingerprint: string;
   selectedYawDegrees: number;
   distanceThreshold: number;
   candidateUniformScale: number;
@@ -255,6 +257,14 @@ export function auditSurfaceComponentAttribution(
     || left.candidateCoverage - right.candidateCoverage || left.componentId.localeCompare(right.componentId));
   return {
     schema: 'morphloom.surface-component-attribution/0.1',
+    evidenceFingerprint: fingerprintJson({
+      referencePoints,
+      componentPointSets,
+      selectedYawDegrees: options.selectedYawDegrees,
+      distanceThreshold,
+      minimumMissingResponsibility,
+      minimumCandidateCoverage,
+    }),
     selectedYawDegrees: options.selectedYawDegrees,
     distanceThreshold,
     candidateUniformScale,

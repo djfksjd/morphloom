@@ -235,6 +235,7 @@ export function createSurfaceAttributionTranslationRecoveryTrials(
   if (ir?.schema !== 'morphloom.assembly/0.1'
     || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
     || attribution?.schema !== 'morphloom.surface-component-attribution/0.1'
+    || !/^[a-f0-9]{16}$/.test(attribution.evidenceFingerprint)
     || !Number.isFinite(options.candidateUnitsToIrUnits) || options.candidateUnitsToIrUnits <= 0
     || options.candidateUnitsToIrUnits > 1_000_000
     || !Array.isArray(fractions) || fractions.length < 1 || fractions.length > 8
@@ -248,7 +249,8 @@ export function createSurfaceAttributionTranslationRecoveryTrials(
   return plan.actions.filter((action) => action.targetingMode === 'surface-nearest-attribution').flatMap((action) => {
     const componentId = action.surfaceAttributionComponentId;
     if (!componentId || action.targetComponentIds.length !== 1 || action.targetComponentIds[0] !== componentId
-      || !componentIds.has(componentId)) {
+      || !componentIds.has(componentId)
+      || action.surfaceAttributionEvidenceFingerprint !== attribution.evidenceFingerprint) {
       throw new Error(`Surface attribution recovery action has an unsafe target: ${action.id}`);
     }
     const attributed = attributedById.get(componentId);

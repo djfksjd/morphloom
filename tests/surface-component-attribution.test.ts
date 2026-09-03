@@ -21,6 +21,7 @@ describe('surface component attribution', () => {
     expect(module.missingResponsibility).toBeGreaterThan(0.4);
     expect(module.suggestedTranslationCandidateUnits?.[0]).toBeLessThan(0);
     expect(report.relocateOrReshapeComponentIds).toContain('module');
+    expect(report.evidenceFingerprint).toMatch(/^[a-f0-9]{16}$/);
   });
 
   it('fails closed on duplicate component ids and degenerate evidence', () => {

@@ -831,6 +831,7 @@ const surfaceAttributionActions: GeometryRecoveryAction[] = surfaceComponentAttr
     spatialConstraintIds: [],
     targetingMode: 'surface-nearest-attribution',
     surfaceAttributionComponentId: component.componentId,
+    surfaceAttributionEvidenceFingerprint: surfaceComponentAttribution.evidenceFingerprint,
     evidenceViewIds: ['ground-truth'],
     requiredComponentIds: [component.componentId],
     prohibitedOperations: ['delete-required-component', 'lower-locked-feature-count', 'change-source-evidence'],

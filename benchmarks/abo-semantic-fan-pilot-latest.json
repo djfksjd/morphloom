@@ -13074,6 +13074,7 @@
           "spatialConstraintIds": [],
           "targetingMode": "surface-nearest-attribution",
           "surfaceAttributionComponentId": "base-rear-rail",
+          "surfaceAttributionEvidenceFingerprint": "c750271fd5ebc4be",
           "evidenceViewIds": [
             "ground-truth"
           ],
@@ -13108,6 +13109,7 @@
           "spatialConstraintIds": [],
           "targetingMode": "surface-nearest-attribution",
           "surfaceAttributionComponentId": "motor-shell",
+          "surfaceAttributionEvidenceFingerprint": "c750271fd5ebc4be",
           "evidenceViewIds": [
             "ground-truth"
           ],
@@ -13142,6 +13144,7 @@
           "spatialConstraintIds": [],
           "targetingMode": "surface-nearest-attribution",
           "surfaceAttributionComponentId": "stand-left",
+          "surfaceAttributionEvidenceFingerprint": "c750271fd5ebc4be",
           "evidenceViewIds": [
             "ground-truth"
           ],
@@ -13176,6 +13179,7 @@
           "spatialConstraintIds": [],
           "targetingMode": "surface-nearest-attribution",
           "surfaceAttributionComponentId": "cage-rear-spoke-2",
+          "surfaceAttributionEvidenceFingerprint": "c750271fd5ebc4be",
           "evidenceViewIds": [
             "ground-truth"
           ],
@@ -19896,6 +19900,7 @@
     },
     "componentAttribution": {
       "schema": "morphloom.surface-component-attribution/0.1",
+      "evidenceFingerprint": "c750271fd5ebc4be",
       "selectedYawDegrees": 180,
       "distanceThreshold": 0.04,
       "candidateUniformScale": 0.5513969472078484,

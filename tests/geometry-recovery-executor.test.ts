@@ -231,8 +231,9 @@ describe('bounded geometry recovery execution', () => {
     plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
     plan.actions[0]!.targetingMode = 'surface-nearest-attribution';
     plan.actions[0]!.surfaceAttributionComponentId = componentId;
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'a'.repeat(16);
     const trials = createSurfaceAttributionTranslationRecoveryTrials(source, plan, {
-      schema: 'morphloom.surface-component-attribution/0.1', selectedYawDegrees: 0,
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'a'.repeat(16), selectedYawDegrees: 0,
       distanceThreshold: 0.04, candidateUniformScale: 1,
       relocateOrReshapeComponentIds: [componentId], shrinkExcessComponentIds: [],
       expandOrAddDetailComponentIds: [], limitation: 'fixture',
@@ -248,6 +249,20 @@ describe('bounded geometry recovery execution', () => {
     expect(trials.map((trial) => trial.edits[0]!.translateMm)).toEqual([
       [2.5, -5, 7.5], [5, -10, 15],
     ]);
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'b'.repeat(16);
+    expect(() => createSurfaceAttributionTranslationRecoveryTrials(source, plan, {
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'a'.repeat(16),
+      selectedYawDegrees: 0, distanceThreshold: 0.04, candidateUniformScale: 1,
+      relocateOrReshapeComponentIds: [componentId], shrinkExcessComponentIds: [],
+      expandOrAddDetailComponentIds: [], limitation: 'fixture', components: [{
+        componentId, candidateSamples: 24, candidateCoverage: 0.5,
+        candidateMeanDistance: 0.1, candidateP95Distance: 0.2,
+        assignedReferenceSamples: 24, assignedReferenceCoverage: 0.5,
+        assignedReferenceMeanDistance: 0.1, assignedReferenceP95Distance: 0.2,
+        missingResponsibility: 0.5, outlierCandidateSamples: 12, missingReferenceSamples: 12,
+        recommendation: 'relocate-or-reshape', suggestedTranslationCandidateUnits: [0.01, -0.02, 0.03],
+      }],
+    }, { candidateUnitsToIrUnits: 1_000 })).toThrow(/unsafe target/);
   });
 
   it('moves only the evidence-facing extreme control point for an open tube', () => {

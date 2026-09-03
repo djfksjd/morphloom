@@ -33,6 +33,7 @@ export interface GeometryRecoveryAction {
   targetingMode: 'spatial-cell-overlap' | 'semantic-feature-overlap' | 'surface-nearest-attribution' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
   semanticFeatureId?: string;
   surfaceAttributionComponentId?: string;
+  surfaceAttributionEvidenceFingerprint?: string;
   evidenceViewIds: string[];
   requiredComponentIds: string[];
   prohibitedOperations: Array<'delete-required-component' | 'lower-locked-feature-count' | 'change-source-evidence'>;
