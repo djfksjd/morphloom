@@ -361,37 +361,58 @@ export function createSurfaceAttributionTubeControlRecoveryTrials(
     }
     if (action.operation !== 'relocate-or-reshape-extraneous-units'
       || attributed?.recommendation !== 'relocate-or-reshape'
-      || !attributed.suggestedTranslationCandidateUnits
+      || (!attributed.suggestedTranslationCandidateUnits
+        && (!attributed.controlPointTranslations || attributed.controlPointTranslations.length === 0))
       || component.geometry.op !== 'tube' || component.geometry.closed
       || component.geometry.points.length < 2 || component.geometry.points.length > 16) return [];
-    const worldDelta = attributed.suggestedTranslationCandidateUnits.map((value) => (
-      value * options.candidateUnitsToIrUnits
-    )) as Vector3;
-    const magnitude = Math.hypot(...worldDelta);
-    if (worldDelta.some((value) => !Number.isFinite(value)) || magnitude <= 1e-9
-      || magnitude > maximumTranslationIrUnits) {
+    const tubeGeometry = component.geometry;
+    const localizedControls = attributed.controlPointTranslations?.filter((hint) => (
+      Number.isInteger(hint.controlIndex) && hint.controlIndex >= 0
+      && hint.controlIndex < tubeGeometry.points.length
+      && Number.isFinite(hint.confidence) && hint.confidence >= 0 && hint.confidence <= 1
+      && hint.suggestedTranslationCandidateUnits.every((value) => Number.isFinite(value))
+    )).slice(0, maximumControlPoints).map((hint) => ({
+      pointIndex: hint.controlIndex,
+      worldDelta: hint.suggestedTranslationCandidateUnits.map((value) => (
+        value * options.candidateUnitsToIrUnits
+      )) as Vector3,
+    }));
+    let controls = localizedControls && localizedControls.length > 0 ? localizedControls : undefined;
+    if (!controls) {
+      if (!attributed.suggestedTranslationCandidateUnits) return [];
+      const worldDelta = attributed.suggestedTranslationCandidateUnits.map((value) => (
+        value * options.candidateUnitsToIrUnits
+      )) as Vector3;
+      const magnitude = Math.hypot(...worldDelta);
+      if (worldDelta.some((value) => !Number.isFinite(value)) || magnitude <= 1e-9
+        || magnitude > maximumTranslationIrUnits) {
+        throw new Error(`Surface attribution tube-control vector exceeds the bounded edit limit: ${action.id}`);
+      }
+      const localDelta = worldToLocalDirection(worldDelta, component.rotation);
+      const unit = localDelta.map((value) => value / magnitude) as Vector3;
+      const ranked = tubeGeometry.points.map((point, pointIndex) => ({
+        pointIndex,
+        projection: point.reduce((sum, value, axis) => sum + value * unit[axis]!, 0),
+      })).sort((left, right) => right.projection - left.projection || left.pointIndex - right.pointIndex);
+      controls = [...new Set([
+        ranked[0]!.pointIndex, ranked.at(-1)!.pointIndex, 0, tubeGeometry.points.length - 1,
+      ])].slice(0, maximumControlPoints).map((pointIndex) => ({ pointIndex, worldDelta }));
+    }
+    if (controls.some(({ worldDelta }) => Math.hypot(...worldDelta) <= 1e-9
+      || Math.hypot(...worldDelta) > maximumTranslationIrUnits)) {
       throw new Error(`Surface attribution tube-control vector exceeds the bounded edit limit: ${action.id}`);
     }
-    const localDelta = worldToLocalDirection(worldDelta, component.rotation);
-    const unit = localDelta.map((value) => value / magnitude) as Vector3;
-    const ranked = component.geometry.points.map((point, pointIndex) => ({
-      pointIndex,
-      projection: point.reduce((sum, value, axis) => sum + value * unit[axis]!, 0),
-    })).sort((left, right) => right.projection - left.projection || left.pointIndex - right.pointIndex);
-    const controlPoints = [...new Set([
-      ranked[0]!.pointIndex,
-      ranked.at(-1)!.pointIndex,
-      0,
-      component.geometry.points.length - 1,
-    ])].slice(0, maximumControlPoints);
-    return controlPoints.flatMap((pointIndex, controlIndex) => fractions.map((fraction, fractionIndex) => ({
+    return controls.flatMap(({ pointIndex, worldDelta }, controlIndex) => {
+      const localDelta = worldToLocalDirection(worldDelta, component.rotation);
+      return fractions.map((fraction, fractionIndex) => ({
       id: `${action.id}:tube-control-${controlIndex + 1}-${fractionIndex + 1}`,
       actionId: action.id,
       edits: [{ componentId, geometry: {
         operation: 'tube-point-deltas',
         deltas: [{ pointIndex, deltaMm: localDelta.map((value) => value * fraction) as Vector3 }],
       } }],
-    })));
+      }));
+    });
   });
 }
 

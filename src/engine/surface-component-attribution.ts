@@ -4,6 +4,15 @@ import { fingerprintJson } from './delivery-validation';
 export interface SurfaceComponentPointSet {
   componentId: string;
   points: SurfacePoint3[];
+  controlAnchors?: Array<{ controlIndex: number; point: SurfacePoint3 }>;
+}
+
+export interface SurfaceControlPointTranslation {
+  controlIndex: number;
+  outlierCandidateSamples: number;
+  missingReferenceSamples: number;
+  confidence: number;
+  suggestedTranslationCandidateUnits: SurfacePoint3;
 }
 
 export interface SurfaceComponentAttribution {
@@ -25,6 +34,7 @@ export interface SurfaceComponentAttribution {
   assignedReferenceRobustSpan?: SurfacePoint3;
   suggestedAlignedScaleAxis?: 0 | 1 | 2;
   suggestedAlignedScaleFactor?: number;
+  controlPointTranslations?: SurfaceControlPointTranslation[];
 }
 
 export interface SurfaceComponentAttributionReport {
@@ -158,6 +168,26 @@ function centroid(points: SurfacePoint3[]): SurfacePoint3 | undefined {
   return sum.map((value) => value / points.length) as SurfacePoint3;
 }
 
+function nearestControlIndex(
+  point: SurfacePoint3,
+  controls: Array<{ controlIndex: number; point: SurfacePoint3 }>,
+): number {
+  return controls.reduce((winner, control, index) => {
+    const distance = control.point.reduce((sum, value, axis) => {
+      const delta = point[axis]! - value;
+      return sum + delta * delta;
+    }, 0);
+    const winningControl = controls[winner]!;
+    const winningDistance = winningControl.point.reduce((sum, value, axis) => {
+      const delta = point[axis]! - value;
+      return sum + delta * delta;
+    }, 0);
+    return distance < winningDistance - Number.EPSILON
+      || (Math.abs(distance - winningDistance) <= Number.EPSILON
+        && control.controlIndex < winningControl.controlIndex) ? index : winner;
+  }, 0);
+}
+
 /**
  * Attributes symmetric surface residuals to independently editable candidate
  * components after applying the same whole-object normalization and yaw used
@@ -195,6 +225,14 @@ export function auditSurfaceComponentAttribution(
   if (new Set(ids).size !== ids.length || componentPointSets.some((component) => (
     !SAFE_ID.test(component.componentId) || !Array.isArray(component.points) || component.points.length < 1
     || component.points.length > 4_096 || component.points.some((point) => !finitePoint(point))
+    || (component.controlAnchors !== undefined && (
+      !Array.isArray(component.controlAnchors) || component.controlAnchors.length < 1
+      || component.controlAnchors.length > 16
+      || new Set(component.controlAnchors.map((anchor) => anchor?.controlIndex)).size
+        !== component.controlAnchors.length
+      || component.controlAnchors.some((anchor) => !Number.isInteger(anchor?.controlIndex)
+        || anchor.controlIndex < 0 || anchor.controlIndex > 4_096 || !finitePoint(anchor.point))
+    ))
   ))) throw new Error('Surface component attribution component inventory is unsafe.');
 
   const candidatePoints = componentPointSets.flatMap((component) => component.points);
@@ -205,6 +243,10 @@ export function auditSurfaceComponentAttribution(
   const normalizedComponents = componentPointSets.map((component) => ({
     componentId: component.componentId,
     points: component.points.map((point) => rotateYaw(normalized(point, candidateBounds), options.selectedYawDegrees)),
+    controlAnchors: component.controlAnchors?.map((anchor) => ({
+      controlIndex: anchor.controlIndex,
+      point: rotateYaw(normalized(anchor.point, candidateBounds), options.selectedYawDegrees),
+    })),
   }));
   const referenceTree = buildTree(normalizedReference.map((point) => ({ point, componentIndex: 0 })))!;
   const candidateTree = buildTree(normalizedComponents.flatMap((component, componentIndex) => (
@@ -256,6 +298,34 @@ export function auditSurfaceComponentAttribution(
         .filter(({ factor }) => Number.isFinite(factor) && factor >= 0.5 && factor <= 2)
         .sort((left, right) => right.magnitude - left.magnitude || left.axis - right.axis)[0]
       : undefined;
+    const controlPointTranslations = component.controlAnchors?.flatMap((anchor, controlArrayIndex) => {
+      const sourcePoints = outlierCandidatePoints.filter((point) => (
+        nearestControlIndex(point, component.controlAnchors!) === controlArrayIndex
+      ));
+      const targetPoints = missingReferencePoints.filter((point) => (
+        nearestControlIndex(point, component.controlAnchors!) === controlArrayIndex
+      ));
+      const source = centroid(sourcePoints);
+      const target = centroid(targetPoints);
+      if (!source || !target) return [];
+      const suggestedTranslationCandidateUnits = inverseRotateYaw(target.map((value, axis) => (
+        (value - source[axis]!) * candidateUniformScale
+      )) as SurfacePoint3, options.selectedYawDegrees);
+      const confidence = Math.min(
+        sourcePoints.length / Math.max(1, outlierCandidatePoints.length),
+        targetPoints.length / Math.max(1, missingReferencePoints.length),
+      );
+      return [{
+        controlIndex: anchor.controlIndex,
+        outlierCandidateSamples: sourcePoints.length,
+        missingReferenceSamples: targetPoints.length,
+        confidence,
+        suggestedTranslationCandidateUnits,
+      }];
+    }).filter((hint) => Math.hypot(...hint.suggestedTranslationCandidateUnits) > Number.EPSILON)
+      .sort((left, right) => right.confidence - left.confidence
+        || right.missingReferenceSamples - left.missingReferenceSamples
+        || left.controlIndex - right.controlIndex);
     const candidateNeedsRepair = candidateCoverage < minimumCandidateCoverage;
     const referenceNeedsRepair = missingResponsibility >= minimumMissingResponsibility
       && assignedReferenceCoverage < minimumCandidateCoverage;
@@ -286,6 +356,8 @@ export function auditSurfaceComponentAttribution(
         ? suggestedAlignedScale.axis : undefined,
       suggestedAlignedScaleFactor: suggestedAlignedScale && suggestedAlignedScale.magnitude >= 0.025
         ? suggestedAlignedScale.factor : undefined,
+      controlPointTranslations: controlPointTranslations && controlPointTranslations.length > 0
+        ? controlPointTranslations : undefined,
     };
   }).sort((left, right) => right.missingResponsibility - left.missingResponsibility
     || left.candidateCoverage - right.candidateCoverage || left.componentId.localeCompare(right.componentId));
@@ -309,6 +381,6 @@ export function auditSurfaceComponentAttribution(
       .map((component) => component.componentId),
     expandOrAddDetailComponentIds: components.filter((component) => component.recommendation === 'expand-or-add-detail')
       .map((component) => component.componentId),
-    limitation: 'Nearest-surface attribution localizes geometric responsibility after whole-object alignment. Robust 10–90% spans can propose one dominant aligned-axis scale, but do not prove ground-truth semantic identity, part boundaries, articulation state, or that a centroid/extent edit is the correct repair; every proposal still requires independent gates.',
+    limitation: 'Nearest-surface attribution localizes geometric responsibility after whole-object alignment. Optional control anchors split paired missing/excess residuals into local translation hints, and robust 10–90% spans can propose one dominant aligned-axis scale. These do not prove ground-truth semantic identity, part boundaries, articulation state, or that a local/extent edit is correct; every proposal still requires independent gates.',
   };
 }

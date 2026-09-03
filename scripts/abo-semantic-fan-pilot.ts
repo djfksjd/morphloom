@@ -710,7 +710,16 @@ const analyzeRecoverySurface = (ir: AssemblyIR, compiled = compileAssemblyIR(ir,
     if (!object) return [];
     const componentTriangles = collectThreeTriangles(object);
     if (componentTriangles.length < 1) return [];
-    return [{ componentId: component.id, points: sampleTriangleSurface(componentTriangles, 24).points }];
+    const controlAnchors = component.geometry.op === 'tube'
+      ? component.geometry.points.map((point, controlIndex) => ({
+        controlIndex,
+        point: object.localToWorld(new THREE.Vector3(...point)).toArray() as [number, number, number],
+      })) : undefined;
+    return [{
+      componentId: component.id,
+      points: sampleTriangleSurface(componentTriangles, 24).points,
+      controlAnchors,
+    }];
   });
   const attribution = auditSurfaceComponentAttribution(referenceSample.points, pointSets, {
     selectedYawDegrees: audit.selectedYawDegrees,

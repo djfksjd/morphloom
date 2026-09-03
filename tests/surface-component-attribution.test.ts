@@ -44,6 +44,32 @@ describe('surface component attribution', () => {
     expect(module.suggestedAlignedScaleFactor).toBeGreaterThan(1.8);
   });
 
+  it('attributes a local residual to the nearest declared control anchor', () => {
+    const body = [
+      ...cluster([-4, 0, 0]), ...cluster([4, 0, 0]),
+      ...cluster([0, -4, 0]), ...cluster([0, 4, 0]),
+      ...cluster([0, 0, -4]), ...cluster([0, 0, 4]),
+    ];
+    const report = auditSurfaceComponentAttribution(
+      [...body, ...cluster([0, 0, 0]), ...cluster([2, 1, 0])],
+      [{ componentId: 'body', points: body }, {
+        componentId: 'route',
+        points: [...cluster([0, 0, 0]), ...cluster([2, 0, 0])],
+        controlAnchors: [
+          { controlIndex: 0, point: [0, 0, 0] },
+          { controlIndex: 1, point: [2, 0, 0] },
+        ],
+      }],
+      { selectedYawDegrees: 0, distanceThreshold: 0.04, minimumMissingResponsibility: 0.1 },
+    );
+    const route = report.components.find((component) => component.componentId === 'route')!;
+    expect(route.recommendation).toBe('relocate-or-reshape');
+    expect(route.controlPointTranslations).toHaveLength(1);
+    expect(route.controlPointTranslations![0]!.controlIndex).toBe(1);
+    expect(route.controlPointTranslations![0]!.suggestedTranslationCandidateUnits[1]).toBeCloseTo(1);
+    expect(route.controlPointTranslations![0]!.confidence).toBeGreaterThan(0.9);
+  });
+
   it('fails closed on duplicate component ids and degenerate evidence', () => {
     const points = [...cluster([-1, 0, 0]), ...cluster([1, 0, 0])];
     expect(() => auditSurfaceComponentAttribution(points, [
@@ -53,5 +79,9 @@ describe('surface component attribution', () => {
     expect(() => auditSurfaceComponentAttribution(Array.from({ length: 16 }, () => [0, 0, 0]), [
       { componentId: 'one', points },
     ], { selectedYawDegrees: 0 })).toThrow(/non-degenerate/);
+    expect(() => auditSurfaceComponentAttribution(points, [{
+      componentId: 'one', points,
+      controlAnchors: [{ controlIndex: 0, point: [0, 0, 0] }, { controlIndex: 0, point: [1, 0, 0] }],
+    }], { selectedYawDegrees: 0 })).toThrow(/inventory/);
   });
 });

@@ -409,6 +409,43 @@ describe('bounded geometry recovery execution', () => {
     expect(trials.every((trial) => trial.edits[0]!.geometry?.operation === 'tube-point-deltas')).toBe(true);
   });
 
+  it('uses the control-local surface residual instead of the component centroid residual', () => {
+    const source = structuredClone(COOLING_ASSEMBLY_IR);
+    const tube = source.components.find((component) => component.geometry.op === 'tube')!;
+    if (tube.geometry.op !== 'tube') throw new Error('fixture tube is missing');
+    tube.rotation = [0, Math.PI / 2, 0];
+    const selectedControl = Math.min(1, tube.geometry.points.length - 1);
+    const plan = planFor(tube.id);
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    plan.actions[0]!.targetingMode = 'surface-nearest-attribution';
+    plan.actions[0]!.surfaceAttributionComponentId = tube.id;
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'f'.repeat(16);
+    const trials = createSurfaceAttributionTubeControlRecoveryTrials(source, plan, {
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'f'.repeat(16),
+      selectedYawDegrees: 0, distanceThreshold: 0.04, candidateUniformScale: 1,
+      relocateOrReshapeComponentIds: [tube.id], shrinkExcessComponentIds: [],
+      expandOrAddDetailComponentIds: [], limitation: 'fixture', components: [{
+        componentId: tube.id, candidateSamples: 24, candidateCoverage: 0.5,
+        candidateMeanDistance: 0.1, candidateP95Distance: 0.2,
+        assignedReferenceSamples: 24, assignedReferenceCoverage: 0.5,
+        assignedReferenceMeanDistance: 0.1, assignedReferenceP95Distance: 0.2,
+        missingResponsibility: 0.5, outlierCandidateSamples: 12, missingReferenceSamples: 12,
+        recommendation: 'relocate-or-reshape', suggestedTranslationCandidateUnits: [0, 0, -0.04],
+        controlPointTranslations: [{
+          controlIndex: selectedControl, outlierCandidateSamples: 6, missingReferenceSamples: 7,
+          confidence: 0.5, suggestedTranslationCandidateUnits: [0.01, 0, 0],
+        }],
+      }],
+    }, { candidateUnitsToIrUnits: 1_000, fractions: [0.5], maximumTranslationIrUnits: 50 });
+    expect(trials).toHaveLength(1);
+    const geometry = trials[0]!.edits[0]!.geometry;
+    expect(geometry?.operation).toBe('tube-point-deltas');
+    if (geometry?.operation !== 'tube-point-deltas') throw new Error('expected tube control edit');
+    expect(geometry.deltas[0]!.pointIndex).toBe(selectedControl);
+    expect(geometry.deltas[0]!.deltaMm[0]).toBeCloseTo(0);
+    expect(geometry.deltas[0]!.deltaMm[2]).toBeCloseTo(5);
+  });
+
   it('moves only the evidence-facing extreme control point for an open tube', () => {
     const source = structuredClone(COOLING_ASSEMBLY_IR);
     const tube = source.components.find((component) => component.geometry.op === 'tube')!;
