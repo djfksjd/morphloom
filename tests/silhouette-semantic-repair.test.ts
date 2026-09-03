@@ -27,8 +27,8 @@ describe('silhouette semantic repair planning', () => {
   it('permits a bounded regional trial only with compatible residuals and calibrated orthogonal views', () => {
     const evidence = buildEvidence();
     const report = planSilhouetteSemanticRepairs(evidence.attribution, evidence.residual, [
-      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true },
-      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true },
+      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true, pixelsPerWorldUnit: 100 },
+      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true, pixelsPerWorldUnit: 100 },
     ]);
     expect(report.actionableGroupIds).toEqual(['support']);
     expect(report.hints[0]).toMatchObject({
@@ -36,13 +36,17 @@ describe('silhouette semantic repair planning', () => {
       evidenceViewIds: ['front', 'right'], blockers: [],
     });
     expect(report.hints[0]!.screenMatches[0]!.screenDeltaNormalized.x).toBeCloseTo(0.4375);
+    expect(report.hints[0]!.worldTranslationMm?.[0]).toBeCloseTo(0.035);
+    expect(report.hints[0]!.worldTranslationMm?.[1]).toBeCloseTo(0);
+    expect(report.hints[0]!.worldTranslationMm?.[2]).toBeCloseTo(-0.035);
+    expect(report.hints[0]!.worldFitRmsNormalizedError).toBeCloseTo(0);
   });
 
   it('blocks a plausible 2D repair when camera calibration is inferred', () => {
     const evidence = buildEvidence();
     const report = planSilhouetteSemanticRepairs(evidence.attribution, evidence.residual, [
-      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: false, intrinsicsVerified: false },
-      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: false, intrinsicsVerified: false },
+      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: false, intrinsicsVerified: false, pixelsPerWorldUnit: 100 },
+      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: false, intrinsicsVerified: false, pixelsPerWorldUnit: 100 },
     ]);
     expect(report.actionableGroupIds).toEqual([]);
     expect(report.hints[0]!.blockers).toContain('absolute camera pose is not verified');
@@ -52,8 +56,8 @@ describe('silhouette semantic repair planning', () => {
   it('does not relocate a group whose removal damages verified coverage', () => {
     const evidence = buildEvidence(true);
     const report = planSilhouetteSemanticRepairs(evidence.attribution, evidence.residual, [
-      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true },
-      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true },
+      { viewId: 'front', azimuthDegrees: 0, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true, pixelsPerWorldUnit: 100 },
+      { viewId: 'right', azimuthDegrees: 90, projection: 'orthographic', absolutePoseVerified: true, intrinsicsVerified: true, pixelsPerWorldUnit: 100 },
     ]);
     expect(report.actionableGroupIds).toEqual([]);
     expect(report.hints[0]).toMatchObject({

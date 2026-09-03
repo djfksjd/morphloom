@@ -31,6 +31,8 @@ export interface SilhouetteResidualComponent {
 
 export interface SilhouetteResidualViewReport {
   id: string;
+  width: number;
+  height: number;
   referencePixels: number;
   candidatePixels: number;
   overlapPixels: number;
@@ -236,7 +238,8 @@ export function auditSilhouetteResidualLocalization(
       ...residualComponents(view, 'excess', minimumComponentPixels, totalResidualPixels),
     ].sort((left, right) => right.pixels - left.pixels || left.id.localeCompare(right.id)) : [];
     return {
-      id: view.id, referencePixels, candidatePixels, overlapPixels, unionPixels, missingPixels, excessPixels,
+      id: view.id, width: view.width, height: view.height,
+      referencePixels, candidatePixels, overlapPixels, unionPixels, missingPixels, excessPixels,
       silhouetteIoU: overlapPixels / unionPixels,
       referenceRecall: overlapPixels / referencePixels,
       candidatePrecision: overlapPixels / candidatePixels,

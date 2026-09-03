@@ -6,6 +6,7 @@ import {
   type AssemblyComponentPatch,
 } from './assembly-edit';
 import type { GeometryRecoveryAction, GeometryRecoveryPlan } from './geometry-recovery-plan';
+import type { SilhouetteSemanticRepairReport } from './silhouette-semantic-repair';
 
 type RecoveryEdit = Omit<AssemblyComponentPatch, 'schema' | 'operationId' | 'expectedInputFingerprint'>;
 type Vector3 = [number, number, number];
@@ -158,6 +159,58 @@ export function createBoundedScaleRecoveryTrials(
       actionId: action.id,
       edits,
     })));
+  });
+}
+
+/**
+ * Converts calibrated semantic screen-space repair hints into reversible
+ * metric translation trials. Fractions are evaluated independently from the
+ * immutable source; this function never applies or accepts an edit itself.
+ */
+export function createSemanticTranslationRecoveryTrials(
+  ir: AssemblyIR,
+  plan: GeometryRecoveryPlan,
+  repair: SilhouetteSemanticRepairReport,
+  options: { fractions?: number[] } = {},
+): GeometryRecoveryTrial[] {
+  const fractions = options.fractions ?? [0.5, 0.75, 1];
+  if (ir?.schema !== 'morphloom.assembly/0.1'
+    || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || repair?.schema !== 'morphloom.silhouette-semantic-repair/0.1'
+    || !Array.isArray(fractions) || fractions.length < 1 || fractions.length > 8
+    || fractions.some((fraction) => !Number.isFinite(fraction) || fraction < 0.05 || fraction > 1)) {
+    throw new Error('Semantic translation recovery trial configuration is unsafe.');
+  }
+  const componentIds = new Set(ir.components.map((component) => component.id));
+  const actionableHints = repair.hints.filter((hint) => hint.automatic3dTrialEligible);
+  if (new Set(repair.actionableGroupIds).size !== repair.actionableGroupIds.length
+    || actionableHints.length !== repair.actionableGroupIds.length
+    || actionableHints.some((hint) => !repair.actionableGroupIds.includes(hint.groupId)
+      || !hint.worldTranslationMm || hint.worldTranslationMm.length !== 3
+      || hint.worldTranslationMm.some((value) => !Number.isFinite(value) || Math.abs(value) > 100_000)
+      || Math.hypot(...hint.worldTranslationMm) <= 1e-9)) {
+    throw new Error('Semantic translation recovery hints are inconsistent or unsafe.');
+  }
+  return actionableHints.flatMap((hint) => {
+    const actions = plan.actions.filter((action) => action.semanticFeatureId === hint.groupId
+      && action.operation === 'relocate-or-reshape-extraneous-units');
+    if (actions.length !== 1) {
+      throw new Error(`Semantic translation group requires exactly one recovery action: ${hint.groupId}`);
+    }
+    const action = actions[0]!;
+    if (action.targetComponentIds.length < 1 || action.targetComponentIds.length > 64
+      || new Set(action.targetComponentIds).size !== action.targetComponentIds.length
+      || action.targetComponentIds.some((id) => !componentIds.has(id))) {
+      throw new Error(`Semantic translation recovery target set is unsafe: ${hint.groupId}`);
+    }
+    return fractions.map((fraction, index) => ({
+      id: `${action.id}:semantic-translate-${index + 1}`,
+      actionId: action.id,
+      edits: action.targetComponentIds.map((componentId) => ({
+        componentId,
+        translateMm: hint.worldTranslationMm!.map((value) => value * fraction) as Vector3,
+      })),
+    }));
   });
 }
 

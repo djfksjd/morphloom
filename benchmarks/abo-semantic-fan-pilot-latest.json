@@ -245,6 +245,8 @@
       "views": [
         {
           "id": "front",
+          "width": 512,
+          "height": 256,
           "referencePixels": 23592,
           "candidatePixels": 27735,
           "overlapPixels": 17504,
@@ -1105,6 +1107,8 @@
         },
         {
           "id": "right",
+          "width": 512,
+          "height": 256,
           "referencePixels": 17183,
           "candidatePixels": 24239,
           "overlapPixels": 13614,
@@ -2013,6 +2017,8 @@
         },
         {
           "id": "rear",
+          "width": 512,
+          "height": 256,
           "referencePixels": 22889,
           "candidatePixels": 26165,
           "overlapPixels": 17161,
@@ -2969,6 +2975,8 @@
         },
         {
           "id": "left",
+          "width": 512,
+          "height": 256,
           "referencePixels": 15926,
           "candidatePixels": 20057,
           "overlapPixels": 11909,
@@ -6043,7 +6051,8 @@
           "blockers": [
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
-            "camera intrinsics are not verified"
+            "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified"
           ]
         },
         {
@@ -6151,7 +6160,8 @@
           "blockers": [
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
-            "camera intrinsics are not verified"
+            "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified"
           ]
         },
         {
@@ -6259,7 +6269,8 @@
           "blockers": [
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
-            "camera intrinsics are not verified"
+            "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified"
           ]
         },
         {
@@ -6366,7 +6377,8 @@
           ],
           "blockers": [
             "absolute camera pose is not verified",
-            "camera intrinsics are not verified"
+            "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified"
           ]
         },
         {
@@ -6475,6 +6487,7 @@
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
             "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified",
             "regional correspondence confidence is below threshold"
           ]
         },
@@ -6584,6 +6597,7 @@
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
             "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified",
             "regional correspondence confidence is below threshold"
           ]
         },
@@ -6670,6 +6684,7 @@
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
             "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified",
             "regional correspondence confidence is below threshold"
           ]
         },
@@ -6779,6 +6794,7 @@
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
             "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified",
             "regional correspondence confidence is below threshold"
           ]
         },
@@ -6865,6 +6881,7 @@
             "semantic ablation does not support shrinking or relocating this group",
             "absolute camera pose is not verified",
             "camera intrinsics are not verified",
+            "orthographic pixel scale is not verified",
             "regional correspondence confidence is below threshold"
           ]
         },

@@ -6,6 +6,7 @@ import {
   createBoundedScaleRecoveryTrials,
   createBoundedShapeRecoveryTrials,
   createBoundedTranslationRecoveryTrials,
+  createSemanticTranslationRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
@@ -183,6 +184,43 @@ describe('bounded geometry recovery execution', () => {
     expect(delta[0]).toBeCloseTo(10 / Math.sqrt(2));
     expect(delta[1]).toBeCloseTo(-10 / Math.sqrt(2));
     expect(delta[2]).toBeCloseTo(0);
+  });
+
+  it('turns a calibrated semantic residual into independent bounded translation trials', () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const plan = planFor(componentId);
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    plan.actions[0]!.semanticFeatureId = 'camera-island';
+    plan.actions[0]!.targetingMode = 'semantic-feature-overlap';
+    const trials = createSemanticTranslationRecoveryTrials(source, plan, {
+      schema: 'morphloom.silhouette-semantic-repair/0.1',
+      actionableGroupIds: ['camera-island'], blockedGroupIds: [], limitation: 'fixture',
+      hints: [{
+        groupId: 'camera-island', recommendation: 'shrink-or-relocate',
+        candidateOperation: 'relocate-or-reshape', confidence: 0.8,
+        automatic3dTrialEligible: true, evidenceViewIds: ['front', 'right'], screenMatches: [],
+        worldTranslationMm: [4, -2, 6], worldFitRmsNormalizedError: 0.001, blockers: [],
+      }],
+    }, { fractions: [0.5, 1] });
+    expect(trials).toHaveLength(2);
+    expect(trials.map((trial) => trial.edits[0]!.translateMm)).toEqual([
+      [2, -1, 3], [4, -2, 6],
+    ]);
+    expect(trials.every((trial) => trial.actionId === plan.actions[0]!.id)).toBe(true);
+  });
+
+  it('creates no semantic translation trial for evidence-blocked hints', () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const plan = planFor(source.components[0]!.id);
+    expect(createSemanticTranslationRecoveryTrials(source, plan, {
+      schema: 'morphloom.silhouette-semantic-repair/0.1',
+      actionableGroupIds: [], blockedGroupIds: ['unknown'], limitation: 'fixture',
+      hints: [{
+        groupId: 'unknown', recommendation: 'inspect', candidateOperation: 'inspect', confidence: 0,
+        automatic3dTrialEligible: false, evidenceViewIds: [], screenMatches: [], blockers: ['blocked'],
+      }],
+    })).toEqual([]);
   });
 
   it('moves only the evidence-facing extreme control point for an open tube', () => {
