@@ -8,6 +8,7 @@ import type { AssemblyComponentIR, AssemblyIR } from '../src/engine/assembly-ir'
 import type { GroundTruthCorpusManifest } from '../src/engine/ground-truth-corpus';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { fitDiscreteMultiviewCameras } from '../src/engine/discrete-multiview-camera-fit';
+import { fitBoundedPerViewArticulationStates } from '../src/engine/articulation-state-fit';
 import { createGeometryRecoveryPlan, observeAlignedComponentBounds } from '../src/engine/geometry-recovery-plan';
 import {
   createBoundedAxisScaleRecoveryTrials,
@@ -418,6 +419,29 @@ function applyObservedHeadTilt(candidate: AssemblyIR, degrees: number): void {
   }
 }
 
+function rotateHeadPointAroundYawPivot(point: [number, number, number], radians: number): [number, number, number] {
+  return [
+    point[0] * Math.cos(radians) + point[2] * Math.sin(radians),
+    point[1],
+    -point[0] * Math.sin(radians) + point[2] * Math.cos(radians),
+  ];
+}
+
+/** Applies a bounded per-view yaw state without changing the delivered neutral assembly. */
+function applyObservedHeadYaw(candidate: AssemblyIR, degrees: number): void {
+  const radians = degrees * Math.PI / 180;
+  const belongsToHead = (id: string) => /^(cage-|front-hub|blade-|blade-spider|motor-|switch-|speed-knob)/.test(id);
+  for (const entry of candidate.components.filter((candidateEntry) => belongsToHead(candidateEntry.id))) {
+    if (entry.position) entry.position = rotateHeadPointAroundYawPivot(entry.position, radians);
+    if (entry.geometry.op === 'tube') {
+      entry.geometry.points = entry.geometry.points.map((point) => rotateHeadPointAroundYawPivot(point, radians));
+    } else {
+      const rotation = entry.rotation ?? [0, 0, 0];
+      entry.rotation = [rotation[0], rotation[1] + radians, rotation[2]];
+    }
+  }
+}
+
 const normalizeAzimuth = (degrees: number) => ((degrees % 360) + 360) % 360;
 const referenceDensities = references.map((reference) => reference.rawFrame.mask!
   .reduce((sum, value) => sum + value, 0) / reference.rawFrame.mask!.length);
@@ -563,47 +587,71 @@ const cameraFit = fitDiscreteMultiviewCameras(perViewScores.map((scores, index) 
 if (cameraFit.views.length !== references.length) {
   throw new Error(`Evidence-constrained camera fit failed: ${cameraFit.blockers.join('; ')}`);
 }
-const fittedViews = cameraFit.views.map((selection, index) => {
+const selectedCameras = cameraFit.views.map((selection, index) => {
   const searchSelection = perViewScores[index]!
     .find((score) => score.renderAzimuthDegrees === selection.candidate.azimuthDegrees
       && cameraModelId(score.camera) === selection.candidate.cameraModelId)!;
-  return scoreView(candidateSurfaceTriangles, index, searchSelection.renderAzimuthDegrees,
-    searchSelection.camera, references);
+  return searchSelection.camera;
 });
+const yawCandidates = Array.from({ length: 13 }, (_, index) => -90 + index * 15);
+const articulatedViewCandidates = cameraFit.views.map((selection, index) => yawCandidates.map((headYawDegrees) => {
+  const posedIr = structuredClone(selectedIr);
+  if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+  const posedBuild = compileAssemblyIR(posedIr, 'beauty');
+  const triangles = collectThreeTriangles(posedBuild.root);
+  const score = scoreView(triangles, index, selection.candidate.azimuthDegrees,
+    selectedCameras[index]!, references);
+  return {
+    stateId: headYawDegrees < 0 ? `yaw-neg-${Math.abs(headYawDegrees)}` : `yaw-${headYawDegrees}`,
+    jointDegrees: headYawDegrees, score, posedBuild, triangles,
+  };
+}));
+const articulationStateFit = fitBoundedPerViewArticulationStates(
+  articulatedViewCandidates.map((candidates, index) => ({
+    id: viewIds[index]!, neutralStateId: 'yaw-0', evidenceStatus: 'inferred' as const,
+    candidates: candidates.map((candidate) => ({
+      stateId: candidate.stateId, jointDegrees: candidate.jointDegrees,
+      gateMargin: candidate.score.gateMargin, wholeIoU: candidate.score.wholeIoU,
+      primaryMassIoU: candidate.score.primaryMassIoU,
+      thinFeatureScore: candidate.score.thinFeature.score,
+    })),
+  })),
+  { minimumGateImprovement: 0.01, maximumAbsoluteJointDegrees: 90, requirePositiveMargin: false },
+);
+const selectedArticulatedViews = articulationStateFit.views.map((selection, index) => (
+  articulatedViewCandidates[index]!.find((candidate) => candidate.stateId === selection.selected.stateId)!
+));
+const fittedViews = selectedArticulatedViews.map((selection) => selection.score);
 const fittedAudit = auditMultiviewSilhouetteFidelity(fittedViews.map((view) => ({
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
 })), { wholeIoU: 0.75, primaryMassIoU: 0.7, thinFeatureScore: 0.8 });
-const semanticAblationTriangles = new Map(visualPlan.features.map((feature) => {
-  const removedIds = new Set(feature.componentIds);
-  const ablatedRoot = build.root.clone(true);
-  const removedObjects: THREE.Object3D[] = [];
-  ablatedRoot.traverse((object) => {
-    if (removedIds.has(object.name)) removedObjects.push(object);
-  });
-  for (const object of removedObjects) object.removeFromParent();
-  return [feature.id, collectThreeTriangles(ablatedRoot)] as const;
-}));
 const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
   cameraFit.views.map((selection, index) => {
     const reference = references[index]!;
-    const camera = perViewScores[index]!.find((score) => (
-      score.renderAzimuthDegrees === selection.candidate.azimuthDegrees
-      && cameraModelId(score.camera) === selection.candidate.cameraModelId
-    ))!.camera;
-    const candidateMask = cachedSilhouette(candidateSurfaceTriangles, selection.candidate.azimuthDegrees,
+    const camera = selectedCameras[index]!;
+    const candidateMask = cachedSilhouette(selectedArticulatedViews[index]!.triangles, selection.candidate.azimuthDegrees,
       reference.frame.width, reference.frame.height, camera).mask!;
     return {
       id: viewIds[index]!, width: reference.frame.width, height: reference.frame.height,
       referenceMask: reference.frame.mask!, candidateMask,
       weight: 1 + Math.max(0, 0.7 - fittedViews[index]!.wholeIoU) * 4,
-      groups: visualPlan.features.map((feature) => ({
-        groupId: feature.id,
-        candidateWithoutGroupMask: silhouetteFrameFromTriangles(
-          semanticAblationTriangles.get(feature.id)!, selection.candidate.azimuthDegrees,
-          reference.frame.width, reference.frame.height, camera,
-        ).mask!,
-      })),
+      groups: visualPlan.features.map((feature) => {
+        const removedIds = new Set(feature.componentIds);
+        const ablatedRoot = selectedArticulatedViews[index]!.posedBuild.root.clone(true);
+        const removedObjects: THREE.Object3D[] = [];
+        ablatedRoot.traverse((object) => {
+          if (removedIds.has(object.name)) removedObjects.push(object);
+        });
+        for (const object of removedObjects) object.removeFromParent();
+        return {
+          groupId: feature.id,
+          candidateWithoutGroupMask: silhouetteFrameFromTriangles(
+            collectThreeTriangles(ablatedRoot), selection.candidate.azimuthDegrees,
+            reference.frame.width, reference.frame.height, camera,
+          ).mask!,
+        };
+      }),
     };
   }),
   { minimumActionableDeltaIoU: 0.001 },
@@ -644,12 +692,14 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
   const triangles = collectThreeTriangles(candidateBuild.root);
   const sample = sampleTriangleSurface(triangles, 4_096);
   const audit = compareSurfaceGeometry(referenceSample.points, sample.points);
-  const views = cameraFit.views.map((selection, index) => scoreView(
-    triangles, index, selection.candidate.azimuthDegrees,
-    perViewScores[index]!.find((score) => score.renderAzimuthDegrees === selection.candidate.azimuthDegrees
-      && cameraModelId(score.camera) === selection.candidate.cameraModelId)!.camera,
-    references,
-  ));
+  const views = cameraFit.views.map((selection, index) => {
+    const posedIr = structuredClone(candidateIr);
+    const headYawDegrees = selectedArticulatedViews[index]!.jointDegrees;
+    if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+    const posedTriangles = collectThreeTriangles(compileAssemblyIR(posedIr, 'beauty').root);
+    return scoreView(posedTriangles, index, selection.candidate.azimuthDegrees,
+      selectedCameras[index]!, references);
+  });
   const silhouette = auditMultiviewSilhouetteFidelity(views.map((view) => ({
     id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
     primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
@@ -749,11 +799,19 @@ const deliveryComponentObservations = deliveryBuild.root.children.flatMap((objec
 const deliveryRecoveryPlan = createGeometryRecoveryPlan(
   deliveryGeometryAudit, visualPlan, deliveryComponentObservations, { maximumActions: 6 },
 );
-const deliveryViews = cameraFit.views.map((selection, index) => {
-  const camera = perViewScores[index]!.find((score) => score.renderAzimuthDegrees === selection.candidate.azimuthDegrees
-    && cameraModelId(score.camera) === selection.candidate.cameraModelId)!.camera;
-  return scoreView(deliverySurfaceTriangles, index, selection.candidate.azimuthDegrees, camera, references);
+const deliveryArticulatedViews = cameraFit.views.map((selection, index) => {
+  const posedIr = structuredClone(deliveryIr);
+  const headYawDegrees = selectedArticulatedViews[index]!.jointDegrees;
+  if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+  const posedBuild = compileAssemblyIR(posedIr, 'beauty');
+  const triangles = collectThreeTriangles(posedBuild.root);
+  return {
+    posedBuild, triangles,
+    score: scoreView(triangles, index, selection.candidate.azimuthDegrees,
+      selectedCameras[index]!, references),
+  };
 });
+const deliveryViews = deliveryArticulatedViews.map((view) => view.score);
 const deliverySilhouetteAudit = auditMultiviewSilhouetteFidelity(deliveryViews.map((view) => ({
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
@@ -822,7 +880,7 @@ for (let index = 0; index < references.length; index += 1) {
   }
   rawContext.putImageData(rawImage, 0, 0);
   writeFileSync(resolve(artifactRoot, `reference-raw-${viewIds[index]}.png`), rawCanvas.encodeSync('png'));
-  const render = silhouetteFrameFromTriangles(deliverySurfaceTriangles, deliveryCalibration.views[index]!.renderAzimuthDegrees,
+  const render = silhouetteFrameFromTriangles(deliveryArticulatedViews[index]!.triangles, deliveryCalibration.views[index]!.renderAzimuthDegrees,
     reference.frame.width, reference.frame.height, deliveryCalibration.views[index]!.camera);
   writeFileSync(resolve(artifactRoot, `silhouette-${viewIds[index]}.png`), render.png);
   const massMask = solidifySilhouetteMask(render.mask!, render.width, render.height).mask;
@@ -879,6 +937,10 @@ const report = {
     limitation: 'Foreground-normalized silhouettes and candidate-scored absolute yaw are development diagnostics only. The source contract proves 90-degree relative turntable steps, but not object-frame absolute pose or camera intrinsics.',
     observedArticulation: {
       headTiltDegrees: observedHeadTiltDegrees,
+      perViewHeadYawDegrees: Object.fromEntries(articulationStateFit.views.map((view) => [
+        view.id, view.selected.jointDegrees,
+      ])),
+      stateFit: articulationStateFit,
       evidence: ['view-090.jpg', 'view-270.jpg'],
       candidates: articulationCandidates.map((candidate) => ({
         headTiltDegrees: candidate.headTiltDegrees,
@@ -910,6 +972,8 @@ const report = {
   productionBlockers: [
     ...(cameraFit.poseEvidenceAudit?.claimBlockers ?? ['camera intrinsics and poses are not independently calibrated']),
     'hidden dimensions and internal motor interfaces remain inferred',
+    ...(articulationStateFit.deliveryClaimAllowed ? []
+      : ['per-view fan-head articulation angles are inferred from silhouettes, not independently measured']),
     ...pbrAudit.blockers.map((blocker) => `PBR: ${blocker}`),
   ],
   dominanceBlockers: ['no same-input img2threejs candidate is available for an independent blind holdout comparison'],
