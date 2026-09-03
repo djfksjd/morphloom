@@ -158,6 +158,68 @@ describe('bounded geometry recovery execution', () => {
     expect(result.ir).toBe(source);
   });
 
+  it('isolates a candidate evaluation crash and still selects a later verified improvement', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const plan = planFor(componentId);
+    const trials = createBoundedScaleRecoveryTrials(plan, { expansionFactors: [1.02, 1.06] });
+    const result = await executeBoundedGeometryRecoverySearch(source, plan, trials, async (ir) => {
+      const scale = scaleOf(ir, componentId);
+      if (scale > 1.01 && scale < 1.04) throw new Error('renderer allocation failed\nretryable detail');
+      return { gateScores: { shape: 0.5 + (scale - 1), topology: 1 }, blockingGateIds: ['shape'] };
+    }, { targetGateIds: ['shape'] });
+    expect(result.report.status).toBe('improved');
+    expect(result.report.selectedTrialId).toBe(`${plan.actions[0]!.id}:scale-2`);
+    expect(result.report.trials[0]!.failure).toEqual({
+      stage: 'evaluate', code: 'candidate-evaluation-failed',
+      message: 'renderer allocation failed retryable detail',
+    });
+    expect(result.report.trials[1]!.accepted).toBe(true);
+    expect(source).toEqual(GALAXY_Z_FOLD8_EXTERIOR_IR);
+  });
+
+  it('isolates an inapplicable candidate edit before evaluating the next trial', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const plan = planFor(componentId);
+    const valid = createBoundedScaleRecoveryTrials(plan, { expansionFactors: [1.06] })[0]!;
+    let evaluations = 0;
+    const result = await executeBoundedGeometryRecoverySearch(source, plan, [{
+      id: 'invalid-local-profile', actionId: plan.actions[0]!.id,
+      edits: [{ componentId, geometry: {
+        operation: 'tube-point-deltas', deltas: [{ pointIndex: 0, deltaMm: [1, 0, 0] }],
+      } }],
+    }, valid], async (ir) => {
+      evaluations += 1;
+      return {
+        gateScores: { shape: 0.5 + (scaleOf(ir, componentId) - 1), topology: 1 },
+        blockingGateIds: ['shape'],
+      };
+    }, { targetGateIds: ['shape'] });
+    expect(result.report.status).toBe('improved');
+    expect(result.report.trials[0]!.failure?.code).toBe('candidate-apply-failed');
+    expect(result.report.trials[0]!.batchReceipt).toBeUndefined();
+    expect(result.report.trials[1]!.accepted).toBe(true);
+    expect(evaluations).toBe(2); // immutable baseline plus only the applicable trial
+  });
+
+  it('records an unsafe candidate evaluation without aborting the bounded search', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const plan = planFor(componentId);
+    const trials = createBoundedScaleRecoveryTrials(plan, { expansionFactors: [1.02, 1.06] });
+    const result = await executeBoundedGeometryRecoverySearch(source, plan, trials, async (ir) => {
+      const scale = scaleOf(ir, componentId);
+      if (scale > 1.01 && scale < 1.04) {
+        return { gateScores: { shape: Number.NaN, topology: 1 }, blockingGateIds: ['shape'] };
+      }
+      return { gateScores: { shape: 0.5 + (scale - 1), topology: 1 }, blockingGateIds: ['shape'] };
+    }, { targetGateIds: ['shape'] });
+    expect(result.report.status).toBe('improved');
+    expect(result.report.trials[0]!.failure?.code).toBe('candidate-evaluation-unsafe');
+    expect(result.report.trials[1]!.accepted).toBe(true);
+  });
+
   it('rejects a tradeoff that improves one target while regressing another target', async () => {
     const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
     const componentId = source.components[0]!.id;

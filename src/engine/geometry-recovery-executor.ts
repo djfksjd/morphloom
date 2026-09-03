@@ -30,6 +30,11 @@ export interface GeometryRecoveryTrialReceipt {
   outputFingerprint?: string;
   batchReceipt?: AssemblyBatchEditReceipt;
   evaluation?: GeometryRecoveryEvaluation;
+  failure?: {
+    stage: 'apply' | 'evaluate';
+    code: 'candidate-apply-failed' | 'candidate-evaluation-failed' | 'candidate-evaluation-unsafe';
+    message: string;
+  };
   accepted: boolean;
   blockers: string[];
 }
@@ -103,6 +108,12 @@ function safeEvaluation(value: GeometryRecoveryEvaluation): boolean {
     && blockerIds.every((id) => SAFE_ID.test(id))
     && new Set(blockerIds).size === blockerIds.length
     && blockerIds.every((id) => Object.hasOwn(value.gateScores, id));
+}
+
+function boundedFailureMessage(error: unknown): string {
+  const message = error instanceof Error ? error.message : 'unknown candidate failure';
+  return message.replace(/[\r\n\t]+/g, ' ').replace(/\s{2,}/g, ' ').trim().slice(0, 240)
+    || 'unknown candidate failure';
 }
 
 function sameGateSet(left: GeometryRecoveryEvaluation, right: GeometryRecoveryEvaluation): boolean {
@@ -926,12 +937,46 @@ export async function executeBoundedGeometryRecoverySearch(
       || trial.edits.some((edit) => !allowedTargets.has(edit.componentId))) {
       throw new Error(`Geometry recovery trial widens its declared target set: ${trial.id}`);
     }
-    const applied = await applyAssemblyComponentBatchPatch(source, {
-      schema: 'morphloom.component-batch-patch/0.1', operationId: trial.id,
-      expectedInputFingerprint: inputFingerprint, edits: trial.edits,
-    });
-    const evaluation = await evaluate(applied.ir);
-    if (!safeEvaluation(evaluation)) throw new Error(`Geometry recovery trial returned an unsafe evaluation: ${trial.id}`);
+    let applied: Awaited<ReturnType<typeof applyAssemblyComponentBatchPatch>>;
+    try {
+      applied = await applyAssemblyComponentBatchPatch(source, {
+        schema: 'morphloom.component-batch-patch/0.1', operationId: trial.id,
+        expectedInputFingerprint: inputFingerprint, edits: trial.edits,
+      });
+    } catch (error) {
+      const message = boundedFailureMessage(error);
+      receipts.push({
+        id: trial.id, actionId: trial.actionId, inputFingerprint, accepted: false,
+        failure: { stage: 'apply', code: 'candidate-apply-failed', message },
+        blockers: [`candidate apply failed: ${message}`],
+      });
+      continue;
+    }
+    let evaluation: GeometryRecoveryEvaluation;
+    try {
+      evaluation = await evaluate(applied.ir);
+    } catch (error) {
+      const message = boundedFailureMessage(error);
+      receipts.push({
+        id: trial.id, actionId: trial.actionId, inputFingerprint,
+        outputFingerprint: applied.receipt.outputFingerprint, batchReceipt: applied.receipt,
+        accepted: false,
+        failure: { stage: 'evaluate', code: 'candidate-evaluation-failed', message },
+        blockers: [`candidate evaluation failed: ${message}`],
+      });
+      continue;
+    }
+    if (!safeEvaluation(evaluation)) {
+      const message = 'candidate returned scores or blockers outside the declared safe evaluation contract';
+      receipts.push({
+        id: trial.id, actionId: trial.actionId, inputFingerprint,
+        outputFingerprint: applied.receipt.outputFingerprint, batchReceipt: applied.receipt,
+        accepted: false,
+        failure: { stage: 'evaluate', code: 'candidate-evaluation-unsafe', message },
+        blockers: [message],
+      });
+      continue;
+    }
     const scored = scoreTrial(
       baseline, evaluation, targetGateIds, minimumImprovement, maximumProtectedRegression,
       maximumTargetRegression,
