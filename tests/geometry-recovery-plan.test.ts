@@ -182,6 +182,7 @@ describe('localized geometry recovery planning', () => {
     const plan = createGeometryRecoveryPlan(audit, planFixture, candidates, { maximumActions: 8 });
     const middle = plan.actions.find((action) => action.causeBandId === 'candidate:z-middle');
     expect(middle?.targetingMode).toBe('semantic-feature-overlap');
+    expect(middle?.semanticFeatureId).toBe('stack');
     expect(middle?.targetComponentIds).toEqual(['stack-a', 'stack-b']);
     expect(plan.actions.some((action) => action.causeBandId === 'candidate:z-low')).toBe(true);
   });

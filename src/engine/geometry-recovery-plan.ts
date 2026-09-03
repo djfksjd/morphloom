@@ -31,6 +31,7 @@ export interface GeometryRecoveryAction {
   candidateComponentCount: number;
   spatialConstraintIds: string[];
   targetingMode: 'spatial-cell-overlap' | 'semantic-feature-overlap' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
+  semanticFeatureId?: string;
   evidenceViewIds: string[];
   requiredComponentIds: string[];
   prohibitedOperations: Array<'delete-required-component' | 'lower-locked-feature-count' | 'change-source-evidence'>;
@@ -355,6 +356,7 @@ export function createGeometryRecoveryPlan(
           : supportingBands.length > 0 && maximumSupportingConstraints > 0
           ? 'cross-axis-intersection'
           : 'single-axis-overlap',
+      ...(semanticFeature ? { semanticFeatureId: semanticFeature.feature.id } : {}),
       evidenceViewIds,
       requiredComponentIds,
       prohibitedOperations: ['delete-required-component', 'lower-locked-feature-count', 'change-source-evidence'],

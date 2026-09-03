@@ -20,6 +20,7 @@ import { auditPartDecomposition, type PartDecompositionContract } from '../src/e
 import { auditVisualPlan, type VisualPlanningContract } from '../src/engine/visual-plan-audit';
 import { compareReferenceFrames, compareThinFeatureSilhouettes, type ComparisonFrame } from '../src/engine/reference-comparison';
 import { auditMultiviewSilhouetteFidelity } from '../src/engine/silhouette-fidelity';
+import { auditSemanticSilhouetteAttribution } from '../src/engine/silhouette-component-attribution';
 import { auditRigidMultiviewSet } from '../src/engine/multiview-consistency';
 import { auditPbrReferenceEvidence } from '../src/engine/pbr-reference-audit';
 import {
@@ -573,6 +574,40 @@ const fittedAudit = auditMultiviewSilhouetteFidelity(fittedViews.map((view) => (
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
 })), { wholeIoU: 0.75, primaryMassIoU: 0.7, thinFeatureScore: 0.8 });
+const semanticAblationTriangles = new Map(visualPlan.features.map((feature) => {
+  const removedIds = new Set(feature.componentIds);
+  const ablatedRoot = build.root.clone(true);
+  const removedObjects: THREE.Object3D[] = [];
+  ablatedRoot.traverse((object) => {
+    if (removedIds.has(object.name)) removedObjects.push(object);
+  });
+  for (const object of removedObjects) object.removeFromParent();
+  return [feature.id, collectThreeTriangles(ablatedRoot)] as const;
+}));
+const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
+  cameraFit.views.map((selection, index) => {
+    const reference = references[index]!;
+    const camera = perViewScores[index]!.find((score) => (
+      score.renderAzimuthDegrees === selection.candidate.azimuthDegrees
+      && cameraModelId(score.camera) === selection.candidate.cameraModelId
+    ))!.camera;
+    const candidateMask = cachedSilhouette(candidateSurfaceTriangles, selection.candidate.azimuthDegrees,
+      reference.frame.width, reference.frame.height, camera).mask!;
+    return {
+      id: viewIds[index]!, width: reference.frame.width, height: reference.frame.height,
+      referenceMask: reference.frame.mask!, candidateMask,
+      weight: 1 + Math.max(0, 0.7 - fittedViews[index]!.wholeIoU) * 4,
+      groups: visualPlan.features.map((feature) => ({
+        groupId: feature.id,
+        candidateWithoutGroupMask: silhouetteFrameFromTriangles(
+          semanticAblationTriangles.get(feature.id)!, selection.candidate.azimuthDegrees,
+          reference.frame.width, reference.frame.height, camera,
+        ).mask!,
+      })),
+    };
+  }),
+  { minimumActionableDeltaIoU: 0.001 },
+);
 const calibration = { views: fittedViews, audit: fittedAudit, gateMargin: cameraFit.minimumGateMargin };
 const visualPlanAudit = auditVisualPlan(visualPlan);
 const artifactPath = resolve(artifactRoot, 'abo-industrial-floor-fan-semantic.glb');
@@ -643,6 +678,17 @@ const recoverySearchPlan = {
   actions: geometryRecoveryPlan.actions
     .filter((action) => action.operation !== 'request-region-evidence'
       && action.targetingMode === 'semantic-feature-overlap')
+    .sort((left, right) => {
+      const attribution = (action: typeof left): number => {
+        const group = semanticSilhouetteAttribution.groups.find((candidate) => (
+          candidate.groupId === action.semanticFeatureId
+        ));
+        if (!group) return Number.NEGATIVE_INFINITY;
+        return action.operation === 'relocate-or-reshape-extraneous-units'
+          ? group.weightedMeanDeltaIoU : -group.weightedMeanDeltaIoU;
+      };
+      return attribution(right) - attribution(left) || left.priority - right.priority;
+    })
     .slice(0, 6),
 };
 recoverySearchPlan.actionable = recoverySearchPlan.actions.length > 0;
@@ -650,8 +696,9 @@ const recoveryTrials = [
   ...createBoundedAxisScaleRecoveryTrials(recoverySearchPlan, {
     alignedYawDegrees: geometryAudit.selectedYawDegrees,
     sourceIr: selectedIr,
-    expansionFactors: [1.05, 1.1, 1.15],
-    reductionFactors: [0.95, 0.9, 0.85],
+    expansionFactors: [1.025, 1.05, 1.075, 1.1, 1.125],
+    reductionFactors: [0.975, 0.95, 0.925, 0.9, 0.875],
+    includeCounterfactualDirection: true,
     grouping: 'batch',
   }),
 ];
@@ -661,7 +708,8 @@ const recoveryResult = recoveryTrials.length > 0
     {
       targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
       minimumImprovement: 0.002,
-      maximumProtectedRegression: 0.005,
+      maximumProtectedRegression: 0.002,
+      maximumTargetRegression: 0.0005,
     },
   )
   : {
@@ -827,6 +875,7 @@ const report = {
     },
     views: deliveryCalibration.views,
     audit: deliveryCalibration.audit,
+    semanticAttribution: semanticSilhouetteAttribution,
     limitation: 'Foreground-normalized silhouettes and candidate-scored absolute yaw are development diagnostics only. The source contract proves 90-degree relative turntable steps, but not object-frame absolute pose or camera intrinsics.',
     observedArticulation: {
       headTiltDegrees: observedHeadTiltDegrees,

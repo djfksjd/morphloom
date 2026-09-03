@@ -60,6 +60,23 @@ describe('bounded geometry recovery execution', () => {
     expect(trials[0]!.edits[0]!.scaleMultiplier?.[2]).toBeCloseTo(1);
   });
 
+  it('can probe the bounded opposite scale direction when spatial inference is wrong', () => {
+    const componentId = GALAXY_Z_FOLD8_EXTERIOR_IR.components[0]!.id;
+    const plan = planFor(componentId);
+    plan.actions[0]!.spatialConstraintIds = ['reference:z-middle'];
+    const trials = createBoundedAxisScaleRecoveryTrials(plan, {
+      alignedYawDegrees: 0, expansionFactors: [1.1], reductionFactors: [0.9],
+      includeCounterfactualDirection: true,
+    });
+    expect(trials.map((trial) => trial.id)).toEqual([
+      `${plan.actions[0]!.id}:axis-scale-1`,
+      `${plan.actions[0]!.id}:counter-axis-scale-1`,
+    ]);
+    expect(trials.map((trial) => trial.edits[0]!.scaleMultiplier)).toEqual([
+      [1, 1, 1.1], [1, 1, 0.9],
+    ]);
+  });
+
   it('maps the world recovery axis into a rotated component local scale basis', () => {
     const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
     const componentId = source.components[0]!.id;
@@ -120,6 +137,26 @@ describe('bounded geometry recovery execution', () => {
     });
     expect(result.report.status).toBe('unchanged');
     expect(result.report.trials[0]?.blockers.join(' ')).toContain('topology regressed');
+    expect(result.ir).toBe(source);
+  });
+
+  it('rejects a tradeoff that improves one target while regressing another target', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const plan = planFor(componentId);
+    const trials = createBoundedScaleRecoveryTrials(plan, { expansionFactors: [1.05] });
+    const evaluate = async (ir: AssemblyIR): Promise<GeometryRecoveryEvaluation> => {
+      const edited = scaleOf(ir, componentId) > 1;
+      return {
+        gateScores: { rms: edited ? 0.61 : 0.6, coverage: edited ? 0.599 : 0.6 },
+        blockingGateIds: [],
+      };
+    };
+    const result = await executeBoundedGeometryRecoverySearch(source, plan, trials, evaluate, {
+      targetGateIds: ['rms', 'coverage'], maximumProtectedRegression: 0.005,
+    });
+    expect(result.report.status).toBe('unchanged');
+    expect(result.report.trials[0]?.blockers.join(' ')).toContain('coverage target regressed');
     expect(result.ir).toBe(source);
   });
 

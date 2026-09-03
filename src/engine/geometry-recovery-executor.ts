@@ -87,6 +87,7 @@ function scoreTrial(
   targetGateIds: string[],
   minimumImprovement: number,
   maximumProtectedRegression: number,
+  maximumTargetRegression: number,
 ): { accepted: boolean; objective: number; mean: number; blockers: string[] } {
   const blockers: string[] = [];
   if (!sameGateSet(baseline, candidate)) blockers.push('candidate changed the declared verification gate set');
@@ -100,6 +101,11 @@ function scoreTrial(
     }
   }
   const improvements = targetGateIds.map((id) => candidate.gateScores[id]! - baseline.gateScores[id]!);
+  for (const [index, improvement] of improvements.entries()) {
+    if (improvement < -maximumTargetRegression) {
+      blockers.push(`${targetGateIds[index]} target regressed by ${(-improvement).toFixed(4)}`);
+    }
+  }
   const objective = Math.min(...targetGateIds.map((id) => candidate.gateScores[id]!));
   const mean = Object.values(candidate.gateScores).reduce((sum, score) => sum + score, 0)
     / Object.keys(candidate.gateScores).length;
@@ -198,6 +204,7 @@ export function createBoundedAxisScaleRecoveryTrials(
     sourceIr?: AssemblyIR;
     expansionFactors?: number[];
     reductionFactors?: number[];
+    includeCounterfactualDirection?: boolean;
     grouping?: RecoveryTrialGrouping;
   },
 ): GeometryRecoveryTrial[] {
@@ -211,6 +218,8 @@ export function createBoundedAxisScaleRecoveryTrials(
   if (plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
     || (options.sourceIr !== undefined && options.sourceIr.schema !== 'morphloom.assembly/0.1')
     || !Number.isFinite(options.alignedYawDegrees) || Math.abs(options.alignedYawDegrees) > 1_000_000
+    || (options.includeCounterfactualDirection !== undefined
+      && typeof options.includeCounterfactualDirection !== 'boolean')
     || !validateFactors(expansionFactors, 1.001, 1.5)
     || !validateFactors(reductionFactors, 0.5, 0.999)) {
     throw new Error('Geometry recovery axis-scale trial configuration is unsafe.');
@@ -227,9 +236,16 @@ export function createBoundedAxisScaleRecoveryTrials(
     const worldAxes = directions.map((direction) => alignedAxisVector(
       direction.axis, options.alignedYawDegrees,
     ));
-    const factors = action.operation === 'expand-or-reshape-existing-units'
+    const expectedFactors = action.operation === 'expand-or-reshape-existing-units'
       ? expansionFactors : reductionFactors;
-    return factors.flatMap((factor, factorIndex) => {
+    const counterfactualFactors = action.operation === 'expand-or-reshape-existing-units'
+      ? reductionFactors : expansionFactors;
+    const factorSets = [
+      { factors: expectedFactors, label: 'axis-scale' },
+      ...(options.includeCounterfactualDirection
+        ? [{ factors: counterfactualFactors, label: 'counter-axis-scale' }] : []),
+    ];
+    return factorSets.flatMap(({ factors, label }) => factors.flatMap((factor, factorIndex) => {
       return groupRecoveryEdits(action.targetComponentIds.map((componentId) => {
         const component = options.sourceIr?.components.find((candidate) => candidate.id === componentId);
         if (options.sourceIr && !component) {
@@ -245,12 +261,12 @@ export function createBoundedAxisScaleRecoveryTrials(
         };
       }), grouping).map((edits, groupIndex) => ({
         id: grouping === 'batch'
-          ? `${action.id}:axis-scale-${factorIndex + 1}`
-          : `${action.id}:c${groupIndex + 1}:axis-scale-${factorIndex + 1}`,
+          ? `${action.id}:${label}-${factorIndex + 1}`
+          : `${action.id}:c${groupIndex + 1}:${label}-${factorIndex + 1}`,
         actionId: action.id,
         edits,
       }));
-    });
+    }));
   });
 }
 
@@ -402,6 +418,8 @@ export function createBoundedShapeRecoveryTrials(
  * Evaluates independent recovery candidates from the same immutable source.
  * It never chains rejected edits, never widens the declared target set, and
  * returns the original IR when no candidate improves without regression.
+ * Target gates use a stricter Pareto-style regression budget than other
+ * protected gates so a gain in one target cannot conceal damage to another.
  */
 export async function executeBoundedGeometryRecoverySearch(
   source: AssemblyIR,
@@ -412,10 +430,12 @@ export async function executeBoundedGeometryRecoverySearch(
     targetGateIds: string[];
     minimumImprovement?: number;
     maximumProtectedRegression?: number;
+    maximumTargetRegression?: number;
   },
 ): Promise<{ ir: AssemblyIR; report: GeometryRecoveryExecutionReport }> {
   const minimumImprovement = options.minimumImprovement ?? 0.002;
   const maximumProtectedRegression = options.maximumProtectedRegression ?? 0;
+  const maximumTargetRegression = options.maximumTargetRegression ?? 0;
   const targetGateIds = options.targetGateIds;
   const inputFingerprint = await fingerprintAssemblyIR(source);
   const baseline = await evaluate(source);
@@ -434,7 +454,9 @@ export async function executeBoundedGeometryRecoverySearch(
     || targetGateIds.some((id) => !SAFE_ID.test(id) || !Object.hasOwn(baseline.gateScores, id))
     || !Number.isFinite(minimumImprovement) || minimumImprovement <= 0 || minimumImprovement > 0.25
     || !Number.isFinite(maximumProtectedRegression) || maximumProtectedRegression < 0
-    || maximumProtectedRegression > 0.1) {
+    || maximumProtectedRegression > 0.1
+    || !Number.isFinite(maximumTargetRegression) || maximumTargetRegression < 0
+    || maximumTargetRegression > maximumProtectedRegression) {
     throw new Error('Geometry recovery execution configuration is unsafe.');
   }
   const actionById = new Map(plan.actions.map((action) => [action.id, action]));
@@ -462,6 +484,7 @@ export async function executeBoundedGeometryRecoverySearch(
     if (!safeEvaluation(evaluation)) throw new Error(`Geometry recovery trial returned an unsafe evaluation: ${trial.id}`);
     const scored = scoreTrial(
       baseline, evaluation, targetGateIds, minimumImprovement, maximumProtectedRegression,
+      maximumTargetRegression,
     );
     receipts.push({
       id: trial.id, actionId: trial.actionId, inputFingerprint,
