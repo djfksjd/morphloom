@@ -4,18 +4,21 @@
     {
       "corpusId": "abo-pilot",
       "corpusCaseId": "abo-industrial-tripod-lamp",
+      "sourceItemId": "B075X2YJHZ",
       "exposure": "development-and-debugging",
       "reason": "Used while implementing and tuning the semantic ABO lamp pipeline."
     },
     {
       "corpusId": "abo-pilot",
       "corpusCaseId": "abo-industrial-floor-fan",
+      "sourceItemId": "B07XMV34PX",
       "exposure": "development-and-tuning",
       "reason": "Ground-truth geometry and four views were repeatedly used for recovery-engine development."
     },
     {
       "corpusId": "abo-pilot",
       "corpusCaseId": "abo-surface-fringed-wool-rug",
+      "sourceItemId": "B0732L971R",
       "exposure": "development-and-debugging",
       "reason": "Included in the visible pilot corpus during surface-pipeline development."
     },
