@@ -1,0 +1,65 @@
+{
+  "schema": "morphloom.holdout-input-lock/0.1",
+  "caseId": "abo-b075qmhyvd-industrial-design",
+  "domain": "industrial-design",
+  "selectionProtocol": "precommitted-random-sample",
+  "selectionAlgorithm": "sha256(seedCommit:sourceItemId:spinId)-ascending-v1",
+  "seedCommit": "dfd349cff743d19fdd2957f87be380bf956853a4",
+  "inputLockedAt": "2026-09-03T20:02:53.320Z",
+  "lockedInputSha256": "18f7ba68daea9221d9a0077696c0611b5d32fe17fa4e77ca72db2fec5a227f5b",
+  "developmentExposureLedgerSha256": "b37999b10a88b882a99f5553e1bdaaa385b28f5bc40bc3a095050ae0beacea89",
+  "eligibility": {
+    "candidatePoolSize": 4388,
+    "hasFourOrthogonalSpinViews": true,
+    "groundTruthModelIndexPresence": true,
+    "groundTruthBytesRead": false,
+    "groundTruthUrlRecorded": false,
+    "modelIndexSha256": "90d061c3e3efa555a55bfc8ed7fc55cdb322086397443de1b33e91f7924d7d92",
+    "spinIndexSha256": "0da9f44c7f684aee1a43dc0eb05dbe2d3941e376dc9400d2663242dfd67e5132"
+  },
+  "source": {
+    "sourceItemId": "B075QMHYVD",
+    "spinId": "a644c77b",
+    "title": "Amazon Brand – Rivet Brecken Modern Wood Nightstand Bedside Table, 24 Inch, Brown",
+    "productType": "TABLE"
+  },
+  "views": [
+    {
+      "id": "front",
+      "sequenceIndex": 0,
+      "relativeAzimuthDegrees": 0,
+      "file": "work/abo/holdouts/industrial-design-01/view-000.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/a6/a644c77b/a644c77b_00.jpg",
+      "sha256": "39c0b5c517ca1e80eb93cccf47cae644137d17ef0953b3e819d1ed8a7e7003a5",
+      "bytes": 92954
+    },
+    {
+      "id": "right",
+      "sequenceIndex": 18,
+      "relativeAzimuthDegrees": 90,
+      "file": "work/abo/holdouts/industrial-design-01/view-090.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/a6/a644c77b/a644c77b_18.jpg",
+      "sha256": "d2fde72c75543e53ff05adb7a51189e25ea47a9a94992201cdeceb5f2f275a3d",
+      "bytes": 81073
+    },
+    {
+      "id": "rear",
+      "sequenceIndex": 36,
+      "relativeAzimuthDegrees": 180,
+      "file": "work/abo/holdouts/industrial-design-01/view-180.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/a6/a644c77b/a644c77b_36.jpg",
+      "sha256": "c11ca1859f39ea7d344a4a834f01c019136b968f7c1b62a1ea3e03f7a837c6f6",
+      "bytes": 51895
+    },
+    {
+      "id": "left",
+      "sequenceIndex": 54,
+      "relativeAzimuthDegrees": 270,
+      "file": "work/abo/holdouts/industrial-design-01/view-270.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/a6/a644c77b/a644c77b_54.jpg",
+      "sha256": "5768bfb58f0fb9cc5c2bc4f8b1cdaa2726f39f33619568ee24ee4b8da1d36438",
+      "bytes": 60549
+    }
+  ],
+  "nextRequiredStep": "Seal Morphloom and img2threejs candidate bytes before resolving or downloading the reference GLB."
+}
