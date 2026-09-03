@@ -72,7 +72,8 @@ type SpinView = { azimuth: number; imageId: string; path: string };
 const spinIndexBytes = readFileSync(resolve(aboRoot, 'spins.csv.gz'));
 const spins = new Map<string, Map<number, SpinView>>();
 for (const line of gunzipSync(spinIndexBytes).toString('utf8').split('\n').slice(1)) {
-  const [spinId, azimuthRaw, imageId, _height, _width, path] = line.split(',');
+  const [spinId, azimuthRaw, imageId, _height, _width, pathRaw] = line.split(',');
+  const path = pathRaw?.replace(/\r$/, '');
   const azimuth = Number(azimuthRaw);
   if (!spinId || !SAFE_ID.test(spinId) || !imageId || !path || !REQUIRED_AZIMUTH_SET.has(azimuth)) continue;
   const views = spins.get(spinId) ?? new Map<number, SpinView>();

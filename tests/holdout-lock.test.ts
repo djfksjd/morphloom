@@ -31,6 +31,7 @@ describe('holdout input lock', () => {
   it('allows only canonical JPEG paths under the ABO spin directory', () => {
     const base = 'https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/';
     expect(safeAboSpinUrl(base, '61/61c91265/61c91265_00.jpg')).toBe(`${base}61/61c91265/61c91265_00.jpg`);
+    expect(() => safeAboSpinUrl(base, '61/61c91265/61c91265_00.jpg\r')).toThrow(/trusted dataset path/);
     expect(() => safeAboSpinUrl(base, '../3dmodels/original/x.glb')).toThrow(/trusted dataset path/);
     expect(() => safeAboSpinUrl(base, 'https://evil.example/x.jpg')).toThrow(/trusted dataset path/);
   });
