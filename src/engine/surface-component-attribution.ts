@@ -21,6 +21,10 @@ export interface SurfaceComponentAttribution {
   missingReferenceSamples: number;
   recommendation: 'preserve' | 'relocate-or-reshape' | 'shrink-excess' | 'expand-or-add-detail' | 'inspect';
   suggestedTranslationCandidateUnits?: SurfacePoint3;
+  candidateRobustSpan?: SurfacePoint3;
+  assignedReferenceRobustSpan?: SurfacePoint3;
+  suggestedAlignedScaleAxis?: 0 | 1 | 2;
+  suggestedAlignedScaleFactor?: number;
 }
 
 export interface SurfaceComponentAttributionReport {
@@ -134,6 +138,14 @@ function percentile(values: number[], fraction: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor((sorted.length - 1) * fraction))]!;
 }
 
+function robustSpan(points: SurfacePoint3[]): SurfacePoint3 | undefined {
+  if (points.length < 8) return undefined;
+  return [0, 1, 2].map((axis) => {
+    const values = points.map((point) => point[axis]!);
+    return percentile(values, 0.9) - percentile(values, 0.1);
+  }) as SurfacePoint3;
+}
+
 function mean(values: number[]): number {
   return values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
 }
@@ -228,6 +240,22 @@ export function auditSurfaceComponentAttribution(
         (value - sourceCentroid[axis]!) * candidateUniformScale
       )) as SurfacePoint3, options.selectedYawDegrees)
       : undefined;
+    const candidateRobustSpan = robustSpan(component.points);
+    const assignedReferenceRobustSpan = robustSpan(assigned.map((value) => value.point));
+    const scaleEstimates = candidateRobustSpan && assignedReferenceRobustSpan
+      ? candidateRobustSpan.map((candidateSpan, axis) => {
+        const referenceSpan = assignedReferenceRobustSpan[axis]!;
+        return candidateSpan >= 0.005 && referenceSpan >= 0.005
+          ? referenceSpan / candidateSpan : 1;
+      }) as SurfacePoint3
+      : undefined;
+    const suggestedAlignedScale = scaleEstimates
+      ? scaleEstimates.map((factor, axis) => ({
+        axis: axis as 0 | 1 | 2, factor, magnitude: Math.abs(Math.log(factor)),
+      }))
+        .filter(({ factor }) => Number.isFinite(factor) && factor >= 0.5 && factor <= 2)
+        .sort((left, right) => right.magnitude - left.magnitude || left.axis - right.axis)[0]
+      : undefined;
     const candidateNeedsRepair = candidateCoverage < minimumCandidateCoverage;
     const referenceNeedsRepair = missingResponsibility >= minimumMissingResponsibility
       && assignedReferenceCoverage < minimumCandidateCoverage;
@@ -252,6 +280,12 @@ export function auditSurfaceComponentAttribution(
       missingReferenceSamples: missingReferencePoints.length,
       recommendation,
       suggestedTranslationCandidateUnits,
+      candidateRobustSpan,
+      assignedReferenceRobustSpan,
+      suggestedAlignedScaleAxis: suggestedAlignedScale && suggestedAlignedScale.magnitude >= 0.025
+        ? suggestedAlignedScale.axis : undefined,
+      suggestedAlignedScaleFactor: suggestedAlignedScale && suggestedAlignedScale.magnitude >= 0.025
+        ? suggestedAlignedScale.factor : undefined,
     };
   }).sort((left, right) => right.missingResponsibility - left.missingResponsibility
     || left.candidateCoverage - right.candidateCoverage || left.componentId.localeCompare(right.componentId));
@@ -275,6 +309,6 @@ export function auditSurfaceComponentAttribution(
       .map((component) => component.componentId),
     expandOrAddDetailComponentIds: components.filter((component) => component.recommendation === 'expand-or-add-detail')
       .map((component) => component.componentId),
-    limitation: 'Nearest-surface attribution localizes geometric responsibility after whole-object alignment; it does not prove ground-truth semantic identity, part boundaries, articulation state, or that a centroid translation is the correct repair.',
+    limitation: 'Nearest-surface attribution localizes geometric responsibility after whole-object alignment. Robust 10–90% spans can propose one dominant aligned-axis scale, but do not prove ground-truth semantic identity, part boundaries, articulation state, or that a centroid/extent edit is the correct repair; every proposal still requires independent gates.',
   };
 }

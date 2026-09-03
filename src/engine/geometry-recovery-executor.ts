@@ -304,6 +304,72 @@ export function createSurfaceAttributionTranslationRecoveryTrials(
   });
 }
 
+/**
+ * Converts a component-attributed robust extent mismatch into one-axis scale
+ * trials. Only the strongest aligned axis is edited, the requested factor is
+ * capped before interpolation, and the evidence fingerprint must match the
+ * current recovery plan exactly.
+ */
+export function createSurfaceAttributionAxisScaleRecoveryTrials(
+  ir: AssemblyIR,
+  plan: GeometryRecoveryPlan,
+  attribution: SurfaceComponentAttributionReport,
+  options: {
+    fractions?: number[];
+    maximumFactorDelta?: number;
+  } = {},
+): GeometryRecoveryTrial[] {
+  const fractions = options.fractions ?? [0.25, 0.5, 0.75];
+  const maximumFactorDelta = options.maximumFactorDelta ?? 0.2;
+  if (ir?.schema !== 'morphloom.assembly/0.1'
+    || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || attribution?.schema !== 'morphloom.surface-component-attribution/0.1'
+    || !/^[a-f0-9]{16}$/.test(attribution.evidenceFingerprint)
+    || !Array.isArray(fractions) || fractions.length < 1 || fractions.length > 8
+    || fractions.some((fraction) => !Number.isFinite(fraction) || fraction < 0.05 || fraction > 1)
+    || !Number.isFinite(maximumFactorDelta) || maximumFactorDelta < 0.01 || maximumFactorDelta > 0.5) {
+    throw new Error('Surface attribution axis-scale trial configuration is unsafe.');
+  }
+  const components = new Map(ir.components.map((component) => [component.id, component]));
+  const attributedById = new Map(attribution.components.map((component) => [component.componentId, component]));
+  return plan.actions.filter((action) => action.targetingMode === 'surface-nearest-attribution').flatMap((action) => {
+    const componentId = action.surfaceAttributionComponentId;
+    const component = componentId ? components.get(componentId) : undefined;
+    if (!componentId || !component || action.targetComponentIds.length !== 1
+      || action.targetComponentIds[0] !== componentId
+      || action.surfaceAttributionEvidenceFingerprint !== attribution.evidenceFingerprint) {
+      throw new Error(`Surface attribution scale action has an unsafe target: ${action.id}`);
+    }
+    const attributed = attributedById.get(componentId);
+    const axis = attributed?.suggestedAlignedScaleAxis;
+    const rawFactor = attributed?.suggestedAlignedScaleFactor;
+    const recommendationMatchesAction = attributed?.recommendation === 'relocate-or-reshape'
+      ? action.operation === 'relocate-or-reshape-extraneous-units'
+      : attributed?.recommendation === 'shrink-excess'
+        ? action.operation === 'relocate-or-reshape-extraneous-units'
+        : attributed?.recommendation === 'expand-or-add-detail'
+          ? action.operation === 'expand-or-reshape-existing-units' : false;
+    if (!recommendationMatchesAction || axis === undefined || rawFactor === undefined || !Number.isFinite(rawFactor)
+      || rawFactor < 0.5 || rawFactor > 2) return [];
+    const boundedFactor = 1 + Math.max(-maximumFactorDelta, Math.min(maximumFactorDelta, rawFactor - 1));
+    const worldAxis = alignedAxisVector(axis, attribution.selectedYawDegrees);
+    const weights = localAxisWeights(worldAxis, component.rotation);
+    return fractions.map((fraction, index) => {
+      const interpolated = 1 + (boundedFactor - 1) * fraction;
+      return {
+        id: `${action.id}:surface-axis-scale-${index + 1}`,
+        actionId: action.id,
+        edits: [{
+          componentId,
+          scaleMultiplier: weights.map((weight) => (
+            1 + (interpolated - 1) * weight
+          )) as Vector3,
+        }],
+      };
+    });
+  });
+}
+
 function alignedAxisVector(axis: 0 | 1 | 2, alignedYawDegrees: number): [number, number, number] {
   if (axis === 1) return [0, 1, 0];
   const radians = alignedYawDegrees * Math.PI / 180;

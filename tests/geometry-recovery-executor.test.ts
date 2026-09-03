@@ -7,6 +7,7 @@ import {
   createBoundedShapeRecoveryTrials,
   createBoundedTranslationRecoveryTrials,
   createSemanticTranslationRecoveryTrials,
+  createSurfaceAttributionAxisScaleRecoveryTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
   executeIterativeGeometryRecoverySearch,
@@ -274,6 +275,41 @@ describe('bounded geometry recovery execution', () => {
         recommendation: 'relocate-or-reshape', suggestedTranslationCandidateUnits: [0.01, -0.02, 0.03],
       }],
     }, { candidateUnitsToIrUnits: 1_000 })).toThrow(/unsafe target/);
+  });
+
+  it('turns attributed robust extent evidence into a capped one-axis scale trial', () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    source.components[0]!.rotation = [0, Math.PI / 2, 0];
+    const plan = planFor(componentId);
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    plan.actions[0]!.targetingMode = 'surface-nearest-attribution';
+    plan.actions[0]!.surfaceAttributionComponentId = componentId;
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'c'.repeat(16);
+    const trials = createSurfaceAttributionAxisScaleRecoveryTrials(source, plan, {
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'c'.repeat(16),
+      selectedYawDegrees: 0, distanceThreshold: 0.04, candidateUniformScale: 1,
+      relocateOrReshapeComponentIds: [componentId], shrinkExcessComponentIds: [],
+      expandOrAddDetailComponentIds: [], limitation: 'fixture', components: [{
+        componentId, candidateSamples: 24, candidateCoverage: 0.5,
+        candidateMeanDistance: 0.1, candidateP95Distance: 0.2,
+        assignedReferenceSamples: 24, assignedReferenceCoverage: 0.5,
+        assignedReferenceMeanDistance: 0.1, assignedReferenceP95Distance: 0.2,
+        missingResponsibility: 0.5, outlierCandidateSamples: 12, missingReferenceSamples: 12,
+        recommendation: 'relocate-or-reshape', suggestedAlignedScaleAxis: 0,
+        suggestedAlignedScaleFactor: 1.8,
+      }],
+    }, { fractions: [0.5, 1], maximumFactorDelta: 0.2 });
+    expect(trials).toHaveLength(2);
+    expect(trials[0]!.edits[0]!.scaleMultiplier).toEqual([1, 1, 1.1]);
+    expect(trials[1]!.edits[0]!.scaleMultiplier).toEqual([1, 1, 1.2]);
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'd'.repeat(16);
+    expect(() => createSurfaceAttributionAxisScaleRecoveryTrials(source, plan, {
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'c'.repeat(16),
+      selectedYawDegrees: 0, distanceThreshold: 0.04, candidateUniformScale: 1,
+      relocateOrReshapeComponentIds: [componentId], shrinkExcessComponentIds: [],
+      expandOrAddDetailComponentIds: [], limitation: 'fixture', components: [],
+    })).toThrow(/unsafe target/);
   });
 
   it('moves only the evidence-facing extreme control point for an open tube', () => {

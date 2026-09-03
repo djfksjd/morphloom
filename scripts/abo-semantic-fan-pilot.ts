@@ -18,6 +18,7 @@ import {
 import {
   createBoundedAxisScaleRecoveryTrials,
   createBoundedGroupAxisSpacingTrials,
+  createSurfaceAttributionAxisScaleRecoveryTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
   executeIterativeGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
@@ -875,6 +876,10 @@ const recoveryTrials = [
       fractions: [0.25, 0.5, 0.75],
       maximumTranslationIrUnits: 100,
     }),
+  ...createSurfaceAttributionAxisScaleRecoveryTrials(selectedIr, recoverySearchPlan,
+    surfaceComponentAttribution, {
+      fractions: [0.25, 0.5, 0.75], maximumFactorDelta: 0.2,
+    }),
 ];
 const recoveryResult = await executeIterativeGeometryRecoverySearch(
   selectedIr,
@@ -893,21 +898,25 @@ const recoveryResult = await executeIterativeGeometryRecoverySearch(
       actions,
       actionable: currentAnalysis.plan.pass && actions.length > 0,
     };
-    const trials = actions.length > 0
-      ? createSurfaceAttributionTranslationRecoveryTrials(currentIr, plan,
+    const trials = actions.length > 0 ? [
+      ...createSurfaceAttributionTranslationRecoveryTrials(currentIr, plan,
         currentAnalysis.attribution, {
           candidateUnitsToIrUnits: 1_000,
           fractions: [0.25, 0.5, 0.75],
           maximumTranslationIrUnits: 100,
-        })
-      : [];
+        }),
+      ...createSurfaceAttributionAxisScaleRecoveryTrials(currentIr, plan,
+        currentAnalysis.attribution, {
+          fractions: [0.25, 0.5, 0.75], maximumFactorDelta: 0.2,
+        }),
+    ] : [];
     return { sourceIrFingerprint: context.sourceIrFingerprint, plan, trials };
   },
   evaluateRecoveryCandidate,
   {
     targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
     maximumRounds: 2,
-    maximumTotalTrials: 64,
+    maximumTotalTrials: 96,
     minimumImprovement: 0.002,
     maximumProtectedRegression: 0.0002,
     maximumTargetRegression: 0.0001,

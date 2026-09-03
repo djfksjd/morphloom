@@ -24,6 +24,26 @@ describe('surface component attribution', () => {
     expect(report.evidenceFingerprint).toMatch(/^[a-f0-9]{16}$/);
   });
 
+  it('estimates one dominant robust scale axis without coupling the other axes', () => {
+    const stretched = (radiusX: number): SurfacePoint3[] => [-1, 1].flatMap((x) => (
+      [-1, 1].flatMap((y) => [-1, 1].map((z): SurfacePoint3 => [x * radiusX, y * 0.1, z * 0.1]))
+    ));
+    const anchors = [...cluster([-3, 0, 0]), ...cluster([3, 0, 0])];
+    const report = auditSurfaceComponentAttribution(
+      [...anchors, ...stretched(0.2)],
+      [
+        { componentId: 'body', points: anchors },
+        { componentId: 'module', points: stretched(0.1) },
+      ],
+      { selectedYawDegrees: 0, distanceThreshold: 0.01, minimumMissingResponsibility: 0.1 },
+    );
+    const module = report.components.find((component) => component.componentId === 'module')!;
+    expect(module.candidateRobustSpan).toBeDefined();
+    expect(module.assignedReferenceRobustSpan).toBeDefined();
+    expect(module.suggestedAlignedScaleAxis).toBe(0);
+    expect(module.suggestedAlignedScaleFactor).toBeGreaterThan(1.8);
+  });
+
   it('fails closed on duplicate component ids and degenerate evidence', () => {
     const points = [...cluster([-1, 0, 0]), ...cluster([1, 0, 0])];
     expect(() => auditSurfaceComponentAttribution(points, [
