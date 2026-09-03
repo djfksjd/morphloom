@@ -21,10 +21,10 @@ const darkWood: AssemblyMaterialIR = {
   ...walnut, color: '#513522', roughness: 0.66,
 };
 const chevronWarm: AssemblyMaterialIR = {
-  ...walnut, color: '#795235', roughness: 0.61, microNormalStrength: 0.16,
+  ...walnut, color: '#60402a', roughness: 0.61, microNormalStrength: 0.16,
 };
 const chevronGolden: AssemblyMaterialIR = {
-  ...walnut, color: '#8b6844', roughness: 0.63, microNormalStrength: 0.15,
+  ...walnut, color: '#704a30', roughness: 0.63, microNormalStrength: 0.15,
 };
 const rearBoard: AssemblyMaterialIR = {
   color: '#202020', surface: 'coated-metal', roughness: 0.76, metalness: 0.03,
