@@ -46,6 +46,33 @@ export interface GeometryRecoveryExecutionReport {
   blockers: string[];
 }
 
+export interface GeometryRecoveryRoundProposal {
+  sourceIrFingerprint: string;
+  plan: GeometryRecoveryPlan;
+  trials: GeometryRecoveryTrial[];
+}
+
+export interface IterativeGeometryRecoveryRound {
+  round: number;
+  sourceIrFingerprint: string;
+  execution: GeometryRecoveryExecutionReport;
+  accepted: boolean;
+  blockers: string[];
+}
+
+export interface IterativeGeometryRecoveryReport {
+  schema: 'morphloom.iterative-geometry-recovery/0.1';
+  status: 'improved' | 'unchanged' | 'blocked';
+  inputFingerprint: string;
+  outputFingerprint: string;
+  selectedTrialIds: string[];
+  totalTrials: number;
+  rounds: IterativeGeometryRecoveryRound[];
+  baseline?: GeometryRecoveryEvaluation;
+  selected?: GeometryRecoveryEvaluation;
+  blockers: string[];
+}
+
 const SAFE_ID = /^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,127}$/;
 const MAX_TRIALS = 64;
 const MAX_GATES = 32;
@@ -722,6 +749,149 @@ export async function executeBoundedGeometryRecoverySearch(
       schema: 'morphloom.geometry-recovery-execution/0.1', status: 'improved',
       inputFingerprint, outputFingerprint: selected.fingerprint, selectedTrialId: selected.id,
       baseline, selected: selected.evaluation, trials: receipts, blockers: [],
+    },
+  };
+}
+
+/**
+ * Re-localizes and retries geometry edits after each accepted checkpoint.
+ * Every proposal must name the exact current IR fingerprint, all trial budgets
+ * are bounded, and a later round is rejected if small per-round losses would
+ * accumulate beyond the original checkpoint's protected-gate allowance.
+ */
+export async function executeIterativeGeometryRecoverySearch(
+  source: AssemblyIR,
+  propose: (
+    ir: AssemblyIR,
+    context: { round: number; sourceIrFingerprint: string; selectedTrialIds: string[] },
+  ) => Promise<GeometryRecoveryRoundProposal> | GeometryRecoveryRoundProposal,
+  evaluate: (ir: AssemblyIR) => Promise<GeometryRecoveryEvaluation>,
+  options: {
+    targetGateIds: string[];
+    maximumRounds?: number;
+    maximumTotalTrials?: number;
+    minimumImprovement?: number;
+    maximumProtectedRegression?: number;
+    maximumTargetRegression?: number;
+    maximumCumulativeProtectedRegression?: number;
+    maximumCumulativeTargetRegression?: number;
+  },
+): Promise<{ ir: AssemblyIR; report: IterativeGeometryRecoveryReport }> {
+  const maximumRounds = options.maximumRounds ?? 3;
+  const maximumTotalTrials = options.maximumTotalTrials ?? 128;
+  const minimumImprovement = options.minimumImprovement ?? 0.002;
+  const maximumProtectedRegression = options.maximumProtectedRegression ?? 0;
+  const maximumTargetRegression = options.maximumTargetRegression ?? 0;
+  const maximumCumulativeProtectedRegression = options.maximumCumulativeProtectedRegression
+    ?? maximumProtectedRegression;
+  const maximumCumulativeTargetRegression = options.maximumCumulativeTargetRegression
+    ?? maximumTargetRegression;
+  if (source?.schema !== 'morphloom.assembly/0.1'
+    || typeof propose !== 'function' || typeof evaluate !== 'function'
+    || !Number.isInteger(maximumRounds) || maximumRounds < 1 || maximumRounds > 4
+    || !Number.isInteger(maximumTotalTrials) || maximumTotalTrials < 1 || maximumTotalTrials > 256
+    || !Number.isFinite(maximumCumulativeProtectedRegression)
+    || maximumCumulativeProtectedRegression < 0 || maximumCumulativeProtectedRegression > 0.1
+    || !Number.isFinite(maximumCumulativeTargetRegression)
+    || maximumCumulativeTargetRegression < 0
+    || maximumCumulativeTargetRegression > maximumCumulativeProtectedRegression) {
+    throw new Error('Iterative geometry recovery configuration is unsafe.');
+  }
+  const inputFingerprint = await fingerprintAssemblyIR(source);
+  const visitedFingerprints = new Set([inputFingerprint]);
+  const selectedTrialIds: string[] = [];
+  const rounds: IterativeGeometryRecoveryRound[] = [];
+  let current = source;
+  let currentFingerprint = inputFingerprint;
+  let baseline: GeometryRecoveryEvaluation | undefined;
+  let selected: GeometryRecoveryEvaluation | undefined;
+  let totalTrials = 0;
+  let terminalBlockers: string[] = [];
+
+  for (let round = 0; round < maximumRounds; round += 1) {
+    const proposal = await propose(current, {
+      round, sourceIrFingerprint: currentFingerprint, selectedTrialIds: [...selectedTrialIds],
+    });
+    if (proposal?.sourceIrFingerprint !== currentFingerprint) {
+      throw new Error(`Iterative geometry recovery received a stale round proposal: ${round}.`);
+    }
+    if (!Array.isArray(proposal.trials) || proposal.trials.length > MAX_TRIALS
+      || totalTrials + proposal.trials.length > maximumTotalTrials) {
+      throw new Error('Iterative geometry recovery trial budget is unsafe.');
+    }
+    if (proposal.trials.length === 0) {
+      const evaluation = await evaluate(current);
+      if (!safeEvaluation(evaluation)) throw new Error('Iterative geometry recovery baseline evaluation is unsafe.');
+      baseline ??= evaluation;
+      const blockers = proposal.plan.blockers.length > 0
+        ? [...proposal.plan.blockers] : ['re-localization produced no bounded edit trials'];
+      rounds.push({
+        round, sourceIrFingerprint: currentFingerprint,
+        execution: {
+          schema: 'morphloom.geometry-recovery-execution/0.1', status: 'blocked',
+          inputFingerprint: currentFingerprint, outputFingerprint: currentFingerprint,
+          baseline: evaluation, trials: [], blockers,
+        },
+        accepted: false,
+        blockers,
+      });
+      terminalBlockers = blockers;
+      break;
+    }
+    totalTrials += proposal.trials.length;
+    const result = await executeBoundedGeometryRecoverySearch(
+      current, proposal.plan, proposal.trials, evaluate, {
+        targetGateIds: options.targetGateIds,
+        minimumImprovement,
+        maximumProtectedRegression,
+        maximumTargetRegression,
+      },
+    );
+    baseline ??= result.report.baseline;
+    if (result.report.status !== 'improved' || !result.report.selected || !result.report.selectedTrialId) {
+      rounds.push({
+        round, sourceIrFingerprint: currentFingerprint, execution: result.report,
+        accepted: false, blockers: [...result.report.blockers],
+      });
+      terminalBlockers = [...result.report.blockers];
+      break;
+    }
+    const cumulative = scoreTrial(
+      baseline, result.report.selected, options.targetGateIds, minimumImprovement,
+      maximumCumulativeProtectedRegression, maximumCumulativeTargetRegression,
+    );
+    const cycle = visitedFingerprints.has(result.report.outputFingerprint);
+    const blockers = [
+      ...cumulative.blockers.map((blocker) => `cumulative checkpoint: ${blocker}`),
+      ...(cycle ? ['cumulative checkpoint: output fingerprint repeated an earlier accepted state'] : []),
+    ];
+    const accepted = blockers.length === 0;
+    rounds.push({ round, sourceIrFingerprint: currentFingerprint, execution: result.report, accepted, blockers });
+    if (!accepted) {
+      terminalBlockers = blockers;
+      break;
+    }
+    current = result.ir;
+    currentFingerprint = result.report.outputFingerprint;
+    selected = result.report.selected;
+    selectedTrialIds.push(result.report.selectedTrialId);
+    visitedFingerprints.add(currentFingerprint);
+  }
+  const improved = currentFingerprint !== inputFingerprint;
+  return {
+    ir: current,
+    report: {
+      schema: 'morphloom.iterative-geometry-recovery/0.1',
+      status: improved ? 'improved' : rounds.some((round) => round.execution.status === 'blocked')
+        ? 'blocked' : 'unchanged',
+      inputFingerprint,
+      outputFingerprint: currentFingerprint,
+      selectedTrialIds,
+      totalTrials,
+      rounds,
+      baseline,
+      selected,
+      blockers: terminalBlockers,
     },
   };
 }

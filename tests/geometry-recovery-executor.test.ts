@@ -9,8 +9,10 @@ import {
   createSemanticTranslationRecoveryTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
+  executeIterativeGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
+import { fingerprintAssemblyIR } from '../src/engine/assembly-edit';
 import type { GeometryRecoveryPlan } from '../src/engine/geometry-recovery-plan';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
@@ -34,6 +36,15 @@ function planFor(componentId: string): GeometryRecoveryPlan {
 
 function scaleOf(ir: AssemblyIR, componentId: string): number {
   return ir.components.find((component) => component.id === componentId)?.scale?.[0] ?? 1;
+}
+
+async function scaleRoundProposal(ir: AssemblyIR, componentId: string) {
+  const plan = planFor(componentId);
+  return {
+    sourceIrFingerprint: await fingerprintAssemblyIR(ir),
+    plan,
+    trials: createBoundedScaleRecoveryTrials(plan, { expansionFactors: [1.05] }),
+  };
 }
 
 describe('bounded geometry recovery execution', () => {
@@ -343,5 +354,64 @@ describe('bounded geometry recovery execution', () => {
     expect(() => createBoundedGroupAxisSpacingTrials(source, plan, {
       axis: 0, factors: [0.5], pivotMm: 0,
     })).toThrow(/bounded edit limit/);
+  });
+
+  it('replans from each accepted checkpoint for bounded iterative improvement', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const evaluate = async (ir: AssemblyIR): Promise<GeometryRecoveryEvaluation> => ({
+      gateScores: { shape: Math.min(1, 0.5 + scaleOf(ir, componentId) - 1), topology: 1 },
+      blockingGateIds: ['shape'],
+    });
+    const result = await executeIterativeGeometryRecoverySearch(
+      source,
+      (ir) => scaleRoundProposal(ir, componentId),
+      evaluate,
+      { targetGateIds: ['shape'], maximumRounds: 2, maximumTotalTrials: 2 },
+    );
+    expect(result.report).toMatchObject({ status: 'improved', totalTrials: 2 });
+    expect(result.report.rounds).toHaveLength(2);
+    expect(result.report.rounds.every((round) => round.accepted)).toBe(true);
+    expect(result.report.selectedTrialIds).toHaveLength(2);
+    expect(scaleOf(result.ir, componentId)).toBeCloseTo(1.1025);
+  });
+
+  it('rejects a stale iterative proposal before applying its edits', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    await expect(executeIterativeGeometryRecoverySearch(source, async (ir) => ({
+      ...await scaleRoundProposal(ir, componentId), sourceIrFingerprint: '0'.repeat(64),
+    }), async () => ({ gateScores: { shape: 0.5 }, blockingGateIds: ['shape'] }), {
+      targetGateIds: ['shape'], maximumRounds: 2,
+    })).rejects.toThrow(/stale round proposal/);
+    expect(source).toEqual(GALAXY_Z_FOLD8_EXTERIOR_IR);
+  });
+
+  it('stops cumulative protected-gate drift even when each round is locally acceptable', async () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    const evaluate = async (ir: AssemblyIR): Promise<GeometryRecoveryEvaluation> => {
+      const scale = scaleOf(ir, componentId);
+      return {
+        gateScores: {
+          shape: Math.min(1, 0.5 + scale - 1),
+          topology: 1 - Math.max(0, scale - 1) * 0.003,
+        },
+        blockingGateIds: ['shape'],
+      };
+    };
+    const result = await executeIterativeGeometryRecoverySearch(
+      source,
+      (ir) => scaleRoundProposal(ir, componentId),
+      evaluate,
+      {
+        targetGateIds: ['shape'], maximumRounds: 3, maximumTotalTrials: 3,
+        maximumProtectedRegression: 0.0002, maximumCumulativeProtectedRegression: 0.0002,
+      },
+    );
+    expect(result.report.rounds).toHaveLength(2);
+    expect(result.report.rounds.map((round) => round.accepted)).toEqual([true, false]);
+    expect(result.report.rounds[1]!.blockers.join(' ')).toContain('cumulative checkpoint');
+    expect(scaleOf(result.ir, componentId)).toBeCloseTo(1.05);
   });
 });

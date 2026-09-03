@@ -19,7 +19,7 @@ import {
   createBoundedAxisScaleRecoveryTrials,
   createBoundedGroupAxisSpacingTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
-  executeBoundedGeometryRecoverySearch,
+  executeIterativeGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
 import { auditAssemblyDetail } from '../src/engine/generation-policy';
@@ -698,40 +698,44 @@ const groundTruthFingerprint = sha256(new Uint8Array(readFileSync(groundTruthPat
 const groundTruthDocument = await nodeIo.read(groundTruthPath);
 const groundTruthTriangles = collectGltfTriangles(groundTruthDocument);
 const referenceSample = sampleTriangleSurface(groundTruthTriangles, 4_096);
-const candidateSample = sampleTriangleSurface(candidateSurfaceTriangles, 4_096);
-const geometryAudit = compareSurfaceGeometry(referenceSample.points, candidateSample.points);
-const componentSurfacePointSets = selectedIr.components.flatMap((component) => {
-  const object = build.root.getObjectByName(component.id);
-  if (!object) return [];
-  const triangles = collectThreeTriangles(object);
-  if (triangles.length < 1) return [];
-  return [{ componentId: component.id, points: sampleTriangleSurface(triangles, 24).points }];
-});
-const surfaceComponentAttribution = auditSurfaceComponentAttribution(
-  referenceSample.points,
-  componentSurfacePointSets,
-  {
-    selectedYawDegrees: geometryAudit.selectedYawDegrees,
-    distanceThreshold: geometryAudit.thresholds.distanceThreshold,
-  },
-);
-build.root.updateMatrixWorld(true);
-const componentEvidence = new Map(selectedIr.components.map((component) => [component.id, component.evidence?.status ?? 'inferred']));
-const componentSpatialObservations = build.root.children.flatMap((object) => {
-  if (!(object instanceof THREE.Mesh) || !componentEvidence.has(object.name)) return [];
-  const bounds = new THREE.Box3().setFromObject(object);
-  if (bounds.isEmpty()) return [];
-  return [observeAlignedComponentBounds(object.name, {
-    minimum: bounds.min.toArray() as [number, number, number],
-    maximum: bounds.max.toArray() as [number, number, number],
-  }, componentEvidence.get(object.name)!, geometryAudit)];
-});
-const geometryRecoveryPlan = createGeometryRecoveryPlan(
-  geometryAudit,
-  visualPlan,
-  componentSpatialObservations,
-  { maximumActions: 12 },
-);
+const analyzeRecoverySurface = (ir: AssemblyIR, compiled = compileAssemblyIR(ir, 'beauty')) => {
+  compiled.root.updateMatrixWorld(true);
+  const triangles = collectThreeTriangles(compiled.root);
+  const sample = sampleTriangleSurface(triangles, 4_096);
+  const audit = compareSurfaceGeometry(referenceSample.points, sample.points);
+  const pointSets = ir.components.flatMap((component) => {
+    const object = compiled.root.getObjectByName(component.id);
+    if (!object) return [];
+    const componentTriangles = collectThreeTriangles(object);
+    if (componentTriangles.length < 1) return [];
+    return [{ componentId: component.id, points: sampleTriangleSurface(componentTriangles, 24).points }];
+  });
+  const attribution = auditSurfaceComponentAttribution(referenceSample.points, pointSets, {
+    selectedYawDegrees: audit.selectedYawDegrees,
+    distanceThreshold: audit.thresholds.distanceThreshold,
+  });
+  const evidence = new Map(ir.components.map((component) => [
+    component.id, component.evidence?.status ?? 'inferred',
+  ]));
+  const observations = compiled.root.children.flatMap((object) => {
+    if (!(object instanceof THREE.Mesh) || !evidence.has(object.name)) return [];
+    const bounds = new THREE.Box3().setFromObject(object);
+    if (bounds.isEmpty()) return [];
+    return [observeAlignedComponentBounds(object.name, {
+      minimum: bounds.min.toArray() as [number, number, number],
+      maximum: bounds.max.toArray() as [number, number, number],
+    }, evidence.get(object.name)!, audit)];
+  });
+  return {
+    audit,
+    attribution,
+    plan: createGeometryRecoveryPlan(audit, visualPlan, observations, { maximumActions: 12 }),
+  };
+};
+const initialRecoverySurface = analyzeRecoverySurface(selectedIr, build);
+const geometryAudit = initialRecoverySurface.audit;
+const surfaceComponentAttribution = initialRecoverySurface.attribution;
+const geometryRecoveryPlan = initialRecoverySurface.plan;
 
 const clampUnit = (value: number): number => Math.max(0, Math.min(1, value));
 const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<GeometryRecoveryEvaluation> => {
@@ -814,30 +818,38 @@ const guardSpacingAction: GeometryRecoveryAction = {
   verificationGates: ['surface-geometry-fidelity', 'visual-plan-revision', 'topology-integrity', 'multiview-silhouette'],
   reason: 'The articulated side views expose repeated guard shells whose shared depth spacing must be tested around the head pivot.',
 };
-const surfaceAttributionActions: GeometryRecoveryAction[] = surfaceComponentAttribution.components
+const surfaceAttributionActionsFor = (
+  attribution: typeof surfaceComponentAttribution,
+  priorityBase: number,
+  previousSelectedTrialIds: string[] = [],
+): GeometryRecoveryAction[] => attribution.components
   .filter((component) => component.recommendation === 'relocate-or-reshape'
     && component.missingResponsibility >= 0.025
     && component.suggestedTranslationCandidateUnits
-    && Math.hypot(...component.suggestedTranslationCandidateUnits) <= 0.1)
+    && Math.hypot(...component.suggestedTranslationCandidateUnits) <= 0.1
+    && !previousSelectedTrialIds.some((id) => id.startsWith(`recover-surface-${component.componentId}:`)))
   .slice(0, 4)
   .map((component, index) => ({
     id: `recover-surface-${component.componentId}`,
     causeBandId: `surface:${component.componentId}`,
     causeBandIds: [`surface:${component.componentId}`],
-    priority: routedRecoveryActions.length + index + 2,
+    priority: priorityBase + index + 1,
     operation: 'relocate-or-reshape-extraneous-units',
     targetComponentIds: [component.componentId],
     candidateComponentCount: 1,
     spatialConstraintIds: [],
     targetingMode: 'surface-nearest-attribution',
     surfaceAttributionComponentId: component.componentId,
-    surfaceAttributionEvidenceFingerprint: surfaceComponentAttribution.evidenceFingerprint,
+    surfaceAttributionEvidenceFingerprint: attribution.evidenceFingerprint,
     evidenceViewIds: ['ground-truth'],
     requiredComponentIds: [component.componentId],
     prohibitedOperations: ['delete-required-component', 'lower-locked-feature-count', 'change-source-evidence'],
     verificationGates: ['surface-geometry-fidelity', 'visual-plan-revision', 'topology-integrity', 'multiview-silhouette'],
     reason: `Merged-GT nearest-surface attribution assigns ${(component.missingResponsibility * 100).toFixed(1)}% of unresolved reference samples to ${component.componentId}; evaluate only bounded metric translations.`,
   }));
+const surfaceAttributionActions = surfaceAttributionActionsFor(
+  surfaceComponentAttribution, routedRecoveryActions.length + 1,
+);
 const recoverySearchPlan = {
   ...geometryRecoveryPlan,
   actions: [...routedRecoveryActions, guardSpacingAction, ...surfaceAttributionActions],
@@ -864,26 +876,48 @@ const recoveryTrials = [
       maximumTranslationIrUnits: 100,
     }),
 ];
-const recoveryResult = recoveryTrials.length > 0
-  ? await executeBoundedGeometryRecoverySearch(
-    selectedIr, recoverySearchPlan, recoveryTrials, evaluateRecoveryCandidate,
-    {
-      targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
-      minimumImprovement: 0.002,
-      maximumProtectedRegression: 0.0002,
-      maximumTargetRegression: 0.0001,
-    },
-  )
-  : {
-    ir: selectedIr,
-    report: {
-      schema: 'morphloom.geometry-recovery-execution/0.1' as const,
-      status: 'blocked' as const,
-      inputFingerprint: '', outputFingerprint: '',
-      baseline: await evaluateRecoveryCandidate(selectedIr), trials: [],
-      blockers: ['localized recovery produced no safe edit trials'],
-    },
-  };
+const recoveryResult = await executeIterativeGeometryRecoverySearch(
+  selectedIr,
+  (currentIr, context) => {
+    if (context.round === 0) return {
+      sourceIrFingerprint: context.sourceIrFingerprint,
+      plan: recoverySearchPlan,
+      trials: recoveryTrials,
+    };
+    const currentAnalysis = analyzeRecoverySurface(currentIr);
+    const actions = surfaceAttributionActionsFor(
+      currentAnalysis.attribution, 0, context.selectedTrialIds,
+    );
+    const plan = {
+      ...currentAnalysis.plan,
+      actions,
+      actionable: currentAnalysis.plan.pass && actions.length > 0,
+    };
+    const trials = actions.length > 0
+      ? createSurfaceAttributionTranslationRecoveryTrials(currentIr, plan,
+        currentAnalysis.attribution, {
+          candidateUnitsToIrUnits: 1_000,
+          fractions: [0.25, 0.5, 0.75],
+          maximumTranslationIrUnits: 100,
+        })
+      : [];
+    return { sourceIrFingerprint: context.sourceIrFingerprint, plan, trials };
+  },
+  evaluateRecoveryCandidate,
+  {
+    targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
+    maximumRounds: 2,
+    maximumTotalTrials: 64,
+    minimumImprovement: 0.002,
+    maximumProtectedRegression: 0.0002,
+    maximumTargetRegression: 0.0001,
+    maximumCumulativeProtectedRegression: 0.0002,
+    maximumCumulativeTargetRegression: 0.0001,
+  },
+);
+const finalAcceptedRecoveryExecution = [...recoveryResult.report.rounds]
+  .reverse().find((round) => round.accepted)?.execution
+  ?? recoveryResult.report.rounds.at(-1)?.execution;
 const deliveryIr = recoveryResult.ir;
 const deliveryBuild = deliveryIr === selectedIr ? build : compileAssemblyIR(deliveryIr, 'beauty');
 const referenceMaterialReceipt = applyReferenceMaterialEvidence(deliveryBuild.root, referenceMaterialSurface, { repeat: 4 });
@@ -1101,7 +1135,8 @@ const report = {
       : { status: 'not-available' },
     recoveryPlan: deliveryRecoveryPlan,
     recoverySearchPlan,
-    recoveryExecution: recoveryResult.report,
+    recoveryExecution: finalAcceptedRecoveryExecution,
+    iterativeRecoveryExecution: recoveryResult.report,
     componentAttribution: surfaceComponentAttribution,
     limitation: 'This development pilot was tuned against its GT and is excluded from independent holdout superiority claims.',
   },
