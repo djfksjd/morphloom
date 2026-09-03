@@ -30,8 +30,9 @@ export interface GeometryRecoveryAction {
   targetComponentIds: string[];
   candidateComponentCount: number;
   spatialConstraintIds: string[];
-  targetingMode: 'spatial-cell-overlap' | 'semantic-feature-overlap' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
+  targetingMode: 'spatial-cell-overlap' | 'semantic-feature-overlap' | 'surface-nearest-attribution' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
   semanticFeatureId?: string;
+  surfaceAttributionComponentId?: string;
   evidenceViewIds: string[];
   requiredComponentIds: string[];
   prohibitedOperations: Array<'delete-required-component' | 'lower-locked-feature-count' | 'change-source-evidence'>;

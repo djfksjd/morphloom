@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-478%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-481%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
@@ -164,7 +164,7 @@ npm run blender:validate -- source.glb roundtrip.glb report.json
 
 `quality:production`은 더 엄격합니다. 분야마다 서로 다른 동일 입력 사례 3개, 반복 생성, 브라우저와 Blender 재열기, 게임 엔진/슬라이서 재열기, img2threejs와의 자동 점수 우위, 최소 5명의 순서 균형 블라인드 우위를 모두 요구합니다. 한 항목이라도 없으면 전 분야 우세나 실무 즉시 납품을 선언하지 않습니다.
 
-현재 외부 ABO 파일럿은 3개 사례·18개 자산과 2개 다중 시점 크기 추론을 검증합니다. 의미 기반 램프는 정답 GLB 감사까지 통과했습니다. 팬 사례는 101개 편집 부품, 결정론적 GLB, Khronos/독립 재열기를 통과했지만 네 시점 윤곽과 정답 형상은 아직 차단됩니다. 강체 촬영 포즈 잔차를 분리한 뒤 최저 전체 윤곽·주요 질량·얇은 부재 점수는 0.597·0.674·0.710이며, 4,096점 형상 감사는 최대 치수 오차 4.15%, RMS Chamfer 0.0560, P95 0.1162, 커버리지 54.1%입니다. 잠긴 화면 좌표에서 누락·과잉 형상을 따로 추적한 최저 회수율·정밀도는 0.742·0.562입니다. 부품 제거 영향과 잔차 영역을 연결하더라도, 서로 다른 두 직교 시점의 절대 자세·렌즈·픽셀 축척이 검증되지 않으면 자동 3D 부분수정을 허용하지 않습니다. 검증된 경우에는 화면 이동을 밀리미터 월드 벡터로 풀고 50%·75%·100% 후보를 원본에서 각각 독립 평가합니다. 선택 잔차가 최대 80°이고 독립 측정되지 않았으므로 이 보정은 진단에만 쓰며 카메라 정확도나 납품 근거로 인정하지 않습니다. 따라서 팬은 `productionReady: false`이며 전 분야 우세도 아직 주장하지 않습니다.
+현재 외부 ABO 파일럿은 3개 사례·18개 자산과 2개 다중 시점 크기 추론을 검증합니다. 의미 기반 램프는 정답 GLB 감사까지 통과했습니다. 팬 사례는 101개 편집 부품, 결정론적 GLB, Khronos/독립 재열기를 통과했지만 네 시점 윤곽과 정답 형상은 아직 차단됩니다. 강체 촬영 포즈 잔차를 분리한 뒤 최저 전체 윤곽·주요 질량·얇은 부재 점수는 0.597·0.674·0.710이며, 4,096점 형상 감사는 최대 치수 오차 4.15%, RMS Chamfer 0.0551, P95 0.1151, 커버리지 54.8%입니다. 잠긴 화면 좌표에서 누락·과잉 형상을 따로 추적한 최저 회수율·정밀도는 0.743·0.562입니다. 정답 GLB가 이름 없는 단일 메시여도 최근접 표면으로 누락 책임을 편집 부품에 귀속하고, 명시적 m↔mm 변환과 100 mm 상한 안에서 이동 후보를 만듭니다. 이 파일럿에서는 모터 셸의 75% 이동이 RMS·P95·커버리지를 모두 개선했고 다른 보호 지표의 회귀는 0.0002 이내였습니다. 부품 제거 영향과 화면 잔차를 연결하는 별도 경로는 서로 다른 두 직교 시점의 절대 자세·렌즈·픽셀 축척이 검증되지 않으면 자동 3D 부분수정을 허용하지 않습니다. 선택 촬영 잔차가 최대 80°이고 독립 측정되지 않았으므로 그 보정은 진단에만 쓰며 카메라 정확도나 납품 근거로 인정하지 않습니다. 따라서 팬은 `productionReady: false`이며 전 분야 우세도 아직 주장하지 않습니다.
 
 GLB 증명은 Khronos Validator·glTF Transform·Three.js 재열기 결과를 함께 기록합니다. 모프는 실제 변형 페이로드를, 질감은 픽셀·슬롯·UV 변환과 샘플링 의미를 비교합니다. glTF가 보존하지 못하는 텍스처·재질 의미는 조용히 버리지 않고 모델 단계에서 차단합니다. 최신 0.31.0 브라우저 영수증은 [`benchmarks/browser-roundtrip-latest.json`](./benchmarks/browser-roundtrip-latest.json)에 저장됩니다.
 

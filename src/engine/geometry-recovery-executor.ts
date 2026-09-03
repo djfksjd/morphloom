@@ -7,6 +7,7 @@ import {
 } from './assembly-edit';
 import type { GeometryRecoveryAction, GeometryRecoveryPlan } from './geometry-recovery-plan';
 import type { SilhouetteSemanticRepairReport } from './silhouette-semantic-repair';
+import type { SurfaceComponentAttributionReport } from './surface-component-attribution';
 
 type RecoveryEdit = Omit<AssemblyComponentPatch, 'schema' | 'operationId' | 'expectedInputFingerprint'>;
 type Vector3 = [number, number, number];
@@ -210,6 +211,66 @@ export function createSemanticTranslationRecoveryTrials(
         componentId,
         translateMm: hint.worldTranslationMm!.map((value) => value * fraction) as Vector3,
       })),
+    }));
+  });
+}
+
+/**
+ * Creates metric IR translation trials from a merged ground-truth surface
+ * attribution. The caller declares the candidate-unit conversion explicitly;
+ * Morphloom never assumes metres, millimetres, or scene scale from coordinates.
+ */
+export function createSurfaceAttributionTranslationRecoveryTrials(
+  ir: AssemblyIR,
+  plan: GeometryRecoveryPlan,
+  attribution: SurfaceComponentAttributionReport,
+  options: {
+    candidateUnitsToIrUnits: number;
+    fractions?: number[];
+    maximumTranslationIrUnits?: number;
+  },
+): GeometryRecoveryTrial[] {
+  const fractions = options.fractions ?? [0.25, 0.5, 0.75];
+  const maximumTranslationIrUnits = options.maximumTranslationIrUnits ?? 100;
+  if (ir?.schema !== 'morphloom.assembly/0.1'
+    || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || attribution?.schema !== 'morphloom.surface-component-attribution/0.1'
+    || !Number.isFinite(options.candidateUnitsToIrUnits) || options.candidateUnitsToIrUnits <= 0
+    || options.candidateUnitsToIrUnits > 1_000_000
+    || !Array.isArray(fractions) || fractions.length < 1 || fractions.length > 8
+    || fractions.some((fraction) => !Number.isFinite(fraction) || fraction < 0.05 || fraction > 1)
+    || !Number.isFinite(maximumTranslationIrUnits) || maximumTranslationIrUnits <= 0
+    || maximumTranslationIrUnits > 100_000) {
+    throw new Error('Surface attribution translation trial configuration is unsafe.');
+  }
+  const componentIds = new Set(ir.components.map((component) => component.id));
+  const attributedById = new Map(attribution.components.map((component) => [component.componentId, component]));
+  return plan.actions.filter((action) => action.targetingMode === 'surface-nearest-attribution').flatMap((action) => {
+    const componentId = action.surfaceAttributionComponentId;
+    if (!componentId || action.targetComponentIds.length !== 1 || action.targetComponentIds[0] !== componentId
+      || !componentIds.has(componentId)) {
+      throw new Error(`Surface attribution recovery action has an unsafe target: ${action.id}`);
+    }
+    const attributed = attributedById.get(componentId);
+    if (!attributed || attributed.recommendation !== 'relocate-or-reshape'
+      || !attributed.suggestedTranslationCandidateUnits) {
+      throw new Error(`Surface attribution recovery action lacks relocation evidence: ${action.id}`);
+    }
+    const fullTranslation = attributed.suggestedTranslationCandidateUnits.map((value) => (
+      value * options.candidateUnitsToIrUnits
+    )) as Vector3;
+    if (fullTranslation.some((value) => !Number.isFinite(value))
+      || Math.hypot(...fullTranslation) <= 1e-9
+      || Math.hypot(...fullTranslation) > maximumTranslationIrUnits) {
+      throw new Error(`Surface attribution recovery vector exceeds the bounded edit limit: ${action.id}`);
+    }
+    return fractions.map((fraction, index) => ({
+      id: `${action.id}:surface-translate-${index + 1}`,
+      actionId: action.id,
+      edits: [{
+        componentId,
+        translateMm: fullTranslation.map((value) => value * fraction) as Vector3,
+      }],
     }));
   });
 }

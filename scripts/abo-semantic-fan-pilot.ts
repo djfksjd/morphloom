@@ -18,6 +18,7 @@ import {
 import {
   createBoundedAxisScaleRecoveryTrials,
   createBoundedGroupAxisSpacingTrials,
+  createSurfaceAttributionTranslationRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
@@ -39,6 +40,7 @@ import {
 } from '../src/engine/reference-material-evidence';
 import { deriveMaskedReferenceSurface } from '../src/engine/reference-surface';
 import { compareSurfaceGeometry, sampleTriangleSurface } from '../src/engine/surface-geometry-fidelity';
+import { auditSurfaceComponentAttribution } from '../src/engine/surface-component-attribution';
 import { solidifySilhouetteMask } from '../src/engine/silhouette-mask';
 import { normalizedFrame, sha256 } from './lib/visual-capture-frames';
 import {
@@ -698,6 +700,21 @@ const groundTruthTriangles = collectGltfTriangles(groundTruthDocument);
 const referenceSample = sampleTriangleSurface(groundTruthTriangles, 4_096);
 const candidateSample = sampleTriangleSurface(candidateSurfaceTriangles, 4_096);
 const geometryAudit = compareSurfaceGeometry(referenceSample.points, candidateSample.points);
+const componentSurfacePointSets = selectedIr.components.flatMap((component) => {
+  const object = build.root.getObjectByName(component.id);
+  if (!object) return [];
+  const triangles = collectThreeTriangles(object);
+  if (triangles.length < 1) return [];
+  return [{ componentId: component.id, points: sampleTriangleSurface(triangles, 24).points }];
+});
+const surfaceComponentAttribution = auditSurfaceComponentAttribution(
+  referenceSample.points,
+  componentSurfacePointSets,
+  {
+    selectedYawDegrees: geometryAudit.selectedYawDegrees,
+    distanceThreshold: geometryAudit.thresholds.distanceThreshold,
+  },
+);
 build.root.updateMatrixWorld(true);
 const componentEvidence = new Map(selectedIr.components.map((component) => [component.id, component.evidence?.status ?? 'inferred']));
 const componentSpatialObservations = build.root.children.flatMap((object) => {
@@ -797,9 +814,32 @@ const guardSpacingAction: GeometryRecoveryAction = {
   verificationGates: ['surface-geometry-fidelity', 'visual-plan-revision', 'topology-integrity', 'multiview-silhouette'],
   reason: 'The articulated side views expose repeated guard shells whose shared depth spacing must be tested around the head pivot.',
 };
+const surfaceAttributionActions: GeometryRecoveryAction[] = surfaceComponentAttribution.components
+  .filter((component) => component.recommendation === 'relocate-or-reshape'
+    && component.missingResponsibility >= 0.025
+    && component.suggestedTranslationCandidateUnits
+    && Math.hypot(...component.suggestedTranslationCandidateUnits) <= 0.1)
+  .slice(0, 4)
+  .map((component, index) => ({
+    id: `recover-surface-${component.componentId}`,
+    causeBandId: `surface:${component.componentId}`,
+    causeBandIds: [`surface:${component.componentId}`],
+    priority: routedRecoveryActions.length + index + 2,
+    operation: 'relocate-or-reshape-extraneous-units',
+    targetComponentIds: [component.componentId],
+    candidateComponentCount: 1,
+    spatialConstraintIds: [],
+    targetingMode: 'surface-nearest-attribution',
+    surfaceAttributionComponentId: component.componentId,
+    evidenceViewIds: ['ground-truth'],
+    requiredComponentIds: [component.componentId],
+    prohibitedOperations: ['delete-required-component', 'lower-locked-feature-count', 'change-source-evidence'],
+    verificationGates: ['surface-geometry-fidelity', 'visual-plan-revision', 'topology-integrity', 'multiview-silhouette'],
+    reason: `Merged-GT nearest-surface attribution assigns ${(component.missingResponsibility * 100).toFixed(1)}% of unresolved reference samples to ${component.componentId}; evaluate only bounded metric translations.`,
+  }));
 const recoverySearchPlan = {
   ...geometryRecoveryPlan,
-  actions: [...routedRecoveryActions, guardSpacingAction],
+  actions: [...routedRecoveryActions, guardSpacingAction, ...surfaceAttributionActions],
 };
 recoverySearchPlan.actionable = recoverySearchPlan.actions.length > 0;
 const axisRecoverySearchPlan = { ...recoverySearchPlan, actions: routedRecoveryActions };
@@ -807,8 +847,8 @@ const recoveryTrials = [
   ...createBoundedAxisScaleRecoveryTrials(axisRecoverySearchPlan, {
     alignedYawDegrees: geometryAudit.selectedYawDegrees,
     sourceIr: selectedIr,
-    expansionFactors: [1.025, 1.05, 1.075, 1.1, 1.125],
-    reductionFactors: [0.975, 0.95, 0.925, 0.9, 0.875],
+    expansionFactors: [1.025, 1.075, 1.125],
+    reductionFactors: [0.975, 0.925, 0.875],
     includeCounterfactualDirection: true,
     grouping: 'batch',
   }),
@@ -816,6 +856,12 @@ const recoveryTrials = [
     axis: 2, factors: [0.4, 0.55, 0.7, 0.85], pivotMm: 0,
     actionIds: [guardSpacingAction.id],
   }),
+  ...createSurfaceAttributionTranslationRecoveryTrials(selectedIr, recoverySearchPlan,
+    surfaceComponentAttribution, {
+      candidateUnitsToIrUnits: 1_000,
+      fractions: [0.25, 0.5, 0.75],
+      maximumTranslationIrUnits: 100,
+    }),
 ];
 const recoveryResult = recoveryTrials.length > 0
   ? await executeBoundedGeometryRecoverySearch(
@@ -823,8 +869,8 @@ const recoveryResult = recoveryTrials.length > 0
     {
       targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
       minimumImprovement: 0.002,
-      maximumProtectedRegression: 0.002,
-      maximumTargetRegression: 0.0005,
+      maximumProtectedRegression: 0.0002,
+      maximumTargetRegression: 0.0001,
     },
   )
   : {
@@ -1055,6 +1101,7 @@ const report = {
     recoveryPlan: deliveryRecoveryPlan,
     recoverySearchPlan,
     recoveryExecution: recoveryResult.report,
+    componentAttribution: surfaceComponentAttribution,
     limitation: 'This development pilot was tuned against its GT and is excluded from independent holdout superiority claims.',
   },
   pbrReferenceAudit: {
