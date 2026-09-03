@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-442%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-469%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
@@ -154,7 +154,7 @@ The current partial-edit suite moves one named building window, knife ornament, 
 
 The seven browser receipts cover industrial design, measured/concept architecture, an electromechanical assembly, character previs, animation/game delivery, and a 3D-print surface. One asphalt receipt is deliberately reused to evaluate separate 3D-print and surface-delivery contracts for the same artifact. Three score-59 cases are intentional evidence rejections rather than technical failures. Texture pixels, samplers, and PBR/optical semantics must survive an actual GLB reopen. Browser-versus-Node colour conversion, script ordering, and wire-curve floating-point differences are normalized deterministically. These rates describe nine locked technical contracts, not independent blind comparisons or perfect visual quality for arbitrary input.
 
-The external ABO pilot covers three cases, 18 assets, and two multi-view scale inferences. The semantic lamp passes its ground-truth GLB audit. The new fan case delivers 101 editable parts plus deterministic Khronos-valid GLB reopen, but its four-view silhouette and ground-truth shape gates still block release. Its 4,096-point audit reports 4.15% maximum dimension error, 0.0601 RMS Chamfer, 0.1162 P95 distance, and 53.4% bidirectional coverage. PBR provenance is now channel-specific, so photographed colour cannot falsely prove inferred metallic or roughness response. The fan remains `productionReady: false`, and global superiority is not claimed.
+The external ABO pilot covers three cases, 18 assets, and two multi-view scale inferences. The semantic lamp passes its ground-truth GLB audit. The fan case delivers 101 editable parts plus deterministic Khronos-valid GLB reopen, but its four-view silhouette and ground-truth shape gates still block release. After separating a rigid capture-pose residual, its minimum whole-silhouette, primary-mass, and thin-feature scores are 0.597, 0.674, and 0.710; the 4,096-point shape audit reports 4.15% maximum dimension error, 0.0560 RMS Chamfer, 0.1162 P95 distance, and 54.1% coverage. The selected residual reaches 80° and is not independently measured, so it remains a diagnostic rather than camera or delivery evidence. The fan remains `productionReady: false`, and global superiority is not claimed.
 
 | Semi-professional delivery contract | Score | Blocking evidence |
 |---|---:|---|

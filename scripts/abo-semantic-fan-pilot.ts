@@ -8,7 +8,7 @@ import type { AssemblyComponentIR, AssemblyIR } from '../src/engine/assembly-ir'
 import type { GroundTruthCorpusManifest } from '../src/engine/ground-truth-corpus';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { fitDiscreteMultiviewCameras } from '../src/engine/discrete-multiview-camera-fit';
-import { fitBoundedPerViewArticulationStates } from '../src/engine/articulation-state-fit';
+import { fitBoundedPerViewCapturePoseResiduals } from '../src/engine/capture-pose-residual-fit';
 import { composeWorldAxisRotation } from '../src/engine/assembly-transform';
 import {
   createGeometryRecoveryPlan,
@@ -432,11 +432,14 @@ function rotateHeadPointAroundYawPivot(point: [number, number, number], radians:
   ];
 }
 
-/** Applies a bounded per-view yaw state without changing the delivered neutral assembly. */
-function applyObservedHeadYaw(candidate: AssemblyIR, degrees: number): void {
+/**
+ * Applies an inferred whole-capture azimuth residual without changing the
+ * delivered neutral assembly. This is a diagnostic camera/exposure transform,
+ * not an articulated product edit: every visible component must stay rigid.
+ */
+function applyObservedCaptureYaw(candidate: AssemblyIR, degrees: number): void {
   const radians = degrees * Math.PI / 180;
-  const belongsToHead = (id: string) => /^(cage-|front-hub|blade-|blade-spider|motor-|switch-|speed-knob)/.test(id);
-  for (const entry of candidate.components.filter((candidateEntry) => belongsToHead(candidateEntry.id))) {
+  for (const entry of candidate.components) {
     if (entry.position) entry.position = rotateHeadPointAroundYawPivot(entry.position, radians);
     if (entry.geometry.op === 'tube') {
       entry.geometry.points = entry.geometry.points.map((point) => rotateHeadPointAroundYawPivot(point, radians));
@@ -598,39 +601,39 @@ const selectedCameras = cameraFit.views.map((selection, index) => {
   return searchSelection.camera;
 });
 const yawCandidates = Array.from({ length: 37 }, (_, index) => -90 + index * 5);
-const articulatedViewCandidates = cameraFit.views.map((selection, index) => yawCandidates.map((headYawDegrees) => {
+const capturePoseCandidates = cameraFit.views.map((selection, index) => yawCandidates.map((residualDegrees) => {
   const posedIr = structuredClone(selectedIr);
-  if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+  if (residualDegrees !== 0) applyObservedCaptureYaw(posedIr, residualDegrees);
   const posedBuild = compileAssemblyIR(posedIr, 'beauty');
   const triangles = collectThreeTriangles(posedBuild.root);
   const score = scoreView(triangles, index, selection.candidate.azimuthDegrees,
     selectedCameras[index]!, references);
   return {
-    stateId: headYawDegrees < 0 ? `yaw-neg-${Math.abs(headYawDegrees)}` : `yaw-${headYawDegrees}`,
-    jointDegrees: headYawDegrees, score,
+    stateId: residualDegrees < 0 ? `yaw-neg-${Math.abs(residualDegrees)}` : `yaw-${residualDegrees}`,
+    residualDegrees, score,
   };
 }));
-const articulationStateFit = fitBoundedPerViewArticulationStates(
-  articulatedViewCandidates.map((candidates, index) => ({
-    id: viewIds[index]!, neutralStateId: 'yaw-0', evidenceStatus: 'inferred' as const,
+const capturePoseResidualFit = fitBoundedPerViewCapturePoseResiduals(
+  capturePoseCandidates.map((candidates, index) => ({
+    id: viewIds[index]!, lockedStateId: 'yaw-0', evidenceStatus: 'inferred' as const,
     candidates: candidates.map((candidate) => ({
-      stateId: candidate.stateId, jointDegrees: candidate.jointDegrees,
+      stateId: candidate.stateId, residualDegrees: candidate.residualDegrees,
       gateMargin: candidate.score.gateMargin, wholeIoU: candidate.score.wholeIoU,
       primaryMassIoU: candidate.score.primaryMassIoU,
       thinFeatureScore: candidate.score.thinFeature.score,
     })),
   })),
-  { minimumGateImprovement: 0.01, maximumAbsoluteJointDegrees: 90, requirePositiveMargin: false },
+  { minimumGateImprovement: 0.01, maximumAbsoluteResidualDegrees: 90, requirePositiveMargin: false },
 );
-const selectedArticulatedViews = articulationStateFit.views.map((selection, index) => {
-  const candidate = articulatedViewCandidates[index]!
+const selectedCaptureViews = capturePoseResidualFit.views.map((selection, index) => {
+  const candidate = capturePoseCandidates[index]!
     .find((item) => item.stateId === selection.selected.stateId)!;
   const posedIr = structuredClone(selectedIr);
-  if (candidate.jointDegrees !== 0) applyObservedHeadYaw(posedIr, candidate.jointDegrees);
+  if (candidate.residualDegrees !== 0) applyObservedCaptureYaw(posedIr, candidate.residualDegrees);
   const posedBuild = compileAssemblyIR(posedIr, 'beauty');
   return { ...candidate, posedBuild, triangles: collectThreeTriangles(posedBuild.root) };
 });
-const fittedViews = selectedArticulatedViews.map((selection) => selection.score);
+const fittedViews = selectedCaptureViews.map((selection) => selection.score);
 const fittedAudit = auditMultiviewSilhouetteFidelity(fittedViews.map((view) => ({
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
@@ -639,7 +642,7 @@ const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
   cameraFit.views.map((selection, index) => {
     const reference = references[index]!;
     const camera = selectedCameras[index]!;
-    const candidateMask = cachedSilhouette(selectedArticulatedViews[index]!.triangles, selection.candidate.azimuthDegrees,
+    const candidateMask = cachedSilhouette(selectedCaptureViews[index]!.triangles, selection.candidate.azimuthDegrees,
       reference.frame.width, reference.frame.height, camera).mask!;
     return {
       id: viewIds[index]!, width: reference.frame.width, height: reference.frame.height,
@@ -647,7 +650,7 @@ const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
       weight: 1 + Math.max(0, 0.7 - fittedViews[index]!.wholeIoU) * 4,
       groups: visualPlan.features.map((feature) => {
         const removedIds = new Set(feature.componentIds);
-        const ablatedRoot = selectedArticulatedViews[index]!.posedBuild.root.clone(true);
+        const ablatedRoot = selectedCaptureViews[index]!.posedBuild.root.clone(true);
         const removedObjects: THREE.Object3D[] = [];
         ablatedRoot.traverse((object) => {
           if (removedIds.has(object.name)) removedObjects.push(object);
@@ -703,8 +706,8 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
   const audit = compareSurfaceGeometry(referenceSample.points, sample.points);
   const views = cameraFit.views.map((selection, index) => {
     const posedIr = structuredClone(candidateIr);
-    const headYawDegrees = selectedArticulatedViews[index]!.jointDegrees;
-    if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+    const residualDegrees = selectedCaptureViews[index]!.residualDegrees;
+    if (residualDegrees !== 0) applyObservedCaptureYaw(posedIr, residualDegrees);
     const posedTriangles = collectThreeTriangles(compileAssemblyIR(posedIr, 'beauty').root);
     return scoreView(posedTriangles, index, selection.candidate.azimuthDegrees,
       selectedCameras[index]!, references);
@@ -832,8 +835,8 @@ const deliveryRecoveryPlan = createGeometryRecoveryPlan(
 );
 const deliveryArticulatedViews = cameraFit.views.map((selection, index) => {
   const posedIr = structuredClone(deliveryIr);
-  const headYawDegrees = selectedArticulatedViews[index]!.jointDegrees;
-  if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
+  const residualDegrees = selectedCaptureViews[index]!.residualDegrees;
+  if (residualDegrees !== 0) applyObservedCaptureYaw(posedIr, residualDegrees);
   const posedBuild = compileAssemblyIR(posedIr, 'beauty');
   const triangles = collectThreeTriangles(posedBuild.root);
   return {
@@ -965,29 +968,33 @@ const report = {
     views: deliveryCalibration.views,
     audit: deliveryCalibration.audit,
     semanticAttribution: semanticSilhouetteAttribution,
-    limitation: 'Foreground-normalized silhouettes and candidate-scored absolute yaw are development diagnostics only. The source contract proves 90-degree relative turntable steps, but not object-frame absolute pose or camera intrinsics.',
+    limitation: 'Foreground-normalized silhouettes and candidate-scored capture-pose residuals are development diagnostics only. The source contract proves nominal 90-degree turntable steps, but not object-frame absolute pose, camera intrinsics, crop homography, or zero residual pose.',
     observedArticulation: {
       headTiltDegrees: observedHeadTiltDegrees,
-      perViewHeadYawDegrees: Object.fromEntries(articulationStateFit.views.map((view) => [
-        view.id, view.selected.jointDegrees,
-      ])),
-      stateFit: articulationStateFit,
-      candidateScores: articulatedViewCandidates.map((candidates, index) => ({
-        viewId: viewIds[index]!,
-        candidates: candidates.map((candidate) => ({
-          stateId: candidate.stateId, jointDegrees: candidate.jointDegrees,
-          gateMargin: candidate.score.gateMargin, wholeIoU: candidate.score.wholeIoU,
-          primaryMassIoU: candidate.score.primaryMassIoU,
-          thinFeatureScore: candidate.score.thinFeature.score,
-        })),
-      })),
-      evidence: ['view-090.jpg', 'view-270.jpg'],
       candidates: articulationCandidates.map((candidate) => ({
         headTiltDegrees: candidate.headTiltDegrees,
         coarseGateMargin: candidate.coarseCalibration[0]!.gateMargin,
         coarseOffsetDegrees: candidate.coarseCalibration[0]!.offsetDegrees,
       })),
-      acceptanceRule: 'Select the bounded articulation candidate with the strongest worst-view silhouette gate margin.',
+      evidenceStatus: 'inferred',
+      deliveryClaimAllowed: false,
+    },
+    capturePoseResidual: {
+      perViewCaptureYawResidualDegrees: Object.fromEntries(capturePoseResidualFit.views.map((view) => [
+        view.id, view.selected.residualDegrees,
+      ])),
+      stateFit: capturePoseResidualFit,
+      candidateScores: capturePoseCandidates.map((candidates, index) => ({
+        viewId: viewIds[index]!,
+        candidates: candidates.map((candidate) => ({
+          stateId: candidate.stateId, residualDegrees: candidate.residualDegrees,
+          gateMargin: candidate.score.gateMargin, wholeIoU: candidate.score.wholeIoU,
+          primaryMassIoU: candidate.score.primaryMassIoU,
+          thinFeatureScore: candidate.score.thinFeature.score,
+        })),
+      })),
+      evidence: viewFiles,
+      acceptanceRule: 'Select a bounded rigid whole-capture yaw residual only as a diagnostic, preserve the neutral asset, and keep delivery claims blocked when the residual is inferred rather than independently calibrated.',
     },
   },
   groundTruthGeometry: {
@@ -1012,8 +1019,8 @@ const report = {
   productionBlockers: [
     ...(cameraFit.poseEvidenceAudit?.claimBlockers ?? ['camera intrinsics and poses are not independently calibrated']),
     'hidden dimensions and internal motor interfaces remain inferred',
-    ...(articulationStateFit.deliveryClaimAllowed ? []
-      : ['per-view fan-head articulation angles are inferred from silhouettes, not independently measured']),
+    ...(capturePoseResidualFit.deliveryClaimAllowed ? []
+      : ['per-view whole-capture yaw residuals are inferred from silhouettes and expose an unresolved pose-evidence mismatch']),
     ...pbrAudit.blockers.map((blocker) => `PBR: ${blocker}`),
   ],
   dominanceBlockers: ['no same-input img2threejs candidate is available for an independent blind holdout comparison'],
