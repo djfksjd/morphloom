@@ -4,6 +4,8 @@ import type { QuantizedReferenceHeightField } from './reference-surface';
 import type { ImplicitSurfaceDescriptor } from './implicit-surface';
 import type { PlanFootprintDescriptor } from './plan-footprint';
 import type { DimensionContract } from './dimension-contract';
+import type { PartDecompositionContract } from './part-decomposition';
+import type { VisualPlanningContract } from './visual-plan-audit';
 
 export type AssemblyGeometryIR =
   | { op: 'roundedBox'; size: [number, number, number]; radius: number; segments?: number }
@@ -78,10 +80,39 @@ export interface AssemblyMaterialIR {
     /** Assembly-plane bounds [minA, minB, maxA, maxB] in millimetres. */
     boundsMm: [number, number, number, number];
     fingerprint?: string;
+    /**
+     * Strength of the conservative single-image de-light pass. Lower values
+     * preserve photographed broad illumination; higher values make the plate
+     * more relightable. The engine caps this at 0.35 because a single image
+     * cannot recover ground-truth albedo.
+     */
+    delightStrength?: number;
+    /**
+     * Blends the projected material multiplier back toward neutral white.
+     * Use only when source colour fidelity matters more than removing baked
+     * exposure. This never changes the hidden-side synthesis boundary.
+     */
+    colorRetention?: number;
     /** Derive tangent-space micro relief and local roughness from visible source detail. */
     relief?: {
       strength?: number;
       maxResolution?: number;
+    };
+    /**
+     * Hidden faces are not allowed to reuse a one-view photograph.  This
+     * recipe carries only the observed material character (not markings or
+     * ornaments) onto those faces as a deterministic seamless PBR surface.
+     */
+    unobservedSurface?: {
+      pattern: 'grain' | 'directional' | 'mineral-flow';
+      /** Estimated bulk colour for cut edges and the unseen face. */
+      color?: string;
+      /** Optional bounded physical-response overrides for the unseen partition. */
+      roughness?: number;
+      metalness?: number;
+      colorVariation?: number;
+      microNormalStrength?: number;
+      textureScale?: [number, number];
     };
   };
 }
@@ -118,6 +149,8 @@ export type EvidenceStatusIR = 'measured' | 'datasheet' | 'estimated' | 'inferre
 export interface ComponentEvidenceIR {
   /** Strongest evidence supporting the dimensions and identity of this edit unit. */
   status: EvidenceStatusIR;
+  /** Stable evidence-pack view id. Required by strict delivery jobs for strong claims. */
+  sourceViewId?: string;
   source?: string;
   notes?: string[];
 }
@@ -222,6 +255,10 @@ export interface AssemblyIR {
   electrical?: ElectricalHarnessIR;
   /** Optional locked detail-and-proof contract used by semi-professional delivery gates. */
   fidelity?: FidelityContract;
+  /** Evidence-first expected-part inventory. Detects omissions before a fidelity contract is derived from geometry. */
+  partDecomposition?: PartDecompositionContract;
+  /** Immutable evidence/count/quality baseline created before geometry or recovery retries. */
+  visualPlan?: VisualPlanningContract;
   /** Source-derived plan regions checked against the compiled top-down mesh projection. */
   planFootprint?: PlanFootprintDescriptor;
   /** Evidence-bound dimensions re-measured from compiled world-space geometry. */

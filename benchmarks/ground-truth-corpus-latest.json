@@ -1,0 +1,49 @@
+{
+  "schema": "morphloom.ground-truth-corpus-audit/0.1",
+  "pass": true,
+  "manifestSha256": "ea4356f4b277cf0d53bdfa24be6822f752d46efc37f724baf0cb47261e4513fe",
+  "cases": [
+    {
+      "id": "abo-industrial-tripod-lamp",
+      "pass": true,
+      "verifiedAssets": 6,
+      "distinctViewAzimuths": 4,
+      "maximumBoundsErrorMm": 0,
+      "blockers": [],
+      "warnings": [
+        "ground-truth: reference GLB warning MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+      ]
+    },
+    {
+      "id": "abo-industrial-floor-fan",
+      "pass": true,
+      "verifiedAssets": 6,
+      "distinctViewAzimuths": 4,
+      "maximumBoundsErrorMm": 0,
+      "blockers": [],
+      "warnings": [
+        "ground-truth: reference GLB warning MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+      ]
+    },
+    {
+      "id": "abo-surface-fringed-wool-rug",
+      "pass": true,
+      "verifiedAssets": 6,
+      "distinctViewAzimuths": 4,
+      "maximumBoundsErrorMm": 0,
+      "blockers": [],
+      "warnings": [
+        "ground-truth: reference GLB warning MESH_PRIMITIVE_GENERATED_TANGENT_SPACE"
+      ]
+    }
+  ],
+  "verifiedCases": 3,
+  "verifiedAssets": 18,
+  "blockers": [],
+  "limitation": "A passing corpus audit proves licensed source identity, byte integrity, decoded views, and independent ground-truth GLB structure. It does not score either reconstruction engine until separately generated candidates are bound to the same inputs.",
+  "manifestPath": "benchmarks/corpora/abo-pilot.json",
+  "assetRoot": "work/abo/pilot",
+  "sourceDataset": "Amazon Berkeley Objects",
+  "sourceDatasetUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/index.html",
+  "totalVerifiedBytes": 45574263
+}

@@ -19,10 +19,18 @@ import { analyzeTopology } from '../src/engine/topology';
 import { SerializedTaskQueue } from '../src/engine/serialized-task-queue';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION, SCENE_FINGERPRINT_REVISION } from '../src/engine/delivery-validation';
-import { STATIC_DELIVERY_REVISION } from '../src/engine/static-mesh-roundtrip';
+import {
+  auditStaticDeliveryProof,
+  STATIC_DELIVERY_REVISION,
+  type StaticDeliveryProofClaim,
+} from '../src/engine/static-mesh-roundtrip';
 import { BROWSER_ROUNDTRIP_PROOF_SCHEMA } from '../src/engine/browser-roundtrip-proof';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import * as THREE from 'three';
+import { calibrateOrthographicYawCamera, projectWithOrthographicYawCamera } from '../src/engine/orthographic-camera-calibration';
+import { calibratePerspectiveCamera } from '../src/engine/perspective-camera-calibration';
+import { inferOrthographicPlanExtents } from '../src/engine/multiview-extents';
+import { auditMultiviewSilhouetteFidelity } from '../src/engine/silhouette-fidelity';
 
 const auditSerializedValidation = async () => {
   const queue = new SerializedTaskQueue(3);
@@ -80,6 +88,33 @@ const auditSerializedValidation = async () => {
 };
 
 const serializedValidationAudit = await auditSerializedValidation();
+
+const calibrationFixture = { azimuthDegrees: 28, pixelsPerWorldUnit: 1.8, offsetPixels: [320, 180] as [number, number] };
+const calibrationWorldPoints: Array<[number, number, number]> = [
+  [-30, 40, -12], [28, 18, -20], [-18, -35, 32], [35, -28, 22], [0, 55, 0],
+];
+const cameraCalibrationAudit = calibrateOrthographicYawCamera(calibrationWorldPoints.map((world, index) => ({
+  id: `anchor-${index + 1}`, world, image: projectWithOrthographicYawCamera(calibrationFixture, world),
+})));
+const perspectiveWorldPoints: Array<[number, number, number]> = [
+  [-3, -2, -1], [3, -2, 0], [-2, 2, 1], [2, 2, 2],
+  [0, 0, -2], [1, -1, 3], [-1, 1, 2.5], [2.5, 0.5, -0.5],
+];
+const perspectiveCameraCalibrationAudit = calibratePerspectiveCamera(perspectiveWorldPoints.map((world, index) => ({
+  id: `perspective-anchor-${index + 1}`,
+  world,
+  image: [320 + 700 * world[0] / (world[2] + 12), 240 - 700 * world[1] / (world[2] + 12)],
+})));
+const multiviewExtentAudit = inferOrthographicPlanExtents([
+  { id: 'front', azimuthDegrees: 0, projectedWidth: 120 },
+  { id: 'right', azimuthDegrees: 90, projectedWidth: 70 },
+  { id: 'rear', azimuthDegrees: 180, projectedWidth: 120 },
+  { id: 'left', azimuthDegrees: 270, projectedWidth: 70 },
+]);
+const sparseSilhouetteAudit = auditMultiviewSilhouetteFidelity([
+  { id: 'front', referenceDensity: 0.05, wholeIoU: 0.43, primaryMassIoU: 0.82, thinFeatureScore: 0.9 },
+  { id: 'side', referenceDensity: 0.04, wholeIoU: 0.39, primaryMassIoU: 0.78, thinFeatureScore: 0.86 },
+]);
 
 const auditDimensionContract = () => {
   const fixture: AssemblyIR = {
@@ -274,6 +309,7 @@ const standardValidationAudit = {
 type BrowserRoundTripAsset = {
   id?: string;
   status?: string;
+  qualityReleaseReady?: boolean;
   inputFingerprint?: string;
   buildFingerprint?: string;
   sceneFingerprint?: string;
@@ -435,6 +471,90 @@ const blenderCrossDomainSummary = {
     finalStandard: item.blender?.deliveryRepair?.standard?.status,
   })),
 };
+type BlenderCrossDomainEditCase = {
+  id?: string;
+  domain?: string;
+  pass?: boolean;
+  edit?: { component?: string; kind?: string; changedVertices?: number; maximumDisplacementMm?: number };
+  isolation?: {
+    meshCount?: number;
+    unchangedMeshes?: number;
+    maximumUnchangedCenterDriftMm?: number;
+    maximumUnchangedSizeDriftMm?: number;
+    stabilityChangeCount?: number;
+  };
+  runtime?: { armatures?: number; actions?: number; preserved?: boolean };
+  riggedPayload?: { pass?: boolean; skinnedMeshNodes?: number; animationClips?: number; animationChannels?: number } | null;
+  finalDelivery?: {
+    inventoryPreserved?: boolean;
+    repair?: { restoredMaterials?: number };
+    validation?: { status?: string; errors?: number; warnings?: number; infos?: number; independentRead?: { status?: string } };
+  };
+};
+const blenderCrossDomainEdit = existsSync('benchmarks/blender-cross-domain-edit-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/blender-cross-domain-edit-latest.json', 'utf8')) as {
+    schema?: string;
+    compilerRevision?: string;
+    pass?: boolean;
+    cases?: BlenderCrossDomainEditCase[];
+  }
+  : undefined;
+const blenderCrossDomainEditCases = blenderCrossDomainEdit?.cases ?? [];
+const blenderCrossDomainEditPass = blenderCrossDomainEdit?.schema === 'morphloom.blender-cross-domain-edit-proof/0.1'
+  && blenderCrossDomainEdit.pass === true
+  && blenderCrossDomainEdit.compilerRevision === DELIVERY_PIPELINE_REVISION
+  && blenderCrossDomainEditCases.length === requiredBlenderDomains.size
+  && new Set(blenderCrossDomainEditCases.map((item) => item.domain)).size === requiredBlenderDomains.size
+  && blenderCrossDomainEditCases.every((item) => {
+    const validation = item.finalDelivery?.validation;
+    const driftToleranceMm = item.domain === 'animation-game' ? 0.5 : 0.1;
+    const rigPass = item.domain !== 'animation-game'
+      || (item.riggedPayload?.pass === true
+        && Number(item.riggedPayload.skinnedMeshNodes) >= 1
+        && Number(item.riggedPayload.animationClips) >= 1
+        && Number(item.riggedPayload.animationChannels) >= 1);
+    const localReliefPass = item.edit?.kind !== 'local-relief'
+      || (Number(item.edit.changedVertices) > 0 && Number(item.edit.maximumDisplacementMm) > 0);
+    return requiredBlenderDomains.has(item.domain ?? '')
+      && item.pass === true
+      && Boolean(item.edit?.component)
+      && Number(item.isolation?.meshCount) >= 1
+      && Number(item.isolation?.unchangedMeshes) === Number(item.isolation?.meshCount) - 1
+      && Number(item.isolation?.maximumUnchangedCenterDriftMm) <= driftToleranceMm
+      && Number(item.isolation?.maximumUnchangedSizeDriftMm) <= driftToleranceMm
+      && item.isolation?.stabilityChangeCount === 0
+      && item.runtime?.preserved === true
+      && item.finalDelivery?.inventoryPreserved === true
+      && Number(item.finalDelivery.repair?.restoredMaterials) === Number(item.isolation?.meshCount)
+      && validation?.status === 'pass'
+      && validation.errors === 0
+      && validation.warnings === 0
+      && validation.infos === 0
+      && validation.independentRead?.status === 'pass'
+      && rigPass
+      && localReliefPass;
+  });
+const blenderCrossDomainEditSummary = {
+  schema: blenderCrossDomainEdit?.schema,
+  compilerRevision: blenderCrossDomainEdit?.compilerRevision,
+  pass: blenderCrossDomainEdit?.pass,
+  benchmarkAccepted: blenderCrossDomainEditPass,
+  cases: blenderCrossDomainEditCases.map((item) => ({
+    id: item.id,
+    domain: item.domain,
+    pass: item.pass,
+    component: item.edit?.component,
+    operation: item.edit?.kind,
+    unchangedMeshes: item.isolation?.unchangedMeshes,
+    meshCount: item.isolation?.meshCount,
+    maximumUnchangedCenterDriftMm: item.isolation?.maximumUnchangedCenterDriftMm,
+    maximumUnchangedSizeDriftMm: item.isolation?.maximumUnchangedSizeDriftMm,
+    runtimePreserved: item.runtime?.preserved,
+    riggedPayloadPass: item.riggedPayload?.pass ?? null,
+    finalInventoryPreserved: item.finalDelivery?.inventoryPreserved,
+    finalStandard: item.finalDelivery?.validation?.status,
+  })),
+};
 const unityCrossDomain = existsSync('benchmarks/unity-cross-domain-latest.json')
   ? JSON.parse(readFileSync('benchmarks/unity-cross-domain-latest.json', 'utf8')) as {
     schema?: string;
@@ -456,42 +576,88 @@ const unityCrossDomainSummary = unityCrossDomain && unityCrossDomain.compilerRev
     blockers: [{ code: 'no-revision-bound-report', detail: 'No Unity report exists for the current compiler revision.' }],
     cases: [],
   };
-type StaticDeliveryFormat = { triangles?: number; sha256?: string; bounds?: { size?: number[] } };
-const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
-  ? JSON.parse(readFileSync('benchmarks/static-delivery-latest.json', 'utf8')) as {
+const godotCrossDomain = existsSync('benchmarks/godot-cross-domain-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/godot-cross-domain-latest.json', 'utf8')) as {
     schema?: string;
     compilerRevision?: string;
-    staticDeliveryRevision?: string;
-    assetId?: string;
-    expectedSourceTriangles?: number;
+    pass?: boolean;
     status?: string;
-    blenderVersion?: string;
-    assetPack?: { compilerRevision?: string; inputFingerprint?: string; browserRoundTrip?: string; sha256?: string };
-    formats?: Record<string, StaticDeliveryFormat>;
-    parity?: { triangles?: number; maximumAxisNormalizedEnvelopeDriftMm?: number };
-    usdz?: { status?: string; validator?: string; sha256?: string };
+    environment?: { godotVersion?: string; godotBinarySha256?: string };
+    cases?: Array<{
+      id?: string;
+      domain?: string;
+      pass?: boolean;
+      parity?: { boundsErrorMm?: number; boundsToleranceMm?: number; blockers?: string[] };
+    }>;
     blockers?: string[];
   }
   : undefined;
-const staticFormats = staticDelivery?.formats ?? {};
-const staticDeliveryPass = staticDelivery?.schema === 'morphloom.static-delivery-proof/0.4'
-  && staticDelivery.compilerRevision === DELIVERY_PIPELINE_REVISION
-  && staticDelivery.staticDeliveryRevision === STATIC_DELIVERY_REVISION
-  && staticDelivery.assetId === 'moderncat-concept'
-  && staticDelivery.status === 'pass'
-  && staticDelivery.assetPack?.compilerRevision === DELIVERY_PIPELINE_REVISION
-  && staticDelivery.assetPack?.browserRoundTrip === 'pass'
-  && /^[a-f0-9]{16}$/.test(staticDelivery.assetPack.inputFingerprint ?? '')
-  && /^[a-f0-9]{64}$/.test(staticDelivery.assetPack.sha256 ?? '')
-  && staticDelivery.expectedSourceTriangles === 81_768
-  && staticDelivery.parity?.triangles === 81_768
-  && Number(staticDelivery.parity.maximumAxisNormalizedEnvelopeDriftMm) <= 0.1
-  && ['obj', 'stl', 'ply'].every((format) => staticFormats[format]?.triangles === 81_768 && /^[a-f0-9]{64}$/.test(staticFormats[format]?.sha256 ?? ''))
-  && staticDelivery.usdz?.status === 'pass'
-  && /^[a-f0-9]{64}$/.test(staticDelivery.usdz.sha256 ?? '')
-  && (staticDelivery.blockers?.length ?? 0) === 0;
+const godotCases = godotCrossDomain?.cases ?? [];
+const godotCrossDomainPass = godotCrossDomain?.schema === 'morphloom.godot-cross-domain-proof/0.1'
+  && godotCrossDomain.compilerRevision === DELIVERY_PIPELINE_REVISION
+  && godotCrossDomain.pass === true
+  && godotCrossDomain.status === 'pass'
+  && godotCases.length === requiredBlenderDomains.size
+  && new Set(godotCases.map((item) => item.domain)).size === requiredBlenderDomains.size
+  && godotCases.every((item) => item.pass === true
+    && Number(item.parity?.boundsErrorMm) <= Number(item.parity?.boundsToleranceMm)
+    && (item.parity?.blockers?.length ?? 0) === 0)
+  && /^[a-f0-9]{64}$/.test(godotCrossDomain.environment?.godotBinarySha256 ?? '')
+  && (godotCrossDomain.blockers?.length ?? 0) === 0;
+const godotCrossDomainSummary = godotCrossDomain
+  ? { ...godotCrossDomain, benchmarkAccepted: godotCrossDomainPass }
+  : {
+    schema: 'morphloom.godot-cross-domain-proof/0.1', compilerRevision: DELIVERY_PIPELINE_REVISION,
+    pass: false, status: 'not-run', benchmarkAccepted: false, blockers: ['No revision-bound Godot report exists.'], cases: [],
+  };
+const prusaSlicer = existsSync('benchmarks/prusaslicer-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/prusaslicer-latest.json', 'utf8')) as {
+    schema?: string;
+    compilerRevision?: string;
+    staticDeliveryRevision?: string;
+    pass?: boolean;
+    status?: string;
+    source?: { sha256?: string; byteDeterministic?: boolean; coordinateUnit?: string; axisConvention?: string; binary?: { facets?: number } };
+    native?: {
+      application?: string; version?: string; binarySha256?: string; boundsErrorMm?: number;
+      info?: { facets?: number; manifold?: boolean; parts?: number; volumeMm3?: number; size?: number[] };
+      gcode?: { bytes?: number; sha256?: string | null; layers?: number; extrusionMoves?: number };
+    };
+    blockers?: string[];
+  }
+  : undefined;
+const prusaSlicerPass = prusaSlicer?.schema === 'morphloom.prusaslicer-print-proof/0.1'
+  && prusaSlicer.compilerRevision === DELIVERY_PIPELINE_REVISION
+  && prusaSlicer.staticDeliveryRevision === STATIC_DELIVERY_REVISION
+  && prusaSlicer.pass === true && prusaSlicer.status === 'pass'
+  && prusaSlicer.source?.byteDeterministic === true
+  && prusaSlicer.source.coordinateUnit === 'mm' && prusaSlicer.source.axisConvention === 'print-z-up'
+  && /^[a-f0-9]{64}$/.test(prusaSlicer.source.sha256 ?? '')
+  && prusaSlicer.native?.application === 'prusa-slicer'
+  && /^[a-f0-9]{64}$/.test(prusaSlicer.native.binarySha256 ?? '')
+  && prusaSlicer.native.info?.manifold === true && prusaSlicer.native.info.parts === 1
+  && Number(prusaSlicer.native.info.volumeMm3) > 0
+  && prusaSlicer.native.info.facets === prusaSlicer.source.binary?.facets
+  && Number(prusaSlicer.native.boundsErrorMm) <= 0.001
+  && Number(prusaSlicer.native.gcode?.bytes) >= 1_024
+  && /^[a-f0-9]{64}$/.test(prusaSlicer.native.gcode?.sha256 ?? '')
+  && Number(prusaSlicer.native.gcode?.layers) >= 2
+  && Number(prusaSlicer.native.gcode?.extrusionMoves) >= 10
+  && (prusaSlicer.blockers?.length ?? 0) === 0;
+const prusaSlicerSummary = prusaSlicer
+  ? { ...prusaSlicer, benchmarkAccepted: prusaSlicerPass }
+  : {
+    schema: 'morphloom.prusaslicer-print-proof/0.1', compilerRevision: DELIVERY_PIPELINE_REVISION,
+    staticDeliveryRevision: STATIC_DELIVERY_REVISION, pass: false, status: 'not-run',
+    benchmarkAccepted: false, blockers: ['No revision-bound PrusaSlicer report exists.'],
+  };
+const staticDelivery = existsSync('benchmarks/static-delivery-latest.json')
+  ? JSON.parse(readFileSync('benchmarks/static-delivery-latest.json', 'utf8')) as StaticDeliveryProofClaim
+  : undefined;
+const staticDeliveryBlockers = auditStaticDeliveryProof(staticDelivery, browserAssets);
+const staticDeliveryPass = staticDeliveryBlockers.length === 0;
 const staticDeliverySummary = staticDelivery
-  ? { ...staticDelivery, benchmarkAccepted: staticDeliveryPass }
+  ? { ...staticDelivery, benchmarkAccepted: staticDeliveryPass, competitiveBlockers: staticDeliveryBlockers }
   : {
     schema: 'morphloom.static-delivery-proof/0.4', compilerRevision: DELIVERY_PIPELINE_REVISION,
     staticDeliveryRevision: STATIC_DELIVERY_REVISION,
@@ -499,15 +665,26 @@ const staticDeliverySummary = staticDelivery
   };
 
 const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+const fidelityCameraAnchors = calibrationWorldPoints.map((world, index) => ({
+  id: `locked-anchor-${index + 1}`,
+  world,
+  image: projectWithOrthographicYawCamera(calibrationFixture, world),
+  evidenceRef: `locked-reference-view/anchor-${index + 1}`,
+}));
 const contract = createFidelityContract(ir, {
   domain: 'product',
   complexity: 'moderate',
   cameras: [{
     id: 'reference-camera',
     sourceViewId: 'locked-reference-view',
-    projection: 'perspective',
-    anchorCount: 12,
-    reprojectionErrorPx: 0.8,
+    projection: 'orthographic',
+    anchorCount: fidelityCameraAnchors.length,
+    reprojectionErrorPx: cameraCalibrationAudit.rmsReprojectionErrorPixels,
+    anchors: fidelityCameraAnchors,
+    calibrationRevision: 'morphloom-camera-calibration/0.1',
+    azimuthDegrees: cameraCalibrationAudit.azimuthDegrees,
+    pixelsPerWorldUnit: cameraCalibrationAudit.pixelsPerWorldUnit,
+    offsetPixels: cameraCalibrationAudit.offsetPixels,
   }],
   targetFidelity: 0.9,
   maxIterationsPerPass: 5,
@@ -716,7 +893,7 @@ const output = {
       parts: compiled.metrics.parts,
       triangles: compiled.metrics.triangles,
       topologyPass: compiled.metrics.topology.pass,
-      fidelityContractPersisted: compiled.root.userData.fidelityContract?.schema === 'morphloom.fidelity/0.1',
+      fidelityContractPersisted: compiled.root.userData.fidelityContract?.schema === 'morphloom.fidelity/0.2',
     },
     crossDomainDelivery: {
       rates: qualityBenchmark.rates,
@@ -736,10 +913,22 @@ const output = {
     gltfStandardValidation: standardValidationAudit,
     blenderRoundTrip: { ...blenderRoundTrip, benchmarkAccepted: blenderRoundTripPass },
     blenderCrossDomain: blenderCrossDomainSummary,
+    blenderCrossDomainEdit: blenderCrossDomainEditSummary,
     unityCrossDomain: unityCrossDomainSummary,
+    godotCrossDomain: godotCrossDomainSummary,
+    prusaSlicer: prusaSlicerSummary,
     staticDelivery: staticDeliverySummary,
+    cameraCalibration: cameraCalibrationAudit,
+    perspectiveCameraCalibration: perspectiveCameraCalibrationAudit,
+    multiviewExtentInference: multiviewExtentAudit,
+    sparseSilhouetteAudit,
   },
   capabilityMatrix: [
+    { capability: 'evidence-first semantic part contract independent of generated geometry', img2threejs: 'detail inventory documented; independent pre-geometry omission receipt not established in pinned audit', morphloom: 'yes—source views, observed counts, required geometry class, relationships, and component realization fail closed' },
+    { capability: 'measured 3D↔2D camera anchor solve with reprojection-error gate', img2threejs: 'camera contract documented; numeric anchor solver not established in pinned audit', morphloom: cameraCalibrationAudit.status === 'calibrated' && cameraCalibrationAudit.rmsReprojectionErrorPixels < 1e-6 ? 'yes' : 'blocked' },
+    { capability: 'non-coplanar perspective-camera DLT receipt recomputed from bound anchors', img2threejs: 'not established in pinned audit', morphloom: perspectiveCameraCalibrationAudit.status === 'calibrated' && perspectiveCameraCalibrationAudit.rmsReprojectionErrorPixels < 1e-6 ? 'yes—positive projective depth and per-pixel residual gate' : 'blocked' },
+    { capability: 'multi-view projected X/Z extent inference with contradictory-view rejection', img2threejs: 'not established in pinned audit', morphloom: multiviewExtentAudit.status === 'inferred' ? 'yes' : 'blocked' },
+    { capability: 'sparse assembly proof combining primary-mass IoU and distance-aware thin-member coverage', img2threejs: 'not established in pinned audit', morphloom: sparseSilhouetteAudit.pass ? 'yes—every view must independently pass both body and thin-member gates' : 'blocked' },
     { capability: 'strict detail inventory', img2threejs: 'yes', morphloom: contractAudit.detailCoverage === 1 && contractAudit.componentCoverage === 1 ? 'yes' : 'blocked' },
     { capability: 'locked staged passes', img2threejs: 'yes', morphloom: transitions.length === 8 ? 'yes' : 'blocked' },
     { capability: 'per-feature thresholds', img2threejs: 'yes', morphloom: contract.details.every((item) => item.threshold >= 0.5) ? 'yes' : 'blocked' },
@@ -750,6 +939,7 @@ const output = {
     { capability: 'smooth implicit Surface Nets with bounded manifold, positive-volume and outward-winding gates', img2threejs: 'Surface Nets', morphloom: implicitTopology.pass && implicitSurface.refinementSteps > 0 && implicitSurface.enclosedVolumeMm3 > 0 && implicitSurface.outwardFaceCoverage >= 0.995 ? 'yes + fail-closed manifold/winding refinement' : 'blocked' },
     { capability: 'foreground-normalized interior bands', img2threejs: 'yes', morphloom: interiorBands.aggregateSimilarity === 1 ? 'yes' : 'blocked' },
     { capability: 'deterministic material region comparator', img2threejs: 'yes', morphloom: materialComparison.passed ? 'yes' : 'blocked' },
+    { capability: 'reference-bound spatial PBR provenance gate', img2threejs: 'not established in pinned audit', morphloom: 'implemented—visible-area-weighted base-colour, metallic, roughness, normal, and emissive response must bind to reference/measured provenance; constants and generic noise cannot satisfy fidelity' },
     { capability: 'bounded reference-image de-lighting with recorded correction evidence', img2threejs: 'box-blurred luminance proxy, single-image confidence capped', morphloom: 'linear-light bounded field, global-exposure preservation, <=2% clipping and <=0.015 robust-luminance regression fail-closed gate' },
     { capability: 'bounded correction and cost ceiling', img2threejs: 'yes', morphloom: contract.maxTotalIterations <= 128 && contract.tokenBudget > 0 ? 'yes' : 'blocked' },
     { capability: 'architecture and measured assemblies', img2threejs: 'roadmap', morphloom: 'yes' },
@@ -758,9 +948,12 @@ const output = {
     { capability: 'same-input GLB byte reproducibility', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'five domains, two independent exports per fixture, identical SHA-256' : 'blocked' },
     { capability: 'Blender application import/export/reimport execution', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? `Blender ${blenderCrossDomainSummary.blenderVersions.join(', ')}: architecture, industrial design, electronics, animation/game, and 3D-print surface all pass revision-bound semantic parity and final exact-byte validation` : 'blocked' },
     { capability: 'DCC re-export sanitation with final-byte conformance gate', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainPass ? 'yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes' : 'blocked' },
-    { capability: 'OBJ/STL/PLY browser export, loader reopen and independent Blender import parity', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `81,768 triangles preserved; STL uses explicit millimetre coordinates; unit-normalized envelope drift ${staticDelivery?.parity?.maximumAxisNormalizedEnvelopeDriftMm?.toFixed(6)} mm` : 'blocked' },
+    { capability: 'isolated partial editing in a production DCC with non-target geometry, UV, material, hierarchy, rig, and animation preservation', img2threejs: 'not established in pinned audit', morphloom: blenderCrossDomainEditPass ? 'Blender 5.2.1 LTS: five domains pass named-part or bounded-relief edits, two reopen cycles, PBR recovery, and final Khronos validation' : 'blocked' },
+    { capability: 'OBJ/STL/PLY browser export, loader reopen and independent Blender import parity', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `${staticDelivery?.expectedSourceTriangles?.toLocaleString()} triangles preserved for ${staticDelivery?.assetId}; STL uses explicit millimetre coordinates and printer Z-up; unit-normalized envelope drift ${staticDelivery?.parity?.maximumAxisNormalizedEnvelopeDriftMm?.toFixed(6)} mm` : 'blocked' },
     { capability: 'USDZ Apple conformance validation', img2threejs: 'not established in pinned audit', morphloom: staticDeliveryPass ? `pass—${staticDelivery?.usdz?.validator}` : 'blocked' },
     { capability: 'Unity application import execution', img2threejs: 'not established in pinned audit', morphloom: unityCrossDomainSummary.pass === true ? 'revision-bound native import pass' : `${unityCrossDomainSummary.status}: ${unityCrossDomainSummary.blockers?.[0]?.code ?? 'not-run'}` },
+    { capability: 'Godot application import execution', img2threejs: 'not established in pinned audit', morphloom: godotCrossDomainPass ? `Godot ${godotCrossDomain?.environment?.godotVersion}: five-domain native PackedScene import parity plus delivered-vertex asphalt relief pass` : 'blocked' },
+    { capability: 'PrusaSlicer manifold reopen and toolpath execution', img2threejs: 'not established in pinned audit', morphloom: prusaSlicerPass ? `PrusaSlicer ${prusaSlicer?.native?.version}: ${prusaSlicer?.native?.info?.facets?.toLocaleString()} facets, Z-up manifold reopen and ${prusaSlicer?.native?.gcode?.layers} toolpath layers` : 'blocked' },
     { capability: 'Unreal application import execution', img2threejs: 'not established in pinned audit', morphloom: 'application-import-not-run' },
     { capability: 'bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-, texture-, and material-payload parity, same-input deduplication, and stale-result guard', img2threejs: 'not established in pinned audit', morphloom: serializedValidationAudit.pass && browserRoundTripPass && releaseBrowserProofPass ? `${releaseBrowserBinding?.verifiedAssets}/${releaseBrowserBinding?.expectedAssets} release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately` : `implemented; current ${BROWSER_ROUNDTRIP_PROOF_SCHEMA} browser receipts required` },
     { capability: 'pixel-level texture content and glTF-semantic sampler fingerprint with actual binary round-trip', img2threejs: 'not established in pinned audit', morphloom: 'implemented; lossless PNG pixels, slot identity, UV channel/transform, color space, wrapping and filtering survive an actual textured GLB reopen; glTF-inexpressible mapping, format, type, anisotropy, transform or mip state fails closed while GPU-only upload state is ignored' },
@@ -794,7 +987,7 @@ const output = {
 writeFileSync('benchmarks/competitive-latest.json', `${JSON.stringify(output, null, 2)}\n`, 'utf8');
 console.log(JSON.stringify(output, null, 2));
 if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !item.accepted)
-  || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.1'
+  || compiled.root.userData.fidelityContract?.schema !== 'morphloom.fidelity/0.2'
   || visualHull.status !== 'carved' || visualHull.minimumViewIoU < 0.85
   || !implicitTopology.pass || implicitSurface.refinementSteps < 1
   || implicitSurface.enclosedVolumeMm3 <= 0 || implicitSurface.outwardFaceCoverage < 0.995
@@ -802,4 +995,5 @@ if (!contractAudit.pass || !deliveryAudit.pass || transitions.some((item) => !it
   || !serializedValidationAudit.pass || !dimensionContractAudit.pass || !anchorPitchAudit.pass
   || !localAxisAudit.pass || !rotatedLocalPitchAudit.pass || !standardValidationAudit.pass
   || !browserRoundTripPass || !releaseBrowserProofPass || !qualityRatesPass
-  || !blenderRoundTripPass || !blenderCrossDomainPass || !staticDeliveryPass) process.exitCode = 1;
+  || !blenderRoundTripPass || !blenderCrossDomainPass || !blenderCrossDomainEditPass || !godotCrossDomainPass
+  || !prusaSlicerPass || !staticDeliveryPass) process.exitCode = 1;

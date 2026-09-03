@@ -1,0 +1,24 @@
+{
+  "schema": "morphloom.blind-packet-key/0.1",
+  "caseId": "abo-industrial-floor-fan-four-view",
+  "packetId": "abo-fan-neutral-v2-a-first",
+  "protocol": "morphloom-neutral-glb-v2",
+  "mapping": {
+    "candidate-a": {
+      "engine": "morphloom",
+      "artifactSha256": "b2422fcf5deaef183c04272a9de4d03b088e87eaffd17ed140f7db8c51b6423a"
+    },
+    "candidate-b": {
+      "engine": "img2threejs-agent-output",
+      "artifactSha256": "e3394f61374315e34b10658ac647e55279c589a2791dec032558a6b7b13a3619",
+      "compatibilityRecoveryApplied": true,
+      "materialClaimEligible": false
+    }
+  },
+  "claimAllowed": false,
+  "blockers": [
+    "no balanced five-rater blind panel has been recorded",
+    "candidate B required compatibility recovery and is ineligible for a material-fidelity claim",
+    "neutral render views are not calibrated to the admitted photographs"
+  ]
+}

@@ -13,19 +13,75 @@ import {
   type FidelityWorkflowState,
 } from '../src/engine/fidelity-pipeline';
 import { DEFAULT_KNIFE_SPEC } from '../src/types';
+import { calibratePerspectiveCamera } from '../src/engine/perspective-camera-calibration';
+
+function calibratedCamera(id = 'source-front', sourceViewId = 'reference-front') {
+  const azimuthDegrees = 30;
+  const pixelsPerWorldUnit = 2;
+  const offsetPixels: [number, number] = [200, 150];
+  const angle = azimuthDegrees * Math.PI / 180;
+  const worlds: Array<[number, number, number]> = [
+    [-2, -1, -1], [2, -1, -1], [-2, 1, 1], [2, 1, 1],
+    [0, 0, 2], [1, 2, -2], [-1, -2, 2], [3, 0.5, 0],
+  ];
+  const anchors = worlds.map((world, index) => ({
+    id: `anchor-${index + 1}`,
+    world,
+    image: [
+      offsetPixels[0] + pixelsPerWorldUnit * (world[0] * Math.cos(angle) - world[2] * Math.sin(angle)),
+      offsetPixels[1] - pixelsPerWorldUnit * world[1],
+    ] as [number, number],
+    evidenceRef: `fixture/${sourceViewId}/anchor-${index + 1}`,
+  }));
+  return {
+    id,
+    sourceViewId,
+    projection: 'orthographic' as const,
+    anchorCount: anchors.length,
+    reprojectionErrorPx: 0,
+    anchors,
+    calibrationRevision: 'morphloom-camera-calibration/0.1' as const,
+    azimuthDegrees,
+    pixelsPerWorldUnit,
+    offsetPixels,
+  };
+}
+
+function calibratedPerspectiveCamera(id = 'source-perspective', sourceViewId = 'reference-perspective') {
+  const worlds: Array<[number, number, number]> = [
+    [-3, -2, -1], [3, -2, 0], [-2, 2, 1], [2, 2, 2],
+    [0, 0, -2], [1, -1, 3], [-1, 1, 2.5], [2.5, 0.5, -0.5],
+  ];
+  const anchors = worlds.map((world, index) => ({
+    id: `perspective-anchor-${index + 1}`,
+    world,
+    image: [320 + 700 * world[0] / (world[2] + 12), 240 - 700 * world[1] / (world[2] + 12)] as [number, number],
+    evidenceRef: `fixture/${sourceViewId}/anchor-${index + 1}`,
+  }));
+  const calibration = calibratePerspectiveCamera(anchors);
+  if (calibration.status !== 'calibrated') throw new Error(calibration.blockers.join('; '));
+  return {
+    id,
+    sourceViewId,
+    projection: 'perspective' as const,
+    anchorCount: anchors.length,
+    reprojectionErrorPx: calibration.rmsReprojectionErrorPixels,
+    anchors,
+    calibrationRevision: 'morphloom-camera-calibration/0.2' as const,
+    projectionMatrix: calibration.projectionMatrix,
+    worldCenter: calibration.worldCenter,
+    worldScale: calibration.worldScale,
+    imageCenter: calibration.imageCenter,
+    imageScale: calibration.imageScale,
+  };
+}
 
 function fixtureContract(overrides: Partial<FidelityContract> = {}): FidelityContract {
   const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
   const contract = createFidelityContract(ir, {
     domain: 'product',
     complexity: 'moderate',
-    cameras: [{
-      id: 'source-front',
-      sourceViewId: 'reference-front',
-      projection: 'perspective',
-      anchorCount: 8,
-      reprojectionErrorPx: 1.1,
-    }],
+    cameras: [calibratedCamera()],
     targetFidelity: 0.9,
     maxIterationsPerPass: 5,
     maxTotalIterations: 28,
@@ -77,6 +133,13 @@ describe('locked fidelity contract', () => {
     expect(auditFidelityContract(first, ir)).toMatchObject({ pass: true, detailCoverage: 1, componentCoverage: 1, materialCoverage: 1 });
   });
 
+  it('fails closed on legacy camera-summary contracts after the 0.2 receipt upgrade', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const legacy = structuredClone(fixtureContract()) as unknown as FidelityContract;
+    Object.assign(legacy, { schema: 'morphloom.fidelity/0.1' });
+    expect(auditFidelityContract(legacy, ir).blockers).toContain('unsupported fidelity schema');
+  });
+
   it('fails closed for shallow inventory, missing camera calibration, and unsafe budgets', () => {
     const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
     const contract = fixtureContract();
@@ -101,6 +164,43 @@ describe('locked fidelity contract', () => {
     underconstrained.cameras[0].anchorCount = 3;
     expect(auditFidelityContract(underconstrained, ir).blockers).toContain(
       'invalid camera calibration: source-front',
+    );
+  });
+
+  it('rejects a reported camera result that cannot be recomputed from its bound anchors', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const contract = fixtureContract();
+    const fabricated = structuredClone(contract);
+    fabricated.cameras[0].azimuthDegrees += 5;
+    expect(auditFidelityContract(fabricated, ir).blockers).toContain(
+      'camera receipt does not reproduce from anchor coordinates: source-front',
+    );
+    const missingEvidence = structuredClone(contract);
+    missingEvidence.cameras[0].anchors[0].evidenceRef = '';
+    expect(auditFidelityContract(missingEvidence, ir).blockers).toContain(
+      'invalid camera anchor evidence: source-front',
+    );
+    const oversized = structuredClone(contract);
+    oversized.cameras[0].anchors = Array.from({ length: 513 }, (_, index) => ({
+      ...oversized.cameras[0].anchors[index % oversized.cameras[0].anchors.length]!,
+      id: `oversized-${index}`,
+    }));
+    oversized.cameras[0].anchorCount = oversized.cameras[0].anchors.length;
+    expect(() => auditFidelityContract(oversized, ir)).not.toThrow();
+    expect(auditFidelityContract(oversized, ir).blockers).toContain(
+      'missing reproducible camera receipt: source-front',
+    );
+  });
+
+  it('accepts a reproducible perspective receipt and blocks a modified projection matrix', () => {
+    const ir = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const perspective = fixtureContract({ cameras: [calibratedPerspectiveCamera()] });
+    expect(auditFidelityContract(perspective, ir).pass).toBe(true);
+    const modified = structuredClone(perspective);
+    if (modified.cameras[0].projection !== 'perspective') throw new Error('expected perspective fixture');
+    modified.cameras[0].projectionMatrix[0] += 0.1;
+    expect(auditFidelityContract(modified, ir).blockers).toContain(
+      'camera receipt does not reproduce from anchor coordinates: source-perspective',
     );
   });
 
@@ -130,7 +230,7 @@ describe('locked fidelity contract', () => {
     }));
     const contract = createFidelityContract(ir, {
       domain: 'product',
-      cameras: [{ id: 'large-camera', sourceViewId: 'large-reference', projection: 'perspective', anchorCount: 12, reprojectionErrorPx: 1 }],
+      cameras: [calibratedCamera('large-camera', 'large-reference')],
     });
     expect(contract.details.length).toBeLessThanOrEqual(2_048);
     expect(contract.materialRegions).toHaveLength(500);

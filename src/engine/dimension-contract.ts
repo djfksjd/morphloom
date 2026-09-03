@@ -25,6 +25,8 @@ export interface DimensionContract {
   toleranceMm: number;
   evidence: {
     status: 'measured' | 'datasheet';
+    /** Stable evidence-pack view id used to verify the strength claim. */
+    sourceViewId?: string;
     source: string;
     note?: string;
   };
@@ -115,6 +117,8 @@ export function validateDimensionContracts(
       }
     }
     if (!contract.evidence || !['measured', 'datasheet'].includes(contract.evidence.status)
+      || (contract.evidence.sourceViewId !== undefined
+        && !ID_PATTERN.test(contract.evidence.sourceViewId))
       || typeof contract.evidence.source !== 'string' || contract.evidence.source.trim().length < 1
       || contract.evidence.source.length > 500
       || (contract.evidence.note !== undefined

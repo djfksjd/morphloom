@@ -4,10 +4,17 @@ import type { ViewMode } from '../types';
 import type { ProductBuild, ProductPartInfo } from './product';
 import type { AssemblyComponentIR, AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
 import { compileElectricalHarness, validateElectricalHarness } from './connectivity';
-import { createSurfaceMaterial, inferSurfaceFinish, inspectSurfaceSystem } from './surface-system';
+import {
+  createSurfaceMaterial,
+  createUnobservedSurfaceMaterial,
+  inferSurfaceFinish,
+  inspectSurfaceSystem,
+} from './surface-system';
 import { analyzeTopology } from './topology';
 import { inspectEngineeringEvidence } from './engineering-audit';
 import { auditFidelityContract } from './fidelity-pipeline';
+import { auditPartDecomposition } from './part-decomposition';
+import { auditVisualPlan } from './visual-plan-audit';
 import { carveVisualHull, validateVisualHullDescriptor, visualHullToBufferGeometry } from './visual-hull';
 import { polygonizeImplicitSurface, validateImplicitSurfaceDescriptor } from './implicit-surface';
 import { createLayeredSurfaceGeometry } from './layered-surface';
@@ -29,10 +36,41 @@ const mm = (value: number) => value / 1000;
 type ReferenceProjectionIR = NonNullable<AssemblyComponentIR['material']['referenceProjection']>;
 type ProjectionStatus = { declared: number; loaded: number; failed: number; errors: string[] };
 const projectionReadiness = new WeakMap<THREE.Object3D, Promise<ProjectionStatus>>();
+export const MAX_REFERENCE_PROJECTION_BYTES = 24 * 1024 * 1024;
+export const REFERENCE_PROJECTION_IO_TIMEOUT_MS = 10_000;
+
+function sniffReferenceImageMime(bytes: Uint8Array): 'image/png' | 'image/jpeg' | 'image/webp' | undefined {
+  if (bytes.length >= 8
+    && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
+    && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a) return 'image/png';
+  if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'image/jpeg';
+  if (bytes.length >= 12
+    && String.fromCharCode(...bytes.subarray(0, 4)) === 'RIFF'
+    && String.fromCharCode(...bytes.subarray(8, 12)) === 'WEBP') return 'image/webp';
+  return undefined;
+}
+
+export function isSafeReferenceProjectionUri(uri: string): boolean {
+  if (uri.length < 1 || uri.length > 2_000 || uri.includes('\\') || /[\0-\x1f\x7f]/.test(uri)) return false;
+  if (/^\/(?!\/)/.test(uri)) {
+    try {
+      const decoded = decodeURIComponent(uri);
+      return !decoded.includes('\\') && !/[\0-\x1f\x7f]/.test(decoded) && !decoded.startsWith('//');
+    } catch {
+      return false;
+    }
+  }
+  // Browser-created object URLs never transmit the referenced bytes to an
+  // external host.  Network/data/file URLs remain forbidden at the IR edge.
+  return /^blob:(?:https?:\/\/[^/]+\/|null\/)[a-zA-Z0-9._~!$&'()*+,;=:@%-]+$/.test(uri);
+}
 
 function validateReferenceProjection(projection: ReferenceProjectionIR, componentId: string): void {
-  if (!/^(?:\/(?!\/)|blob:)/.test(projection.uri) || projection.uri.includes('\\') || projection.uri.includes('\0')) {
+  if (!isSafeReferenceProjectionUri(projection.uri)) {
     throw new Error(`Reference projection URI must be local or blob-backed in ${componentId}.`);
+  }
+  if (!projection.fingerprint || !/^[a-f0-9]{8,64}$/i.test(projection.fingerprint)) {
+    throw new Error(`Reference projection fingerprint is required and invalid in ${componentId}.`);
   }
   const [x, y, width, height] = projection.crop;
   if (x < 0 || y < 0 || width <= 0 || height <= 0 || x + width > 1 || y + height > 1) {
@@ -48,6 +86,30 @@ function validateReferenceProjection(projection: ReferenceProjectionIR, componen
       || projection.relief.maxResolution < 256
       || projection.relief.maxResolution > 2048)) {
     throw new Error(`Reference relief resolution is invalid in ${componentId}.`);
+  }
+  if (projection.delightStrength !== undefined
+    && (!Number.isFinite(projection.delightStrength)
+      || projection.delightStrength <= 0
+      || projection.delightStrength > 0.35)) {
+    throw new Error(`Reference de-light strength is invalid in ${componentId}.`);
+  }
+  if (projection.colorRetention !== undefined
+    && (!Number.isFinite(projection.colorRetention)
+      || projection.colorRetention < 0
+      || projection.colorRetention > 1)) {
+    throw new Error(`Reference colour retention is invalid in ${componentId}.`);
+  }
+  const hidden = projection.unobservedSurface;
+  if (hidden) {
+    if (!['grain', 'directional', 'mineral-flow'].includes(hidden.pattern)
+      || (hidden.color !== undefined && !/^#[0-9a-f]{6}$/i.test(hidden.color))
+      || (hidden.roughness !== undefined && (hidden.roughness < 0 || hidden.roughness > 1))
+      || (hidden.metalness !== undefined && (hidden.metalness < 0 || hidden.metalness > 1))
+      || (hidden.colorVariation !== undefined && (hidden.colorVariation < 0 || hidden.colorVariation > 0.45))
+      || (hidden.microNormalStrength !== undefined && (hidden.microNormalStrength < 0 || hidden.microNormalStrength > 1))
+      || hidden.textureScale?.some((value) => value <= 0 || value > 1024)) {
+      throw new Error(`Unobserved surface synthesis is invalid in ${componentId}.`);
+    }
   }
 }
 
@@ -104,7 +166,8 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     if (inspectedNodes > 200_000) throw new Error('AssemblyIR is too complex to inspect safely.');
     if (depth > 16) throw new Error(`AssemblyIR nesting is too deep at ${key}.`);
     if (typeof node === 'number') {
-      if (!Number.isFinite(node) || Math.abs(node) > 1_000_000) throw new Error(`Unsafe numeric value at ${key}.`);
+      const numericLimit = key.endsWith('.geometry.descriptor.triangleBudget') ? 1_400_000 : 1_000_000;
+      if (!Number.isFinite(node) || Math.abs(node) > numericLimit) throw new Error(`Unsafe numeric value at ${key}.`);
       const minSegments = /(^|\.)bevelSegments$/.test(key) ? 0 : 3;
       if (/segments/i.test(key) && (node < minSegments || node > 512)) throw new Error(`Unsafe segment count at ${key}.`);
       return;
@@ -132,6 +195,8 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   };
   inspect(candidate.metadata, 'metadata');
   inspect(candidate.fidelity, 'fidelity');
+  inspect(candidate.partDecomposition, 'partDecomposition');
+  inspect(candidate.visualPlan, 'visualPlan');
   inspect(candidate.planFootprint, 'planFootprint');
   inspect(candidate.dimensionContracts, 'dimensionContracts');
   for (const component of candidate.components as AssemblyComponentIR[]) {
@@ -313,6 +378,14 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   if (candidate.fidelity) {
     const fidelityAudit = auditFidelityContract(candidate.fidelity, candidate as AssemblyIR);
     if (!fidelityAudit.pass) throw new Error(`AssemblyIR fidelity contract is blocked: ${fidelityAudit.blockers.join('; ')}`);
+  }
+  if (candidate.partDecomposition) {
+    const decompositionAudit = auditPartDecomposition(candidate.partDecomposition, candidate as AssemblyIR);
+    if (!decompositionAudit.pass) throw new Error(`AssemblyIR part decomposition is blocked: ${decompositionAudit.blockers.join('; ')}`);
+  }
+  if (candidate.visualPlan) {
+    const visualPlanAudit = auditVisualPlan(candidate.visualPlan);
+    if (!visualPlanAudit.pass) throw new Error(`AssemblyIR visual plan is blocked: ${visualPlanAudit.blockers.join('; ')}`);
   }
 }
 
@@ -806,17 +879,26 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
     // A single admitted image constrains only the source-facing hemisphere.
     // Projecting it onto the hidden rear would duplicate evidence and mirror
     // visible detail onto geometry the source never observed.
-    const materialIndex = normal[projectionAxis] / normalLength >= minimumFacing ? 0 : 1;
+    const signedFacing = normal[projectionAxis] / normalLength;
+    const materialIndex = signedFacing >= minimumFacing ? 0 : 1;
     if (materialIndex === 0) {
       projectedTriangles += 1;
+    } else {
+      sideTriangles += 1;
+    }
+    // Source and rear caps need a stable 0..1 assembly-space UV domain. The
+    // source-facing partition consumes the admitted photograph; the rear cap
+    // consumes a different procedural texture. Retaining ExtrudeGeometry's
+    // metre-sized rear-cap UVs compressed an entire product into a few texels.
+    // Near-tangent edge/bevel triangles keep their authored non-degenerate UVs
+    // because a broadside projection would collapse those triangles to lines.
+    if (materialIndex === 0 || Math.abs(signedFacing) >= minimumFacing) {
       for (let corner = 0; corner < 3; corner += 1) {
         const point = points[corner];
         uv[(triangle + corner) * 2] = (point.x - minX) / width;
         const secondary = projection.mapping === 'assembly-xz' ? point.z : point.y;
         uv[(triangle + corner) * 2 + 1] = (secondary - minSecondary) / height;
       }
-    } else {
-      sideTriangles += 1;
     }
     if (activeMaterial < 0) activeMaterial = materialIndex;
     if (materialIndex !== activeMaterial) {
@@ -834,6 +916,7 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
     minimumFacing,
     projectedTriangles,
     sideTriangles,
+    hiddenUvDomain: 'normalized-rear-plus-authored-edge',
     groups: geometry.groups.length,
   };
   if (geometry !== source) source.dispose();
@@ -851,12 +934,18 @@ interface ProjectionLoadRecord {
   promise: Promise<boolean>;
 }
 
-export function referenceProjectionDiffuseGain(metalness: number, authoredLinearLuma: number): number {
+export function referenceProjectionDiffuseGain(
+  metalness: number,
+  authoredLinearLuma: number,
+  colorRetention = 0,
+): number {
   if (!Number.isFinite(metalness) || metalness < 0 || metalness > 1
-    || !Number.isFinite(authoredLinearLuma) || authoredLinearLuma < 0 || authoredLinearLuma > 1) {
+    || !Number.isFinite(authoredLinearLuma) || authoredLinearLuma < 0 || authoredLinearLuma > 1
+    || !Number.isFinite(colorRetention) || colorRetention < 0 || colorRetention > 1) {
     throw new Error('Reference projection metalness and authored luminance must be within 0..1.');
   }
-  return THREE.MathUtils.clamp(0.8 - authoredLinearLuma * 0.42 + metalness * 0.2, 0.5, 0.95);
+  const compensated = THREE.MathUtils.clamp(0.8 - authoredLinearLuma * 0.42 + metalness * 0.2, 0.5, 0.95);
+  return THREE.MathUtils.lerp(compensated, 1, colorRetention);
 }
 
 function applyReferenceProjectionAppearance(
@@ -865,7 +954,13 @@ function applyReferenceProjectionAppearance(
 ): void {
   material.map = record.texture;
   if (record.normalTexture) material.normalMap = record.normalTexture;
-  if (record.roughnessTexture) material.roughnessMap = record.roughnessTexture;
+  if (record.roughnessTexture) {
+    // glTF requires roughness in G and metalness in B of one shared image.
+    // Keeping both slots on the same packed map avoids the exporter's canvas
+    // merge path, which cannot draw a DataTexture mixed with a CanvasTexture.
+    material.roughnessMap = record.roughnessTexture;
+    material.metalnessMap = record.roughnessTexture;
+  }
   // The admitted plate already contains photographed illumination. Applying a
   // full white multiplier under a second PBR studio rig overexposes pale
   // dielectrics while highly metallic regions receive much less diffuse light.
@@ -875,7 +970,14 @@ function applyReferenceProjectionAppearance(
   const authoredLinearLuma = typeof recordedLuma === 'number'
     ? recordedLuma
     : material.color.r * 0.2126 + material.color.g * 0.7152 + material.color.b * 0.0722;
-  const colorGain = referenceProjectionDiffuseGain(material.metalness, authoredLinearLuma);
+  const projection = material.userData.morphloomSurface?.referenceProjectionParameters as
+    | Pick<ReferenceProjectionIR, 'colorRetention'>
+    | undefined;
+  const colorGain = referenceProjectionDiffuseGain(
+    material.metalness,
+    authoredLinearLuma,
+    projection?.colorRetention ?? 0,
+  );
   material.color.setRGB(colorGain, colorGain, colorGain);
   material.userData.morphloomSurface = {
     ...material.userData.morphloomSurface,
@@ -925,7 +1027,12 @@ function createOpaqueCroppedProjectionTexture(
     return undefined;
   }
   const extended = extendOpaqueProjectionColors(pixels.data, width, height);
-  const delighted = delightReferenceProjection(extended.rgba, width, height);
+  const delighted = delightReferenceProjection(
+    extended.rgba,
+    width,
+    height,
+    projection.delightStrength ?? 0.2,
+  );
   const opaqueImage = context.createImageData(width, height);
   opaqueImage.data.set(delighted.rgba);
   context.putImageData(opaqueImage, 0, 0);
@@ -941,20 +1048,62 @@ function createOpaqueCroppedProjectionTexture(
 }
 
 function projectionKey(projection: ReferenceProjectionIR): string {
-  return `${projection.uri}|${projection.mapping}|${projection.crop.join(',')}|${projection.boundsMm.join(',')}|${projection.fingerprint ?? ''}|${projection.relief?.strength ?? ''}|${projection.relief?.maxResolution ?? ''}`;
+  return `${projection.uri}|${projection.mapping}|${projection.crop.join(',')}|${projection.boundsMm.join(',')}|${projection.fingerprint ?? ''}|${projection.relief?.strength ?? ''}|${projection.relief?.maxResolution ?? ''}|${projection.delightStrength ?? ''}|${projection.colorRetention ?? ''}`;
 }
 
-async function verifyReferenceFingerprint(projection: ReferenceProjectionIR): Promise<boolean> {
-  if (!projection.fingerprint) return true;
-  if (typeof fetch !== 'function' || !globalThis.crypto?.subtle) return false;
+async function fetchVerifiedReferenceProjection(
+  projection: ReferenceProjectionIR,
+): Promise<{ bytes: Uint8Array; mime: 'image/png' | 'image/jpeg' | 'image/webp' }> {
+  if (typeof fetch !== 'function' || !globalThis.crypto?.subtle) {
+    throw new Error('secure local reference loading is unavailable');
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort('local reference load timed out'), REFERENCE_PROJECTION_IO_TIMEOUT_MS);
   try {
-    const response = await fetch(projection.uri, { cache: 'no-store', credentials: 'same-origin' });
-    if (!response.ok) return false;
-    const digest = await globalThis.crypto.subtle.digest('SHA-256', await response.arrayBuffer());
+    const response = await fetch(projection.uri, {
+      cache: 'no-store', credentials: 'same-origin', signal: controller.signal,
+    });
+    if (!response.ok) throw new Error(`local reference returned HTTP ${response.status}`);
+    const declaredLength = Number(response.headers.get('content-length'));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_REFERENCE_PROJECTION_BYTES) {
+      throw new Error(`local reference exceeds ${MAX_REFERENCE_PROJECTION_BYTES} bytes`);
+    }
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('bounded local reference stream is unavailable');
+    const chunks: Uint8Array[] = [];
+    let total = 0;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (!value) continue;
+        total += value.byteLength;
+        if (total > MAX_REFERENCE_PROJECTION_BYTES) {
+          await reader.cancel('local reference byte budget exceeded');
+          throw new Error(`local reference exceeds ${MAX_REFERENCE_PROJECTION_BYTES} bytes`);
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+    if (total < 12) throw new Error('local reference image is truncated');
+    const bytes = new Uint8Array(total);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    const mime = sniffReferenceImageMime(bytes);
+    if (!mime) throw new Error('local reference must be PNG, JPEG, or WebP');
+    const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
     const actual = [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, '0')).join('');
-    return actual.startsWith(projection.fingerprint.toLowerCase());
-  } catch {
-    return false;
+    if (!actual.startsWith(projection.fingerprint!.toLowerCase())) {
+      throw new Error('local reference fingerprint mismatch');
+    }
+    return { bytes, mime };
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
@@ -1007,7 +1156,14 @@ function createReferenceSurfaceMaps(
   // ImageData requires an ArrayBuffer-backed view in newer DOM typings. Copying
   // also prevents the canvas from sharing mutable analysis buffers.
   const normalPixels = new ImageData(new Uint8ClampedArray(analysis.normalRgba), width, height);
-  const roughnessPixels = new ImageData(new Uint8ClampedArray(analysis.roughnessRgba), width, height);
+  const packedMetallicRoughness = new Uint8ClampedArray(analysis.roughnessRgba.length);
+  for (let offset = 0; offset < packedMetallicRoughness.length; offset += 4) {
+    packedMetallicRoughness[offset] = 255;
+    packedMetallicRoughness[offset + 1] = analysis.roughnessRgba[offset + 1]!;
+    packedMetallicRoughness[offset + 2] = 255;
+    packedMetallicRoughness[offset + 3] = 255;
+  }
+  const roughnessPixels = new ImageData(packedMetallicRoughness, width, height);
   normalContext.putImageData(normalPixels, 0, 0);
   roughnessContext.putImageData(roughnessPixels, 0, 0);
   sourceCanvas.width = sourceCanvas.height = 1;
@@ -1037,49 +1193,75 @@ function createProjectionRecord(
   const materials = new Set<THREE.MeshPhysicalMaterial>();
   let resolveLoad: (loaded: boolean) => void = () => undefined;
   const promise = new Promise<boolean>((resolve) => { resolveLoad = resolve; });
-  const record = {} as ProjectionLoadRecord;
-  const loader = new THREE.TextureLoader();
-  loader.setCrossOrigin('anonymous');
-  const texture = loader.load(
-    projection.uri,
-    () => {
-      void (async () => {
-        if (root.userData.morphloomProjectionActive !== true) {
+  const placeholder = new THREE.Texture();
+  placeholder.name = `morphloom_reference_pending_${projection.fingerprint}`;
+  const record: ProjectionLoadRecord = {
+    texture: placeholder,
+    materials,
+    state: 'loading',
+    promise,
+  };
+  let settled = false;
+  const fail = (message: string, texture?: THREE.Texture): void => {
+    texture?.dispose();
+    if (settled) return;
+    settled = true;
+    record.state = 'failed';
+    status.failed += 1;
+    status.errors.push(`${message}: ${projection.uri}`);
+    for (const material of materials) {
+      material.userData.morphloomSurface = {
+        ...material.userData.morphloomSurface,
+        referenceProjectionState: 'failed',
+      };
+    }
+    placeholder.dispose();
+    resolveLoad(false);
+  };
+  void (async () => {
+    const verified = await fetchVerifiedReferenceProjection(projection);
+    if (root.userData.morphloomProjectionActive !== true) {
+      settled = true;
+      placeholder.dispose();
+      resolveLoad(false);
+      return;
+    }
+    const objectUri = URL.createObjectURL(new Blob([verified.bytes.slice().buffer], { type: verified.mime }));
+    const loader = new THREE.TextureLoader();
+    let pendingTexture: THREE.Texture | undefined;
+    let objectUriActive = true;
+    let decodeTimeout: ReturnType<typeof setTimeout> | undefined;
+    const releaseObjectUri = (): void => {
+      if (!objectUriActive) return;
+      objectUriActive = false;
+      URL.revokeObjectURL(objectUri);
+    };
+    pendingTexture = loader.load(
+      objectUri,
+      (texture) => {
+        if (decodeTimeout !== undefined) clearTimeout(decodeTimeout);
+        releaseObjectUri();
+        if (settled) {
           texture.dispose();
-          resolveLoad(false);
           return;
         }
-        if (!await verifyReferenceFingerprint(projection)) {
-          record.state = 'failed';
-          status.failed += 1;
-          status.errors.push(`Reference projection fingerprint mismatch: ${projection.uri}`);
-          texture.dispose();
-          resolveLoad(false);
-          return;
-        }
         if (root.userData.morphloomProjectionActive !== true) {
+          settled = true;
           texture.dispose();
+          placeholder.dispose();
           resolveLoad(false);
           return;
         }
         const opaqueProjection = createOpaqueCroppedProjectionTexture(texture, projection);
         if (!opaqueProjection) {
-          record.state = 'failed';
-          status.failed += 1;
-          status.errors.push(`Unable to prepare opaque reference projection: ${projection.uri}`);
-          texture.dispose();
-          resolveLoad(false);
+          fail('Unable to prepare opaque reference projection', texture);
           return;
         }
         const croppedProjection = { ...projection, crop: [0, 0, 1, 1] as [number, number, number, number] };
         const derivedMaps = createReferenceSurfaceMaps(opaqueProjection.texture, croppedProjection);
         if (projection.relief && !derivedMaps) {
-          record.state = 'failed';
-          status.failed += 1;
-          status.errors.push(`Unable to derive local reference relief: ${projection.uri}`);
           opaqueProjection.texture.dispose();
-          texture.dispose();
-          resolveLoad(false);
+          fail('Unable to derive local reference relief', texture);
           return;
         }
         record.normalTexture = derivedMaps?.normal;
@@ -1088,41 +1270,30 @@ function createProjectionRecord(
         record.alphaFillPixels = opaqueProjection.filledPixels;
         record.delightMetrics = opaqueProjection.delightMetrics;
         record.texture = opaqueProjection.texture;
+        placeholder.dispose();
         texture.dispose();
         record.state = 'loaded';
+        settled = true;
         status.loaded += 1;
-        for (const material of materials) {
-          applyReferenceProjectionAppearance(material, record);
-        }
+        for (const material of materials) applyReferenceProjectionAppearance(material, record);
         resolveLoad(true);
-      })().catch(() => {
-        record.state = 'failed';
-        status.failed += 1;
-        status.errors.push(`Unable to verify local reference projection: ${projection.uri}`);
-        texture.dispose();
-        resolveLoad(false);
-      });
-    },
-    undefined,
-    () => {
-      record.state = 'failed';
-      status.failed += 1;
-      status.errors.push(`Unable to load local reference projection: ${projection.uri}`);
-      for (const material of materials) {
-        material.userData.morphloomSurface = {
-          ...material.userData.morphloomSurface,
-          referenceProjectionState: 'failed',
-        };
-      }
-      texture.dispose();
-      resolveLoad(false);
-    },
-  );
-  texture.name = `morphloom_reference_${projection.fingerprint ?? 'unverified'}`;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.userData.morphloomProjectionOwned = true;
-  Object.assign(record, { texture, materials, state: 'loading' as const, promise });
+      },
+      undefined,
+      () => {
+        if (decodeTimeout !== undefined) clearTimeout(decodeTimeout);
+        releaseObjectUri();
+        fail('Unable to decode local reference projection', pendingTexture);
+      },
+    );
+    if (!settled) {
+      decodeTimeout = setTimeout(() => {
+        releaseObjectUri();
+        fail('Local reference projection decode timed out', pendingTexture);
+      }, REFERENCE_PROJECTION_IO_TIMEOUT_MS);
+    }
+  })().catch((error) => {
+    fail(error instanceof Error ? error.message : 'Unable to verify local reference projection');
+  });
   return record;
 }
 
@@ -1164,24 +1335,15 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
     });
     const projection = mode === 'beauty' ? component.material.referenceProjection : undefined;
     const projectedMaterial = projection ? baseMaterial : undefined;
-    const sideMaterial = projection ? baseMaterial.clone() : undefined;
+    const sideMaterial = projection ? createUnobservedSurfaceMaterial(component.material, {
+      mode,
+      category: component.category,
+      materialName: `${component.materialName} ${component.id}`,
+    }, projection.unobservedSurface) : undefined;
     if (sideMaterial) {
       sideMaterial.name = `${baseMaterial.name || component.id}_cut_edges`;
-      sideMaterial.userData = structuredClone(baseMaterial.userData);
-      // A single plate does not observe cut edges or the rear hemisphere.
-      // Repeating the front image there is false evidence, while retaining a
-      // strongly directional procedural normal creates barcode-like seams at
-      // rounded silhouettes. Keep only the authored bulk PBR response on the
-      // unobserved partition and mark the evidence boundary explicitly.
-      sideMaterial.normalMap = null;
-      sideMaterial.roughnessMap = null;
-      sideMaterial.anisotropy = 0;
-      sideMaterial.userData.morphloomSurface = {
-        ...sideMaterial.userData.morphloomSurface,
-        referenceProjection: null,
-        referenceProjectionState: 'unobserved-side',
-        referenceRelief: false,
-      };
+      // The one source image is never mirrored. The separate material contains
+      // only a deterministic, explicitly estimated bulk-surface synthesis.
       sideMaterial.needsUpdate = true;
     }
     const mesh = new THREE.Mesh(
@@ -1211,6 +1373,10 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
         projectedMaterial.userData.morphloomSurface = {
           ...projectedMaterial.userData.morphloomSurface,
           referenceProjection: projection.mapping,
+          referenceProjectionParameters: {
+            colorRetention: projection.colorRetention ?? 0,
+            delightStrength: projection.delightStrength ?? 0.2,
+          },
           referenceFingerprint: projection.fingerprint ?? null,
           referenceProjectionState: record.state,
         };

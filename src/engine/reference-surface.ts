@@ -33,6 +33,38 @@ export interface ReferenceSurfaceAnalysis {
   metrics: ReferenceSurfaceMetrics;
 }
 
+export interface MaskedReferenceSurfaceInput {
+  id: string;
+  fingerprint: string;
+  width: number;
+  height: number;
+  rgba: Uint8Array | Uint8ClampedArray;
+  mask: Uint8Array;
+}
+
+export interface MaskedReferenceSurfaceDerivation {
+  schema: 'morphloom.masked-reference-surface/0.1';
+  selectedSourceId: string;
+  selectedSourceFingerprint: string;
+  sourceForegroundPixels: number;
+  sourceInteriorPixels: number;
+  textureSize: number;
+  seededTexels: number;
+  inpaintedTexels: number;
+  materialSuitability: {
+    pass: boolean;
+    foregroundFillRatio: number;
+    interiorFillRatio: number;
+    seededTexelRatio: number;
+    blockers: string[];
+  };
+  /** Background-excluded source pixels after deterministic hole filling. */
+  sourceAlbedoRgba: Uint8ClampedArray;
+  /** Neutral micro-contrast modulation for preserving an authored base colour. */
+  albedoRgba: Uint8ClampedArray;
+  analysis: ReferenceSurfaceAnalysis;
+}
+
 export interface ReferenceSurfaceEvidenceAudit {
   schema: 'morphloom.reference-surface-evidence/0.1';
   expectation: 'irregular-granular';
@@ -83,6 +115,166 @@ function assertImageInput(pixels: Uint8Array | Uint8ClampedArray, width: number,
   const pixelCount = width * height;
   if (pixelCount > MAX_REFERENCE_PIXELS) throw new Error('Reference surface exceeds the bounded pixel budget.');
   if (pixels.length !== pixelCount * 4) throw new Error('Reference surface RGBA length does not match its dimensions.');
+}
+
+const SAFE_SOURCE_ID = /^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$/;
+const SHA256 = /^[a-f0-9]{64}$/;
+
+/**
+ * Extracts a bounded, background-free material tile from one or more object
+ * masks. The densest eroded foreground view is selected deterministically;
+ * empty texels are filled from the nearest real foreground texel before any
+ * surface signal is derived. This prevents white studio backgrounds and hard
+ * silhouette edges from being mistaken for material relief.
+ */
+export function deriveMaskedReferenceSurface(
+  inputs: MaskedReferenceSurfaceInput[],
+  options: { textureSize?: number; strength?: number } = {},
+): MaskedReferenceSurfaceDerivation {
+  const textureSize = options.textureSize ?? 128;
+  const strength = options.strength ?? 0.72;
+  if (!Array.isArray(inputs) || inputs.length < 1 || inputs.length > 16
+    || !Number.isInteger(textureSize) || textureSize < 16 || textureSize > 512
+    || !Number.isFinite(strength) || strength < 0 || strength > 2) {
+    throw new Error('Masked reference surface request is outside safe bounds.');
+  }
+  const candidates = inputs.map((input, inputIndex) => {
+    assertImageInput(input.rgba, input.width, input.height);
+    if (!SAFE_SOURCE_ID.test(input.id) || !SHA256.test(input.fingerprint)
+      || !(input.mask instanceof Uint8Array) || input.mask.length !== input.width * input.height
+      || input.mask.some((value) => value !== 0 && value !== 1)) {
+      throw new Error(`Masked reference source is invalid: ${input?.id ?? inputIndex}.`);
+    }
+    let foreground = 0;
+    let interior = 0;
+    let minimumX = input.width;
+    let minimumY = input.height;
+    let maximumX = -1;
+    let maximumY = -1;
+    const interiorMask = new Uint8Array(input.mask.length);
+    for (let y = 0; y < input.height; y += 1) for (let x = 0; x < input.width; x += 1) {
+      const index = y * input.width + x;
+      if (input.mask[index] !== 1) continue;
+      foreground += 1;
+      minimumX = Math.min(minimumX, x); maximumX = Math.max(maximumX, x);
+      minimumY = Math.min(minimumY, y); maximumY = Math.max(maximumY, y);
+      if (x > 0 && y > 0 && x + 1 < input.width && y + 1 < input.height
+        && input.mask[index - 1] === 1 && input.mask[index + 1] === 1
+        && input.mask[index - input.width] === 1 && input.mask[index + input.width] === 1) {
+        interiorMask[index] = 1;
+        interior += 1;
+      }
+    }
+    if (foreground < 16 || maximumX <= minimumX || maximumY <= minimumY) {
+      throw new Error(`Masked reference source has insufficient foreground: ${input.id}.`);
+    }
+    return { input, inputIndex, foreground, interior, interiorMask, minimumX, minimumY, maximumX, maximumY };
+  });
+  candidates.sort((left, right) => right.interior - left.interior
+    || right.foreground - left.foreground || left.input.id.localeCompare(right.input.id)
+    || left.inputIndex - right.inputIndex);
+  const selected = candidates[0]!;
+  const activeMask = selected.interior >= 16 ? selected.interiorMask : selected.input.mask;
+  const seeded = new Uint8ClampedArray(textureSize * textureSize * 4);
+  const valid = new Uint8Array(textureSize * textureSize);
+  const cropWidth = selected.maximumX - selected.minimumX + 1;
+  const cropHeight = selected.maximumY - selected.minimumY + 1;
+  let seededTexels = 0;
+  for (let targetY = 0; targetY < textureSize; targetY += 1) {
+    const sourceMinY = selected.minimumY + Math.floor(targetY * cropHeight / textureSize);
+    const sourceMaxY = selected.minimumY + Math.max(0, Math.ceil((targetY + 1) * cropHeight / textureSize) - 1);
+    for (let targetX = 0; targetX < textureSize; targetX += 1) {
+      const sourceMinX = selected.minimumX + Math.floor(targetX * cropWidth / textureSize);
+      const sourceMaxX = selected.minimumX + Math.max(0, Math.ceil((targetX + 1) * cropWidth / textureSize) - 1);
+      const sums = [0, 0, 0];
+      let samples = 0;
+      for (let sourceY = sourceMinY; sourceY <= sourceMaxY; sourceY += 1) {
+        for (let sourceX = sourceMinX; sourceX <= sourceMaxX; sourceX += 1) {
+          const sourceIndex = sourceY * selected.input.width + sourceX;
+          if (activeMask[sourceIndex] !== 1) continue;
+          const sourceOffset = sourceIndex * 4;
+          sums[0] += selected.input.rgba[sourceOffset]!;
+          sums[1] += selected.input.rgba[sourceOffset + 1]!;
+          sums[2] += selected.input.rgba[sourceOffset + 2]!;
+          samples += 1;
+        }
+      }
+      if (samples === 0) continue;
+      const targetIndex = targetY * textureSize + targetX;
+      const targetOffset = targetIndex * 4;
+      seeded[targetOffset] = Math.round(sums[0] / samples);
+      seeded[targetOffset + 1] = Math.round(sums[1] / samples);
+      seeded[targetOffset + 2] = Math.round(sums[2] / samples);
+      seeded[targetOffset + 3] = 255;
+      valid[targetIndex] = 1;
+      seededTexels += 1;
+    }
+  }
+  if (seededTexels < 4) throw new Error('Masked reference surface produced too few material texels.');
+  const queue = new Int32Array(valid.length);
+  let head = 0;
+  let tail = 0;
+  for (let index = 0; index < valid.length; index += 1) if (valid[index] === 1) queue[tail++] = index;
+  const neighbors = [-1, 1, -textureSize, textureSize];
+  while (head < tail) {
+    const sourceIndex = queue[head++]!;
+    const sourceX = sourceIndex % textureSize;
+    for (const delta of neighbors) {
+      const targetIndex = sourceIndex + delta;
+      if (targetIndex < 0 || targetIndex >= valid.length || valid[targetIndex] === 1) continue;
+      if ((delta === -1 && sourceX === 0) || (delta === 1 && sourceX === textureSize - 1)) continue;
+      const sourceOffset = sourceIndex * 4;
+      const targetOffset = targetIndex * 4;
+      seeded.set(seeded.subarray(sourceOffset, sourceOffset + 4), targetOffset);
+      valid[targetIndex] = 1;
+      queue[tail++] = targetIndex;
+    }
+  }
+  const analysis = analyzeReferenceSurface(seeded, textureSize, textureSize, strength);
+  const cropPixels = cropWidth * cropHeight;
+  const foregroundFillRatio = selected.foreground / cropPixels;
+  const interiorFillRatio = selected.interior / cropPixels;
+  const seededTexelRatio = seededTexels / (textureSize * textureSize);
+  const suitabilityBlockers = [
+    foregroundFillRatio < 0.55
+      ? `foreground fill ${foregroundFillRatio.toFixed(3)} is too sparse for a stationary material patch`
+      : undefined,
+    interiorFillRatio < 0.42
+      ? `eroded interior fill ${interiorFillRatio.toFixed(3)} is dominated by silhouettes or structural gaps`
+      : undefined,
+    seededTexelRatio < 0.5
+      ? `sampled texel fill ${seededTexelRatio.toFixed(3)} requires excessive structural inpainting`
+      : undefined,
+  ].filter((blocker): blocker is string => Boolean(blocker));
+  const albedoRgba = new Uint8ClampedArray(seeded.length);
+  for (let index = 0; index < analysis.heights.length; index += 1) {
+    const sourceOffset = index * 4;
+    const microGain = THREE.MathUtils.clamp(0.94 + analysis.heights[index]! * 0.06, 0.82, 1);
+    albedoRgba[sourceOffset] = Math.round(microGain * 255);
+    albedoRgba[sourceOffset + 1] = Math.round(microGain * 255);
+    albedoRgba[sourceOffset + 2] = Math.round(microGain * 255);
+    albedoRgba[sourceOffset + 3] = 255;
+  }
+  return {
+    schema: 'morphloom.masked-reference-surface/0.1',
+    selectedSourceId: selected.input.id,
+    selectedSourceFingerprint: selected.input.fingerprint,
+    sourceForegroundPixels: selected.foreground,
+    sourceInteriorPixels: selected.interior,
+    textureSize,
+    seededTexels,
+    inpaintedTexels: textureSize * textureSize - seededTexels,
+    materialSuitability: {
+      pass: suitabilityBlockers.length === 0,
+      foregroundFillRatio,
+      interiorFillRatio,
+      seededTexelRatio,
+      blockers: suitabilityBlockers,
+    },
+    sourceAlbedoRgba: new Uint8ClampedArray(seeded),
+    albedoRgba,
+    analysis,
+  };
 }
 
 function buildIntegral(values: Float32Array, width: number, height: number): Float32Array {

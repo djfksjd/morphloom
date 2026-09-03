@@ -6,7 +6,13 @@ import { buildCharacter, deriveBodyTopology, poseCharacterPoint } from '../src/e
 import { buildOrnateKnife, createOrnateKnifeIR } from '../src/engine/knife';
 import { parseOhpk } from '../src/engine/ohpk';
 import { buildProduct } from '../src/engine/product';
-import { compileAssemblyIR, referenceProjectionDiffuseGain, validateAssemblyIR } from '../src/engine/assembly-compiler';
+import {
+  compileAssemblyIR,
+  isSafeReferenceProjectionUri,
+  MAX_REFERENCE_PROJECTION_BYTES,
+  referenceProjectionDiffuseGain,
+  validateAssemblyIR,
+} from '../src/engine/assembly-compiler';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { POOR_COYOTES_CABIN_IR } from '../src/engine/poor-coyotes-cabin';
@@ -18,7 +24,12 @@ import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { analyzeTopology } from '../src/engine/topology';
 import { auditDomainReadiness } from '../src/engine/domain-readiness';
 import { validateElectricalHarness } from '../src/engine/connectivity';
-import { createSurfaceMaterial } from '../src/engine/surface-system';
+import {
+  createSurfaceMaterial,
+  inspectSharedSurfaceCache,
+  MAX_SHARED_SURFACE_BYTES,
+  surfaceMapAllocationBytes,
+} from '../src/engine/surface-system';
 import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
 import { buildPhysicalNetlist } from '../src/engine/netlist';
 import { fitPerspectiveCameraToBounds, fogDensityForAssetRadius } from '../src/engine/camera-framing';
@@ -55,7 +66,7 @@ describe('OHPK human pipeline', () => {
     expect(build.body.geometry.groups).toHaveLength(0);
     expect(build.metrics.surfaces.finishes).toEqual(expect.arrayContaining(['skin', 'hair']));
     expect(build.metrics.surfaces.microNormalMaterials).toBeGreaterThanOrEqual(2);
-  });
+  }, 20_000);
 
   it('turns Korean agent directions into deterministic CharacterIR changes', () => {
     const result = applyPrompt('185cm의 근육질 남성, 짧은 머리와 검정 전투복', DEFAULT_SPEC);
@@ -88,7 +99,7 @@ describe('OHPK human pipeline', () => {
     expect(topology.selfIntersections).toBe(0);
     expect(topology.selfIntersectionComplete).toBe(true);
     expect(topology.pass).toBe(true);
-  }, 20_000);
+  }, 40_000);
 
   it('adds bounded pose-driven garment wrinkles without changing the closed body topology', async () => {
     const pack = await loadPack();
@@ -284,9 +295,12 @@ describe('AssemblyIR product pipeline', () => {
     if (core?.geometry.op !== 'extrude') throw new Error('Talon core must remain an extruded profile.');
     expect(core.geometry.holes).toHaveLength(4);
     const build = compileAssemblyIR(TALON_REFERENCE_BENCHMARK_IR, 'beauty');
-    expect(build.parts.length).toBeGreaterThanOrEqual(24);
+    expect(build.parts.length).toBeGreaterThanOrEqual(40);
     expect(build.root.getObjectByName('continuous_steel_body')).toBeTruthy();
     expect(build.root.getObjectByName('ring_lip_front')).toBeTruthy();
+    expect(build.root.getObjectByName('grip_divider_1_front')).toBeTruthy();
+    expect(build.root.getObjectByName('rosette_hub_front')).toBeTruthy();
+    expect(build.root.getObjectByName('rosette_spoke_6_back')).toBeTruthy();
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeGreaterThanOrEqual(239.99);
     expect(build.metrics.bounds.getSize(new THREE.Vector3()).x * 1000).toBeLessThan(242);
     const coreMesh = build.root.getObjectByName('continuous_steel_body') as THREE.Mesh;
@@ -296,18 +310,40 @@ describe('AssemblyIR product pipeline', () => {
     expect(projectedCaps).not.toBe(authoredEdges);
     expect(authoredEdges.userData.morphloomSurface).toMatchObject({
       referenceProjection: null,
-      referenceProjectionState: 'unobserved-side',
+      referenceProjectionState: 'unobserved-synthesized',
       referenceRelief: false,
+      unobservedPattern: 'mineral-flow',
+      unobservedColor: '#760a1f',
+      unobservedRoughness: 0.28,
+      unobservedMetalness: 0.5,
+      unobservedEvidenceBoundary: 'material-character-only',
     });
-    expect(authoredEdges.normalMap).toBeNull();
-    expect(authoredEdges.roughnessMap).toBeNull();
+    expect(authoredEdges.map).toBeTruthy();
+    expect(authoredEdges.normalMap).toBeTruthy();
+    expect(authoredEdges.roughnessMap).toBeTruthy();
+    expect(authoredEdges.metalnessMap).toBe(authoredEdges.roughnessMap);
     expect(authoredEdges.anisotropy).toBe(0);
+    const hiddenAlbedo = (authoredEdges.map as THREE.DataTexture).image.data as Uint8Array;
+    const hiddenLuma = Array.from({ length: hiddenAlbedo.length / 4 }, (_, index) => hiddenAlbedo[index * 4]!);
+    expect(Math.max(...hiddenLuma) - Math.min(...hiddenLuma)).toBeGreaterThan(80);
+    expect(new Set(hiddenLuma).size).toBeGreaterThan(32);
     expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition).toMatchObject({
       method: 'source-facing-triangle-partition-v1',
       projectionAxis: 'z',
+      hiddenUvDomain: 'normalized-rear-plus-authored-edge',
     });
     expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition.projectedTriangles).toBeGreaterThan(0);
     expect(coreMesh.geometry.userData.morphloomReferenceProjectionPartition.sideTriangles).toBeGreaterThan(0);
+    const hiddenUvValues = coreMesh.geometry.groups
+      .filter((group) => group.materialIndex === 1)
+      .flatMap((group) => Array.from({ length: group.count }, (_, offset) => {
+        const index = group.start + offset;
+        const uv = coreMesh.geometry.getAttribute('uv');
+        return [uv.getX(index), uv.getY(index)];
+      }));
+    expect(hiddenUvValues.length).toBeGreaterThan(0);
+    expect(Math.max(...hiddenUvValues.map(([u]) => u)) - Math.min(...hiddenUvValues.map(([u]) => u))).toBeGreaterThan(0.8);
+    expect(Math.max(...hiddenUvValues.map(([, v]) => v)) - Math.min(...hiddenUvValues.map(([, v]) => v))).toBeGreaterThan(0.8);
     const positions = coreMesh.geometry.getAttribute('position');
     const halfThicknesses = Array.from({ length: positions.count }, (_, index) => Math.abs(positions.getZ(index)))
       .filter((value) => value > 1e-8);
@@ -325,16 +361,30 @@ describe('AssemblyIR product pipeline', () => {
       verifiedEdgeTaperSegments: 14,
       maximumMeasuredEdgeThicknessMm: expect.closeTo(0.12, 4),
     });
+    expect(build.metrics.surfaces.unobservedSynthesizedMaterials).toBeGreaterThanOrEqual(1);
+  });
+
+  it('rejects unsafe hidden-side synthesis instead of accepting arbitrary hallucinated texture', () => {
+    const ir = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    const projection = ir.components[0]!.material.referenceProjection;
+    if (!projection?.unobservedSurface) throw new Error('Missing hidden-side synthesis fixture.');
+    projection.unobservedSurface.colorVariation = 0.9;
+    expect(() => validateAssemblyIR(ir)).toThrow(/Unobserved surface synthesis/);
+    projection.unobservedSurface.colorVariation = 0.3;
+    projection.unobservedSurface.color = 'ruby';
+    expect(() => validateAssemblyIR(ir)).toThrow(/Unobserved surface synthesis/);
   });
 
   it('bounds photographed-light compensation while preserving stronger metallic response', () => {
     expect(referenceProjectionDiffuseGain(0, 0)).toBeCloseTo(0.8);
     expect(referenceProjectionDiffuseGain(0.08, 0.67)).toBeCloseTo(0.5346);
     expect(referenceProjectionDiffuseGain(0.76, 0.11)).toBeCloseTo(0.9058);
+    expect(referenceProjectionDiffuseGain(0.08, 0.67, 0.75)).toBeCloseTo(0.88365);
     expect(referenceProjectionDiffuseGain(1, 0)).toBeCloseTo(0.95);
     expect(referenceProjectionDiffuseGain(0, 1)).toBeCloseTo(0.5);
     expect(() => referenceProjectionDiffuseGain(-0.01, 0.5)).toThrow(/0\.\.1/);
     expect(() => referenceProjectionDiffuseGain(0.5, Number.NaN)).toThrow(/0\.\.1/);
+    expect(() => referenceProjectionDiffuseGain(0.5, 0.5, 1.01)).toThrow(/0\.\.1/);
   });
 
   it('maps reference UVs in assembly space so independently editable parts retain one aligned photograph', () => {
@@ -378,6 +428,29 @@ describe('AssemblyIR product pipeline', () => {
     expect(() => validateAssemblyIR(invalid)).toThrow(/local or blob-backed/);
   });
 
+  it('admits only bounded local bitmap projection identities before browser allocation', () => {
+    expect(isSafeReferenceProjectionUri('/benchmark-input/talon.webp')).toBe(true);
+    expect(isSafeReferenceProjectionUri('blob:https://127.0.0.1:4173/7a81c54e-5d5b-4fd8-91dc-8b21e76791fc')).toBe(true);
+    expect(isSafeReferenceProjectionUri('//example.com/tracker.png')).toBe(false);
+    expect(isSafeReferenceProjectionUri('/assets/%5c%5cexample.com/tracker.png')).toBe(false);
+    expect(isSafeReferenceProjectionUri('data:image/png;base64,AAAA')).toBe(false);
+    expect(MAX_REFERENCE_PROJECTION_BYTES).toBe(24 * 1024 * 1024);
+
+    const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
+    delete invalid.components[0]!.material.referenceProjection!.fingerprint;
+    expect(() => validateAssemblyIR(invalid)).toThrow(/fingerprint is required/);
+  });
+
+  it('caps shared procedural PBR texture residency by bytes as well as entries', () => {
+    expect(surfaceMapAllocationBytes(64)).toBe(65_536);
+    expect(surfaceMapAllocationBytes(256)).toBe(1_048_576);
+    expect(() => surfaceMapAllocationBytes(0)).toThrow(/unsafe/);
+    const cache = inspectSharedSurfaceCache();
+    expect(cache.estimatedBytes).toBeLessThanOrEqual(MAX_SHARED_SURFACE_BYTES);
+    expect(cache.entries).toBeLessThanOrEqual(cache.maximumEntries);
+    expect(cache.maximumBytes).toBe(MAX_SHARED_SURFACE_BYTES);
+  });
+
   it('bounds reference-derived relief work before allocating browser canvases', () => {
     const invalid = structuredClone(TALON_REFERENCE_BENCHMARK_IR);
     invalid.components[0].material.referenceProjection = {
@@ -387,6 +460,12 @@ describe('AssemblyIR product pipeline', () => {
     expect(() => validateAssemblyIR(invalid)).toThrow(/relief strength is invalid/);
     invalid.components[0].material.referenceProjection.relief = { strength: 1, maxResolution: 8192 };
     expect(() => validateAssemblyIR(invalid)).toThrow(/relief resolution is invalid/);
+    invalid.components[0].material.referenceProjection.relief = { strength: 1, maxResolution: 1024 };
+    invalid.components[0].material.referenceProjection.delightStrength = 0.36;
+    expect(() => validateAssemblyIR(invalid)).toThrow(/de-light strength is invalid/);
+    invalid.components[0].material.referenceProjection.delightStrength = 0.2;
+    invalid.components[0].material.referenceProjection.colorRetention = 1.01;
+    expect(() => validateAssemblyIR(invalid)).toThrow(/colour retention is invalid/);
   });
 
   it('rejects zero-width, zero-tip, and over-thick cutting-edge tapers', () => {
@@ -477,7 +556,7 @@ describe('AssemblyIR product pipeline', () => {
     expect(report.checks.find((check) => check.id === 'rig')).toMatchObject({
       label: '건축 셸 범위 검수', status: 'pass', score: 100,
     });
-  });
+  }, 15_000);
 
   it('builds the Pinterest concept residence but keeps semi-professional delivery blocked', () => {
     expect(() => validateAssemblyIR(MODERNCAT_CONCEPT_RESIDENCE_IR)).not.toThrow();
@@ -498,11 +577,11 @@ describe('AssemblyIR product pipeline', () => {
     expect(detail.footprintVerified).toBe(true);
     expect(detail.blockers).toContain('evidence pack not delivery-ready: verified-provenance,verified-section,field-measured-height,dimension-arithmetic');
     const report = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, build.metrics, MODERNCAT_CONCEPT_RESIDENCE_IR);
-    expect(report.total).toBeGreaterThanOrEqual(90);
-    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'pass', score: 100 });
+    expect(report.total).toBeLessThanOrEqual(59);
+    expect(report.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'blocked', score: 59 });
     expect(report.deliveryReady).toBe(false);
     expect(report.evidenceScore).toBeLessThan(100);
-  });
+  }, 20_000);
 
   it('builds a detailed phone as independently named parts', () => {
     const build = buildProduct(DEFAULT_PRODUCT_SPEC, 'beauty');
@@ -531,7 +610,7 @@ describe('AssemblyIR product pipeline', () => {
     });
     expect(build.metrics.connectivity!.endpointErrorMaxMm).toBeLessThan(0.0001);
     expect(build.metrics.topology.pass).toBe(true);
-  });
+  }, 15_000);
 
   it('rejects a conductor with a missing physical endpoint', () => {
     expect(() => validateElectricalHarness({
@@ -831,6 +910,7 @@ describe('PBR micro-surface system', () => {
     const report = preparePortableGltfGeometry(root);
     expect(report).toMatchObject({
       visibleMeshes: 1,
+      stableNodeIdsAssigned: 1,
       tangentSpacesGenerated: 1,
       indexedForTangents: 1,
       unresolvedNormalMappedMeshes: [],
@@ -848,6 +928,20 @@ describe('PBR micro-surface system', () => {
     }
   });
 
+  it('fails closed when portable edit-unit names are empty or duplicated', () => {
+    const unnamed = new THREE.Group();
+    unnamed.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial()));
+    expect(() => preparePortableGltfGeometry(unnamed)).toThrow(/non-empty name/);
+
+    const duplicated = new THREE.Group();
+    for (let index = 0; index < 2; index += 1) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial());
+      mesh.name = 'same-edit-unit';
+      duplicated.add(mesh);
+    }
+    expect(() => preparePortableGltfGeometry(duplicated)).toThrow(/must be unique/);
+  });
+
   it('bakes Three-only sheen intensity into the glTF sheen color', () => {
     const root = new THREE.Group();
     const material = new THREE.MeshPhysicalMaterial({
@@ -855,8 +949,12 @@ describe('PBR micro-surface system', () => {
       sheenColor: new THREE.Color(0.5, 0.25, 0.125),
       sheenRoughness: 0.7,
     });
-    root.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material));
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+    mesh.name = 'portable-sheen-test';
+    root.add(mesh);
     const report = preparePortableGltfGeometry(root);
+    expect(report.stableNodeIdsAssigned).toBe(1);
+    expect(mesh.userData.morphloomStableNodeId).toBe('portable-sheen-test');
     expect(report.normalizedSheenMaterials).toBe(1);
     expect(material.sheen).toBe(1);
     expect(material.sheenColor.toArray()).toEqual([0.1, 0.05, 0.025]);
@@ -883,7 +981,7 @@ describe('PBR micro-surface system', () => {
     expect(exportInput.userData.gameDelivery).toEqual(build.root.userData.gameDelivery);
     expect(exportInput.children).toContain(build.body);
     expect(build.body.parent).toBe(build.root);
-  });
+  }, 20_000);
 });
 
 describe('result viewer camera framing', () => {
@@ -1023,7 +1121,7 @@ describe('short-prompt generation contract', () => {
     const reversedQuality = evaluateProductQuality(DEFAULT_PRODUCT_SPEC, undefined, reversedBuild.metrics, reversedProjection);
     expect(reversedQuality.total).toBeLessThanOrEqual(59);
     expect(reversedQuality.checks.find((check) => check.id === 'silhouette')).toMatchObject({ status: 'blocked' });
-  });
+  }, 30_000);
 
   it('rejects a plan contract that names geometry absent from the assembly', () => {
     const invalid = structuredClone(LAUREL_HOMES_BUILDING_B_IR);

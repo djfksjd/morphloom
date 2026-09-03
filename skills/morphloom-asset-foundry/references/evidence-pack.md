@@ -38,4 +38,4 @@ Photographic shape comparison requires camera calibration with at least four anc
 
 ## Delivery handoff
 
-Save `morphloom.evidence-pack/0.2` with the source-neutral capability map, dimension observations, camera observations, stable component ids, readiness report, conflicts, and next actions. Then run the compiled-asset gates in [quality-contract.md](quality-contract.md). Evidence readiness and mesh quality are independent: both must pass.
+Save `morphloom.evidence-pack/0.2` with the source-neutral capability map, dimension observations, camera observations, stable component ids, readiness report, conflicts, and next actions. Bind every manifest view to a workspace-relative file path and its lowercase SHA-256 in the enclosing `morphloom.job/0.1`. The standard runner rereads the bytes and checks the hash, size, filename, MIME type, and decoded image dimensions; a model-authored filename or readiness score is not proof. Then run the compiled-asset gates in [quality-contract.md](quality-contract.md). Evidence readiness and mesh quality are independent: both must pass.

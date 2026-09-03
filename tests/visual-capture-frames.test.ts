@@ -19,6 +19,21 @@ async function rectangleCapture(directory: string, name: string, x: number): Pro
   return path;
 }
 
+async function ringCapture(directory: string, name: string): Promise<string> {
+  const canvas = createCanvas(128, 128);
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#ffffff';
+  context.fillRect(0, 0, 128, 128);
+  context.strokeStyle = '#111111';
+  context.lineWidth = 7;
+  context.beginPath();
+  context.arc(64, 64, 42, 0, Math.PI * 2);
+  context.stroke();
+  const path = join(directory, name);
+  await writeFile(path, canvas.toBuffer('image/png'));
+  return path;
+}
+
 afterEach(async () => {
   await Promise.all(temporaryDirectories.splice(0).map((path) => rm(path, { recursive: true, force: true })));
 });
@@ -39,5 +54,15 @@ describe('locked visual capture coordinates', () => {
     const locked = compareReferenceFrames(lockedReference.frame, lockedShifted.frame);
     expect(locked.silhouetteIoU).toBe(0);
     expect(locked.interiorSimilarity).toBe(0);
+  });
+
+  it('retains a raw structural mask beside the filled mass mask', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'morphloom-raw-mask-'));
+    temporaryDirectories.push(directory);
+    const capture = await normalizedFrame(await ringCapture(directory, 'ring.png'));
+    const rawPixels = capture.rawFrame.mask!.reduce((sum, value) => sum + value, 0);
+    const massPixels = capture.frame.mask!.reduce((sum, value) => sum + value, 0);
+    expect(rawPixels).toBeGreaterThan(0);
+    expect(massPixels).toBeGreaterThan(rawPixels * 2);
   });
 });

@@ -11,6 +11,9 @@ export default defineConfig({
     fileParallelism: false,
     maxWorkers: 1,
     minWorkers: 1,
+    // Model-comparison sandboxes intentionally contain copied test trees.
+    // Never count or execute those snapshots as project verification.
+    exclude: ['**/node_modules/**', '**/dist/**', '**/work/**', '**/tmp/**', '**/.git/**'],
   },
   build: {
     // Three.js is an intentional shared runtime chunk; keep the application

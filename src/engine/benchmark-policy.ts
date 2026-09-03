@@ -2,11 +2,13 @@ export type BenchmarkDomain =
   | 'product'
   | 'industrial-design'
   | 'architecture'
+  | 'electronics-assembly'
   | 'service-assembly'
   | 'character'
   | 'animation'
   | 'game'
-  | '3d-print';
+  | '3d-print'
+  | 'surface';
 export type BenchmarkExpectedDecision = 'release' | 'block';
 
 export interface BenchmarkCaseInput {
@@ -39,22 +41,26 @@ const EVIDENCE_THRESHOLD: Record<BenchmarkDomain, number> = {
   product: 80,
   'industrial-design': 80,
   architecture: 85,
+  'electronics-assembly': 90,
   'service-assembly': 85,
   character: 85,
   animation: 80,
   game: 75,
   '3d-print': 80,
+  surface: 80,
 };
 
 const SURFACE_THRESHOLD: Record<BenchmarkDomain, number> = {
   product: 0.75,
   'industrial-design': 0.75,
   architecture: 0.4,
+  'electronics-assembly': 0.75,
   'service-assembly': 0.75,
   character: 0.75,
   animation: 0.75,
   game: 0.75,
   '3d-print': 0,
+  surface: 1,
 };
 
 export function evaluateBenchmarkCase(input: BenchmarkCaseInput): BenchmarkCaseResult {

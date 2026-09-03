@@ -1,0 +1,463 @@
+{
+  "schema": "morphloom.godot-cross-domain-proof/0.1",
+  "compilerRevision": "morphloom-compiler/0.31.0",
+  "generatedAt": "2026-09-03T07:54:05.553Z",
+  "pass": true,
+  "status": "pass",
+  "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",
+  "environment": {
+    "godotVersion": "4.7.2-stable (official)",
+    "godotBinary": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/native-tools/godot/app/Godot.app/Contents/MacOS/Godot",
+    "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf"
+  },
+  "cases": [
+    {
+      "id": "laurel-homes-architecture",
+      "domain": "architecture",
+      "pass": true,
+      "source": {
+        "meshes": 321,
+        "vertices": 566244,
+        "triangles": 188748,
+        "materials": 321,
+        "textures": 21,
+        "textureSlots": 642,
+        "skins": 0,
+        "joints": 0,
+        "maximumJointsPerSkin": 0,
+        "morphTargets": 0,
+        "animationClips": 0,
+        "animationNames": [],
+        "boundsSizeMeters": [
+          42.72720001430511,
+          2.9200000232458114,
+          21.621399949932098
+        ]
+      },
+      "godot": {
+        "blockers": [],
+        "godot_version": "4.7.2-stable (official)",
+        "pass": true,
+        "schema": "morphloom.godot-cross-domain-import/0.1",
+        "source": "res://fixtures/laurel-homes-architecture.glb",
+        "source_sha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68",
+        "stats": {
+          "animation_clips": 0,
+          "animation_names": [],
+          "blend_shapes": 0,
+          "bones": 0,
+          "bounds_max_meters": [
+            21.3635997772217,
+            2.70000004768372,
+            8.27120018005371
+          ],
+          "bounds_max_nodes": [
+            "east_north_masonry_pier_6",
+            "west_north_head_wall",
+            "balcony_north_west_slab"
+          ],
+          "bounds_min_meters": [
+            -21.3635997772217,
+            -0.219999998807907,
+            -13.3501996994019
+          ],
+          "bounds_min_nodes": [
+            "west_north_masonry_pier_1",
+            "south_connector_bar_floor_slab",
+            "entrance_canopy"
+          ],
+          "bounds_size_meters": [
+            42.7271995544434,
+            2.92000007629395,
+            21.6213989257812
+          ],
+          "materials": 321,
+          "meshes": 321,
+          "nodes": 323,
+          "skeletons": 0,
+          "skinned_meshes": 0,
+          "texture_slots": 963,
+          "textures": 20,
+          "triangles": 188748,
+          "vertices": 566244
+        }
+      },
+      "parity": {
+        "boundsErrorMm": 0.001024150897421805,
+        "boundsToleranceMm": 0.1,
+        "blockers": []
+      }
+    },
+    {
+      "id": "ornate-knife-product",
+      "domain": "industrial-design",
+      "pass": true,
+      "source": {
+        "meshes": 16,
+        "vertices": 18527,
+        "triangles": 18930,
+        "materials": 16,
+        "textures": 13,
+        "textureSlots": 32,
+        "skins": 0,
+        "joints": 0,
+        "maximumJointsPerSkin": 0,
+        "morphTargets": 0,
+        "animationClips": 0,
+        "animationNames": [],
+        "boundsSizeMeters": [
+          0.1202733686629676,
+          0.4729999982118607,
+          0.04067132624003629
+        ]
+      },
+      "godot": {
+        "blockers": [],
+        "godot_version": "4.7.2-stable (official)",
+        "pass": true,
+        "schema": "morphloom.godot-cross-domain-import/0.1",
+        "source": "res://fixtures/ornate-knife-product.glb",
+        "source_sha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6",
+        "stats": {
+          "animation_clips": 0,
+          "animation_names": [],
+          "blend_shapes": 0,
+          "bones": 0,
+          "bounds_max_meters": [
+            0.0601366870105267,
+            0.34400001168251,
+            0.0203356631100178
+          ],
+          "bounds_max_nodes": [
+            "guard_scroll_right",
+            "blade_core",
+            "pommel"
+          ],
+          "bounds_min_meters": [
+            -0.0601366870105267,
+            -0.12899999320507,
+            -0.0203356631100178
+          ],
+          "bounds_min_nodes": [
+            "guard_scroll_left",
+            "pommel",
+            "pommel"
+          ],
+          "bounds_size_meters": [
+            0.120273374021053,
+            0.47299998998642,
+            0.0406713262200356
+          ],
+          "materials": 16,
+          "meshes": 16,
+          "nodes": 18,
+          "skeletons": 0,
+          "skinned_meshes": 0,
+          "texture_slots": 48,
+          "textures": 12,
+          "triangles": 18930,
+          "vertices": 18525
+        }
+      },
+      "parity": {
+        "boundsErrorMm": 0.00000822544066192421,
+        "boundsToleranceMm": 0.1,
+        "blockers": []
+      }
+    },
+    {
+      "id": "cooling-electronics-assembly",
+      "domain": "electronics",
+      "pass": true,
+      "source": {
+        "meshes": 322,
+        "vertices": 352193,
+        "triangles": 272560,
+        "materials": 322,
+        "textures": 17,
+        "textureSlots": 598,
+        "skins": 0,
+        "joints": 0,
+        "maximumJointsPerSkin": 0,
+        "morphTargets": 0,
+        "animationClips": 0,
+        "animationNames": [],
+        "boundsSizeMeters": [
+          0.3170000017285347,
+          0.1504999999962747,
+          0.20400000010430813
+        ]
+      },
+      "godot": {
+        "blockers": [],
+        "godot_version": "4.7.2-stable (official)",
+        "pass": true,
+        "schema": "morphloom.godot-cross-domain-import/0.1",
+        "source": "res://fixtures/cooling-electronics-assembly.glb",
+        "source_sha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a",
+        "stats": {
+          "animation_clips": 0,
+          "animation_names": [],
+          "blend_shapes": 0,
+          "bones": 0,
+          "bounds_max_meters": [
+            0.162000000476837,
+            0.12049999833107,
+            0.101999998092651
+          ],
+          "bounds_max_nodes": [
+            "md10cB",
+            "cold_plate",
+            "frame_front"
+          ],
+          "bounds_min_meters": [
+            -0.155000001192093,
+            -0.0300000011920929,
+            -0.101999998092651
+          ],
+          "bounds_min_nodes": [
+            "frame_front",
+            "frame_front",
+            "frame_rear"
+          ],
+          "bounds_size_meters": [
+            0.31700000166893,
+            0.150499999523163,
+            0.203999996185303
+          ],
+          "materials": 322,
+          "meshes": 322,
+          "nodes": 325,
+          "skeletons": 0,
+          "skinned_meshes": 0,
+          "texture_slots": 897,
+          "textures": 16,
+          "triangles": 272560,
+          "vertices": 351877
+        }
+      },
+      "parity": {
+        "boundsErrorMm": 0.00000391900512042298,
+        "boundsToleranceMm": 0.1,
+        "blockers": []
+      }
+    },
+    {
+      "id": "field-human-runtime",
+      "domain": "animation-game",
+      "pass": true,
+      "source": {
+        "meshes": 3,
+        "vertices": 31735,
+        "triangles": 51934,
+        "materials": 3,
+        "textures": 4,
+        "textureSlots": 6,
+        "skins": 2,
+        "joints": 98,
+        "maximumJointsPerSkin": 49,
+        "morphTargets": 10,
+        "animationClips": 22,
+        "animationNames": [
+          "morphloom_breathe_idle",
+          "morphloom_crouch_idle",
+          "morphloom_crouch_walk",
+          "morphloom_hand_gesture",
+          "morphloom_idle_preview",
+          "morphloom_jump_air",
+          "morphloom_jump_land",
+          "morphloom_jump_start",
+          "morphloom_pick_up",
+          "morphloom_point",
+          "morphloom_pull",
+          "morphloom_push",
+          "morphloom_run_cycle",
+          "morphloom_sprint_cycle",
+          "morphloom_strafe_left",
+          "morphloom_strafe_right",
+          "morphloom_turn_in_place",
+          "morphloom_turn_left_90",
+          "morphloom_turn_right_90",
+          "morphloom_walk_backward",
+          "morphloom_walk_cycle",
+          "morphloom_wave"
+        ],
+        "boundsSizeMeters": [
+          1.1199051141738892,
+          1.79944139637053,
+          0.4468359053134918
+        ]
+      },
+      "godot": {
+        "blockers": [],
+        "godot_version": "4.7.2-stable (official)",
+        "pass": true,
+        "schema": "morphloom.godot-cross-domain-import/0.1",
+        "source": "res://fixtures/field-human-runtime.glb",
+        "source_sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+        "stats": {
+          "animation_clips": 22,
+          "animation_names": [
+            "morphloom_breathe_idle",
+            "morphloom_crouch_idle",
+            "morphloom_crouch_walk",
+            "morphloom_hand_gesture",
+            "morphloom_idle_preview",
+            "morphloom_jump_air",
+            "morphloom_jump_land",
+            "morphloom_jump_start",
+            "morphloom_pick_up",
+            "morphloom_point",
+            "morphloom_pull",
+            "morphloom_push",
+            "morphloom_run_cycle",
+            "morphloom_sprint_cycle",
+            "morphloom_strafe_left",
+            "morphloom_strafe_right",
+            "morphloom_turn_in_place",
+            "morphloom_turn_left_90",
+            "morphloom_turn_right_90",
+            "morphloom_walk_backward",
+            "morphloom_walk_cycle",
+            "morphloom_wave"
+          ],
+          "blend_shapes": 10,
+          "bones": 49,
+          "bounds_max_meters": [
+            0.559952557086945,
+            1.79944145679474,
+            0.223417952656746
+          ],
+          "bounds_max_nodes": [
+            "morphloom_human_body",
+            "hair_cap",
+            "morphloom_human_body"
+          ],
+          "bounds_min_meters": [
+            -0.559952557086945,
+            0,
+            -0.223417952656746
+          ],
+          "bounds_min_nodes": [
+            "morphloom_human_body",
+            "morphloom_human_body",
+            "morphloom_human_body"
+          ],
+          "bounds_size_meters": [
+            1.11990511417389,
+            1.79944145679474,
+            0.446835905313492
+          ],
+          "materials": 3,
+          "meshes": 3,
+          "nodes": 8,
+          "skeletons": 1,
+          "skinned_meshes": 2,
+          "texture_slots": 9,
+          "textures": 4,
+          "triangles": 51934,
+          "vertices": 28180
+        }
+      },
+      "parity": {
+        "boundsErrorMm": 0.000060424210079901286,
+        "boundsToleranceMm": 1,
+        "blockers": []
+      }
+    },
+    {
+      "id": "asphalt-print-surface",
+      "domain": "3d-printing",
+      "pass": true,
+      "source": {
+        "meshes": 1,
+        "vertices": 335808,
+        "triangles": 111936,
+        "materials": 1,
+        "textures": 3,
+        "textureSlots": 3,
+        "skins": 0,
+        "joints": 0,
+        "maximumJointsPerSkin": 0,
+        "morphTargets": 0,
+        "animationClips": 0,
+        "animationNames": [],
+        "boundsSizeMeters": [
+          0.6000000238418579,
+          0.04345347546041012,
+          0.44999998807907104
+        ],
+        "surfaceRelief": {
+          "samples": 165888,
+          "rms_roughness_mm": 0.97881656978884,
+          "peak_to_valley_mm": 6.200158968567848
+        }
+      },
+      "godot": {
+        "blockers": [],
+        "godot_version": "4.7.2-stable (official)",
+        "pass": true,
+        "schema": "morphloom.godot-cross-domain-import/0.1",
+        "source": "res://fixtures/asphalt-print-surface.glb",
+        "source_sha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818",
+        "stats": {
+          "animation_clips": 0,
+          "animation_names": [],
+          "blend_shapes": 0,
+          "bones": 0,
+          "bounds_max_meters": [
+            0.300000011920929,
+            0.0234534777700901,
+            0.224999994039536
+          ],
+          "bounds_max_nodes": [
+            "asphalt_core_sample",
+            "asphalt_core_sample",
+            "asphalt_core_sample"
+          ],
+          "bounds_min_meters": [
+            -0.300000011920929,
+            -0.0199999995529652,
+            -0.224999994039536
+          ],
+          "bounds_min_nodes": [
+            "asphalt_core_sample",
+            "asphalt_core_sample",
+            "asphalt_core_sample"
+          ],
+          "bounds_size_meters": [
+            0.600000023841858,
+            0.0434534773230553,
+            0.449999988079071
+          ],
+          "materials": 1,
+          "meshes": 1,
+          "nodes": 3,
+          "skeletons": 0,
+          "skinned_meshes": 0,
+          "surface_relief": {
+            "peak_to_valley_mm": 6.20025396347046,
+            "rms_roughness_mm": 0.978816213524551,
+            "samples": 165888
+          },
+          "texture_slots": 4,
+          "textures": 3,
+          "triangles": 111936,
+          "vertices": 335808
+        }
+      },
+      "parity": {
+        "boundsErrorMm": 0.0000018626451839254266,
+        "boundsToleranceMm": 0.1,
+        "surfaceRelief": {
+          "rmsErrorMm": 3.5626428906976315e-7,
+          "peakToValleyErrorMm": 0.00009499490261166699,
+          "toleranceMm": 0.02
+        },
+        "blockers": []
+      }
+    }
+  ],
+  "blockers": [],
+  "limitation": "This proves native Godot import integrity, not gameplay quality, physics tuning, target-device performance, or final art approval."
+}

@@ -1,0 +1,294 @@
+{
+  "schema": "morphloom.asphalt-same-input/0.1",
+  "generatedAt": "2026-09-03T06:15:49.684Z",
+  "claimScope": "Same-source asphalt appearance extraction and delivered GLB surface relief only; not all-domain superiority.",
+  "protocol": {
+    "sameSourceBytes": true,
+    "source": "/Users/danny/Documents/Codex/2026-08-30/g/public/local-references/7e754a7eebdfefdb-morphloom-asphalt-reference.jpg",
+    "sourceSha256": "7e754a7eebdfefdb10ed7fbae22b3362689d0a1ed1033d1ffbd038ecde13741a",
+    "sourcePixels": [
+      508,
+      660
+    ],
+    "equalClosedCarrierBounds": true,
+    "dccInspectionInput": "canonical exported GLB reopened through @gltf-transform/core",
+    "competitorPinnedCommit": "9fbd0ca5bbcc3b13bebe712745d6784d33db0b85",
+    "competitorNativePolicy": "reference maps preserved; runtime bump is not converted with Morphloom geometry code"
+  },
+  "morphloom": {
+    "materialReceipt": {
+      "schema": "morphloom.reference-material-application/0.1",
+      "sourceId": "same-input-asphalt",
+      "evidenceFingerprint": "7e754a7eebdfefdb10ed7fbae22b3362689d0a1ed1033d1ffbd038ecde13741a",
+      "status": "applied",
+      "appliedMaterials": [
+        "Dense-graded bituminous asphalt with exposed aggregate asphalt_core_sample [asphalt]"
+      ],
+      "skippedMeshesWithoutUv": [],
+      "blockers": [],
+      "albedoMode": "source-colour",
+      "channels": {
+        "baseColor": "reference",
+        "normal": "reference",
+        "roughness": "reference",
+        "metallic": "unverified"
+      }
+    },
+    "materialSuitability": {
+      "pass": true,
+      "foregroundFillRatio": 1,
+      "interiorFillRatio": 0.9930446194225722,
+      "seededTexelRatio": 0.99609375,
+      "blockers": []
+    },
+    "surfaceAudit": {
+      "schema": "morphloom.reference-surface-evidence/0.1",
+      "expectation": "irregular-granular",
+      "pass": true,
+      "score": 97.71140059140045,
+      "checks": [
+        {
+          "id": "signal",
+          "measured": 1,
+          "pass": true,
+          "score": 100,
+          "threshold": ">=0.65"
+        },
+        {
+          "id": "multiscale",
+          "measured": 1,
+          "pass": true,
+          "score": 100,
+          "threshold": ">=0.667"
+        },
+        {
+          "id": "irregularity",
+          "measured": 0.8675164346405942,
+          "pass": true,
+          "score": 86.75164346405943,
+          "threshold": ">=0.65"
+        },
+        {
+          "id": "aperiodic",
+          "measured": 0.004832399156567467,
+          "pass": true,
+          "score": 99.51676008434326,
+          "threshold": "<=0.65"
+        },
+        {
+          "id": "normal-response",
+          "measured": 0.6280650448301485,
+          "pass": true,
+          "score": 100,
+          "threshold": "0.15..1.8"
+        },
+        {
+          "id": "roughness-variation",
+          "measured": 0.05630118417610479,
+          "pass": true,
+          "score": 100,
+          "threshold": ">=0.015"
+        }
+      ],
+      "blockers": []
+    },
+    "referenceMetrics": {
+      "normalizedEntropy": 0.561609714906359,
+      "meanGradient": 0.3877842341546907,
+      "heightDeviation": 0.052274103116836904,
+      "fineDeviation": 0.08238872569047778,
+      "mediumDeviation": 0.044100425930950767,
+      "coarseDeviation": 0.013139798257116862,
+      "multiScaleBalance": 1,
+      "periodicity": 0.004832399156567467,
+      "irregularity": 0.8675164346405942,
+      "normalGradientP90": 0.9871765258918075,
+      "normalSlopeRms": 0.6280650448301485,
+      "roughnessDeviation": 0.05630118417610479,
+      "surfaceSignalConfidence": 1
+    },
+    "albedoLuminance": {
+      "mean": 0.25450322768267464,
+      "p05": 0.0196078431372549,
+      "p50": 0.23137254901960785,
+      "p95": 0.5843137254901961
+    },
+    "delivery": {
+      "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/asphalt-same-input/morphloom/morphloom-asphalt.glb",
+      "bytes": 20937264,
+      "sha256": "c9f209b14063e9939c3f9872d5c3eb3f1a42bf8a1d2958843250176bfdf3fc93",
+      "repeatSha256": "c9f209b14063e9939c3f9872d5c3eb3f1a42bf8a1d2958843250176bfdf3fc93",
+      "byteDeterministic": true,
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 2,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "relief": {
+        "top": {
+          "vertices": 184800,
+          "meanNormalY": -0.010899310356758523,
+          "minimumMm": 18.39381828904152,
+          "maximumMm": 22.84713089466095,
+          "rmsDeviationMm": 0.5251142211790369,
+          "peakToValleyMm": 4.4533126056194305
+        },
+        "primitives": [
+          {
+            "vertices": 184800,
+            "meanNormalY": -0.010899310356758523,
+            "minimumMm": 18.39381828904152,
+            "maximumMm": 22.84713089466095,
+            "rmsDeviationMm": 0.5251142211790369,
+            "peakToValleyMm": 4.4533126056194305
+          },
+          {
+            "vertices": 184800,
+            "meanNormalY": -0.010899310356758523,
+            "minimumMm": 18.39381828904152,
+            "maximumMm": 22.84713089466095,
+            "rmsDeviationMm": 0.5251142211790369,
+            "peakToValleyMm": 4.4533126056194305
+          }
+        ]
+      }
+    }
+  },
+  "img2threejs": {
+    "extractorVerdict": "pass",
+    "extractorConfidence": 0.809,
+    "foregroundCoverage": 0.0572,
+    "warnings": [
+      "foreground mask is very small",
+      "single-image inverse rendering cannot prove true physical PBR; confidence is capped"
+    ],
+    "albedoLuminance": {
+      "mean": 0.7044267093434053,
+      "p05": 0.7019607843137254,
+      "p50": 0.7019607843137254,
+      "p95": 0.7019607843137254
+    },
+    "mapSha256": {
+      "albedo": "20e1405c7dcbf1695a5693b210c50f026a54a21e0894f33722b4efc1002697a1",
+      "roughness": "033628eb8928fcd44bb1ad08415ef9a17605dda9d28f4974f483ebe7fb6bb50f",
+      "height": "70552d659f08c3109a0ab49aca34802c37d3c08db65df886141a8afebc824988",
+      "normal": "e2a969f0f641c9a5cdcb0812a1867e3a9ed427d13aec269d04849b49615033da",
+      "ao": "2b233d3b8a909d74b3453badf72ea3c5fa0ab986522eb2f114896bfc54e819ca"
+    },
+    "delivery": {
+      "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/asphalt-same-input/img2threejs-delivery/img2threejs-asphalt.glb",
+      "bytes": 20228160,
+      "sha256": "67e4e58d73e326d82ceeb0ea02a4649de040c2ffa28a141afea786b1ffd115ed",
+      "repeatSha256": "67e4e58d73e326d82ceeb0ea02a4649de040c2ffa28a141afea786b1ffd115ed",
+      "byteDeterministic": true,
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 2,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "relief": {
+        "top": {
+          "vertices": 184800,
+          "meanNormalY": 0,
+          "minimumMm": 19.999999552965164,
+          "maximumMm": 19.999999552965164,
+          "rmsDeviationMm": 0,
+          "peakToValleyMm": 0
+        },
+        "primitives": [
+          {
+            "vertices": 184800,
+            "meanNormalY": 0,
+            "minimumMm": 19.999999552965164,
+            "maximumMm": 19.999999552965164,
+            "rmsDeviationMm": 0,
+            "peakToValleyMm": 0
+          },
+          {
+            "vertices": 184800,
+            "meanNormalY": 0,
+            "minimumMm": 19.999999552965164,
+            "maximumMm": 19.999999552965164,
+            "rmsDeviationMm": 0,
+            "peakToValleyMm": 0
+          }
+        ]
+      }
+    }
+  },
+  "sourceAlbedoLuminance": {
+    "mean": 0.25377776140281927,
+    "p05": 0.011764705882352941,
+    "p50": 0.21176470588235294,
+    "p95": 0.6588235294117647
+  },
+  "neutralRenderEvidence": {
+    "status": "pass",
+    "blockers": [],
+    "protocol": "morphloom-surface-neutral-v1",
+    "blenderVersion": "5.2.1 LTS",
+    "renders": {
+      "morphloomTop": {
+        "viewId": "top",
+        "sourceSha256": "c9f209b14063e9939c3f9872d5c3eb3f1a42bf8a1d2958843250176bfdf3fc93",
+        "renderSha256": "6da3d186dd3d1233e957c1d26162f3b39d9058c74af9b073e9aa05107ef20105"
+      },
+      "img2threejsTop": {
+        "viewId": "top",
+        "sourceSha256": "67e4e58d73e326d82ceeb0ea02a4649de040c2ffa28a141afea786b1ffd115ed",
+        "renderSha256": "d729f54232cccbf4f2c77dfc7555e5f56502bd605b9c37cac6f82d0abb260f8d"
+      },
+      "morphloomGrazing": {
+        "viewId": "grazing",
+        "sourceSha256": "c9f209b14063e9939c3f9872d5c3eb3f1a42bf8a1d2958843250176bfdf3fc93",
+        "renderSha256": "e341d35d715763c7b4457c1f2f897d4c3b5aa742753d86cd5af3a6e8363c5f6d"
+      },
+      "img2threejsGrazing": {
+        "viewId": "grazing",
+        "sourceSha256": "67e4e58d73e326d82ceeb0ea02a4649de040c2ffa28a141afea786b1ffd115ed",
+        "renderSha256": "d2110c66d2914148e46d30a51aea65133748722b5f6e7eeba58e82cff61a4a28"
+      }
+    },
+    "limitation": "Locked renders prove comparable delivery views; perceptual preference still needs a blind rating."
+  },
+  "comparison": {
+    "morphloomMeanLumaAbsoluteError": 0.000725466279855369,
+    "img2threejsMeanLumaAbsoluteError": 0.4506489479405861,
+    "morphloomDeliveredReliefMm": 4.4533126056194305,
+    "img2threejsDeliveredReliefMm": 0,
+    "morphloomPreservesDccRelief": true,
+    "img2threejsPreservesDccRelief": false,
+    "technicalWinnerForThisSurfaceCase": "morphloom",
+    "blindPerceptualWinner": "pending"
+  }
+}

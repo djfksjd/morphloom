@@ -58,4 +58,18 @@ describe('geometric self-intersection gate', () => {
     expect(second).toEqual(first);
     geometry.dispose();
   });
+
+  it('invalidates an exact-content cache hit after direct vertex mutation without a version bump', () => {
+    const geometry = twoClosedBoxes(new THREE.Vector3(2, 0, 0));
+    expect(analyzeSelfIntersections(geometry).intersections).toBe(0);
+    const position = geometry.getAttribute('position');
+    const secondBoxFirstVertex = position.count / 2;
+    for (let index = secondBoxFirstVertex; index < position.count; index += 1) {
+      position.setX(index, position.getX(index) - 1.63);
+    }
+    // BufferAttribute.setX does not increment `version`; byte equality must
+    // still prevent reuse of the earlier non-intersection report.
+    expect(analyzeSelfIntersections(geometry).intersections).toBeGreaterThan(0);
+    geometry.dispose();
+  });
 });

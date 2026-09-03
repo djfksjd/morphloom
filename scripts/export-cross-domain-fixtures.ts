@@ -12,6 +12,7 @@ import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 import { createPortableGltfExportInput, preparePortableGltfGeometry } from '../src/engine/gltf-export-preparation';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { canonicalizeGlbBufferViews } from '../src/engine/glb-canonicalization';
+import { exportMillimetreStlBytes } from '../src/engine/static-mesh-roundtrip';
 import { buildOrnateKnife } from '../src/engine/knife';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { parseOhpk } from '../src/engine/ohpk';
@@ -124,11 +125,11 @@ async function generateFixture(fixture: Fixture) {
     console.warn = originalWarn;
   }
   if (!(result instanceof ArrayBuffer)) throw new Error(`${fixture.id} did not export binary GLB.`);
-  return { deliveryBytes: canonicalizeGlbBufferViews(result), preparation };
+  return { deliveryBytes: canonicalizeGlbBufferViews(result), preparation, root };
 }
 
 async function exportFixture(fixture: Fixture) {
-  const { deliveryBytes, preparation } = await generateFixture(fixture);
+  const { deliveryBytes, preparation, root } = await generateFixture(fixture);
   const validation = await validateGlbStandard(deliveryBytes);
   if (validation.status !== 'pass') {
     writeFileSync(resolve(outputDirectory, `${fixture.id}.rejected.glb`), Buffer.from(deliveryBytes));
@@ -142,6 +143,35 @@ async function exportFixture(fixture: Fixture) {
   }
   const path = resolve(outputDirectory, `${fixture.id}.glb`);
   writeFileSync(path, Buffer.from(deliveryBytes));
+  let printDelivery: {
+    file: string;
+    bytes: number;
+    sha256: string;
+    repeatSha256: string;
+    byteDeterministic: true;
+    coordinateUnit: 'mm';
+    axisConvention: 'print-z-up';
+  } | undefined;
+  if (fixture.domain === '3d-printing') {
+    const stlBytes = exportMillimetreStlBytes(root);
+    const repeatStlBytes = exportMillimetreStlBytes(repeat.root);
+    const stlSha256 = createHash('sha256').update(stlBytes).digest('hex');
+    const repeatStlSha256 = createHash('sha256').update(repeatStlBytes).digest('hex');
+    if (stlSha256 !== repeatStlSha256) {
+      throw new Error(`${fixture.id} produced byte-different STL files from the same input.`);
+    }
+    const stlPath = resolve(outputDirectory, `${fixture.id}.stl`);
+    writeFileSync(stlPath, stlBytes);
+    printDelivery = {
+      file: stlPath,
+      bytes: stlBytes.byteLength,
+      sha256: stlSha256,
+      repeatSha256: repeatStlSha256,
+      byteDeterministic: true,
+      coordinateUnit: 'mm',
+      axisConvention: 'print-z-up',
+    };
+  }
   return {
     id: fixture.id,
     domain: fixture.domain,
@@ -152,6 +182,7 @@ async function exportFixture(fixture: Fixture) {
     byteDeterministic: true,
     preparation,
     validation,
+    ...(printDelivery ? { printDelivery } : {}),
   };
 }
 

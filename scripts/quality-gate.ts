@@ -127,6 +127,12 @@ const domainReports = {
     deterministic: fingerprints.architecture[0] === fingerprints.architecture[1],
     browserGlbRoundTrip: hasMatchingBrowserProof('laurel-homes-architectural-review'),
   }),
+  electronicsAssembly: auditDomainReadiness({
+    domain: 'electronics-assembly', root: coolingA.root, topology: coolingA.metrics.topology,
+    evidenceScore: coolingA.metrics.engineering?.evidenceScore ?? 0,
+    deterministic: fingerprints.cooling[0] === fingerprints.cooling[1],
+    browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly'),
+  }),
   animation: auditDomainReadiness({
     domain: 'animation', root: baseCharacterA.root, evidenceScore: 90,
     deterministic: fingerprints.baseCharacter[0] === fingerprints.baseCharacter[1], browserGlbRoundTrip: baseBrowserProof,
@@ -140,11 +146,22 @@ const domainReports = {
     evidenceScore: 84, deterministic: fingerprints.asphalt[0] === fingerprints.asphalt[1],
     browserGlbRoundTrip: asphaltBrowserProof, sourceUnitMm: 1,
   }),
+  surface: auditDomainReadiness({
+    domain: 'surface', root: asphaltA.root, topology: asphaltA.metrics.topology,
+    evidenceScore: 84, deterministic: fingerprints.asphalt[0] === fingerprints.asphalt[1],
+    browserGlbRoundTrip: asphaltBrowserProof,
+  }),
 };
 
 const checkPassed = (report: { checks: Array<{ id: string; pass: boolean }> }, id: string): boolean => report.checks.some((check) => check.id === id && check.pass);
 const modelChecksPass = (report: { checks: Array<{ id: string; pass: boolean; blocking?: boolean }> }): boolean => report.checks
   .filter((check) => check.blocking !== false && check.id !== 'glb-roundtrip')
+  .every((check) => check.pass);
+const electronicsStructuralChecksPass = domainReports.electronicsAssembly.checks
+  .filter((check) => check.blocking !== false
+    && check.id !== 'glb-roundtrip'
+    && check.id !== 'electronics-evidence'
+    && check.id !== 'electronics-production-evidence')
   .every((check) => check.pass);
 
 const cases = [
@@ -180,9 +197,9 @@ const cases = [
     expectedDecision: 'release',
   }),
   evaluateBenchmarkCase({
-    id: 'cooling-service-assembly', domain: 'service-assembly', topologyPass: coolingA.metrics.topology.pass,
+    id: 'cooling-service-assembly', domain: 'electronics-assembly', topologyPass: coolingA.metrics.topology.pass,
     evidenceScore: coolingA.metrics.engineering?.evidenceScore ?? 0, surfaceCoverage: surfaceCoverage(coolingA),
-    domainChecksPass: Boolean(coolingA.metrics.engineering?.digitalReady),
+    domainChecksPass: electronicsStructuralChecksPass,
     firstFingerprint: fingerprints.cooling[0], repeatedFingerprint: fingerprints.cooling[1],
     inputFingerprint: inputFingerprints.cooling,
     browserGlbRoundTrip: hasMatchingBrowserProof('cooling-service-assembly'),
@@ -215,6 +232,13 @@ const cases = [
   evaluateBenchmarkCase({
     id: 'asphalt-3d-print-surface', domain: '3d-print', topologyPass: asphaltA.metrics.topology.pass,
     evidenceScore: 84, surfaceCoverage: surfaceCoverage(asphaltA), domainChecksPass: modelChecksPass(domainReports.print3d),
+    firstFingerprint: fingerprints.asphalt[0], repeatedFingerprint: fingerprints.asphalt[1],
+    inputFingerprint: inputFingerprints.asphalt, browserGlbRoundTrip: asphaltBrowserProof,
+    expectedDecision: 'release',
+  }),
+  evaluateBenchmarkCase({
+    id: 'asphalt-multiscale-surface', domain: 'surface', topologyPass: asphaltA.metrics.topology.pass,
+    evidenceScore: 84, surfaceCoverage: surfaceCoverage(asphaltA), domainChecksPass: modelChecksPass(domainReports.surface),
     firstFingerprint: fingerprints.asphalt[0], repeatedFingerprint: fingerprints.asphalt[1],
     inputFingerprint: inputFingerprints.asphalt, browserGlbRoundTrip: asphaltBrowserProof,
     expectedDecision: 'release',

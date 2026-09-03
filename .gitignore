@@ -4,6 +4,11 @@ dist/
 coverage/
 *.tsbuildinfo
 work/
+tmp/
+output/
+outputs/
+.playwright-cli/
+scripts/__pycache__/
 public/benchmark-input/
 public/local-references/
 .env

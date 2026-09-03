@@ -1,0 +1,91 @@
+{
+  "schema": "morphloom.low-model-blind-audit/0.1",
+  "generatedAt": "2026-09-03T04:48:06Z",
+  "caseId": "abo-industrial-floor-fan-four-view",
+  "protocol": {
+    "referenceViews": [
+      { "id": "front", "sha256": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11" },
+      { "id": "right", "sha256": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643" },
+      { "id": "rear", "sha256": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3" },
+      { "id": "left", "sha256": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b" }
+    ],
+    "candidateRenders": {
+      "morphloom": "ba1f615f7dc215612831721e48679438ad2d0cacb396d3a68492b41244f335d9",
+      "img2threejs": "2d10824661f569e9848e15e355d436d067da982c976614c7e4fb5cd2d6f97497"
+    },
+    "balancedOrder": true,
+    "engineNamesHiddenFromRaters": true,
+    "dimensions": ["shape", "completeness", "thin_structure", "surface", "overall"]
+  },
+  "ratings": [
+    {
+      "rater": "codex-cli:gpt-5.4-mini",
+      "presentation": { "A": "morphloom", "B": "img2threejs" },
+      "winner": "A",
+      "confidence": 0.99,
+      "scores": {
+        "A": { "shape": 88, "completeness": 92, "thin_structure": 90, "surface": 78, "overall": 89 },
+        "B": { "shape": 18, "completeness": 10, "thin_structure": 5, "surface": 20, "overall": 12 }
+      }
+    },
+    {
+      "rater": "codex-cli:gpt-5.4-mini",
+      "presentation": { "A": "img2threejs", "B": "morphloom" },
+      "winner": "B",
+      "confidence": 0.99,
+      "scores": {
+        "A": { "shape": 5, "completeness": 0, "thin_structure": 2, "surface": 5, "overall": 3 },
+        "B": { "shape": 92, "completeness": 90, "thin_structure": 88, "surface": 84, "overall": 89 }
+      }
+    },
+    {
+      "rater": "claude-cli:haiku",
+      "presentation": { "A": "morphloom", "B": "img2threejs" },
+      "winner": "A",
+      "confidence": 0.87,
+      "scores": {
+        "A": { "shape": 79, "completeness": 84, "thin_structure": 76, "surface": 71, "overall": 78 },
+        "B": { "shape": 26, "completeness": 31, "thin_structure": 11, "surface": 38, "overall": 27 }
+      }
+    },
+    {
+      "rater": "claude-cli:haiku",
+      "presentation": { "A": "img2threejs", "B": "morphloom" },
+      "winner": "B",
+      "confidence": 0.99,
+      "scores": {
+        "A": { "shape": 0, "completeness": 10, "thin_structure": 0, "surface": 15, "overall": 5 },
+        "B": { "shape": 95, "completeness": 92, "thin_structure": 88, "surface": 90, "overall": 91 }
+      }
+    }
+  ],
+  "aggregate": {
+    "completedRatings": 4,
+    "morphloomWins": 4,
+    "img2threejsWins": 0,
+    "ties": 0,
+    "morphloomMeanOverall": 86.75,
+    "img2threejsMeanOverall": 11.75,
+    "meanOverallAdvantage": 75,
+    "orderInvariant": true
+  },
+  "unavailableRaters": [
+    {
+      "rater": "gemini-cli:gemini-2.5-flash-lite",
+      "status": "blocked",
+      "reason": "Google CLI authentication returned UNSUPPORTED_CLIENT for the signed-in individual tier."
+    },
+    {
+      "rater": "aside-cli:google-gemini",
+      "status": "blocked",
+      "reason": "The signed-in Aside account exposed no requested Gemini Flash model; explicit model requests were rejected as unavailable."
+    }
+  ],
+  "claimAllowed": false,
+  "claimBlockers": [
+    "This is one industrial-design case, not a cross-domain benchmark.",
+    "Two model families with order reversal do not satisfy the five-unique-rater human blind-panel contract.",
+    "Only one neutral candidate view was rated against four reference views.",
+    "Morphloom still fails its absolute-camera, ground-truth geometry, and evidence-derived PBR release gates."
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "schema": "morphloom.competitor-cli-audit/0.1",
+  "generatedAt": "2026-09-03T04:48:06Z",
+  "caseId": "abo-industrial-floor-fan-four-view",
+  "protocol": {
+    "input": "same four ABO reference views",
+    "agent": "Codex CLI",
+    "model": "gpt-5.4-mini",
+    "reasoningEffort": "low",
+    "competitorRepository": "img2threejs/img2threejs",
+    "competitorCommit": "9fbd0ca5bbcc3b13bebe712745d6784d33db0b85",
+    "isolation": "detached competitor worktree with no Morphloom source access",
+    "sourceViews": [
+      { "id": "front", "path": "work/abo/pilot/fan/view-000.jpg", "sha256": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11" },
+      { "id": "right", "path": "work/abo/pilot/fan/view-090.jpg", "sha256": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643" },
+      { "id": "rear", "path": "work/abo/pilot/fan/view-180.jpg", "sha256": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3" },
+      { "id": "left", "path": "work/abo/pilot/fan/view-270.jpg", "sha256": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b" }
+    ]
+  },
+  "img2threejsCandidate": {
+    "selfReportedStrictSpecPass": true,
+    "independentlyRepeatedStrictSpecPass": true,
+    "spec": {
+      "path": "work/img2threejs-fan-run/comparison-run/fan/spec.json",
+      "sha256": "fe0057dc3125a53308e51b835169e7b9803e000d1d13159d60ca048c5445f790"
+    },
+    "generatedSource": {
+      "path": "work/img2threejs-fan-run/comparison-run/fan/src/createFanModel.ts",
+      "sha256": "a6a25831678990ae570dcd4991b799e7e146e8daafc65c8c68bd67231d2033cc",
+      "typescriptCompilePass": true,
+      "declaredComponents": 20,
+      "implementedPivotNodes": 8,
+      "implementedMeshConstructors": 8
+    },
+    "integrityFindings": [
+      "The detail inventory floor was reduced to zero and the detail list was emptied.",
+      "Only one view-evidence record remained despite four supplied source views.",
+      "The 38-wire repetition system maps to one wire-guards bundle, so the claimed per-wire editability is not represented by stable component IDs.",
+      "The quality target and repetition system specify three blades while the component inventory contains four blades.",
+      "Reference-derived PBR was disabled even though photographs were supplied and visual surface fidelity was requested.",
+      "Procedural material URLs and claimed resolutions are metadata; no inspectable reference-derived PBR image payload was delivered.",
+      "Only 8 of the 20 declared component pivots appear in the generated TypeScript source.",
+      "Every non-endpoint BoxGeometry is scaled by 1,1,1 instead of the declared component dimensions, so the recovered render is a stack of unit primitives rather than the planned fan."
+    ],
+    "delivery": {
+      "realGlb": true,
+      "realGlbAfterCompatibilityRecovery": true,
+      "artifact": {
+        "path": "tmp/img2threejs-fan-candidate/img2threejs-fan.glb",
+        "bytes": 538364,
+        "sha256": "e3394f61374315e34b10658ac647e55279c589a2791dec032558a6b7b13a3619",
+        "nodes": 17,
+        "meshes": 8,
+        "materials": 1,
+        "triangles": 14400
+      },
+      "compatibilityRecovery": {
+        "applied": true,
+        "visualMaterialClaimEligible": false,
+        "reason": "The generated factory used non-fetchable procedural:// URLs as reference textures and stored a circular runtime object in userData. Deterministic one-pixel channel-safe placeholders and removal of that circular metadata were required only to inspect geometry and exportability."
+      },
+      "browserRender": false,
+      "neutralBlenderRenders": true,
+      "neutralRenderSetAudit": {
+        "path": "benchmarks/abo-fan-neutral-comparison-latest.json",
+        "status": "pass",
+        "views": ["front", "rear", "iso"],
+        "protocol": "morphloom-neutral-glb-v2"
+      },
+      "comparisonSheet": true,
+      "triangleCount": 14400,
+      "nativeDccReopen": true,
+      "componentEditProof": false
+    }
+  },
+  "morphloomCandidate": {
+    "artifact": {
+      "path": "tmp/abo-semantic-fan/abo-industrial-floor-fan-semantic.glb",
+      "bytes": 3464012,
+      "sha256": "7881815cc6e28dd9c027931143e33302dfa8d93d4a7e6fe397b18b941bb60b84"
+    },
+    "delivery": {
+      "realGlb": true,
+      "khronosValidation": { "pass": true, "errors": 0, "warnings": 0, "infos": 0, "hints": 0 },
+      "independentRead": { "pass": true, "nodes": 102, "meshes": 101, "materials": 101 },
+      "blenderVersion": "5.2.1 LTS",
+      "componentEditProof": { "pass": true, "editedComponent": "speed-knob", "unchangedMeshes": 100, "meshCount": 101 },
+      "neutralBlenderRenders": { "pass": true, "views": ["front", "rear", "iso"], "minimumFrameMarginPixels": 10 },
+      "deterministic": true
+    },
+    "knownQualityBlockers": [
+      "The latest four-view silhouette gate still fails on the right and left views.",
+      "Ground-truth surface distance and coverage gates still fail.",
+      "Reference-derived PBR evidence coverage is not yet sufficient for production delivery."
+    ],
+    "boundedRecovery": {
+      "status": "improved",
+      "editedComponent": "foot-left-rear",
+      "operation": "scale-1-percent",
+      "protectedGateRegression": false,
+      "surfaceRmsBefore": 0.056044865054387175,
+      "surfaceRmsAfter": 0.05595701737176403,
+      "minimumCoverageBefore": 0.53857421875,
+      "minimumCoverageAfter": 0.54150390625
+    }
+  },
+  "comparison": {
+    "deliveryWinner": "morphloom",
+    "deliveryReason": "Morphloom delivered a validated 101-mesh, independently reopenable and component-editable GLB. The competitor source required compatibility recovery and then delivered only 8 unit-primitive meshes with no component-edit proof.",
+    "sameGroundTruthSurfaceComparison": {
+      "reference": "work/abo/pilot/fan/ground-truth.glb",
+      "samplesPerCandidate": 4096,
+      "morphloom": {
+        "report": "benchmarks/abo-fan-morphloom-surface-latest.json",
+        "symmetricRmsChamfer": 0.055957017371764034,
+        "worstP95Distance": 0.11572054086406765,
+        "minimumCoverage": 0.54150390625,
+        "maximumDimensionRelativeError": 0.041519694712074846
+      },
+      "img2threejs": {
+        "report": "benchmarks/abo-fan-img2threejs-surface-latest.json",
+        "symmetricRmsChamfer": 0.12909005126366446,
+        "worstP95Distance": 0.2916260607762877,
+        "minimumCoverage": 0.238525390625,
+        "maximumDimensionRelativeError": 3.4712669169951242
+      },
+      "winner": "morphloom",
+      "bothPassReleaseThresholds": false,
+      "interpretation": "Morphloom is substantially closer on the same ground-truth geometry, but still fails the absolute release thresholds."
+    },
+    "visualWinner": null,
+    "visualEvaluationEligible": false,
+    "visualIneligibilityReason": "A locked neutral three-view render and an order-reversed two-model-family blind audit now exist. All four low-model ratings prefer Morphloom, but the material result required compatibility repair and no calibrated matched-reference, balanced five-human-rater blind panel has been recorded.",
+    "productionDominanceClaim": false,
+    "productionDominanceBlockers": [
+      "No calibrated matched-reference, balanced five-human-rater blind panel exists for this run; the available four ratings come from two CLI model families.",
+      "The competitor render needed compatibility recovery, so it is ineligible for a reference-material fidelity claim.",
+      "Morphloom still fails its own side-view silhouette, reference-surface, and evidence-derived PBR gates.",
+      "One fan case cannot establish cross-domain superiority."
+    ]
+  },
+  "engineRegressionAdded": {
+    "module": "src/engine/visual-plan-audit.ts",
+    "test": "tests/visual-plan-audit.test.ts and tests/neutral-render-proof.test.ts",
+    "blockedFailureClasses": [
+      "silent source-evidence deletion",
+      "repeated-part bundling behind one edit ID",
+      "cross-section count disagreement",
+      "quality-floor lowering during retries",
+      "reference-PBR disabling with image-conditioned surface goals",
+      "unresolved-evidence erasure without a receipt",
+      "locked-plan mutation",
+      "neutral-render top/bottom clipping hidden by a wide aspect ratio"
+    ]
+  }
+}

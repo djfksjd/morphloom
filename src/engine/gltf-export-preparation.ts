@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 export interface GltfExportPreparationReport {
   visibleMeshes: number;
+  stableNodeIdsAssigned: number;
   normalizedNormalAttributes: number;
   /** Three supports a scalar sheen multiplier, while KHR_materials_sheen does not. */
   normalizedSheenMaterials: number;
@@ -58,16 +59,28 @@ export function preparePortableGltfGeometry(root: THREE.Object3D): GltfExportPre
   const normalizedMaterials = new Set<THREE.Material>();
   const report: GltfExportPreparationReport = {
     visibleMeshes: 0,
+    stableNodeIdsAssigned: 0,
     normalizedNormalAttributes: 0,
     normalizedSheenMaterials: 0,
     tangentSpacesGenerated: 0,
     indexedForTangents: 0,
     unresolvedNormalMappedMeshes: [],
   };
+  const stableNodeIds = new Set<string>();
 
   root.traverseVisible((object) => {
     if (!(object instanceof THREE.Mesh)) return;
     report.visibleMeshes += 1;
+    const stableNodeId = object.name.trim();
+    if (!stableNodeId || stableNodeId.length > 256) {
+      throw new Error('Every portable mesh requires a non-empty name no longer than 256 characters.');
+    }
+    if (stableNodeIds.has(stableNodeId)) {
+      throw new Error(`Portable mesh names must be unique for isolated editing: ${stableNodeId}`);
+    }
+    stableNodeIds.add(stableNodeId);
+    object.userData.morphloomStableNodeId = stableNodeId;
+    report.stableNodeIdsAssigned += 1;
     for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
       if (normalizedMaterials.has(material)) continue;
       normalizedMaterials.add(material);

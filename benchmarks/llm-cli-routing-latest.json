@@ -1,0 +1,64 @@
+{
+  "schema": "morphloom.llm-cli-routing-audit/0.1",
+  "generatedAt": "2026-09-03T01:50:44.000Z",
+  "purpose": "Record the same-input visual-planning availability and result quality of locally installed model CLIs without treating a text plan as a generated 3D asset.",
+  "input": {
+    "asset": "ABO industrial floor fan",
+    "views": [
+      "work/abo/pilot/fan/view-000.jpg",
+      "work/abo/pilot/fan/view-090.jpg",
+      "work/abo/pilot/fan/view-180.jpg",
+      "work/abo/pilot/fan/view-270.jpg"
+    ],
+    "promptPolicy": "Same structured visual-planning prompt for every available CLI; no scale reference was supplied."
+  },
+  "providers": [
+    {
+      "provider": "codex",
+      "cliVersion": "0.152.1",
+      "availability": "completed",
+      "authentication": "ChatGPT login",
+      "model": "gpt-5.4-mini",
+      "reasoningEffort": "low",
+      "imagesAccepted": 4,
+      "structuredJson": true,
+      "objectClassCorrect": true,
+      "componentGroupsReturned": 11,
+      "editableUnitCountRequiredByMorphloomPilot": 101,
+      "assemblyIrReturned": false,
+      "glbReturned": false,
+      "verdict": "planning-only",
+      "notes": [
+        "Correctly classified the object as an industrial floor fan and described major asymmetries and uncertainty.",
+        "Grouped repeated and connected parts instead of producing the 101 independently editable units required by the pilot contract.",
+        "Dimension estimates cannot be accepted as measured because the images contain no calibrated scale evidence."
+      ]
+    },
+    {
+      "provider": "claude",
+      "cliVersion": "2.1.259",
+      "availability": "blocked",
+      "authentication": "not logged in",
+      "assemblyIrReturned": false,
+      "glbReturned": false,
+      "verdict": "not-run",
+      "blocker": "Claude CLI reported loggedIn=false and no ANTHROPIC_API_KEY was present."
+    },
+    {
+      "provider": "gemini",
+      "cliVersion": "0.57.0",
+      "availability": "blocked",
+      "authentication": "installed client rejected by service",
+      "assemblyIrReturned": false,
+      "glbReturned": false,
+      "verdict": "not-run",
+      "blocker": "Gemini CLI returned IneligibleTierError and required migration to a supported client or a configured API key."
+    }
+  ],
+  "comparison": {
+    "providerComparisonCompleted": false,
+    "actual3dComparisonCompleted": false,
+    "morphloomDominanceClaimAllowed": false,
+    "reason": "Two providers were unavailable and the one completed provider produced a visual plan rather than AssemblyIR or a 3D deliverable."
+  }
+}

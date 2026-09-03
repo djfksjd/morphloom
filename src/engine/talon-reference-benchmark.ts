@@ -21,18 +21,21 @@ const profile = (points: Array<[number, number]>): Array<[number, number]> =>
 const referenceProfile = (points: Array<[number, number]>): Array<[number, number]> =>
   points.map(([x, y]) => [(x - 7) * SCALE_MM_PER_PIXEL - 120, -(y - 237.5) * SCALE_MM_PER_PIXEL]);
 
-const OUTER = profile([[100.64,41.63],[101.86,41.63],[103.07,40.71],[104.29,41.02],[116.49,34.61],[128.08,31.56],[147.29,30.04],[162.54,30.04],[174.43,28.51],[200.97,20.58],[214.99,14.79],[222.31,10.83],[228.72,6.25],[233.9,1.37],[233.6,0.15],[237.26,-3.81],[240,-12.35],[240,-18.75],[238.78,-23.33],[235.73,-28.21],[230.55,-32.48],[225.36,-34],[218.35,-33.7],[209.2,-30.04],[205.54,-26.99],[201.27,-19.97],[197.31,-9.91],[194.56,-7.17],[189.07,-4.73],[183.28,-3.51],[167.12,-3.2],[154.31,3.81],[147.6,6.25],[140.58,7.47],[134.18,7.17],[129.91,5.95],[127.17,3.51],[122.9,-3.81],[119.54,-3.81],[114.97,-2.9],[110.7,-1.07],[102.16,5.34],[96.98,5.64],[95.76,6.56],[93.32,6.86],[83.86,5.34],[67.7,1.37],[57.03,-2.59],[43.91,-9],[23.79,-21.8],[9.45,-33.09],[0,-41.63],[0.91,-34],[4.27,-22.41],[9.76,-10.83],[12.81,-5.64],[17.38,0.15],[30.19,12.35],[39.95,19.67],[49.71,25.46],[61.91,31.56],[63.13,31.56],[63.13,28.51],[63.74,28.51],[68.61,34.31],[69.22,33.7],[69.22,31.26],[69.83,30.95],[74.1,36.44],[75.02,35.83],[75.32,33.09],[75.93,33.09],[80.51,38.27],[81.42,38.27],[81.73,35.53],[82.64,34.92],[84.17,36.14],[86,39.49],[93.93,41.02],[94.84,41.02],[94.84,40.41],[92.4,37.36],[92.4,35.53],[93.32,35.53]]);
+// Outer boundary traced from the admitted broadside mask and simplified at a
+// sub-millimetre tolerance. This removes hand-fit handle inflation while
+// retaining the tooth peaks, guard transition, choils and finger-ring mass.
+const OUTER: Array<[number, number]> = [[-120,-39.66],[-115.56,-21.92],[-110.64,-11.58],[-107.19,-5.67],[-101.77,1.23],[-92.4,10.1],[-81.07,18.97],[-59.88,30.79],[-57.41,31.78],[-56.43,28.33],[-51.5,34.24],[-50.51,30.79],[-46.08,36.21],[-45.59,36.21],[-44.6,32.76],[-39.18,38.18],[-38.69,38.18],[-37.7,34.73],[-36.22,35.72],[-34.25,39.17],[-25.38,41.14],[-24.89,37.2],[-19.47,41.63],[-18.48,41.63],[-17,40.64],[-16.51,41.14],[-14.05,40.15],[-9.61,37.2],[-4.19,34.73],[3.7,32.27],[17.49,30.3],[49.53,29.31],[60.86,26.85],[81.07,20.45],[98.32,13.06],[108.17,6.65],[112.61,2.71],[114.09,-0.25],[117.04,-3.69],[118.52,-6.65],[120,-12.56],[120,-18.47],[117.54,-25.37],[112.11,-31.28],[109.65,-32.76],[105.71,-33.75],[100.29,-33.75],[92.4,-31.28],[86.49,-27.34],[83.04,-22.91],[79.1,-13.06],[76.63,-8.62],[72.69,-5.67],[68.75,-4.19],[63.82,-3.2],[49.03,-3.2],[47.06,-2.71],[33.26,4.68],[23.41,7.64],[14.54,7.64],[9.61,6.16],[7.15,3.69],[3.2,-3.2],[1.23,-3.69],[0.74,-3.2],[-2.71,-3.2],[-7.15,-1.72],[-11.58,0.74],[-17.99,5.67],[-23.41,6.16],[-24.89,7.14],[-27.84,7.14],[-41.15,4.68],[-52.48,1.72],[-61.85,-1.72],[-76.14,-8.62],[-91.42,-17.98],[-102.75,-26.36],[-110.64,-32.76],[-120,-41.63]];
 const HOLES = [
   profile([[220.18,-2.29],[215.91,-4.42],[212.25,-8.69],[210.42,-13.57],[210.42,-18.75],[212.25,-23.63],[213.77,-25.16],[217.13,-26.99],[222.31,-27.29],[226.28,-26.07],[230.55,-22.41],[232.68,-18.14],[232.99,-12.96],[231.46,-8.39],[228.41,-4.73],[224.14,-2.59]]),
   profile([[85.08,30.04],[83.25,29.43],[81.42,26.38],[82.03,23.63],[84.17,22.11],[87.22,22.72],[89.05,25.16],[88.44,28.82],[87.22,29.73]]),
   profile([[74.71,26.07],[72.88,24.85],[72.58,21.8],[73.8,20.28],[75.93,20.28],[77.76,21.8],[78.07,23.94],[76.85,26.07]]),
   profile([[65.87,22.11],[64.35,20.89],[64.04,18.75],[64.96,17.23],[66.48,16.93],[68.01,17.84],[68.61,20.58],[67.7,22.11]]),
 ];
-const CUTTING_EDGE_PATH: Array<[number, number]> = profile([
-  [0, -41.63], [9.45, -33.09], [23.79, -21.8], [43.91, -9], [57.03, -2.59],
-  [67.7, 1.37], [83.86, 5.34], [93.32, 6.86], [95.76, 6.56], [96.98, 5.64],
-  [102.16, 5.34], [110.7, -1.07], [114.97, -2.9], [119.54, -3.81], [122.9, -3.81],
-]);
+const CUTTING_EDGE_PATH: Array<[number, number]> = [
+  [-120, -41.63], [-110.64, -32.76], [-102.75, -26.36], [-91.42, -17.98], [-76.14, -8.62],
+  [-61.85, -1.72], [-52.48, 1.72], [-41.15, 4.68], [-27.84, 7.14], [-23.41, 6.16],
+  [-17.99, 5.67], [-11.58, 0.74], [-7.15, -1.72], [-2.71, -3.2], [3.2, -3.2],
+];
 
 const PANELS = [
   referenceProfile([[345,104],[459,128],[458,211],[430,210],[407,208],[400,218],[398,226],[386,221],[374,209],[363,186]]),
@@ -40,9 +43,51 @@ const PANELS = [
   referenceProfile([[636,160],[773,230],[763,240],[731,244],[714,257],[698,292],[696,315],[686,323],[676,313],[663,271],[651,250],[614,248]]),
 ];
 
-const ruby = { color: '#b91529', surface: 'polished-metal' as const, roughness: 0.19, metalness: 0.76, clearcoat: 0.82, clearcoatRoughness: 0.09, iridescence: 0.18, microNormalStrength: 0.42, referenceProjection: REFERENCE_PROJECTION };
-const ivory = { color: '#d9d6c7', surface: 'polished-metal' as const, roughness: 0.31, metalness: 0.08, clearcoat: 0.58, clearcoatRoughness: 0.18, microNormalStrength: 0.16, referenceProjection: REFERENCE_PROJECTION };
-const brass = { color: '#9a7931', surface: 'polished-metal' as const, roughness: 0.26, metalness: 0.88, clearcoat: 0.35, clearcoatRoughness: 0.2, referenceProjection: REFERENCE_PROJECTION };
+const ruby = {
+  color: '#b91529', surface: 'polished-metal' as const, roughness: 0.19, metalness: 0.76,
+  clearcoat: 0.82, clearcoatRoughness: 0.09, iridescence: 0.18, microNormalStrength: 0.42,
+  referenceProjection: {
+    ...REFERENCE_PROJECTION,
+    unobservedSurface: {
+      pattern: 'mineral-flow' as const,
+      color: '#760a1f',
+      roughness: 0.28,
+      metalness: 0.5,
+      colorVariation: 0.3,
+      microNormalStrength: 0.24,
+      textureScale: [1.35, 0.9] as [number, number],
+    },
+  },
+};
+const ivory = {
+  color: '#d9d6c7', surface: 'polished-metal' as const, roughness: 0.31, metalness: 0.08,
+  clearcoat: 0.58, clearcoatRoughness: 0.18, microNormalStrength: 0.16,
+  referenceProjection: {
+    ...REFERENCE_PROJECTION,
+    unobservedSurface: {
+      pattern: 'grain' as const,
+      color: '#cfc9b6',
+      roughness: 0.4,
+      metalness: 0,
+      colorVariation: 0.07,
+      microNormalStrength: 0.12,
+      textureScale: [3, 2] as [number, number],
+    },
+  },
+};
+const brass = {
+  color: '#b58a31', surface: 'polished-metal' as const, roughness: 0.22, metalness: 0.9,
+  clearcoat: 0.38, clearcoatRoughness: 0.18,
+  referenceProjection: {
+    ...REFERENCE_PROJECTION,
+    unobservedSurface: {
+      pattern: 'grain' as const,
+      colorVariation: 0.035,
+      microNormalStrength: 0.06,
+      textureScale: [4, 4] as [number, number],
+    },
+  },
+};
 
 const panelComponents: AssemblyComponentIR[] = PANELS.flatMap((points, index) => [-1, 1].map((side) => ({
   id: `ivory_panel_${index + 1}_${side > 0 ? 'front' : 'back'}`,
@@ -75,6 +120,68 @@ const pinComponents: AssemblyComponentIR[] = pinPixels.flatMap(([x, y], index) =
 
 const [rosetteX, rosetteY] = referenceProfile([[551, 186]])[0];
 const [ringX, ringY] = profile([[221.6, -14.8]])[0];
+const dividerLines = [
+  referenceProfile([[460, 132], [459, 211]]),
+  referenceProfile([[634, 162], [613, 247]]),
+];
+const dividerComponents: AssemblyComponentIR[] = dividerLines.flatMap((points, index) => [-1, 1].map((side) => ({
+  id: `grip_divider_${index + 1}_${side > 0 ? 'front' : 'back'}`,
+  name: `Grip divider ${index + 1} ${side > 0 ? 'front' : 'back'}`,
+  category: 'mechanical' as const,
+  materialName: 'aged brass',
+  detail: 'A separately editable brass liner keeps the visible scale break crisp at grazing angles.',
+  geometry: {
+    op: 'tube' as const,
+    points: points.map(([x, y]) => [x, y, 0] as [number, number, number]),
+    radius: 0.34,
+    tubularSegments: 10,
+    radialSegments: 8,
+  },
+  position: [0, 0, side * 4.03] as [number, number, number],
+  material: brass,
+  evidence: { status: 'estimated' as const, source: SOURCE },
+})));
+const rosetteDetailComponents: AssemblyComponentIR[] = [-1, 1].flatMap((side) => {
+  const face = side > 0 ? 'front' : 'back';
+  const spokes = Array.from({ length: 6 }, (_, index) => {
+    const angle = index / 6 * Math.PI * 2;
+    return {
+      id: `rosette_spoke_${index + 1}_${face}`,
+      name: `Rosette spoke ${index + 1} ${face}`,
+      category: 'mechanical' as const,
+      materialName: 'aged brass',
+      detail: 'Independent spoke geometry preserves the signature wheel ornament instead of baking it into colour.',
+      geometry: {
+        op: 'tube' as const,
+        points: [
+          [Math.cos(angle) * 1.15, Math.sin(angle) * 1.15, 0],
+          [Math.cos(angle) * 3.3, Math.sin(angle) * 3.3, 0],
+        ] as Array<[number, number, number]>,
+        radius: 0.28,
+        tubularSegments: 6,
+        radialSegments: 7,
+      },
+      position: [rosetteX, rosetteY, side * 4.08] as [number, number, number],
+      material: brass,
+      evidence: { status: 'estimated' as const, source: SOURCE },
+    };
+  });
+  return [
+    {
+      id: `rosette_hub_${face}`,
+      name: `Rosette hub ${face}`,
+      category: 'mechanical' as const,
+      materialName: 'aged brass',
+      detail: 'Raised central hub supports the six-spoke signature ornament.',
+      geometry: { op: 'cylinder' as const, radiusTop: 1.25, radiusBottom: 1.25, depth: 0.55, radialSegments: 32 },
+      position: [rosetteX, rosetteY, side * 4.08] as [number, number, number],
+      rotation: [Math.PI / 2, 0, 0] as [number, number, number],
+      material: brass,
+      evidence: { status: 'estimated' as const, source: SOURCE },
+    },
+    ...spokes,
+  ];
+});
 
 export const TALON_REFERENCE_BENCHMARK_IR: AssemblyIR = {
   schema: 'morphloom.assembly/0.1',
@@ -103,6 +210,8 @@ export const TALON_REFERENCE_BENCHMARK_IR: AssemblyIR = {
     },
     ...panelComponents,
     ...pinComponents,
+    ...dividerComponents,
+    ...rosetteDetailComponents,
     ...[-1, 1].flatMap((side) => ([
       {
         id: `rosette_${side > 0 ? 'front' : 'back'}`, name: `Grip rosette ${side > 0 ? 'front' : 'back'}`,

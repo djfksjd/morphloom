@@ -117,7 +117,7 @@ for obj in list(bpy.context.scene.objects):
 scene = bpy.context.scene
 scene.render.engine = "BLENDER_EEVEE"
 scene.render.resolution_x = 1024
-scene.render.resolution_y = 512
+scene.render.resolution_y = 1024
 scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = "PNG"
 scene.render.image_settings.color_mode = "RGBA"
@@ -153,9 +153,28 @@ bpy.ops.render.render(write_still=True)
 if not render_path.is_file() or render_path.stat().st_size < 100:
     raise RuntimeError("Neutral renderer did not produce a valid PNG")
 
+rendered = bpy.data.images.load(str(render_path), check_existing=False)
+width, height = rendered.size
+pixels = rendered.pixels[:]
+visible = [index // 4 for index in range(3, len(pixels), 4) if pixels[index] > (1 / 255)]
+if not visible:
+    raise RuntimeError("Neutral renderer produced an empty alpha silhouette")
+minimum_x = min(pixel % width for pixel in visible)
+maximum_x = max(pixel % width for pixel in visible)
+minimum_y = min(pixel // width for pixel in visible)
+maximum_y = max(pixel // width for pixel in visible)
+minimum_margin = min(minimum_x, minimum_y, width - 1 - maximum_x, height - 1 - maximum_y)
+framing = {
+    "alphaBoundsPixels": {"min": [minimum_x, minimum_y], "max": [maximum_x, maximum_y]},
+    "minimumMarginPixels": minimum_margin,
+    "touchesBorder": minimum_margin <= 1,
+}
+if minimum_margin < 8:
+    raise RuntimeError(f"Neutral renderer framing is clipped or unsafe: minimum margin {minimum_margin}px")
+
 report = {
-    "schema": "morphloom.neutral-glb-render/0.2",
-    "protocol": "morphloom-neutral-glb-v1",
+    "schema": "morphloom.neutral-glb-render/0.3",
+    "protocol": "morphloom-neutral-glb-v2",
     "viewId": view_id,
     "blenderVersion": bpy.app.version_string,
     "source": source.name,
@@ -178,7 +197,8 @@ report = {
         "up": [0, 0, 1],
         "orthographicHeight": camera_preset["orthographicHeight"],
     },
-    "renderSettings": {"engine": "BLENDER_EEVEE", "width": 1024, "height": 512, "transparent": True, "viewTransform": "AgX", "look": "AgX - Medium High Contrast"},
+    "framing": framing,
+    "renderSettings": {"engine": "BLENDER_EEVEE", "width": 1024, "height": 1024, "transparent": True, "viewTransform": "AgX", "look": "AgX - Medium High Contrast"},
     "studio": {
         "world": {"color": [0.12, 0.12, 0.12, 1], "strength": 0.28},
         "lights": [

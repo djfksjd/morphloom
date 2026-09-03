@@ -4,6 +4,30 @@ const MAX_GRID_RESOLUTION = 64;
 const MAX_CELLS_PER_TRIANGLE = 512;
 const MAX_CANDIDATE_PAIRS = 3_000_000;
 const BARYCENTRIC_INTERIOR_EPSILON = 1e-8;
+const MAX_DETERMINISTIC_REPORTS = 32;
+const MAX_CONTENT_REPORTS = 256;
+const MAX_CONTENT_CACHE_BYTES = 96 * 1024 * 1024;
+const MAX_CACHEABLE_GEOMETRY_BYTES = 16 * 1024 * 1024;
+
+const deterministicReportCache = new Map<string, SelfIntersectionReport>();
+const deterministicKeyByGeometry = new WeakMap<THREE.BufferGeometry, string>();
+
+interface ContentReportEntry {
+  positionBytes: Uint8Array;
+  indexBytes?: Uint8Array;
+  report: SelfIntersectionReport;
+  bytes: number;
+}
+
+const contentReportCache = new Map<string, ContentReportEntry[]>();
+let contentReportEntries = 0;
+let contentReportBytes = 0;
+
+/** Internal compiler hook. The association is private and consumed by one audit. */
+export function registerDeterministicTopologyKey(geometry: THREE.BufferGeometry, key: string): void {
+  if (!key || key.length > 1_000_000) throw new Error('Deterministic topology key is unsafe.');
+  deterministicKeyByGeometry.set(geometry, key);
+}
 
 const reportCache = new WeakMap<THREE.BufferGeometry, {
   positionAttribute: THREE.BufferAttribute | THREE.InterleavedBufferAttribute;
@@ -17,6 +41,7 @@ const reportCache = new WeakMap<THREE.BufferGeometry, {
 
 interface PreparedTriangle {
   indices: [number, number, number];
+  canonicalIndices: [number, number, number];
   points: [THREE.Vector3, THREE.Vector3, THREE.Vector3];
   box: THREE.Box3;
   normal: THREE.Vector3;
@@ -34,10 +59,160 @@ function attributeVersion(attribute: THREE.BufferAttribute | THREE.InterleavedBu
   return attribute instanceof THREE.InterleavedBufferAttribute ? attribute.data.version : attribute.version;
 }
 
-function sharesVertex(a: PreparedTriangle, b: PreparedTriangle, epsilon: number): boolean {
-  if (a.indices.some((index) => b.indices.includes(index))) return true;
+function attributeBytes(attribute: THREE.BufferAttribute | THREE.InterleavedBufferAttribute): Uint8Array | undefined {
+  const array = attribute instanceof THREE.InterleavedBufferAttribute ? attribute.data.array : attribute.array;
+  if (!ArrayBuffer.isView(array)) return undefined;
+  return new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
+}
+
+function bytesEqual(left: Uint8Array | undefined, right: Uint8Array | undefined): boolean {
+  if (!left || !right) return left === right;
+  if (left.byteLength !== right.byteLength) return false;
+  for (let index = 0; index < left.byteLength; index += 1) {
+    if (left[index] !== right[index]) return false;
+  }
+  return true;
+}
+
+function byteHash(bytes: Uint8Array): string {
+  let first = 0x811c9dc5;
+  let second = 0x9e3779b9;
+  for (let index = 0; index < bytes.byteLength; index += 1) {
+    const value = bytes[index]!;
+    first = Math.imul(first ^ value, 0x01000193) >>> 0;
+    second = Math.imul(second ^ (value + index), 0x85ebca6b) >>> 0;
+  }
+  return `${first.toString(16).padStart(8, '0')}${second.toString(16).padStart(8, '0')}`;
+}
+
+function contentSignature(
+  position: THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
+  index: THREE.BufferAttribute | null,
+): { key: string; positionBytes: Uint8Array; indexBytes?: Uint8Array; bytes: number } | undefined {
+  const positionBytes = attributeBytes(position);
+  const indexBytes = index ? attributeBytes(index) : undefined;
+  if (!positionBytes || (index && !indexBytes)) return undefined;
+  const bytes = positionBytes.byteLength + (indexBytes?.byteLength ?? 0);
+  if (bytes > MAX_CACHEABLE_GEOMETRY_BYTES) return undefined;
+  const positionMeta = position instanceof THREE.InterleavedBufferAttribute
+    ? `i:${position.itemSize}:${position.offset}:${position.data.stride}:${position.normalized ? 1 : 0}`
+    : `b:${position.itemSize}:${position.normalized ? 1 : 0}`;
+  const indexMeta = index ? `${index.array.constructor.name}:${index.itemSize}:${index.normalized ? 1 : 0}` : 'none';
+  return {
+    key: `${positionMeta}:${position.count}:${positionBytes.byteLength}:${byteHash(positionBytes)}:${indexMeta}:${index?.count ?? 0}:${indexBytes?.byteLength ?? 0}:${indexBytes ? byteHash(indexBytes) : 'none'}`,
+    positionBytes,
+    indexBytes,
+    bytes,
+  };
+}
+
+function cloneReport(report: SelfIntersectionReport): SelfIntersectionReport {
+  return { ...report, samplePairs: report.samplePairs.map((pair) => [...pair]) as Array<[number, number]> };
+}
+
+function lookupContentReport(signature: ReturnType<typeof contentSignature>): SelfIntersectionReport | undefined {
+  if (!signature) return undefined;
+  const entries = contentReportCache.get(signature.key);
+  const matched = entries?.find((entry) => bytesEqual(signature.positionBytes, entry.positionBytes)
+    && bytesEqual(signature.indexBytes, entry.indexBytes));
+  if (!matched || !entries) return undefined;
+  contentReportCache.delete(signature.key);
+  contentReportCache.set(signature.key, entries);
+  return cloneReport(matched.report);
+}
+
+function storeContentReport(signature: ReturnType<typeof contentSignature>, report: SelfIntersectionReport): void {
+  if (!signature) return;
+  const entries = contentReportCache.get(signature.key) ?? [];
+  if (entries.some((entry) => bytesEqual(signature.positionBytes, entry.positionBytes)
+    && bytesEqual(signature.indexBytes, entry.indexBytes))) return;
+  const entry: ContentReportEntry = {
+    positionBytes: signature.positionBytes.slice(),
+    indexBytes: signature.indexBytes?.slice(),
+    report: cloneReport(report),
+    bytes: signature.bytes,
+  };
+  entries.push(entry);
+  contentReportCache.delete(signature.key);
+  contentReportCache.set(signature.key, entries);
+  contentReportEntries += 1;
+  contentReportBytes += entry.bytes;
+  while (contentReportEntries > MAX_CONTENT_REPORTS || contentReportBytes > MAX_CONTENT_CACHE_BYTES) {
+    const oldestKey = contentReportCache.keys().next().value as string | undefined;
+    if (oldestKey === undefined) break;
+    const removed = contentReportCache.get(oldestKey) ?? [];
+    contentReportCache.delete(oldestKey);
+    contentReportEntries -= removed.length;
+    contentReportBytes -= removed.reduce((sum, item) => sum + item.bytes, 0);
+  }
+}
+
+function sharesVertex(a: PreparedTriangle, b: PreparedTriangle): boolean {
+  return a.canonicalIndices.some((index) => b.canonicalIndices.includes(index));
+}
+
+function canonicalVertexIds(
+  position: THREE.BufferAttribute | THREE.InterleavedBufferAttribute,
+  epsilon: number,
+): Uint32Array {
+  const ids = new Uint32Array(position.count);
+  const buckets = new Map<number, Array<{
+    id: number;
+    qx: number;
+    qy: number;
+    qz: number;
+    x: number;
+    y: number;
+    z: number;
+  }>>();
+  // Integer cell hashes avoid allocating 27 temporary strings per vertex.
+  // Hash collisions are harmless because every candidate retains its complete
+  // cell coordinate and is checked before the distance comparison.
+  const hashCell = (qx: number, qy: number, qz: number): number => (
+    Math.imul(qx | 0, 73_856_093)
+    ^ Math.imul(qy | 0, 19_349_663)
+    ^ Math.imul(qz | 0, 83_492_791)
+  );
   const epsilonSq = epsilon * epsilon;
-  return a.points.some((point) => b.points.some((other) => point.distanceToSquared(other) <= epsilonSq));
+  let nextId = 0;
+  for (let index = 0; index < position.count; index += 1) {
+    const x = position.getX(index);
+    const y = position.getY(index);
+    const z = position.getZ(index);
+    const qx = Math.floor(x / epsilon);
+    const qy = Math.floor(y / epsilon);
+    const qz = Math.floor(z / epsilon);
+    let canonical: number | undefined;
+    for (let dx = -1; dx <= 1 && canonical === undefined; dx += 1) {
+      for (let dy = -1; dy <= 1 && canonical === undefined; dy += 1) {
+        for (let dz = -1; dz <= 1 && canonical === undefined; dz += 1) {
+          const candidateQx = qx + dx;
+          const candidateQy = qy + dy;
+          const candidateQz = qz + dz;
+          const candidates = buckets.get(hashCell(candidateQx, candidateQy, candidateQz));
+          const match = candidates?.find((candidate) => {
+            if (candidate.qx !== candidateQx || candidate.qy !== candidateQy || candidate.qz !== candidateQz) return false;
+            const px = candidate.x - x;
+            const py = candidate.y - y;
+            const pz = candidate.z - z;
+            return px * px + py * py + pz * pz <= epsilonSq;
+          });
+          if (match) canonical = match.id;
+        }
+      }
+    }
+    if (canonical === undefined) {
+      canonical = nextId;
+      nextId += 1;
+      const key = hashCell(qx, qy, qz);
+      const bucket = buckets.get(key);
+      const entry = { id: canonical, qx, qy, qz, x, y, z };
+      if (bucket) bucket.push(entry);
+      else buckets.set(key, [entry]);
+    }
+    ids[index] = canonical;
+  }
+  return ids;
 }
 
 function orient2d(a: THREE.Vector2, b: THREE.Vector2, c: THREE.Vector2): number {
@@ -86,29 +261,49 @@ function segmentHitsTriangle(
   triangle: PreparedTriangle,
   epsilon: number,
 ): boolean {
-  const direction = new THREE.Vector3().subVectors(end, start);
-  if (direction.lengthSq() <= epsilon * epsilon) return false;
-  const edge1 = new THREE.Vector3().subVectors(triangle.points[1], triangle.points[0]);
-  const edge2 = new THREE.Vector3().subVectors(triangle.points[2], triangle.points[0]);
-  const p = new THREE.Vector3().crossVectors(direction, edge2);
-  const determinant = edge1.dot(p);
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const dz = end.z - start.z;
+  if (dx * dx + dy * dy + dz * dz <= epsilon * epsilon) return false;
+  const origin = triangle.points[0];
+  const edge1x = triangle.points[1].x - origin.x;
+  const edge1y = triangle.points[1].y - origin.y;
+  const edge1z = triangle.points[1].z - origin.z;
+  const edge2x = triangle.points[2].x - origin.x;
+  const edge2y = triangle.points[2].y - origin.y;
+  const edge2z = triangle.points[2].z - origin.z;
+  const px = dy * edge2z - dz * edge2y;
+  const py = dz * edge2x - dx * edge2z;
+  const pz = dx * edge2y - dy * edge2x;
+  const determinant = edge1x * px + edge1y * py + edge1z * pz;
   if (Math.abs(determinant) <= epsilon) return false;
   const inverse = 1 / determinant;
-  const translated = new THREE.Vector3().subVectors(start, triangle.points[0]);
-  const u = translated.dot(p) * inverse;
+  const tx = start.x - origin.x;
+  const ty = start.y - origin.y;
+  const tz = start.z - origin.z;
+  const u = (tx * px + ty * py + tz * pz) * inverse;
   if (u <= BARYCENTRIC_INTERIOR_EPSILON || u >= 1 - BARYCENTRIC_INTERIOR_EPSILON) return false;
-  const q = new THREE.Vector3().crossVectors(translated, edge1);
-  const v = direction.dot(q) * inverse;
+  const qx = ty * edge1z - tz * edge1y;
+  const qy = tz * edge1x - tx * edge1z;
+  const qz = tx * edge1y - ty * edge1x;
+  const v = (dx * qx + dy * qy + dz * qz) * inverse;
   if (v <= BARYCENTRIC_INTERIOR_EPSILON || u + v >= 1 - BARYCENTRIC_INTERIOR_EPSILON) return false;
-  const t = edge2.dot(q) * inverse;
+  const t = (edge2x * qx + edge2y * qy + edge2z * qz) * inverse;
   return t > BARYCENTRIC_INTERIOR_EPSILON && t < 1 - BARYCENTRIC_INTERIOR_EPSILON;
 }
 
 function trianglesIntersect(a: PreparedTriangle, b: PreparedTriangle, epsilon: number): boolean {
-  if (!a.box.clone().expandByScalar(epsilon).intersectsBox(b.box)) return false;
-  const normalCross = new THREE.Vector3().crossVectors(a.normal, b.normal);
-  const planeDistance = Math.abs(a.normal.dot(new THREE.Vector3().subVectors(b.points[0], a.points[0])));
-  if (normalCross.lengthSq() <= epsilon * epsilon && planeDistance <= epsilon) {
+  if (a.box.max.x + epsilon < b.box.min.x || a.box.min.x - epsilon > b.box.max.x
+    || a.box.max.y + epsilon < b.box.min.y || a.box.min.y - epsilon > b.box.max.y
+    || a.box.max.z + epsilon < b.box.min.z || a.box.min.z - epsilon > b.box.max.z) return false;
+  const crossX = a.normal.y * b.normal.z - a.normal.z * b.normal.y;
+  const crossY = a.normal.z * b.normal.x - a.normal.x * b.normal.z;
+  const crossZ = a.normal.x * b.normal.y - a.normal.y * b.normal.x;
+  const deltaX = b.points[0].x - a.points[0].x;
+  const deltaY = b.points[0].y - a.points[0].y;
+  const deltaZ = b.points[0].z - a.points[0].z;
+  const planeDistance = Math.abs(a.normal.x * deltaX + a.normal.y * deltaY + a.normal.z * deltaZ);
+  if (crossX * crossX + crossY * crossY + crossZ * crossZ <= epsilon * epsilon && planeDistance <= epsilon) {
     return coplanarTrianglesIntersect(a, b, epsilon);
   }
   for (let index = 0; index < 3; index += 1) {
@@ -125,6 +320,21 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
   if (!position || indexCount < 6) {
     return { intersections: 0, candidatePairs: 0, complete: true, triangleCount: Math.floor(indexCount / 3), samplePairs: [] };
   }
+  const deterministicKey = deterministicKeyByGeometry.get(geometry);
+  if (typeof deterministicKey === 'string') {
+    // Consume the key before returning so a caller mutation can never inherit
+    // a report merely because userData survived. New compiler-built geometry
+    // receives a fresh key from its immutable source descriptor.
+    deterministicKeyByGeometry.delete(geometry);
+    const deterministic = deterministicReportCache.get(deterministicKey);
+    if (deterministic) return cloneReport(deterministic);
+  }
+  const signature = contentSignature(position, index);
+  const contentCached = lookupContentReport(signature);
+  if (contentCached) {
+    if (typeof deterministicKey === 'string') deterministicReportCache.set(deterministicKey, cloneReport(contentCached));
+    return contentCached;
+  }
   const cached = reportCache.get(geometry);
   const positionVersion = attributeVersion(position);
   const indexVersion = index ? attributeVersion(index) : -1;
@@ -140,6 +350,7 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
   const bounds = geometry.boundingBox ?? new THREE.Box3();
   const diagonal = bounds.getSize(new THREE.Vector3()).length();
   const epsilon = Math.max(diagonal * 1e-9, 1e-10);
+  const canonicalIds = canonicalVertexIds(position, epsilon);
   const triangles: PreparedTriangle[] = [];
   for (let offset = 0; offset < indexCount; offset += 3) {
     const indices: [number, number, number] = index
@@ -150,7 +361,13 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
       new THREE.Vector3().subVectors(points[1], points[0]),
       new THREE.Vector3().subVectors(points[2], points[0]),
     ).normalize();
-    triangles.push({ indices, points, normal, box: new THREE.Box3().setFromPoints(points) });
+    triangles.push({
+      indices,
+      canonicalIndices: [canonicalIds[indices[0]]!, canonicalIds[indices[1]]!, canonicalIds[indices[2]]!],
+      points,
+      normal,
+      box: new THREE.Box3().setFromPoints(points),
+    });
   }
 
   const resolution = Math.max(1, Math.min(MAX_GRID_RESOLUTION, Math.ceil(Math.cbrt(triangles.length))));
@@ -164,7 +381,7 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
     0,
     Math.min(resolution - 1, Math.floor((value - bounds.min[axis]) / cellSize[axis])),
   );
-  const cells = new Map<string, number[]>();
+  const cells = new Map<number, number[]>();
   const oversized: number[] = [];
   triangles.forEach((triangle, triangleIndex) => {
     const min = {
@@ -181,7 +398,7 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
     for (let x = min.x; x <= max.x; x += 1) {
       for (let y = min.y; y <= max.y; y += 1) {
         for (let z = min.z; z <= max.z; z += 1) {
-          const key = `${x}:${y}:${z}`;
+          const key = (x * resolution + y) * resolution + z;
           const bucket = cells.get(key);
           if (bucket) bucket.push(triangleIndex);
           else cells.set(key, [triangleIndex]);
@@ -204,7 +421,7 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
     seen.add(pairKey);
     const a = triangles[low];
     const b = triangles[high];
-    if (sharesVertex(a, b, epsilon) || !a.box.intersectsBox(b.box)) return true;
+    if (sharesVertex(a, b) || !a.box.intersectsBox(b.box)) return true;
     candidatePairs += 1;
     if (candidatePairs > MAX_CANDIDATE_PAIRS) {
       complete = false;
@@ -233,6 +450,14 @@ export function analyzeSelfIntersections(geometry: THREE.BufferGeometry): SelfIn
   }
 
   const report = { intersections, candidatePairs, complete, triangleCount: triangles.length, samplePairs };
+  if (typeof deterministicKey === 'string') {
+    if (deterministicReportCache.size >= MAX_DETERMINISTIC_REPORTS) {
+      const oldest = deterministicReportCache.keys().next().value as string | undefined;
+      if (oldest !== undefined) deterministicReportCache.delete(oldest);
+    }
+    deterministicReportCache.set(deterministicKey, cloneReport(report));
+  }
+  storeContentReport(signature, report);
   reportCache.set(geometry, {
     positionAttribute: position,
     indexAttribute: index,

@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.28.0",
-  "generatedAt": "2026-09-02T11:16:55.581Z",
+  "compilerRevision": "morphloom-compiler/0.31.0",
+  "generatedAt": "2026-09-03T07:53:00.388Z",
   "pass": true,
   "scope": "actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation",
   "cases": [
@@ -10,8 +10,8 @@
       "domain": "architecture",
       "pass": true,
       "source": {
-        "bytes": 29549740,
-        "sha256": "ccbdae460c278d7791405190b727527cdcfdc81310287c819104a5d3109a5bf1",
+        "bytes": 29565852,
+        "sha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -402,8 +402,8 @@
       "domain": "industrial-design",
       "pass": true,
       "source": {
-        "bytes": 1148324,
-        "sha256": "df27f0a7a9d27d51242015b0a22ca3513e3335eeb170d4c8e453f194b3a7500a",
+        "bytes": 1149000,
+        "sha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -713,8 +713,8 @@
       "domain": "electronics",
       "pass": true,
       "source": {
-        "bytes": 18462860,
-        "sha256": "0ca35c68fa2365a3ef718c69c9ca5ae4979fb3a6316d173dc7ea22ff010adefd",
+        "bytes": 18477032,
+        "sha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1068,8 +1068,8 @@
       "domain": "animation-game",
       "pass": true,
       "source": {
-        "bytes": 5065592,
-        "sha256": "270d3a149d3a8d43d6a016df2a539f2d1d23393d1f43841077e9dad4adfbfbee",
+        "bytes": 5065808,
+        "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",
@@ -1409,7 +1409,7 @@
           "applied": false,
           "repairedTangents": 0,
           "removedUnusedTangentAccessors": 0,
-          "outputSha256": "694ddc972fc2c416d2ed0cbfeea2aee60bb40883db301f2c197046e53b0fc359",
+          "outputSha256": "81964cce249d3a9d0e1d427359c0cfe9f04fbb41cce54fd1df77b93b3cafdd0b",
           "standard": {
             "status": "pass",
             "validator": "Khronos glTF Validator",
@@ -1438,8 +1438,8 @@
       "domain": "3d-printing",
       "pass": true,
       "source": {
-        "bytes": 17745176,
-        "sha256": "71e0dfa7458f08d5bd9acf580eb316dd4b45bde0d3136f9e972b5f01954f9af2",
+        "bytes": 17745284,
+        "sha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818",
         "byteDeterministic": true,
         "standard": {
           "status": "pass",

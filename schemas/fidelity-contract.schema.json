@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/djfksjd/morphloom/schemas/fidelity-contract.schema.json",
-  "title": "Morphloom Fidelity Contract 0.1",
+  "title": "Morphloom Fidelity Contract 0.2",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "assetName", "domain", "complexity", "targetFidelity", "maxIterationsPerPass", "maxTotalIterations", "tokenBudget", "details", "cameras", "materialRegions", "hardGates", "passes"],
   "properties": {
-    "schema": { "const": "morphloom.fidelity/0.1" },
+    "schema": { "const": "morphloom.fidelity/0.2" },
     "assetName": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "domain": { "enum": ["architecture", "product", "human", "unknown"] },
+    "domain": { "enum": ["architecture", "product", "electronics", "human", "animation", "game", "3d-print", "surface", "unknown"] },
     "complexity": { "enum": ["simple", "moderate", "complex", "ultra-complex"] },
     "targetFidelity": { "type": "number", "minimum": 0.7, "maximum": 1 },
     "maxIterationsPerPass": { "type": "integer", "minimum": 1, "maximum": 12 },
@@ -48,15 +48,57 @@
         "notes": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 500 } }
       }
     },
-    "camera": {
+    "coordinate": { "type": "number", "minimum": -1000000000, "maximum": 1000000000 },
+    "worldPoint": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "prefixItems": [{ "$ref": "#/$defs/coordinate" }, { "$ref": "#/$defs/coordinate" }, { "$ref": "#/$defs/coordinate" }]
+    },
+    "imagePoint": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "prefixItems": [{ "$ref": "#/$defs/coordinate" }, { "$ref": "#/$defs/coordinate" }]
+    },
+    "cameraAnchor": {
       "type": "object", "additionalProperties": false,
-      "required": ["id", "sourceViewId", "projection", "anchorCount", "reprojectionErrorPx"],
+      "required": ["id", "world", "image", "evidenceRef"],
       "properties": {
-        "id": { "$ref": "#/$defs/id" }, "sourceViewId": { "type": "string", "minLength": 1, "maxLength": 160 },
-        "projection": { "enum": ["perspective", "orthographic"] }, "anchorCount": { "type": "integer", "minimum": 3, "maximum": 512 },
-        "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 4 }
+        "id": { "$ref": "#/$defs/id" },
+        "world": { "$ref": "#/$defs/worldPoint" },
+        "image": { "$ref": "#/$defs/imagePoint" },
+        "evidenceRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "confidence": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
       }
     },
+    "orthographicCamera": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "sourceViewId", "projection", "anchorCount", "reprojectionErrorPx", "anchors", "calibrationRevision", "azimuthDegrees", "pixelsPerWorldUnit", "offsetPixels"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "sourceViewId": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "projection": { "const": "orthographic" }, "anchorCount": { "type": "integer", "minimum": 4, "maximum": 512 },
+        "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 4 },
+        "anchors": { "type": "array", "minItems": 4, "maxItems": 512, "items": { "$ref": "#/$defs/cameraAnchor" } },
+        "calibrationRevision": { "const": "morphloom-camera-calibration/0.1" },
+        "azimuthDegrees": { "$ref": "#/$defs/coordinate" },
+        "pixelsPerWorldUnit": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000000000 },
+        "offsetPixels": { "$ref": "#/$defs/imagePoint" }
+      }
+    },
+    "perspectiveCamera": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "sourceViewId", "projection", "anchorCount", "reprojectionErrorPx", "anchors", "calibrationRevision", "projectionMatrix", "worldCenter", "worldScale", "imageCenter", "imageScale"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "sourceViewId": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "projection": { "const": "perspective" }, "anchorCount": { "type": "integer", "minimum": 6, "maximum": 512 },
+        "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 4 },
+        "anchors": { "type": "array", "minItems": 6, "maxItems": 512, "items": { "$ref": "#/$defs/cameraAnchor" } },
+        "calibrationRevision": { "const": "morphloom-camera-calibration/0.2" },
+        "projectionMatrix": { "type": "array", "minItems": 12, "maxItems": 12, "items": { "$ref": "#/$defs/coordinate" } },
+        "worldCenter": { "$ref": "#/$defs/worldPoint" },
+        "worldScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000000000 },
+        "imageCenter": { "$ref": "#/$defs/imagePoint" },
+        "imageScale": { "type": "number", "exclusiveMinimum": 0, "maximum": 1000000000 }
+      }
+    },
+    "camera": { "oneOf": [{ "$ref": "#/$defs/orthographicCamera" }, { "$ref": "#/$defs/perspectiveCamera" }] },
     "materialRegion": {
       "type": "object", "additionalProperties": false,
       "required": ["id", "componentId", "evidenceRef", "expectedSurface", "confidence"],

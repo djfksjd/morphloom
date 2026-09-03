@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-02T11:54:28.269Z",
+  "generatedAt": "2026-09-03T08:42:06.676Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -189,10 +189,8 @@
       "occupiedVoxelCount": 512,
       "minimumViewIoU": 1,
       "confidenceWeightedIoU": 1,
-      "unconstrainedAxes": [
-        "y"
-      ],
-      "limitationCount": 2
+      "unconstrainedAxes": [],
+      "limitationCount": 1
     },
     "implicitSurface": {
       "requestedResolution": 32,
@@ -471,7 +469,35 @@
             "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 4040.379605627806,
-            "unsupportedOverhangRatio": 0.06320888744678257
+            "unsupportedOverhangRatio": 0.06320888744678257,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
           }
         },
         "architecture": {
@@ -670,7 +696,305 @@
             "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 512845854.9532662,
-            "unsupportedOverhangRatio": 0.1481512964921408
+            "unsupportedOverhangRatio": 0.1481512964921408,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": true,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "electronicsAssembly": {
+          "domain": "electronics-assembly",
+          "pass": false,
+          "score": 94,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "322/322 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "245/245 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "111/111 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "electronics-topology",
+              "label": "전자 조립 메시 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-graph",
+              "label": "부품·핀·도선 연결 그래프",
+              "pass": true,
+              "score": 100,
+              "detail": "75/75 도선 · 필수 포트 150/150 · 오류 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-documentation",
+              "label": "핀·선경·검증 근거",
+              "pass": true,
+              "score": 100,
+              "detail": "핀 100% · 선경 100% · 검증 100%",
+              "blocking": true
+            },
+            {
+              "id": "electronics-anchors",
+              "label": "이동 부품 배선 앵커·종단 정합",
+              "pass": true,
+              "score": 100,
+              "detail": "live yes · 최대 종단 오차 0.0000 mm",
+              "blocking": true
+            },
+            {
+              "id": "electronics-digital-readiness",
+              "label": "디지털 조립 납품 준비",
+              "pass": true,
+              "score": 100,
+              "detail": "evidence 52 · bench 대기 5 · 추정 도선 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-production-evidence",
+              "label": "실물 제작 근거 준비",
+              "pass": false,
+              "score": 52,
+              "detail": "근거 52/90 · 추정 부품 36 · bench 대기 5 · bench 필요 도선 6",
+              "blocking": true
+            },
+            {
+              "id": "electronics-evidence",
+              "label": "전자 조립 원천 근거",
+              "pass": false,
+              "score": 52,
+              "detail": "52/90",
+              "blocking": true
+            },
+            {
+              "id": "electronics-uv",
+              "label": "전자 부품 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "electronics-normals",
+              "label": "전자 부품 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 8.00e-7",
+              "blocking": true
+            },
+            {
+              "id": "electronics-surface",
+              "label": "전자 부품 PBR 미세표면",
+              "pass": true,
+              "score": 93,
+              "detail": "93% micro-normal",
+              "blocking": true
+            }
+          ],
+          "blockers": [
+            "electronics-production-evidence: 근거 52/90 · 추정 부품 36 · bench 대기 5 · bench 필요 도선 6",
+            "electronics-evidence: 52/90"
+          ],
+          "warnings": [],
+          "metrics": {
+            "meshes": 322,
+            "triangles": 272560,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 8.000970449506539e-7,
+            "pbrSurfaceCoverage": 0.9285714285714286,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 0.486684002680704,
+            "declaredMinimumFeatureMm": 1,
+            "enclosedVolumeMm3": 1123260.1697548206,
+            "surfaceAreaMm2": 1137324.5776131183,
+            "volumeThicknessProxyMm": 1.9752675566234321,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 519229.3530525971,
+            "unsupportedOverhangRatio": 0.4565357711184735,
+            "electricalPorts": 150,
+            "electricalWires": 75,
+            "electricalRequiredPortCoverage": 1,
+            "electricalPinDocumentationCoverage": 1,
+            "electricalGaugeDocumentationCoverage": 1,
+            "electricalVerificationCoverage": 1,
+            "electricalEndpointErrorMaxMm": 0.0000068009559172592,
+            "electricalLiveAnchors": true,
+            "electricalDigitalReady": true,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
           }
         },
         "animation": {
@@ -937,7 +1261,35 @@
             "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 195859.29683757343,
-            "unsupportedOverhangRatio": 0.05385488873995824
+            "unsupportedOverhangRatio": 0.05385488873995824,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
           }
         },
         "game": {
@@ -1228,7 +1580,35 @@
             "sampledWallThicknessTriangleLimit": 0,
             "sampledWallThicknessTriangleTests": 0,
             "unsupportedOverhangAreaMm2": 195859.29683757343,
-            "unsupportedOverhangRatio": 0.05385488873995824
+            "unsupportedOverhangRatio": 0.05385488873995824,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
           }
         },
         "print3d": {
@@ -1451,7 +1831,278 @@
             "sampledWallThicknessTriangleLimit": 500000,
             "sampledWallThicknessTriangleTests": 10745856,
             "unsupportedOverhangAreaMm2": 0,
-            "unsupportedOverhangRatio": 0
+            "unsupportedOverhangRatio": 0,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 1,
+            "validSurfaceReliefPatches": 1,
+            "surfaceReliefSamples": 27985,
+            "minimumSurfaceRmsRoughnessMm": 0.9782976116843785,
+            "minimumSurfacePeakToValleyMm": 6.2001592866946424,
+            "surfaceReliefGeometryRmsErrorMm": 0.0005189581044615643,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 3.1812679424092494e-7,
+            "surfaceAggregateFeatures": 6959,
+            "surfaceCoarseAggregateFeatures": 1099,
+            "surfaceFineAggregateFeatures": 5860,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "surface": {
+          "domain": "surface",
+          "pass": true,
+          "score": 99,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "4/4 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "surface-topology",
+              "label": "표면 샘플 폐쇄 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "surface-evidence",
+              "label": "표면 생성 근거",
+              "pass": true,
+              "score": 84,
+              "detail": "84/80 · 절차형 수치는 특정 현장의 실측으로 승격하지 않음",
+              "blocking": true
+            },
+            {
+              "id": "surface-uv",
+              "label": "표면 UV 무결성",
+              "pass": true,
+              "score": 99,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 1.20%",
+              "blocking": true
+            },
+            {
+              "id": "surface-normals",
+              "label": "표면 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 3.98e-8",
+              "blocking": true
+            },
+            {
+              "id": "surface-multiscale-relief",
+              "label": "실제 다중 크기 요철 기하",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 패치 · 27,985 표본 · RMS 0.978 mm · P–V 6.200 mm · 기하 오차 RMS 0.001 / P–V 0.000 mm",
+              "blocking": true
+            },
+            {
+              "id": "surface-aggregate-structure",
+              "label": "굵은·미세 입자 구조",
+              "pass": true,
+              "score": 100,
+              "detail": "6,959 입자 · coarse 1,099 · fine 5,860",
+              "blocking": true
+            },
+            {
+              "id": "surface-pbr-response",
+              "label": "요철·거칠기 PBR 응답",
+              "pass": true,
+              "score": 100,
+              "detail": "1 authored · normal map 1 · roughness map 1",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 1,
+            "triangles": 111936,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0.012006861063464836,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.983618057645799e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 43.45347546041012,
+            "declaredMinimumFeatureMm": 33.5,
+            "enclosedVolumeMm3": 10762674.26790627,
+            "surfaceAreaMm2": 636534.8951200972,
+            "volumeThicknessProxyMm": 33.816446986384435,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 0,
+            "unsupportedOverhangRatio": 0,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 1,
+            "validSurfaceReliefPatches": 1,
+            "surfaceReliefSamples": 27985,
+            "minimumSurfaceRmsRoughnessMm": 0.9782976116843785,
+            "minimumSurfacePeakToValleyMm": 6.2001592866946424,
+            "surfaceReliefGeometryRmsErrorMm": 0.0005189581044615643,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 3.1812679424092494e-7,
+            "surfaceAggregateFeatures": 6959,
+            "surfaceCoarseAggregateFeatures": 1099,
+            "surfaceFineAggregateFeatures": 5860,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
           }
         }
       }
@@ -1667,9 +2318,9 @@
     },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.4",
-      "compilerRevision": "morphloom-compiler/0.28.0",
+      "compilerRevision": "morphloom-compiler/0.31.0",
       "fingerprintRevision": "morphloom-scene-fingerprint/0.5.0",
-      "generatedAt": "2026-09-02T10:47:27.362Z",
+      "generatedAt": "2026-09-03T08:08:59.930Z",
       "receiptIntegrityPass": true,
       "assets": [
         {
@@ -1678,7 +2329,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "a6a85d51b0a2a896",
+          "inputFingerprint": "02f9e94f6e479f66",
           "buildFingerprint": "cc3394a4e714001f",
           "preparedSceneFingerprint": "0e46db527df133f5"
         },
@@ -1688,7 +2339,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "d79093e849c52cd4",
+          "inputFingerprint": "fbdda22a32571e08",
           "buildFingerprint": "ca755d08621f69a2",
           "preparedSceneFingerprint": "ad83006a0534fa65"
         },
@@ -1698,7 +2349,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "2efbc596b1897f1d",
+          "inputFingerprint": "ccfccf14c4ea8271",
           "buildFingerprint": "91ed80be19b55d27",
           "preparedSceneFingerprint": "33f7af0613db3396"
         },
@@ -1708,7 +2359,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "765516d0288df4a3",
+          "inputFingerprint": "cc3722c2a7647553",
           "buildFingerprint": "c83bee357cdfa547",
           "preparedSceneFingerprint": "6f2c9df9d2ed478b"
         },
@@ -1718,7 +2369,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "e6b03ab61f9b526e",
+          "inputFingerprint": "9d01658c9594ecee",
           "buildFingerprint": "8668442f85334b1d",
           "preparedSceneFingerprint": "195fb5eea2538381"
         },
@@ -1728,7 +2379,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "9a8dd45120b6eeff",
+          "inputFingerprint": "f6df604f1671dc8f",
           "buildFingerprint": "5036c3dfeef7fadc",
           "preparedSceneFingerprint": "f08e8c7cc7929ffd"
         },
@@ -1738,7 +2389,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "30b8c11d70655754",
+          "inputFingerprint": "6ce68883c839bfe0",
           "buildFingerprint": "4651530e91a994ac",
           "preparedSceneFingerprint": "3ef01837c09a735c"
         }
@@ -1918,7 +2569,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.28.0",
+      "compilerRevision": "morphloom-compiler/0.31.0",
       "pass": true,
       "benchmarkAccepted": true,
       "blenderVersions": [
@@ -1997,9 +2648,92 @@
         }
       ]
     },
+    "blenderCrossDomainEdit": {
+      "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.31.0",
+      "pass": true,
+      "benchmarkAccepted": true,
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "component": "west_north_window_1",
+          "operation": "translation",
+          "unchangedMeshes": 320,
+          "meshCount": 321,
+          "maximumUnchangedCenterDriftMm": 0.000059604644775390625,
+          "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "component": "pommel_gem",
+          "operation": "translation",
+          "unchangedMeshes": 15,
+          "meshCount": 16,
+          "maximumUnchangedCenterDriftMm": 1.1641532182693481e-7,
+          "maximumUnchangedSizeDriftMm": 0.000014901161193847656,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "component": "power_usb_c",
+          "operation": "translation",
+          "unchangedMeshes": 321,
+          "meshCount": 322,
+          "maximumUnchangedCenterDriftMm": 0.000001862645149230957,
+          "maximumUnchangedSizeDriftMm": 0.000022351741790771484,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "component": "hair_cap",
+          "operation": "translation",
+          "unchangedMeshes": 2,
+          "meshCount": 3,
+          "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+          "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+          "runtimePreserved": true,
+          "riggedPayloadPass": true,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "component": "asphalt_core_sample",
+          "operation": "local-relief",
+          "unchangedMeshes": 0,
+          "meshCount": 1,
+          "maximumUnchangedCenterDriftMm": 0,
+          "maximumUnchangedSizeDriftMm": 0,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        }
+      ]
+    },
     "unityCrossDomain": {
       "schema": "morphloom.unity-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.28.0",
+      "compilerRevision": "morphloom-compiler/0.31.0",
       "pass": false,
       "status": "not-run",
       "blockers": [
@@ -2010,19 +2744,570 @@
       ],
       "cases": []
     },
+    "godotCrossDomain": {
+      "schema": "morphloom.godot-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.31.0",
+      "generatedAt": "2026-09-03T07:54:05.553Z",
+      "pass": true,
+      "status": "pass",
+      "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",
+      "environment": {
+        "godotVersion": "4.7.2-stable (official)",
+        "godotBinary": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/native-tools/godot/app/Godot.app/Contents/MacOS/Godot",
+        "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf"
+      },
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "source": {
+            "meshes": 321,
+            "vertices": 566244,
+            "triangles": 188748,
+            "materials": 321,
+            "textures": 21,
+            "textureSlots": 642,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              42.72720001430511,
+              2.9200000232458114,
+              21.621399949932098
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/laurel-homes-architecture.glb",
+            "source_sha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                21.3635997772217,
+                2.70000004768372,
+                8.27120018005371
+              ],
+              "bounds_max_nodes": [
+                "east_north_masonry_pier_6",
+                "west_north_head_wall",
+                "balcony_north_west_slab"
+              ],
+              "bounds_min_meters": [
+                -21.3635997772217,
+                -0.219999998807907,
+                -13.3501996994019
+              ],
+              "bounds_min_nodes": [
+                "west_north_masonry_pier_1",
+                "south_connector_bar_floor_slab",
+                "entrance_canopy"
+              ],
+              "bounds_size_meters": [
+                42.7271995544434,
+                2.92000007629395,
+                21.6213989257812
+              ],
+              "materials": 321,
+              "meshes": 321,
+              "nodes": 323,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 963,
+              "textures": 20,
+              "triangles": 188748,
+              "vertices": 566244
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.001024150897421805,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "source": {
+            "meshes": 16,
+            "vertices": 18527,
+            "triangles": 18930,
+            "materials": 16,
+            "textures": 13,
+            "textureSlots": 32,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.1202733686629676,
+              0.4729999982118607,
+              0.04067132624003629
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/ornate-knife-product.glb",
+            "source_sha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.0601366870105267,
+                0.34400001168251,
+                0.0203356631100178
+              ],
+              "bounds_max_nodes": [
+                "guard_scroll_right",
+                "blade_core",
+                "pommel"
+              ],
+              "bounds_min_meters": [
+                -0.0601366870105267,
+                -0.12899999320507,
+                -0.0203356631100178
+              ],
+              "bounds_min_nodes": [
+                "guard_scroll_left",
+                "pommel",
+                "pommel"
+              ],
+              "bounds_size_meters": [
+                0.120273374021053,
+                0.47299998998642,
+                0.0406713262200356
+              ],
+              "materials": 16,
+              "meshes": 16,
+              "nodes": 18,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 48,
+              "textures": 12,
+              "triangles": 18930,
+              "vertices": 18525
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.00000822544066192421,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "source": {
+            "meshes": 322,
+            "vertices": 352193,
+            "triangles": 272560,
+            "materials": 322,
+            "textures": 17,
+            "textureSlots": 598,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.3170000017285347,
+              0.1504999999962747,
+              0.20400000010430813
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/cooling-electronics-assembly.glb",
+            "source_sha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.162000000476837,
+                0.12049999833107,
+                0.101999998092651
+              ],
+              "bounds_max_nodes": [
+                "md10cB",
+                "cold_plate",
+                "frame_front"
+              ],
+              "bounds_min_meters": [
+                -0.155000001192093,
+                -0.0300000011920929,
+                -0.101999998092651
+              ],
+              "bounds_min_nodes": [
+                "frame_front",
+                "frame_front",
+                "frame_rear"
+              ],
+              "bounds_size_meters": [
+                0.31700000166893,
+                0.150499999523163,
+                0.203999996185303
+              ],
+              "materials": 322,
+              "meshes": 322,
+              "nodes": 325,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 897,
+              "textures": 16,
+              "triangles": 272560,
+              "vertices": 351877
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.00000391900512042298,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "source": {
+            "meshes": 3,
+            "vertices": 31735,
+            "triangles": 51934,
+            "materials": 3,
+            "textures": 4,
+            "textureSlots": 6,
+            "skins": 2,
+            "joints": 98,
+            "maximumJointsPerSkin": 49,
+            "morphTargets": 10,
+            "animationClips": 22,
+            "animationNames": [
+              "morphloom_breathe_idle",
+              "morphloom_crouch_idle",
+              "morphloom_crouch_walk",
+              "morphloom_hand_gesture",
+              "morphloom_idle_preview",
+              "morphloom_jump_air",
+              "morphloom_jump_land",
+              "morphloom_jump_start",
+              "morphloom_pick_up",
+              "morphloom_point",
+              "morphloom_pull",
+              "morphloom_push",
+              "morphloom_run_cycle",
+              "morphloom_sprint_cycle",
+              "morphloom_strafe_left",
+              "morphloom_strafe_right",
+              "morphloom_turn_in_place",
+              "morphloom_turn_left_90",
+              "morphloom_turn_right_90",
+              "morphloom_walk_backward",
+              "morphloom_walk_cycle",
+              "morphloom_wave"
+            ],
+            "boundsSizeMeters": [
+              1.1199051141738892,
+              1.79944139637053,
+              0.4468359053134918
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/field-human-runtime.glb",
+            "source_sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+            "stats": {
+              "animation_clips": 22,
+              "animation_names": [
+                "morphloom_breathe_idle",
+                "morphloom_crouch_idle",
+                "morphloom_crouch_walk",
+                "morphloom_hand_gesture",
+                "morphloom_idle_preview",
+                "morphloom_jump_air",
+                "morphloom_jump_land",
+                "morphloom_jump_start",
+                "morphloom_pick_up",
+                "morphloom_point",
+                "morphloom_pull",
+                "morphloom_push",
+                "morphloom_run_cycle",
+                "morphloom_sprint_cycle",
+                "morphloom_strafe_left",
+                "morphloom_strafe_right",
+                "morphloom_turn_in_place",
+                "morphloom_turn_left_90",
+                "morphloom_turn_right_90",
+                "morphloom_walk_backward",
+                "morphloom_walk_cycle",
+                "morphloom_wave"
+              ],
+              "blend_shapes": 10,
+              "bones": 49,
+              "bounds_max_meters": [
+                0.559952557086945,
+                1.79944145679474,
+                0.223417952656746
+              ],
+              "bounds_max_nodes": [
+                "morphloom_human_body",
+                "hair_cap",
+                "morphloom_human_body"
+              ],
+              "bounds_min_meters": [
+                -0.559952557086945,
+                0,
+                -0.223417952656746
+              ],
+              "bounds_min_nodes": [
+                "morphloom_human_body",
+                "morphloom_human_body",
+                "morphloom_human_body"
+              ],
+              "bounds_size_meters": [
+                1.11990511417389,
+                1.79944145679474,
+                0.446835905313492
+              ],
+              "materials": 3,
+              "meshes": 3,
+              "nodes": 8,
+              "skeletons": 1,
+              "skinned_meshes": 2,
+              "texture_slots": 9,
+              "textures": 4,
+              "triangles": 51934,
+              "vertices": 28180
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.000060424210079901286,
+            "boundsToleranceMm": 1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "source": {
+            "meshes": 1,
+            "vertices": 335808,
+            "triangles": 111936,
+            "materials": 1,
+            "textures": 3,
+            "textureSlots": 3,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.6000000238418579,
+              0.04345347546041012,
+              0.44999998807907104
+            ],
+            "surfaceRelief": {
+              "samples": 165888,
+              "rms_roughness_mm": 0.97881656978884,
+              "peak_to_valley_mm": 6.200158968567848
+            }
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/asphalt-print-surface.glb",
+            "source_sha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.300000011920929,
+                0.0234534777700901,
+                0.224999994039536
+              ],
+              "bounds_max_nodes": [
+                "asphalt_core_sample",
+                "asphalt_core_sample",
+                "asphalt_core_sample"
+              ],
+              "bounds_min_meters": [
+                -0.300000011920929,
+                -0.0199999995529652,
+                -0.224999994039536
+              ],
+              "bounds_min_nodes": [
+                "asphalt_core_sample",
+                "asphalt_core_sample",
+                "asphalt_core_sample"
+              ],
+              "bounds_size_meters": [
+                0.600000023841858,
+                0.0434534773230553,
+                0.449999988079071
+              ],
+              "materials": 1,
+              "meshes": 1,
+              "nodes": 3,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "surface_relief": {
+                "peak_to_valley_mm": 6.20025396347046,
+                "rms_roughness_mm": 0.978816213524551,
+                "samples": 165888
+              },
+              "texture_slots": 4,
+              "textures": 3,
+              "triangles": 111936,
+              "vertices": 335808
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.0000018626451839254266,
+            "boundsToleranceMm": 0.1,
+            "surfaceRelief": {
+              "rmsErrorMm": 3.5626428906976315e-7,
+              "peakToValleyErrorMm": 0.00009499490261166699,
+              "toleranceMm": 0.02
+            },
+            "blockers": []
+          }
+        }
+      ],
+      "blockers": [],
+      "limitation": "This proves native Godot import integrity, not gameplay quality, physics tuning, target-device performance, or final art approval.",
+      "benchmarkAccepted": true
+    },
+    "prusaSlicer": {
+      "schema": "morphloom.prusaslicer-print-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.31.0",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+      "generatedAt": "2026-09-03T08:33:50.575Z",
+      "pass": true,
+      "status": "pass",
+      "source": {
+        "file": "asphalt-print-surface.stl",
+        "bytes": 5596884,
+        "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+        "byteDeterministic": true,
+        "coordinateUnit": "mm",
+        "axisConvention": "print-z-up",
+        "binary": {
+          "facets": 111936,
+          "minimum": [
+            -300,
+            -225,
+            -20
+          ],
+          "maximum": [
+            300,
+            225,
+            23.453475952148438
+          ],
+          "size": [
+            600,
+            450,
+            43.45347595214844
+          ]
+        }
+      },
+      "native": {
+        "application": "prusa-slicer",
+        "version": "2.9.6",
+        "binary": "/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer",
+        "binarySha256": "b79b464d2f27ce163f361eada916c3901095db02b196a665f9ac85ffbc6d7ca7",
+        "info": {
+          "size": [
+            600,
+            450,
+            43.453476
+          ],
+          "minimum": [
+            -300,
+            -225,
+            -20
+          ],
+          "maximum": [
+            300,
+            225,
+            23.453476
+          ],
+          "facets": 111936,
+          "manifold": true,
+          "parts": 1,
+          "volumeMm3": 10761761
+        },
+        "boundsErrorMm": 4.7851564488610165e-8,
+        "sliceProfile": {
+          "bedMm": [
+            650,
+            500
+          ],
+          "centeredAtMm": [
+            325,
+            250
+          ],
+          "brimWidthMm": 5,
+          "nozzleDiameterMm": 2,
+          "layerHeightMm": 1,
+          "infillPercent": 0,
+          "perimeters": 1,
+          "coarseValidationProfile": true
+        },
+        "gcode": {
+          "bytes": 7070099,
+          "sha256": "bb6d3fab4060f283ba82da4d4ee467f8b89dbbd7669b17d4eb22f977f3c46cb9",
+          "layers": 43,
+          "extrusionMoves": 190158
+        }
+      },
+      "blockers": [],
+      "limitation": "This proves native manifold reopen and bounded coarse toolpath generation under a declared generic 650 × 500 mm virtual FFF envelope. It is not a production print profile; a real printer, nozzle, filament, tolerances, supports, orientation and safety still require target-machine validation.",
+      "benchmarkAccepted": true
+    },
     "staticDelivery": {
       "schema": "morphloom.static-delivery-proof/0.4",
-      "generatedAt": "2026-09-02T11:54:13.068Z",
-      "compilerRevision": "morphloom-compiler/0.28.0",
-      "staticDeliveryRevision": "morphloom-static-delivery/0.5.0",
-      "assetId": "moderncat-concept",
-      "expectedSourceTriangles": 81768,
+      "generatedAt": "2026-09-03T08:31:29.159Z",
+      "compilerRevision": "morphloom-compiler/0.31.0",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+      "assetId": "asphalt-surface",
+      "expectedSourceTriangles": 111936,
       "assetPack": {
-        "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
-        "bytes": 8327774,
-        "sha256": "0b4c8b53b379e47420a232595a18669db67add84725a5698b13154c703338d3d",
-        "compilerRevision": "morphloom-compiler/0.28.0",
-        "inputFingerprint": "9a8dd45120b6eeff",
+        "source": "rough-asphalt-surface-layered-relief-benchmark-morphloom-asset.zip",
+        "bytes": 13461090,
+        "sha256": "4e2625b02f63c253bf7cd970bd86ecf8bd18b5ff87c8adca572e48797d6880c2",
+        "compilerRevision": "morphloom-compiler/0.31.0",
+        "inputFingerprint": "02f9e94f6e479f66",
         "browserRoundTrip": "pass"
       },
       "status": "pass",
@@ -2030,103 +3315,203 @@
       "formats": {
         "obj": {
           "source": "morphloom-cad-mesh.obj",
-          "bytes": 43197734,
-          "sha256": "7d6b755ea12c0980077190d4d2f9ae01cb04ecad7fca1b34f0aad460467b3b84",
-          "meshes": 147,
-          "vertices": 242181,
-          "triangles": 81768,
+          "bytes": 51036132,
+          "sha256": "2db5177d9226da384ea7017943bf537d2d70da55543e9a0afafa6178bbe17176",
+          "meshes": 1,
+          "vertices": 335808,
+          "triangles": 111936,
           "coordinateUnit": "m",
           "coordinateScaleFromMeters": 1,
+          "axisConvention": "source-y-up",
           "bounds": {
             "min": [
-              -6.769999980926514,
-              -6.190000057220459,
-              -0.22000037133693695
+              -0.30000001192092896,
+              -0.22499999403953552,
+              -0.020000016316771507
             ],
             "max": [
-              6.769999980926514,
-              5.045000076293945,
-              7.09499979019165
+              0.30000001192092896,
+              0.22499999403953552,
+              0.023453492671251297
             ],
             "size": [
-              13.539999961853027,
-              11.235000610351562,
-              7.315000057220459
+              0.6000000238418579,
+              0.44999998807907104,
+              0.043453507125377655
             ]
           }
         },
         "stl": {
           "source": "morphloom-cad-mesh.stl",
-          "bytes": 4088484,
-          "sha256": "71d9f9bb51cb24207dacc22cb05eebfdcc39bc552126bda2034388583d8ed0d3",
+          "bytes": 5596884,
+          "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
           "meshes": 1,
-          "vertices": 41178,
-          "triangles": 81768,
+          "vertices": 55970,
+          "triangles": 111936,
           "coordinateUnit": "mm",
           "coordinateScaleFromMeters": 1000,
+          "axisConvention": "print-z-up",
           "bounds": {
             "min": [
-              -6770,
-              -220,
-              -5045
+              -300,
+              -225,
+              -20
             ],
             "max": [
-              6770,
-              7095,
-              6190
+              300,
+              225,
+              23.453475952148438
             ],
             "size": [
-              13540,
-              7315,
-              11235
+              600,
+              450,
+              43.45347595214844
             ]
           }
         },
         "ply": {
           "source": "morphloom-static-mesh.ply",
-          "bytes": 8813037,
-          "sha256": "8d7673c4bf5e474b7650fa63c0eac27a5c409f0a35c7348be6025980ad21e70b",
+          "bytes": 12201286,
+          "sha256": "1dbe6e98b5ff7ce7ab9717ca3cb4d77d92f073f326e484de42814015a5a65d1e",
           "meshes": 1,
-          "vertices": 242181,
-          "triangles": 81768,
+          "vertices": 335808,
+          "triangles": 111936,
           "coordinateUnit": "m",
           "coordinateScaleFromMeters": 1,
+          "axisConvention": "source-y-up",
           "bounds": {
             "min": [
-              -6.769999980926514,
-              -0.2199999988079071,
-              -5.044999599456787
+              -0.30000001192092896,
+              -0.019999999552965164,
+              -0.22499999403953552
             ],
             "max": [
-              6.769999980926514,
-              7.09499979019165,
-              6.190000057220459
+              0.30000001192092896,
+              0.023453475907444954,
+              0.22499999403953552
             ],
             "size": [
-              13.539999961853027,
-              7.314999580383301,
-              11.234999656677246
+              0.6000000238418579,
+              0.04345347732305527,
+              0.44999998807907104
             ]
           }
         }
       },
       "parity": {
-        "triangles": 81768,
-        "maximumAxisNormalizedEnvelopeDriftMm": 0.00095367431640625
+        "triangles": 111936,
+        "maximumAxisNormalizedEnvelopeDriftMm": 0.00003117322922019383
       },
       "usdz": {
-        "source": "morphloom-moderncat.usdz",
-        "bytes": 27420208,
-        "sha256": "20383113893ef0a6cd1e09913fc2c3cdda70650707d53d3a9265308906092132",
+        "source": "morphloom-apple-ar.usdz",
+        "bytes": 37239261,
+        "sha256": "49f978ef47ef1bbb1092dc86238b39d61f5d2ab06e6f12879d5362a05f74c73a",
         "validator": "/usr/bin/usdchecker",
         "status": "pass"
       },
       "blockers": [],
       "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": true,
+      "competitiveBlockers": []
+    },
+    "cameraCalibration": {
+      "status": "calibrated",
+      "azimuthDegrees": 28,
+      "pixelsPerWorldUnit": 1.7999999999999998,
+      "offsetPixels": [
+        320.00000000000006,
+        180
+      ],
+      "rmsReprojectionErrorPixels": 5.859285502108464e-14,
+      "maximumReprojectionErrorPixels": 6.355287432313019e-14,
+      "anchorCount": 5,
+      "blockers": []
+    },
+    "perspectiveCameraCalibration": {
+      "status": "calibrated",
+      "projectionMatrix": [
+        1.1533639306928414,
+        2.498001805406602e-16,
+        -0.026149091553844973,
+        0.009956384905462573,
+        -7.979727989493313e-17,
+        -1.1533639306928416,
+        -0.0008656631136260608,
+        -0.027283395518131207,
+        2.1510571102112408e-16,
+        1.3600232051658168e-15,
+        0.24100319692352426,
+        1
+      ],
+      "worldCenter": [
+        0.3125,
+        0.0625,
+        0.625
+      ],
+      "worldScale": 3.0426653611595214,
+      "imageCenter": [
+        335.8704148799726,
+        240.52538852951147
+      ],
+      "imageScale": 146.26973616656002,
+      "rmsReprojectionErrorPixels": 7.105427357601002e-14,
+      "maximumReprojectionErrorPixels": 1.1368683772161603e-13,
+      "anchorCount": 8,
+      "blockers": []
+    },
+    "multiviewExtentInference": {
+      "status": "inferred",
+      "xExtent": 119.99999999999999,
+      "zExtent": 69.99999999999997,
+      "rmsResidual": 1.0048591735576161e-14,
+      "normalizedRmsResidual": 1.0577464984817012e-16,
+      "maximumResidual": 1.4210854715202004e-14,
+      "observations": 4,
+      "blockers": []
+    },
+    "sparseSilhouetteAudit": {
+      "pass": true,
+      "mode": "sparse-structure",
+      "thresholds": {
+        "maximumSparseDensity": 0.12,
+        "maximumHybridDensity": 0.25,
+        "wholeIoU": 0.75,
+        "hybridWholeIoU": 0.7,
+        "primaryMassIoU": 0.7,
+        "thinFeatureScore": 0.8
+      },
+      "minimumWholeIoU": 0.39,
+      "minimumPrimaryMassIoU": 0.78,
+      "minimumThinFeatureScore": 0.86,
+      "blockers": []
     }
   },
   "capabilityMatrix": [
+    {
+      "capability": "evidence-first semantic part contract independent of generated geometry",
+      "img2threejs": "detail inventory documented; independent pre-geometry omission receipt not established in pinned audit",
+      "morphloom": "yes—source views, observed counts, required geometry class, relationships, and component realization fail closed"
+    },
+    {
+      "capability": "measured 3D↔2D camera anchor solve with reprojection-error gate",
+      "img2threejs": "camera contract documented; numeric anchor solver not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "non-coplanar perspective-camera DLT receipt recomputed from bound anchors",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—positive projective depth and per-pixel residual gate"
+    },
+    {
+      "capability": "multi-view projected X/Z extent inference with contradictory-view rejection",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "sparse assembly proof combining primary-mass IoU and distance-aware thin-member coverage",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—every view must independently pass both body and thin-member gates"
+    },
     {
       "capability": "strict detail inventory",
       "img2threejs": "yes",
@@ -2178,6 +3563,11 @@
       "morphloom": "yes"
     },
     {
+      "capability": "reference-bound spatial PBR provenance gate",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented—visible-area-weighted base-colour, metallic, roughness, normal, and emissive response must bind to reference/measured provenance; constants and generic noise cannot satisfy fidelity"
+    },
+    {
       "capability": "bounded reference-image de-lighting with recorded correction evidence",
       "img2threejs": "box-blurred luminance proxy, single-image confidence capped",
       "morphloom": "linear-light bounded field, global-exposure preservation, <=2% clipping and <=0.015 robust-luminance regression fail-closed gate"
@@ -2218,9 +3608,14 @@
       "morphloom": "yes—invalid Blender-generated tangents are normalized or removed, then Khronos + glTF Transform are rerun on delivery bytes"
     },
     {
+      "capability": "isolated partial editing in a production DCC with non-target geometry, UV, material, hierarchy, rig, and animation preservation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "Blender 5.2.1 LTS: five domains pass named-part or bounded-relief edits, two reopen cycles, PBR recovery, and final Khronos validation"
+    },
+    {
       "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "81,768 triangles preserved; STL uses explicit millimetre coordinates; unit-normalized envelope drift 0.000954 mm"
+      "morphloom": "111,936 triangles preserved for asphalt-surface; STL uses explicit millimetre coordinates and printer Z-up; unit-normalized envelope drift 0.000031 mm"
     },
     {
       "capability": "USDZ Apple conformance validation",
@@ -2231,6 +3626,16 @@
       "capability": "Unity application import execution",
       "img2threejs": "not established in pinned audit",
       "morphloom": "not-run: no-revision-bound-report"
+    },
+    {
+      "capability": "Godot application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "Godot 4.7.2-stable (official): five-domain native PackedScene import parity plus delivered-vertex asphalt relief pass"
+    },
+    {
+      "capability": "PrusaSlicer manifold reopen and toolpath execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "PrusaSlicer 2.9.6: 111,936 facets, Z-up manifold reopen and 43 toolpath layers"
     },
     {
       "capability": "Unreal application import execution",

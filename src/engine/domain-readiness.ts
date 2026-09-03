@@ -9,8 +9,11 @@ import type { PlanFootprintAudit } from './plan-footprint';
 import type { DimensionAudit } from './dimension-contract';
 import { auditSkinnedLodQuality } from './lod-quality';
 import { auditSampledWallThickness } from './print-thickness';
+import type { ConnectivityReport } from './connectivity';
+import type { EngineeringAuditReport } from './engineering-audit';
+import { auditAssemblyDetail } from './generation-policy';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.12.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.14.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -28,9 +31,11 @@ const MINIMUM_BLINK_SIDE_COVERAGE = 0.9;
 export type ProductionDomain =
   | 'architecture'
   | 'industrial-design'
+  | 'electronics-assembly'
   | 'animation'
   | 'game'
-  | '3d-print';
+  | '3d-print'
+  | 'surface';
 
 const REQUIRED_RUNTIME_CLIPS = HUMANOID_RUNTIME_CLIP_NAMES;
 
@@ -152,6 +157,176 @@ export interface DomainReadinessReport {
     sampledWallThicknessTriangleTests: number;
     unsupportedOverhangAreaMm2: number;
     unsupportedOverhangRatio: number;
+    electricalPorts: number;
+    electricalWires: number;
+    electricalRequiredPortCoverage: number;
+    electricalPinDocumentationCoverage: number;
+    electricalGaugeDocumentationCoverage: number;
+    electricalVerificationCoverage: number;
+    electricalEndpointErrorMaxMm: number;
+    electricalLiveAnchors: boolean;
+    electricalDigitalReady: boolean;
+    electricalProductionReady: boolean;
+    surfaceReliefPatches: number;
+    validSurfaceReliefPatches: number;
+    surfaceReliefSamples: number;
+    minimumSurfaceRmsRoughnessMm: number;
+    minimumSurfacePeakToValleyMm: number;
+    surfaceReliefGeometryRmsErrorMm: number;
+    surfaceReliefGeometryPeakToValleyErrorMm: number;
+    surfaceAggregateFeatures: number;
+    surfaceCoarseAggregateFeatures: number;
+    surfaceFineAggregateFeatures: number;
+    referenceBoundSurfaceReliefs: number;
+    productionContractRequired: boolean;
+    partDecompositionPass: boolean;
+    partFeatureCoverage: number;
+    partSourceViewCoverage: number;
+    partComponentCoverage: number;
+    fidelityContractPass: boolean;
+    evidenceDeliveryReady: boolean;
+  };
+}
+
+interface SurfaceReliefInspection {
+  patches: number;
+  validPatches: number;
+  samples: number;
+  minimumRmsRoughnessMm: number;
+  minimumPeakToValleyMm: number;
+  maximumGeometryRmsErrorMm: number;
+  maximumGeometryPeakToValleyErrorMm: number;
+  aggregateFeatures: number;
+  coarseAggregateFeatures: number;
+  fineAggregateFeatures: number;
+  referenceBoundPatches: number;
+}
+
+const SURFACE_RELIEF_METHODS = new Set([
+  'deterministic-angular-aggregate-height-field-v2',
+  'reference-conditioned-aggregate-height-field-v3',
+  'reference-conditioned-multiscale-aggregate-height-field-v4',
+  'reference-conditioned-linear-multiscale-aggregate-height-field-v5',
+]);
+
+/**
+ * Audits both the relief declaration and the delivered top-surface vertices.
+ * This prevents plausible metadata or texture maps from hiding flattened geometry.
+ */
+function inspectSurfaceRelief(root: THREE.Object3D): SurfaceReliefInspection {
+  let patches = 0;
+  let validPatches = 0;
+  let samples = 0;
+  let minimumRmsRoughnessMm = Number.POSITIVE_INFINITY;
+  let minimumPeakToValleyMm = Number.POSITIVE_INFINITY;
+  let maximumGeometryRmsErrorMm = 0;
+  let maximumGeometryPeakToValleyErrorMm = 0;
+  let aggregateFeatures = 0;
+  let coarseAggregateFeatures = 0;
+  let fineAggregateFeatures = 0;
+  let referenceBoundPatches = 0;
+  root.traverseVisible((object) => {
+    if (!(object instanceof THREE.Mesh)) return;
+    const audit = object.geometry.userData.morphloomSurfaceRelief as Record<string, unknown> | undefined;
+    if (!audit) return;
+    patches += 1;
+    const numericKeys = [
+      'minimumMm', 'maximumMm', 'meanMm', 'rmsRoughnessMm', 'peakToValleyMm',
+      'macroAmplitudeMm', 'aggregateAmplitudeMm', 'aggregateScaleMm',
+    ] as const;
+    const numbersValid = numericKeys.every((key) => typeof audit[key] === 'number' && Number.isFinite(audit[key]));
+    const declaredSamples = Number(audit.samples);
+    const coarse = Number(audit.coarseAggregateFeatures);
+    const fine = Number(audit.fineAggregateFeatures);
+    const aggregate = Number(audit.aggregateFeatures);
+    const minimum = Number(audit.minimumMm);
+    const maximum = Number(audit.maximumMm);
+    const mean = Number(audit.meanMm);
+    const rms = Number(audit.rmsRoughnessMm);
+    const peakToValley = Number(audit.peakToValleyMm);
+    const macroAmplitude = Number(audit.macroAmplitudeMm);
+    const aggregateAmplitude = Number(audit.aggregateAmplitudeMm);
+    const aggregateScale = Number(audit.aggregateScaleMm);
+    const methodValid = typeof audit.method === 'string' && SURFACE_RELIEF_METHODS.has(audit.method);
+    const countsValid = Number.isInteger(declaredSamples) && declaredSamples > 0
+      && Number.isInteger(coarse) && coarse > 0
+      && Number.isInteger(fine) && fine > 0
+      && Number.isInteger(aggregate) && aggregate === coarse + fine;
+    const rangeValid = numbersValid && minimum <= mean && mean <= maximum
+      && rms > 0 && peakToValley > 0
+      && Math.abs((maximum - minimum) - peakToValley) <= 0.001
+      && macroAmplitude >= 0 && aggregateAmplitude > 0 && aggregateScale > 0;
+    const referenceFingerprint = audit.referenceFingerprint;
+    const referenceBound = typeof referenceFingerprint === 'string' && referenceFingerprint.length > 0;
+    const referenceValid = referenceBound
+      ? Number.isInteger(audit.referenceSamples) && Number(audit.referenceSamples) > 0
+        && typeof audit.referenceBlend === 'number' && Number.isFinite(audit.referenceBlend)
+        && Number(audit.referenceBlend) >= 0 && Number(audit.referenceBlend) <= 1
+        && typeof audit.referenceIrregularity === 'number' && Number.isFinite(audit.referenceIrregularity)
+        && Number(audit.referenceIrregularity) >= 0
+      : audit.referenceSamples === undefined && audit.referenceBlend === undefined
+        && audit.referenceIrregularity === undefined;
+
+    const position = object.geometry.getAttribute('position');
+    const topGroup = object.geometry.groups.find((group: { materialIndex?: number }) => group.materialIndex === 0);
+    let deliveredRmsMm = 0;
+    let deliveredPeakToValleyMm = 0;
+    let deliveredSamples = 0;
+    if (position && topGroup && !object.geometry.getIndex()) {
+      const start = Math.max(0, Math.floor(topGroup.start));
+      const end = Math.min(position.count, Math.floor(topGroup.start + topGroup.count));
+      let sum = 0;
+      let deliveredMinimum = Number.POSITIVE_INFINITY;
+      let deliveredMaximum = Number.NEGATIVE_INFINITY;
+      for (let index = start; index < end; index += 1) {
+        const yMm = position.getY(index) * 1_000;
+        if (!Number.isFinite(yMm)) continue;
+        sum += yMm;
+        deliveredMinimum = Math.min(deliveredMinimum, yMm);
+        deliveredMaximum = Math.max(deliveredMaximum, yMm);
+        deliveredSamples += 1;
+      }
+      if (deliveredSamples > 0) {
+        const deliveredMean = sum / deliveredSamples;
+        let squared = 0;
+        for (let index = start; index < end; index += 1) {
+          const yMm = position.getY(index) * 1_000;
+          if (Number.isFinite(yMm)) squared += (yMm - deliveredMean) ** 2;
+        }
+        deliveredRmsMm = Math.sqrt(squared / deliveredSamples);
+        deliveredPeakToValleyMm = deliveredMaximum - deliveredMinimum;
+      }
+    }
+    const rmsError = Math.abs(deliveredRmsMm - rms);
+    const peakError = Math.abs(deliveredPeakToValleyMm - peakToValley);
+    const geometryValid = deliveredSamples >= declaredSamples
+      && deliveredRmsMm > 0.1 && deliveredPeakToValleyMm > 0.5
+      && rmsError <= Math.max(0.05, rms * 0.15)
+      && peakError <= Math.max(0.05, peakToValley * 0.05);
+    if (methodValid && countsValid && rangeValid && referenceValid
+      && audit.facetedNormals === true && geometryValid) validPatches += 1;
+    samples += Number.isInteger(declaredSamples) && declaredSamples > 0 ? declaredSamples : 0;
+    minimumRmsRoughnessMm = Math.min(minimumRmsRoughnessMm, Number.isFinite(rms) ? rms : 0);
+    minimumPeakToValleyMm = Math.min(minimumPeakToValleyMm, Number.isFinite(peakToValley) ? peakToValley : 0);
+    maximumGeometryRmsErrorMm = Math.max(maximumGeometryRmsErrorMm, Number.isFinite(rmsError) ? rmsError : Number.POSITIVE_INFINITY);
+    maximumGeometryPeakToValleyErrorMm = Math.max(maximumGeometryPeakToValleyErrorMm, Number.isFinite(peakError) ? peakError : Number.POSITIVE_INFINITY);
+    aggregateFeatures += Number.isInteger(aggregate) && aggregate > 0 ? aggregate : 0;
+    coarseAggregateFeatures += Number.isInteger(coarse) && coarse > 0 ? coarse : 0;
+    fineAggregateFeatures += Number.isInteger(fine) && fine > 0 ? fine : 0;
+    if (referenceBound) referenceBoundPatches += 1;
+  });
+  return {
+    patches,
+    validPatches,
+    samples,
+    minimumRmsRoughnessMm: Number.isFinite(minimumRmsRoughnessMm) ? minimumRmsRoughnessMm : 0,
+    minimumPeakToValleyMm: Number.isFinite(minimumPeakToValleyMm) ? minimumPeakToValleyMm : 0,
+    maximumGeometryRmsErrorMm,
+    maximumGeometryPeakToValleyErrorMm,
+    aggregateFeatures,
+    coarseAggregateFeatures,
+    fineAggregateFeatures,
+    referenceBoundPatches,
   };
 }
 
@@ -967,6 +1142,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     : undefined;
   const surfaces = inspectSurfaceSystem(input.root);
   const geometry = inspectGeometry(input.root);
+  const relief = inspectSurfaceRelief(input.root);
   const deformation = inspectSkinDeformation(input.root);
   const animationDelivery = inspectAnimationDelivery(input.root);
   const collisionDelivery = inspectCollisionDelivery(input.root);
@@ -1003,6 +1179,35 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     `${snapshot.materialPayloads.filter((payload) => payload.serializable).length}/${snapshot.materialPayloads.length} material payloads serializable`);
   add('glb-roundtrip', '실제 GLB 재열기', input.browserGlbRoundTrip, input.browserGlbRoundTrip ? 100 : 0, input.browserGlbRoundTrip ? '브라우저 GLTFLoader 재열기 통과' : '동일 입력 브라우저 증명 없음');
   const dimensions = input.root.userData.dimensionAudit as DimensionAudit | undefined;
+  const connectivity = input.root.userData.connectivity as ConnectivityReport | undefined;
+  const engineering = input.root.userData.engineeringAudit as EngineeringAuditReport | undefined;
+  const assemblyIR = input.root.userData.assemblyIR as AssemblyIR | undefined;
+  const detailAudit = assemblyIR ? auditAssemblyDetail(assemblyIR) : undefined;
+  const productionContractRequired = assemblyIR?.metadata?.qualityTarget === 'semi-professional-editable'
+    || assemblyIR?.metadata?.fidelityContractRequired === true
+    || assemblyIR?.metadata?.partDecompositionRequired === true;
+  if (productionContractRequired) {
+    const partCoverage = Math.min(
+      detailAudit?.partRequiredFeatureCoverage ?? 0,
+      detailAudit?.partSourceViewCoverage ?? 0,
+      detailAudit?.partMappedComponentCoverage ?? 0,
+    );
+    add('evidence-first-part-contract', '생성 전 부품 누락 방지 계약', detailAudit?.partDecompositionPass === true,
+      partCoverage * 100,
+      detailAudit?.partDecompositionPass
+        ? '근거 시점·필수 부품·편집 단위 매핑 통과'
+        : detailAudit?.partDecompositionBlockers.join('; ') || '생성 전 부품 분해 계약 없음');
+    add('locked-fidelity-contract', '특징별 충실도 계약', detailAudit?.fidelityContractPass === true,
+      detailAudit?.fidelityContractPass ? 100 : 0,
+      detailAudit?.fidelityContractPass
+        ? '서명 특징·음각 공간·관계·재질·검증 시점 잠금 통과'
+        : detailAudit?.fidelityBlockers.join('; ') || '잠긴 충실도 계약 없음');
+    add('evidence-delivery-state', '원천 근거 납품 준비', assemblyIR?.metadata?.evidenceDeliveryReady === true,
+      assemblyIR?.metadata?.evidenceDeliveryReady === true ? 100 : 0,
+      assemblyIR?.metadata?.evidenceDeliveryReady === true
+        ? '필수 근거 준비 완료'
+        : String(assemblyIR?.metadata?.evidenceUnresolvedCapabilities ?? '미해결 근거가 남아 있음'));
+  }
   if (dimensions) {
     const passed = dimensions.checks.filter((check) => check.pass).length;
     const maximumDeviation = Math.max(0, ...dimensions.checks.map((check) => check.deviationMm ?? Number.POSITIVE_INFINITY));
@@ -1036,6 +1241,56 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
     const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
     add('design-normals', '제품 노멀 무결성', normalPass, normalIntegrityScore, `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
     add('design-surface', '제품 PBR 미세표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
+  } else if (input.domain === 'electronics-assembly') {
+    const ports = connectivity?.ports ?? 0;
+    const wires = connectivity?.wires ?? 0;
+    const pinCoverage = engineering?.physicalPinCoverage ?? 0;
+    const gaugeCoverage = engineering?.conductorGaugeCoverage ?? 0;
+    const verificationCoverage = engineering?.conductorVerificationCoverage ?? 0;
+    const graphPass = connectivity !== undefined
+      && connectivity.errors.length === 0
+      && connectivity.danglingWires === 0
+      && connectivity.openRequiredPorts === 0
+      && connectivity.overloadedPorts === 0
+      && connectivity.offComponentPorts === 0
+      && connectivity.connectedWires === connectivity.wires
+      && connectivity.connectedRequiredPorts === connectivity.requiredPorts;
+    add('electronics-topology', '전자 조립 메시 토폴로지', topology.pass, topology.pass ? 100 : 0,
+      `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 자기교차 ${topology.selfIntersections}`);
+    add('electronics-graph', '부품·핀·도선 연결 그래프', graphPass, graphPass ? 100 : 0,
+      connectivity
+        ? `${connectivity.connectedWires}/${wires} 도선 · 필수 포트 ${connectivity.connectedRequiredPorts}/${connectivity.requiredPorts} · 오류 ${connectivity.errors.length}`
+        : '컴파일된 전기 연결 그래프 없음');
+    const documentationPass = ports > 0 && wires > 0
+      && pinCoverage === 1 && gaugeCoverage === 1 && verificationCoverage === 1;
+    add('electronics-documentation', '핀·선경·검증 근거', documentationPass,
+      Math.min(pinCoverage, gaugeCoverage, verificationCoverage) * 100,
+      `핀 ${Math.round(pinCoverage * 100)}% · 선경 ${Math.round(gaugeCoverage * 100)}% · 검증 ${Math.round(verificationCoverage * 100)}%`);
+    const anchorPass = connectivity?.liveAnchors === true
+      && (connectivity.endpointErrorMaxMm ?? Number.POSITIVE_INFINITY) <= 0.05;
+    add('electronics-anchors', '이동 부품 배선 앵커·종단 정합', anchorPass, anchorPass ? 100 : 0,
+      connectivity
+        ? `live ${connectivity.liveAnchors ? 'yes' : 'no'} · 최대 종단 오차 ${connectivity.endpointErrorMaxMm.toFixed(4)} mm`
+        : '컴파일된 배선 앵커 없음');
+    add('electronics-digital-readiness', '디지털 조립 납품 준비', engineering?.digitalReady === true,
+      engineering?.digitalReady ? 100 : 0,
+      engineering
+        ? `evidence ${engineering.evidenceScore} · bench 대기 ${engineering.outstandingBenchChecks} · 추정 도선 ${engineering.inferredWires}`
+        : '엔지니어링 감사 결과 없음');
+    add('electronics-production-evidence', '실물 제작 근거 준비', engineering?.productionReady === true,
+      engineering?.productionReady ? 100 : engineering?.evidenceScore ?? 0,
+      engineering
+        ? `근거 ${engineering.evidenceScore}/90 · 추정 부품 ${engineering.componentEvidence.inferred} · bench 대기 ${engineering.outstandingBenchChecks} · bench 필요 도선 ${engineering.benchRequiredWires}`
+        : '엔지니어링 감사 결과 없음');
+    add('electronics-evidence', '전자 조립 원천 근거', input.evidenceScore >= 90, input.evidenceScore, `${input.evidenceScore}/90`);
+    const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1 && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('electronics-uv', '전자 부품 UV 무결성', uvPass, uvIntegrityScore,
+      `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
+    const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1 && geometry.maximumNormalUnitError <= 0.05;
+    add('electronics-normals', '전자 부품 노멀 무결성', normalPass, normalIntegrityScore,
+      `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
+    add('electronics-surface', '전자 부품 PBR 미세표면', pbrSurfaceCoverage >= 0.75,
+      pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
   } else if (input.domain === 'animation') {
     const bodyTopologyPass = skinnedTopology?.pass === true;
     add('animation-topology', '변형 가능한 폐쇄형 바디', bodyTopologyPass, bodyTopologyPass ? 100 : 0, `${skinnedTopology?.watertightMeshes ?? 0}/${skinnedTopology?.meshes ?? 0} 스킨 메시 폐쇄형`);
@@ -1144,7 +1399,7 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
         : 'LOD1+가 선언되면 형상·스킨 변형 보존 검사를 차단 게이트로 적용',
       lodQualityRequired);
     add('game-pbr', '게임 PBR 표면', pbrSurfaceCoverage >= 0.75, pbrSurfaceCoverage * 100, `${Math.round(pbrSurfaceCoverage * 100)}% micro-normal`);
-  } else {
+  } else if (input.domain === '3d-print') {
     const unitReady = input.sourceUnitMm === 1;
     const minimumAxis = geometry.minimumMeshAxisMm ?? 0;
     const minimumFeature = declaredMinimumFeatureMm ?? 0;
@@ -1166,6 +1421,39 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
         : '국부 벽 두께 검사를 실행하지 못함');
     const supportFree = geometry.unsupportedOverhangRatio <= 0.01;
     add('print-overhang', '45° 오버행 분석', supportFree, supportFree ? 100 : Math.max(0, 100 - geometry.unsupportedOverhangRatio * 500), `${geometry.unsupportedOverhangAreaMm2.toFixed(1)} mm² · 표면의 ${(geometry.unsupportedOverhangRatio * 100).toFixed(2)}%`, false);
+  } else {
+    add('surface-topology', '표면 샘플 폐쇄 토폴로지', topology.pass, topology.pass ? 100 : 0,
+      `경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles} · 자기교차 ${topology.selfIntersections}`);
+    add('surface-evidence', '표면 생성 근거', input.evidenceScore >= 80, input.evidenceScore,
+      `${input.evidenceScore}/80 · 절차형 수치는 특정 현장의 실측으로 승격하지 않음`);
+    const uvPass = uvMeshCoverage >= 0.95 && geometry.uvFiniteCoverage === 1
+      && geometry.degenerateUvTriangleFraction <= 0.05;
+    add('surface-uv', '표면 UV 무결성', uvPass, uvIntegrityScore,
+      `${Math.round(uvMeshCoverage * 100)}% 메시 · 유한값 ${Math.round(geometry.uvFiniteCoverage * 100)}% · 퇴화 삼각형 ${(geometry.degenerateUvTriangleFraction * 100).toFixed(2)}%`);
+    const normalPass = normalMeshCoverage === 1 && geometry.normalValidityCoverage === 1
+      && geometry.maximumNormalUnitError <= 0.05;
+    add('surface-normals', '표면 노멀 무결성', normalPass, normalIntegrityScore,
+      `${Math.round(normalMeshCoverage * 100)}% 메시 · 유효 ${Math.round(geometry.normalValidityCoverage * 100)}% · 최대 단위오차 ${geometry.maximumNormalUnitError.toExponential(2)}`);
+    const reliefPass = relief.patches > 0 && relief.validPatches === relief.patches
+      && relief.samples >= 4_096 && relief.minimumRmsRoughnessMm > 0.1
+      && relief.minimumPeakToValleyMm > 0.5;
+    add('surface-multiscale-relief', '실제 다중 크기 요철 기하', reliefPass,
+      relief.patches > 0 ? relief.validPatches / relief.patches * 100 : 0,
+      `${relief.validPatches}/${relief.patches} 패치 · ${relief.samples.toLocaleString()} 표본 · RMS ${relief.minimumRmsRoughnessMm.toFixed(3)} mm · P–V ${relief.minimumPeakToValleyMm.toFixed(3)} mm · 기하 오차 RMS ${relief.maximumGeometryRmsErrorMm.toFixed(3)} / P–V ${relief.maximumGeometryPeakToValleyErrorMm.toFixed(3)} mm`);
+    const aggregatePass = relief.aggregateFeatures >= 100
+      && relief.coarseAggregateFeatures > 0 && relief.fineAggregateFeatures > 0;
+    add('surface-aggregate-structure', '굵은·미세 입자 구조', aggregatePass,
+      aggregatePass ? 100 : Math.min(100, relief.aggregateFeatures),
+      `${relief.aggregateFeatures.toLocaleString()} 입자 · coarse ${relief.coarseAggregateFeatures.toLocaleString()} · fine ${relief.fineAggregateFeatures.toLocaleString()}`);
+    const responsePass = surfaces.authoredMaterials > 0
+      && surfaces.microNormalMaterials === surfaces.authoredMaterials
+      && surfaces.roughnessMappedMaterials === surfaces.authoredMaterials
+      && pbrSurfaceCoverage === 1;
+    add('surface-pbr-response', '요철·거칠기 PBR 응답', responsePass,
+      surfaces.authoredMaterials > 0
+        ? Math.min(surfaces.microNormalMaterials, surfaces.roughnessMappedMaterials) / surfaces.authoredMaterials * 100
+        : 0,
+      `${surfaces.authoredMaterials} authored · normal map ${surfaces.microNormalMaterials} · roughness map ${surfaces.roughnessMappedMaterials}`);
   }
 
   const blockers = checks.filter((check) => check.blocking && !check.pass).map((check) => `${check.id}: ${check.detail}`);
@@ -1270,6 +1558,35 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
       sampledWallThicknessTriangleTests: sampledWallThickness?.triangleTests ?? 0,
       unsupportedOverhangAreaMm2: geometry.unsupportedOverhangAreaMm2,
       unsupportedOverhangRatio: geometry.unsupportedOverhangRatio,
+      electricalPorts: connectivity?.ports ?? 0,
+      electricalWires: connectivity?.wires ?? 0,
+      electricalRequiredPortCoverage: connectivity && connectivity.requiredPorts > 0
+        ? connectivity.connectedRequiredPorts / connectivity.requiredPorts : 0,
+      electricalPinDocumentationCoverage: engineering?.physicalPinCoverage ?? 0,
+      electricalGaugeDocumentationCoverage: engineering?.conductorGaugeCoverage ?? 0,
+      electricalVerificationCoverage: engineering?.conductorVerificationCoverage ?? 0,
+      electricalEndpointErrorMaxMm: connectivity?.endpointErrorMaxMm ?? 0,
+      electricalLiveAnchors: connectivity?.liveAnchors ?? false,
+      electricalDigitalReady: engineering?.digitalReady ?? false,
+      electricalProductionReady: engineering?.productionReady ?? false,
+      surfaceReliefPatches: relief.patches,
+      validSurfaceReliefPatches: relief.validPatches,
+      surfaceReliefSamples: relief.samples,
+      minimumSurfaceRmsRoughnessMm: relief.minimumRmsRoughnessMm,
+      minimumSurfacePeakToValleyMm: relief.minimumPeakToValleyMm,
+      surfaceReliefGeometryRmsErrorMm: relief.maximumGeometryRmsErrorMm,
+      surfaceReliefGeometryPeakToValleyErrorMm: relief.maximumGeometryPeakToValleyErrorMm,
+      surfaceAggregateFeatures: relief.aggregateFeatures,
+      surfaceCoarseAggregateFeatures: relief.coarseAggregateFeatures,
+      surfaceFineAggregateFeatures: relief.fineAggregateFeatures,
+      referenceBoundSurfaceReliefs: relief.referenceBoundPatches,
+      productionContractRequired,
+      partDecompositionPass: detailAudit?.partDecompositionPass === true,
+      partFeatureCoverage: detailAudit?.partRequiredFeatureCoverage ?? 0,
+      partSourceViewCoverage: detailAudit?.partSourceViewCoverage ?? 0,
+      partComponentCoverage: detailAudit?.partMappedComponentCoverage ?? 0,
+      fidelityContractPass: detailAudit?.fidelityContractPass === true,
+      evidenceDeliveryReady: assemblyIR?.metadata?.evidenceDeliveryReady === true,
     },
   };
 }

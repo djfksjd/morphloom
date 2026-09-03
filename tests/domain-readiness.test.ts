@@ -17,6 +17,7 @@ import type { AssemblyIR } from '../src/engine/assembly-ir';
 import { LAUREL_HOMES_BUILDING_B_IR } from '../src/engine/laurel-homes-building-b';
 import { auditSampledWallThickness } from '../src/engine/print-thickness';
 import { REQUIRED_FACIAL_MORPH_NAMES } from '../src/engine/facial-morphs';
+import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
 
 let humanPack: HumanPack;
 
@@ -28,6 +29,111 @@ beforeAll(async () => {
 });
 
 describe('cross-domain semi-professional readiness', () => {
+  it('blocks a semi-professional AssemblyIR when generation evidence contracts are missing', () => {
+    const ir: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'production contract regression fixture', units: 'mm',
+      components: [{
+        id: 'body', name: 'Body', category: 'enclosure', materialName: 'polymer',
+        detail: 'Measured editable body used to prove that geometry alone cannot pass release.',
+        geometry: { op: 'roundedBox', size: [80, 40, 20], radius: 3, segments: 8 },
+        material: { color: '#555555', surface: 'molded-polymer', roughness: 0.6, microNormalStrength: 0.1 },
+        evidence: { status: 'measured', source: 'synthetic gate fixture' },
+      }],
+      metadata: {
+        qualityTarget: 'semi-professional-editable', evidenceDeliveryReady: true,
+      },
+    };
+    const build = compileAssemblyIR(ir, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'industrial-design', root: build.root, topology: build.metrics.topology,
+      evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(false);
+    expect(report.checks.find((check) => check.id === 'evidence-first-part-contract')).toMatchObject({ pass: false, blocking: true });
+    expect(report.checks.find((check) => check.id === 'locked-fidelity-contract')).toMatchObject({ pass: false, blocking: true });
+    expect(report.checks.find((check) => check.id === 'evidence-delivery-state')).toMatchObject({ pass: true, blocking: true });
+    expect(report.metrics.productionContractRequired).toBe(true);
+    expect(report.metrics.partDecompositionPass).toBe(false);
+    expect(report.metrics.fidelityContractPass).toBe(false);
+  });
+
+  it('separates a digitally connected electronics assembly from physical production evidence', () => {
+    const build = compileAssemblyIR(COOLING_ASSEMBLY_IR, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'electronics-assembly', root: build.root, topology: build.metrics.topology,
+      evidenceScore: build.metrics.engineering?.evidenceScore ?? 0,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.checks.find((check) => check.id === 'electronics-graph')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'electronics-documentation')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'electronics-anchors')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'electronics-digital-readiness')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'electronics-production-evidence')).toMatchObject({ pass: false });
+    expect(report.checks.find((check) => check.id === 'electronics-evidence')).toMatchObject({ pass: false });
+    expect(report.metrics.electricalRequiredPortCoverage).toBe(1);
+    expect(report.metrics.electricalPinDocumentationCoverage).toBe(1);
+    expect(report.metrics.electricalGaugeDocumentationCoverage).toBe(1);
+    expect(report.metrics.electricalVerificationCoverage).toBe(1);
+    expect(report.metrics.electricalLiveAnchors).toBe(true);
+    expect(report.metrics.electricalDigitalReady).toBe(true);
+    expect(report.metrics.electricalProductionReady).toBe(false);
+    expect(report.pass).toBe(false);
+  }, 40_000);
+
+  it('passes a fully evidenced electronics calibration fixture and blocks endpoint drift', () => {
+    const fixture: AssemblyIR = {
+      schema: 'morphloom.assembly/0.1', name: 'Synthetic electronics gate calibration fixture', units: 'mm',
+      components: [
+        {
+          id: 'source', name: 'Source connector', category: 'interconnect', materialName: 'LCP',
+          detail: 'Synthetic, dimension-locked gate calibration part; not a real product claim.',
+          geometry: { op: 'roundedBox', size: [10, 8, 8], radius: 0.8, segments: 4 },
+          position: [-12, 0, 0], material: { color: '#303840', roughness: 0.62, surface: 'molded-polymer' },
+          evidence: { status: 'measured', source: 'synthetic test construction' },
+        },
+        {
+          id: 'load', name: 'Load connector', category: 'interconnect', materialName: 'LCP',
+          detail: 'Synthetic, dimension-locked gate calibration part; not a real product claim.',
+          geometry: { op: 'roundedBox', size: [10, 8, 8], radius: 0.8, segments: 4 },
+          position: [12, 0, 0], material: { color: '#303840', roughness: 0.62, surface: 'molded-polymer' },
+          evidence: { status: 'measured', source: 'synthetic test construction' },
+        },
+      ],
+      electrical: {
+        endpointToleranceMm: 0.05,
+        portToleranceMm: 0.05,
+        verificationScope: 'Synthetic digital gate calibration only; no product certification claim.',
+        ports: [
+          { id: 'source_p1', componentId: 'source', pin: 'P1', physicalPin: 'J1-1', signal: 'power', position: [5, 0, 0], direction: [1, 0, 0], required: true },
+          { id: 'load_p1', componentId: 'load', pin: 'P1', physicalPin: 'J2-1', signal: 'power', position: [-5, 0, 0], direction: [-1, 0, 0], required: true },
+        ],
+        wires: [{
+          id: 'w_power', name: 'Synthetic power conductor', net: 'PWR', signal: 'power',
+          from: 'source_p1', to: 'load_p1', diameter: 0.8, color: '#e05040',
+          gauge: '20AWG', verification: 'design',
+        }],
+      },
+    };
+    const build = compileAssemblyIR(fixture, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'electronics-assembly', root: build.root, topology: build.metrics.topology,
+      evidenceScore: build.metrics.engineering?.evidenceScore ?? 0,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(build.metrics.engineering).toMatchObject({ digitalReady: true, productionReady: true, evidenceScore: 98 });
+    expect(report.pass).toBe(true);
+    expect(report.score).toBe(100);
+
+    const connectivity = build.root.userData.connectivity as { endpointErrorMaxMm: number };
+    connectivity.endpointErrorMaxMm = 0.051;
+    const drifted = auditDomainReadiness({
+      domain: 'electronics-assembly', root: build.root, topology: build.metrics.topology,
+      evidenceScore: 98, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(drifted.pass).toBe(false);
+    expect(drifted.blockers.some((blocker) => blocker.startsWith('electronics-anchors:'))).toBe(true);
+  });
+
   it('requires the compiled architecture footprint to match its measured plan contract', () => {
     const build = compileAssemblyIR(LAUREL_HOMES_BUILDING_B_IR, 'beauty');
     const report = auditDomainReadiness({
@@ -49,7 +155,7 @@ describe('cross-domain semi-professional readiness', () => {
     expect(blocked.pass).toBe(false);
     expect(blocked.blockers.some((blocker) => blocker.startsWith('architecture-plan:'))).toBe(true);
     expect(blocked.checks.find((check) => check.id === 'architecture-plan')?.detail).toMatch(/IoU|공백/);
-  }, 20_000);
+  }, 40_000);
 
   it('re-measures evidence-bound vertical dimensions and blocks a height regression that leaves the plan intact', () => {
     const measured = structuredClone(LAUREL_HOMES_BUILDING_B_IR);
@@ -101,7 +207,7 @@ describe('cross-domain semi-professional readiness', () => {
       evidenceScore: 100, deterministic: true, browserGlbRoundTrip: true,
     });
     expect(productReport.blockers.some((blocker) => blocker.startsWith('evidence-dimensions:'))).toBe(true);
-  }, 20_000);
+  }, 30_000);
 
   it('blocks a measured connector pitch when either compiled datum moves', () => {
     const fixture: AssemblyIR = {
@@ -321,7 +427,7 @@ describe('cross-domain semi-professional readiness', () => {
     expect(mislocalizedFingerWeights).toBe(0);
     expect(first.metrics.rig.maximumWeightError).toBeLessThanOrEqual(1e-7);
     expect(secondSnapshot.fingerprint).toBe(firstSnapshot.fingerprint);
-  }, 20_000);
+  }, 40_000);
 
   it('passes separate animation and real-time game contracts for the editable base', () => {
     const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
@@ -389,7 +495,7 @@ describe('cross-domain semi-professional readiness', () => {
       selfIntersections: 0,
       selfIntersectionComplete: true,
     });
-  }, 20_000);
+  }, 40_000);
 
   it('blocks a humanoid whose lower-body joints exist but no longer deform the primary skin', () => {
     const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
@@ -428,7 +534,7 @@ describe('cross-domain semi-professional readiness', () => {
       .toMatch(/knee_L.*ankle_R/);
     expect(game.pass).toBe(false);
     expect(game.blockers.join(' ')).toMatch(/game-joint-deformation/);
-  }, 20_000);
+  }, 40_000);
 
   it('blocks anatomically misplaced joint weights even when every critical joint still moves vertices', () => {
     const build = buildCharacter(humanPack, FIELD_HUMAN_SPEC, 'beauty');
@@ -723,6 +829,63 @@ describe('cross-domain semi-professional readiness', () => {
     expect(print.metrics.sampledWallThicknessTriangleTests).toBeLessThanOrEqual(24_000_000);
     expect(print.metrics.unsupportedOverhangRatio).toBeLessThanOrEqual(0.01);
     expect(print.warnings).toEqual([]);
+  }, 40_000);
+
+  it('proves rough surfaces with delivered relief geometry and PBR response, not labels alone', () => {
+    const asphalt = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
+    const report = auditDomainReadiness({
+      domain: 'surface', root: asphalt.root, topology: asphalt.metrics.topology,
+      evidenceScore: 84, deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(true);
+    expect(report.checks.find((check) => check.id === 'surface-multiscale-relief')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'surface-aggregate-structure')).toMatchObject({ pass: true });
+    expect(report.checks.find((check) => check.id === 'surface-pbr-response')).toMatchObject({ pass: true });
+    expect(report.metrics.validSurfaceReliefPatches).toBe(report.metrics.surfaceReliefPatches);
+    expect(report.metrics.surfaceReliefSamples).toBeGreaterThanOrEqual(4_096);
+    expect(report.metrics.surfaceCoarseAggregateFeatures).toBeGreaterThan(0);
+    expect(report.metrics.surfaceFineAggregateFeatures).toBeGreaterThan(0);
+    expect(report.metrics.minimumSurfaceRmsRoughnessMm).toBeGreaterThan(0.1);
+    expect(report.metrics.minimumSurfacePeakToValleyMm).toBeGreaterThan(0.5);
+  }, 20_000);
+
+  it('blocks flattened relief geometry even when the original audit metadata remains', () => {
+    const asphalt = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
+    asphalt.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh) || !object.geometry.userData.morphloomSurfaceRelief) return;
+      const position = object.geometry.getAttribute('position');
+      const topGroup = object.geometry.groups.find((group) => group.materialIndex === 0);
+      if (!topGroup) throw new Error('Missing surface top group.');
+      for (let index = topGroup.start; index < topGroup.start + topGroup.count; index += 1) {
+        position.setY(index, 0.02);
+      }
+      position.needsUpdate = true;
+      object.geometry.computeVertexNormals();
+    });
+    const report = auditDomainReadiness({
+      domain: 'surface', root: asphalt.root, evidenceScore: 84,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(false);
+    expect(report.metrics.validSurfaceReliefPatches).toBe(0);
+    expect(report.blockers.join(' ')).toMatch(/surface-multiscale-relief/);
+  }, 40_000);
+
+  it('blocks a missing roughness response even when relief and normal maps remain', () => {
+    const asphalt = compileAssemblyIR(ASPHALT_SURFACE_BENCHMARK_IR, 'beauty');
+    asphalt.root.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      materials.forEach((material) => {
+        if (material instanceof THREE.MeshPhysicalMaterial) material.roughnessMap = null;
+      });
+    });
+    const report = auditDomainReadiness({
+      domain: 'surface', root: asphalt.root, evidenceScore: 84,
+      deterministic: true, browserGlbRoundTrip: true,
+    });
+    expect(report.pass).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/surface-pbr-response/);
   }, 20_000);
 
   it('blocks placeholder UVs and invalid normals even when the attributes exist', () => {

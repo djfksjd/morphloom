@@ -3,6 +3,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { basename } from 'node:path';
 import { createCanvas, loadImage } from '@napi-rs/canvas';
 import type { ComparisonFrame } from '../../src/engine/reference-comparison';
+import { solidifySilhouetteMask } from '../../src/engine/silhouette-mask';
 
 export const TARGET_WIDTH = 512;
 export const TARGET_HEIGHT = 256;
@@ -11,6 +12,8 @@ const MAX_CAPTURE_BYTES = 64 * 1024 * 1024;
 
 export interface NormalizedCapture {
   frame: ComparisonFrame;
+  /** Foreground before enclosed-hole filling, retained for rods, wires, rails and other sparse structures. */
+  rawFrame: ComparisonFrame;
   bytes: Uint8Array;
   aspect: number;
   threshold: number;
@@ -232,15 +235,20 @@ export async function normalizedFrame(
   targetContext.fillStyle = '#ffffff';
   targetContext.fillRect(0, 0, TARGET_WIDTH, TARGET_HEIGHT);
   targetContext.drawImage(sourceCanvas, x0, y0, x1 - x0, y1 - y0, drawX, drawY, drawWidth, drawHeight);
-  const normalizedMask = resizeMask(mask, sourceWidth, sourceHeight,
+  const solidMask = solidifySilhouetteMask(mask, sourceWidth, sourceHeight).mask;
+  const normalizedMask = resizeMask(solidMask, sourceWidth, sourceHeight,
     [x0, y0, x1 - x0, y1 - y0], [drawX, drawY, drawWidth, drawHeight]);
+  const normalizedRawMask = resizeMask(mask, sourceWidth, sourceHeight,
+    [x0, y0, x1 - x0, y1 - y0], [drawX, drawY, drawWidth, drawHeight]);
+  const rgba = targetContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data;
   return {
     frame: {
       width: TARGET_WIDTH,
       height: TARGET_HEIGHT,
-      rgba: targetContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data,
+      rgba,
       mask: normalizedMask,
     },
+    rawFrame: { width: TARGET_WIDTH, height: TARGET_HEIGHT, rgba, mask: normalizedRawMask },
     bytes,
     aspect,
     threshold,
@@ -264,13 +272,15 @@ export async function lockedCanvasFrame(path: string, forcedThreshold?: number):
   targetContext.drawImage(sourceCanvas, 0, 0, sourceWidth, sourceHeight, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
   const normalizedMask = resizeMask(mask, sourceWidth, sourceHeight,
     [0, 0, sourceWidth, sourceHeight], [0, 0, TARGET_WIDTH, TARGET_HEIGHT]);
+  const rgba = targetContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data;
   return {
     frame: {
       width: TARGET_WIDTH,
       height: TARGET_HEIGHT,
-      rgba: targetContext.getImageData(0, 0, TARGET_WIDTH, TARGET_HEIGHT).data,
+      rgba,
       mask: normalizedMask,
     },
+    rawFrame: { width: TARGET_WIDTH, height: TARGET_HEIGHT, rgba, mask: normalizedMask },
     bytes,
     aspect,
     threshold,

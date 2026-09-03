@@ -1,0 +1,1085 @@
+{
+  "schema": "morphloom.glb-surface-comparison/0.1",
+  "reference": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/work/abo/pilot/fan/ground-truth.glb",
+    "triangles": 323770,
+    "surfaceArea": 0.8063400643195456
+  },
+  "candidate": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/abo-semantic-fan/abo-industrial-floor-fan-semantic.glb",
+    "triangles": 59152,
+    "surfaceArea": 0.781560266937764
+  },
+  "requestedSamples": 4096,
+  "normalizedAxisQuantiles": {
+    "fractions": [
+      0.05,
+      0.25,
+      0.5,
+      0.75,
+      0.95
+    ],
+    "reference": [
+      [
+        -0.404802455116381,
+        -0.1728150591360541,
+        -0.01992451626849983,
+        0.15433098315538094,
+        0.40119756847520915
+      ],
+      [
+        -0.4774860383492334,
+        -0.1612186847270966,
+        0.025119941601779928,
+        0.19258269134816194,
+        0.4078016720977865
+      ],
+      [
+        0.012249785616410951,
+        0.12581012300249614,
+        0.19979551763774625,
+        0.28241690303171596,
+        0.3615445912233473
+      ]
+    ],
+    "candidate": [
+      [
+        -0.38669087684813946,
+        -0.1287441983538711,
+        -0.001317371998832073,
+        0.14282861604622085,
+        0.3867757168610105
+      ],
+      [
+        -0.43874972380475047,
+        -0.11754888649622089,
+        0.07809097082693688,
+        0.2148770063720865,
+        0.4217478236927075
+      ],
+      [
+        -0.342094194304473,
+        -0.3072609116530865,
+        -0.2346803096478681,
+        -0.1573385681788438,
+        0.04597526832722517
+      ]
+    ]
+  },
+  "audit": {
+    "schema": "morphloom.surface-geometry-fidelity/0.1",
+    "pass": false,
+    "dimensionPass": true,
+    "shapePass": false,
+    "selectedYawDegrees": 180,
+    "referenceBounds": {
+      "minimum": [
+        -0.2774828374385834,
+        0,
+        -0.3751937448978424
+      ],
+      "maximum": [
+        0.277507483959198,
+        0.5457066297531128,
+        0.04917465150356293
+      ],
+      "size": [
+        0.5549903213977814,
+        0.5457066297531128,
+        0.42436839640140533
+      ]
+    },
+    "candidateInputBounds": {
+      "minimum": [
+        -0.27373161911964417,
+        -0.2834438174488422,
+        -0.06584606401828666
+      ],
+      "maximum": [
+        0.27373161911964417,
+        0.2679531297590061,
+        0.3409026861190796
+      ],
+      "size": [
+        0.5474632382392883,
+        0.5513969472078483,
+        0.4067487501373662
+      ]
+    },
+    "candidateBounds": {
+      "minimum": [
+        -0.27373161911964417,
+        -0.2834438174488422,
+        -0.3409026861190796
+      ],
+      "maximum": [
+        0.27373161911964417,
+        0.2679531297590061,
+        0.06584606401828666
+      ],
+      "size": [
+        0.5474632382392883,
+        0.5513969472078483,
+        0.4067487501373662
+      ]
+    },
+    "dimensionRelativeErrors": [
+      0.013562548513522838,
+      0.010427429583015825,
+      0.041519694712074846
+    ],
+    "maximumDimensionRelativeError": 0.041519694712074846,
+    "symmetricRmsChamfer": 0.055957017371764034,
+    "referenceP95Distance": 0.09500373533626186,
+    "candidateP95Distance": 0.11572054086406765,
+    "minimumCoverage": 0.54150390625,
+    "referenceCoverage": 0.5849609375,
+    "candidateCoverage": 0.54150390625,
+    "spatialCoverage": {
+      "reference": [
+        {
+          "id": "reference:x-low",
+          "side": "reference",
+          "axis": "x",
+          "band": "low",
+          "samples": 1050,
+          "coverage": 0.5533333333333333,
+          "meanDistance": 0.04441370484233998,
+          "p95Distance": 0.11000246685110406
+        },
+        {
+          "id": "reference:x-middle",
+          "side": "reference",
+          "axis": "x",
+          "band": "middle",
+          "samples": 2073,
+          "coverage": 0.5986493005306319,
+          "meanDistance": 0.03896047522549644,
+          "p95Distance": 0.08560134427202247
+        },
+        {
+          "id": "reference:x-high",
+          "side": "reference",
+          "axis": "x",
+          "band": "high",
+          "samples": 973,
+          "coverage": 0.5899280575539568,
+          "meanDistance": 0.04304651001726344,
+          "p95Distance": 0.10925203142348916
+        },
+        {
+          "id": "reference:y-low",
+          "side": "reference",
+          "axis": "y",
+          "band": "low",
+          "samples": 1016,
+          "coverage": 0.2992125984251969,
+          "meanDistance": 0.06661830226202783,
+          "p95Distance": 0.16899325805116083
+        },
+        {
+          "id": "reference:y-middle",
+          "side": "reference",
+          "axis": "y",
+          "band": "middle",
+          "samples": 1938,
+          "coverage": 0.6718266253869969,
+          "meanDistance": 0.03327535545051392,
+          "p95Distance": 0.06530252483768477
+        },
+        {
+          "id": "reference:y-high",
+          "side": "reference",
+          "axis": "y",
+          "band": "high",
+          "samples": 1142,
+          "coverage": 0.691768826619965,
+          "meanDistance": 0.03249726402135932,
+          "p95Distance": 0.0788078620120241
+        },
+        {
+          "id": "reference:z-low",
+          "side": "reference",
+          "axis": "z",
+          "band": "low",
+          "samples": 138,
+          "coverage": 0.4057971014492754,
+          "meanDistance": 0.04823751467018961,
+          "p95Distance": 0.08103010585597283
+        },
+        {
+          "id": "reference:z-middle",
+          "side": "reference",
+          "axis": "z",
+          "band": "middle",
+          "samples": 906,
+          "coverage": 0.39072847682119205,
+          "meanDistance": 0.062131343457506566,
+          "p95Distance": 0.16981760449816746
+        },
+        {
+          "id": "reference:z-high",
+          "side": "reference",
+          "axis": "z",
+          "band": "high",
+          "samples": 3052,
+          "coverage": 0.6507208387942333,
+          "meanDistance": 0.03484139425842778,
+          "p95Distance": 0.06936767865949507
+        }
+      ],
+      "candidate": [
+        {
+          "id": "candidate:x-low",
+          "side": "candidate",
+          "axis": "x",
+          "band": "low",
+          "samples": 931,
+          "coverage": 0.5939849624060151,
+          "meanDistance": 0.04328063658417084,
+          "p95Distance": 0.11266689194216262
+        },
+        {
+          "id": "candidate:x-middle",
+          "side": "candidate",
+          "axis": "x",
+          "band": "middle",
+          "samples": 2303,
+          "coverage": 0.49066435084672166,
+          "meanDistance": 0.04870905423376522,
+          "p95Distance": 0.11089981800288383
+        },
+        {
+          "id": "candidate:x-high",
+          "side": "candidate",
+          "axis": "x",
+          "band": "high",
+          "samples": 862,
+          "coverage": 0.6206496519721578,
+          "meanDistance": 0.0481346358073082,
+          "p95Distance": 0.15983979139282892
+        },
+        {
+          "id": "candidate:y-low",
+          "side": "candidate",
+          "axis": "y",
+          "band": "low",
+          "samples": 847,
+          "coverage": 0.3105076741440378,
+          "meanDistance": 0.07228210080372754,
+          "p95Distance": 0.17568114669822793
+        },
+        {
+          "id": "candidate:y-middle",
+          "side": "candidate",
+          "axis": "y",
+          "band": "middle",
+          "samples": 1918,
+          "coverage": 0.6131386861313869,
+          "meanDistance": 0.04138419675686799,
+          "p95Distance": 0.10891661955242174
+        },
+        {
+          "id": "candidate:y-high",
+          "side": "candidate",
+          "axis": "y",
+          "band": "high",
+          "samples": 1331,
+          "coverage": 0.585274229902329,
+          "meanDistance": 0.04009425384349664,
+          "p95Distance": 0.09291416096365458
+        },
+        {
+          "id": "candidate:z-low",
+          "side": "candidate",
+          "axis": "z",
+          "band": "low",
+          "samples": 152,
+          "coverage": 0.1513157894736842,
+          "meanDistance": 0.09994022956098267,
+          "p95Distance": 0.20135359729662777
+        },
+        {
+          "id": "candidate:z-middle",
+          "side": "candidate",
+          "axis": "z",
+          "band": "middle",
+          "samples": 664,
+          "coverage": 0.34186746987951805,
+          "meanDistance": 0.07307949037221237,
+          "p95Distance": 0.1657510075439168
+        },
+        {
+          "id": "candidate:z-high",
+          "side": "candidate",
+          "axis": "z",
+          "band": "high",
+          "samples": 3280,
+          "coverage": 0.6,
+          "meanDistance": 0.03970962930661757,
+          "p95Distance": 0.091013476825892
+        }
+      ],
+      "worstBand": {
+        "id": "candidate:z-low",
+        "side": "candidate",
+        "axis": "z",
+        "band": "low",
+        "samples": 152,
+        "coverage": 0.1513157894736842,
+        "meanDistance": 0.09994022956098267,
+        "p95Distance": 0.20135359729662777
+      },
+      "referenceCells": [
+        {
+          "id": "reference:cell:x-low:y-low:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 90,
+          "coverage": 0.5555555555555556,
+          "meanDistance": 0.043649447944799226,
+          "p95Distance": 0.07845919484528485
+        },
+        {
+          "id": "reference:cell:x-low:y-low:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 59,
+          "coverage": 0,
+          "meanDistance": 0.12218987589602583,
+          "p95Distance": 0.19106180545204357
+        },
+        {
+          "id": "reference:cell:x-low:y-low:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 228,
+          "coverage": 0.36403508771929827,
+          "meanDistance": 0.05477898105293413,
+          "p95Distance": 0.11415811170571517
+        },
+        {
+          "id": "reference:cell:x-low:y-middle:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-low:y-middle:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 25,
+          "coverage": 0.04,
+          "meanDistance": 0.05558022548807411,
+          "p95Distance": 0.06910392313396056
+        },
+        {
+          "id": "reference:cell:x-low:y-middle:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 418,
+          "coverage": 0.7320574162679426,
+          "meanDistance": 0.030501679393704167,
+          "p95Distance": 0.06190503388654583
+        },
+        {
+          "id": "reference:cell:x-low:y-high:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-low:y-high:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 50,
+          "coverage": 0,
+          "meanDistance": 0.07421303428256193,
+          "p95Distance": 0.08973787756160144
+        },
+        {
+          "id": "reference:cell:x-low:y-high:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 180,
+          "coverage": 0.7833333333333333,
+          "meanDistance": 0.028651500408845818,
+          "p95Distance": 0.05406216076221745
+        },
+        {
+          "id": "reference:cell:x-middle:y-low:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 48,
+          "coverage": 0.125,
+          "meanDistance": 0.05684013978029656,
+          "p95Distance": 0.08103010585597283
+        },
+        {
+          "id": "reference:cell:x-middle:y-low:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 85,
+          "coverage": 0,
+          "meanDistance": 0.14038173800191334,
+          "p95Distance": 0.17235389111549834
+        },
+        {
+          "id": "reference:cell:x-middle:y-low:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 258,
+          "coverage": 0.34108527131782945,
+          "meanDistance": 0.04606164146277574,
+          "p95Distance": 0.06984853134509932
+        },
+        {
+          "id": "reference:cell:x-middle:y-middle:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-middle:y-middle:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 289,
+          "coverage": 0.5190311418685121,
+          "meanDistance": 0.04120339530700464,
+          "p95Distance": 0.08138642541659576
+        },
+        {
+          "id": "reference:cell:x-middle:y-middle:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 707,
+          "coverage": 0.7015558698727016,
+          "meanDistance": 0.031908043893183274,
+          "p95Distance": 0.0626829788805555
+        },
+        {
+          "id": "reference:cell:x-middle:y-high:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-middle:y-high:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 278,
+          "coverage": 0.7302158273381295,
+          "meanDistance": 0.02973380038294662,
+          "p95Distance": 0.08615455097867186
+        },
+        {
+          "id": "reference:cell:x-middle:y-high:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 408,
+          "coverage": 0.7303921568627451,
+          "meanDistance": 0.028155937310728223,
+          "p95Distance": 0.059735035411181754
+        },
+        {
+          "id": "reference:cell:x-high:y-low:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-high:y-low:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 37,
+          "coverage": 0,
+          "meanDistance": 0.16831350382145566,
+          "p95Distance": 0.19807825876209725
+        },
+        {
+          "id": "reference:cell:x-high:y-low:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 211,
+          "coverage": 0.36492890995260663,
+          "meanDistance": 0.053481786004014285,
+          "p95Distance": 0.11168137443715052
+        },
+        {
+          "id": "reference:cell:x-high:y-middle:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-high:y-middle:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 29,
+          "coverage": 0,
+          "meanDistance": 0.056079683998217736,
+          "p95Distance": 0.06530252483768477
+        },
+        {
+          "id": "reference:cell:x-high:y-middle:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 470,
+          "coverage": 0.7425531914893617,
+          "meanDistance": 0.03033053644079238,
+          "p95Distance": 0.05500270273572427
+        },
+        {
+          "id": "reference:cell:x-high:y-high:z-low",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "reference:cell:x-high:y-high:z-middle",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 54,
+          "coverage": 0,
+          "meanDistance": 0.07447224417809499,
+          "p95Distance": 0.09202028637826282
+        },
+        {
+          "id": "reference:cell:x-high:y-high:z-high",
+          "side": "reference",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 172,
+          "coverage": 0.8604651162790697,
+          "meanDistance": 0.025981590754758994,
+          "p95Distance": 0.04764631273774094
+        }
+      ],
+      "candidateCells": [
+        {
+          "id": "candidate:cell:x-low:y-low:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 56,
+          "coverage": 0.32142857142857145,
+          "meanDistance": 0.05996347254365669,
+          "p95Distance": 0.11266689194216262
+        },
+        {
+          "id": "candidate:cell:x-low:y-low:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 29,
+          "coverage": 0,
+          "meanDistance": 0.15368419187196092,
+          "p95Distance": 0.18277138271412774
+        },
+        {
+          "id": "candidate:cell:x-low:y-low:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 182,
+          "coverage": 0.4065934065934066,
+          "meanDistance": 0.057955976826884706,
+          "p95Distance": 0.11987585824110777
+        },
+        {
+          "id": "candidate:cell:x-low:y-middle:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-low:y-middle:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-low:y-middle:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 430,
+          "coverage": 0.7767441860465116,
+          "meanDistance": 0.028524076191891394,
+          "p95Distance": 0.05570066822848189
+        },
+        {
+          "id": "candidate:cell:x-low:y-high:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-low:y-high:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-low:y-high:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "low",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 234,
+          "coverage": 0.5427350427350427,
+          "meanDistance": 0.04130827388087635,
+          "p95Distance": 0.08563221517225128
+        },
+        {
+          "id": "candidate:cell:x-middle:y-low:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 66,
+          "coverage": 0.07575757575757576,
+          "meanDistance": 0.0981740000621437,
+          "p95Distance": 0.17615649760109522
+        },
+        {
+          "id": "candidate:cell:x-middle:y-low:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 2,
+          "coverage": 0,
+          "meanDistance": 0.1625766883390253,
+          "p95Distance": 0.1594023691341338
+        },
+        {
+          "id": "candidate:cell:x-middle:y-low:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 272,
+          "coverage": 0.3382352941176471,
+          "meanDistance": 0.0545696079352672,
+          "p95Distance": 0.09665610875079143
+        },
+        {
+          "id": "candidate:cell:x-middle:y-middle:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-middle:y-middle:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 308,
+          "coverage": 0.18506493506493507,
+          "meanDistance": 0.08550902038774888,
+          "p95Distance": 0.13414999510511985
+        },
+        {
+          "id": "candidate:cell:x-middle:y-middle:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 812,
+          "coverage": 0.5738916256157636,
+          "meanDistance": 0.03828462681360454,
+          "p95Distance": 0.07563689975961833
+        },
+        {
+          "id": "candidate:cell:x-middle:y-high:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-middle:y-high:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 294,
+          "coverage": 0.5782312925170068,
+          "meanDistance": 0.0409147426537555,
+          "p95Distance": 0.0981563256690169
+        },
+        {
+          "id": "candidate:cell:x-middle:y-high:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "middle",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 549,
+          "coverage": 0.6193078324225865,
+          "meanDistance": 0.03839080431495716,
+          "p95Distance": 0.09407043421678121
+        },
+        {
+          "id": "candidate:cell:x-high:y-low:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "low"
+          },
+          "samples": 30,
+          "coverage": 0,
+          "meanDistance": 0.1784492142241034,
+          "p95Distance": 0.21342179934126704
+        },
+        {
+          "id": "candidate:cell:x-high:y-low:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "middle"
+          },
+          "samples": 31,
+          "coverage": 0,
+          "meanDistance": 0.17345400150172097,
+          "p95Distance": 0.19030811339900944
+        },
+        {
+          "id": "candidate:cell:x-high:y-low:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "low",
+            "z": "high"
+          },
+          "samples": 179,
+          "coverage": 0.4134078212290503,
+          "meanDistance": 0.058558851168066625,
+          "p95Distance": 0.12193785193151778
+        },
+        {
+          "id": "candidate:cell:x-high:y-middle:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-high:y-middle:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "middle"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-high:y-middle:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "middle",
+            "z": "high"
+          },
+          "samples": 368,
+          "coverage": 0.8668478260869565,
+          "meanDistance": 0.026319677622515893,
+          "p95Distance": 0.050347042574730064
+        },
+        {
+          "id": "candidate:cell:x-high:y-high:z-low",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "low"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-high:y-high:z-middle",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "middle"
+          },
+          "samples": 0,
+          "coverage": 0,
+          "meanDistance": 0,
+          "p95Distance": 0
+        },
+        {
+          "id": "candidate:cell:x-high:y-high:z-high",
+          "side": "candidate",
+          "bands": {
+            "x": "high",
+            "y": "high",
+            "z": "high"
+          },
+          "samples": 254,
+          "coverage": 0.5590551181102362,
+          "meanDistance": 0.041707991608084236,
+          "p95Distance": 0.08578158996995945
+        }
+      ],
+      "worstCell": {
+        "id": "candidate:cell:x-high:y-low:z-low",
+        "side": "candidate",
+        "bands": {
+          "x": "high",
+          "y": "low",
+          "z": "low"
+        },
+        "samples": 30,
+        "coverage": 0,
+        "meanDistance": 0.1784492142241034,
+        "p95Distance": 0.21342179934126704
+      },
+      "candidateAlignedNormalizedBounds": {
+        "minimum": [
+          -0.49643296087466626,
+          -0.5,
+          -0.36883478608020187
+        ],
+        "maximum": [
+          0.49643296087466626,
+          0.5,
+          0.368834786080202
+        ],
+        "size": [
+          0.9928659217493325,
+          1,
+          0.7376695721604039
+        ]
+      }
+    },
+    "thresholds": {
+      "yawStepDegrees": 10,
+      "distanceThreshold": 0.04,
+      "maximumDimensionRelativeError": 0.05,
+      "maximumRmsChamfer": 0.05,
+      "maximumP95Distance": 0.1,
+      "minimumCoverage": 0.9
+    },
+    "blockers": [
+      "Symmetric RMS Chamfer 0.0560 exceeds 0.0500.",
+      "P95 surface distance exceeds 0.1000.",
+      "Minimum surface coverage 54.2% is below 90.0%."
+    ],
+    "limitation": "Uniform translation, scale, and bounded yaw are removed only for shape distance; raw axis dimensions remain an independent blocking gate. Surface sampling does not prove semantic part identity, hidden interfaces, or material fidelity."
+  }
+}

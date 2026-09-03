@@ -163,4 +163,31 @@ describe('same-input blind visual benchmark contract', () => {
     expect(report.blockers.join(' ')).toMatch(/img2threejs\/front: material region failed/);
     expect(report.claimAllowed).toBe(false);
   });
+
+  it('rejects malformed blind votes instead of counting them toward a winner claim', () => {
+    const input = benchmark(true);
+    input.blindRatings![4] = {
+      raterFingerprint: '50000000',
+      presentationOrder: 'morphloom-first',
+      preferred: 'unknown' as 'morphloom',
+    };
+    const report = auditSameInputVisualBenchmark(input);
+    expect(report.blind.eligible).toBe(false);
+    expect(report.claimAllowed).toBe(false);
+    expect(report.blockers.join(' ')).toMatch(/invalid rater, presentation order, or preference/);
+  });
+
+  it('bounds calibrated views and blind panel size before expensive scoring', () => {
+    const tooManyViews = benchmark(true);
+    tooManyViews.candidates[0].views = Array.from({ length: 17 }, (_, index) => view(`view-${index}`, 1, 'b'));
+    expect(() => auditSameInputVisualBenchmark(tooManyViews)).toThrow(/view count is unsafe/);
+
+    const tooManyRatings = benchmark(true);
+    tooManyRatings.blindRatings = Array.from({ length: 129 }, (_, index) => ({
+      raterFingerprint: index.toString(16).padStart(8, '0'),
+      presentationOrder: index % 2 === 0 ? 'morphloom-first' as const : 'img2threejs-first' as const,
+      preferred: 'morphloom' as const,
+    }));
+    expect(() => auditSameInputVisualBenchmark(tooManyRatings)).toThrow(/rating count is unsafe/);
+  });
 });

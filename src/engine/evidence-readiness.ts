@@ -194,6 +194,38 @@ function validDimension(observation: DimensionObservation, viewIds: Set<string>)
         && observation.toleranceMm <= MAX_TOLERANCE_MM));
 }
 
+function dimensionStrengthIssue(
+  observation: DimensionObservation,
+  view: ReferenceView | undefined,
+  audit: SourceAuditObservation | undefined,
+): string | undefined {
+  if (observation.status === 'estimated') return undefined;
+  if (!view) return 'missing source view';
+  const sourceType = view.sourceType ?? 'photo';
+  if (observation.status === 'datasheet') {
+    return sourceType === 'datasheet' ? undefined : `datasheet claim is backed by ${sourceType}`;
+  }
+  if (sourceType === 'scan' || sourceType === 'cad') return undefined;
+  if (sourceType === 'datasheet') return 'measured claim is backed by a datasheet';
+  if (sourceType === 'technical-drawing') {
+    if (audit?.provenance === 'synthetic-concept' || audit?.provenance === 'unknown'
+      || audit?.geometryConsistency === 'conflict' || audit?.dimensionLegibility === 'unreadable') {
+      return 'measured claim is backed by an untrusted or unreadable drawing';
+    }
+    const coversMeasurement = view.role === 'measurement'
+      || view.coveredRoles?.includes('measurement')
+      || inferReferenceCapabilities(view).includes('scale');
+    return coversMeasurement ? undefined : 'measured drawing has no scale evidence';
+  }
+  const photographedMeasurement = (view.role === 'measurement'
+    || view.coveredRoles?.includes('measurement')
+    || inferReferenceCapabilities(view).includes('scale'))
+    && audit?.provenance === 'client-measured'
+    && audit.dimensionLegibility === 'verified'
+    && audit.geometryConsistency !== 'conflict';
+  return photographedMeasurement ? undefined : 'measured claim is backed by an uncalibrated photograph';
+}
+
 function findDimensionConflicts(observations: DimensionObservation[]): EvidenceConflict[] {
   const byProperty = new Map<string, DimensionObservation[]>();
   for (const observation of observations) {
@@ -259,9 +291,6 @@ export function evaluateSemiProfessionalReadiness(
   const expectedComponentIds = expectedComponentInputs.slice(0, MAX_EXPECTED_COMPONENTS);
   const invalidDimensions = dimensions.filter((observation) => !validDimension(observation, viewIds));
   const validDimensions = dimensions.filter((observation) => validDimension(observation, viewIds));
-  const strongDimensionProperties = unique(validDimensions
-    .filter((observation) => observation.status !== 'estimated')
-    .map((observation) => observation.property.trim().toLowerCase()));
   const invalidCalibrations = calibrations.filter((calibration) => !viewIds.has(calibration.viewId)
     || !['perspective', 'orthographic'].includes(calibration.projection)
     || !Number.isFinite(calibration.anchorCount)
@@ -273,6 +302,20 @@ export function evaluateSemiProfessionalReadiness(
     || !['verified', 'partial', 'conflict'].includes(audit.geometryConsistency)
     || !['verified', 'partial', 'unreadable'].includes(audit.dimensionLegibility));
   const validSourceAudits = sourceAudits.filter((audit) => !invalidSourceAudits.includes(audit));
+  const viewById = new Map(scopedViews.map((view) => [view.id, view]));
+  const auditByViewId = new Map(validSourceAudits.map((audit) => [audit.viewId, audit]));
+  const invalidStrengthObservations = validDimensions.flatMap((observation) => {
+    const issue = dimensionStrengthIssue(
+      observation,
+      viewById.get(observation.sourceViewId),
+      auditByViewId.get(observation.sourceViewId),
+    );
+    return issue ? [{ observation, issue }] : [];
+  });
+  const invalidStrengthIds = new Set(invalidStrengthObservations.map(({ observation }) => observation.id));
+  const strongDimensionProperties = unique(validDimensions
+    .filter((observation) => observation.status !== 'estimated' && !invalidStrengthIds.has(observation.id))
+    .map((observation) => observation.property.trim().toLowerCase()));
   const sourceAuditIssues: string[] = [];
   const trustedArchitectureSources = validSourceAudits.filter((audit) =>
     ['official-record', 'professional-drawing', 'client-measured'].includes(audit.provenance)
@@ -352,6 +395,11 @@ export function evaluateSemiProfessionalReadiness(
   if (unresolvedCapabilities.length > 0) {
     warnings.push(`준실무 납품 속성 미해결: ${unresolvedCapabilities.join(', ')}`);
     nextActions.push(`사진·도면·치수·데이터시트·스캔 중 적합한 근거로 해결: ${unresolvedCapabilities.join(', ')}`);
+  }
+  if (invalidStrengthObservations.length > 0) {
+    warnings.push(`근거 강도 오표기 ${invalidStrengthObservations.length}개: ${invalidStrengthObservations
+      .map(({ observation, issue }) => `${observation.id}: ${issue}`).join('; ')}`);
+    nextActions.push('사진 추정치는 estimated로 낮추거나 실제 실측·데이터시트 원본에 연결');
   }
   if (strongDimensionProperties.length < requirements.minStrongDimensions) {
     warnings.push(`강한 치수 축 ${strongDimensionProperties.length}/${requirements.minStrongDimensions}`);

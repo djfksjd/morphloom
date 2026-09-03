@@ -7,11 +7,13 @@
  */
 import * as THREE from 'three';
 
-export type VisualHullViewAxis = 'front' | 'side' | 'top';
+export type VisualHullViewAxis = 'front' | 'side' | 'top' | 'azimuth';
 export type VisualHullWorldAxis = 'x' | 'y' | 'z';
 
 export interface VisualHullView {
   axis: VisualHullViewAxis;
+  /** Clockwise yaw around +Y. Required only for `axis: 'azimuth'`. */
+  azimuthDegrees?: number;
   confidence: number;
   /** Equal-width binary rows: `1` is foreground, `0` is background. */
   mask: string[];
@@ -38,9 +40,9 @@ export interface VisualHullResult {
   occupiedVoxelCount: number;
   totalVoxelCount: number;
   occupiedFraction: number;
-  viewAxes: VisualHullViewAxis[];
+  viewAxes: string[];
   viewAgreement: Array<{
-    axis: VisualHullViewAxis;
+    axis: string;
     confidence: number;
     silhouetteIoU: number;
     falseNegativeFraction: number;
@@ -55,17 +57,87 @@ export interface VisualHullResult {
 
 const MIN_MASK_DIMENSION = 4;
 const MAX_MASK_DIMENSION = 256;
-const MAX_RESOLUTION = 32;
-const MAX_TRIANGLES = 400_000;
+const MAX_RESOLUTION = 48;
+const MAX_TRIANGLES = 1_400_000;
 const MAX_VOXELS = MAX_RESOLUTION ** 3;
 
-const VIEW_AXES: Record<VisualHullViewAxis, readonly [number, boolean, number, boolean]> = {
-  front: [0, false, 1, true],
-  side: [2, false, 1, true],
-  top: [0, false, 2, false],
+interface ProjectionFrame {
+  label: string;
+  horizontal: [number, number, number];
+  vertical: [number, number, number];
+  direction: [number, number, number];
+  rowFlip: boolean;
+  minimumHorizontal: number;
+  maximumHorizontal: number;
+  minimumVertical: number;
+  maximumVertical: number;
+}
+
+const CANONICAL_FRAMES: Record<Exclude<VisualHullViewAxis, 'azimuth'>, Pick<ProjectionFrame, 'label' | 'horizontal' | 'vertical' | 'direction' | 'rowFlip'>> = {
+  front: { label: 'front', horizontal: [1, 0, 0], vertical: [0, 1, 0], direction: [0, 0, 1], rowFlip: true },
+  side: { label: 'side', horizontal: [0, 0, 1], vertical: [0, 1, 0], direction: [1, 0, 0], rowFlip: true },
+  top: { label: 'top', horizontal: [1, 0, 0], vertical: [0, 0, 1], direction: [0, 1, 0], rowFlip: false },
 };
-const VIEW_FREE_AXIS: Record<VisualHullViewAxis, number> = { front: 2, side: 0, top: 1 };
 const AXIS_NAMES: VisualHullWorldAxis[] = ['x', 'y', 'z'];
+
+function dot(left: readonly number[], right: readonly number[]): number {
+  return left[0]! * right[0]! + left[1]! * right[1]! + left[2]! * right[2]!;
+}
+
+function viewLabel(view: VisualHullView): string {
+  return view.axis === 'azimuth' ? `azimuth-${String(view.azimuthDegrees).padStart(3, '0')}` : view.axis;
+}
+
+function baseFrame(view: VisualHullView): Pick<ProjectionFrame, 'label' | 'horizontal' | 'vertical' | 'direction' | 'rowFlip'> {
+  if (view.axis !== 'azimuth') return CANONICAL_FRAMES[view.axis];
+  const radians = (view.azimuthDegrees ?? 0) * Math.PI / 180;
+  const cosine = Math.cos(radians);
+  const sine = Math.sin(radians);
+  return {
+    label: viewLabel(view),
+    horizontal: [cosine, 0, sine],
+    vertical: [0, 1, 0],
+    direction: [-sine, 0, cosine],
+    rowFlip: true,
+  };
+}
+
+function projectionFrame(
+  view: VisualHullView,
+  low: [number, number, number],
+  high: [number, number, number],
+): ProjectionFrame {
+  const frame = baseFrame(view);
+  let minimumHorizontal = Number.POSITIVE_INFINITY;
+  let maximumHorizontal = Number.NEGATIVE_INFINITY;
+  let minimumVertical = Number.POSITIVE_INFINITY;
+  let maximumVertical = Number.NEGATIVE_INFINITY;
+  for (const x of [low[0], high[0]]) for (const y of [low[1], high[1]]) for (const z of [low[2], high[2]]) {
+    const point = [x, y, z];
+    const horizontal = dot(point, frame.horizontal);
+    const vertical = dot(point, frame.vertical);
+    minimumHorizontal = Math.min(minimumHorizontal, horizontal);
+    maximumHorizontal = Math.max(maximumHorizontal, horizontal);
+    minimumVertical = Math.min(minimumVertical, vertical);
+    maximumVertical = Math.max(maximumVertical, vertical);
+  }
+  return { ...frame, minimumHorizontal, maximumHorizontal, minimumVertical, maximumVertical };
+}
+
+function project(point: readonly number[], frame: ProjectionFrame): [number, number] {
+  const horizontalRange = frame.maximumHorizontal - frame.minimumHorizontal;
+  const verticalRange = frame.maximumVertical - frame.minimumVertical;
+  const u = (dot(point, frame.horizontal) - frame.minimumHorizontal) / horizontalRange;
+  const vertical = (dot(point, frame.vertical) - frame.minimumVertical) / verticalRange;
+  return [u, frame.rowFlip ? 1 - vertical : vertical];
+}
+
+function directionIsParallel(left: readonly number[], right: readonly number[]): boolean {
+  const crossX = left[1]! * right[2]! - left[2]! * right[1]!;
+  const crossY = left[2]! * right[0]! - left[0]! * right[2]!;
+  const crossZ = left[0]! * right[1]! - left[1]! * right[0]!;
+  return Math.hypot(crossX, crossY, crossZ) < 1e-6;
+}
 
 function finiteTuple(value: unknown): value is [number, number, number] {
   return Array.isArray(value) && value.length === 3 && value.every((item) => typeof item === 'number' && Number.isFinite(item));
@@ -118,19 +190,38 @@ export function validateVisualHullDescriptor(descriptor: unknown): asserts descr
     const worstCase = (value.resolution as number) ** 3 * 12;
     if ((value.triangleBudget as number) < worstCase) errors.push(`triangleBudget must be at least ${worstCase} for this resolution.`);
   }
-  if (!Array.isArray(value.views) || value.views.length < 2 || value.views.length > 3) {
-    errors.push('views must contain two or three distinct orthographic views.');
+  if (!Array.isArray(value.views) || value.views.length < 2 || value.views.length > 8) {
+    errors.push('views must contain two to eight distinct orthographic views.');
   } else {
-    const axes = new Set<VisualHullViewAxis>();
+    const projections = new Set<string>();
+    const directions: [number, number, number][] = [];
     value.views.forEach((view, index) => {
-      if (!view || !Object.hasOwn(VIEW_AXES, view.axis)) errors.push(`views[${index}].axis is invalid.`);
-      else if (axes.has(view.axis)) errors.push('view axes must be distinct.');
-      else axes.add(view.axis);
+      if (!view || !['front', 'side', 'top', 'azimuth'].includes(view.axis)) errors.push(`views[${index}].axis is invalid.`);
+      else {
+        if (view.axis === 'azimuth') {
+          if (!Number.isInteger(view.azimuthDegrees) || (view.azimuthDegrees ?? -1) < 0 || (view.azimuthDegrees ?? 360) >= 360) {
+            errors.push(`views[${index}].azimuthDegrees must be an integer from 0 to 359.`);
+          }
+        } else if (view.azimuthDegrees !== undefined) {
+          errors.push(`views[${index}].azimuthDegrees is only valid for an azimuth view.`);
+        }
+        const label = viewLabel(view as VisualHullView);
+        if (projections.has(label)) errors.push('view projections must be distinct.');
+        else projections.add(label);
+        if ((view.axis !== 'azimuth' || Number.isInteger(view.azimuthDegrees))) {
+          directions.push(baseFrame(view as VisualHullView).direction);
+        }
+      }
       if (typeof view?.confidence !== 'number' || !Number.isFinite(view.confidence) || view.confidence <= 0 || view.confidence > 1) {
         errors.push(`views[${index}].confidence must be within (0, 1].`);
       }
       validateMask(view?.mask, `views[${index}].mask`, errors);
     });
+    if (directions.length >= 2 && !directions.some((direction, index) => (
+      directions.slice(index + 1).some((other) => !directionIsParallel(direction, other))
+    ))) {
+      errors.push('views must contain at least two non-collinear projection directions.');
+    }
   }
   if (value.hiddenRegions !== undefined && (!Array.isArray(value.hiddenRegions)
     || value.hiddenRegions.length > 256
@@ -174,19 +265,25 @@ function inspectProjectionAgreement(
   occupied: Uint8Array,
   resolution: number,
   views: VisualHullView[],
+  frames: ProjectionFrame[],
+  low: [number, number, number],
+  step: [number, number, number],
 ): Pick<VisualHullResult, 'viewAgreement' | 'minimumViewIoU' | 'confidenceWeightedIoU'> {
-  const viewAgreement = views.map((view) => {
+  const viewAgreement = views.map((view, viewIndex) => {
+    const frame = frames[viewIndex]!;
     const predicted = new Uint8Array(resolution * resolution);
     for (let z = 0; z < resolution; z += 1) {
       for (let y = 0; y < resolution; y += 1) {
         for (let x = 0; x < resolution; x += 1) {
           if (occupied[voxelKey(x, y, z, resolution)] === 0) continue;
-          const coordinates = [x, y, z];
-          const [columnAxis, columnFlip, rowAxis, rowFlip] = VIEW_AXES[view.axis];
-          let column = coordinates[columnAxis]!;
-          let row = coordinates[rowAxis]!;
-          if (columnFlip) column = resolution - column - 1;
-          if (rowFlip) row = resolution - row - 1;
+          const point = [
+            low[0] + (x + 0.5) * step[0],
+            low[1] + (y + 0.5) * step[1],
+            low[2] + (z + 0.5) * step[2],
+          ];
+          const [u, v] = project(point, frame);
+          const column = Math.min(resolution - 1, Math.max(0, Math.floor(u * resolution)));
+          const row = Math.min(resolution - 1, Math.max(0, Math.floor(v * resolution)));
           predicted[row * resolution + column] = 1;
         }
       }
@@ -206,7 +303,7 @@ function inspectProjectionAgreement(
       }
     }
     return {
-      axis: view.axis,
+      axis: frame.label,
       confidence: view.confidence,
       silhouetteIoU: intersection / Math.max(1, union),
       falseNegativeFraction: (targetCount - intersection) / Math.max(1, targetCount),
@@ -278,6 +375,7 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     (high[1] - low[1]) / resolution,
     (high[2] - low[2]) / resolution,
   ];
+  const frames = descriptor.views.map((view) => projectionFrame(view, low, high));
   const occupied = new Uint8Array(totalVoxelCount);
   const silhouetteToleranceVoxels = descriptor.silhouetteToleranceVoxels ?? 0;
   let occupiedVoxelCount = 0;
@@ -285,12 +383,8 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     for (let y = 0; y < resolution; y += 1) {
       for (let x = 0; x < resolution; x += 1) {
         const point = [low[0] + (x + 0.5) * step[0], low[1] + (y + 0.5) * step[1], low[2] + (z + 0.5) * step[2]];
-        const inside = descriptor.views.every((view) => {
-          const [columnAxis, columnFlip, rowAxis, rowFlip] = VIEW_AXES[view.axis];
-          let u = (point[columnAxis] - low[columnAxis]) / (high[columnAxis] - low[columnAxis]);
-          let v = (point[rowAxis] - low[rowAxis]) / (high[rowAxis] - low[rowAxis]);
-          if (columnFlip) u = 1 - u;
-          if (rowFlip) v = 1 - v;
+        const inside = descriptor.views.every((view, viewIndex) => {
+          const [u, v] = project(point, frames[viewIndex]!);
           return sampleMaskWithTolerance(view.mask, u, v, silhouetteToleranceVoxels, resolution);
         });
         if (!inside) continue;
@@ -300,13 +394,16 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     }
   }
   const surface = boundarySurface(occupied, low, step, resolution);
-  const projectionAgreement = inspectProjectionAgreement(occupied, resolution, descriptor.views);
-  const covered = new Set(descriptor.views.map((view) => VIEW_FREE_AXIS[view.axis]));
-  const unconstrainedAxes = AXIS_NAMES.filter((_, axis) => !covered.has(axis));
+  const projectionAgreement = inspectProjectionAgreement(occupied, resolution, descriptor.views, frames, low, step);
+  const worldAxes: [number, number, number][] = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  const unconstrainedAxes = AXIS_NAMES.filter((_, axis) => frames.every((frame) => (
+    Math.abs(dot(worldAxes[axis]!, frame.horizontal)) < 1e-6
+      && Math.abs(dot(worldAxes[axis]!, frame.vertical)) < 1e-6
+  )));
   const limitations = [
     'A visual hull is an upper bound and cannot reproduce a concavity that no supplied silhouette exposes.',
   ];
-  if (descriptor.views.length < 3) limitations.push(`Only ${descriptor.views.length} views were supplied; ${unconstrainedAxes.join(', ')} remains loose.`);
+  if (unconstrainedAxes.length > 0) limitations.push(`${unconstrainedAxes.join(', ')} remains unconstrained by every supplied view.`);
   if (silhouetteToleranceVoxels > 0) limitations.push(`Silhouettes were dilated by at most ${silhouetteToleranceVoxels} voxel(s); inspect per-view projection error before delivery.`);
   if (projectionAgreement.minimumViewIoU < 0.75) limitations.push(`Minimum source-view silhouette IoU is ${projectionAgreement.minimumViewIoU.toFixed(3)}; source calibration or masks require review.`);
   return {
@@ -317,7 +414,7 @@ export function carveVisualHull(descriptor: VisualHullDescriptor): VisualHullRes
     occupiedVoxelCount,
     totalVoxelCount,
     occupiedFraction: occupiedVoxelCount / totalVoxelCount,
-    viewAxes: descriptor.views.map((view) => view.axis),
+    viewAxes: frames.map((frame) => frame.label),
     ...projectionAgreement,
     unconstrainedAxes,
     status: occupiedVoxelCount === 0 ? 'empty' : 'carved',

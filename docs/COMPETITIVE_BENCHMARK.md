@@ -1,16 +1,20 @@
 # Morphloom vs. img2threejs
 
-검증 기준일: 2026-09-02
+검증 기준일: 2026-09-03
 img2threejs 기준 커밋: [`9fbd0ca`](https://github.com/img2threejs/img2threejs/tree/9fbd0ca5bbcc3b13bebe712745d6784d33db0b85)
-최신 쇼케이스 실행 커밋: [`db90e65`](https://github.com/img2threejs/img2threejs-showcase/tree/db90e65a8d46f2a8d1a4eb76bd370b74ecfc467a)
+최신 쇼케이스 확인 커밋: [`b14415b`](https://github.com/img2threejs/img2threejs-showcase/tree/b14415bda1a66eec8b96a7fe3952b96379d8919e)
 
 ## 결론
 
 Morphloom이 모든 시각 결과에서 img2threejs보다 낫다고 아직 주장할 수는 없습니다. img2threejs는 한 장의 참조 이미지를 절차적 Three.js 모델로 재구성하는 과정과 자동 검수의 폭이 매우 넓습니다. Python 3.12.13에서 공식 테스트를 직접 실행해 1,083개 중 1,045개 통과, 38개 건너뜀, 실패 0개를 확인했습니다.
 
+외부 ABO 파일럿은 3개 사례·18개 자산과 2개 다중 시점 크기 추론을 검증합니다. 의미 기반 램프는 정답 GLB 형상 게이트까지 통과했습니다. 더 복잡한 팬 사례는 101개 편집 부품과 결정론적 표준 GLB를 만들었지만, 4,096점 정답 감사에서 최대 치수 오차 4.15%, RMS Chamfer 0.0560, P95 0.1164, 커버리지 53.9%로 아직 차단됩니다. 네 시점 윤곽과 채널별 PBR 출처도 합격 전입니다. 독립 경쟁 출력과 분야별 3개 블라인드 사례가 없으므로 전 분야 우세 주장은 허용되지 않습니다.
+
+같은 ABO 팬 4시점을 격리한 img2threejs 작업 트리에 주고 Codex CLI `gpt-5.4-mini` low로 실제 생성도 실행했습니다. 상대 실행은 스펙 검사와 TypeScript 컴파일은 통과했지만, 선언 20부품 중 8개 피벗만 구현했고 GLB·렌더·DCC 재열기는 만들지 못했습니다. 또한 38개 그릴선을 한 묶음 ID로 표시하고, 요구 3날/부품 4날이 충돌하며, 디테일 최소값을 0으로 낮추고 사진 기반 PBR 필수를 해제했습니다. Morphloom은 이 사례에서 101개 명명 메시 GLB와 Blender 단일부품 수정 증명을 납품해 **납품 비교는 우세**하지만, 상대 렌더가 없어 블라인드 시각 우승은 판정하지 않습니다. 원자료 해시와 결과는 [`../benchmarks/img2threejs-abo-fan-cli-latest.json`](../benchmarks/img2threejs-abo-fan-cli-latest.json)에 고정했습니다.
+
 Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가능한 부재, GLB/DCC 납품 쪽이 더 넓습니다. 이번 고도화로 img2threejs의 강점이었던 디테일 우선 계약과 단계별 시각 검수에 더해, 실제 시각 외피·내부 밴드·재질 비교 알고리즘을 Apache-2.0 조건에 맞춰 Morphloom의 AssemblyIR 납품 흐름에 결합했습니다.
 
-추가로 Morphloom은 분야마다 다른 납품 계약을 실행합니다. 건축은 도면 점유영역 대비 실제 메시 상부 재투영 IoU·과잉/누락·보호 공백 침범, 폐쇄 셸, 80% 이상 미세표면을 함께 검사합니다. 애니메이션은 49본·30개 손가락 본의 실제 가중 정점과 좌우 어깨·팔꿈치·골반·무릎·발목 10관절별 실제 정점 변형 및 98% 이상 해부학적 영향 구역 일치, 22클립/185트랙의 이름·바인딩·실제 움직임·루프 이음·in-place 루트모션, 5개 얼굴 모프별 비영 변형 정점 98% 이상 머리-목 구역·90% 이상 표정 의미 높이 구역·좌우 눈깜박임 90% 이상 올바른 눈 영역 일치와 GLB 메타데이터 보존, 게임은 같은 10관절 변형/위치·얼굴 모프 위치/의미와 10만 tris 예산·실제 스킨 LOD1·유한 치수/본 연결/바디 교차 충돌체·유한 UV·UV 삼각형 면적·단위 노멀, 3D 프린팅은 mm·폐쇄 체적·0.8 mm 이상 선언 형상·전역 `2V/A`와 연결 외피별 제한 국부 벽 두께 레이·45° 오버행 실측을 각각 검사합니다. 현재 8개 잠금 사례의 기술·판정·납품·거절 안전성은 모두 100%입니다.
+추가로 Morphloom은 분야마다 다른 납품 계약을 실행합니다. 건축은 도면 점유영역 대비 실제 메시 상부 재투영 IoU·과잉/누락·보호 공백 침범, 폐쇄 셸, 80% 이상 미세표면을 함께 검사합니다. 애니메이션은 49본·30개 손가락 본의 실제 가중 정점과 좌우 어깨·팔꿈치·골반·무릎·발목 10관절별 실제 정점 변형 및 98% 이상 해부학적 영향 구역 일치, 22클립/185트랙의 이름·바인딩·실제 움직임·루프 이음·in-place 루트모션, 5개 얼굴 모프별 비영 변형 정점 98% 이상 머리-목 구역·90% 이상 표정 의미 높이 구역·좌우 눈깜박임 90% 이상 올바른 눈 영역 일치와 GLB 메타데이터 보존, 게임은 같은 10관절 변형/위치·얼굴 모프 위치/의미와 10만 tris 예산·실제 스킨 LOD1·유한 치수/본 연결/바디 교차 충돌체·유한 UV·UV 삼각형 면적·단위 노멀, 3D 프린팅은 mm·폐쇄 체적·0.8 mm 이상 선언 형상·전역 `2V/A`와 연결 외피별 제한 국부 벽 두께 레이·45° 오버행 실측, 표면은 납품 꼭짓점의 요철 RMS·최고–최저 높이·굵은/미세 입자 및 normal/roughness 응답을 각각 검사합니다. 현재 9개 잠금 기술 계약의 기술·판정·납품·거절 안전성은 모두 100%입니다. 이는 독립 블라인드 비교 우세를 뜻하지 않습니다.
 
 최신 쇼케이스 전체도 직접 빌드했습니다. Lee Sin은 42본/10클립, Boxing Man은 41본/19클립, Monster는 41본/27클립을 표시합니다. Morphloom은 22개 의미 기반 클립으로 앞의 두 사례보다 많지만 Monster의 원시 클립 수 27개에는 못 미칩니다. 대신 모든 클립에 동작 범주·loop 여부·root-motion 정책을 선언하고 185개 트랙의 실제 변형, 반복 이음, in-place 이동, 49본/30손가락 본, 스킨 LOD, 충돌 정보와 GLB 재열기 후 메타데이터 지문까지 하나의 차단 게이트로 검증합니다. 따라서 **최대 클립 개수 우위가 아니라 납품 계약의 깊이 우위**로 표현합니다.
 
@@ -18,9 +22,9 @@ Morphloom은 실측 건축물, 제품 분해 구조, 전기 연결, 편집 가�
 
 공개 Talon Doppler Ruby 정면 사진 한 장을 양쪽에 동일하게 사용했습니다. img2threejs는 공개 데모의 고정 캡처 모드로 다시 렌더했고, Morphloom은 사진의 알파 외곽과 내부 개구를 측정해 `TALON_REFERENCE_BENCHMARK_IR`을 생성한 뒤 로컬 뷰어에서 정면·ISO 렌더와 GLB 재열기를 실행했습니다.
 
-UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. 사진의 넓은 조명 변화는 메모리 상한이 있는 선형 색공간 lighting field로 제한적으로 제거하고, 원본의 미세·중간 표면 신호는 normal·roughness 입력으로 유지했습니다. Morphloom은 종합 0.911 대 0.785, 실루엣 0.937 대 0.745, 내부 디테일 0.929 대 0.868, 재질·질감 0.851 대 0.805, 표면 스케일 0.873 대 0.777, 불규칙성 0.849 대 0.771, 공간 질감 0.602 대 0.470으로 앞섰습니다. 색상 0.870 대 0.863과 미세구조 0.940 대 0.931도 Morphloom이 앞섰으며, 비교 렌더는 새 공간 질감 게이트에서 탈락했습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 보정 시점과 5명 블라인드 패널을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
+UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 img2threejs 캡처를 512×256 전경 포락으로 정렬한 정면 진단도 실행했습니다. 사진의 넓은 조명 변화는 메모리 상한이 있는 선형 색공간 lighting field로 제한적으로 제거하고, 원본의 미세·중간 표면 신호는 normal·roughness 입력으로 유지했습니다. Morphloom은 종합 0.911 대 0.785, 실루엣 0.937 대 0.745, 내부 디테일 0.929 대 0.868, 재질·질감 0.851 대 0.805, 표면 스케일 0.873 대 0.777, 불규칙성 0.849 대 0.771, 공간 질감 0.602 대 0.470으로 앞섰습니다. 색상 0.870 대 0.863과 미세구조 0.940 대 0.931도 Morphloom이 앞섰으며, 비교 렌더는 새 공간 질감 게이트에서 탈락했습니다. 이는 한 뷰 자동 진단이므로 필요한 2개 독립 참조 시점을 충족하지 않아 `unproven`, `claimAllowed: false`입니다. 결과와 캡처 해시는 [`../benchmarks/talon-visual-broadside-latest.json`](../benchmarks/talon-visual-broadside-latest.json)에 고정했습니다.
 
-뷰어 연출 편향도 분리했습니다. 두 실행 중인 브라우저 장면에서 실제 GLB를 추출한 뒤 Blender 5.2.1 LTS의 동일한 1024×512 Eevee 스튜디오, 직교 카메라, 가로·세로 최대 포락 2.000 정규화로 정면·후면·등각을 다시 렌더했습니다. 감사기는 양쪽의 Blender 버전·카메라·조명·렌더 설정을 바이트 수준 계약으로 비교하고, 각 후보가 세 시점 모두 같은 GLB를 사용했는지와 PNG/GLB 실제 SHA-256을 다시 계산합니다. 3/3 시점이 통과했으며 증거 해시는 [`../benchmarks/talon-neutral-render-latest.json`](../benchmarks/talon-neutral-render-latest.json)에 있습니다.
+뷰어 연출 편향도 분리했습니다. 현재 프로토콜 v2는 실제 GLB를 Blender 5.2.1 LTS에서 같은 1024×1024 Eevee 스튜디오·직교 카메라·가로/세로 최대 포락 2.000 정규화로 정면·후면·등각 렌더하고, 알파 실루엣의 최소 프레임 여백 8px까지 검사합니다. 감사기는 양쪽의 Blender 버전·카메라·조명·렌더 설정을 바이트 수준 계약으로 비교하고, 각 후보가 세 시점 모두 같은 GLB를 사용했는지와 PNG/GLB 실제 SHA-256을 다시 계산합니다. ABO 선풍기 3/3 시점의 최신 증거는 [`../benchmarks/abo-fan-neutral-comparison-latest.json`](../benchmarks/abo-fan-neutral-comparison-latest.json)이며, 이전 Talon v1 영수증은 역사 자료일 뿐 현재 프로토콜 통과 증거로 재사용하지 않습니다.
 
 중립 정면을 같은 원본과 비교하면 Morphloom은 종합 0.924 대 0.877, 내부 디테일 0.906 대 0.783, 재질 0.885 대 0.748, 표면 스케일 0.903 대 0.847, 공간 질감 0.729 대 0.653으로 앞섰습니다. 비교 모델은 실루엣만 0.968 대 0.948로 앞섰습니다. 후면에서는 비교 모델의 정면 플레이트가 관측되지 않은 칼날까지 번졌고, Morphloom은 후면을 별도 authored 재질로 유지했습니다. 정면 진단은 여전히 한 장 기준이라 [`../benchmarks/talon-neutral-front-latest.json`](../benchmarks/talon-neutral-front-latest.json)의 상태를 `unproven`으로 유지합니다.
 
@@ -36,9 +40,9 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 폐쇄 메시 | 공개 화면에서 수치 미표시 | 25/25, 경계 0, 비매니폴드 0 |
 | GLB 재열기 | 공개 화면에서 수치 미표시 | PASS, 포락 오차 0.000 mm, 명명 노드 100% |
 | 동일 Blender 3시점 중립 렌더 | 감사용 장면 GLB 3/3 렌더, 규격 검사는 차단 | GLB 규격·독립 파서 PASS, 중립 렌더 3/3 |
-| OBJ/STL/PLY 실제 정적 메시 납품 | 고정 커밋 감사에서 확인되지 않음 | 0.28.0 ModernCat 자산팩을 Aside로 저장하고 Blender 5.2.1에서 3포맷 81,768 tris·포락 오차 0.001mm 미만 통과 |
-| USDZ 규격 검사 | 고정 커밋 감사에서 확인되지 않음 | 0.28.0 ModernCat USDZ를 Aside로 저장하고 Apple usdchecker 통과 |
-| 준실무 납품성 | Three.js 전시 강점 | IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG 구현; GLB Blender 5분야, Aside 브라우저 7/7, 정적 팩·USDZ 통과. Unity·Unreal 앱 임포트는 미증명 |
+| OBJ/STL/PLY 실제 정적 메시 납품 | 고정 커밋 감사에서 확인되지 않음 | 0.31.0 브라우저 자산팩 111,936면을 Blender 5.2.1로 재열기 통과; 포맷 간 포락 오차 0.000031mm |
+| USDZ 규격 검사 | 고정 커밋 감사에서 확인되지 않음 | 0.31.0 브라우저 USDZ를 Apple `usdchecker`로 통과 |
+| 준실무 납품성 | Three.js 전시 강점 | IR/GLB/OBJ/STL/PLY/USDZ/Figma SVG 구현; 0.31.0 GLB Blender·Godot 5분야와 브라우저 7/7, Blender 부분 편집 5/5, PrusaSlicer와 정적 포맷 검증 통과. Unity·Unreal 자체 임포트는 미완료 |
 
 정면 색상 투영은 양쪽 모두 지원합니다. 검증한 img2threejs Talon 재질은 base-color plate와 상수 roughness를 사용하고, Morphloom은 같은 입력에서 파생한 normal·roughness를 GLB에 포함합니다. 따라서 이 사례에서 **표면 반응 기능과 편집·토폴로지·납품 범위는 Morphloom 쪽이 더 넓음**을 확인했습니다. 이것은 블라인드 지각 품질 우승 판정이 아닙니다. 단일 사진에서 안 보이는 깊이와 후면도 실측했다고 판정하지 않습니다. 상세 수치는 [`../benchmarks/talon-same-reference-latest.json`](../benchmarks/talon-same-reference-latest.json)에 고정했습니다.
 
@@ -49,6 +53,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 - 생성 전에 부품·재질·미세 표면·토폴로지를 `FidelityContract`로 잠급니다.
 - 사진 기준 카메라는 4개 이상의 안정적인 앵커와 최대 4 px 재투영 오차를 가져야 합니다.
 - `blockout → structure → form → material → surface → lighting → interaction → optimization` 순서를 건너뛸 수 없습니다.
+- 표면 품질은 재질 이름이나 메타데이터만으로 통과하지 않습니다. 납품 메시의 꼭짓점에서 요철 RMS와 최고–최저 높이를 재실측하고, 굵은·미세 입자 구조 및 normal/roughness 응답을 함께 검증합니다.
 - 전체 평균이 높아도 중요한 특징 하나가 임계값 아래면 통과하지 못합니다.
 - 각 단계는 참조 시점, 직교, 클레이, 사광, 와이어, X-ray 중 필요한 검수 화면을 증거로 요구합니다.
 - 동일 크기의 참조/렌더 프레임에서 실루엣 IoU, 내부 색·재질 차이, 특징 영역별 점수와 양쪽 이미지 지문을 직접 계산합니다.
@@ -59,12 +64,12 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 - 로컬 참조 플레이트를 부품 별 UV가 아닌 조립 XY 좌표계로 투영해 편집 부품 사이의 무늬가 끊기지 않습니다.
 - 투명 원본의 검정 RGB가 필터 경계에 번지지 않도록 가장 가까운 유효 표면색을 제한된 픽셀 예산 안에서 확장합니다. 투영은 signed normal로 판정한 source-facing 삼각형에만 적용하며, 접선·후면은 authored UV와 `unobserved-side` 재질을 유지해 측면 오염·거울 복제·바코드 경계를 막습니다.
 - 원본 밝기의 국부 기울기와 변동에서 tangent-space normal·roughness map을 생성해 요철·마모가 조명에 반응하게 합니다.
-- `https:` 참조는 거부하고 로컬 경로와 `blob:`만 허용하며, 투영 로드 실패 시 100점과 GLB 납품을 모두 차단합니다.
+- 원격 참조는 지문이 있는 HTTPS만 허용하고 10초·24MiB 상한, 이미지 매직바이트, SHA-256 일치 검사를 모두 통과한 바이트만 로컬 객체 URL로 디코딩합니다. 로드 실패·지문 불일치·형식 위장은 100점과 GLB 납품을 차단합니다.
 - 수정 결과가 나빠지면 이전 최선 결과로 되돌리고, 같은 결함이 두 번 남으면 IR이 아니라 명세를 다시 고칩니다.
 - 개선이 정체되거나 반복·토큰 상한에 도달하면 무한 생성하지 않고 추가 근거를 요청합니다.
 - 계약과 검수 결과를 AssemblyIR/Three.js 장면에 보존해 이후 납품 검사가 잊지 않게 했습니다.
 - 건축 도면은 직사각형 조합뿐 아니라 오목한 단일 다각형으로 소스 점유 구역을 잠글 수 있습니다. 자기교차 외곽선은 래스터 처리 전에 거부하고, 보호 공백과 실제 컴파일 메시를 위에서 재투영합니다. U자 중정 메움, 중앙 돌출부 반전, 누락/과잉 면적은 단순 포락이나 `verified` 메타데이터로 통과할 수 없으며 감사 지문도 GLB 재열기에서 확인합니다.
-- 브라우저 GLB 검증은 동일 입력을 하나의 작업으로 합치고 서로 다른 무거운 작업을 직렬화합니다. 대기 작업은 4개로 제한하며 오래된 결과가 현재 선택을 덮지 못합니다. compiler 0.28.0을 Aside CLI로 실행해 7개 분야 자산을 재검증했고 GLB·질감·재질·모프 페이로드와 명명 노드가 모두 일치했으며 콘솔 오류·경고는 0개였습니다. 브라우저/Node 색 변환, 유니코드 정렬, 전선 튜브 프레임도 결정적으로 고정합니다.
+- 브라우저 GLB 검증은 동일 입력을 하나의 작업으로 합치고 서로 다른 무거운 작업을 직렬화합니다. 대기 작업은 4개로 제한하며 오래된 결과가 현재 선택을 덮지 못합니다. compiler 0.31.0을 실제 브라우저 자동화로 실행해 7개 자산을 재검증했고 GLB·질감·재질·모프 페이로드와 명명 노드가 모두 일치했으며 콘솔 오류·경고는 0개였습니다. Aside 데몬이 꺼진 환경에서는 명시한 2차 수단으로 Playwright를 사용했습니다.
 
 ## 정직한 비교표
 
@@ -82,9 +87,12 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | GLB 규격·교차 파서·브라우저 재열기 검사 | Three.js factory 중심 | Khronos 공식 Validator + glTF Transform + 실제 바이트 Three.js 재열기 + 모프 변형 페이로드 모멘트 |
 | 동일 입력 GLB 바이트 재현성 | 고정 커밋 감사에서 확인되지 않음 | 5분야 각각 2회 독립 생성 SHA-256 일치 |
 | Blender 앱 자체 임포트·재내보내기·재임포트 | 공개 자동 증명 없음 | Blender 5.2.1 LTS에서 현재 compiler revision과 결합된 건축·산업디자인·전자 조립·애니메이션/게임·3D 프린팅 표면 5/5 통과 |
+| Blender 부품 부분 편집 | 공개 자동 증명 없음 | 0.31.0에서 창문·칼 장식·USB-C·머리카락 이동과 국부 아스팔트 요철 편집 5/5; 비대상 형상·UV·PBR·계층·리그·애니메이션 및 최종 GLB 규격 검사 통과 |
 | DCC 재출력 바이트 정화·재검증 | 고정 커밋 감사에서 확인되지 않음 | Blender가 재생성한 비정상 탄젠트를 기록·복구하고 최종 바이트를 Khronos 오류/경고/정보 0 + glTF Transform 재파싱으로 차단 |
-| 정적 메시·Apple AR 실제 납품 검사 | 고정 커밋 감사에서 확인되지 않음 | 현재 0.28.0 건축 자산팩의 OBJ/STL/PLY Blender 재열기와 USDZ usdchecker 통과; 해시는 revision-bound 보고서에 고정 |
+| 정적 메시·Apple AR 실제 납품 검사 | 고정 커밋 감사에서 확인되지 않음 | 0.31.0 실제 브라우저 자산팩의 OBJ/STL/PLY를 Blender 5.2.1로 재열고 USDZ를 Apple `usdchecker`로 검증; 현재 브라우저 입력 지문과 결합 |
 | Unity 앱 자체 임포트 | 공개 자동 증명 없음 | glTFast 6.20 고정 5분야 프리팹 임포트 하네스 구현·Unity 6000.5 API 컴파일 통과; 최신 실제 실행은 로컬 라이선싱 초기화 실패로 임포트 전 차단 |
+| Godot 앱 자체 임포트 | 고정 커밋 감사에서 확인되지 않음 | 공식 Godot 4.7.2에서 5분야 `PackedScene` 메시·재질·질감·스킨·본·모프·애니메이션·포락 통과; 아스팔트 165,888개 꼭짓점 요철 RMS/P–V 원본 대비 최대 오차 0.000095 mm; 앱·입력 해시 결합 |
+| PrusaSlicer 실제 재열기·도구경로 | 고정 커밋 감사에서 확인되지 않음 | 0.31.0에서 PrusaSlicer 2.9.6 실제 재열기 통과; 111,936면 단일 매니폴드·양의 체적·43층/190,158회 압출 이동 G-code |
 | Unreal 앱 자체 임포트 | 공개 자동 증명 없음 | 아직 별도 검수—실행하지 않은 앱을 검증 완료로 표시하지 않음 |
 | 실제 스켈레톤·스킨·애니메이션 GLB | 최신 쇼케이스 41–42 bones, 10–27 clips | 지원—49 bones(손가락 30), 실제 손가락 가중 정점·상하체 10관절별 웨이트/변형/공간 위치, 22 clips/185 tracks의 이름·바인딩·동작·루프·루트모션·메타데이터 재열기 |
 | 게임 LOD·충돌·예산·UV·노멀 게이트 | 고정 커밋 감사에서 확인되지 않음 | 지원—실제 스킨 LOD0/1의 중립/관절 포즈 3축 실루엣·포락·가중치 보존, 16부위 충돌 캡슐/구의 양끝점·중심·높이·회전·본·바디 교차·높이 커버, GLB 충돌 지문, 유한/비퇴화 UV·단위 노멀 검사 |
@@ -94,7 +102,7 @@ UI·바닥·실측 보조선을 제거한 Morphloom 투명 WebGL PNG와 실제 i
 | 회전 부품 자체축 치수 | 고정 커밋 감사에서 확인되지 않음 | 지원—45° 회전 부재의 월드 AABB 약 77.78 mm와 실제 로컬 길이 100 mm를 구분하고, 실제 길이 100→90 mm 회귀를 차단 |
 | 회전 부품 내부 피치 | 고정 커밋 감사에서 확인되지 않음 | 지원—회전된 카메라/PCB 플레이트의 홀·핀·렌즈 중심 피치를 부품 자체축으로 투영해 25.0→24.5 mm 회귀 차단 |
 | 실제 삼각형 자기 교차 | 고정 커밋에 ray-parity 검사 존재 | 공간 격자 broadphase + 정확 삼각형 교차 + 검사예산 초과 차단; 제품·전선·포즈·LOD·프린트 계약에 연결 |
-| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 263개—개수보다 납품 계약 회귀, 선형광·해상도 정규화 표면 복원, 브라우저/Node 결정성, 실제 질감 픽셀·PBR 광학 재질·GLB/USDZ 왕복, 중립 렌더와 증거 해시 위조 차단에 집중 |
+| 자동 테스트 폭 | 코어 1,083개 실행 확인 | 387개—개수보다 납품 계약 회귀, 잠금 생성계획 무결성, 증거 기반 카메라 간격, 구역별 정답 메시 오차, 실제 PBR 바이트 지문, 중립 렌더 프레임 잘림, 전자 조립·리깅·3D 프린팅·GLB/USDZ 왕복 검증에 집중 |
 | 동일 Talon 이미지 정면 색상 | 원본 plate 투영 | 원본 plate 투영 |
 | 동일 Talon 이미지 표면 PBR 반응 | 상수 roughness, normal map 없음 | 우세—사진 파생 normal+roughness |
 | 동일 Talon 이미지 편집·납품 결과 | 제한적 공개 지표 | 우세—25개 부품, 실제 wedge 날, 폐쇄 토폴로지, GLB 재열기 |
@@ -109,10 +117,14 @@ npm run benchmark:neutral-audit -- --morphloom morphloom-front.json,morphloom-re
 npm run benchmark:fixtures -- /tmp/morphloom-fixtures
 npm run benchmark:blender-cross-domain -- /tmp/morphloom-fixtures
 npm run benchmark:unity-cross-domain -- /tmp/morphloom-fixtures
-npm run benchmark:static-delivery -- --asset-id moderncat-concept --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
+npm run benchmark:godot-cross-domain -- /tmp/morphloom-fixtures
+npm run benchmark:prusaslicer -- /tmp/morphloom-fixtures
+npm run benchmark:static-delivery -- --asset-id asphalt-surface --asset-pack asset.zip --obj-file result.obj --obj-report obj.json --stl-file result.stl --stl-report stl.json --ply-file result.ply --ply-report ply.json --usdz-file result.usdz --output benchmarks/static-delivery-latest.json
 ```
 
-결과는 `benchmarks/competitive-latest.json`, `benchmarks/blender-cross-domain-latest.json`, `benchmarks/unity-cross-domain-latest.json`, `benchmarks/static-delivery-latest.json`에 저장됩니다. 현재 5분야 Blender 증명과 revision-bound 정적 포맷·USDZ 증명은 실제 상호운용성과 납품 바이트 무결성을 확인하지만 동일 입력의 시각적 우승을 뜻하지 않습니다. Unity 보고서는 라이선스나 에디터 실패를 최대 두 번의 제한된 복구 후 구조화해 기록하며 임포트하지 못한 실행을 통과로 바꾸지 않습니다. 실제 시각 품질의 우열은 동일 입력 지문, 동일 목표, 동일 보정 카메라, 실제 WebGL 캡처, 중요 특징 영역, 최소 5명의 중복 없는 균형 블라인드 평가가 있어야 확정됩니다. 이 증거가 없으면 자동 지표가 앞서도 보고서는 `claimAllowed: false`를 유지합니다.
+중립 렌더는 v2부터 1024×1024 고정 프레임과 알파 경계 검사를 사용합니다. 어느 방향이든 모델과 화면 사이 여백이 8px 미만이면 잘린 비교로 판단해 실패합니다.
+
+결과는 `benchmarks/competitive-latest.json`, `benchmarks/blender-cross-domain-latest.json`, `benchmarks/blender-cross-domain-edit-latest.json`, `benchmarks/godot-cross-domain-latest.json`, `benchmarks/prusaslicer-latest.json`, `benchmarks/unity-cross-domain-latest.json`, `benchmarks/static-delivery-latest.json`에 저장됩니다. 현재 0.31.0의 5분야 Blender·부분 편집·Godot·브라우저 증명은 실제 상호운용성과 납품 바이트 무결성을 확인하지만 동일 입력의 시각적 우승을 뜻하지 않습니다. 오래된 compiler revision의 슬라이서·정적 포맷 영수증은 자동으로 제외합니다. 실제 시각 품질의 우열은 동일 입력 지문, 동일 목표, 동일 보정 카메라, 실제 WebGL 캡처, 중요 특징 영역, 최소 5명의 중복 없는 균형 블라인드 평가가 있어야 확정됩니다. 이 증거가 없으면 자동 지표가 앞서도 보고서는 `claimAllowed: false`를 유지합니다.
 
 ## 참고한 img2threejs 근거
 

@@ -1,0 +1,58 @@
+{
+  "schema": "morphloom.neutral-render-set-audit/0.1",
+  "status": "pass",
+  "views": [
+    "front",
+    "rear",
+    "iso"
+  ],
+  "pairs": [
+    {
+      "schema": "morphloom.neutral-render-pair-audit/0.1",
+      "status": "pass",
+      "viewId": "front",
+      "sourceSha256": {
+        "morphloom": "7881815cc6e28dd9c027931143e33302dfa8d93d4a7e6fe397b18b941bb60b84",
+        "img2threejs": "e3394f61374315e34b10658ac647e55279c589a2791dec032558a6b7b13a3619"
+      },
+      "renderSha256": {
+        "morphloom": "abde71761f9e8eb578ca320a0c464050adc68e7135217084ca9d0a3d00d9bb60",
+        "img2threejs": "bdfd1badd664671ca738e794765d0879fff629b0a5c4c85c8afe2a4dc1dd6578"
+      },
+      "blockers": [],
+      "limitation": "This audit proves identical neutral rendering conditions, not which result is perceptually better."
+    },
+    {
+      "schema": "morphloom.neutral-render-pair-audit/0.1",
+      "status": "pass",
+      "viewId": "rear",
+      "sourceSha256": {
+        "morphloom": "7881815cc6e28dd9c027931143e33302dfa8d93d4a7e6fe397b18b941bb60b84",
+        "img2threejs": "e3394f61374315e34b10658ac647e55279c589a2791dec032558a6b7b13a3619"
+      },
+      "renderSha256": {
+        "morphloom": "51bc10c7751a8a1903ef4698768700b6ee91db3d6da4af073bfe02eccc887018",
+        "img2threejs": "a0aec4cd70d87fc2c0cb4cd8a989aaef7179d311c41b07c24a4a43fe400d3f22"
+      },
+      "blockers": [],
+      "limitation": "This audit proves identical neutral rendering conditions, not which result is perceptually better."
+    },
+    {
+      "schema": "morphloom.neutral-render-pair-audit/0.1",
+      "status": "pass",
+      "viewId": "iso",
+      "sourceSha256": {
+        "morphloom": "7881815cc6e28dd9c027931143e33302dfa8d93d4a7e6fe397b18b941bb60b84",
+        "img2threejs": "e3394f61374315e34b10658ac647e55279c589a2791dec032558a6b7b13a3619"
+      },
+      "renderSha256": {
+        "morphloom": "844d04c2495b2262125bd2a9a8c3d635e32841a463fa70299cc5eccb356f07a7",
+        "img2threejs": "2d10824661f569e9848e15e355d436d067da982c976614c7e4fb5cd2d6f97497"
+      },
+      "blockers": [],
+      "limitation": "This audit proves identical neutral rendering conditions, not which result is perceptually better."
+    }
+  ],
+  "blockers": [],
+  "limitation": "This audit proves same-GLB multi-view rendering under identical conditions. Perceptual superiority still requires matched references and blind ratings."
+}

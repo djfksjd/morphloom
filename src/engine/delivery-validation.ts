@@ -3,8 +3,8 @@ import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.28.0';
-export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.5.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.31.0';
+export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.6.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
 
@@ -150,6 +150,18 @@ class StableHasher {
       return;
     }
     this.number(value.length);
+    if (ArrayBuffer.isView(value)) {
+      // Geometry, skinning and animation payloads are already canonical typed
+      // arrays. Hash their delivered bytes directly instead of formatting every
+      // scalar through toPrecision(), which made large assemblies spend most
+      // of their audit time allocating temporary decimal strings. The concrete
+      // typed-array class is part of the payload identity so equal bytes with a
+      // different component type cannot collide.
+      const view = value as unknown as ArrayBufferView;
+      this.text(value.constructor.name);
+      this.bytes(new Uint8Array(view.buffer, view.byteOffset, view.byteLength));
+      return;
+    }
     for (let index = 0; index < value.length; index += 1) this.number(value[index]);
   }
 

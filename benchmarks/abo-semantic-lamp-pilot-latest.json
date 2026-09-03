@@ -1,0 +1,1078 @@
+{
+  "schema": "morphloom.abo-semantic-lamp-pilot/0.2",
+  "pass": false,
+  "productionReady": false,
+  "artifact": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/abo-semantic-lamp/abo-industrial-tripod-lamp-semantic.glb",
+    "bytes": 738192,
+    "sha256": "c8e9d74c57e378e95f53cdfd463810fb8f02f388093cda004c8668f860e45409",
+    "deterministic": true,
+    "validation": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 26,
+        "meshes": 24,
+        "materials": 24,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  "structure": {
+    "components": 24,
+    "decompositionAudit": {
+      "pass": true,
+      "blockers": [],
+      "warnings": [],
+      "requiredFeatureCoverage": 1,
+      "sourceViewCoverage": 1,
+      "mappedComponentCoverage": 1,
+      "thinFeatureCount": 8
+    }
+  },
+  "thinTerminalEvidence": [
+    {
+      "id": "front",
+      "status": "extracted",
+      "terminals": [
+        {
+          "x": 203,
+          "y": 235,
+          "normalizedX": 0.01834862385321101,
+          "normalizedY": 0.9653679653679653
+        },
+        {
+          "x": 227,
+          "y": 211,
+          "normalizedX": 0.23853211009174313,
+          "normalizedY": 0.8614718614718615
+        },
+        {
+          "x": 289,
+          "y": 241,
+          "normalizedX": 0.8073394495412844,
+          "normalizedY": 0.9913419913419913
+        },
+        {
+          "x": 308,
+          "y": 217,
+          "normalizedX": 0.981651376146789,
+          "normalizedY": 0.8874458874458875
+        }
+      ],
+      "foregroundBounds": [
+        201,
+        12,
+        311,
+        244
+      ],
+      "regionTop": 58,
+      "skeletonPixels": 652,
+      "blockers": []
+    },
+    {
+      "id": "right",
+      "status": "extracted",
+      "terminals": [
+        {
+          "x": 203,
+          "y": 234,
+          "normalizedX": 0.01834862385321101,
+          "normalizedY": 0.961038961038961
+        },
+        {
+          "x": 228,
+          "y": 211,
+          "normalizedX": 0.24770642201834864,
+          "normalizedY": 0.8614718614718615
+        },
+        {
+          "x": 289,
+          "y": 240,
+          "normalizedX": 0.8073394495412844,
+          "normalizedY": 0.987012987012987
+        },
+        {
+          "x": 308,
+          "y": 216,
+          "normalizedX": 0.981651376146789,
+          "normalizedY": 0.8831168831168831
+        }
+      ],
+      "foregroundBounds": [
+        201,
+        12,
+        311,
+        244
+      ],
+      "regionTop": 58,
+      "skeletonPixels": 636,
+      "blockers": []
+    },
+    {
+      "id": "rear",
+      "status": "extracted",
+      "terminals": [
+        {
+          "x": 203,
+          "y": 234,
+          "normalizedX": 0.01834862385321101,
+          "normalizedY": 0.961038961038961
+        },
+        {
+          "x": 228,
+          "y": 210,
+          "normalizedX": 0.24770642201834864,
+          "normalizedY": 0.8571428571428571
+        },
+        {
+          "x": 289,
+          "y": 241,
+          "normalizedX": 0.8073394495412844,
+          "normalizedY": 0.9913419913419913
+        },
+        {
+          "x": 308,
+          "y": 217,
+          "normalizedX": 0.981651376146789,
+          "normalizedY": 0.8874458874458875
+        }
+      ],
+      "foregroundBounds": [
+        201,
+        12,
+        311,
+        244
+      ],
+      "regionTop": 58,
+      "skeletonPixels": 645,
+      "blockers": []
+    },
+    {
+      "id": "left",
+      "status": "extracted",
+      "terminals": [
+        {
+          "x": 201,
+          "y": 234,
+          "normalizedX": 0,
+          "normalizedY": 0.961038961038961
+        },
+        {
+          "x": 228,
+          "y": 210,
+          "normalizedX": 0.24770642201834864,
+          "normalizedY": 0.8571428571428571
+        },
+        {
+          "x": 290,
+          "y": 242,
+          "normalizedX": 0.8165137614678899,
+          "normalizedY": 0.9956709956709957
+        },
+        {
+          "x": 308,
+          "y": 216,
+          "normalizedX": 0.981651376146789,
+          "normalizedY": 0.8831168831168831
+        }
+      ],
+      "foregroundBounds": [
+        201,
+        12,
+        311,
+        244
+      ],
+      "regionTop": 58,
+      "skeletonPixels": 643,
+      "blockers": []
+    }
+  ],
+  "landmarkFeedback": {
+    "reconstruction": {
+      "status": "reconstructed",
+      "landmarks": [
+        {
+          "id": "leg-left",
+          "position": [
+            -0.3673069619681966,
+            -0.7,
+            0.18770738041198945
+          ]
+        },
+        {
+          "id": "leg-right",
+          "position": [
+            0.40451404258365087,
+            -0.56,
+            -0.1942383450658107
+          ]
+        },
+        {
+          "id": "leg-rear",
+          "position": [
+            0.20593756341801686,
+            -0.735,
+            0.38526090965095416
+          ]
+        },
+        {
+          "id": "center-support",
+          "position": [
+            -0.15811832935023118,
+            -0.52,
+            -0.38893172245021485
+          ]
+        }
+      ],
+      "assignments": [
+        {
+          "viewId": "front",
+          "landmarkId": "leg-left",
+          "observationIndex": 3,
+          "normalizedError": 0.08313734679346163
+        },
+        {
+          "viewId": "front",
+          "landmarkId": "leg-right",
+          "observationIndex": 0,
+          "normalizedError": 0.09000663226272532
+        },
+        {
+          "viewId": "front",
+          "landmarkId": "leg-rear",
+          "observationIndex": 2,
+          "normalizedError": 0.02769105425247754
+        },
+        {
+          "viewId": "front",
+          "landmarkId": "center-support",
+          "observationIndex": 1,
+          "normalizedError": 0.026521440019862542
+        },
+        {
+          "viewId": "right",
+          "landmarkId": "leg-left",
+          "observationIndex": 1,
+          "normalizedError": 0.11373807479888673
+        },
+        {
+          "viewId": "right",
+          "landmarkId": "leg-right",
+          "observationIndex": 2,
+          "normalizedError": 0.11499392946706026
+        },
+        {
+          "viewId": "right",
+          "landmarkId": "leg-rear",
+          "observationIndex": 3,
+          "normalizedError": 0.11164939476348336
+        },
+        {
+          "viewId": "right",
+          "landmarkId": "center-support",
+          "observationIndex": 0,
+          "normalizedError": 0.11288388540060934
+        },
+        {
+          "viewId": "rear",
+          "landmarkId": "leg-left",
+          "observationIndex": 0,
+          "normalizedError": 0.009544273200388087
+        },
+        {
+          "viewId": "rear",
+          "landmarkId": "leg-right",
+          "observationIndex": 3,
+          "normalizedError": 0.01208455434064748
+        },
+        {
+          "viewId": "rear",
+          "landmarkId": "leg-rear",
+          "observationIndex": 1,
+          "normalizedError": 0.13997834114411392
+        },
+        {
+          "viewId": "rear",
+          "landmarkId": "center-support",
+          "observationIndex": 2,
+          "normalizedError": 0.14501221612165227
+        },
+        {
+          "viewId": "left",
+          "landmarkId": "leg-left",
+          "observationIndex": 2,
+          "normalizedError": 0.04074866581132139
+        },
+        {
+          "viewId": "left",
+          "landmarkId": "leg-right",
+          "observationIndex": 1,
+          "normalizedError": 0.033006436650020746
+        },
+        {
+          "viewId": "left",
+          "landmarkId": "leg-rear",
+          "observationIndex": 0,
+          "normalizedError": 0.03458863575319308
+        },
+        {
+          "viewId": "left",
+          "landmarkId": "center-support",
+          "observationIndex": 3,
+          "normalizedError": 0.03496180747853139
+        }
+      ],
+      "iterations": 2,
+      "rmsNormalizedError": 0.08436516413283797,
+      "maximumNormalizedError": 0.14501221612165227,
+      "blockers": []
+    },
+    "coordinateUnit": "compiled-scene-meters",
+    "applied": true,
+    "acceptanceRule": "apply on a better worst gate margin, a strict Pareto improvement, or a >=0.01 sparse-hybrid gain with every required regression bounded to 0.005",
+    "baselineGateMargin": 0.9811143327325446,
+    "candidate": {
+      "offsetDegrees": 260,
+      "gateMargin": 1.015193956370427,
+      "minimumPrimaryMassIoU": 0.7106357694592988,
+      "minimumThinFeatureScore": 0.830328087314702,
+      "minimumHybrid": 0.7934632567545563,
+      "meanHybrid": 0.8233823643222529,
+      "minimumIoU": 0.34280476626947753
+    },
+    "selectedGateMargin": 1.015193956370427
+  },
+  "headFeedback": {
+    "applied": false,
+    "selectedRadialScale": 1,
+    "selectedLocalScore": {
+      "offsetDegrees": 260,
+      "gateMargin": 1.015193956370427,
+      "minimumPrimaryMassIoU": 0.7106357694592988,
+      "minimumThinFeatureScore": 0.830328087314702,
+      "minimumHybrid": 0.7934632567545563,
+      "meanHybrid": 0.8233823643222529,
+      "minimumIoU": 0.34280476626947753
+    },
+    "candidates": [
+      {
+        "radialScale": 1,
+        "score": {
+          "offsetDegrees": 260,
+          "gateMargin": 1.015193956370427,
+          "minimumPrimaryMassIoU": 0.7106357694592988,
+          "minimumThinFeatureScore": 0.830328087314702,
+          "minimumHybrid": 0.7934632567545563,
+          "meanHybrid": 0.8233823643222529,
+          "minimumIoU": 0.34280476626947753
+        }
+      },
+      {
+        "radialScale": 1.06,
+        "score": {
+          "offsetDegrees": 260,
+          "gateMargin": 1.007294484058684,
+          "minimumPrimaryMassIoU": 0.7051061388410786,
+          "minimumThinFeatureScore": 0.8210255759812561,
+          "minimumHybrid": 0.787108035081787,
+          "meanHybrid": 0.8195215121783472,
+          "minimumIoU": 0.3485568140299598
+        }
+      },
+      {
+        "radialScale": 0.94,
+        "score": {
+          "offsetDegrees": 260,
+          "gateMargin": 0.9824683214719667,
+          "minimumPrimaryMassIoU": 0.6877278250303767,
+          "minimumThinFeatureScore": 0.8360242996014305,
+          "minimumHybrid": 0.7952577436417022,
+          "meanHybrid": 0.8226622553846434,
+          "minimumIoU": 0.33627505056076484
+        }
+      },
+      {
+        "radialScale": 0.88,
+        "score": {
+          "offsetDegrees": 256,
+          "gateMargin": 0.963739624290083,
+          "minimumPrimaryMassIoU": 0.674617737003058,
+          "minimumThinFeatureScore": 0.7853264337977928,
+          "minimumHybrid": 0.7614254571040259,
+          "meanHybrid": 0.7934757817426906,
+          "minimumIoU": 0.34306023194912083
+        }
+      },
+      {
+        "radialScale": 0.82,
+        "score": {
+          "offsetDegrees": 252,
+          "gateMargin": 0.9216872752784356,
+          "minimumPrimaryMassIoU": 0.6451810926949049,
+          "minimumThinFeatureScore": 0.7450541384433325,
+          "minimumHybrid": 0.7263472337837865,
+          "meanHybrid": 0.7606666973970004,
+          "minimumIoU": 0.3475
+        }
+      }
+    ],
+    "acceptanceRule": "bounded radial candidates; apply only when the worst required gate margin improves"
+  },
+  "groundTruthGeometry": {
+    "reference": {
+      "source": "Amazon Berkeley Objects CC-BY-4.0 ground-truth GLB",
+      "path": "/Users/danny/Documents/Codex/2026-08-30/g/work/abo/pilot/lamp/ground-truth.glb",
+      "sample": {
+        "points": 512,
+        "requestedSamples": 512,
+        "sampledTriangles": 153008,
+        "sourceTriangles": 153008,
+        "surfaceArea": 0.6343828691273078
+      }
+    },
+    "candidate": {
+      "sample": {
+        "points": 512,
+        "requestedSamples": 512,
+        "sampledTriangles": 16800,
+        "sourceTriangles": 16800,
+        "surfaceArea": 0.7424429419188373
+      }
+    },
+    "audit": {
+      "schema": "morphloom.surface-geometry-fidelity/0.1",
+      "pass": true,
+      "dimensionPass": true,
+      "shapePass": true,
+      "selectedYawDegrees": 200,
+      "referenceBounds": {
+        "minimum": [
+          -0.43958720564842224,
+          0.00015825271839275956,
+          -0.441983163356781
+        ],
+        "maximum": [
+          0.43958720564842224,
+          1.5043418407440186,
+          0.441983163356781
+        ],
+        "size": [
+          0.8791744112968445,
+          1.5041835880256258,
+          0.883966326713562
+        ]
+      },
+      "candidateInputBounds": {
+        "minimum": [
+          -0.3823069616329205,
+          -0.7432499998155981,
+          -0.39693172283019446
+        ],
+        "maximum": [
+          0.41951404224837474,
+          0.7269999986886978,
+          0.40026090931567804
+        ],
+        "size": [
+          0.8018210038812952,
+          1.470249998504296,
+          0.7971926321458724
+        ]
+      },
+      "candidateBounds": {
+        "minimum": [
+          -0.4606476764356149,
+          -0.7432499998155981,
+          -0.44655701782936946
+        ],
+        "maximum": [
+          0.42345073587333126,
+          0.7269999986886978,
+          0.4270734645661526
+        ],
+        "size": [
+          0.8840984123089461,
+          1.470249998504296,
+          0.8736304823955221
+        ]
+      },
+      "dimensionRelativeErrors": [
+        0.00560071010806424,
+        0.022559473319257915,
+        0.011692576974585492
+      ],
+      "maximumDimensionRelativeError": 0.022559473319257915,
+      "symmetricRmsChamfer": 0.025760105988391534,
+      "referenceP95Distance": 0.05536328192053338,
+      "candidateP95Distance": 0.03994809542894838,
+      "minimumCoverage": 0.912109375,
+      "referenceCoverage": 0.912109375,
+      "candidateCoverage": 0.94921875,
+      "spatialCoverage": {
+        "reference": [
+          {
+            "id": "reference:x-low",
+            "side": "reference",
+            "axis": "x",
+            "band": "low",
+            "samples": 41,
+            "coverage": 0.5609756097560976,
+            "meanDistance": 0.04894189975495888,
+            "p95Distance": 0.11552646478298481
+          },
+          {
+            "id": "reference:x-middle",
+            "side": "reference",
+            "axis": "x",
+            "band": "middle",
+            "samples": 425,
+            "coverage": 0.9388235294117647,
+            "meanDistance": 0.019217539591589436,
+            "p95Distance": 0.042908311947938566
+          },
+          {
+            "id": "reference:x-high",
+            "side": "reference",
+            "axis": "x",
+            "band": "high",
+            "samples": 46,
+            "coverage": 0.9782608695652174,
+            "meanDistance": 0.016982195453995465,
+            "p95Distance": 0.029958428553481457
+          },
+          {
+            "id": "reference:y-low",
+            "side": "reference",
+            "axis": "y",
+            "band": "low",
+            "samples": 119,
+            "coverage": 0.6218487394957983,
+            "meanDistance": 0.04249603582803977,
+            "p95Distance": 0.11552646478298481
+          },
+          {
+            "id": "reference:y-middle",
+            "side": "reference",
+            "axis": "y",
+            "band": "middle",
+            "samples": 119,
+            "coverage": 1,
+            "meanDistance": 0.01666470564309972,
+            "p95Distance": 0.027588900973318852
+          },
+          {
+            "id": "reference:y-high",
+            "side": "reference",
+            "axis": "y",
+            "band": "high",
+            "samples": 274,
+            "coverage": 1,
+            "meanDistance": 0.014288777270792034,
+            "p95Distance": 0.026360537884564404
+          },
+          {
+            "id": "reference:z-low",
+            "side": "reference",
+            "axis": "z",
+            "band": "low",
+            "samples": 49,
+            "coverage": 1,
+            "meanDistance": 0.01752024375013462,
+            "p95Distance": 0.029575742053409224
+          },
+          {
+            "id": "reference:z-middle",
+            "side": "reference",
+            "axis": "z",
+            "band": "middle",
+            "samples": 418,
+            "coverage": 0.9545454545454546,
+            "meanDistance": 0.018309654635034076,
+            "p95Distance": 0.03940283308277466
+          },
+          {
+            "id": "reference:z-high",
+            "side": "reference",
+            "axis": "z",
+            "band": "high",
+            "samples": 45,
+            "coverage": 0.4222222222222222,
+            "meanDistance": 0.05429612502359506,
+            "p95Distance": 0.1304144951684196
+          }
+        ],
+        "candidate": [
+          {
+            "id": "candidate:x-low",
+            "side": "candidate",
+            "axis": "x",
+            "band": "low",
+            "samples": 30,
+            "coverage": 0.6,
+            "meanDistance": 0.03831340322449314,
+            "p95Distance": 0.06196165464621002
+          },
+          {
+            "id": "candidate:x-middle",
+            "side": "candidate",
+            "axis": "x",
+            "band": "middle",
+            "samples": 446,
+            "coverage": 0.9730941704035875,
+            "meanDistance": 0.017335760519929834,
+            "p95Distance": 0.036140980531971234
+          },
+          {
+            "id": "candidate:x-high",
+            "side": "candidate",
+            "axis": "x",
+            "band": "high",
+            "samples": 36,
+            "coverage": 0.9444444444444444,
+            "meanDistance": 0.01890342951802159,
+            "p95Distance": 0.033938660580720044
+          },
+          {
+            "id": "candidate:y-low",
+            "side": "candidate",
+            "axis": "y",
+            "band": "low",
+            "samples": 73,
+            "coverage": 0.7534246575342466,
+            "meanDistance": 0.030675929261174965,
+            "p95Distance": 0.05735374147016347
+          },
+          {
+            "id": "candidate:y-middle",
+            "side": "candidate",
+            "axis": "y",
+            "band": "middle",
+            "samples": 82,
+            "coverage": 1,
+            "meanDistance": 0.016568737044460324,
+            "p95Distance": 0.03239507157216545
+          },
+          {
+            "id": "candidate:y-high",
+            "side": "candidate",
+            "axis": "y",
+            "band": "high",
+            "samples": 357,
+            "coverage": 0.9775910364145658,
+            "meanDistance": 0.01670502934890969,
+            "p95Distance": 0.03593127716475869
+          },
+          {
+            "id": "candidate:z-low",
+            "side": "candidate",
+            "axis": "z",
+            "band": "low",
+            "samples": 34,
+            "coverage": 1,
+            "meanDistance": 0.018754308610376146,
+            "p95Distance": 0.03004119255215395
+          },
+          {
+            "id": "candidate:z-middle",
+            "side": "candidate",
+            "axis": "z",
+            "band": "middle",
+            "samples": 460,
+            "coverage": 0.9565217391304348,
+            "meanDistance": 0.018101971009310342,
+            "p95Distance": 0.039213896281264565
+          },
+          {
+            "id": "candidate:z-high",
+            "side": "candidate",
+            "axis": "z",
+            "band": "high",
+            "samples": 18,
+            "coverage": 0.6666666666666666,
+            "meanDistance": 0.03317342190204056,
+            "p95Distance": 0.05443046482524327
+          }
+        ],
+        "worstBand": {
+          "id": "reference:z-high",
+          "side": "reference",
+          "axis": "z",
+          "band": "high",
+          "samples": 45,
+          "coverage": 0.4222222222222222,
+          "meanDistance": 0.05429612502359506,
+          "p95Distance": 0.1304144951684196
+        },
+        "candidateAlignedNormalizedBounds": {
+          "minimum": [
+            -0.3018094825769968,
+            -0.5,
+            -0.2983370357193437
+          ],
+          "maximum": [
+            0.2995157432066118,
+            0.5,
+            0.29586836015501605
+          ],
+          "size": [
+            0.6013252257836086,
+            1,
+            0.5942053958743598
+          ]
+        }
+      },
+      "thresholds": {
+        "yawStepDegrees": 10,
+        "distanceThreshold": 0.04,
+        "maximumDimensionRelativeError": 0.05,
+        "maximumRmsChamfer": 0.05,
+        "maximumP95Distance": 0.1,
+        "minimumCoverage": 0.9
+      },
+      "blockers": [],
+      "limitation": "Uniform translation, scale, and bounded yaw are removed only for shape distance; raw axis dimensions remain an independent blocking gate. Surface sampling does not prove semantic part identity, hidden interfaces, or material fidelity."
+    }
+  },
+  "pbrReferenceAudit": {
+    "audit": {
+      "schema": "morphloom.pbr-reference-audit/0.2",
+      "pass": false,
+      "channels": [
+        {
+          "channel": "baseColor",
+          "requiredCoverage": 1,
+          "slotCoverage": 1,
+          "evidenceMappedCoverage": 0,
+          "slotPass": true,
+          "evidencePass": false
+        },
+        {
+          "channel": "metallic",
+          "requiredCoverage": 1,
+          "slotCoverage": 1,
+          "evidenceMappedCoverage": 0,
+          "slotPass": true,
+          "evidencePass": false
+        },
+        {
+          "channel": "roughness",
+          "requiredCoverage": 1,
+          "slotCoverage": 1,
+          "evidenceMappedCoverage": 0,
+          "slotPass": true,
+          "evidencePass": false
+        },
+        {
+          "channel": "normal",
+          "requiredCoverage": 1,
+          "slotCoverage": 1,
+          "evidenceMappedCoverage": 0,
+          "slotPass": true,
+          "evidencePass": false
+        },
+        {
+          "channel": "emissive",
+          "requiredCoverage": 0,
+          "slotCoverage": 1,
+          "evidenceMappedCoverage": 0,
+          "slotPass": true,
+          "evidencePass": true
+        }
+      ],
+      "thresholds": {
+        "minimumSlotCoverage": 0.8,
+        "minimumEvidenceCoverage": 0.6,
+        "minimumSpatialDeviation": 0.01
+      },
+      "evidenceBinding": {
+        "enforced": true,
+        "acceptedFingerprints": [
+          "742babfcce4bb85bc8916bed47b2747495d67d0826ae1a2d8fbeb1456d698b73",
+          "1dd2828290de9a7df5fe5ac9a47f87b09022a4f9706f7cde633fe9fa8065ef21",
+          "676f72668c67fb808a3fffd3fe412a98e2660cd927d3d0480f492ac4d10539ed",
+          "1eacdc91adec0f08b2448da88b27473e493db74b96977438afd055b7088957e6",
+          "58b66c970adcbb0ad71cfcd975752a7b95fb857266ad1b51f05f82459e1a278a"
+        ]
+      },
+      "blockers": [
+        "baseColor evidence-mapped coverage 0.000 < 0.600",
+        "metallic evidence-mapped coverage 0.000 < 0.600",
+        "roughness evidence-mapped coverage 0.000 < 0.600",
+        "normal evidence-mapped coverage 0.000 < 0.600"
+      ],
+      "limitation": "Texture signals are bound to actual embedded encoded payload bytes and prove delivered spatial variation and provenance, not calibrated physical BRDF parameters."
+    },
+    "referenceMaterials": 1,
+    "candidateMaterials": 24,
+    "evidenceRule": "A spatial PBR channel in the trusted reference requires delivered variation and reference/measured provenance bound to the locked ground-truth or input-image SHA-256 set."
+  },
+  "rigidMultiviewAudit": {
+    "status": "consistent",
+    "pass": true,
+    "pairs": [
+      {
+        "from": "front",
+        "to": "right",
+        "angularSeparationDegrees": 90,
+        "upperIoU": 0.6957383548067394,
+        "lowerIoU": 0.7881796690307329,
+        "localizedDifference": 0.09244131422399349,
+        "suspiciousStationaryRegion": false
+      },
+      {
+        "from": "front",
+        "to": "left",
+        "angularSeparationDegrees": 90,
+        "upperIoU": 0.8682634730538922,
+        "lowerIoU": 0.8478900883218842,
+        "localizedDifference": -0.020373384732008004,
+        "suspiciousStationaryRegion": false
+      },
+      {
+        "from": "right",
+        "to": "rear",
+        "angularSeparationDegrees": 90,
+        "upperIoU": 0.8585526315789473,
+        "lowerIoU": 0.752539242843952,
+        "localizedDifference": -0.10601338873499533,
+        "suspiciousStationaryRegion": false
+      },
+      {
+        "from": "rear",
+        "to": "left",
+        "angularSeparationDegrees": 90,
+        "upperIoU": 0.715438950554995,
+        "lowerIoU": 0.8448023426061494,
+        "localizedDifference": 0.12936339205115444,
+        "suspiciousStationaryRegion": false
+      }
+    ],
+    "blockers": [],
+    "warnings": []
+  },
+  "sourceViewSilhouette": {
+    "calibration": {
+      "strategy": "evidence-constrained-single-global-azimuth-offset",
+      "offsetDegrees": 260,
+      "candidates": 90,
+      "selection": "maximize-worst-required-gate-margin",
+      "gateMargin": 1.015193956370427,
+      "primaryMassWeight": 0.35,
+      "thinFeatureWeight": 0.65,
+      "stepDegrees": [
+        90,
+        90,
+        90,
+        90
+      ],
+      "selectedCameraModelId": "orthographic-e0-d4",
+      "cameraPoseEvidence": {
+        "schema": "morphloom.camera-pose-evidence-audit/0.1",
+        "pass": true,
+        "relativePoseVerified": true,
+        "absolutePoseVerified": false,
+        "intrinsicsVerified": false,
+        "sameCameraVisualClaimAllowed": false,
+        "expectedStepDegrees": [
+          90,
+          90,
+          90,
+          90
+        ],
+        "blockers": [],
+        "claimBlockers": [
+          "absolute object-frame camera pose is not independently calibrated",
+          "camera intrinsics are not independently calibrated"
+        ],
+        "warnings": [
+          "relative turntable rotation is verified, but absolute pose and lens parameters remain unverified"
+        ]
+      },
+      "sameCameraVisualClaimAllowed": false
+    },
+    "headPlanExtentInference": {
+      "status": "inferred",
+      "xExtent": 42,
+      "zExtent": 44.99999999999999,
+      "rmsResidual": 5.0242958677880805e-15,
+      "normalizedRmsResidual": 1.155010544319099e-16,
+      "maximumResidual": 7.105427357601002e-15,
+      "observations": 4,
+      "blockers": [],
+      "appliedDiameterMm": 224,
+      "appliedDepthMm": 194.71428571428567,
+      "sourceBandBounds": [
+        {
+          "minX": 240,
+          "minY": 12,
+          "maxX": 281,
+          "maxY": 61,
+          "width": 42,
+          "height": 50,
+          "pixels": 1326
+        },
+        {
+          "minX": 232,
+          "minY": 12,
+          "maxX": 276,
+          "maxY": 61,
+          "width": 45,
+          "height": 50,
+          "pixels": 1368
+        },
+        {
+          "minX": 233,
+          "minY": 12,
+          "maxX": 274,
+          "maxY": 61,
+          "width": 42,
+          "height": 50,
+          "pixels": 1294
+        },
+        {
+          "minX": 238,
+          "minY": 12,
+          "maxX": 282,
+          "maxY": 61,
+          "width": 45,
+          "height": 50,
+          "pixels": 1380
+        }
+      ]
+    },
+    "views": [
+      {
+        "id": "front",
+        "source": "view-000.jpg",
+        "evidenceAzimuthDegrees": 0,
+        "renderAzimuthDegrees": 260,
+        "referenceDensity": 0.02732086181640625,
+        "silhouetteIoU": 0.34280476626947753,
+        "primaryMassIoU": 0.725,
+        "thinFeature": {
+          "method": "thin-feature-distance-v1",
+          "tolerancePixels": 3,
+          "referenceCoverage": 0.8299357721306897,
+          "renderCoverage": 0.8234508547008547,
+          "symmetricCoverage": 0.8234508547008547,
+          "meanDistancePixels": 1.6275767918088737,
+          "maximumDistancePixels": 21,
+          "score": 0.830328087314702
+        },
+        "hybridScore": 0.7934632567545563
+      },
+      {
+        "id": "right",
+        "source": "view-090.jpg",
+        "evidenceAzimuthDegrees": 90,
+        "renderAzimuthDegrees": 350,
+        "referenceDensity": 0.02764129638671875,
+        "silhouetteIoU": 0.4113653995345229,
+        "primaryMassIoU": 0.7106357694592988,
+        "thinFeature": {
+          "method": "thin-feature-distance-v1",
+          "tolerancePixels": 3,
+          "referenceCoverage": 0.904223019597019,
+          "renderCoverage": 0.9293924466338259,
+          "symmetricCoverage": 0.904223019597019,
+          "meanDistancePixels": 0.9869451697127938,
+          "maximumDistancePixels": 10,
+          "score": 0.9061371931030616
+        },
+        "hybridScore": 0.8377116948277447
+      },
+      {
+        "id": "rear",
+        "source": "view-180.jpg",
+        "evidenceAzimuthDegrees": 180,
+        "renderAzimuthDegrees": 80,
+        "referenceDensity": 0.02718353271484375,
+        "silhouetteIoU": 0.44739449177729346,
+        "primaryMassIoU": 0.7686746987951807,
+        "thinFeature": {
+          "method": "thin-feature-distance-v1",
+          "tolerancePixels": 3,
+          "referenceCoverage": 0.8821218074656189,
+          "renderCoverage": 0.8837520042757884,
+          "symmetricCoverage": 0.8821218074656189,
+          "meanDistancePixels": 1.2496919917864477,
+          "maximumDistancePixels": 27,
+          "score": 0.8838662253117795
+        },
+        "hybridScore": 0.8435491910309698
+      },
+      {
+        "id": "left",
+        "source": "view-270.jpg",
+        "evidenceAzimuthDegrees": 270,
+        "renderAzimuthDegrees": 170,
+        "referenceDensity": 0.02759552001953125,
+        "silhouetteIoU": 0.3628865979381443,
+        "primaryMassIoU": 0.7311377245508982,
+        "thinFeature": {
+          "method": "thin-feature-distance-v1",
+          "tolerancePixels": 3,
+          "referenceCoverage": 0.8739286701686481,
+          "renderCoverage": 0.8661740558292282,
+          "symmetricCoverage": 0.8661740558292282,
+          "meanDistancePixels": 1.5414660981983221,
+          "maximumDistancePixels": 20,
+          "score": 0.8660109401275794
+        },
+        "hybridScore": 0.818805314675741
+      }
+    ],
+    "minimumIoU": 0.34280476626947753,
+    "meanIoU": 0.3911128138798596,
+    "threshold": 0.75,
+    "wholeAreaPass": false,
+    "pass": true,
+    "audit": {
+      "pass": true,
+      "mode": "sparse-structure",
+      "thresholds": {
+        "maximumSparseDensity": 0.12,
+        "maximumHybridDensity": 0.25,
+        "wholeIoU": 0.75,
+        "hybridWholeIoU": 0.7,
+        "primaryMassIoU": 0.7,
+        "thinFeatureScore": 0.8
+      },
+      "minimumWholeIoU": 0.34280476626947753,
+      "minimumPrimaryMassIoU": 0.7106357694592988,
+      "minimumThinFeatureScore": 0.830328087314702,
+      "blockers": []
+    }
+  },
+  "deliveryAudit": {
+    "pass": false,
+    "blockers": [
+      "evidence pack not delivery-ready: independently calibrated image landmarks, calibrated PBR",
+      "locked fidelity contract is required"
+    ]
+  },
+  "productionBlockers": [
+    "landmark coordinates were estimated by the multimodal planner rather than independently calibrated",
+    "absolute object-frame camera pose is not independently calibrated",
+    "camera intrinsics are not independently calibrated",
+    "PBR: baseColor evidence-mapped coverage 0.000 < 0.600",
+    "PBR: metallic evidence-mapped coverage 0.000 < 0.600",
+    "PBR: roughness evidence-mapped coverage 0.000 < 0.600",
+    "PBR: normal evidence-mapped coverage 0.000 < 0.600",
+    "hidden interfaces are not independently evidenced"
+  ],
+  "dominanceBlockers": [
+    "no same-input img2threejs candidate is available for a blind comparison"
+  ]
+}

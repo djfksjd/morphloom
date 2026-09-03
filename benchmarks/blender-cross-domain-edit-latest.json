@@ -1,0 +1,587 @@
+{
+  "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
+  "compilerRevision": "morphloom-compiler/0.31.0",
+  "generatedAt": "2026-09-03T07:50:24.633Z",
+  "pass": true,
+  "scope": "five-domain named or bounded-local edits, two Blender reopen cycles, non-target semantic invariants, and exact final GLB validation",
+  "cases": [
+    {
+      "id": "laurel-homes-architecture",
+      "domain": "architecture",
+      "purpose": "Move one named window 50 mm while preserving 320 other building meshes.",
+      "pass": true,
+      "source": {
+        "file": "laurel-homes-architecture.glb",
+        "bytes": 29565852,
+        "sha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68"
+      },
+      "edit": {
+        "component": "west_north_window_1",
+        "kind": "translation",
+        "translationMm": [
+          50,
+          0,
+          0
+        ]
+      },
+      "isolation": {
+        "meshCount": 321,
+        "unchangedMeshes": 320,
+        "maximumUnchangedCenterDriftMm": 0.000059604644775390625,
+        "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+        "topologyChangeCount": 0,
+        "stabilityChangeCount": 0
+      },
+      "runtime": {
+        "armatures": 0,
+        "actions": 0,
+        "preserved": true
+      },
+      "riggedPayload": null,
+      "rawValidation": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 432,
+        "warnings": 0,
+        "infos": 47,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "ACCESSOR_VECTOR3_NON_UNIT",
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "not-run",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "stabilityValidation": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 432,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "ACCESSOR_VECTOR3_NON_UNIT"
+        ],
+        "independentRead": {
+          "status": "not-run",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "finalDelivery": {
+        "file": "laurel-homes-architecture.edited.delivery.glb",
+        "bytes": 28272520,
+        "sha256": "5f38c68e761755f002d71d7183933ec2d60443711562221fdb4a004523fedb6d",
+        "repairApplied": true,
+        "repair": {
+          "repairedTangents": 432,
+          "removedUnusedTangentAccessors": 0,
+          "restoredMaterials": 321,
+          "materialSourceSha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68"
+        },
+        "inventoryPreserved": true,
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      "warnings": [],
+      "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+    },
+    {
+      "id": "ornate-knife-product",
+      "domain": "industrial-design",
+      "purpose": "Move one pommel ornament 5 mm without blunting or reshaping the blade.",
+      "pass": true,
+      "source": {
+        "file": "ornate-knife-product.glb",
+        "bytes": 1149000,
+        "sha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6"
+      },
+      "edit": {
+        "component": "pommel_gem",
+        "kind": "translation",
+        "translationMm": [
+          0,
+          5,
+          0
+        ]
+      },
+      "isolation": {
+        "meshCount": 16,
+        "unchangedMeshes": 15,
+        "maximumUnchangedCenterDriftMm": 1.1641532182693481e-7,
+        "maximumUnchangedSizeDriftMm": 0.000014901161193847656,
+        "topologyChangeCount": 4,
+        "stabilityChangeCount": 0
+      },
+      "runtime": {
+        "armatures": 0,
+        "actions": 0,
+        "preserved": true
+      },
+      "riggedPayload": null,
+      "rawValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 1,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 17,
+          "meshes": 16,
+          "materials": 16,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "stabilityValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 17,
+          "meshes": 16,
+          "materials": 16,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "finalDelivery": {
+        "file": "ornate-knife-product.edited.delivery.glb",
+        "bytes": 1111028,
+        "sha256": "8f175ab2a656c6b02e7594b9893ab87e9be1bfda39e2149069fdf03842d6af7f",
+        "repairApplied": true,
+        "repair": {
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "restoredMaterials": 16,
+          "materialSourceSha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6"
+        },
+        "inventoryPreserved": true,
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      "warnings": [],
+      "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+    },
+    {
+      "id": "cooling-electronics-assembly",
+      "domain": "electronics",
+      "purpose": "Move one USB-C connector 3 mm while preserving the remaining assembly and wiring meshes.",
+      "pass": true,
+      "source": {
+        "file": "cooling-electronics-assembly.glb",
+        "bytes": 18477032,
+        "sha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a"
+      },
+      "edit": {
+        "component": "power_usb_c",
+        "kind": "translation",
+        "translationMm": [
+          3,
+          0,
+          0
+        ]
+      },
+      "isolation": {
+        "meshCount": 322,
+        "unchangedMeshes": 321,
+        "maximumUnchangedCenterDriftMm": 0.000001862645149230957,
+        "maximumUnchangedSizeDriftMm": 0.000022351741790771484,
+        "topologyChangeCount": 79,
+        "stabilityChangeCount": 0
+      },
+      "runtime": {
+        "armatures": 0,
+        "actions": 0,
+        "preserved": true
+      },
+      "riggedPayload": null,
+      "rawValidation": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 940,
+        "warnings": 0,
+        "infos": 60,
+        "hints": 0,
+        "truncated": true,
+        "issueCodes": [
+          "ACCESSOR_VECTOR3_NON_UNIT",
+          "UNUSED_MESH_TANGENT",
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "not-run",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "stabilityValidation": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 954,
+        "warnings": 0,
+        "infos": 46,
+        "hints": 0,
+        "truncated": true,
+        "issueCodes": [
+          "ACCESSOR_VECTOR3_NON_UNIT",
+          "UNUSED_MESH_TANGENT",
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "not-run",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "finalDelivery": {
+        "file": "cooling-electronics-assembly.edited.delivery.glb",
+        "bytes": 17217580,
+        "sha256": "f1b06a6ffd92bb292c22fca395b812d94053945675f40e433693d7fd2f695474",
+        "repairApplied": true,
+        "repair": {
+          "repairedTangents": 1428,
+          "removedUnusedTangentAccessors": 23,
+          "restoredMaterials": 322,
+          "materialSourceSha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a"
+        },
+        "inventoryPreserved": true,
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      "warnings": [],
+      "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+    },
+    {
+      "id": "field-human-runtime",
+      "domain": "animation-game",
+      "purpose": "Move the separate hair mesh 5 mm while preserving the body skin, rig, and animation inventory.",
+      "pass": true,
+      "source": {
+        "file": "field-human-runtime.glb",
+        "bytes": 5065808,
+        "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+      },
+      "edit": {
+        "component": "hair_cap",
+        "kind": "translation",
+        "translationMm": [
+          0,
+          5,
+          0
+        ]
+      },
+      "isolation": {
+        "meshCount": 3,
+        "unchangedMeshes": 2,
+        "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+        "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+        "topologyChangeCount": 1,
+        "stabilityChangeCount": 0
+      },
+      "runtime": {
+        "armatures": 1,
+        "actions": 22,
+        "preserved": true
+      },
+      "riggedPayload": {
+        "schema": "morphloom.rigged-payload-audit/0.1",
+        "pass": true,
+        "skinnedMeshNodes": 2,
+        "animationClips": 22,
+        "animationChannels": 185,
+        "maximumBasePositionDriftMeters": 0,
+        "maximumUvDrift": 2.9802322387695312e-8,
+        "maximumBoneWeightDrift": 0.000015941046513034962,
+        "maximumAnimationTimeDriftSeconds": 5.960464477539063e-8,
+        "maximumAnimationValueDrift": 1.7881393432617188e-7,
+        "blockers": []
+      },
+      "rawValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 53,
+          "meshes": 3,
+          "materials": 3,
+          "skins": 1,
+          "animations": 22
+        }
+      },
+      "stabilityValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 53,
+          "meshes": 3,
+          "materials": 3,
+          "skins": 1,
+          "animations": 22
+        }
+      },
+      "finalDelivery": {
+        "file": "field-human-runtime.edited.delivery.glb",
+        "bytes": 3167100,
+        "sha256": "b72a4ef91673f6c60de47073e39ab6fad9f67905bdbc5a479b909ae01b722a27",
+        "repairApplied": true,
+        "repair": {
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "restoredMaterials": 3,
+          "materialSourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+        },
+        "inventoryPreserved": true,
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      "warnings": [],
+      "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+    },
+    {
+      "id": "asphalt-print-surface",
+      "domain": "3d-printing",
+      "purpose": "Raise only a bounded center patch by up to 1.5 mm while preserving watertight topology and UVs.",
+      "pass": true,
+      "source": {
+        "file": "asphalt-print-surface.glb",
+        "bytes": 17745284,
+        "sha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818"
+      },
+      "edit": {
+        "component": "asphalt_core_sample",
+        "kind": "local-relief",
+        "amplitudeMm": 1.5,
+        "radiusFraction": 0.18,
+        "centerUv": [
+          0.57,
+          0.43
+        ],
+        "heightAxis": 2,
+        "changedVertices": 16782,
+        "totalVertices": 335808,
+        "maximumDisplacementMm": 1.499485192349417
+      },
+      "isolation": {
+        "meshCount": 1,
+        "unchangedMeshes": 0,
+        "maximumUnchangedCenterDriftMm": 0,
+        "maximumUnchangedSizeDriftMm": 0,
+        "topologyChangeCount": 0,
+        "stabilityChangeCount": 0
+      },
+      "runtime": {
+        "armatures": 0,
+        "actions": 0,
+        "preserved": true
+      },
+      "riggedPayload": null,
+      "rawValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "stabilityValidation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "finalDelivery": {
+        "file": "asphalt-print-surface.edited.delivery.glb",
+        "bytes": 17744256,
+        "sha256": "cc266a5302a364cdb2234fd12470ecb52e65bbe2084f8fbf9dcab93a2896c498",
+        "repairApplied": true,
+        "repair": {
+          "repairedTangents": 0,
+          "removedUnusedTangentAccessors": 0,
+          "restoredMaterials": 1,
+          "materialSourceSha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818"
+        },
+        "inventoryPreserved": true,
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      "warnings": [],
+      "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+    }
+  ],
+  "claimBoundary": "This proves these five concrete edits. It does not prove arbitrary sculpting, CAD feature history, shader graph parity, or artistic approval."
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/djfksjd/morphloom/schemas/morphloom-job.schema.json",
+  "title": "Morphloom Job Envelope 0.1",
+  "description": "Portable job envelope. Morphloom's bounded runtime validators remain authoritative for nested AssemblyIR and Evidence Pack semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "request", "target", "sources", "evidencePack", "assembly"],
+  "properties": {
+    "schema": { "const": "morphloom.job/0.1" },
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$" },
+    "request": { "type": "string", "minLength": 1, "maxLength": 8000 },
+    "target": { "enum": ["review", "delivery"] },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["viewId", "path", "sha256"],
+        "properties": {
+          "viewId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$" },
+          "path": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "evidencePack": {
+      "type": "object",
+      "required": ["schema"],
+      "properties": { "schema": { "const": "morphloom.evidence-pack/0.2" } }
+    },
+    "assembly": {
+      "type": "object",
+      "required": ["schema", "name", "units", "components"],
+      "properties": {
+        "schema": { "const": "morphloom.assembly/0.1" },
+        "units": { "const": "mm" }
+      }
+    },
+    "patches": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "type": "object" }
+    }
+  }
+}

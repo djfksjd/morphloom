@@ -1,0 +1,625 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.1",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/abo-semantic-fan/abo-industrial-floor-fan-semantic.glb",
+    "bytes": 3464012,
+    "sha256": "7881815cc6e28dd9c027931143e33302dfa8d93d4a7e6fe397b18b941bb60b84"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/abo-semantic-fan/abo-industrial-floor-fan-edited.glb",
+    "bytes": 3229072,
+    "sha256": "bd567d8776f59cab019f11bb4270040ef304f28efbbbaa65b150781e6721924e"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/abo-semantic-fan/abo-industrial-floor-fan-edited-stability.glb",
+    "bytes": 3229072,
+    "sha256": "ef8667df736a32cf511216d3620fc401ba24bb4ca8d82947e27ba46b60f701d9"
+  },
+  "edit": {
+    "component": "speed-knob",
+    "translationMm": [
+      12.0,
+      0.0,
+      0.0
+    ]
+  },
+  "meshCount": 101,
+  "unchangedMeshes": 100,
+  "maximumUnchangedCenterDriftMm": 1.6763806343078613e-05,
+  "maximumUnchangedSizeDriftMm": 2.60770320892334e-05,
+  "topologyChanges": [
+    {
+      "component": "base-front-rail",
+      "before": {
+        "vertices": 453,
+        "edges": 1272,
+        "polygons": 820
+      },
+      "after": {
+        "vertices": 475,
+        "edges": 1292,
+        "polygons": 820
+      }
+    },
+    {
+      "component": "base-left-link",
+      "before": {
+        "vertices": 321,
+        "edges": 900,
+        "polygons": 580
+      },
+      "after": {
+        "vertices": 343,
+        "edges": 920,
+        "polygons": 580
+      }
+    },
+    {
+      "component": "base-rear-rail",
+      "before": {
+        "vertices": 365,
+        "edges": 1024,
+        "polygons": 660
+      },
+      "after": {
+        "vertices": 387,
+        "edges": 1044,
+        "polygons": 660
+      }
+    },
+    {
+      "component": "base-right-link",
+      "before": {
+        "vertices": 321,
+        "edges": 900,
+        "polygons": 580
+      },
+      "after": {
+        "vertices": 343,
+        "edges": 920,
+        "polygons": 580
+      }
+    },
+    {
+      "component": "cage-front-spoke-1",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-10",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-11",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-12",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-2",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-3",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-4",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-5",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-6",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-7",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-8",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-front-spoke-9",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-1",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-10",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-11",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-12",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-2",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-3",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-4",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-5",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-6",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-7",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-8",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "cage-rear-spoke-9",
+      "before": {
+        "vertices": 135,
+        "edges": 362,
+        "polygons": 228
+      },
+      "after": {
+        "vertices": 149,
+        "edges": 374,
+        "polygons": 228
+      }
+    },
+    {
+      "component": "motor-vent-1",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-10",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-11",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-12",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-13",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-14",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-2",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-3",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-4",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-5",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-6",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-7",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-8",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "motor-vent-9",
+      "before": {
+        "vertices": 44,
+        "edges": 115,
+        "polygons": 72
+      },
+      "after": {
+        "vertices": 58,
+        "edges": 127,
+        "polygons": 72
+      }
+    },
+    {
+      "component": "power-cable",
+      "before": {
+        "vertices": 497,
+        "edges": 1376,
+        "polygons": 880
+      },
+      "after": {
+        "vertices": 515,
+        "edges": 1392,
+        "polygons": 880
+      }
+    },
+    {
+      "component": "stand-left",
+      "before": {
+        "vertices": 365,
+        "edges": 1024,
+        "polygons": 660
+      },
+      "after": {
+        "vertices": 387,
+        "edges": 1044,
+        "polygons": 660
+      }
+    },
+    {
+      "component": "stand-right",
+      "before": {
+        "vertices": 365,
+        "edges": 1024,
+        "polygons": 660
+      },
+      "after": {
+        "vertices": 387,
+        "edges": 1044,
+        "polygons": 660
+      }
+    }
+  ],
+  "topologyInterpretation": "Polygon counts are blocking. A one-time vertex/edge re-index is reported but accepted only when a second no-op Blender round trip is stable.",
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves named-component transform editability, face/material-slot preservation, bounded non-target drift, and second-pass representation reporting. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, rig editability, or material-node parity."
+}

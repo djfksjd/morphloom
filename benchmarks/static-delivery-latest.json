@@ -1,16 +1,16 @@
 {
   "schema": "morphloom.static-delivery-proof/0.4",
-  "generatedAt": "2026-09-02T11:54:13.068Z",
-  "compilerRevision": "morphloom-compiler/0.28.0",
-  "staticDeliveryRevision": "morphloom-static-delivery/0.5.0",
-  "assetId": "moderncat-concept",
-  "expectedSourceTriangles": 81768,
+  "generatedAt": "2026-09-03T08:31:29.159Z",
+  "compilerRevision": "morphloom-compiler/0.31.0",
+  "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+  "assetId": "asphalt-surface",
+  "expectedSourceTriangles": 111936,
   "assetPack": {
-    "source": "moderncat-two-storey-residence-pinterest-concept-panel-test-morphloom-asset.zip",
-    "bytes": 8327774,
-    "sha256": "0b4c8b53b379e47420a232595a18669db67add84725a5698b13154c703338d3d",
-    "compilerRevision": "morphloom-compiler/0.28.0",
-    "inputFingerprint": "9a8dd45120b6eeff",
+    "source": "rough-asphalt-surface-layered-relief-benchmark-morphloom-asset.zip",
+    "bytes": 13461090,
+    "sha256": "4e2625b02f63c253bf7cd970bd86ecf8bd18b5ff87c8adca572e48797d6880c2",
+    "compilerRevision": "morphloom-compiler/0.31.0",
+    "inputFingerprint": "02f9e94f6e479f66",
     "browserRoundTrip": "pass"
   },
   "status": "pass",
@@ -18,94 +18,97 @@
   "formats": {
     "obj": {
       "source": "morphloom-cad-mesh.obj",
-      "bytes": 43197734,
-      "sha256": "7d6b755ea12c0980077190d4d2f9ae01cb04ecad7fca1b34f0aad460467b3b84",
-      "meshes": 147,
-      "vertices": 242181,
-      "triangles": 81768,
+      "bytes": 51036132,
+      "sha256": "2db5177d9226da384ea7017943bf537d2d70da55543e9a0afafa6178bbe17176",
+      "meshes": 1,
+      "vertices": 335808,
+      "triangles": 111936,
       "coordinateUnit": "m",
       "coordinateScaleFromMeters": 1,
+      "axisConvention": "source-y-up",
       "bounds": {
         "min": [
-          -6.769999980926514,
-          -6.190000057220459,
-          -0.22000037133693695
+          -0.30000001192092896,
+          -0.22499999403953552,
+          -0.020000016316771507
         ],
         "max": [
-          6.769999980926514,
-          5.045000076293945,
-          7.09499979019165
+          0.30000001192092896,
+          0.22499999403953552,
+          0.023453492671251297
         ],
         "size": [
-          13.539999961853027,
-          11.235000610351562,
-          7.315000057220459
+          0.6000000238418579,
+          0.44999998807907104,
+          0.043453507125377655
         ]
       }
     },
     "stl": {
       "source": "morphloom-cad-mesh.stl",
-      "bytes": 4088484,
-      "sha256": "71d9f9bb51cb24207dacc22cb05eebfdcc39bc552126bda2034388583d8ed0d3",
+      "bytes": 5596884,
+      "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
       "meshes": 1,
-      "vertices": 41178,
-      "triangles": 81768,
+      "vertices": 55970,
+      "triangles": 111936,
       "coordinateUnit": "mm",
       "coordinateScaleFromMeters": 1000,
+      "axisConvention": "print-z-up",
       "bounds": {
         "min": [
-          -6770,
-          -220,
-          -5045
+          -300,
+          -225,
+          -20
         ],
         "max": [
-          6770,
-          7095,
-          6190
+          300,
+          225,
+          23.453475952148438
         ],
         "size": [
-          13540,
-          7315,
-          11235
+          600,
+          450,
+          43.45347595214844
         ]
       }
     },
     "ply": {
       "source": "morphloom-static-mesh.ply",
-      "bytes": 8813037,
-      "sha256": "8d7673c4bf5e474b7650fa63c0eac27a5c409f0a35c7348be6025980ad21e70b",
+      "bytes": 12201286,
+      "sha256": "1dbe6e98b5ff7ce7ab9717ca3cb4d77d92f073f326e484de42814015a5a65d1e",
       "meshes": 1,
-      "vertices": 242181,
-      "triangles": 81768,
+      "vertices": 335808,
+      "triangles": 111936,
       "coordinateUnit": "m",
       "coordinateScaleFromMeters": 1,
+      "axisConvention": "source-y-up",
       "bounds": {
         "min": [
-          -6.769999980926514,
-          -0.2199999988079071,
-          -5.044999599456787
+          -0.30000001192092896,
+          -0.019999999552965164,
+          -0.22499999403953552
         ],
         "max": [
-          6.769999980926514,
-          7.09499979019165,
-          6.190000057220459
+          0.30000001192092896,
+          0.023453475907444954,
+          0.22499999403953552
         ],
         "size": [
-          13.539999961853027,
-          7.314999580383301,
-          11.234999656677246
+          0.6000000238418579,
+          0.04345347732305527,
+          0.44999998807907104
         ]
       }
     }
   },
   "parity": {
-    "triangles": 81768,
-    "maximumAxisNormalizedEnvelopeDriftMm": 0.00095367431640625
+    "triangles": 111936,
+    "maximumAxisNormalizedEnvelopeDriftMm": 0.00003117322922019383
   },
   "usdz": {
-    "source": "morphloom-moderncat.usdz",
-    "bytes": 27420208,
-    "sha256": "20383113893ef0a6cd1e09913fc2c3cdda70650707d53d3a9265308906092132",
+    "source": "morphloom-apple-ar.usdz",
+    "bytes": 37239261,
+    "sha256": "49f978ef47ef1bbb1092dc86238b39d61f5d2ab06e6f12879d5362a05f74c73a",
     "validator": "/usr/bin/usdchecker",
     "status": "pass"
   },

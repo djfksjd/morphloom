@@ -81,7 +81,12 @@ describe('semi-professional evidence readiness', () => {
       evidencePackSchema: 'morphloom.evidence-pack/0.2',
       evidenceDeliveryReady: true,
     });
-    expect(auditAssemblyDetail(taggedAssembly).pass).toBe(true);
+    const compiledReadiness = auditAssemblyDetail(taggedAssembly);
+    expect(compiledReadiness.pass).toBe(false);
+    expect(compiledReadiness.blockers).toEqual(expect.arrayContaining([
+      'locked fidelity contract is required',
+      'evidence-first part decomposition contract is required',
+    ]));
   });
 
   it('accepts a combined architectural drawing sheet when it resolves the required properties', () => {
@@ -193,6 +198,9 @@ describe('semi-professional evidence readiness', () => {
     };
     const calibrated = evaluateSemiProfessionalReadiness(views, {
       profile: 'product-visualization', dimensions, cameraCalibrations: [calibration],
+      sourceAudits: [{
+        viewId: 'front', provenance: 'client-measured', geometryConsistency: 'verified', dimensionLegibility: 'verified',
+      }],
     });
     expect(calibrated).toMatchObject({ buildReady: true, deliveryReady: true });
   });

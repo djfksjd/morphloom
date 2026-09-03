@@ -1,5 +1,7 @@
 import type { AssemblyIR, EvidenceStatusIR, SurfaceFinishIR } from './assembly-ir';
 import type { AssetDomain, ReviewMode } from './generation-policy';
+import { calibrateOrthographicYawCamera, type OrthographicCameraAnchor } from './orthographic-camera-calibration';
+import { calibratePerspectiveCamera, type PerspectiveCameraCalibration } from './perspective-camera-calibration';
 
 export type FidelityComplexity = 'simple' | 'moderate' | 'complex' | 'ultra-complex';
 export type FidelityFeatureKind =
@@ -42,13 +44,37 @@ export interface FidelityFeature {
   notes?: string[];
 }
 
-export interface FidelityCamera {
+export interface FidelityCameraAnchor extends OrthographicCameraAnchor {
+  evidenceRef: string;
+}
+
+interface FidelityCameraBase {
   id: string;
   sourceViewId: string;
-  projection: 'perspective' | 'orthographic';
   anchorCount: number;
   reprojectionErrorPx: number;
+  anchors: FidelityCameraAnchor[];
 }
+
+export interface FidelityOrthographicCamera extends FidelityCameraBase {
+  projection: 'orthographic';
+  calibrationRevision: 'morphloom-camera-calibration/0.1';
+  azimuthDegrees: number;
+  pixelsPerWorldUnit: number;
+  offsetPixels: [number, number];
+}
+
+export interface FidelityPerspectiveCamera extends FidelityCameraBase {
+  projection: 'perspective';
+  calibrationRevision: 'morphloom-camera-calibration/0.2';
+  projectionMatrix: PerspectiveCameraCalibration['projectionMatrix'];
+  worldCenter: [number, number, number];
+  worldScale: number;
+  imageCenter: [number, number];
+  imageScale: number;
+}
+
+export type FidelityCamera = FidelityOrthographicCamera | FidelityPerspectiveCamera;
 
 export interface FidelityMaterialRegion {
   id: string;
@@ -66,7 +92,7 @@ export interface FidelityPassContract {
 }
 
 export interface FidelityContract {
-  schema: 'morphloom.fidelity/0.1';
+  schema: 'morphloom.fidelity/0.2';
   assetName: string;
   domain: AssetDomain;
   complexity: FidelityComplexity;
@@ -185,6 +211,18 @@ const REQUIRED_HARD_GATES = [
 
 function finiteUnit(value: number): boolean {
   return Number.isFinite(value) && value >= 0 && value <= 1;
+}
+
+function finiteCameraCoordinate(value: number): boolean {
+  return Number.isFinite(value) && Math.abs(value) <= 1e9;
+}
+
+function maximumRelativeDelta(left: readonly number[], right: readonly number[]): number {
+  if (left.length !== right.length) return Number.POSITIVE_INFINITY;
+  return left.reduce((maximum, value, index) => Math.max(
+    maximum,
+    Math.abs(value - right[index]!) / (1 + Math.max(Math.abs(value), Math.abs(right[index]!))),
+  ), 0);
 }
 
 function validId(value: string): boolean {
@@ -357,7 +395,16 @@ export function fidelityContractFingerprint(contract: FidelityContract): string 
       detail.id, detail.label, detail.kind, detail.importance, detail.componentIds,
       detail.evidenceRef, detail.confidence, detail.threshold, detail.proofViews, detail.notes,
     ]),
-    cameras: contract.cameras.map((camera) => [camera.id, camera.sourceViewId, camera.projection, camera.anchorCount, camera.reprojectionErrorPx]),
+    cameras: contract.cameras.map((camera) => camera.projection === 'orthographic' ? [
+      camera.id, camera.sourceViewId, camera.projection, camera.anchorCount, camera.reprojectionErrorPx,
+      camera.calibrationRevision, camera.azimuthDegrees, camera.pixelsPerWorldUnit, camera.offsetPixels,
+      camera.anchors.map((anchor) => [anchor.id, anchor.world, anchor.image, anchor.confidence, anchor.evidenceRef]),
+    ] : [
+      camera.id, camera.sourceViewId, camera.projection, camera.anchorCount, camera.reprojectionErrorPx,
+      camera.calibrationRevision, camera.projectionMatrix, camera.worldCenter, camera.worldScale,
+      camera.imageCenter, camera.imageScale,
+      camera.anchors.map((anchor) => [anchor.id, anchor.world, anchor.image, anchor.confidence, anchor.evidenceRef]),
+    ]),
     materials: contract.materialRegions.map((region) => [region.id, region.componentId, region.evidenceRef, region.expectedSurface, region.confidence]),
     hardGates: contract.hardGates,
     passes: contract.passes.map((pass) => [pass.id, pass.minimumFidelity, pass.requiredKinds, pass.requiredProofViews]),
@@ -371,7 +418,7 @@ export function createFidelityContract(ir: AssemblyIR, options: FidelityContract
   const complexity = options.complexity ?? (ir.components.length >= 80
     ? 'ultra-complex' : ir.components.length >= 24 ? 'complex' : ir.components.length >= 6 ? 'moderate' : 'simple');
   const contract: FidelityContract = {
-    schema: 'morphloom.fidelity/0.1',
+    schema: 'morphloom.fidelity/0.2',
     assetName: ir.name,
     domain: options.domain,
     complexity,
@@ -405,7 +452,7 @@ export function auditFidelityContract(contract: FidelityContract, ir: AssemblyIR
   ]);
   const validKinds = new Set<FidelityFeatureKind>(['silhouette', 'proportion', 'negative-space', 'component', 'interface', 'material', 'micro-surface', 'marking', 'pose', 'topology']);
   const validViews = new Set<ReviewMode>(['source-camera', 'orthographic', 'clay', 'grazing-light', 'wire', 'x-ray']);
-  if (contract.schema !== 'morphloom.fidelity/0.1') blockers.push('unsupported fidelity schema');
+  if (contract.schema !== 'morphloom.fidelity/0.2') blockers.push('unsupported fidelity schema');
   if (contract.assetName !== ir.name) blockers.push('fidelity assetName does not match AssemblyIR');
   if (!validDomains.has(contract.domain)) blockers.push('unsupported fidelity domain');
   if (!validComplexities.has(contract.complexity)) blockers.push('unsupported fidelity complexity');
@@ -453,9 +500,82 @@ export function auditFidelityContract(contract: FidelityContract, ir: AssemblyIR
   for (const camera of cameras) {
     if (!validId(camera.id) || cameraIds.has(camera.id)) blockers.push(`invalid or duplicate camera id: ${camera.id}`);
     cameraIds.add(camera.id);
-    if (typeof camera.sourceViewId !== 'string' || !camera.sourceViewId.trim() || camera.sourceViewId.length > 160 || !['perspective', 'orthographic'].includes(camera.projection)
-      || !Number.isInteger(camera.anchorCount) || camera.anchorCount < 4 || camera.anchorCount > 512
-      || !Number.isFinite(camera.reprojectionErrorPx) || camera.reprojectionErrorPx < 0 || camera.reprojectionErrorPx > 4) blockers.push(`invalid camera calibration: ${camera.id}`);
+    if (!['perspective', 'orthographic'].includes(camera.projection)) {
+      blockers.push(`invalid camera calibration: ${camera.id}`);
+      continue;
+    }
+    const minimumAnchors = camera.projection === 'perspective' ? 6 : 4;
+    if (typeof camera.sourceViewId !== 'string' || !camera.sourceViewId.trim() || camera.sourceViewId.length > 160
+      || !Number.isInteger(camera.anchorCount) || camera.anchorCount < minimumAnchors || camera.anchorCount > 512
+      || !Number.isFinite(camera.reprojectionErrorPx) || camera.reprojectionErrorPx < 0 || camera.reprojectionErrorPx > 4) {
+      blockers.push(`invalid camera calibration: ${camera.id}`);
+    }
+    if (!Array.isArray(camera.anchors) || camera.anchors.length < minimumAnchors || camera.anchors.length > 512
+      || camera.anchors.length !== camera.anchorCount
+    ) {
+      blockers.push(`missing reproducible camera receipt: ${camera.id}`);
+      continue;
+    }
+    const anchorIds = new Set<string>();
+    let anchorsValid = true;
+    for (const anchor of camera.anchors) {
+      if (!validId(anchor.id) || anchorIds.has(anchor.id)
+        || !Array.isArray(anchor.world) || anchor.world.length !== 3 || !anchor.world.every(finiteCameraCoordinate)
+        || !Array.isArray(anchor.image) || anchor.image.length !== 2 || !anchor.image.every(finiteCameraCoordinate)
+        || typeof anchor.evidenceRef !== 'string' || !anchor.evidenceRef.trim() || anchor.evidenceRef.length > MAX_TEXT
+        || (anchor.confidence !== undefined && (!Number.isFinite(anchor.confidence) || anchor.confidence <= 0 || anchor.confidence > 1))) {
+        anchorsValid = false;
+        break;
+      }
+      anchorIds.add(anchor.id);
+    }
+    if (!anchorsValid) {
+      blockers.push(`invalid camera anchor evidence: ${camera.id}`);
+      continue;
+    }
+    if (camera.projection === 'orthographic') {
+      if (camera.calibrationRevision !== 'morphloom-camera-calibration/0.1'
+        || !Number.isFinite(camera.azimuthDegrees) || !Number.isFinite(camera.pixelsPerWorldUnit)
+        || camera.pixelsPerWorldUnit <= 0 || !Array.isArray(camera.offsetPixels) || camera.offsetPixels.length !== 2
+        || !camera.offsetPixels.every(Number.isFinite)) {
+        blockers.push(`missing reproducible camera receipt: ${camera.id}`);
+        continue;
+      }
+      const calibration = calibrateOrthographicYawCamera(camera.anchors, 4);
+      const azimuthDelta = Math.abs((((calibration.azimuthDegrees - camera.azimuthDegrees) % 360) + 540) % 360 - 180);
+      const offsetDelta = Math.hypot(
+        calibration.offsetPixels[0] - camera.offsetPixels[0],
+        calibration.offsetPixels[1] - camera.offsetPixels[1],
+      );
+      if (calibration.status !== 'calibrated'
+        || Math.abs(calibration.rmsReprojectionErrorPixels - camera.reprojectionErrorPx) > 0.01
+        || azimuthDelta > 0.01
+        || Math.abs(calibration.pixelsPerWorldUnit - camera.pixelsPerWorldUnit) > 0.01
+        || offsetDelta > 0.01) {
+        blockers.push(`camera receipt does not reproduce from anchor coordinates: ${camera.id}`);
+      }
+    } else {
+      if (camera.calibrationRevision !== 'morphloom-camera-calibration/0.2'
+        || !Array.isArray(camera.projectionMatrix) || camera.projectionMatrix.length !== 12
+        || !camera.projectionMatrix.every(finiteCameraCoordinate)
+        || !Array.isArray(camera.worldCenter) || camera.worldCenter.length !== 3 || !camera.worldCenter.every(finiteCameraCoordinate)
+        || !Number.isFinite(camera.worldScale) || camera.worldScale <= 0
+        || !Array.isArray(camera.imageCenter) || camera.imageCenter.length !== 2 || !camera.imageCenter.every(finiteCameraCoordinate)
+        || !Number.isFinite(camera.imageScale) || camera.imageScale <= 0) {
+        blockers.push(`missing reproducible camera receipt: ${camera.id}`);
+        continue;
+      }
+      const calibration = calibratePerspectiveCamera(camera.anchors, 4);
+      if (calibration.status !== 'calibrated'
+        || Math.abs(calibration.rmsReprojectionErrorPixels - camera.reprojectionErrorPx) > 0.01
+        || maximumRelativeDelta(calibration.projectionMatrix, camera.projectionMatrix) > 1e-8
+        || maximumRelativeDelta(calibration.worldCenter, camera.worldCenter) > 1e-8
+        || maximumRelativeDelta([calibration.worldScale], [camera.worldScale]) > 1e-8
+        || maximumRelativeDelta(calibration.imageCenter, camera.imageCenter) > 1e-8
+        || maximumRelativeDelta([calibration.imageScale], [camera.imageScale]) > 1e-8) {
+        blockers.push(`camera receipt does not reproduce from anchor coordinates: ${camera.id}`);
+      }
+    }
   }
   if (contract.complexity !== 'simple' && cameras.length < 1) blockers.push('moderate or complex assets require a calibrated source camera');
   if (!Array.isArray(contract.materialRegions) || materialRegions.length > MAX_MATERIAL_REGIONS) blockers.push('material region count is unsafe');

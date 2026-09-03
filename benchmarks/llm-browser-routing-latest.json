@@ -1,0 +1,104 @@
+{
+  "schema": "morphloom.llm-browser-routing-audit/0.2",
+  "date": "2026-09-03",
+  "purpose": "Authenticated Chrome-extension plus Playwright comparison of three web model surfaces using the same four-view fan evidence and exact final prompt. This measures visual-plan contract compliance, not 3D asset superiority.",
+  "transport": {
+    "browser": "user Chrome window",
+    "control": "Chrome extension + Playwright",
+    "inAppBrowserUsed": false,
+    "standalonePlaywrightUsed": false
+  },
+  "input": {
+    "case": "ABO industrial floor fan",
+    "views": [
+      {
+        "id": "front",
+        "path": "work/abo/pilot/fan/view-000.jpg",
+        "sha256": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11"
+      },
+      {
+        "id": "right",
+        "path": "work/abo/pilot/fan/view-090.jpg",
+        "sha256": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643"
+      },
+      {
+        "id": "rear",
+        "path": "work/abo/pilot/fan/view-180.jpg",
+        "sha256": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3"
+      },
+      {
+        "id": "left",
+        "path": "work/abo/pilot/fan/view-270.jpg",
+        "sha256": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b"
+      }
+    ],
+    "finalPromptSha256": "6beafba2773c60b9280e129f90efacf2570017f77863ba3bfefd8060bb15350c",
+    "rawResponses": "work/llm-web-comparison/provider-responses.json",
+    "engineAudit": "work/llm-web-comparison/provider-audit.json"
+  },
+  "providers": {
+    "chatgptWeb": {
+      "authenticated": true,
+      "visiblePlan": "Free",
+      "modelIdentity": "default web model; exact model identity not exposed",
+      "responseSha256": "e1df1a87a75c5349e6ee8cc835c5c64d8f43cea95e2decac4ad47ed98a3276bf",
+      "strictJson": true,
+      "featureCount": 14,
+      "repeatedArrayCount": 7,
+      "separatelyEditableRepeatedArrayCount": 7,
+      "safeSourceCorrections": 4,
+      "enginePass": true,
+      "blockers": []
+    },
+    "claudeWeb": {
+      "authenticated": true,
+      "visibleModel": "Fable 5",
+      "visibleEffort": "high",
+      "responseSha256": "bca8a6f6a7b5974ed3c55dc0bd336d1ba8e47f9bd80c32d1d148f52944589155",
+      "strictJson": true,
+      "featureCount": 15,
+      "repeatedArrayCount": 7,
+      "separatelyEditableRepeatedArrayCount": 2,
+      "safeSourceCorrections": 0,
+      "enginePass": false,
+      "blockers": [
+        "front and rear guard rings are grouped as non-editable arrays",
+        "front and rear guard spokes are grouped as non-editable arrays",
+        "rear motor vents are grouped as a non-editable array"
+      ]
+    },
+    "geminiWeb": {
+      "authenticated": true,
+      "visibleMode": "Flash",
+      "responseSha256": "7c7a8365242229b37bb542e5d206c2d035a9d230e042e057b5decdba49ebb3eb",
+      "strictJson": true,
+      "featureCount": 12,
+      "repeatedArrayCount": 7,
+      "separatelyEditableRepeatedArrayCount": 4,
+      "safeSourceCorrections": 4,
+      "enginePass": false,
+      "blockers": [
+        "guard rings are grouped as a non-editable array",
+        "guard spokes are grouped as a non-editable array",
+        "rear motor vents are grouped as a non-editable array"
+      ]
+    }
+  },
+  "engineHardening": {
+    "sourceKindRecovery": "allowed only when an immutable source fingerprint exactly matches a bound evidence source",
+    "semanticRecovery": "forbidden; counts, editability and geometry are never silently upgraded",
+    "requiredRepeatedEditability": true,
+    "duplicateCountAuthorityBlocked": true,
+    "deterministicProviderPromptAdded": true
+  },
+  "visualPlanningComparisonAllowed": true,
+  "lowestModelComparisonCompleted": false,
+  "actual3dComparisonCompleted": false,
+  "claimAllowed": false,
+  "remainingBlockers": [
+    "The web run produced visual plans, not provider-generated 3D assets.",
+    "The exact ChatGPT model identity is not exposed by the Free web surface.",
+    "Claude was visibly Fable 5 high, so this is not the requested lowest-Claude-model trial.",
+    "A single fan case cannot prove cross-domain or img2threejs superiority."
+  ]
+}

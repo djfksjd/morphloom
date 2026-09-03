@@ -4,7 +4,7 @@
   "title": "Morphloom Semi-professional Evidence Pack 0.2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "target", "profile", "baseManifest", "dimensions", "cameraCalibrations", "expectedComponentIds", "readiness", "agentInstructions"],
+  "required": ["schema", "target", "profile", "baseManifest", "dimensions", "cameraCalibrations", "sourceAudits", "expectedComponentIds", "readiness", "agentInstructions"],
   "properties": {
     "schema": { "const": "morphloom.evidence-pack/0.2" },
     "target": { "const": "semi-professional-editable" },
@@ -12,6 +12,7 @@
     "baseManifest": { "$ref": "#/$defs/baseManifest" },
     "dimensions": { "type": "array", "maxItems": 128, "items": { "$ref": "#/$defs/dimension" } },
     "cameraCalibrations": { "type": "array", "maxItems": 24, "items": { "$ref": "#/$defs/camera" } },
+    "sourceAudits": { "type": "array", "maxItems": 24, "items": { "$ref": "#/$defs/sourceAudit" } },
     "expectedComponentIds": { "type": "array", "maxItems": 512, "uniqueItems": true, "items": { "$ref": "#/$defs/asciiId" } },
     "readiness": { "$ref": "#/$defs/readiness" },
     "agentInstructions": { "type": "array", "minItems": 1, "maxItems": 16, "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
@@ -91,6 +92,18 @@
         "reprojectionErrorPx": { "type": "number", "minimum": 0, "maximum": 10000 }
       }
     },
+    "sourceAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["viewId", "provenance", "geometryConsistency", "dimensionLegibility"],
+      "properties": {
+        "viewId": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "provenance": { "enum": ["official-record", "professional-drawing", "client-measured", "unknown", "synthetic-concept"] },
+        "geometryConsistency": { "enum": ["verified", "partial", "conflict"] },
+        "dimensionLegibility": { "enum": ["verified", "partial", "unreadable"] },
+        "notes": { "type": "array", "maxItems": 32, "items": { "type": "string", "maxLength": 500 } }
+      }
+    },
     "conflict": {
       "type": "object",
       "additionalProperties": false,
@@ -106,7 +119,7 @@
     "readiness": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["target", "profile", "buildReady", "deliveryReady", "score", "recommendedRoles", "presentRecommendedRoles", "missingRecommendedRoles", "requiredCapabilities", "resolvedCapabilities", "unresolvedCapabilities", "strongDimensionProperties", "calibratedViews", "identifiedComponentIds", "conflicts", "blockers", "warnings", "nextActions"],
+      "required": ["target", "profile", "buildReady", "deliveryReady", "score", "recommendedRoles", "presentRecommendedRoles", "missingRecommendedRoles", "requiredCapabilities", "resolvedCapabilities", "unresolvedCapabilities", "strongDimensionProperties", "calibratedViews", "identifiedComponentIds", "sourceAuditReady", "sourceAuditIssues", "conflicts", "blockers", "warnings", "nextActions"],
       "properties": {
         "target": { "const": "semi-professional-editable" },
         "profile": { "$ref": "#/$defs/profile" },
@@ -122,6 +135,8 @@
         "strongDimensionProperties": { "type": "array", "items": { "type": "string" } },
         "calibratedViews": { "type": "array", "items": { "type": "string" } },
         "identifiedComponentIds": { "type": "array", "items": { "$ref": "#/$defs/asciiId" } },
+        "sourceAuditReady": { "type": "boolean" },
+        "sourceAuditIssues": { "type": "array", "items": { "type": "string" } },
         "conflicts": { "type": "array", "items": { "$ref": "#/$defs/conflict" } },
         "blockers": { "type": "array", "items": { "type": "string" } },
         "warnings": { "type": "array", "items": { "type": "string" } },

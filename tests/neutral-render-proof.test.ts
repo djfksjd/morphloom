@@ -4,8 +4,8 @@ import { auditNeutralRenderPair, auditNeutralRenderSet, validateNeutralRenderRep
 function report(candidate: 'morphloom' | 'img2threejs') {
   const digest = candidate === 'morphloom' ? 'a'.repeat(64) : 'b'.repeat(64);
   return {
-    schema: 'morphloom.neutral-glb-render/0.2',
-    protocol: 'morphloom-neutral-glb-v1',
+    schema: 'morphloom.neutral-glb-render/0.3',
+    protocol: 'morphloom-neutral-glb-v2',
     viewId: 'front',
     blenderVersion: '5.2.1 LTS',
     source: `${candidate}.glb`,
@@ -24,7 +24,8 @@ function report(candidate: 'morphloom' | 'img2threejs') {
       normalizedBounds: { min: [-1, -0.1, -0.5], max: [1, 0.1, 0.5], size: [2, 0.2, 1] },
     },
     camera: { projection: 'orthographic', position: [0, -4, 0], target: [0, 0, 0], up: [0, 0, 1], orthographicHeight: 2.35 },
-    renderSettings: { engine: 'BLENDER_EEVEE', width: 1024, height: 512, transparent: true, viewTransform: 'AgX', look: 'AgX - Medium High Contrast' },
+    framing: { alphaBoundsPixels: { min: [64, 80], max: [959, 943] }, minimumMarginPixels: 64, touchesBorder: false },
+    renderSettings: { engine: 'BLENDER_EEVEE', width: 1024, height: 1024, transparent: true, viewTransform: 'AgX', look: 'AgX - Medium High Contrast' },
     studio: {
       world: { color: [0.12, 0.12, 0.12, 1], strength: 0.28 },
       lights: [
@@ -58,6 +59,14 @@ describe('neutral GLB render proof', () => {
     const studio = report('img2threejs');
     studio.studio.lights[0]!.energy = 500;
     expect(auditNeutralRenderPair(report('morphloom'), studio).blockers[0]).toMatch(/studio contract changed/);
+  });
+
+  it('blocks renders whose alpha silhouette touches or nearly touches the frame', () => {
+    const clipped = report('img2threejs');
+    clipped.framing.alphaBoundsPixels.min = [0, 40];
+    clipped.framing.minimumMarginPixels = 0;
+    clipped.framing.touchesBorder = true;
+    expect(() => validateNeutralRenderReport(clipped)).toThrow(/framing is clipped/);
   });
 
   it('blocks attempts to compare one source or one render against itself', () => {

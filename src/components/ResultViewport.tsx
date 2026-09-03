@@ -242,8 +242,13 @@ function drawDimensionOverview(
   build.root.updateMatrixWorld(true);
   const assetSize = build.metrics.bounds.getSize(new THREE.Vector3());
   const assetDiagonal = Math.max(assetSize.length(), 0.1);
-  const tick = Math.max(assetDiagonal * 0.006, 0.018);
-  const labelWidth = THREE.MathUtils.clamp(assetDiagonal * 0.092, 0.48, 1.72);
+  const architecturalScale = assetDiagonal > 4;
+  const tick = architecturalScale
+    ? Math.max(assetDiagonal * 0.006, 0.018)
+    : THREE.MathUtils.clamp(assetDiagonal * 0.012, 0.0015, 0.02);
+  const labelWidth = architecturalScale
+    ? THREE.MathUtils.clamp(assetDiagonal * 0.092, 0.48, 1.72)
+    : THREE.MathUtils.clamp(assetDiagonal * 0.24, 0.03, 0.22);
   const repeatedDetail = /(slat|seam|mullion|post|step|chair|light|screw|port|ring|aperture|connector|nightstand|ridge cap)/i;
   const candidates: Array<{
     bounds: THREE.Box3;
@@ -266,11 +271,12 @@ function drawDimensionOverview(
     candidates.push({ bounds, size, part, priority: longest + Math.cbrt(Math.max(size.x * size.y * size.z, 0)) * 0.25 + architecturalWeight });
   });
 
-  const maximumDimensions = assetDiagonal > 4 ? 20 : 28;
+  const maximumDimensions = architecturalScale ? 20 : 4;
   const selected = candidates.sort((left, right) => right.priority - left.priority).slice(0, maximumDimensions);
   selected.forEach(({ bounds, size, part }, index) => {
     const lane = index % 4;
-    const offset = Math.max(tick * (2.1 + lane * 0.6), Math.min(size.y, assetDiagonal * 0.03) * 0.18);
+    const laneStep = architecturalScale ? 0.6 : 3.8;
+    const offset = Math.max(tick * (2.1 + lane * laneStep), Math.min(size.y, assetDiagonal * 0.03) * 0.18);
     const y = bounds.max.y + offset;
     const z = bounds.max.z + offset * 0.35;
     const widthStart = new THREE.Vector3(bounds.min.x, y, z);
@@ -313,13 +319,18 @@ function drawDimensionOverview(
       '#fff7e8',
       '#ffb454',
     );
-    heightLabel.position.copy(heightStart).lerp(heightEnd, 0.5).add(new THREE.Vector3(offset * 0.85, 0, 0));
+    heightLabel.position.copy(heightStart).lerp(heightEnd, 0.5).add(new THREE.Vector3(
+      offset * 0.85,
+      architecturalScale ? 0 : (lane - 1.5) * labelWidth * 0.38,
+      0,
+    ));
     heightLabel.userData.partId = part.id;
     runtime.dimensionOverview.add(heightLabel);
   });
   runtime.dimensionOverview.userData.dimensionCount = selected.length;
   runtime.dimensionOverview.userData.dimensionCandidateCount = candidates.length;
   runtime.dimensionOverview.userData.dimensionLimit = maximumDimensions;
+  runtime.dimensionOverview.userData.dimensionLabelWidth = labelWidth;
   runtime.dimensionOverview.userData.dimensionMode = 'decluttered-width-depth-height';
   runtime.dimensionOverview.visible = true;
   runtime.syncDiagnostics();
@@ -343,7 +354,12 @@ function annotationLabel(
   context.lineWidth = 8;
   context.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
   context.fillStyle = foreground;
-  context.font = '600 54px IBM Plex Mono, monospace';
+  let fontSize = 54;
+  do {
+    context.font = `600 ${fontSize}px IBM Plex Mono, monospace`;
+    if (context.measureText(text).width <= canvas.width - 48 || fontSize <= 24) break;
+    fontSize -= 2;
+  } while (fontSize > 24);
   context.textAlign = 'center';
   context.textBaseline = 'middle';
   context.fillText(text, canvas.width / 2, canvas.height / 2 + 2);
@@ -1033,6 +1049,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       };
       build.root.addEventListener('morphloom-reference-projection-ready' as never, handleReferenceProjectionReady as never);
       frameBuild(runtime, build, assetKind, assemblyIR, spec);
+      if (dimensionOverviewEnabled) zoomOptically(runtime, 0.72);
       if (preserveMeasurement && measurementEnabled && measurementPointsRef.current.length > 0) {
         drawMeasurementAnnotation(runtime, measurementPointsRef.current, measurementMode, measurementUnit, markerRadiusRef.current);
       }
@@ -1070,7 +1087,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       return () => {
         build.root.removeEventListener('morphloom-reference-projection-ready' as never, handleReferenceProjectionReady as never);
       };
-    }, [assemblyIR, assetKind, dimensionOverviewEnabled, measurementUnit, mode, onBuilt, onTelemetry, pack, productSpec, spec]);
+    }, [assemblyIR, assetKind, mode, onBuilt, onTelemetry, pack, productSpec, spec]);
 
     useEffect(() => {
       const sequence = ++validationSequenceRef.current;
@@ -1129,7 +1146,10 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
             if (sequence !== validationSequenceRef.current) return;
             onDeliveryAudit?.(blockedDeliveryAudit(error));
           });
-      }, 80);
+      // Keep the first interaction responsive. GLB export, validator startup
+      // and browser round-trip remain automatic, but begin after the viewer is
+      // usable instead of monopolizing the main thread immediately after mount.
+      }, 10_000);
       return () => {
         window.clearTimeout(timer);
         validationSequenceRef.current += 1;
@@ -1154,8 +1174,14 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       const runtime = runtimeRef.current;
       const build = buildRef.current;
       if (!runtime || !build) return;
-      if (dimensionOverviewEnabled) drawDimensionOverview(runtime, build, measurementUnit);
-      else clearGroup(runtime.dimensionOverview);
+      const wasVisible = runtime.dimensionOverview.visible && runtime.dimensionOverview.children.length > 0;
+      if (dimensionOverviewEnabled) {
+        drawDimensionOverview(runtime, build, measurementUnit);
+        if (!wasVisible) zoomOptically(runtime, 0.72);
+      } else {
+        clearGroup(runtime.dimensionOverview);
+        runtime.dimensionOverview.visible = false;
+      }
     }, [dimensionOverviewEnabled, measurementUnit]);
 
     useImperativeHandle(ref, () => ({

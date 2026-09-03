@@ -107,6 +107,7 @@ const manifest = JSON.parse(strFromU8(manifestBytes)) as {
     format?: Format;
     coordinateUnit?: 'm' | 'mm';
     coordinateScaleFromMeters?: number;
+    axisConvention?: 'source-y-up' | 'print-z-up';
     status?: string;
     bytes?: number;
     triangleParity?: boolean;
@@ -146,6 +147,7 @@ for (const format of ['obj', 'stl', 'ply'] as const) {
   if (!audit || audit.schema !== 'morphloom.static-mesh-roundtrip/0.2'
     || audit.coordinateScaleFromMeters !== expectedScale
     || audit.coordinateUnit !== (format === 'stl' ? 'mm' : 'm')
+    || audit.axisConvention !== (format === 'stl' ? 'print-z-up' : 'source-y-up')
     || audit.status !== 'pass' || audit.triangleParity !== true
     || audit.sourceTriangles !== expectedTriangles || audit.reopenedTriangles !== expectedTriangles
     || Number(audit.boundsErrorMm) > 0.1 || (audit.blockers?.length ?? 0) !== 0
@@ -200,6 +202,7 @@ const report = {
     triangles: report.triangles,
     coordinateUnit: report.format === 'stl' ? 'mm' : 'm',
     coordinateScaleFromMeters: report.format === 'stl' ? 1_000 : 1,
+    axisConvention: report.format === 'stl' ? 'print-z-up' : 'source-y-up',
     bounds: report.bounds,
   }])),
   parity: {

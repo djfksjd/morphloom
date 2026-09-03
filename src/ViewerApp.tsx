@@ -134,7 +134,7 @@ const VIEWER_ASSETS: ViewerAsset[] = [
 function resolveInitialViewerAsset(): ViewerAsset {
   const requested = new URLSearchParams(window.location.search).get('asset');
   return VIEWER_ASSETS.find((asset) => asset.id === requested)
-    ?? VIEWER_ASSETS.find((asset) => asset.id === 'moderncat-concept')!;
+    ?? VIEWER_ASSETS.find((asset) => asset.id === 'fold8')!;
 }
 
 const BROWSER_PROOF_ASSETS: Record<string, BrowserProofDefinition> = {
@@ -899,7 +899,7 @@ export function ViewerApp() {
               ? deliveryAudit.blockers.join(' · ')
               : 'GLB를 메모리에서 다시 열어 메시·삼각형·명명 노드·포락을 원본과 비교합니다.'}</p>
             <div className="browser-proof-progress" aria-label="브라우저 왕복 검증 수집 현황">
-              <span><b>ASIDE BROWSER PROOF</b>{Object.keys(browserProofReceipts).length}/{BROWSER_PROOF_EXPECTED_COUNT} ASSETS</span>
+              <span><b>ACTUAL BROWSER PROOF</b>{Object.keys(browserProofReceipts).length}/{BROWSER_PROOF_EXPECTED_COUNT} ASSETS</span>
               <button
                 disabled={Object.keys(browserProofReceipts).length === 0}
                 onClick={() => {
@@ -908,7 +908,7 @@ export function ViewerApp() {
                     getBrowserConsoleEvidence(),
                   );
                   downloadJson(report, 'morphloom-browser-roundtrip.json');
-                  setViewerNote(`Aside 브라우저 왕복 증빙 ${report.assets.length}/${BROWSER_PROOF_EXPECTED_COUNT}개를 저장했습니다.`);
+                  setViewerNote(`실제 브라우저 왕복 증빙 ${report.assets.length}/${BROWSER_PROOF_EXPECTED_COUNT}개를 저장했습니다.`);
                 }}
               >SAVE PROOF</button>
             </div>

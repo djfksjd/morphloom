@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type { AssemblyGeometryIR } from './assembly-ir';
 import { sampleQuantizedReferenceHeight } from './reference-surface';
+import { registerDeterministicTopologyKey } from './self-intersection';
 
 type SurfacePatchIR = Extract<AssemblyGeometryIR, { op: 'surfacePatch' }>;
 
@@ -295,6 +296,11 @@ export function createLayeredSurfaceGeometry(spec: SurfacePatchIR): THREE.Buffer
   faceted.computeVertexNormals();
   faceted.computeBoundingBox();
   faceted.computeBoundingSphere();
+  // The compiler consumes this exact descriptor key once during its immediate
+  // topology audit. Self-intersection analysis may then reuse an identical
+  // deterministic build without trusting the key after either geometry has
+  // escaped to callers and become mutable.
+  registerDeterministicTopologyKey(faceted, `surfacePatch:${JSON.stringify(spec)}`);
   geometry.dispose();
   return faceted;
 }

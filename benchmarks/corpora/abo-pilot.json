@@ -1,0 +1,382 @@
+{
+  "schema": "morphloom.ground-truth-corpus/0.2",
+  "id": "abo-product-surface-pilot",
+  "revision": "2026-09-03.2",
+  "sourceDataset": "Amazon Berkeley Objects",
+  "sourceDatasetUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/index.html",
+  "purpose": "Independent multi-view product and surface reconstruction evidence with artist-authored PBR GLB ground truth.",
+  "cases": [
+    {
+      "id": "abo-industrial-tripod-lamp",
+      "domains": ["industrial-design"],
+      "sourceItemId": "B075X2YJHZ",
+      "title": "Vintage industrial spotlight tripod floor lamp",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": [
+          "Data, images, and 3D model: Amazon.com",
+          "Dataset builders: Matthieu Guillaumin, Thomas Dideriksen, Kenan Deng, Himanshu Arora, Jasmine Collins, and Jitendra Malik"
+        ]
+      },
+      "evidenceMode": "multi-view+metric+reference-3d",
+      "cameraPoseEvidence": {
+        "schema": "morphloom.camera-pose-evidence/0.1",
+        "turntableSequence": {
+          "id": "abo-spin-90236130",
+          "frameCount": 72,
+          "degreesPerStep": 5,
+          "direction": "clockwise",
+          "metadataSourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/metadata/spins.csv.gz",
+          "metadataRecordFingerprint": "db761438abe04b1edc35b9f5315198cb46abfe9e87300f86a12b3ecc1f7c09df"
+        },
+        "views": [
+          { "id": "front", "sourceFingerprint": "1dd2828290de9a7df5fe5ac9a47f87b09022a4f9706f7cde633fe9fa8065ef21", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "db761438abe04b1edc35b9f5315198cb46abfe9e87300f86a12b3ecc1f7c09df", "usesCandidateGeometry": false, "sequenceIndex": 0, "relativeAzimuthDegrees": 0 },
+          { "id": "right", "sourceFingerprint": "676f72668c67fb808a3fffd3fe412a98e2660cd927d3d0480f492ac4d10539ed", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "db761438abe04b1edc35b9f5315198cb46abfe9e87300f86a12b3ecc1f7c09df", "usesCandidateGeometry": false, "sequenceIndex": 18, "relativeAzimuthDegrees": 90 },
+          { "id": "rear", "sourceFingerprint": "1eacdc91adec0f08b2448da88b27473e493db74b96977438afd055b7088957e6", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "db761438abe04b1edc35b9f5315198cb46abfe9e87300f86a12b3ecc1f7c09df", "usesCandidateGeometry": false, "sequenceIndex": 36, "relativeAzimuthDegrees": 180 },
+          { "id": "left", "sourceFingerprint": "58b66c970adcbb0ad71cfcd975752a7b95fb857266ad1b51f05f82459e1a278a", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "db761438abe04b1edc35b9f5315198cb46abfe9e87300f86a12b3ecc1f7c09df", "usesCandidateGeometry": false, "sequenceIndex": 54, "relativeAzimuthDegrees": 270 }
+        ]
+      },
+      "inputAssetIds": ["front", "right", "rear", "left"],
+      "contextAssetIds": ["primary"],
+      "groundTruthAssetId": "ground-truth",
+      "listingDimensionsMm": { "width": 647.7, "height": 1524, "depth": 647.7, "confidence": 0.7 },
+      "expectedModel": {
+        "nodes": 1,
+        "meshes": 1,
+        "materials": 1,
+        "textures": 4,
+        "vertices": 80309,
+        "triangles": 153008,
+        "boundsMeters": [0.8791744112968445, 1.5041835880256258, 0.883966326713562]
+      },
+      "assets": [
+        {
+          "id": "ground-truth",
+          "kind": "ground-truth-model",
+          "relativePath": "lamp/ground-truth.glb",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/3dmodels/original/Z/B075X2YJHZ.glb",
+          "sha256": "742babfcce4bb85bc8916bed47b2747495d67d0826ae1a2d8fbeb1456d698b73",
+          "bytes": 5606664,
+          "mimeType": "model/gltf-binary"
+        },
+        {
+          "id": "primary",
+          "kind": "input-image",
+          "relativePath": "lamp/main.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/images/original/6b/6bcc53d0.jpg",
+          "sha256": "3a90ffc2cc8a85a27227f6349ec8e51d97b15282079ca1106821ee9891405633",
+          "bytes": 170847,
+          "mimeType": "image/jpeg",
+          "role": "primary",
+          "width": 2560,
+          "height": 2560
+        },
+        {
+          "id": "front",
+          "kind": "input-image",
+          "relativePath": "lamp/view-000.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/90/90236130/90236130_00.jpg",
+          "sha256": "1dd2828290de9a7df5fe5ac9a47f87b09022a4f9706f7cde633fe9fa8065ef21",
+          "bytes": 29329,
+          "mimeType": "image/jpeg",
+          "role": "front",
+          "sequenceIndex": 0,
+          "relativeAzimuthDegrees": 0,
+          "width": 505,
+          "height": 935
+        },
+        {
+          "id": "right",
+          "kind": "input-image",
+          "relativePath": "lamp/view-090.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/90/90236130/90236130_18.jpg",
+          "sha256": "676f72668c67fb808a3fffd3fe412a98e2660cd927d3d0480f492ac4d10539ed",
+          "bytes": 29139,
+          "mimeType": "image/jpeg",
+          "role": "right",
+          "sequenceIndex": 18,
+          "relativeAzimuthDegrees": 90,
+          "width": 505,
+          "height": 935
+        },
+        {
+          "id": "rear",
+          "kind": "input-image",
+          "relativePath": "lamp/view-180.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/90/90236130/90236130_36.jpg",
+          "sha256": "1eacdc91adec0f08b2448da88b27473e493db74b96977438afd055b7088957e6",
+          "bytes": 29040,
+          "mimeType": "image/jpeg",
+          "role": "rear",
+          "sequenceIndex": 36,
+          "relativeAzimuthDegrees": 180,
+          "width": 505,
+          "height": 935
+        },
+        {
+          "id": "left",
+          "kind": "input-image",
+          "relativePath": "lamp/view-270.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/90/90236130/90236130_54.jpg",
+          "sha256": "58b66c970adcbb0ad71cfcd975752a7b95fb857266ad1b51f05f82459e1a278a",
+          "bytes": 28773,
+          "mimeType": "image/jpeg",
+          "role": "left",
+          "sequenceIndex": 54,
+          "relativeAzimuthDegrees": 270,
+          "width": 505,
+          "height": 935
+        }
+      ]
+    },
+    {
+      "id": "abo-industrial-floor-fan",
+      "domains": ["industrial-design"],
+      "sourceItemId": "B07XMV34PX",
+      "title": "18-inch high-velocity industrial floor fan",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": [
+          "Data, images, and 3D model: Amazon.com",
+          "Dataset builders: Matthieu Guillaumin, Thomas Dideriksen, Kenan Deng, Himanshu Arora, Jasmine Collins, and Jitendra Malik"
+        ]
+      },
+      "evidenceMode": "multi-view+metric+reference-3d",
+      "cameraPoseEvidence": {
+        "schema": "morphloom.camera-pose-evidence/0.1",
+        "turntableSequence": {
+          "id": "abo-spin-281a313b",
+          "frameCount": 72,
+          "degreesPerStep": 5,
+          "direction": "clockwise",
+          "metadataSourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/metadata/spins.csv.gz",
+          "metadataRecordFingerprint": "c5c3adb72b33079d43fded65e0b2665832c6650a2fd4367d0532f7e6fce1690b"
+        },
+        "views": [
+          { "id": "front", "sourceFingerprint": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "c5c3adb72b33079d43fded65e0b2665832c6650a2fd4367d0532f7e6fce1690b", "usesCandidateGeometry": false, "sequenceIndex": 0, "relativeAzimuthDegrees": 0 },
+          { "id": "right", "sourceFingerprint": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "c5c3adb72b33079d43fded65e0b2665832c6650a2fd4367d0532f7e6fce1690b", "usesCandidateGeometry": false, "sequenceIndex": 18, "relativeAzimuthDegrees": 90 },
+          { "id": "rear", "sourceFingerprint": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "c5c3adb72b33079d43fded65e0b2665832c6650a2fd4367d0532f7e6fce1690b", "usesCandidateGeometry": false, "sequenceIndex": 36, "relativeAzimuthDegrees": 180 },
+          { "id": "left", "sourceFingerprint": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "c5c3adb72b33079d43fded65e0b2665832c6650a2fd4367d0532f7e6fce1690b", "usesCandidateGeometry": false, "sequenceIndex": 54, "relativeAzimuthDegrees": 270 }
+        ]
+      },
+      "inputAssetIds": ["front", "right", "rear", "left"],
+      "contextAssetIds": ["primary"],
+      "groundTruthAssetId": "ground-truth",
+      "listingDimensionsMm": { "width": 554.99, "height": 546.1, "depth": 210.058, "confidence": 0.7 },
+      "expectedModel": {
+        "nodes": 1,
+        "meshes": 1,
+        "materials": 1,
+        "textures": 3,
+        "vertices": 182907,
+        "triangles": 323770,
+        "boundsMeters": [0.5549903213977814, 0.5457066297531128, 0.42436839640140533]
+      },
+      "assets": [
+        {
+          "id": "ground-truth",
+          "kind": "ground-truth-model",
+          "relativePath": "fan/ground-truth.glb",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/3dmodels/original/X/B07XMV34PX.glb",
+          "sha256": "2ada234b9e1352a7acc20bfea85676e373f27022c531a59130889712355518aa",
+          "bytes": 19087980,
+          "mimeType": "model/gltf-binary"
+        },
+        {
+          "id": "primary",
+          "kind": "input-image",
+          "relativePath": "fan/main.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/images/original/fa/fafe4f4a.jpg",
+          "sha256": "39cd73c6179abf618bf801cf83b739caff050d2b0ef3a70f54758a457576265e",
+          "bytes": 795729,
+          "mimeType": "image/jpeg",
+          "role": "primary",
+          "width": 2560,
+          "height": 2560
+        },
+        {
+          "id": "front",
+          "kind": "input-image",
+          "relativePath": "fan/view-000.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_00.jpg",
+          "sha256": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11",
+          "bytes": 94716,
+          "mimeType": "image/jpeg",
+          "role": "front",
+          "sequenceIndex": 0,
+          "relativeAzimuthDegrees": 0,
+          "width": 834,
+          "height": 690
+        },
+        {
+          "id": "right",
+          "kind": "input-image",
+          "relativePath": "fan/view-090.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_18.jpg",
+          "sha256": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643",
+          "bytes": 68373,
+          "mimeType": "image/jpeg",
+          "role": "right",
+          "sequenceIndex": 18,
+          "relativeAzimuthDegrees": 90,
+          "width": 834,
+          "height": 690
+        },
+        {
+          "id": "rear",
+          "kind": "input-image",
+          "relativePath": "fan/view-180.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_36.jpg",
+          "sha256": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3",
+          "bytes": 92739,
+          "mimeType": "image/jpeg",
+          "role": "rear",
+          "sequenceIndex": 36,
+          "relativeAzimuthDegrees": 180,
+          "width": 834,
+          "height": 690
+        },
+        {
+          "id": "left",
+          "kind": "input-image",
+          "relativePath": "fan/view-270.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_54.jpg",
+          "sha256": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b",
+          "bytes": 66318,
+          "mimeType": "image/jpeg",
+          "role": "left",
+          "sequenceIndex": 54,
+          "relativeAzimuthDegrees": 270,
+          "width": 834,
+          "height": 690
+        }
+      ]
+    },
+    {
+      "id": "abo-surface-fringed-wool-rug",
+      "domains": ["surface"],
+      "sourceItemId": "B0732L971R",
+      "title": "Fringed woven area rug with irregular pile and pattern",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/",
+        "attribution": [
+          "Data, images, and 3D model: Amazon.com",
+          "Dataset builders: Matthieu Guillaumin, Thomas Dideriksen, Kenan Deng, Himanshu Arora, Jasmine Collins, and Jitendra Malik"
+        ]
+      },
+      "evidenceMode": "multi-view+metric+reference-3d",
+      "cameraPoseEvidence": {
+        "schema": "morphloom.camera-pose-evidence/0.1",
+        "turntableSequence": {
+          "id": "abo-spin-dd93dda6",
+          "frameCount": 72,
+          "degreesPerStep": 5,
+          "direction": "clockwise",
+          "metadataSourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/metadata/spins.csv.gz",
+          "metadataRecordFingerprint": "70e9a384da4e4bc68c24af048d43f84d84b3b8316653b9883049e0942ce0ced9"
+        },
+        "views": [
+          { "id": "front", "sourceFingerprint": "9a113f9db14fa1519be75e6d57abf65d7c07509015aa5452c70096bf6eec24f7", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "70e9a384da4e4bc68c24af048d43f84d84b3b8316653b9883049e0942ce0ced9", "usesCandidateGeometry": false, "sequenceIndex": 0, "relativeAzimuthDegrees": 0 },
+          { "id": "right", "sourceFingerprint": "34b05f92e92b9e7ffbb3de1b10902ed9d882cc206af9d37750912c29cc82233d", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "70e9a384da4e4bc68c24af048d43f84d84b3b8316653b9883049e0942ce0ced9", "usesCandidateGeometry": false, "sequenceIndex": 18, "relativeAzimuthDegrees": 90 },
+          { "id": "rear", "sourceFingerprint": "bd946c62ddc65bbb188c37269a3f95ac591a49c7a0ff610b76f521737276b8f6", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "70e9a384da4e4bc68c24af048d43f84d84b3b8316653b9883049e0942ce0ced9", "usesCandidateGeometry": false, "sequenceIndex": 36, "relativeAzimuthDegrees": 180 },
+          { "id": "left", "sourceFingerprint": "9f7d11f9754c25535ca403f7c4d34d614a91bfcc4b418d4b381314ae94d48452", "derivation": "dataset-turntable-metadata", "derivationReceiptFingerprint": "70e9a384da4e4bc68c24af048d43f84d84b3b8316653b9883049e0942ce0ced9", "usesCandidateGeometry": false, "sequenceIndex": 54, "relativeAzimuthDegrees": 270 }
+        ]
+      },
+      "inputAssetIds": ["front", "right", "rear", "left"],
+      "contextAssetIds": ["primary"],
+      "groundTruthAssetId": "ground-truth",
+      "listingDimensionsMm": { "width": 1524, "height": 2.54, "depth": 2438.4, "confidence": 0.7 },
+      "expectedModel": {
+        "nodes": 1,
+        "meshes": 1,
+        "materials": 1,
+        "textures": 3,
+        "vertices": 226814,
+        "triangles": 433664,
+        "boundsMeters": [2.4654948711395264, 0.011691844090819359, 1.464881420135498]
+      },
+      "assets": [
+        {
+          "id": "ground-truth",
+          "kind": "ground-truth-model",
+          "relativePath": "rug/ground-truth.glb",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/3dmodels/original/R/B0732L971R.glb",
+          "sha256": "d708e1c9e8e14ea55490dffc91025b74172b8bf7f3b134becdcffb857e55f603",
+          "bytes": 17227628,
+          "mimeType": "model/gltf-binary"
+        },
+        {
+          "id": "primary",
+          "kind": "input-image",
+          "relativePath": "rug/main.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/images/original/92/925a7910.jpg",
+          "sha256": "ed9044420d2964dfb0999b70856772d9906096818f3b58798075965b2c5f67e6",
+          "bytes": 1607134,
+          "mimeType": "image/jpeg",
+          "role": "primary",
+          "width": 2560,
+          "height": 2560
+        },
+        {
+          "id": "front",
+          "kind": "input-image",
+          "relativePath": "rug/view-000.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/dd/dd93dda6/dd93dda6_00.jpg",
+          "sha256": "9a113f9db14fa1519be75e6d57abf65d7c07509015aa5452c70096bf6eec24f7",
+          "bytes": 160364,
+          "mimeType": "image/jpeg",
+          "role": "front",
+          "sequenceIndex": 0,
+          "relativeAzimuthDegrees": 0,
+          "width": 1303,
+          "height": 863
+        },
+        {
+          "id": "right",
+          "kind": "input-image",
+          "relativePath": "rug/view-090.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/dd/dd93dda6/dd93dda6_18.jpg",
+          "sha256": "34b05f92e92b9e7ffbb3de1b10902ed9d882cc206af9d37750912c29cc82233d",
+          "bytes": 159667,
+          "mimeType": "image/jpeg",
+          "role": "right",
+          "sequenceIndex": 18,
+          "relativeAzimuthDegrees": 90,
+          "width": 1303,
+          "height": 863
+        },
+        {
+          "id": "rear",
+          "kind": "input-image",
+          "relativePath": "rug/view-180.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/dd/dd93dda6/dd93dda6_36.jpg",
+          "sha256": "bd946c62ddc65bbb188c37269a3f95ac591a49c7a0ff610b76f521737276b8f6",
+          "bytes": 159367,
+          "mimeType": "image/jpeg",
+          "role": "rear",
+          "sequenceIndex": 36,
+          "relativeAzimuthDegrees": 180,
+          "width": 1303,
+          "height": 863
+        },
+        {
+          "id": "left",
+          "kind": "input-image",
+          "relativePath": "rug/view-270.jpg",
+          "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/dd/dd93dda6/dd93dda6_54.jpg",
+          "sha256": "9f7d11f9754c25535ca403f7c4d34d614a91bfcc4b418d4b381314ae94d48452",
+          "bytes": 160456,
+          "mimeType": "image/jpeg",
+          "role": "left",
+          "sequenceIndex": 54,
+          "relativeAzimuthDegrees": 270,
+          "width": 1303,
+          "height": 863
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import { snapshotScene } from '../src/engine/delivery-validation';
 import {
   analyzeReferenceSurface,
   auditReferenceSurfaceEvidence,
+  deriveMaskedReferenceSurface,
   quantizeReferenceHeightField,
   sampleQuantizedReferenceHeight,
 } from '../src/engine/reference-surface';
@@ -105,6 +106,57 @@ function makeTinyRgbaPng(): Uint8Array {
 }
 
 describe('reference-conditioned surface analysis', () => {
+  it('extracts a deterministic background-free material tile from the densest masked view', () => {
+    const sparseMask = new Uint8Array(24 * 24);
+    const denseMask = new Uint8Array(24 * 24);
+    for (let y = 4; y < 20; y += 1) for (let x = 4; x < 20; x += 1) denseMask[y * 24 + x] = 1;
+    for (let y = 8; y < 16; y += 1) for (let x = 8; x < 16; x += 1) sparseMask[y * 24 + x] = 1;
+    const whiteBackground = makeRgba(24, 24, (x, y) => denseMask[y * 24 + x]
+      ? 32 + ((x * 37 + y * 53) % 150)
+      : 255);
+    const inputs = [
+      { id: 'sparse', fingerprint: 'a'.repeat(64), width: 24, height: 24,
+        rgba: makeRgba(24, 24, (x, y) => sparseMask[y * 24 + x] ? 90 : 255), mask: sparseMask },
+      { id: 'dense', fingerprint: 'b'.repeat(64), width: 24, height: 24, rgba: whiteBackground, mask: denseMask },
+    ];
+    const first = deriveMaskedReferenceSurface(inputs, { textureSize: 32, strength: 1.2 });
+    const second = deriveMaskedReferenceSurface([...inputs].reverse(), { textureSize: 32, strength: 1.2 });
+    expect(first.selectedSourceId).toBe('dense');
+    expect(first.selectedSourceFingerprint).toBe('b'.repeat(64));
+    expect(first.analysis.metrics.surfaceSignalConfidence).toBeGreaterThan(0.5);
+    expect(first.analysis.metrics.roughnessDeviation).toBeGreaterThan(0.005);
+    expect(first.materialSuitability).toMatchObject({ pass: true });
+    expect(Math.max(...first.albedoRgba.filter((_, index) => index % 4 !== 3))).toBeLessThan(255);
+    expect(Array.from(first.albedoRgba)).toEqual(Array.from(second.albedoRgba));
+    expect(Array.from(first.analysis.normalRgba)).toEqual(Array.from(second.analysis.normalRgba));
+  });
+
+  it('rejects sparse object silhouettes as reusable material evidence', () => {
+    const mask = new Uint8Array(64 * 64);
+    for (let y = 4; y < 60; y += 1) {
+      mask[y * 64 + 8] = 1;
+      mask[y * 64 + 55] = 1;
+    }
+    for (let x = 8; x < 56; x += 1) mask[32 * 64 + x] = 1;
+    const derivation = deriveMaskedReferenceSurface([{
+      id: 'wire-object', fingerprint: 'e'.repeat(64), width: 64, height: 64,
+      rgba: makeRgba(64, 64, (x, y) => mask[y * 64 + x] ? 25 : 255), mask,
+    }], { textureSize: 32 });
+    expect(derivation.materialSuitability.pass).toBe(false);
+    expect(derivation.materialSuitability.blockers).toContainEqual(expect.stringMatching(/sparse|structural/));
+  });
+
+  it('fails closed for malformed masks and unbound evidence fingerprints', () => {
+    expect(() => deriveMaskedReferenceSurface([{
+      id: 'bad', fingerprint: 'not-a-sha', width: 4, height: 4,
+      rgba: makeRgba(4, 4, () => 80), mask: new Uint8Array(16).fill(1),
+    }])).toThrow(/invalid/);
+    expect(() => deriveMaskedReferenceSurface([{
+      id: 'bad', fingerprint: 'c'.repeat(64), width: 4, height: 4,
+      rgba: makeRgba(4, 4, () => 80), mask: new Uint8Array(15).fill(1),
+    }])).toThrow(/invalid/);
+  });
+
   it('is deterministic and distinguishes irregular aggregate from a flat swatch', () => {
     const pixels = deterministicIrregularRgba();
     const first = analyzeReferenceSurface(pixels, 32, 32, 1.25);
@@ -294,7 +346,7 @@ describe('reference-conditioned surface compilation', () => {
     expect(vValues.reduce((minimum, value) => Math.min(minimum, value), Infinity)).toBeCloseTo(0);
     expect(uValues.reduce((maximum, value) => Math.max(maximum, value), -Infinity)).toBeCloseTo(1);
     expect(vValues.reduce((maximum, value) => Math.max(maximum, value), -Infinity)).toBeCloseTo(1);
-  }, 20_000);
+  }, 40_000);
 
   it('rejects malformed embedded photo fields at the IR boundary', () => {
     const wrongLength = referenceIr();

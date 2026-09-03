@@ -63,7 +63,7 @@ describe('visual hull space carving', () => {
     geometry.dispose();
   });
 
-  it('intersects every view and reports a loose axis for two views', () => {
+  it('intersects every view without falsely reporting the shared vertical axis as loose', () => {
     const half = Array.from({ length: 16 }, () => '0'.repeat(8) + '1'.repeat(8));
     const full = carveVisualHull(descriptor([
       { axis: 'front', confidence: 1, mask: solidMask(16) },
@@ -74,8 +74,8 @@ describe('visual hull space carving', () => {
       { axis: 'side', confidence: 1, mask: solidMask(16) },
     ]));
     expect(carved.occupiedVoxelCount / full.occupiedVoxelCount).toBeCloseTo(0.5, 1);
-    expect(carved.unconstrainedAxes).toEqual(['y']);
-    expect(carved.limitations.join(' ')).toMatch(/loose/);
+    expect(carved.unconstrainedAxes).toEqual([]);
+    expect(carved.limitations.join(' ')).toMatch(/concavity/);
   });
 
   it('returns explicit empty evidence and rejects unsafe descriptors', () => {
@@ -86,7 +86,7 @@ describe('visual hull space carving', () => {
       { axis: 'top', confidence: 1, mask: right },
     ]));
     expect(empty).toMatchObject({ status: 'empty', occupiedVoxelCount: 0, triangleCount: 0 });
-    expect(() => validateVisualHullDescriptor(descriptor([{ axis: 'front', confidence: 1, mask: solidMask(16) }]))).toThrow(/two or three/);
+    expect(() => validateVisualHullDescriptor(descriptor([{ axis: 'front', confidence: 1, mask: solidMask(16) }]))).toThrow(/two to eight/);
     expect(() => validateVisualHullDescriptor({ ...descriptor([
       { axis: 'front', confidence: 1, mask: solidMask(16) },
       { axis: 'side', confidence: 1, mask: solidMask(16) },
@@ -99,6 +99,29 @@ describe('visual hull space carving', () => {
       { axis: 'front', confidence: 0, mask: solidMask(16) },
       { axis: 'side', confidence: 1, mask: solidMask(16) },
     ]))).toThrow(/confidence.*\(0, 1\]/);
+  });
+
+  it('carves four calibrated azimuth silhouettes instead of collapsing them into front and side aliases', () => {
+    const input = descriptor([0, 45, 90, 135].map((azimuthDegrees) => ({
+      axis: 'azimuth' as const,
+      azimuthDegrees,
+      confidence: 0.95,
+      mask: discMask(24),
+    })), 16);
+    const result = carveVisualHull(input);
+    expect(result.status).toBe('carved');
+    expect(result.viewAxes).toEqual(['azimuth-000', 'azimuth-045', 'azimuth-090', 'azimuth-135']);
+    expect(result.viewAgreement).toHaveLength(4);
+    expect(result.minimumViewIoU).toBeGreaterThan(0.75);
+    expect(result.unconstrainedAxes).toEqual([]);
+    expect(edgeCounts(result.indices)).toEqual({ boundary: 0, nonManifold: 0 });
+  });
+
+  it('rejects opposite-only views because they share the same unconstrained projection line', () => {
+    expect(() => validateVisualHullDescriptor(descriptor([
+      { axis: 'azimuth', azimuthDegrees: 0, confidence: 1, mask: solidMask(16) },
+      { axis: 'azimuth', azimuthDegrees: 180, confidence: 1, mask: solidMask(16) },
+    ]))).toThrow(/non-collinear/);
   });
 
   it('uses a bounded tolerance for one-voxel calibration disagreement and reports the residual projection error', () => {

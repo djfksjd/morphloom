@@ -43,6 +43,17 @@ export interface ReferenceComparisonResult {
   regions: RegionComparisonScore[];
 }
 
+export interface ThinFeatureSilhouetteResult {
+  method: 'thin-feature-distance-v1';
+  tolerancePixels: number;
+  referenceCoverage: number;
+  renderCoverage: number;
+  symmetricCoverage: number;
+  meanDistancePixels: number;
+  maximumDistancePixels: number;
+  score: number;
+}
+
 export interface InteriorComparisonBand {
   id: string;
   from: number;
@@ -68,6 +79,99 @@ export interface BandedInteriorComparisonResult {
 }
 
 const MAX_PIXELS = 16_777_216;
+
+function foregroundMask(frame: ComparisonFrame): Uint8Array {
+  const mask = new Uint8Array(frame.width * frame.height);
+  for (let pixel = 0; pixel < mask.length; pixel += 1) mask[pixel] = Number(foreground(frame, pixel));
+  return mask;
+}
+
+/** Chebyshev pixel distance from every cell to the nearest foreground cell. */
+function foregroundDistance(mask: Uint8Array, width: number, height: number): Uint16Array {
+  const distance = new Uint16Array(mask.length);
+  distance.fill(0xffff);
+  const queue = new Int32Array(mask.length);
+  let head = 0;
+  let tail = 0;
+  for (let index = 0; index < mask.length; index += 1) {
+    if (mask[index] === 0) continue;
+    distance[index] = 0;
+    queue[tail++] = index;
+  }
+  if (tail === 0) return distance;
+  const directions = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]] as const;
+  while (head < tail) {
+    const index = queue[head++]!;
+    const x = index % width;
+    const y = Math.floor(index / width);
+    const nextDistance = Math.min(0xfffe, distance[index]! + 1);
+    for (const [dx, dy] of directions) {
+      const nextX = x + dx;
+      const nextY = y + dy;
+      if (nextX < 0 || nextX >= width || nextY < 0 || nextY >= height) continue;
+      const next = nextY * width + nextX;
+      if (distance[next]! <= nextDistance) continue;
+      distance[next] = nextDistance;
+      queue[tail++] = next;
+    }
+  }
+  return distance;
+}
+
+/**
+ * Thin rods, wires, rails and garment seams need a distance-aware proof: their
+ * area IoU collapses after a one-pixel shift. This metric still penalizes a
+ * missing branch because every unsupported source pixel remains uncovered.
+ */
+export function compareThinFeatureSilhouettes(
+  reference: ComparisonFrame,
+  render: ComparisonFrame,
+  tolerancePixels = 3,
+): ThinFeatureSilhouetteResult {
+  validateFrame(reference, 'Reference frame');
+  validateFrame(render, 'Render frame');
+  if (reference.width !== render.width || reference.height !== render.height) throw new Error('Comparison frames must have identical dimensions.');
+  if (!Number.isInteger(tolerancePixels) || tolerancePixels < 0 || tolerancePixels > 32) {
+    throw new Error('Thin-feature tolerance must be an integer in [0, 32].');
+  }
+  const referenceMask = foregroundMask(reference);
+  const renderMask = foregroundMask(render);
+  const referencePixels = referenceMask.reduce((sum, value) => sum + value, 0);
+  const renderPixels = renderMask.reduce((sum, value) => sum + value, 0);
+  if (referencePixels === 0 || renderPixels === 0) throw new Error('Thin-feature comparison requires foreground in both frames.');
+  const distanceToReference = foregroundDistance(referenceMask, reference.width, reference.height);
+  const distanceToRender = foregroundDistance(renderMask, render.width, render.height);
+  let coveredReference = 0;
+  let coveredRender = 0;
+  let distanceSum = 0;
+  let maximumDistancePixels = 0;
+  for (let pixel = 0; pixel < referenceMask.length; pixel += 1) {
+    if (referenceMask[pixel]) {
+      const distance = distanceToRender[pixel]!;
+      coveredReference += Number(distance <= tolerancePixels);
+      distanceSum += distance;
+      maximumDistancePixels = Math.max(maximumDistancePixels, distance);
+    }
+    if (renderMask[pixel]) {
+      const distance = distanceToReference[pixel]!;
+      coveredRender += Number(distance <= tolerancePixels);
+      distanceSum += distance;
+      maximumDistancePixels = Math.max(maximumDistancePixels, distance);
+    }
+  }
+  const referenceCoverage = coveredReference / referencePixels;
+  const renderCoverage = coveredRender / renderPixels;
+  const symmetricCoverage = Math.min(referenceCoverage, renderCoverage);
+  const meanDistancePixels = distanceSum / (referencePixels + renderPixels);
+  const diagonal = Math.hypot(reference.width, reference.height);
+  const distanceScore = Math.max(0, 1 - meanDistancePixels / Math.max(1, diagonal * 0.02));
+  return {
+    method: 'thin-feature-distance-v1', tolerancePixels,
+    referenceCoverage, renderCoverage, symmetricCoverage,
+    meanDistancePixels, maximumDistancePixels,
+    score: symmetricCoverage * 0.8 + distanceScore * 0.2,
+  };
+}
 
 function validateFrame(frame: ComparisonFrame, label: string): void {
   if (!Number.isInteger(frame.width) || !Number.isInteger(frame.height) || frame.width < 1 || frame.height < 1) {

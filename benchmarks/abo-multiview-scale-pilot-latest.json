@@ -1,0 +1,150 @@
+{
+  "schema": "morphloom.abo-multiview-scale-pilot/0.1",
+  "pass": true,
+  "cases": [
+    {
+      "id": "abo-industrial-tripod-lamp",
+      "status": "measured",
+      "observations": [
+        {
+          "id": "front",
+          "azimuthDegrees": 0,
+          "aspectWidthOverHeight": 0.47391304347826085,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.47365576169569934,
+          "normalizedResidual": 0.0005428881650380564
+        },
+        {
+          "id": "right",
+          "azimuthDegrees": 90,
+          "aspectWidthOverHeight": 0.4776931447225245,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.47826025314302123,
+          "normalizedResidual": 0.001187181408739171
+        },
+        {
+          "id": "rear",
+          "azimuthDegrees": 180,
+          "aspectWidthOverHeight": 0.4733984799131379,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.4736557616956994,
+          "normalizedResidual": 0.0005434782608696195
+        },
+        {
+          "id": "left",
+          "azimuthDegrees": 270,
+          "aspectWidthOverHeight": 0.4788273615635179,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.4782602531430213,
+          "normalizedResidual": 0.001184369286343282
+        }
+      ],
+      "dimensions": {
+        "listingMm": [
+          647.7,
+          1524,
+          647.7
+        ],
+        "recoveredMm": [
+          721.8513808242458,
+          1524,
+          728.8686257899643
+        ],
+        "groundTruthMm": [
+          879.1744112968445,
+          1504.1835880256258,
+          883.966326713562
+        ],
+        "listingMaximumErrorMm": 236.26632671356197,
+        "recoveredMaximumErrorMm": 157.3230304725987,
+        "errorReductionMm": 78.94329624096326
+      },
+      "residual": {
+        "rms": 0.0009222562663741395,
+        "maximum": 0.001187181408739171,
+        "confidence": 0.8958498468013164
+      },
+      "blockers": [],
+      "limitations": [
+        "The estimate assumes an upright object, an orthographic or long-lens spin, and a trustworthy height anchor.",
+        "Concavity, self-occlusion, camera tilt, and independently cropped views still require calibrated-camera verification."
+      ]
+    },
+    {
+      "id": "abo-industrial-floor-fan",
+      "status": "measured",
+      "observations": [
+        {
+          "id": "front",
+          "azimuthDegrees": 0,
+          "aspectWidthOverHeight": 0.9265905383360522,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.9537865528447297,
+          "normalizedResidual": 0.0293506283341889
+        },
+        {
+          "id": "right",
+          "azimuthDegrees": 90,
+          "aspectWidthOverHeight": 0.6807511737089202,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.7211448176236909,
+          "normalizedResidual": 0.05933687002652512
+        },
+        {
+          "id": "rear",
+          "azimuthDegrees": 180,
+          "aspectWidthOverHeight": 0.9809825673534073,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.9537865528447297,
+          "normalizedResidual": 0.02772323934567942
+        },
+        {
+          "id": "left",
+          "azimuthDegrees": 270,
+          "aspectWidthOverHeight": 0.7615384615384615,
+          "confidence": 0.9,
+          "predictedAspectWidthOverHeight": 0.721144817623691,
+          "normalizedResidual": 0.053042158675961286
+        }
+      ],
+      "dimensions": {
+        "listingMm": [
+          554.99,
+          546.1,
+          210.058
+        ],
+        "recoveredMm": [
+          520.8628365085069,
+          546.1,
+          393.81718490429756
+        ],
+        "groundTruthMm": [
+          554.9903213977814,
+          545.7066297531128,
+          424.36839640140533
+        ],
+        "listingMaximumErrorMm": 214.31039640140534,
+        "recoveredMaximumErrorMm": 34.127484889274456,
+        "errorReductionMm": 180.1829115121309
+      },
+      "residual": {
+        "rms": 0.04462166549160876,
+        "maximum": 0.05933687002652512,
+        "confidence": 0.6992025052877606
+      },
+      "blockers": [],
+      "limitations": [
+        "The estimate assumes an upright object, an orthographic or long-lens spin, and a trustworthy height anchor.",
+        "Concavity, self-occlusion, camera tilt, and independently cropped views still require calibrated-camera verification."
+      ]
+    },
+    {
+      "id": "abo-surface-fringed-wool-rug",
+      "status": "not-applicable",
+      "reason": "The selected surface reference is not upright; its image height is not the physical thickness axis."
+    }
+  ],
+  "measuredCases": 2,
+  "improvedCases": 2,
+  "limitation": "This pilot tests metric envelope recovery from four licensed spin silhouettes and a listing height. It does not test semantic part decomposition, concavity, PBR recovery, or either engine against the reference GLB surface."
+}

@@ -1,0 +1,86 @@
+{
+  "schema": "morphloom.prusaslicer-print-proof/0.1",
+  "compilerRevision": "morphloom-compiler/0.31.0",
+  "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+  "generatedAt": "2026-09-03T08:33:50.575Z",
+  "pass": true,
+  "status": "pass",
+  "source": {
+    "file": "asphalt-print-surface.stl",
+    "bytes": 5596884,
+    "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+    "byteDeterministic": true,
+    "coordinateUnit": "mm",
+    "axisConvention": "print-z-up",
+    "binary": {
+      "facets": 111936,
+      "minimum": [
+        -300,
+        -225,
+        -20
+      ],
+      "maximum": [
+        300,
+        225,
+        23.453475952148438
+      ],
+      "size": [
+        600,
+        450,
+        43.45347595214844
+      ]
+    }
+  },
+  "native": {
+    "application": "prusa-slicer",
+    "version": "2.9.6",
+    "binary": "/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer",
+    "binarySha256": "b79b464d2f27ce163f361eada916c3901095db02b196a665f9ac85ffbc6d7ca7",
+    "info": {
+      "size": [
+        600,
+        450,
+        43.453476
+      ],
+      "minimum": [
+        -300,
+        -225,
+        -20
+      ],
+      "maximum": [
+        300,
+        225,
+        23.453476
+      ],
+      "facets": 111936,
+      "manifold": true,
+      "parts": 1,
+      "volumeMm3": 10761761
+    },
+    "boundsErrorMm": 4.7851564488610165e-8,
+    "sliceProfile": {
+      "bedMm": [
+        650,
+        500
+      ],
+      "centeredAtMm": [
+        325,
+        250
+      ],
+      "brimWidthMm": 5,
+      "nozzleDiameterMm": 2,
+      "layerHeightMm": 1,
+      "infillPercent": 0,
+      "perimeters": 1,
+      "coarseValidationProfile": true
+    },
+    "gcode": {
+      "bytes": 7070099,
+      "sha256": "bb6d3fab4060f283ba82da4d4ee467f8b89dbbd7669b17d4eb22f977f3c46cb9",
+      "layers": 43,
+      "extrusionMoves": 190158
+    }
+  },
+  "blockers": [],
+  "limitation": "This proves native manifold reopen and bounded coarse toolpath generation under a declared generic 650 × 500 mm virtual FFF envelope. It is not a production print profile; a real printer, nozzle, filament, tolerances, supports, orientation and safety still require target-machine validation."
+}

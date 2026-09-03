@@ -18,7 +18,7 @@ interface SurfaceRecipe {
   specularIntensity: number;
   microNormalStrength: number;
   textureScale: [number, number];
-  pattern: 'none' | 'directional' | 'grain' | 'aggregate' | 'orange-peel' | 'fibrous' | 'hex-weave';
+  pattern: 'none' | 'directional' | 'grain' | 'aggregate' | 'orange-peel' | 'fibrous' | 'hex-weave' | 'mineral-flow';
 }
 
 export interface SurfaceReport {
@@ -34,6 +34,8 @@ export interface SurfaceReport {
   /** Projected materials whose baked broad lighting was removed in linear light. */
   referenceDelightedMaterials: number;
   referenceReliefMaterials: number;
+  /** Hidden-side materials synthesized from physical character, never copied source markings. */
+  unobservedSynthesizedMaterials: number;
   referenceProjectionFingerprints: string[];
   maximumReferenceIrregularity: number;
   distinctFinishes: number;
@@ -140,6 +142,28 @@ function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pa
     const pebble = hash(Math.floor(x / 2), Math.floor(y / 2), seed + 43) * 2 - 1;
     return grit * 0.72 + pebble * 0.28;
   }
+  if (pattern === 'mineral-flow') {
+    // Integer-frequency toroidal domain warping stays seamless under
+    // RepeatWrapping. Several incommensurate-looking (but integer-cycle)
+    // fields make veins branch and change width instead of exposing the broad
+    // parallel sine bands produced by the earlier two-wave approximation.
+    // This synthesizes material character only; it does not copy any observed
+    // logo, scratch, fastener or ornament onto an unseen face.
+    const period = 128;
+    const u = x / period * Math.PI * 2;
+    const v = y / period * Math.PI * 2;
+    const phase = seed * 0.013;
+    const warpA = Math.sin(u * 2 + v * 3 + phase)
+      + Math.sin(u * 5 - v * 2 + phase * 1.7) * 0.42;
+    const warpB = Math.sin(v * 4 - u + phase * 2.3)
+      + Math.sin(u * 3 + v * 7 - phase) * 0.28;
+    const veinPhase = u * 2 - v + warpA * 1.36 + warpB * 0.74;
+    const vein = Math.pow(1 - Math.abs(Math.sin(veinPhase)), 4.2);
+    const cloud = Math.sin(u * 3 + v * 2 + warpB * 1.2 + phase * 0.8) * 0.55
+      + Math.sin(u * 7 - v * 5 + warpA * 0.48 - phase * 1.4) * 0.24;
+    const branching = Math.sin(u * 11 + v * 8 + warpA * 1.8 + warpB * 1.1) * 0.12;
+    return THREE.MathUtils.clamp(cloud * 0.58 + branching - vein * 0.82 + noise * 0.06, -1, 1);
+  }
   if (pattern === 'grain') return noise * 0.58 + broad * 0.26;
   return 0;
 }
@@ -211,7 +235,29 @@ function asphaltAggregateSample(x: number, y: number, size: number, seed: number
 
 const textureCache = new Map<string, { albedo: THREE.Texture; normal: THREE.Texture; roughness: THREE.Texture }>();
 const MAX_SHARED_SURFACE_MAPS = 96;
+export const MAX_SHARED_SURFACE_BYTES = 32 * 1024 * 1024;
+let sharedSurfaceBytes = 0;
 let iridescenceThicknessTexture: THREE.Texture | undefined;
+
+/** CPU RGBA8 bytes plus the approximate full mip chain uploaded to the GPU. */
+export function surfaceMapAllocationBytes(size: number): number {
+  if (!Number.isInteger(size) || size < 1 || size > 4096) throw new Error('Surface map size is unsafe.');
+  return Math.ceil(size * size * 4 * 3 * (4 / 3));
+}
+
+export function inspectSharedSurfaceCache(): {
+  entries: number;
+  estimatedBytes: number;
+  maximumEntries: number;
+  maximumBytes: number;
+} {
+  return {
+    entries: textureCache.size,
+    estimatedBytes: sharedSurfaceBytes,
+    maximumEntries: MAX_SHARED_SURFACE_MAPS,
+    maximumBytes: MAX_SHARED_SURFACE_BYTES,
+  };
+}
 
 function exportSafeTexture(data: Uint8Array, size: number): THREE.Texture {
   // Keep authored bytes identical in browsers, Node benchmarks and the GLB.
@@ -240,12 +286,14 @@ function createMicroSurfaceMaps(
   finish: SurfaceFinishIR,
   scale: [number, number],
   patternOverride?: SurfaceRecipe['pattern'],
+  albedoContrast?: number,
 ) {
   const pattern = patternOverride ?? SURFACE_LIBRARY[finish].pattern;
-  const key = `${finish}:${pattern}:${scale[0]}:${scale[1]}`;
+  const key = `${finish}:${pattern}:${scale[0]}:${scale[1]}:${albedoContrast ?? 'preset'}`;
   const cached = textureCache.get(key);
   if (cached) return cached;
-  const size = pattern === 'aggregate' ? 256 : 64;
+  const size = pattern === 'aggregate' ? 256 : pattern === 'mineral-flow' ? 128 : 64;
+  const allocationBytes = surfaceMapAllocationBytes(size);
   const albedoData = new Uint8Array(size * size * 4);
   const normalData = new Uint8Array(size * size * 4);
   // glTF stores roughness in G and metalness in B of one shared texture.
@@ -288,7 +336,8 @@ function createMicroSurfaceMaps(
         1,
       ) * 255);
       metallicRoughnessData.set([255, value, 255, 255], offset);
-      const fibreContrast = pattern === 'hex-weave' ? 0.19 : pattern === 'aggregate' ? 0.24 : 0.055;
+      const fibreContrast = albedoContrast
+        ?? (pattern === 'hex-weave' ? 0.19 : pattern === 'aggregate' ? 0.24 : pattern === 'mineral-flow' ? 0.24 : 0.055);
       const albedo = Math.round(THREE.MathUtils.clamp(
         aggregateHeights ? 0.72 + variation * 0.2 : 0.86 + variation * fibreContrast,
         0.5,
@@ -297,7 +346,8 @@ function createMicroSurfaceMaps(
       albedoData.set([albedo, albedo, albedo, 255], offset);
     }
   }
-  const shared = textureCache.size < MAX_SHARED_SURFACE_MAPS;
+  const shared = textureCache.size < MAX_SHARED_SURFACE_MAPS
+    && sharedSurfaceBytes + allocationBytes <= MAX_SHARED_SURFACE_BYTES;
   const setup = (texture: THREE.Texture, suffix: string) => {
     texture.name = `morphloom_${finish}_${suffix}`;
     texture.userData.morphloomShared = shared;
@@ -317,7 +367,10 @@ function createMicroSurfaceMaps(
   setup(albedo, 'albedo');
   albedo.colorSpace = THREE.SRGBColorSpace;
   const maps = { albedo, normal, roughness };
-  if (shared) textureCache.set(key, maps);
+  if (shared) {
+    textureCache.set(key, maps);
+    sharedSurfaceBytes += allocationBytes;
+  }
   return maps;
 }
 
@@ -407,6 +460,61 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
   return material;
 }
 
+type UnobservedSurfaceRecipe = NonNullable<NonNullable<AssemblyMaterialIR['referenceProjection']>['unobservedSurface']>;
+
+/**
+ * Builds the hidden partition of a single-view reconstruction.  It preserves
+ * bulk colour and physical response while synthesizing only seamless material
+ * character.  Source pixels are deliberately never attached to this material,
+ * so logos, fasteners and other front-only evidence cannot leak to the rear.
+ */
+export function createUnobservedSurfaceMaterial(
+  source: AssemblyMaterialIR,
+  context: SurfaceMaterialContext,
+  requested?: UnobservedSurfaceRecipe,
+): THREE.MeshPhysicalMaterial {
+  const finish = inferSurfaceFinish(context.materialName, source.surface);
+  const preset = SURFACE_LIBRARY[finish];
+  const recipe: UnobservedSurfaceRecipe = requested ?? {
+    pattern: preset.pattern === 'mineral-flow' ? 'mineral-flow' : 'grain',
+    colorVariation: 0.055,
+    microNormalStrength: Math.min(source.microNormalStrength ?? preset.microNormalStrength, 0.32),
+    textureScale: source.textureScale ?? preset.textureScale,
+  };
+  const material = createSurfaceMaterial(source, context);
+  if (recipe.color !== undefined) material.color.set(recipe.color);
+  if (recipe.roughness !== undefined) material.roughness = recipe.roughness;
+  if (recipe.metalness !== undefined) material.metalness = recipe.metalness;
+  const pattern = recipe.pattern;
+  const textureScale = recipe.textureScale ?? source.textureScale ?? preset.textureScale;
+  const colorVariation = recipe.colorVariation ?? 0.055;
+  const normalStrength = recipe.microNormalStrength
+    ?? Math.min(source.microNormalStrength ?? preset.microNormalStrength, 0.32);
+  const maps = createMicroSurfaceMaps(finish, textureScale, pattern, colorVariation);
+  material.map = maps.albedo;
+  material.normalMap = maps.normal;
+  material.normalScale.set(normalStrength, normalStrength);
+  material.roughnessMap = maps.roughness;
+  material.metalnessMap = maps.roughness;
+  // An unseen face has no evidence for a brushing direction. Keep its response
+  // isotropic unless the IR explicitly requests a directional synthesis.
+  material.anisotropy = pattern === 'directional' ? Math.min(source.anisotropy ?? preset.anisotropy, 0.35) : 0;
+  material.userData.morphloomSurface = {
+    ...material.userData.morphloomSurface,
+    referenceProjection: null,
+    referenceProjectionState: 'unobserved-synthesized',
+    referenceRelief: false,
+    unobservedPattern: pattern,
+    unobservedColor: recipe.color ?? source.color,
+    unobservedRoughness: material.roughness,
+    unobservedMetalness: material.metalness,
+    unobservedColorVariation: colorVariation,
+    unobservedEvidenceBoundary: 'material-character-only',
+  };
+  material.needsUpdate = true;
+  return material;
+}
+
 export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
   const materials = new Set<THREE.Material>();
   root.traverse((object) => {
@@ -425,6 +533,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
   let referenceProjectedMaterials = 0;
   let referenceDelightedMaterials = 0;
   let referenceReliefMaterials = 0;
+  let unobservedSynthesizedMaterials = 0;
   let maximumReferenceIrregularity = 0;
   const referenceProjectionFingerprints = new Set<string>();
   for (const material of materials) {
@@ -434,10 +543,15 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
       finish?: string;
       referenceIrregularity?: number;
       referenceDelight?: ReferenceDelightMetrics;
+      referenceProjectionState?: string;
     } | undefined;
     if (metadata?.finish) {
       authoredMaterials += 1;
       finishes.add(metadata.finish);
+    }
+    if (metadata?.referenceProjectionState === 'unobserved-synthesized'
+      && material.map && material.normalMap && material.roughnessMap) {
+      unobservedSynthesizedMaterials += 1;
     }
     if (material.normalMap) microNormalMaterials += 1;
     if (material.roughnessMap) roughnessMappedMaterials += 1;
@@ -474,6 +588,7 @@ export function inspectSurfaceSystem(root: THREE.Object3D): SurfaceReport {
     referenceProjectedMaterials,
     referenceDelightedMaterials,
     referenceReliefMaterials,
+    unobservedSynthesizedMaterials,
     referenceProjectionFingerprints: [...referenceProjectionFingerprints].sort(),
     maximumReferenceIrregularity,
     distinctFinishes: finishes.size,

@@ -1,8 +1,8 @@
 export type NeutralRenderView = 'front' | 'rear' | 'iso';
 
 export interface NeutralRenderReport {
-  schema: 'morphloom.neutral-glb-render/0.2';
-  protocol: 'morphloom-neutral-glb-v1';
+  schema: 'morphloom.neutral-glb-render/0.3';
+  protocol: 'morphloom-neutral-glb-v2';
   viewId: NeutralRenderView;
   blenderVersion: string;
   source: string;
@@ -26,6 +26,11 @@ export interface NeutralRenderReport {
     target: [number, number, number];
     up: [number, number, number];
     orthographicHeight: number;
+  };
+  framing: {
+    alphaBoundsPixels: { min: [number, number]; max: [number, number] };
+    minimumMarginPixels: number;
+    touchesBorder: boolean;
   };
   renderSettings: Record<string, unknown>;
   studio: Record<string, unknown>;
@@ -64,7 +69,7 @@ const VIEW_CAMERAS: Record<NeutralRenderView, NeutralRenderReport['camera']> = {
   iso: { projection: 'orthographic', position: [2.8, -3.4, 1.8], target: [0, 0, 0], up: [0, 0, 1], orthographicHeight: 2.55 },
 };
 const RENDER_SETTINGS = {
-  engine: 'BLENDER_EEVEE', width: 1024, height: 512, transparent: true,
+  engine: 'BLENDER_EEVEE', width: 1024, height: 1024, transparent: true,
   viewTransform: 'AgX', look: 'AgX - Medium High Contrast',
 };
 const STUDIO = {
@@ -161,7 +166,7 @@ function validateLockedStudio(value: unknown): Record<string, unknown> {
 
 export function validateNeutralRenderReport(value: unknown): NeutralRenderReport {
   const input = record(value, 'Neutral render report');
-  if (input.schema !== 'morphloom.neutral-glb-render/0.2' || input.protocol !== 'morphloom-neutral-glb-v1') {
+  if (input.schema !== 'morphloom.neutral-glb-render/0.3' || input.protocol !== 'morphloom-neutral-glb-v2') {
     throw new Error('Neutral render protocol is unsupported.');
   }
   if (!VIEW_IDS.has(input.viewId as NeutralRenderView)) throw new Error('Neutral render view is unsupported.');
@@ -195,6 +200,18 @@ export function validateNeutralRenderReport(value: unknown): NeutralRenderReport
   if (canonical(camera) !== canonical(VIEW_CAMERAS[input.viewId as NeutralRenderView])) {
     throw new Error('Neutral render camera does not match its locked view preset.');
   }
+  const framingInput = record(input.framing, 'Neutral render framing');
+  const alphaBoundsInput = record(framingInput.alphaBoundsPixels, 'Neutral render framing.alphaBoundsPixels');
+  const alphaMinimum = tuple2(alphaBoundsInput.min, 'Neutral render framing.alphaBoundsPixels.min');
+  const alphaMaximum = tuple2(alphaBoundsInput.max, 'Neutral render framing.alphaBoundsPixels.max');
+  const minimumMarginPixels = finite(framingInput.minimumMarginPixels, 'Neutral render framing.minimumMarginPixels');
+  if (!Number.isInteger(minimumMarginPixels) || minimumMarginPixels < 8
+    || framingInput.touchesBorder !== false
+    || alphaMinimum.some((entry) => !Number.isInteger(entry) || entry < 0 || entry > 1023)
+    || alphaMaximum.some((entry) => !Number.isInteger(entry) || entry < 0 || entry > 1023)
+    || alphaMaximum.some((entry, index) => entry < alphaMinimum[index]!)) {
+    throw new Error('Neutral render framing is clipped or unsafe.');
+  }
   const renderSettings = validateLockedRenderSettings(input.renderSettings);
   const studio = validateLockedStudio(input.studio);
   return {
@@ -218,9 +235,19 @@ export function validateNeutralRenderReport(value: unknown): NeutralRenderReport
       normalizedBounds,
     },
     camera,
+    framing: {
+      alphaBoundsPixels: { min: alphaMinimum, max: alphaMaximum },
+      minimumMarginPixels,
+      touchesBorder: false,
+    },
     renderSettings,
     studio,
   };
+}
+
+function tuple2(value: unknown, label: string): [number, number] {
+  if (!Array.isArray(value) || value.length !== 2) throw new Error(`${label} must contain two numbers.`);
+  return value.map((entry, index) => finite(entry, `${label}[${index}]`)) as [number, number];
 }
 
 function canonical(value: unknown): string {

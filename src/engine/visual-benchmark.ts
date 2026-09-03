@@ -5,6 +5,7 @@ import {
   type ComparisonRegion,
   type ReferenceComparisonResult,
 } from './reference-comparison';
+import { fingerprintJson } from './delivery-validation';
 
 export type VisualBenchmarkDomain = 'industrial-design' | 'architecture' | 'character' | 'surface';
 export type VisualCandidateId = 'morphloom' | 'img2threejs';
@@ -69,9 +70,11 @@ export interface CandidateVisualScore {
 }
 
 export interface SameInputVisualBenchmarkReport {
-  schema: 'morphloom.same-input-visual-audit/0.1';
+  schema: 'morphloom.same-input-visual-audit/0.2';
   id: string;
   domain: VisualBenchmarkDomain;
+  lockedInputFingerprint: string;
+  candidateRendererVersions: Record<VisualCandidateId, string>;
   status: 'unproven' | 'comparable' | 'automatic-morphloom-lead' | 'automatic-img2threejs-lead' | 'morphloom-winner' | 'img2threejs-winner';
   claimAllowed: boolean;
   scores: Record<VisualCandidateId, CandidateVisualScore>;
@@ -81,6 +84,7 @@ export interface SameInputVisualBenchmarkReport {
     morphloomShare: number;
     img2threejsShare: number;
     tieShare: number;
+    ratingSetFingerprint: string;
   };
   captureProtocol: { verified: boolean; evidenceFingerprint?: string };
   blockers: string[];
@@ -104,12 +108,17 @@ const DOMAIN_MINIMUM_FEATURES: Record<VisualBenchmarkDomain, number> = {
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$/;
 const SHA256 = /^[a-f0-9]{64}$/;
 const FINGERPRINT = /^[a-f0-9]{8,128}$/;
+const MAXIMUM_VIEWS_PER_CANDIDATE = 16;
+const MAXIMUM_BLIND_RATINGS = 128;
 
 function average(values: number[]): number {
   return values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length);
 }
 
 function validateCandidate(benchmark: SameInputVisualBenchmark, candidate: VisualBenchmarkCandidate, blockers: string[]): void {
+  if (!Array.isArray(candidate.views) || candidate.views.length > MAXIMUM_VIEWS_PER_CANDIDATE) {
+    throw new Error(`${candidate.id}: calibrated view count is unsafe.`);
+  }
   if (candidate.inputFingerprint !== benchmark.lockedInputFingerprint) blockers.push(`${candidate.id}: input fingerprint does not match the locked input`);
   if (!candidate.rendererVersion.trim() || candidate.rendererVersion.length > 160) blockers.push(`${candidate.id}: renderer version is missing or unsafe`);
   if (candidate.views.length < DOMAIN_MINIMUM_VIEWS[benchmark.domain]) {
@@ -200,12 +209,21 @@ function scoreCandidate(candidate: VisualBenchmarkCandidate): CandidateVisualSco
 }
 
 function evaluateBlindRatings(ratings: BlindVisualRating[] | undefined, blockers: string[]) {
+  if (ratings !== undefined && (!Array.isArray(ratings) || ratings.length > MAXIMUM_BLIND_RATINGS)) {
+    throw new Error('Blind evaluation rating count is unsafe.');
+  }
   const safe = ratings ?? [];
+  const recordsValid = safe.every((rating) => rating !== null
+    && typeof rating === 'object'
+    && FINGERPRINT.test(rating.raterFingerprint)
+    && (rating.presentationOrder === 'morphloom-first' || rating.presentationOrder === 'img2threejs-first')
+    && (rating.preferred === 'morphloom' || rating.preferred === 'img2threejs' || rating.preferred === 'tie'));
+  if (!recordsValid) blockers.push('blind evaluation contains an invalid rater, presentation order, or preference');
   const raters = new Set(safe.map((rating) => rating.raterFingerprint));
   const morphloomFirst = safe.filter((rating) => rating.presentationOrder === 'morphloom-first').length;
   const imgFirst = safe.filter((rating) => rating.presentationOrder === 'img2threejs-first').length;
-  const eligible = safe.length >= 5 && raters.size === safe.length && Math.abs(morphloomFirst - imgFirst) <= 1
-    && safe.every((rating) => FINGERPRINT.test(rating.raterFingerprint));
+  const eligible = recordsValid && safe.length >= 5 && raters.size === safe.length
+    && Math.abs(morphloomFirst - imgFirst) <= 1;
   if (!eligible) blockers.push('blind evaluation requires at least five unique raters and balanced presentation order');
   return {
     eligible,
@@ -213,6 +231,7 @@ function evaluateBlindRatings(ratings: BlindVisualRating[] | undefined, blockers
     morphloomShare: safe.filter((rating) => rating.preferred === 'morphloom').length / Math.max(1, safe.length),
     img2threejsShare: safe.filter((rating) => rating.preferred === 'img2threejs').length / Math.max(1, safe.length),
     tieShare: safe.filter((rating) => rating.preferred === 'tie').length / Math.max(1, safe.length),
+    ratingSetFingerprint: fingerprintJson(safe),
   };
 }
 
@@ -316,9 +335,14 @@ export function auditSameInputVisualBenchmark(benchmark: SameInputVisualBenchmar
   }
   const claimAllowed = status === 'morphloom-winner' || status === 'img2threejs-winner';
   return {
-    schema: 'morphloom.same-input-visual-audit/0.1',
+    schema: 'morphloom.same-input-visual-audit/0.2',
     id: benchmark.id,
     domain: benchmark.domain,
+    lockedInputFingerprint: benchmark.lockedInputFingerprint,
+    candidateRendererVersions: {
+      morphloom: morphloom.rendererVersion,
+      img2threejs: competitor.rendererVersion,
+    },
     status,
     claimAllowed,
     scores: { morphloom: morphloomScore, img2threejs: competitorScore },
