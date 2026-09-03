@@ -18,7 +18,13 @@ const accentWood: AssemblyMaterialIR = {
   ...walnut, color: '#694127', roughness: 0.58,
 };
 const darkWood: AssemblyMaterialIR = {
-  ...walnut, color: '#3b2418', roughness: 0.66,
+  ...walnut, color: '#513522', roughness: 0.66,
+};
+const chevronWarm: AssemblyMaterialIR = {
+  ...walnut, color: '#795235', roughness: 0.61, microNormalStrength: 0.16,
+};
+const chevronGolden: AssemblyMaterialIR = {
+  ...walnut, color: '#8b6844', roughness: 0.63, microNormalStrength: 0.15,
 };
 const rearBoard: AssemblyMaterialIR = {
   color: '#202020', surface: 'coated-metal', roughness: 0.76, metalness: 0.03,
@@ -80,14 +86,14 @@ export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): Assembly
       detail: 'Editable drawer volume separated from its decorative face.', geometry: { op: 'roundedBox', size: [spec.widthMm - 82, drawerHeight - 30, spec.depthMm - 54], radius: 2, segments: 3 },
       position: [0, y, -2], material: darkWood });
     const stripY = y + (drawer % 2 === 0 ? 0 : 3);
-    for (let strip = 0; strip < 5; strip += 1) {
-      const x = (strip - 2) * (spec.widthMm - 86) / 5;
+    for (let strip = 0; strip < 6; strip += 1) {
+      const x = (strip - 2.5) * (spec.widthMm - 112) / 6;
       const rotation = (strip % 2 === 0 ? 1 : -1) * Math.PI / 3.65;
       add({ id: `drawer_${index}_inlay_${strip + 1}`, name: `drawer ${index} chevron veneer ${strip + 1}`,
-        category: 'mechanical', materialName: strip % 2 === 0 ? 'dark walnut veneer' : 'reference walnut veneer',
-        detail: 'Raised sub-millimetre veneer strip preserves the photographed chevron direction at grazing angles.',
-        geometry: { op: 'roundedBox', size: [drawerHeight * 0.74, Math.max(46, (spec.widthMm - 90) / 10), 0.4], radius: 0.1, segments: 3 },
-        position: [x, stripY, frontZ - 14.25], rotation: [0, 0, rotation], material: strip % 2 === 0 ? darkWood : walnut });
+        category: 'mechanical', materialName: strip % 2 === 0 ? 'warm walnut veneer' : 'golden walnut veneer',
+        detail: 'Flush low-contrast veneer panel preserves the photographed grain direction without reading as an applied bar.',
+        geometry: { op: 'roundedBox', size: [drawerHeight * 0.7, Math.max(42, (spec.widthMm - 110) / 12), 0.12], radius: 0.05, segments: 3 },
+        position: [x, stripY, frontZ - 14.065], rotation: [0, 0, rotation], material: strip % 2 === 0 ? chevronWarm : chevronGolden });
     }
     add({ id: `drawer_${index}_handle`, name: `drawer ${index} brushed brass pull`, category: 'mechanical', materialName: 'brushed brass',
       detail: 'Independent rectangular pull with visible stand-off depth.', geometry: { op: 'roundedBox', size: [92, 24, 12], radius: 2.2, segments: 3 },
@@ -124,7 +130,7 @@ export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): Assembly
         { id: 'top', label: 'independent top slab', kind: 'primary-mass', required: true, evidenceRef: spec.source, evidenceStatus: 'estimated', sourceViewIds, componentIds: ['top_slab'], minimumCount: 1, geometryRequirement: 'separate-part' },
         { id: 'carcass', label: 'two side panels and bottom rail', kind: 'primary-mass', required: true, evidenceRef: spec.source, evidenceStatus: 'estimated', sourceViewIds, componentIds: ['side_panel_left', 'side_panel_right', 'carcass_bottom'], minimumCount: 3, geometryRequirement: 'separate-part' },
         { id: 'drawers', label: 'two editable drawer fronts and boxes', kind: 'layered-stack', required: true, evidenceRef: `${spec.source}:front`, evidenceStatus: 'estimated', sourceViewIds: ['front', 'right'], componentIds: ['drawer_1_front', 'drawer_1_box', 'drawer_2_front', 'drawer_2_box'], minimumCount: 4, geometryRequirement: 'layered-parts' },
-        { id: 'chevron', label: 'ten flush chevron veneer strips', kind: 'layered-stack', required: true, evidenceRef: `${spec.source}:front`, evidenceStatus: 'estimated', sourceViewIds: ['front'], componentIds: Array.from({ length: 2 }, (_, drawer) => Array.from({ length: 5 }, (__, strip) => `drawer_${drawer + 1}_inlay_${strip + 1}`)).flat(), minimumCount: 10, geometryRequirement: 'layered-parts' },
+        { id: 'chevron', label: 'twelve flush chevron veneer panels', kind: 'layered-stack', required: true, evidenceRef: `${spec.source}:front`, evidenceStatus: 'estimated', sourceViewIds: ['front'], componentIds: Array.from({ length: 2 }, (_, drawer) => Array.from({ length: 6 }, (__, strip) => `drawer_${drawer + 1}_inlay_${strip + 1}`)).flat(), minimumCount: 12, geometryRequirement: 'layered-parts' },
         { id: 'handles', label: 'paired brass drawer pulls', kind: 'repeated-array', required: true, evidenceRef: `${spec.source}:front`, evidenceStatus: 'estimated', sourceViewIds: ['front'], componentIds: ['drawer_1_handle', 'drawer_2_handle'], minimumCount: 2, geometryRequirement: 'repeat-set', observedCounts: [{ sourceViewId: 'front', count: 2, method: 'external-vision' }] },
         { id: 'handle-posts', label: 'four handle stand-off posts', kind: 'interface', required: true, evidenceRef: `${spec.source}:front`, evidenceStatus: 'estimated', sourceViewIds: ['front', 'right'], componentIds: ['drawer_1_handle_post_left', 'drawer_1_handle_post_right', 'drawer_2_handle_post_left', 'drawer_2_handle_post_right'], minimumCount: 4, geometryRequirement: 'repeat-set' },
         { id: 'legs', label: 'four tapered legs', kind: 'repeated-array', required: true, evidenceRef: spec.source, evidenceStatus: 'estimated', sourceViewIds, componentIds: ['leg_front_left', 'leg_front_right', 'leg_rear_left', 'leg_rear_right'], minimumCount: 4, geometryRequirement: 'repeat-set', observedCounts: sourceViewIds.map((sourceViewId) => ({ sourceViewId, count: 4, method: 'external-vision' as const })) },

@@ -12,7 +12,7 @@ describe('casework furniture engine', () => {
   it('compiles independently editable drawers, veneer, hardware, legs, and rear service details', () => {
     const ir = create();
     const ids = new Set(ir.components.map((component) => component.id));
-    expect(ids.size).toBe(39);
+    expect(ids.size).toBe(41);
     for (const expected of [
       'top_slab', 'drawer_1_front', 'drawer_2_box', 'drawer_1_handle',
       'leg_front_left', 'rear_panel', 'rear_fastener_6',
@@ -20,6 +20,7 @@ describe('casework furniture engine', () => {
     expect(ir.components.find((component) => component.id === 'rear_panel')?.geometry).toMatchObject({
       op: 'extrude', ovalHoles: [{ radii: [14, 14] }],
     });
+    expect(ir.components.filter((component) => component.id.includes('_inlay_'))).toHaveLength(12);
     expect(() => compileAssemblyIR(ir, 'beauty')).not.toThrow();
   });
 
