@@ -30,7 +30,7 @@ export interface GeometryRecoveryAction {
   targetComponentIds: string[];
   candidateComponentCount: number;
   spatialConstraintIds: string[];
-  targetingMode: 'spatial-cell-overlap' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
+  targetingMode: 'spatial-cell-overlap' | 'semantic-feature-overlap' | 'cross-axis-intersection' | 'single-axis-overlap' | 'unmapped-or-ambiguous';
   evidenceViewIds: string[];
   requiredComponentIds: string[];
   prohibitedOperations: Array<'delete-required-component' | 'lower-locked-feature-count' | 'change-source-evidence'>;
@@ -271,15 +271,37 @@ export function createGeometryRecoveryPlan(
     .sort((left, right) => left.coverage - right.coverage
       || right.p95Distance - left.p95Distance || left.id.localeCompare(right.id))) {
     const key = `${band.side}:${band.axis}`;
-    if (seenAxisSides.has(key)) continue;
-    seenAxisSides.add(key);
+    // When cell evidence exists, retain multiple failed bands on the same axis:
+    // low and middle depth failures commonly describe different assemblies.
+    if (selectedCells.length === 0) {
+      if (seenAxisSides.has(key)) continue;
+      seenAxisSides.add(key);
+    }
     selectedBands.push(band);
     if (selectedBands.length >= maximumActions) break;
   }
 
   const bandActions = selectedBands.map((band, index): GeometryRecoveryAction => {
     const primaryCandidates = componentObservations.filter((observation) => overlapsBand(observation, band));
-    const supportingBands = selectedBands.filter((candidate) => (
+    const featureKindPriority = (kind: VisualPlanningContract['features'][number]['kind']): number => ({
+      'primary-mass': 8, 'layered-stack': 7, 'optical-stack': 6, interface: 5,
+      articulation: 5, opening: 4, fastener: 3, 'repeated-array': 2,
+      'surface-relief': 2, 'thin-feature': 1, 'routed-element': 1,
+    })[kind];
+    const primaryIds = new Set(primaryCandidates.map((candidate) => candidate.componentId));
+    const semanticFeature = selectedCells.length > 0 ? [...visualPlan.features]
+      .map((feature) => ({
+        feature,
+        targetIds: feature.componentIds.filter((componentId) => primaryIds.has(componentId)),
+      }))
+      .filter((candidate) => candidate.targetIds.length > 0
+        && candidate.targetIds.length <= maximumTargetsPerAction)
+      .sort((left, right) => right.targetIds.length / right.feature.componentIds.length
+          - left.targetIds.length / left.feature.componentIds.length
+        || featureKindPriority(right.feature.kind) - featureKindPriority(left.feature.kind)
+        || left.targetIds.length - right.targetIds.length
+        || left.feature.id.localeCompare(right.feature.id))[0] : undefined;
+    const supportingBands = semanticFeature ? [] : selectedBands.filter((candidate) => (
       candidate.side === band.side && candidate.axis !== band.axis
     ));
     const scoredCandidates = primaryCandidates.map((observation) => ({
@@ -297,10 +319,14 @@ export function createGeometryRecoveryPlan(
         candidate.supportingConstraintIds.length === maximumSupportingConstraints
       ))
       : scoredCandidates;
-    const ambiguous = spatiallyConstrained.length > maximumTargetsPerAction;
-    const targets = ambiguous ? [] : spatiallyConstrained.map((candidate) => candidate.observation);
+    const semanticTargets = semanticFeature
+      ? componentObservations.filter((observation) => semanticFeature.targetIds.includes(observation.componentId))
+      : undefined;
+    const candidateTargets = semanticTargets ?? spatiallyConstrained.map((candidate) => candidate.observation);
+    const ambiguous = candidateTargets.length > maximumTargetsPerAction;
+    const targets = ambiguous ? [] : candidateTargets;
     const targetComponentIds = targets.map((target) => target.componentId).sort();
-    const spatialConstraintIds = [band.id, ...new Set(spatiallyConstrained.flatMap((candidate) => (
+    const spatialConstraintIds = [band.id, ...new Set((semanticFeature ? [] : spatiallyConstrained).flatMap((candidate) => (
       candidate.supportingConstraintIds
     )))].sort();
     const features = targetComponentIds.flatMap((componentId) => componentFeatures.get(componentId) ?? []);
@@ -324,7 +350,9 @@ export function createGeometryRecoveryPlan(
       spatialConstraintIds,
       targetingMode: operation === 'request-region-evidence'
         ? 'unmapped-or-ambiguous'
-        : supportingBands.length > 0 && maximumSupportingConstraints > 0
+        : semanticFeature
+          ? 'semantic-feature-overlap'
+          : supportingBands.length > 0 && maximumSupportingConstraints > 0
           ? 'cross-axis-intersection'
           : 'single-axis-overlap',
       evidenceViewIds,
@@ -335,10 +363,23 @@ export function createGeometryRecoveryPlan(
         ? ambiguous
           ? `${band.id} coverage ${(band.coverage * 100).toFixed(1)}% still maps to ${spatiallyConstrained.length} equally constrained edit units, above the safe limit of ${maximumTargetsPerAction}; acquire a finer region mask or component correspondence before changing geometry.`
           : `${band.id} coverage ${(band.coverage * 100).toFixed(1)}% has no evidence-addressable edit unit; acquire or map evidence before changing geometry.`
-        : `${band.id} coverage ${(band.coverage * 100).toFixed(1)}% maps through ${spatialConstraintIds.length} spatial constraints to ${targetComponentIds.length} bounded edit units; revise only those units and require all dependent gates to improve.`,
+        : semanticFeature
+          ? `${band.id} coverage ${(band.coverage * 100).toFixed(1)}% maps to the evidence-locked ${semanticFeature.feature.id} feature and ${targetComponentIds.length} bounded edit units; revise that semantic assembly as one candidate and require all dependent gates to improve.`
+          : `${band.id} coverage ${(band.coverage * 100).toFixed(1)}% maps through ${spatialConstraintIds.length} spatial constraints to ${targetComponentIds.length} bounded edit units; revise only those units and require all dependent gates to improve.`,
     };
   });
-  const rawActions = cellActions.length > 0 ? cellActions : bandActions;
+  // Preserve both resolutions. A dense failing cell is useful for pinpointing
+  // small hardware, but it must not suppress a coarse axis band that exposes a
+  // whole-profile error (for example an over-deep motor housing in side view).
+  // Interleaving also keeps a small downstream trial budget representative of
+  // both local and global failure modes.
+  const rawActions: GeometryRecoveryAction[] = [];
+  const actionDepth = Math.max(cellActions.length, Math.ceil(bandActions.length / 2));
+  for (let index = 0; index < actionDepth; index += 1) {
+    if (bandActions[index * 2]) rawActions.push(bandActions[index * 2]!);
+    if (cellActions[index]) rawActions.push(cellActions[index]!);
+    if (bandActions[index * 2 + 1]) rawActions.push(bandActions[index * 2 + 1]!);
+  }
   const groupedActions = new Map<string, GeometryRecoveryAction>();
   for (const action of rawActions) {
     const groupingKey = [
@@ -358,7 +399,7 @@ export function createGeometryRecoveryPlan(
       ...existing.requiredComponentIds, ...action.requiredComponentIds,
     ])].sort();
   }
-  const actions = [...groupedActions.values()].map((action, index) => ({
+  const actions = [...groupedActions.values()].slice(0, maximumActions).map((action, index) => ({
     ...action,
     id: action.causeBandIds.length > 1
       ? `recover-${action.causeBandIds[0]!.split(':')[0]}-intersection-${index + 1}`

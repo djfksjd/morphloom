@@ -51,6 +51,7 @@ describe('localized geometry recovery planning', () => {
     expect(plan.actions.every((action) => action.verificationGates.includes('visual-plan-revision'))).toBe(true);
     expect(plan.actions.every((action) => action.candidateComponentCount >= action.targetComponentIds.length)).toBe(true);
     expect(plan.actions.some((action) => action.targetingMode === 'spatial-cell-overlap')).toBe(true);
+    expect(plan.actions.some((action) => action.targetingMode === 'semantic-feature-overlap')).toBe(true);
   });
 
   it('requests evidence instead of hallucinating geometry for an unmapped failed region', () => {
@@ -142,5 +143,46 @@ describe('localized geometry recovery planning', () => {
     expect(plan.actions[0]?.targetComponentIds).toEqual([]);
     expect(plan.actions[0]?.candidateComponentCount).toBe(3);
     expect(plan.actions[0]?.reason).toContain('above the safe limit');
+  });
+
+  it('prefers a fully localized semantic assembly and retains distinct failures on one axis', () => {
+    const points = sampleTriangleSurface(box(1, 1, 1), 128).points;
+    const baseAudit = compareSurfaceGeometry(points, points);
+    const audit = {
+      ...baseAudit,
+      pass: false,
+      spatialCoverage: {
+        ...baseAudit.spatialCoverage,
+        reference: baseAudit.spatialCoverage.reference.map((band) => ({ ...band, coverage: 1 })),
+        candidate: baseAudit.spatialCoverage.candidate.map((band) => ({
+          ...band,
+          coverage: band.id === 'candidate:z-low' ? 0.05
+            : band.id === 'candidate:z-middle' ? 0.1 : 1,
+        })),
+        referenceCells: baseAudit.spatialCoverage.referenceCells.map((cell) => ({ ...cell, coverage: 1 })),
+        candidateCells: baseAudit.spatialCoverage.candidateCells.map((cell) => ({
+          ...cell,
+          samples: cell.id === 'candidate:cell:x-middle:y-middle:z-middle' ? 20 : cell.samples,
+          coverage: cell.id === 'candidate:cell:x-middle:y-middle:z-middle' ? 0.1 : 1,
+        })),
+      },
+    };
+    const candidates: ComponentSpatialObservation[] = [
+      { componentId: 'broad-a', normalizedBounds: { minimum: [0.4, 0.4, 0.34], maximum: [0.6, 0.6, 0.6] }, evidenceStatus: 'measured' },
+      { componentId: 'broad-b', normalizedBounds: { minimum: [0.4, 0.4, 0.8], maximum: [0.6, 0.6, 0.9] }, evidenceStatus: 'measured' },
+      { componentId: 'stack-a', normalizedBounds: { minimum: [0.4, 0.4, 0.36], maximum: [0.6, 0.6, 0.48] }, evidenceStatus: 'measured' },
+      { componentId: 'stack-b', normalizedBounds: { minimum: [0.4, 0.4, 0.5], maximum: [0.6, 0.6, 0.62] }, evidenceStatus: 'measured' },
+    ];
+    const planFixture = visualPlan(candidates.map(({ componentId }) => componentId));
+    const baseFeature = planFixture.features[0]!;
+    planFixture.features = [
+      { ...baseFeature, id: 'broad', kind: 'primary-mass', componentIds: ['broad-a', 'broad-b'] },
+      { ...baseFeature, id: 'stack', kind: 'layered-stack', componentIds: ['stack-a', 'stack-b'] },
+    ];
+    const plan = createGeometryRecoveryPlan(audit, planFixture, candidates, { maximumActions: 8 });
+    const middle = plan.actions.find((action) => action.causeBandId === 'candidate:z-middle');
+    expect(middle?.targetingMode).toBe('semantic-feature-overlap');
+    expect(middle?.targetComponentIds).toEqual(['stack-a', 'stack-b']);
+    expect(plan.actions.some((action) => action.causeBandId === 'candidate:z-low')).toBe(true);
   });
 });

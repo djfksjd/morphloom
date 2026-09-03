@@ -154,6 +154,106 @@ export function createBoundedScaleRecoveryTrials(
   });
 }
 
+function alignedAxisVector(axis: 0 | 1 | 2, alignedYawDegrees: number): [number, number, number] {
+  if (axis === 1) return [0, 1, 0];
+  const radians = alignedYawDegrees * Math.PI / 180;
+  const cosine = Math.cos(radians);
+  const sine = Math.sin(radians);
+  return axis === 0 ? [cosine, 0, -sine] : [sine, 0, cosine];
+}
+
+function localAxisWeights(
+  worldAxis: [number, number, number],
+  rotation: [number, number, number] = [0, 0, 0],
+): [number, number, number] {
+  const [x, y, z] = rotation;
+  const a = Math.cos(x); const b = Math.sin(x);
+  const c = Math.cos(y); const d = Math.sin(y);
+  const e = Math.cos(z); const f = Math.sin(z);
+  // Three.js Euler XYZ object rotation. Multiplication by the transpose maps
+  // the evidence/world direction into the component's local scale basis.
+  const matrix = [
+    c * e, -c * f, d,
+    a * f + b * e * d, a * e - b * f * d, -b * c,
+    b * f - a * e * d, b * e + a * f * d, a * c,
+  ];
+  return [
+    Math.abs(matrix[0]! * worldAxis[0] + matrix[3]! * worldAxis[1] + matrix[6]! * worldAxis[2]),
+    Math.abs(matrix[1]! * worldAxis[0] + matrix[4]! * worldAxis[1] + matrix[7]! * worldAxis[2]),
+    Math.abs(matrix[2]! * worldAxis[0] + matrix[5]! * worldAxis[1] + matrix[8]! * worldAxis[2]),
+  ];
+}
+
+/**
+ * Creates anisotropic scale trials from failed audit axes. Unlike uniform
+ * scaling, these proposals preserve unaffected dimensions and are therefore
+ * suitable for profile failures such as an over-deep enclosure or a blade
+ * whose edge is too thick. The audit axes are transformed back through the
+ * locked yaw before the local IR scale multiplier is emitted.
+ */
+export function createBoundedAxisScaleRecoveryTrials(
+  plan: GeometryRecoveryPlan,
+  options: {
+    alignedYawDegrees: number;
+    sourceIr?: AssemblyIR;
+    expansionFactors?: number[];
+    reductionFactors?: number[];
+    grouping?: RecoveryTrialGrouping;
+  },
+): GeometryRecoveryTrial[] {
+  const expansionFactors = options.expansionFactors ?? [1.05, 1.1, 1.15];
+  const reductionFactors = options.reductionFactors ?? [0.95, 0.9, 0.85];
+  const grouping = validateGrouping(options.grouping);
+  const validateFactors = (values: number[], minimum: number, maximum: number): boolean => (
+    Array.isArray(values) && values.length >= 1 && values.length <= 8
+    && values.every((value) => Number.isFinite(value) && value >= minimum && value <= maximum)
+  );
+  if (plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || (options.sourceIr !== undefined && options.sourceIr.schema !== 'morphloom.assembly/0.1')
+    || !Number.isFinite(options.alignedYawDegrees) || Math.abs(options.alignedYawDegrees) > 1_000_000
+    || !validateFactors(expansionFactors, 1.001, 1.5)
+    || !validateFactors(reductionFactors, 0.5, 0.999)) {
+    throw new Error('Geometry recovery axis-scale trial configuration is unsafe.');
+  }
+  return plan.actions.flatMap((action) => {
+    if (action.operation === 'request-region-evidence' || action.targetComponentIds.length < 1) return [];
+    const directions = action.spatialConstraintIds
+      .map(bandDirection)
+      .filter((value): value is NonNullable<typeof value> => value !== undefined);
+    if (directions.length < 1) return [];
+    if (directions.some((direction) => direction.side !== directions[0]!.side)) {
+      throw new Error(`Geometry recovery action mixes reference and candidate bands: ${action.id}`);
+    }
+    const worldAxes = directions.map((direction) => alignedAxisVector(
+      direction.axis, options.alignedYawDegrees,
+    ));
+    const factors = action.operation === 'expand-or-reshape-existing-units'
+      ? expansionFactors : reductionFactors;
+    return factors.flatMap((factor, factorIndex) => {
+      return groupRecoveryEdits(action.targetComponentIds.map((componentId) => {
+        const component = options.sourceIr?.components.find((candidate) => candidate.id === componentId);
+        if (options.sourceIr && !component) {
+          throw new Error(`Geometry recovery axis-scale target does not exist: ${componentId}`);
+        }
+        const weights = worldAxes.reduce<[number, number, number]>((maximums, worldAxis) => {
+          const axisWeights = localAxisWeights(worldAxis, component?.rotation);
+          return maximums.map((value, axis) => Math.max(value, axisWeights[axis]!)) as [number, number, number];
+        }, [0, 0, 0]);
+        return {
+          componentId,
+          scaleMultiplier: weights.map((weight) => 1 + (factor - 1) * weight) as [number, number, number],
+        };
+      }), grouping).map((edits, groupIndex) => ({
+        id: grouping === 'batch'
+          ? `${action.id}:axis-scale-${factorIndex + 1}`
+          : `${action.id}:c${groupIndex + 1}:axis-scale-${factorIndex + 1}`,
+        actionId: action.id,
+        edits,
+      }));
+    });
+  });
+}
+
 function bandDirection(id: string): { axis: 0 | 1 | 2; direction: -1 | 0 | 1; side: 'reference' | 'candidate' } | undefined {
   const match = /^(reference|candidate):([xyz])-(low|middle|high)$/.exec(id);
   if (!match) return undefined;

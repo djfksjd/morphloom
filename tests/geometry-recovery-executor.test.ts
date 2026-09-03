@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import {
+  createBoundedAxisScaleRecoveryTrials,
   createBoundedScaleRecoveryTrials,
   createBoundedShapeRecoveryTrials,
   createBoundedTranslationRecoveryTrials,
@@ -33,6 +34,57 @@ function scaleOf(ir: AssemblyIR, componentId: string): number {
 }
 
 describe('bounded geometry recovery execution', () => {
+  it('scales only the failed aligned axis while preserving unaffected dimensions', () => {
+    const componentId = GALAXY_Z_FOLD8_EXTERIOR_IR.components[0]!.id;
+    const plan = planFor(componentId);
+    plan.actions[0]!.causeBandId = 'candidate:z-low';
+    plan.actions[0]!.causeBandIds = ['candidate:z-low'];
+    plan.actions[0]!.spatialConstraintIds = ['candidate:z-low'];
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    const trials = createBoundedAxisScaleRecoveryTrials(plan, {
+      alignedYawDegrees: 180, reductionFactors: [0.8],
+    });
+    expect(trials).toHaveLength(1);
+    expect(trials[0]!.edits[0]!.scaleMultiplier).toEqual([1, 1, 0.8]);
+  });
+
+  it('maps a failed aligned depth axis back to width at a quarter-turn yaw', () => {
+    const componentId = GALAXY_Z_FOLD8_EXTERIOR_IR.components[0]!.id;
+    const plan = planFor(componentId);
+    plan.actions[0]!.spatialConstraintIds = ['reference:z-high'];
+    const trials = createBoundedAxisScaleRecoveryTrials(plan, {
+      alignedYawDegrees: 90, expansionFactors: [1.2],
+    });
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[0]).toBeCloseTo(1.2);
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[1]).toBeCloseTo(1);
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[2]).toBeCloseTo(1);
+  });
+
+  it('maps the world recovery axis into a rotated component local scale basis', () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const componentId = source.components[0]!.id;
+    source.components[0]!.rotation = [Math.PI / 2, 0, 0];
+    const plan = planFor(componentId);
+    plan.actions[0]!.spatialConstraintIds = ['reference:z-high'];
+    const trials = createBoundedAxisScaleRecoveryTrials(plan, {
+      alignedYawDegrees: 0, expansionFactors: [1.2], sourceIr: source,
+    });
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[0]).toBeCloseTo(1);
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[1]).toBeCloseTo(1.2);
+    expect(trials[0]!.edits[0]!.scaleMultiplier?.[2]).toBeCloseTo(1);
+  });
+
+  it('keeps a middle-band axis actionable for profile thickness recovery', () => {
+    const componentId = GALAXY_Z_FOLD8_EXTERIOR_IR.components[0]!.id;
+    const plan = planFor(componentId);
+    plan.actions[0]!.spatialConstraintIds = ['candidate:z-middle'];
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    const trials = createBoundedAxisScaleRecoveryTrials(plan, {
+      alignedYawDegrees: 0, reductionFactors: [0.8],
+    });
+    expect(trials[0]!.edits[0]!.scaleMultiplier).toEqual([1, 1, 0.8]);
+  });
+
   it('selects the strongest isolated improvement from independent bounded trials', async () => {
     const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
     const componentId = source.components[0]!.id;

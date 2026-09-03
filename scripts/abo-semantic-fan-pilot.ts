@@ -10,9 +10,7 @@ import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { fitDiscreteMultiviewCameras } from '../src/engine/discrete-multiview-camera-fit';
 import { createGeometryRecoveryPlan, observeAlignedComponentBounds } from '../src/engine/geometry-recovery-plan';
 import {
-  createBoundedScaleRecoveryTrials,
-  createBoundedShapeRecoveryTrials,
-  createBoundedTranslationRecoveryTrials,
+  createBoundedAxisScaleRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
@@ -602,7 +600,7 @@ const geometryRecoveryPlan = createGeometryRecoveryPlan(
   geometryAudit,
   visualPlan,
   componentSpatialObservations,
-  { maximumActions: 6 },
+  { maximumActions: 12 },
 );
 
 const clampUnit = (value: number): number => Math.max(0, Math.min(1, value));
@@ -643,25 +641,18 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
 const recoverySearchPlan = {
   ...geometryRecoveryPlan,
   actions: geometryRecoveryPlan.actions
-    .filter((action) => action.operation !== 'request-region-evidence')
-    .slice(0, 2),
+    .filter((action) => action.operation !== 'request-region-evidence'
+      && action.targetingMode === 'semantic-feature-overlap')
+    .slice(0, 6),
 };
 recoverySearchPlan.actionable = recoverySearchPlan.actions.length > 0;
 const recoveryTrials = [
-  ...createBoundedScaleRecoveryTrials(recoverySearchPlan, {
-    expansionFactors: [1.01, 1.025, 1.05],
-    reductionFactors: [0.99, 0.975, 0.95],
-    grouping: 'per-component',
-  }),
-  ...createBoundedTranslationRecoveryTrials(recoverySearchPlan, {
+  ...createBoundedAxisScaleRecoveryTrials(recoverySearchPlan, {
     alignedYawDegrees: geometryAudit.selectedYawDegrees,
-    distancesMm: [1, 2, 5],
-    grouping: 'per-component',
-  }),
-  ...createBoundedShapeRecoveryTrials(selectedIr, recoverySearchPlan, {
-    alignedYawDegrees: geometryAudit.selectedYawDegrees,
-    distancesMm: [1, 2, 5],
-    grouping: 'per-component',
+    sourceIr: selectedIr,
+    expansionFactors: [1.05, 1.1, 1.15],
+    reductionFactors: [0.95, 0.9, 0.85],
+    grouping: 'batch',
   }),
 ];
 const recoveryResult = recoveryTrials.length > 0
@@ -670,7 +661,7 @@ const recoveryResult = recoveryTrials.length > 0
     {
       targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
       minimumImprovement: 0.002,
-      maximumProtectedRegression: 0.0001,
+      maximumProtectedRegression: 0.005,
     },
   )
   : {
@@ -856,6 +847,7 @@ const report = {
       ? { path: visualHullBaseline!.path, audit: visualHullGeometryAudit }
       : { status: 'not-available' },
     recoveryPlan: deliveryRecoveryPlan,
+    recoverySearchPlan,
     recoveryExecution: recoveryResult.report,
     limitation: 'This development pilot was tuned against its GT and is excluded from independent holdout superiority claims.',
   },
