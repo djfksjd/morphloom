@@ -305,6 +305,86 @@ export function createSurfaceAttributionTranslationRecoveryTrials(
 }
 
 /**
+ * Deforms only a bounded set of control points on an open tube when merged-GT
+ * surface evidence suggests relocation. Both route extremes and declared
+ * endpoints are tried independently; the verification search decides whether
+ * a local bend is better than translating the complete component.
+ */
+export function createSurfaceAttributionTubeControlRecoveryTrials(
+  ir: AssemblyIR,
+  plan: GeometryRecoveryPlan,
+  attribution: SurfaceComponentAttributionReport,
+  options: {
+    candidateUnitsToIrUnits: number;
+    fractions?: number[];
+    maximumTranslationIrUnits?: number;
+    maximumControlPoints?: number;
+  },
+): GeometryRecoveryTrial[] {
+  const fractions = options.fractions ?? [0.25, 0.5, 0.75];
+  const maximumTranslationIrUnits = options.maximumTranslationIrUnits ?? 100;
+  const maximumControlPoints = options.maximumControlPoints ?? 4;
+  if (ir?.schema !== 'morphloom.assembly/0.1'
+    || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || attribution?.schema !== 'morphloom.surface-component-attribution/0.1'
+    || !/^[a-f0-9]{16}$/.test(attribution.evidenceFingerprint)
+    || !Number.isFinite(options.candidateUnitsToIrUnits) || options.candidateUnitsToIrUnits <= 0
+    || options.candidateUnitsToIrUnits > 1_000_000
+    || !Array.isArray(fractions) || fractions.length < 1 || fractions.length > 4
+    || fractions.some((fraction) => !Number.isFinite(fraction) || fraction < 0.05 || fraction > 1)
+    || !Number.isFinite(maximumTranslationIrUnits) || maximumTranslationIrUnits <= 0
+    || maximumTranslationIrUnits > 100_000
+    || !Number.isInteger(maximumControlPoints) || maximumControlPoints < 1 || maximumControlPoints > 4) {
+    throw new Error('Surface attribution tube-control trial configuration is unsafe.');
+  }
+  const components = new Map(ir.components.map((component) => [component.id, component]));
+  const attributedById = new Map(attribution.components.map((component) => [component.componentId, component]));
+  return plan.actions.filter((action) => action.targetingMode === 'surface-nearest-attribution').flatMap((action) => {
+    const componentId = action.surfaceAttributionComponentId;
+    const component = componentId ? components.get(componentId) : undefined;
+    const attributed = componentId ? attributedById.get(componentId) : undefined;
+    if (!componentId || !component || action.targetComponentIds.length !== 1
+      || action.targetComponentIds[0] !== componentId
+      || action.surfaceAttributionEvidenceFingerprint !== attribution.evidenceFingerprint) {
+      throw new Error(`Surface attribution tube-control action has an unsafe target: ${action.id}`);
+    }
+    if (action.operation !== 'relocate-or-reshape-extraneous-units'
+      || attributed?.recommendation !== 'relocate-or-reshape'
+      || !attributed.suggestedTranslationCandidateUnits
+      || component.geometry.op !== 'tube' || component.geometry.closed
+      || component.geometry.points.length < 2 || component.geometry.points.length > 16) return [];
+    const worldDelta = attributed.suggestedTranslationCandidateUnits.map((value) => (
+      value * options.candidateUnitsToIrUnits
+    )) as Vector3;
+    const magnitude = Math.hypot(...worldDelta);
+    if (worldDelta.some((value) => !Number.isFinite(value)) || magnitude <= 1e-9
+      || magnitude > maximumTranslationIrUnits) {
+      throw new Error(`Surface attribution tube-control vector exceeds the bounded edit limit: ${action.id}`);
+    }
+    const localDelta = worldToLocalDirection(worldDelta, component.rotation);
+    const unit = localDelta.map((value) => value / magnitude) as Vector3;
+    const ranked = component.geometry.points.map((point, pointIndex) => ({
+      pointIndex,
+      projection: point.reduce((sum, value, axis) => sum + value * unit[axis]!, 0),
+    })).sort((left, right) => right.projection - left.projection || left.pointIndex - right.pointIndex);
+    const controlPoints = [...new Set([
+      ranked[0]!.pointIndex,
+      ranked.at(-1)!.pointIndex,
+      0,
+      component.geometry.points.length - 1,
+    ])].slice(0, maximumControlPoints);
+    return controlPoints.flatMap((pointIndex, controlIndex) => fractions.map((fraction, fractionIndex) => ({
+      id: `${action.id}:tube-control-${controlIndex + 1}-${fractionIndex + 1}`,
+      actionId: action.id,
+      edits: [{ componentId, geometry: {
+        operation: 'tube-point-deltas',
+        deltas: [{ pointIndex, deltaMm: localDelta.map((value) => value * fraction) as Vector3 }],
+      } }],
+    })));
+  });
+}
+
+/**
  * Converts a component-attributed robust extent mismatch into one-axis scale
  * trials. Only the strongest aligned axis is edited, the requested factor is
  * capped before interpolation, and the evidence fingerprint must match the
@@ -397,6 +477,26 @@ function localAxisWeights(
     Math.abs(matrix[0]! * worldAxis[0] + matrix[3]! * worldAxis[1] + matrix[6]! * worldAxis[2]),
     Math.abs(matrix[1]! * worldAxis[0] + matrix[4]! * worldAxis[1] + matrix[7]! * worldAxis[2]),
     Math.abs(matrix[2]! * worldAxis[0] + matrix[5]! * worldAxis[1] + matrix[8]! * worldAxis[2]),
+  ];
+}
+
+function worldToLocalDirection(
+  worldDirection: [number, number, number],
+  rotation: [number, number, number] = [0, 0, 0],
+): [number, number, number] {
+  const [x, y, z] = rotation;
+  const a = Math.cos(x); const b = Math.sin(x);
+  const c = Math.cos(y); const d = Math.sin(y);
+  const e = Math.cos(z); const f = Math.sin(z);
+  const matrix = [
+    c * e, -c * f, d,
+    a * f + b * e * d, a * e - b * f * d, -b * c,
+    b * f - a * e * d, b * e + a * f * d, a * c,
+  ];
+  return [
+    matrix[0]! * worldDirection[0] + matrix[3]! * worldDirection[1] + matrix[6]! * worldDirection[2],
+    matrix[1]! * worldDirection[0] + matrix[4]! * worldDirection[1] + matrix[7]! * worldDirection[2],
+    matrix[2]! * worldDirection[0] + matrix[5]! * worldDirection[1] + matrix[8]! * worldDirection[2],
   ];
 }
 
@@ -563,9 +663,9 @@ export function createBoundedTranslationRecoveryTrials(
 }
 
 /**
- * Generates local shape edits for routed tubes while translating rigid parts.
- * Only one extreme control point is moved per open tube, so the remaining
- * route and every undeclared component stay byte-identical.
+ * Generates topology-preserving local shape edits for routed tubes, extruded
+ * outlines, lathe profiles, and blade loft sections while translating rigid
+ * primitives. Only one evidence-facing control point is moved per component.
  */
 export function createBoundedShapeRecoveryTrials(
   ir: AssemblyIR,
@@ -594,24 +694,72 @@ export function createBoundedShapeRecoveryTrials(
       action.targetComponentIds.map((componentId): RecoveryEdit => {
         const component = componentById.get(componentId);
         if (!component) throw new Error(`Geometry recovery shape target does not exist: ${componentId}`);
-        const delta = directionReceipt.direction.map((value) => value * distance) as [number, number, number];
-        if (component.geometry.op !== 'tube' || component.geometry.closed || component.geometry.points.length < 2) {
-          return { componentId, translateMm: delta };
+        const worldDelta = directionReceipt.direction.map((value) => value * distance) as Vector3;
+        const localDirection = worldToLocalDirection(directionReceipt.direction, component.rotation);
+        const localDelta = localDirection.map((value) => value * distance) as Vector3;
+        const chooseExtreme = (projections: number[]): number => projections
+          .map((projection, pointIndex) => ({ pointIndex, projection }))
+          .sort((left, right) => {
+            const difference = directionReceipt.side === 'reference'
+              ? right.projection - left.projection : left.projection - right.projection;
+            return Math.abs(difference) <= 1e-9 ? left.pointIndex - right.pointIndex : difference;
+          })[0]!.pointIndex;
+        if (component.geometry.op === 'tube' && !component.geometry.closed
+          && component.geometry.points.length >= 2) {
+          const pointIndex = chooseExtreme(component.geometry.points.map((point) => point.reduce((sum, value, axis) => (
+            sum + value * localDirection[axis]!
+          ), 0)));
+          return { componentId, geometry: {
+            operation: 'tube-point-deltas', deltas: [{ pointIndex, deltaMm: localDelta }],
+          } };
         }
-        const dot = (point: [number, number, number]): number => point.reduce((sum, value, axis) => (
-          sum + value * directionReceipt.direction[axis]!
-        ), 0);
-        const candidates = component.geometry.points.map((point, pointIndex) => ({ pointIndex, projection: dot(point) }));
-        candidates.sort((left, right) => directionReceipt.side === 'reference'
-          ? right.projection - left.projection || left.pointIndex - right.pointIndex
-          : left.projection - right.projection || left.pointIndex - right.pointIndex);
-        return {
-          componentId,
-          geometry: {
-            operation: 'tube-point-deltas',
-            deltas: [{ pointIndex: candidates[0]!.pointIndex, deltaMm: delta }],
-          },
-        };
+        if (component.geometry.op === 'extrude') {
+          const planarLength = Math.hypot(localDirection[0], localDirection[1]);
+          if (planarLength >= 0.5) {
+            const planar: [number, number] = [localDirection[0] / planarLength, localDirection[1] / planarLength];
+            const pointIndex = chooseExtreme(component.geometry.points.map((point) => (
+              point[0] * planar[0] + point[1] * planar[1]
+            )));
+            return { componentId, geometry: { operation: 'extrude-point-deltas', deltas: [{
+              pointIndex, deltaMm: [planar[0] * distance, planar[1] * distance],
+            }] } };
+          }
+        }
+        if (component.geometry.op === 'lathe') {
+          const radialWeight = Math.hypot(localDirection[0], localDirection[2]);
+          if (Math.abs(localDirection[1]) >= radialWeight) {
+            const pointIndex = chooseExtreme(component.geometry.profile.map((point) => point[1] * localDirection[1]));
+            return { componentId, geometry: { operation: 'lathe-profile-deltas', deltas: [{
+              pointIndex, deltaMm: [0, Math.sign(localDirection[1]) * distance],
+            }] } };
+          }
+          const pointIndex = component.geometry.profile.reduce((winner, point, index, points) => (
+            point[0] > points[winner]![0] ? index : winner
+          ), 0);
+          return { componentId, geometry: { operation: 'lathe-profile-deltas', deltas: [{
+            pointIndex, deltaMm: [directionReceipt.side === 'reference' ? distance : -distance, 0],
+          }] } };
+        }
+        if (component.geometry.op === 'bladeLoft') {
+          const radialWeight = Math.abs(localDirection[0]);
+          if (Math.abs(localDirection[1]) >= Math.max(radialWeight, Math.abs(localDirection[2]))) {
+            const pointIndex = chooseExtreme(component.geometry.sections.map((section) => (
+              section[0] * localDirection[1]
+            )));
+            return { componentId, geometry: { operation: 'blade-section-deltas', deltas: [{
+              pointIndex, deltaMm: [Math.sign(localDirection[1]) * distance, 0],
+            }] } };
+          }
+          if (radialWeight >= Math.abs(localDirection[2])) {
+            const pointIndex = component.geometry.sections.reduce((winner, section, index, sections) => (
+              section[1] > sections[winner]![1] ? index : winner
+            ), 0);
+            return { componentId, geometry: { operation: 'blade-section-deltas', deltas: [{
+              pointIndex, deltaMm: [0, directionReceipt.side === 'reference' ? distance : -distance],
+            }] } };
+          }
+        }
+        return { componentId, translateMm: worldDelta };
       }),
       grouping,
     ).map((edits, groupIndex) => ({

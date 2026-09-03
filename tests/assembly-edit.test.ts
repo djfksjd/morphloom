@@ -6,6 +6,10 @@ import {
 } from '../src/engine/assembly-edit';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { createOrnateKnifeIR } from '../src/engine/knife';
+import { compileAssemblyIR } from '../src/engine/assembly-compiler';
+import { analyzeTopology } from '../src/engine/topology';
+import { DEFAULT_KNIFE_SPEC } from '../src/types';
 
 describe('isolated AssemblyIR component edits', () => {
   it('moves and refinishes one named component while preserving every other component byte-for-byte', async () => {
@@ -118,5 +122,39 @@ describe('isolated AssemblyIR component edits', () => {
       componentId: tube.id, expectedInputFingerprint: tubeFingerprint,
       geometry: { operation: 'tube-point-deltas', deltas: [{ pointIndex: 4_096, deltaMm: [1, 0, 0] }] },
     })).rejects.toThrow(/missing tube point/);
+  });
+
+  it('edits existing extrude, lathe, and blade profile controls without changing topology inventory', async () => {
+    const source = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const snapshot = structuredClone(source);
+    const expectedInputFingerprint = await fingerprintAssemblyIR(source);
+    const result = await applyAssemblyComponentBatchPatch(source, {
+      schema: 'morphloom.component-batch-patch/0.1', operationId: 'profile-controls-001',
+      expectedInputFingerprint,
+      edits: [
+        { componentId: 'blade_core', geometry: {
+          operation: 'blade-section-deltas', deltas: [{ pointIndex: 9, deltaMm: [4, 0] }],
+        } },
+        { componentId: 'fuller_front', geometry: {
+          operation: 'extrude-point-deltas', deltas: [{ pointIndex: 3, deltaMm: [1, 2] }],
+        } },
+        { componentId: 'grip_core', geometry: {
+          operation: 'lathe-profile-deltas', deltas: [{ pointIndex: 3, deltaMm: [1, 2] }],
+        } },
+      ],
+    });
+    const blade = result.ir.components.find((component) => component.id === 'blade_core')!;
+    const fuller = result.ir.components.find((component) => component.id === 'fuller_front')!;
+    const grip = result.ir.components.find((component) => component.id === 'grip_core')!;
+    expect(blade.geometry.op === 'bladeLoft' && blade.geometry.sections[9]).toEqual([330, 0.28]);
+    expect(fuller.geometry.op === 'extrude' && fuller.geometry.points[3]).toEqual([1, 294]);
+    expect(grip.geometry.op === 'lathe' && grip.geometry.profile[3]).toEqual([16, -23]);
+    expect(result.ir.components).toHaveLength(source.components.length);
+    expect(result.receipt.unaffectedComponentsPreserved).toBe(true);
+    const topology = analyzeTopology(compileAssemblyIR(result.ir, 'beauty').root);
+    expect(topology.boundaryEdges).toBe(0);
+    expect(topology.nonManifoldEdges).toBe(0);
+    expect(topology.degenerateTriangles).toBe(0);
+    expect(source).toEqual(snapshot);
   });
 });

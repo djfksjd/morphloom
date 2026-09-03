@@ -10,10 +10,11 @@ export interface AssemblyComponentPatch {
   translateMm?: Vector3;
   rotateRadians?: Vector3;
   scaleMultiplier?: Vector3;
-  geometry?: {
-    operation: 'tube-point-deltas';
-    deltas: Array<{ pointIndex: number; deltaMm: Vector3 }>;
-  };
+  geometry?:
+    | { operation: 'tube-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: Vector3 }> }
+    | { operation: 'extrude-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
+    | { operation: 'lathe-profile-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
+    | { operation: 'blade-section-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> };
   material?: Partial<Pick<AssemblyMaterialIR,
     | 'color' | 'roughness' | 'metalness' | 'transmission' | 'clearcoat'
     | 'clearcoatRoughness' | 'ior' | 'anisotropy' | 'anisotropyRotation'
@@ -80,6 +81,13 @@ function finiteVector(value: Vector3 | undefined, minimum: number, maximum: numb
   );
 }
 
+function finiteVector2(value: [number, number] | undefined, minimum: number, maximum: number): boolean {
+  return value === undefined || (
+    value.length === 2
+    && value.every((item) => Number.isFinite(item) && item >= minimum && item <= maximum)
+  );
+}
+
 function validMaterialPatch(material: AssemblyComponentPatch['material']): boolean {
   if (!material) return true;
   const entries = Object.entries(material);
@@ -95,32 +103,60 @@ function validMaterialPatch(material: AssemblyComponentPatch['material']): boole
 
 function validGeometryPatch(geometry: AssemblyComponentPatch['geometry']): boolean {
   if (!geometry) return true;
-  return geometry.operation === 'tube-point-deltas'
-    && Array.isArray(geometry.deltas) && geometry.deltas.length >= 1 && geometry.deltas.length <= 16
+  if (!['tube-point-deltas', 'extrude-point-deltas', 'lathe-profile-deltas', 'blade-section-deltas']
+    .includes(geometry.operation)) return false;
+  return Array.isArray(geometry.deltas) && geometry.deltas.length >= 1 && geometry.deltas.length <= 16
     && new Set(geometry.deltas.map((delta) => delta?.pointIndex)).size === geometry.deltas.length
     && geometry.deltas.every((delta) => Number.isInteger(delta?.pointIndex)
       && delta.pointIndex >= 0 && delta.pointIndex <= 4_096
-      && finiteVector(delta.deltaMm, -10_000, 10_000));
+      && (geometry.operation === 'tube-point-deltas'
+        ? finiteVector(delta.deltaMm as Vector3, -10_000, 10_000)
+        : finiteVector2(delta.deltaMm as [number, number], -10_000, 10_000)));
 }
 
 function applyGeometryPatch(
   source: AssemblyGeometryIR,
   patch: NonNullable<AssemblyComponentPatch['geometry']>,
 ): AssemblyGeometryIR {
-  if (patch.operation !== 'tube-point-deltas' || source.op !== 'tube') {
+  if (patch.operation === 'tube-point-deltas' && source.op === 'tube') {
+    if (patch.deltas.some((delta) => delta.pointIndex >= source.points.length)) {
+      throw new Error('Geometry patch references a missing tube point.');
+    }
+    const deltaByIndex = new Map(patch.deltas.map((delta) => [delta.pointIndex, delta.deltaMm]));
+    return {
+      ...source,
+      points: source.points.map((point, pointIndex) => {
+        const delta = deltaByIndex.get(pointIndex);
+        return delta ? addVector(point, delta) : [...point];
+      }),
+    };
+  }
+  const profileOperation = patch.operation === 'extrude-point-deltas' ? 'extrude'
+    : patch.operation === 'lathe-profile-deltas' ? 'lathe'
+      : patch.operation === 'blade-section-deltas' ? 'bladeLoft' : undefined;
+  if (!profileOperation || source.op !== profileOperation) {
     throw new Error(`Geometry patch ${patch.operation} is incompatible with ${source.op}.`);
   }
-  if (patch.deltas.some((delta) => delta.pointIndex >= source.points.length)) {
-    throw new Error('Geometry patch references a missing tube point.');
+  const sourcePoints = source.op === 'extrude' ? source.points
+    : source.op === 'lathe' ? source.profile : source.sections;
+  if (patch.deltas.some((delta) => delta.pointIndex >= sourcePoints.length)) {
+    throw new Error('Geometry patch references a missing profile point.');
   }
   const deltaByIndex = new Map(patch.deltas.map((delta) => [delta.pointIndex, delta.deltaMm]));
-  return {
-    ...source,
-    points: source.points.map((point, pointIndex) => {
-      const delta = deltaByIndex.get(pointIndex);
-      return delta ? addVector(point, delta) : [...point];
-    }),
-  };
+  const editedPoints = sourcePoints.map((point, pointIndex): [number, number] => {
+    const delta = deltaByIndex.get(pointIndex);
+    const edited: [number, number] = delta
+      ? [point[0] + delta[0], point[1] + delta[1]] : [...point];
+    if (edited.some((value) => !Number.isFinite(value) || Math.abs(value) > 100_000)
+      || (source.op === 'lathe' && edited[0] < 0)
+      || (source.op === 'bladeLoft' && edited[1] < 0)) {
+      throw new Error('Geometry patch produced an unsafe profile point.');
+    }
+    return edited;
+  });
+  if (source.op === 'extrude') return { ...source, points: editedPoints };
+  if (source.op === 'lathe') return { ...source, profile: editedPoints };
+  return { ...source, sections: editedPoints };
 }
 
 function addVector(source: Vector3 | undefined, delta: Vector3): Vector3 {

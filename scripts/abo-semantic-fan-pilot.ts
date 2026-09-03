@@ -19,6 +19,7 @@ import {
   createBoundedAxisScaleRecoveryTrials,
   createBoundedGroupAxisSpacingTrials,
   createSurfaceAttributionAxisScaleRecoveryTrials,
+  createSurfaceAttributionTubeControlRecoveryTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
   executeIterativeGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
@@ -890,15 +891,14 @@ const recoveryResult = await executeIterativeGeometryRecoverySearch(
       trials: recoveryTrials,
     };
     const currentAnalysis = analyzeRecoverySurface(currentIr);
-    const actions = surfaceAttributionActionsFor(
-      currentAnalysis.attribution, 0, context.selectedTrialIds,
-    );
+    const actions = surfaceAttributionActionsFor(currentAnalysis.attribution, 0,
+      context.round === 1 ? context.selectedTrialIds : []);
     const plan = {
       ...currentAnalysis.plan,
       actions,
       actionable: currentAnalysis.plan.pass && actions.length > 0,
     };
-    const trials = actions.length > 0 ? [
+    const trials = context.round === 1 && actions.length > 0 ? [
       ...createSurfaceAttributionTranslationRecoveryTrials(currentIr, plan,
         currentAnalysis.attribution, {
           candidateUnitsToIrUnits: 1_000,
@@ -909,14 +909,22 @@ const recoveryResult = await executeIterativeGeometryRecoverySearch(
         currentAnalysis.attribution, {
           fractions: [0.25, 0.5, 0.75], maximumFactorDelta: 0.2,
         }),
-    ] : [];
+    ] : actions.length > 0
+      ? createSurfaceAttributionTubeControlRecoveryTrials(currentIr, plan,
+        currentAnalysis.attribution, {
+          candidateUnitsToIrUnits: 1_000,
+          fractions: [0.25, 0.5],
+          maximumTranslationIrUnits: 100,
+          maximumControlPoints: 3,
+        })
+      : [];
     return { sourceIrFingerprint: context.sourceIrFingerprint, plan, trials };
   },
   evaluateRecoveryCandidate,
   {
     targetGateIds: ['geometry-rms', 'geometry-p95', 'geometry-coverage'],
-    maximumRounds: 2,
-    maximumTotalTrials: 96,
+    maximumRounds: 3,
+    maximumTotalTrials: 128,
     minimumImprovement: 0.002,
     maximumProtectedRegression: 0.0002,
     maximumTargetRegression: 0.0001,

@@ -8,6 +8,7 @@ import {
   createBoundedTranslationRecoveryTrials,
   createSemanticTranslationRecoveryTrials,
   createSurfaceAttributionAxisScaleRecoveryTrials,
+  createSurfaceAttributionTubeControlRecoveryTrials,
   createSurfaceAttributionTranslationRecoveryTrials,
   executeBoundedGeometryRecoverySearch,
   executeIterativeGeometryRecoverySearch,
@@ -17,6 +18,8 @@ import { fingerprintAssemblyIR } from '../src/engine/assembly-edit';
 import type { GeometryRecoveryPlan } from '../src/engine/geometry-recovery-plan';
 import { GALAXY_Z_FOLD8_EXTERIOR_IR } from '../src/engine/galaxy-fold8-exterior';
 import { COOLING_ASSEMBLY_IR } from '../src/engine/cooling-assembly';
+import { createOrnateKnifeIR } from '../src/engine/knife';
+import { DEFAULT_KNIFE_SPEC } from '../src/types';
 
 function planFor(componentId: string): GeometryRecoveryPlan {
   return {
@@ -312,6 +315,38 @@ describe('bounded geometry recovery execution', () => {
     })).toThrow(/unsafe target/);
   });
 
+  it('creates bounded independent control-point trials for an attributed bent tube', () => {
+    const source = structuredClone(COOLING_ASSEMBLY_IR);
+    const tube = source.components.find((component) => component.geometry.op === 'tube')!;
+    tube.rotation = [0, Math.PI / 2, 0];
+    const plan = planFor(tube.id);
+    plan.actions[0]!.operation = 'relocate-or-reshape-extraneous-units';
+    plan.actions[0]!.targetingMode = 'surface-nearest-attribution';
+    plan.actions[0]!.surfaceAttributionComponentId = tube.id;
+    plan.actions[0]!.surfaceAttributionEvidenceFingerprint = 'e'.repeat(16);
+    const trials = createSurfaceAttributionTubeControlRecoveryTrials(source, plan, {
+      schema: 'morphloom.surface-component-attribution/0.1', evidenceFingerprint: 'e'.repeat(16),
+      selectedYawDegrees: 0, distanceThreshold: 0.04, candidateUniformScale: 1,
+      relocateOrReshapeComponentIds: [tube.id], shrinkExcessComponentIds: [],
+      expandOrAddDetailComponentIds: [], limitation: 'fixture', components: [{
+        componentId: tube.id, candidateSamples: 24, candidateCoverage: 0.5,
+        candidateMeanDistance: 0.1, candidateP95Distance: 0.2,
+        assignedReferenceSamples: 24, assignedReferenceCoverage: 0.5,
+        assignedReferenceMeanDistance: 0.1, assignedReferenceP95Distance: 0.2,
+        missingResponsibility: 0.5, outlierCandidateSamples: 12, missingReferenceSamples: 12,
+        recommendation: 'relocate-or-reshape', suggestedTranslationCandidateUnits: [0.01, 0.02, 0.03],
+      }],
+    }, {
+      candidateUnitsToIrUnits: 1_000, fractions: [0.5],
+      maximumTranslationIrUnits: 50, maximumControlPoints: 4,
+    });
+    expect(trials.length).toBeGreaterThanOrEqual(2);
+    expect(trials.length).toBeLessThanOrEqual(4);
+    expect(new Set(trials.map((trial) => trial.edits[0]!.geometry?.deltas[0]!.pointIndex)).size)
+      .toBe(trials.length);
+    expect(trials.every((trial) => trial.edits[0]!.geometry?.operation === 'tube-point-deltas')).toBe(true);
+  });
+
   it('moves only the evidence-facing extreme control point for an open tube', () => {
     const source = structuredClone(COOLING_ASSEMBLY_IR);
     const tube = source.components.find((component) => component.geometry.op === 'tube')!;
@@ -327,6 +362,40 @@ describe('bounded geometry recovery execution', () => {
       point[0] > points[winner]![0] ? index : winner
     ), 0);
     expect(edit.geometry?.deltas).toEqual([{ pointIndex: expectedIndex, deltaMm: [5, 0, 0] }]);
+  });
+
+  it('maps an evidence direction into a rotated tube local control-point frame', () => {
+    const source = structuredClone(COOLING_ASSEMBLY_IR);
+    const tube = source.components.find((component) => component.geometry.op === 'tube')!;
+    tube.rotation = [0, Math.PI / 2, 0];
+    if (tube.geometry.op !== 'tube') throw new Error('fixture tube is missing');
+    const plan = planFor(tube.id);
+    plan.actions[0]!.spatialConstraintIds = ['reference:x-high'];
+    const edit = createBoundedShapeRecoveryTrials(source, plan, {
+      alignedYawDegrees: 0, distancesMm: [5],
+    })[0]!.edits[0]!;
+    const expectedIndex = tube.geometry.points.reduce((winner, point, index, points) => (
+      point[2] > points[winner]![2] ? index : winner
+    ), 0);
+    expect(edit.geometry?.operation).toBe('tube-point-deltas');
+    if (edit.geometry?.operation !== 'tube-point-deltas') throw new Error('expected a tube control edit');
+    expect(edit.geometry?.deltas[0]!.pointIndex).toBe(expectedIndex);
+    expect(edit.geometry?.deltas[0]!.deltaMm[0]).toBeCloseTo(0);
+    expect(edit.geometry?.deltas[0]!.deltaMm[2]).toBeCloseTo(5);
+  });
+
+  it('extends only the evidence-facing blade tip section instead of translating the whole knife', () => {
+    const source = createOrnateKnifeIR(DEFAULT_KNIFE_SPEC);
+    const blade = source.components.find((component) => component.id === 'blade_core')!;
+    const plan = planFor(blade.id);
+    plan.actions[0]!.spatialConstraintIds = ['reference:y-high'];
+    const trials = createBoundedShapeRecoveryTrials(source, plan, {
+      alignedYawDegrees: 0, distancesMm: [4],
+    });
+    expect(trials[0]!.edits[0]).toEqual({
+      componentId: 'blade_core',
+      geometry: { operation: 'blade-section-deltas', deltas: [{ pointIndex: 9, deltaMm: [4, 0] }] },
+    });
   });
 
   it('can isolate multi-target recovery proposals into one-component trials', () => {

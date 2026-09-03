@@ -14646,7 +14646,7 @@
         "recover-surface-motor-shell:surface-translate-3",
         "recover-surface-stand-right:surface-translate-3"
       ],
-      "totalTrials": 88,
+      "totalTrials": 96,
       "rounds": [
         {
           "round": 0,
@@ -23525,6 +23525,524 @@
           },
           "accepted": true,
           "blockers": []
+        },
+        {
+          "round": 2,
+          "sourceIrFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+          "execution": {
+            "schema": "morphloom.geometry-recovery-execution/0.1",
+            "status": "unchanged",
+            "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+            "outputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+            "baseline": {
+              "gateScores": {
+                "geometry-rms": 0.7270360439707741,
+                "geometry-p95": 0.6164526986120786,
+                "geometry-coverage": 0.554931640625,
+                "dimension-fidelity": 0.9584803052879252,
+                "silhouette-whole": 0.5970973718520551,
+                "silhouette-primary": 0.6766787578518977,
+                "silhouette-thin": 0.7203919426389374,
+                "silhouette-recall": 0.7472448287555103,
+                "silhouette-precision": 0.5643678160919541
+              },
+              "blockingGateIds": [
+                "geometry-rms",
+                "geometry-p95",
+                "geometry-coverage",
+                "silhouette-whole",
+                "silhouette-precision"
+              ]
+            },
+            "trials": [
+              {
+                "id": "recover-surface-base-rear-rail:tube-control-1-1",
+                "actionId": "recover-surface-base-rear-rail",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "9361de4c3a293616a11888719a78492930415bdad1d9227e8cdbc06c2605dd53",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-base-rear-rail:tube-control-1-1",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "9361de4c3a293616a11888719a78492930415bdad1d9227e8cdbc06c2605dd53",
+                  "editedComponentIds": [
+                    "base-rear-rail"
+                  ],
+                  "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-base-rear-rail:tube-control-1-1:1",
+                      "componentId": "base-rear-rail",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "9361de4c3a293616a11888719a78492930415bdad1d9227e8cdbc06c2605dd53",
+                      "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7280722639845294,
+                    "geometry-p95": 0.6162897836470607,
+                    "geometry-coverage": 0.55078125,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5973798827120271,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7208388370281705,
+                    "silhouette-recall": 0.7472448287555103,
+                    "silhouette-precision": 0.5646923519263944
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0042",
+                  "geometry-p95 target regressed by 0.0002",
+                  "geometry-coverage target regressed by 0.0042",
+                  "no target gate improved by at least 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-base-rear-rail:tube-control-1-2",
+                "actionId": "recover-surface-base-rear-rail",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "892c4ac593078a03751a706230ed694d08c7fb39a8851767adb482b0fb8f4df8",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-base-rear-rail:tube-control-1-2",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "892c4ac593078a03751a706230ed694d08c7fb39a8851767adb482b0fb8f4df8",
+                  "editedComponentIds": [
+                    "base-rear-rail"
+                  ],
+                  "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-base-rear-rail:tube-control-1-2:1",
+                      "componentId": "base-rear-rail",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "892c4ac593078a03751a706230ed694d08c7fb39a8851767adb482b0fb8f4df8",
+                      "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7283906809460665,
+                    "geometry-p95": 0.6169453786542073,
+                    "geometry-coverage": 0.549072265625,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5970052083333334,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7204718171999706,
+                    "silhouette-recall": 0.7474143777551713,
+                    "silhouette-precision": 0.564460502545574
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0059",
+                  "geometry-coverage target regressed by 0.0059",
+                  "no target gate improved by at least 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-base-rear-rail:tube-control-2-1",
+                "actionId": "recover-surface-base-rear-rail",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "f0810aa6cfea816eb3477ff8723a32d10f9a16f5544da18d567bf6bc4df9334f",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-base-rear-rail:tube-control-2-1",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "f0810aa6cfea816eb3477ff8723a32d10f9a16f5544da18d567bf6bc4df9334f",
+                  "editedComponentIds": [
+                    "base-rear-rail"
+                  ],
+                  "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-base-rear-rail:tube-control-2-1:1",
+                      "componentId": "base-rear-rail",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "f0810aa6cfea816eb3477ff8723a32d10f9a16f5544da18d567bf6bc4df9334f",
+                      "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7287809872268287,
+                    "geometry-p95": 0.6181948714211419,
+                    "geometry-coverage": 0.55224609375,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5971521701835649,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7189282167237726,
+                    "silhouette-recall": 0.7472448287555103,
+                    "silhouette-precision": 0.5631656562346387
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0027",
+                  "silhouette-thin regressed by 0.0015",
+                  "silhouette-precision regressed by 0.0012",
+                  "geometry-coverage target regressed by 0.0027",
+                  "no target gate improved by at least 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-base-rear-rail:tube-control-2-2",
+                "actionId": "recover-surface-base-rear-rail",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "b7fcb8e74a39adde3e7cff093f3850e3b7310307c9c3675b1cfc05baf9a37a01",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-base-rear-rail:tube-control-2-2",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "b7fcb8e74a39adde3e7cff093f3850e3b7310307c9c3675b1cfc05baf9a37a01",
+                  "editedComponentIds": [
+                    "base-rear-rail"
+                  ],
+                  "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-base-rear-rail:tube-control-2-2:1",
+                      "componentId": "base-rear-rail",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "b7fcb8e74a39adde3e7cff093f3850e3b7310307c9c3675b1cfc05baf9a37a01",
+                      "unaffectedInputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedOutputFingerprint": "a4f47515d10f2e030f52c920d15366da9346f51985dbf4c1f112332148858300",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7301172826520093,
+                    "geometry-p95": 0.6195352056269227,
+                    "geometry-coverage": 0.5556640625,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5972551037913879,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7179838520236165,
+                    "silhouette-recall": 0.7472448287555103,
+                    "silhouette-precision": 0.5623363874345549
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "silhouette-thin regressed by 0.0024",
+                  "silhouette-precision regressed by 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-stand-left:tube-control-1-1",
+                "actionId": "recover-surface-stand-left",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "5f8f73293fe429d6da3649ed2b290ea3f00bebadff11618a320a4be0db4944ca",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-stand-left:tube-control-1-1",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "5f8f73293fe429d6da3649ed2b290ea3f00bebadff11618a320a4be0db4944ca",
+                  "editedComponentIds": [
+                    "stand-left"
+                  ],
+                  "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-stand-left:tube-control-1-1:1",
+                      "componentId": "stand-left",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "5f8f73293fe429d6da3649ed2b290ea3f00bebadff11618a320a4be0db4944ca",
+                      "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.727230150133483,
+                    "geometry-p95": 0.6167003471570185,
+                    "geometry-coverage": 0.54736328125,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5969944417758869,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7205366252158582,
+                    "silhouette-recall": 0.7469481180061037,
+                    "silhouette-precision": 0.5645015601905075
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0076",
+                  "silhouette-recall regressed by 0.0003",
+                  "geometry-coverage target regressed by 0.0076",
+                  "no target gate improved by at least 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-stand-left:tube-control-1-2",
+                "actionId": "recover-surface-stand-left",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "4eba30aa0d97b7995ba6498b18f2380f1d4ae40f0d94fc3a98c1d1977ea04002",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-stand-left:tube-control-1-2",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "4eba30aa0d97b7995ba6498b18f2380f1d4ae40f0d94fc3a98c1d1977ea04002",
+                  "editedComponentIds": [
+                    "stand-left"
+                  ],
+                  "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-stand-left:tube-control-1-2:1",
+                      "componentId": "stand-left",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "4eba30aa0d97b7995ba6498b18f2380f1d4ae40f0d94fc3a98c1d1977ea04002",
+                      "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7279028819217227,
+                    "geometry-p95": 0.6241896906481363,
+                    "geometry-coverage": 0.55322265625,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5969258217251081,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7206603956170163,
+                    "silhouette-recall": 0.7472024415055951,
+                    "silhouette-precision": 0.5646160791234046
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0017",
+                  "geometry-coverage target regressed by 0.0017"
+                ]
+              },
+              {
+                "id": "recover-surface-stand-left:tube-control-2-1",
+                "actionId": "recover-surface-stand-left",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "5be772875ed72e43de90cb9851f54d2e9e4d300e7d4280646c93bb6edf70eadc",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-stand-left:tube-control-2-1",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "5be772875ed72e43de90cb9851f54d2e9e4d300e7d4280646c93bb6edf70eadc",
+                  "editedComponentIds": [
+                    "stand-left"
+                  ],
+                  "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-stand-left:tube-control-2-1:1",
+                      "componentId": "stand-left",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "5be772875ed72e43de90cb9851f54d2e9e4d300e7d4280646c93bb6edf70eadc",
+                      "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.726932221418732,
+                    "geometry-p95": 0.6145482824383077,
+                    "geometry-coverage": 0.5498046875,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5976120222328964,
+                    "silhouette-primary": 0.6766787578518977,
+                    "silhouette-thin": 0.7204923353412893,
+                    "silhouette-recall": 0.7477110885045778,
+                    "silhouette-precision": 0.5637900611432558
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-p95 regressed by 0.0019",
+                  "geometry-coverage regressed by 0.0051",
+                  "silhouette-precision regressed by 0.0006",
+                  "geometry-rms target regressed by 0.0001",
+                  "geometry-p95 target regressed by 0.0019",
+                  "geometry-coverage target regressed by 0.0051",
+                  "no target gate improved by at least 0.0020"
+                ]
+              },
+              {
+                "id": "recover-surface-stand-left:tube-control-2-2",
+                "actionId": "recover-surface-stand-left",
+                "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                "outputFingerprint": "fb9a1c559d962a7d5aef604e89863de61c50e590dcf39d13f565c38e1144f65f",
+                "batchReceipt": {
+                  "schema": "morphloom.component-batch-edit-receipt/0.1",
+                  "operationId": "recover-surface-stand-left:tube-control-2-2",
+                  "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                  "outputFingerprint": "fb9a1c559d962a7d5aef604e89863de61c50e590dcf39d13f565c38e1144f65f",
+                  "editedComponentIds": [
+                    "stand-left"
+                  ],
+                  "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                  "unaffectedComponentsPreserved": true,
+                  "componentReceipts": [
+                    {
+                      "schema": "morphloom.component-edit-receipt/0.1",
+                      "operationId": "recover-surface-stand-left:tube-control-2-2:1",
+                      "componentId": "stand-left",
+                      "inputFingerprint": "fc1bbcf3ff473d38ce1245dcd2be34c742c5b34cc81afa2d4b6aedba81af7367",
+                      "outputFingerprint": "fb9a1c559d962a7d5aef604e89863de61c50e590dcf39d13f565c38e1144f65f",
+                      "unaffectedInputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedOutputFingerprint": "1e7aaa664921c386e40a49d1801d5b2655771828b1e1d17abaf7ad48e33d1f17",
+                      "unaffectedComponentsPreserved": true,
+                      "changedFields": [
+                        "geometry"
+                      ]
+                    }
+                  ]
+                },
+                "evaluation": {
+                  "gateScores": {
+                    "geometry-rms": 0.7276849148144715,
+                    "geometry-p95": 0.6180824177716998,
+                    "geometry-coverage": 0.550048828125,
+                    "dimension-fidelity": 0.9584803052879252,
+                    "silhouette-whole": 0.5873319856722347,
+                    "silhouette-primary": 0.6861506295168401,
+                    "silhouette-thin": 0.72084123019781,
+                    "silhouette-recall": 0.7484740590030519,
+                    "silhouette-precision": 0.5646291969007502
+                  },
+                  "blockingGateIds": [
+                    "geometry-rms",
+                    "geometry-p95",
+                    "geometry-coverage",
+                    "silhouette-whole",
+                    "silhouette-precision"
+                  ]
+                },
+                "accepted": false,
+                "blockers": [
+                  "geometry-coverage regressed by 0.0049",
+                  "silhouette-whole regressed by 0.0098",
+                  "geometry-coverage target regressed by 0.0049",
+                  "no target gate improved by at least 0.0020"
+                ]
+              }
+            ],
+            "blockers": [
+              "no bounded candidate improved target gates without protected-gate regression"
+            ]
+          },
+          "accepted": false,
+          "blockers": [
+            "no bounded candidate improved target gates without protected-gate regression"
+          ]
         }
       ],
       "baseline": {
@@ -23567,7 +24085,9 @@
           "silhouette-precision"
         ]
       },
-      "blockers": []
+      "blockers": [
+        "no bounded candidate improved target gates without protected-gate regression"
+      ]
     },
     "componentAttribution": {
       "schema": "morphloom.surface-component-attribution/0.1",
