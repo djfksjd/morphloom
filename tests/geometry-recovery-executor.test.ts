@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AssemblyIR } from '../src/engine/assembly-ir';
 import {
   createBoundedAxisScaleRecoveryTrials,
+  createBoundedGroupAxisSpacingTrials,
   createBoundedScaleRecoveryTrials,
   createBoundedShapeRecoveryTrials,
   createBoundedTranslationRecoveryTrials,
@@ -219,5 +220,48 @@ describe('bounded geometry recovery execution', () => {
     ]);
     expect(trials.every((trial) => trial.edits.length === 1)).toBe(true);
     expect(new Set(trials.map((trial) => trial.edits[0]!.componentId))).toEqual(new Set(componentIds));
+  });
+
+  it('compresses a semantic group around a shared axis pivot without scaling rigid parts', () => {
+    const source = structuredClone(GALAXY_Z_FOLD8_EXTERIOR_IR);
+    const targets = source.components.slice(0, 2);
+    targets[0]!.position = [0, 0, -20];
+    targets[1]!.position = [0, 0, 20];
+    const plan = planFor(targets[0]!.id);
+    plan.actions[0]!.targetComponentIds = targets.map((component) => component.id);
+    plan.actions[0]!.candidateComponentCount = 2;
+    const trials = createBoundedGroupAxisSpacingTrials(source, plan, {
+      axis: 2, factors: [0.5], pivotMm: 0,
+    });
+    expect(trials).toHaveLength(1);
+    expect(trials[0]!.edits).toEqual([
+      { componentId: targets[0]!.id, translateMm: [0, 0, 10] },
+      { componentId: targets[1]!.id, translateMm: [0, 0, -10] },
+    ]);
+    expect(trials[0]!.edits.every((edit) => edit.scaleMultiplier === undefined)).toBe(true);
+  });
+
+  it('moves tube control points around the same group-spacing pivot', () => {
+    const source = structuredClone(COOLING_ASSEMBLY_IR);
+    const tube = source.components.find((component) => component.geometry.op === 'tube')!;
+    const plan = planFor(tube.id);
+    const trials = createBoundedGroupAxisSpacingTrials(source, plan, {
+      axis: 0, factors: [0.5], pivotMm: 0,
+    });
+    expect(trials[0]!.edits[0]!.geometry?.operation).toBe('tube-point-deltas');
+    if (tube.geometry.op !== 'tube') throw new Error('fixture tube is missing');
+    expect(trials[0]!.edits[0]!.geometry?.deltas[0]!.deltaMm[0])
+      .toBeCloseTo(-tube.geometry.points[0]![0] * 0.5);
+  });
+
+  it('fails closed instead of partially spacing an unsupported long tube group', () => {
+    const source = structuredClone(COOLING_ASSEMBLY_IR);
+    const tube = source.components.find((component) => component.geometry.op === 'tube')!;
+    if (tube.geometry.op !== 'tube') throw new Error('fixture tube is missing');
+    tube.geometry.points = Array.from({ length: 17 }, (_, index) => [index, 0, 0]);
+    const plan = planFor(tube.id);
+    expect(() => createBoundedGroupAxisSpacingTrials(source, plan, {
+      axis: 0, factors: [0.5], pivotMm: 0,
+    })).toThrow(/bounded edit limit/);
   });
 });

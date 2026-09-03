@@ -9,9 +9,15 @@ import type { GroundTruthCorpusManifest } from '../src/engine/ground-truth-corpu
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { fitDiscreteMultiviewCameras } from '../src/engine/discrete-multiview-camera-fit';
 import { fitBoundedPerViewArticulationStates } from '../src/engine/articulation-state-fit';
-import { createGeometryRecoveryPlan, observeAlignedComponentBounds } from '../src/engine/geometry-recovery-plan';
+import { composeWorldAxisRotation } from '../src/engine/assembly-transform';
+import {
+  createGeometryRecoveryPlan,
+  observeAlignedComponentBounds,
+  type GeometryRecoveryAction,
+} from '../src/engine/geometry-recovery-plan';
 import {
   createBoundedAxisScaleRecoveryTrials,
+  createBoundedGroupAxisSpacingTrials,
   executeBoundedGeometryRecoverySearch,
   type GeometryRecoveryEvaluation,
 } from '../src/engine/geometry-recovery-executor';
@@ -413,8 +419,7 @@ function applyObservedHeadTilt(candidate: AssemblyIR, degrees: number): void {
     if (entry.geometry.op === 'tube') {
       entry.geometry.points = entry.geometry.points.map((point) => rotateHeadPointAroundPivot(point, radians));
     } else {
-      const rotation = entry.rotation ?? [0, 0, 0];
-      entry.rotation = [rotation[0] + radians, rotation[1], rotation[2]];
+      entry.rotation = composeWorldAxisRotation(entry.rotation, [1, 0, 0], radians);
     }
   }
 }
@@ -436,8 +441,7 @@ function applyObservedHeadYaw(candidate: AssemblyIR, degrees: number): void {
     if (entry.geometry.op === 'tube') {
       entry.geometry.points = entry.geometry.points.map((point) => rotateHeadPointAroundYawPivot(point, radians));
     } else {
-      const rotation = entry.rotation ?? [0, 0, 0];
-      entry.rotation = [rotation[0], rotation[1] + radians, rotation[2]];
+      entry.rotation = composeWorldAxisRotation(entry.rotation, [0, 1, 0], radians);
     }
   }
 }
@@ -593,7 +597,7 @@ const selectedCameras = cameraFit.views.map((selection, index) => {
       && cameraModelId(score.camera) === selection.candidate.cameraModelId)!;
   return searchSelection.camera;
 });
-const yawCandidates = Array.from({ length: 13 }, (_, index) => -90 + index * 15);
+const yawCandidates = Array.from({ length: 37 }, (_, index) => -90 + index * 5);
 const articulatedViewCandidates = cameraFit.views.map((selection, index) => yawCandidates.map((headYawDegrees) => {
   const posedIr = structuredClone(selectedIr);
   if (headYawDegrees !== 0) applyObservedHeadYaw(posedIr, headYawDegrees);
@@ -603,7 +607,7 @@ const articulatedViewCandidates = cameraFit.views.map((selection, index) => yawC
     selectedCameras[index]!, references);
   return {
     stateId: headYawDegrees < 0 ? `yaw-neg-${Math.abs(headYawDegrees)}` : `yaw-${headYawDegrees}`,
-    jointDegrees: headYawDegrees, score, posedBuild, triangles,
+    jointDegrees: headYawDegrees, score,
   };
 }));
 const articulationStateFit = fitBoundedPerViewArticulationStates(
@@ -618,9 +622,14 @@ const articulationStateFit = fitBoundedPerViewArticulationStates(
   })),
   { minimumGateImprovement: 0.01, maximumAbsoluteJointDegrees: 90, requirePositiveMargin: false },
 );
-const selectedArticulatedViews = articulationStateFit.views.map((selection, index) => (
-  articulatedViewCandidates[index]!.find((candidate) => candidate.stateId === selection.selected.stateId)!
-));
+const selectedArticulatedViews = articulationStateFit.views.map((selection, index) => {
+  const candidate = articulatedViewCandidates[index]!
+    .find((item) => item.stateId === selection.selected.stateId)!;
+  const posedIr = structuredClone(selectedIr);
+  if (candidate.jointDegrees !== 0) applyObservedHeadYaw(posedIr, candidate.jointDegrees);
+  const posedBuild = compileAssemblyIR(posedIr, 'beauty');
+  return { ...candidate, posedBuild, triangles: collectThreeTriangles(posedBuild.root) };
+});
 const fittedViews = selectedArticulatedViews.map((selection) => selection.score);
 const fittedAudit = auditMultiviewSilhouetteFidelity(fittedViews.map((view) => ({
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
@@ -723,9 +732,7 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
   ].filter((id): id is keyof typeof gateScores => Boolean(id));
   return { gateScores, blockingGateIds };
 };
-const recoverySearchPlan = {
-  ...geometryRecoveryPlan,
-  actions: geometryRecoveryPlan.actions
+const routedRecoveryActions = geometryRecoveryPlan.actions
     .filter((action) => action.operation !== 'request-region-evidence'
       && action.targetingMode === 'semantic-feature-overlap')
     .sort((left, right) => {
@@ -739,17 +746,41 @@ const recoverySearchPlan = {
       };
       return attribution(right) - attribution(left) || left.priority - right.priority;
     })
-    .slice(0, 6),
+    .slice(0, 6);
+const guardSpacingComponentIds = selectedIr.components
+  .filter((component) => component.id.startsWith('cage-'))
+  .map((component) => component.id);
+const guardSpacingAction: GeometryRecoveryAction = {
+  id: 'recover-side-profile-guard-spacing', causeBandId: 'candidate:z-middle',
+  causeBandIds: ['candidate:z-middle'], priority: routedRecoveryActions.length + 1,
+  operation: 'relocate-or-reshape-extraneous-units',
+  targetComponentIds: guardSpacingComponentIds,
+  candidateComponentCount: guardSpacingComponentIds.length,
+  spatialConstraintIds: ['candidate:z-middle'], targetingMode: 'semantic-feature-overlap',
+  semanticFeatureId: 'double-guard', evidenceViewIds: ['right', 'left'],
+  requiredComponentIds: guardSpacingComponentIds,
+  prohibitedOperations: ['delete-required-component', 'lower-locked-feature-count', 'change-source-evidence'],
+  verificationGates: ['surface-geometry-fidelity', 'visual-plan-revision', 'topology-integrity', 'multiview-silhouette'],
+  reason: 'The articulated side views expose repeated guard shells whose shared depth spacing must be tested around the head pivot.',
+};
+const recoverySearchPlan = {
+  ...geometryRecoveryPlan,
+  actions: [...routedRecoveryActions, guardSpacingAction],
 };
 recoverySearchPlan.actionable = recoverySearchPlan.actions.length > 0;
+const axisRecoverySearchPlan = { ...recoverySearchPlan, actions: routedRecoveryActions };
 const recoveryTrials = [
-  ...createBoundedAxisScaleRecoveryTrials(recoverySearchPlan, {
+  ...createBoundedAxisScaleRecoveryTrials(axisRecoverySearchPlan, {
     alignedYawDegrees: geometryAudit.selectedYawDegrees,
     sourceIr: selectedIr,
     expansionFactors: [1.025, 1.05, 1.075, 1.1, 1.125],
     reductionFactors: [0.975, 0.95, 0.925, 0.9, 0.875],
     includeCounterfactualDirection: true,
     grouping: 'batch',
+  }),
+  ...createBoundedGroupAxisSpacingTrials(selectedIr, recoverySearchPlan, {
+    axis: 2, factors: [0.4, 0.55, 0.7, 0.85], pivotMm: 0,
+    actionIds: [guardSpacingAction.id],
   }),
 ];
 const recoveryResult = recoveryTrials.length > 0
@@ -941,6 +972,15 @@ const report = {
         view.id, view.selected.jointDegrees,
       ])),
       stateFit: articulationStateFit,
+      candidateScores: articulatedViewCandidates.map((candidates, index) => ({
+        viewId: viewIds[index]!,
+        candidates: candidates.map((candidate) => ({
+          stateId: candidate.stateId, jointDegrees: candidate.jointDegrees,
+          gateMargin: candidate.score.gateMargin, wholeIoU: candidate.score.wholeIoU,
+          primaryMassIoU: candidate.score.primaryMassIoU,
+          thinFeatureScore: candidate.score.thinFeature.score,
+        })),
+      })),
       evidence: ['view-090.jpg', 'view-270.jpg'],
       candidates: articulationCandidates.map((candidate) => ({
         headTiltDegrees: candidate.headTiltDegrees,

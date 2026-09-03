@@ -8,6 +8,7 @@ import {
 import type { GeometryRecoveryAction, GeometryRecoveryPlan } from './geometry-recovery-plan';
 
 type RecoveryEdit = Omit<AssemblyComponentPatch, 'schema' | 'operationId' | 'expectedInputFingerprint'>;
+type Vector3 = [number, number, number];
 
 export interface GeometryRecoveryTrial {
   id: string;
@@ -411,6 +412,98 @@ export function createBoundedShapeRecoveryTrials(
       actionId: action.id,
       edits,
     })));
+  });
+}
+
+/**
+ * Changes spacing inside a semantic component group around one world-axis
+ * pivot without scaling the individual rigid parts. Tube control points are
+ * moved around the same pivot so routed or wire geometry stays coherent.
+ */
+export function createBoundedGroupAxisSpacingTrials(
+  ir: AssemblyIR,
+  plan: GeometryRecoveryPlan,
+  options: {
+    axis: 0 | 1 | 2;
+    factors: number[];
+    pivotMm?: number;
+    actionIds?: string[];
+  },
+): GeometryRecoveryTrial[] {
+  if (ir?.schema !== 'morphloom.assembly/0.1'
+    || plan?.schema !== 'morphloom.geometry-recovery-plan/0.1'
+    || ![0, 1, 2].includes(options.axis)
+    || !Array.isArray(options.factors) || options.factors.length < 1 || options.factors.length > 8
+    || options.factors.some((factor) => !Number.isFinite(factor) || factor < 0.25 || factor > 1.5
+      || Math.abs(factor - 1) < 1e-9)
+    || (options.pivotMm !== undefined && (!Number.isFinite(options.pivotMm)
+      || Math.abs(options.pivotMm) > 100_000))
+    || (options.actionIds !== undefined && (!Array.isArray(options.actionIds)
+      || options.actionIds.length < 1 || options.actionIds.length > 64
+      || new Set(options.actionIds).size !== options.actionIds.length
+      || options.actionIds.some((id) => !SAFE_ID.test(id))))) {
+    throw new Error('Geometry recovery group-spacing configuration is unsafe.');
+  }
+  const componentById = new Map(ir.components.map((component) => [component.id, component]));
+  const selectedActionIds = options.actionIds ? new Set(options.actionIds) : undefined;
+  if (selectedActionIds && [...selectedActionIds].some((id) => !plan.actions.some((action) => action.id === id))) {
+    throw new Error('Geometry recovery group-spacing action filter references a missing action.');
+  }
+  return plan.actions.flatMap((action) => {
+    if (action.operation === 'request-region-evidence'
+      || (selectedActionIds && !selectedActionIds.has(action.id))) return [];
+    if (action.targetComponentIds.length > 64
+      || new Set(action.targetComponentIds).size !== action.targetComponentIds.length) {
+      throw new Error(`Geometry recovery group target set is unsafe: ${action.id}`);
+    }
+    const components = action.targetComponentIds.map((id) => componentById.get(id));
+    if (components.some((component) => !component)) {
+      throw new Error(`Geometry recovery group target does not exist: ${action.id}`);
+    }
+    if (components.some((component) => component!.geometry.op === 'tube'
+      && component!.geometry.points.length > 16)) {
+      throw new Error(`Geometry recovery group tube exceeds the bounded edit limit: ${action.id}`);
+    }
+    const coordinates = components.flatMap((component) => {
+      if (component!.geometry.op === 'tube') {
+        return component!.geometry.points.map((point) => point[options.axis]);
+      }
+      return [component!.position?.[options.axis] ?? 0];
+    });
+    const pivotMm = options.pivotMm ?? (
+      (Math.min(...coordinates) + Math.max(...coordinates)) / 2
+    );
+    return options.factors.flatMap((factor, factorIndex) => {
+      const edits = components.flatMap((component): RecoveryEdit[] => {
+        if (component!.geometry.op === 'tube') {
+          const deltas = component!.geometry.points.map((point, pointIndex) => {
+            const delta = (point[options.axis] - pivotMm) * (factor - 1);
+            const deltaMm: Vector3 = [0, 0, 0];
+            deltaMm[options.axis] = delta;
+            return { pointIndex, deltaMm };
+          }).filter((delta) => Math.abs(delta.deltaMm[options.axis]) > 1e-9);
+          return deltas.length > 0 ? [{
+            componentId: component!.id,
+            geometry: { operation: 'tube-point-deltas', deltas },
+          }] : [];
+        }
+        const position = component!.position?.[options.axis] ?? 0;
+        const delta = (position - pivotMm) * (factor - 1);
+        if (Math.abs(delta) <= 1e-9) return [];
+        const translateMm: Vector3 = [0, 0, 0];
+        translateMm[options.axis] = delta;
+        return [{ componentId: component!.id, translateMm }];
+      });
+      if (edits.length > 64) {
+        throw new Error(`Geometry recovery group trial exceeds the bounded edit limit: ${action.id}`);
+      }
+      if (edits.length < 1) return [];
+      return [{
+        id: `${action.id}:group-axis-${options.axis + 1}-spacing-${factorIndex + 1}`,
+        actionId: action.id,
+        edits,
+      }];
+    });
   });
 }
 
