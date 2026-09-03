@@ -24,7 +24,11 @@ import { compareReferenceFrames, compareThinFeatureSilhouettes, type ComparisonF
 import { auditMultiviewSilhouetteFidelity } from '../src/engine/silhouette-fidelity';
 import { auditRigidMultiviewSet } from '../src/engine/multiview-consistency';
 import { auditPbrReferenceEvidence } from '../src/engine/pbr-reference-audit';
-import { applyReferenceMaterialEvidence } from '../src/engine/reference-material-evidence';
+import {
+  applyReferenceMaterialEvidence,
+  bindReferenceMaterialFactorEvidence,
+  referenceMaterialProvenanceFromExtras,
+} from '../src/engine/reference-material-evidence';
 import { deriveMaskedReferenceSurface } from '../src/engine/reference-surface';
 import { compareSurfaceGeometry, sampleTriangleSurface } from '../src/engine/surface-geometry-fidelity';
 import { solidifySilhouetteMask } from '../src/engine/silhouette-mask';
@@ -85,7 +89,7 @@ const referenceMaterialSurface = deriveMaskedReferenceSurface(references.map((re
   height: reference.rawFrame.height,
   rgba: reference.rawFrame.rgba,
   mask: reference.rawFrame.mask!,
-})), { textureSize: 128, strength: 0.9 });
+})), { textureSize: 128, strength: 0.9, localizedPatch: true });
 const resizeFrame = (frame: ComparisonFrame, width: number, height: number): ComparisonFrame => {
   const mask = new Uint8Array(width * height);
   const rgba = new Uint8ClampedArray(width * height * 4);
@@ -682,6 +686,11 @@ const recoveryResult = recoveryTrials.length > 0
 const deliveryIr = recoveryResult.ir;
 const deliveryBuild = deliveryIr === selectedIr ? build : compileAssemblyIR(deliveryIr, 'beauty');
 const referenceMaterialReceipt = applyReferenceMaterialEvidence(deliveryBuild.root, referenceMaterialSurface, { repeat: 4 });
+const referenceFactorReceipt = bindReferenceMaterialFactorEvidence(deliveryBuild.root, {
+  sourceId: referenceMaterialSurface.selectedSourceId,
+  evidenceFingerprint: referenceMaterialSurface.selectedSourceFingerprint,
+  channels: ['baseColor', 'metallic', 'roughness', 'normal'],
+});
 const deliverySurfaceTriangles = deliveryIr === selectedIr ? candidateSurfaceTriangles : collectThreeTriangles(deliveryBuild.root);
 const deliverySample = sampleTriangleSurface(deliverySurfaceTriangles, 4_096);
 const deliveryGeometryAudit = compareSurfaceGeometry(referenceSample.points, deliverySample.points);
@@ -720,6 +729,11 @@ const detailAudit = auditAssemblyDetail(deliveryIr);
 const bytes = await exportCanonicalGlb(deliveryBuild.root);
 const repeatBuild = compileAssemblyIR(structuredClone(deliveryIr), 'beauty');
 applyReferenceMaterialEvidence(repeatBuild.root, referenceMaterialSurface, { repeat: 4 });
+bindReferenceMaterialFactorEvidence(repeatBuild.root, {
+  sourceId: referenceMaterialSurface.selectedSourceId,
+  evidenceFingerprint: referenceMaterialSurface.selectedSourceFingerprint,
+  channels: ['baseColor', 'metallic', 'roughness', 'normal'],
+});
 const repeatBytes = await exportCanonicalGlb(repeatBuild.root);
 const artifactFingerprint = sha256(new Uint8Array(bytes));
 const deterministic = artifactFingerprint === sha256(new Uint8Array(repeatBytes));
@@ -743,29 +757,7 @@ const visualHullGeometryAudit = visualHullBaseline
   : undefined;
 const [referencePbr, candidatePbr] = await Promise.all([
   collectPbrEvidence(groundTruthDocument, () => ({ provenance: 'reference', evidenceFingerprint: groundTruthFingerprint })),
-  collectPbrEvidence(candidateDocument, (material) => {
-    const extras = material.getExtras() as { morphloomSurface?: {
-      referenceProjectionState?: string;
-      referenceFingerprint?: string;
-      referenceMaterialEvidence?: { evidenceFingerprint?: string };
-    } };
-    const projectionFingerprint = extras.morphloomSurface?.referenceFingerprint;
-    if (extras.morphloomSurface?.referenceProjectionState === 'loaded' && projectionFingerprint) {
-      return { provenance: 'reference' as const, evidenceFingerprint: projectionFingerprint };
-    }
-    const evidenceFingerprint = extras.morphloomSurface?.referenceMaterialEvidence?.evidenceFingerprint;
-    return evidenceFingerprint ? {
-      provenance: 'procedural' as const,
-      factorProvenanceByChannel: { baseColor: 'reference' as const, roughness: 'reference' as const, normal: 'reference' as const },
-      textureProvenanceByChannel: {
-        baseColor: 'reference' as const, roughness: 'reference' as const,
-        normal: 'reference' as const, metallic: 'procedural' as const,
-      },
-      evidenceFingerprintByChannel: {
-        baseColor: evidenceFingerprint, roughness: evidenceFingerprint, normal: evidenceFingerprint,
-      },
-    } : { provenance: 'procedural' as const };
-  }),
+  collectPbrEvidence(candidateDocument, (material) => referenceMaterialProvenanceFromExtras(material.getExtras())),
 ]);
 const pbrAudit = auditPbrReferenceEvidence(referencePbr, candidatePbr, {
   acceptedEvidenceFingerprints: [groundTruthFingerprint, ...imageFingerprints],
@@ -869,7 +861,7 @@ const report = {
   },
   pbrReferenceAudit: {
     audit: pbrAudit, referenceMaterials: referencePbr.length, candidateMaterials: candidatePbr.length,
-    referenceMaterialReceipt,
+    referenceMaterialReceipt, referenceFactorReceipt,
     evidenceRule: 'Trusted spatial PBR variation must be delivered and SHA-256-bound to the GT or one of the four input views.',
   },
   rigidMultiviewAudit,

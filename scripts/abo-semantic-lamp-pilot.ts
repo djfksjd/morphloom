@@ -29,9 +29,16 @@ import {
 import {
   auditPbrReferenceEvidence,
   type PbrMaterialEvidence,
+  type PbrSpatialChannel,
   type PbrTextureProvenance,
   type PbrTextureSignal,
 } from '../src/engine/pbr-reference-audit';
+import {
+  applyReferenceMaterialEvidence,
+  bindReferenceMaterialFactorEvidence,
+  referenceMaterialProvenanceFromExtras,
+} from '../src/engine/reference-material-evidence';
+import { deriveMaskedReferenceSurface } from '../src/engine/reference-surface';
 
 class NodeFileReader {
   result: ArrayBuffer | string | null = null;
@@ -65,6 +72,14 @@ const viewFiles = ['view-000.jpg', 'view-090.jpg', 'view-180.jpg', 'view-270.jpg
 const azimuths = [0, 90, 180, 270];
 const references = await Promise.all(viewFiles.map((file) => normalizedFrame(resolve(assetRoot, file))));
 const imageFingerprints = viewFiles.map((file) => sha256(new Uint8Array(readFileSync(resolve(assetRoot, file)))));
+const referenceMaterialSurface = deriveMaskedReferenceSurface(references.map((reference, index) => ({
+  id: allViews[index]!,
+  fingerprint: imageFingerprints[index]!,
+  width: reference.rawFrame.width,
+  height: reference.rawFrame.height,
+  rgba: reference.rawFrame.rgba,
+  mask: reference.rawFrame.mask!,
+})), { textureSize: 128, strength: 0.82, localizedPatch: true });
 const cameraPoseEvidenceAudit = auditCameraPoseEvidence(
   corpusCase.cameraPoseEvidence,
   Object.fromEntries(allViews.map((id, index) => [id, imageFingerprints[index]!])),
@@ -463,18 +478,27 @@ async function textureSignal(
 
 async function collectPbrEvidence(
   document: import('@gltf-transform/core').Document,
-  provenanceFor: (material: Material) => { provenance: PbrTextureProvenance; evidenceFingerprint?: string },
+  provenanceFor: (material: Material) => {
+    provenance: PbrTextureProvenance;
+    evidenceFingerprint?: string;
+    factorProvenanceByChannel?: Partial<Record<PbrSpatialChannel, PbrTextureProvenance>>;
+    evidenceFingerprintByChannel?: Partial<Record<PbrSpatialChannel, string>>;
+    textureProvenanceByChannel?: Partial<Record<PbrSpatialChannel, PbrTextureProvenance>>;
+  },
 ): Promise<PbrMaterialEvidence[]> {
   const areas = materialSurfaceAreas(document);
   const cache = new Map<Texture, Promise<PbrTextureSignal>>();
   return Promise.all([...areas].map(async ([material, weight], materialIndex) => {
     const provenanceReceipt = provenanceFor(material);
-    const provenance = provenanceReceipt.provenance;
     const [baseColorTexture, metallicRoughnessTexture, normalTexture, emissiveTexture] = await Promise.all([
-      textureSignal(material.getBaseColorTexture(), provenance, cache),
-      textureSignal(material.getMetallicRoughnessTexture(), provenance, cache),
-      textureSignal(material.getNormalTexture(), provenance, cache),
-      textureSignal(material.getEmissiveTexture(), provenance, cache),
+      textureSignal(material.getBaseColorTexture(), provenanceReceipt.textureProvenanceByChannel?.baseColor
+        ?? provenanceReceipt.provenance, cache),
+      textureSignal(material.getMetallicRoughnessTexture(), provenanceReceipt.textureProvenanceByChannel?.roughness
+        ?? provenanceReceipt.provenance, cache),
+      textureSignal(material.getNormalTexture(), provenanceReceipt.textureProvenanceByChannel?.normal
+        ?? provenanceReceipt.provenance, cache),
+      textureSignal(material.getEmissiveTexture(), provenanceReceipt.textureProvenanceByChannel?.emissive
+        ?? provenanceReceipt.provenance, cache),
     ]);
     return {
       id: material.getName() || `material-${materialIndex + 1}`,
@@ -484,8 +508,11 @@ async function collectPbrEvidence(
       roughnessFactor: material.getRoughnessFactor(),
       normalScale: material.getNormalScale(),
       emissiveFactor: material.getEmissiveFactor(),
-      factorProvenance: provenance,
+      factorProvenance: provenanceReceipt.provenance,
       evidenceFingerprint: provenanceReceipt.evidenceFingerprint,
+      factorProvenanceByChannel: provenanceReceipt.factorProvenanceByChannel,
+      evidenceFingerprintByChannel: provenanceReceipt.evidenceFingerprintByChannel,
+      textureProvenanceByChannel: provenanceReceipt.textureProvenanceByChannel,
       baseColorTexture, metallicRoughnessTexture, normalTexture, emissiveTexture,
     };
   }));
@@ -630,8 +657,27 @@ const calibrationCandidates = calibrationSelection.candidates;
 const calibration = calibrationSelection.selected;
 const decompositionAudit = auditPartDecomposition(decomposition, selectedIr);
 const detailAudit = auditAssemblyDetail(selectedIr);
+const referenceMaterialReceipt = applyReferenceMaterialEvidence(build.root, referenceMaterialSurface, {
+  repeat: 4,
+  materialFilter: (_material, mesh) => mesh.name !== 'lens',
+});
+const referenceFactorReceipt = bindReferenceMaterialFactorEvidence(build.root, {
+  sourceId: referenceMaterialSurface.selectedSourceId,
+  evidenceFingerprint: referenceMaterialSurface.selectedSourceFingerprint,
+  channels: ['baseColor', 'metallic', 'roughness', 'normal', 'emissive'],
+});
 const bytes = await exportGlb(build.root);
-const repeat = await exportGlb(compileAssemblyIR(structuredClone(selectedIr), 'beauty').root);
+const repeatBuild = compileAssemblyIR(structuredClone(selectedIr), 'beauty');
+applyReferenceMaterialEvidence(repeatBuild.root, referenceMaterialSurface, {
+  repeat: 4,
+  materialFilter: (_material, mesh) => mesh.name !== 'lens',
+});
+bindReferenceMaterialFactorEvidence(repeatBuild.root, {
+  sourceId: referenceMaterialSurface.selectedSourceId,
+  evidenceFingerprint: referenceMaterialSurface.selectedSourceFingerprint,
+  channels: ['baseColor', 'metallic', 'roughness', 'normal', 'emissive'],
+});
+const repeat = await exportGlb(repeatBuild.root);
 const validation = await validateGlbStandard(bytes);
 const artifactPath = resolve(artifactRoot, 'abo-industrial-tripod-lamp-semantic.glb');
 writeFileSync(artifactPath, Buffer.from(bytes));
@@ -646,12 +692,7 @@ const generatedSurfaceSample = sampleTriangleSurface(collectThreeTriangles(build
 const groundTruthGeometry = compareSurfaceGeometry(groundTruthSurfaceSample.points, generatedSurfaceSample.points);
 const [groundTruthPbrEvidence, candidatePbrEvidence] = await Promise.all([
   collectPbrEvidence(groundTruthDocument, () => ({ provenance: 'reference', evidenceFingerprint: groundTruthFingerprint })),
-  collectPbrEvidence(candidateDocument, (material) => {
-    const extras = material.getExtras() as { morphloomSurface?: { referenceProjectionState?: string; referenceFingerprint?: string } };
-    return extras.morphloomSurface?.referenceProjectionState === 'loaded'
-      ? { provenance: 'reference' as const, evidenceFingerprint: extras.morphloomSurface.referenceFingerprint }
-      : { provenance: 'procedural' as const };
-  }),
+  collectPbrEvidence(candidateDocument, (material) => referenceMaterialProvenanceFromExtras(material.getExtras())),
 ]);
 const pbrReferenceAudit = auditPbrReferenceEvidence(groundTruthPbrEvidence, candidatePbrEvidence, {
   acceptedEvidenceFingerprints: [groundTruthFingerprint, ...lockedImageFingerprints],
@@ -743,6 +784,8 @@ const report = {
     audit: pbrReferenceAudit,
     referenceMaterials: groundTruthPbrEvidence.length,
     candidateMaterials: candidatePbrEvidence.length,
+    referenceMaterialReceipt,
+    referenceFactorReceipt,
     evidenceRule: 'A spatial PBR channel in the trusted reference requires delivered variation and reference/measured provenance bound to the locked ground-truth or input-image SHA-256 set.',
   },
   rigidMultiviewAudit,

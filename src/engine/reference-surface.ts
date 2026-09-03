@@ -46,6 +46,14 @@ export interface MaskedReferenceSurfaceDerivation {
   schema: 'morphloom.masked-reference-surface/0.1';
   selectedSourceId: string;
   selectedSourceFingerprint: string;
+  /** Exact source-image crop used to derive the repeatable material tile. */
+  sourceRegion: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    selection: 'object-bounds' | 'dense-interior-patch';
+  };
   sourceForegroundPixels: number;
   sourceInteriorPixels: number;
   textureSize: number;
@@ -129,7 +137,7 @@ const SHA256 = /^[a-f0-9]{64}$/;
  */
 export function deriveMaskedReferenceSurface(
   inputs: MaskedReferenceSurfaceInput[],
-  options: { textureSize?: number; strength?: number } = {},
+  options: { textureSize?: number; strength?: number; localizedPatch?: boolean } = {},
 ): MaskedReferenceSurfaceDerivation {
   const textureSize = options.textureSize ?? 128;
   const strength = options.strength ?? 0.72;
@@ -168,7 +176,89 @@ export function deriveMaskedReferenceSurface(
     if (foreground < 16 || maximumX <= minimumX || maximumY <= minimumY) {
       throw new Error(`Masked reference source has insufficient foreground: ${input.id}.`);
     }
-    return { input, inputIndex, foreground, interior, interiorMask, minimumX, minimumY, maximumX, maximumY };
+    let region: {
+      minimumX: number;
+      minimumY: number;
+      maximumX: number;
+      maximumY: number;
+      foreground: number;
+      interior: number;
+      selection: 'object-bounds' | 'dense-interior-patch';
+    } = {
+      minimumX, minimumY, maximumX, maximumY, foreground, interior,
+      selection: 'object-bounds',
+    };
+    if (options.localizedPatch) {
+      const maskIntegral = new Uint32Array((input.width + 1) * (input.height + 1));
+      const interiorIntegral = new Uint32Array(maskIntegral.length);
+      const stride = input.width + 1;
+      for (let y = 0; y < input.height; y += 1) {
+        let maskRow = 0;
+        let interiorRow = 0;
+        for (let x = 0; x < input.width; x += 1) {
+          const sourceIndex = y * input.width + x;
+          maskRow += input.mask[sourceIndex]!;
+          interiorRow += interiorMask[sourceIndex]!;
+          maskIntegral[(y + 1) * stride + x + 1] = maskIntegral[y * stride + x + 1]! + maskRow;
+          interiorIntegral[(y + 1) * stride + x + 1] = interiorIntegral[y * stride + x + 1]! + interiorRow;
+        }
+      }
+      const rectangleSum = (integral: Uint32Array, x: number, y: number, width: number, height: number): number => (
+        integral[(y + height) * stride + x + width]!
+        - integral[y * stride + x + width]!
+        - integral[(y + height) * stride + x]!
+        + integral[y * stride + x]!
+      );
+      const objectWidth = maximumX - minimumX + 1;
+      const objectHeight = maximumY - minimumY + 1;
+      const maximumPatchSpan = Math.min(objectWidth, objectHeight);
+      const minimumPatchSpan = Math.max(16, Math.floor(maximumPatchSpan * 0.1));
+      let best: typeof region | undefined;
+      const spans = [...new Set([0.5, 0.4, 0.32, 0.25, 0.2, 0.16, 0.12, 0.1]
+        .map((fraction) => Math.max(minimumPatchSpan, Math.floor(maximumPatchSpan * fraction))))]
+        .filter((span) => span >= minimumPatchSpan && span <= maximumPatchSpan)
+        .sort((left, right) => right - left);
+      for (const span of spans) {
+        const step = Math.max(1, Math.floor(span / 8));
+        const lastX = maximumX - span + 1;
+        const lastY = maximumY - span + 1;
+        const xs = [...new Set(Array.from(
+          { length: Math.max(1, Math.floor((lastX - minimumX) / step) + 1) },
+          (_, index) => Math.min(lastX, minimumX + index * step),
+        ).concat(lastX))];
+        const ys = [...new Set(Array.from(
+          { length: Math.max(1, Math.floor((lastY - minimumY) / step) + 1) },
+          (_, index) => Math.min(lastY, minimumY + index * step),
+        ).concat(lastY))];
+        for (const y of ys) for (const x of xs) {
+          if (x < minimumX || y < minimumY || x > lastX || y > lastY) continue;
+          const pixels = span * span;
+          const patchForeground = rectangleSum(maskIntegral, x, y, span, span);
+          const patchInterior = rectangleSum(interiorIntegral, x, y, span, span);
+          if (patchForeground / pixels < 0.94 || patchInterior / pixels < 0.86) continue;
+          const candidate = {
+            minimumX: x, minimumY: y, maximumX: x + span - 1, maximumY: y + span - 1,
+            foreground: patchForeground, interior: patchInterior,
+            selection: 'dense-interior-patch' as const,
+          };
+          if (!best || span > best.maximumX - best.minimumX + 1
+            || (span === best.maximumX - best.minimumX + 1 && patchInterior > best.interior)
+            || (span === best.maximumX - best.minimumX + 1 && patchInterior === best.interior
+              && (y < best.minimumY || (y === best.minimumY && x < best.minimumX)))) {
+            best = candidate;
+          }
+        }
+        if (best) break;
+      }
+      if (best) region = best;
+    }
+    return {
+      input, inputIndex, interiorMask,
+      foreground: region.foreground, interior: region.interior,
+      minimumX: region.minimumX, minimumY: region.minimumY,
+      maximumX: region.maximumX, maximumY: region.maximumY,
+      selection: region.selection,
+    };
   });
   candidates.sort((left, right) => right.interior - left.interior
     || right.foreground - left.foreground || left.input.id.localeCompare(right.input.id)
@@ -259,6 +349,13 @@ export function deriveMaskedReferenceSurface(
     schema: 'morphloom.masked-reference-surface/0.1',
     selectedSourceId: selected.input.id,
     selectedSourceFingerprint: selected.input.fingerprint,
+    sourceRegion: {
+      x: selected.minimumX,
+      y: selected.minimumY,
+      width: cropWidth,
+      height: cropHeight,
+      selection: selected.selection,
+    },
     sourceForegroundPixels: selected.foreground,
     sourceInteriorPixels: selected.interior,
     textureSize,

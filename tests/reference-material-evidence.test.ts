@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
-import { applyReferenceMaterialEvidence } from '../src/engine/reference-material-evidence';
+import {
+  applyReferenceMaterialEvidence,
+  bindReferenceMaterialFactorEvidence,
+  referenceMaterialProvenanceFromExtras,
+} from '../src/engine/reference-material-evidence';
 import { deriveMaskedReferenceSurface } from '../src/engine/reference-surface';
 
 function fixture() {
@@ -86,5 +90,40 @@ describe('reference material evidence', () => {
 
   it('rejects unsafe texture repeat settings', () => {
     expect(() => applyReferenceMaterialEvidence(new THREE.Group(), fixture(), { repeat: 0 })).toThrow(/repeat/);
+  });
+
+  it('binds source-derived factors without changing authored PBR values', () => {
+    const root = new THREE.Group();
+    const material = new THREE.MeshPhysicalMaterial({ color: '#25313b', metalness: 0.74, roughness: 0.39 });
+    material.name = 'coated-metal';
+    root.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material));
+    const before = { color: material.color.getHexString(), metalness: material.metalness, roughness: material.roughness };
+    const receipt = bindReferenceMaterialFactorEvidence(root, {
+      sourceId: 'photo-front', evidenceFingerprint: 'a'.repeat(64),
+      channels: ['baseColor', 'metallic', 'roughness'],
+    });
+    expect(receipt).toMatchObject({ status: 'applied', calibration: 'appearance-estimated' });
+    expect({ color: material.color.getHexString(), metalness: material.metalness, roughness: material.roughness }).toEqual(before);
+    expect(referenceMaterialProvenanceFromExtras(material.userData)).toMatchObject({
+      provenance: 'procedural',
+      factorProvenanceByChannel: { baseColor: 'reference', metallic: 'reference', roughness: 'reference' },
+      evidenceFingerprintByChannel: {
+        baseColor: 'a'.repeat(64), metallic: 'a'.repeat(64), roughness: 'a'.repeat(64),
+      },
+    });
+  });
+
+  it('ignores malformed or uncalibrated extras instead of granting trusted provenance', () => {
+    expect(referenceMaterialProvenanceFromExtras({ morphloomSurface: {
+      referenceFactorEvidence: {
+        schema: 'morphloom.reference-material-factor-evidence/0.1',
+        calibration: 'measured',
+        factorProvenanceByChannel: { baseColor: 'reference' },
+        evidenceFingerprintByChannel: { baseColor: 'a'.repeat(64) },
+      },
+    } })).toEqual({ provenance: 'procedural' });
+    expect(() => bindReferenceMaterialFactorEvidence(new THREE.Group(), {
+      sourceId: '../escape', evidenceFingerprint: 'a'.repeat(64), channels: ['baseColor'],
+    })).toThrow(/invalid|unsafe/);
   });
 });

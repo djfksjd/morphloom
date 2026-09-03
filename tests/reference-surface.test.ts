@@ -146,6 +146,46 @@ describe('reference-conditioned surface analysis', () => {
     expect(derivation.materialSuitability.blockers).toContainEqual(expect.stringMatching(/sparse|structural/));
   });
 
+  it('extracts a large dense interior patch from an otherwise sparse product photograph when explicitly requested', () => {
+    const width = 160;
+    const height = 120;
+    const mask = new Uint8Array(width * height);
+    for (let y = 12; y < 108; y += 1) {
+      mask[y * width + 18] = 1;
+      mask[y * width + 141] = 1;
+    }
+    for (let x = 18; x < 142; x += 1) mask[92 * width + x] = 1;
+    for (let y = 28; y < 76; y += 1) for (let x = 56; x < 104; x += 1) mask[y * width + x] = 1;
+    const input = {
+      id: 'product-front', fingerprint: '9'.repeat(64), width, height,
+      rgba: makeRgba(width, height, (x, y) => mask[y * width + x] ? 35 + ((x * 7 + y * 11) % 80) : 255),
+      mask,
+    };
+    const wholeObject = deriveMaskedReferenceSurface([input], { textureSize: 32 });
+    const localized = deriveMaskedReferenceSurface([input], { textureSize: 32, localizedPatch: true });
+    expect(wholeObject.materialSuitability.pass).toBe(false);
+    expect(localized.materialSuitability.pass).toBe(true);
+    expect(localized.sourceRegion.selection).toBe('dense-interior-patch');
+    expect(localized.sourceRegion.width).toBeGreaterThanOrEqual(16);
+    expect(localized.sourceRegion.width).toBeLessThan(wholeObject.sourceRegion.width);
+    expect(localized.selectedSourceFingerprint).toBe(input.fingerprint);
+    expect(localized.inpaintedTexels).toBeLessThan(localized.seededTexels / 5);
+  });
+
+  it('does not turn a thin wire into a material patch even when localized search is enabled', () => {
+    const mask = new Uint8Array(96 * 96);
+    for (let index = 8; index < 88; index += 1) {
+      mask[index * 96 + 47] = 1;
+      mask[index * 96 + 48] = 1;
+    }
+    const derivation = deriveMaskedReferenceSurface([{
+      id: 'thin-wire', fingerprint: '8'.repeat(64), width: 96, height: 96,
+      rgba: makeRgba(96, 96, (x, y) => mask[y * 96 + x] ? 40 : 255), mask,
+    }], { textureSize: 32, localizedPatch: true });
+    expect(derivation.sourceRegion.selection).toBe('object-bounds');
+    expect(derivation.materialSuitability.pass).toBe(false);
+  });
+
   it('fails closed for malformed masks and unbound evidence fingerprints', () => {
     expect(() => deriveMaskedReferenceSurface([{
       id: 'bad', fingerprint: 'not-a-sha', width: 4, height: 4,
