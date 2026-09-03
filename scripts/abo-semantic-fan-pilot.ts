@@ -28,6 +28,7 @@ import { auditVisualPlan, type VisualPlanningContract } from '../src/engine/visu
 import { compareReferenceFrames, compareThinFeatureSilhouettes, type ComparisonFrame } from '../src/engine/reference-comparison';
 import { auditMultiviewSilhouetteFidelity } from '../src/engine/silhouette-fidelity';
 import { auditSemanticSilhouetteAttribution } from '../src/engine/silhouette-component-attribution';
+import { auditSilhouetteResidualLocalization } from '../src/engine/silhouette-residual-localization';
 import { auditRigidMultiviewSet } from '../src/engine/multiview-consistency';
 import { auditPbrReferenceEvidence } from '../src/engine/pbr-reference-audit';
 import {
@@ -704,18 +705,27 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
   const triangles = collectThreeTriangles(candidateBuild.root);
   const sample = sampleTriangleSurface(triangles, 4_096);
   const audit = compareSurfaceGeometry(referenceSample.points, sample.points);
-  const views = cameraFit.views.map((selection, index) => {
+  const recoveryViewRenders = cameraFit.views.map((selection, index) => {
     const posedIr = structuredClone(candidateIr);
     const residualDegrees = selectedCaptureViews[index]!.residualDegrees;
     if (residualDegrees !== 0) applyObservedCaptureYaw(posedIr, residualDegrees);
     const posedTriangles = collectThreeTriangles(compileAssemblyIR(posedIr, 'beauty').root);
-    return scoreView(posedTriangles, index, selection.candidate.azimuthDegrees,
+    const score = scoreView(posedTriangles, index, selection.candidate.azimuthDegrees,
       selectedCameras[index]!, references);
+    const reference = references[index]!;
+    const candidateMask = cachedSilhouette(posedTriangles, selection.candidate.azimuthDegrees,
+      reference.rawFrame.width, reference.rawFrame.height, selectedCameras[index]!).mask!;
+    return { score, candidateMask };
   });
+  const views = recoveryViewRenders.map((view) => view.score);
   const silhouette = auditMultiviewSilhouetteFidelity(views.map((view) => ({
     id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
     primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
   })), { wholeIoU: 0.75, primaryMassIoU: 0.7, thinFeatureScore: 0.8 });
+  const residual = auditSilhouetteResidualLocalization(recoveryViewRenders.map((view, index) => ({
+    id: viewIds[index]!, width: references[index]!.rawFrame.width, height: references[index]!.rawFrame.height,
+    referenceMask: references[index]!.rawFrame.mask!, candidateMask: view.candidateMask,
+  })), { columns: 6, rows: 6, minimumComponentPixels: 4, localize: false });
   const maximumP95 = Math.max(audit.referenceP95Distance, audit.candidateP95Distance);
   const gateScores = {
     'geometry-rms': clampUnit(1 - audit.symmetricRmsChamfer / 0.2),
@@ -725,6 +735,8 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
     'silhouette-whole': silhouette.minimumWholeIoU,
     'silhouette-primary': silhouette.minimumPrimaryMassIoU,
     'silhouette-thin': silhouette.minimumThinFeatureScore,
+    'silhouette-recall': residual.minimumReferenceRecall,
+    'silhouette-precision': residual.minimumCandidatePrecision,
   };
   const blockingGateIds = [
     audit.symmetricRmsChamfer > audit.thresholds.maximumRmsChamfer && 'geometry-rms',
@@ -732,6 +744,8 @@ const evaluateRecoveryCandidate = async (candidateIr: AssemblyIR): Promise<Geome
     audit.minimumCoverage < audit.thresholds.minimumCoverage && 'geometry-coverage',
     audit.maximumDimensionRelativeError > audit.thresholds.maximumDimensionRelativeError && 'dimension-fidelity',
     !silhouette.pass && 'silhouette-whole',
+    residual.minimumReferenceRecall < 0.7 && 'silhouette-recall',
+    residual.minimumCandidatePrecision < 0.7 && 'silhouette-precision',
   ].filter((id): id is keyof typeof gateScores => Boolean(id));
   return { gateScores, blockingGateIds };
 };
@@ -833,7 +847,7 @@ const deliveryComponentObservations = deliveryBuild.root.children.flatMap((objec
 const deliveryRecoveryPlan = createGeometryRecoveryPlan(
   deliveryGeometryAudit, visualPlan, deliveryComponentObservations, { maximumActions: 6 },
 );
-const deliveryArticulatedViews = cameraFit.views.map((selection, index) => {
+const deliveryCaptureViews = cameraFit.views.map((selection, index) => {
   const posedIr = structuredClone(deliveryIr);
   const residualDegrees = selectedCaptureViews[index]!.residualDegrees;
   if (residualDegrees !== 0) applyObservedCaptureYaw(posedIr, residualDegrees);
@@ -845,7 +859,7 @@ const deliveryArticulatedViews = cameraFit.views.map((selection, index) => {
       selectedCameras[index]!, references),
   };
 });
-const deliveryViews = deliveryArticulatedViews.map((view) => view.score);
+const deliveryViews = deliveryCaptureViews.map((view) => view.score);
 const deliverySilhouetteAudit = auditMultiviewSilhouetteFidelity(deliveryViews.map((view) => ({
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
@@ -855,6 +869,21 @@ const deliveryCalibration = {
   audit: deliverySilhouetteAudit,
   gateMargin: Math.min(...deliveryViews.map((view) => view.gateMargin)),
 };
+const deliverySilhouetteResidual = auditSilhouetteResidualLocalization(
+  deliveryCaptureViews.map((view, index) => {
+    const reference = references[index]!;
+    const camera = selectedCameras[index]!;
+    return {
+      id: viewIds[index]!, width: reference.rawFrame.width, height: reference.rawFrame.height,
+      referenceMask: reference.rawFrame.mask!,
+      candidateMask: cachedSilhouette(view.triangles, cameraFit.views[index]!.candidate.azimuthDegrees,
+        reference.rawFrame.width, reference.rawFrame.height, camera).mask!,
+    };
+  }),
+  // Ignore sub-pixel/antialias speckle in the persisted diagnostic while
+  // retaining narrow structural residuals at this benchmark's 512 px scale.
+  { columns: 6, rows: 6, minimumComponentPixels: 64 },
+);
 const decompositionAudit = auditPartDecomposition(decomposition, deliveryIr);
 const detailAudit = auditAssemblyDetail(deliveryIr);
 const bytes = await exportCanonicalGlb(deliveryBuild.root);
@@ -914,7 +943,7 @@ for (let index = 0; index < references.length; index += 1) {
   }
   rawContext.putImageData(rawImage, 0, 0);
   writeFileSync(resolve(artifactRoot, `reference-raw-${viewIds[index]}.png`), rawCanvas.encodeSync('png'));
-  const render = silhouetteFrameFromTriangles(deliveryArticulatedViews[index]!.triangles, deliveryCalibration.views[index]!.renderAzimuthDegrees,
+  const render = silhouetteFrameFromTriangles(deliveryCaptureViews[index]!.triangles, deliveryCalibration.views[index]!.renderAzimuthDegrees,
     reference.frame.width, reference.frame.height, deliveryCalibration.views[index]!.camera);
   writeFileSync(resolve(artifactRoot, `silhouette-${viewIds[index]}.png`), render.png);
   const massMask = solidifySilhouetteMask(render.mask!, render.width, render.height).mask;
@@ -967,6 +996,7 @@ const report = {
     },
     views: deliveryCalibration.views,
     audit: deliveryCalibration.audit,
+    residualLocalization: deliverySilhouetteResidual,
     semanticAttribution: semanticSilhouetteAttribution,
     limitation: 'Foreground-normalized silhouettes and candidate-scored capture-pose residuals are development diagnostics only. The source contract proves nominal 90-degree turntable steps, but not object-frame absolute pose, camera intrinsics, crop homography, or zero residual pose.',
     observedArticulation: {

@@ -236,6 +236,3654 @@
         "left: thin feature score 0.785 < 0.800"
       ]
     },
+    "residualLocalization": {
+      "schema": "morphloom.silhouette-residual-localization/0.1",
+      "grid": {
+        "columns": 6,
+        "rows": 6
+      },
+      "views": [
+        {
+          "id": "front",
+          "referencePixels": 23592,
+          "candidatePixels": 27735,
+          "overlapPixels": 17504,
+          "unionPixels": 33823,
+          "missingPixels": 6088,
+          "excessPixels": 10231,
+          "silhouetteIoU": 0.5175176654938947,
+          "referenceRecall": 0.7419464225161072,
+          "candidatePrecision": 0.6311159185145123,
+          "missingFraction": 0.25805357748389285,
+          "excessFraction": 0.3688840814854876,
+          "cells": [
+            {
+              "id": "front:cell-1-1",
+              "column": 0,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-1-2",
+              "column": 1,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-1-3",
+              "column": 2,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 1239,
+              "candidatePixels": 1334,
+              "overlapPixels": 987,
+              "missingPixels": 252,
+              "excessPixels": 347,
+              "localIoU": 0.6223203026481715,
+              "residualShare": 0.03670568049512838
+            },
+            {
+              "id": "front:cell-1-4",
+              "column": 3,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 919,
+              "candidatePixels": 1179,
+              "overlapPixels": 834,
+              "missingPixels": 85,
+              "excessPixels": 345,
+              "localIoU": 0.6598101265822784,
+              "residualShare": 0.026349653777805012
+            },
+            {
+              "id": "front:cell-1-5",
+              "column": 4,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-1-6",
+              "column": 5,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-2-1",
+              "column": 0,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-2-2",
+              "column": 1,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 181,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 181,
+              "localIoU": 0,
+              "residualShare": 0.011091365892517925
+            },
+            {
+              "id": "front:cell-2-3",
+              "column": 2,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 2816,
+              "candidatePixels": 2659,
+              "overlapPixels": 2045,
+              "missingPixels": 771,
+              "excessPixels": 614,
+              "localIoU": 0.5962099125364432,
+              "residualShare": 0.08487039647037196
+            },
+            {
+              "id": "front:cell-2-4",
+              "column": 3,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2146,
+              "candidatePixels": 3083,
+              "overlapPixels": 1971,
+              "missingPixels": 175,
+              "excessPixels": 1112,
+              "localIoU": 0.6049723756906077,
+              "residualShare": 0.0788651265396164
+            },
+            {
+              "id": "front:cell-2-5",
+              "column": 4,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 8,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 8,
+              "localIoU": 0,
+              "residualShare": 0.0004902261167963723
+            },
+            {
+              "id": "front:cell-2-6",
+              "column": 5,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-3-1",
+              "column": 0,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-3-2",
+              "column": 1,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 184,
+              "candidatePixels": 686,
+              "overlapPixels": 173,
+              "missingPixels": 11,
+              "excessPixels": 513,
+              "localIoU": 0.24820659971305595,
+              "residualShare": 0.032109810650162385
+            },
+            {
+              "id": "front:cell-3-3",
+              "column": 2,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 2820,
+              "candidatePixels": 3498,
+              "overlapPixels": 2669,
+              "missingPixels": 151,
+              "excessPixels": 829,
+              "localIoU": 0.7314332693888737,
+              "residualShare": 0.06005269930755561
+            },
+            {
+              "id": "front:cell-3-4",
+              "column": 3,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 3163,
+              "candidatePixels": 3051,
+              "overlapPixels": 2631,
+              "missingPixels": 532,
+              "excessPixels": 420,
+              "localIoU": 0.7343008651967625,
+              "residualShare": 0.05833690789876831
+            },
+            {
+              "id": "front:cell-3-5",
+              "column": 4,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 97,
+              "candidatePixels": 291,
+              "overlapPixels": 97,
+              "missingPixels": 0,
+              "excessPixels": 194,
+              "localIoU": 0.3333333333333333,
+              "residualShare": 0.011887983332312028
+            },
+            {
+              "id": "front:cell-3-6",
+              "column": 5,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-4-1",
+              "column": 0,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-4-2",
+              "column": 1,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 175,
+              "candidatePixels": 489,
+              "overlapPixels": 112,
+              "missingPixels": 63,
+              "excessPixels": 377,
+              "localIoU": 0.2028985507246377,
+              "residualShare": 0.026962436423800477
+            },
+            {
+              "id": "front:cell-4-3",
+              "column": 2,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 2579,
+              "candidatePixels": 2724,
+              "overlapPixels": 1900,
+              "missingPixels": 679,
+              "excessPixels": 824,
+              "localIoU": 0.5583308845136644,
+              "residualShare": 0.09210123169311846
+            },
+            {
+              "id": "front:cell-4-4",
+              "column": 3,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 2278,
+              "candidatePixels": 2688,
+              "overlapPixels": 1822,
+              "missingPixels": 456,
+              "excessPixels": 866,
+              "localIoU": 0.5795165394402035,
+              "residualShare": 0.08100986580060053
+            },
+            {
+              "id": "front:cell-4-5",
+              "column": 4,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 301,
+              "candidatePixels": 313,
+              "overlapPixels": 231,
+              "missingPixels": 70,
+              "excessPixels": 82,
+              "localIoU": 0.6031331592689295,
+              "residualShare": 0.009314296219131074
+            },
+            {
+              "id": "front:cell-4-6",
+              "column": 5,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-5-1",
+              "column": 0,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-5-2",
+              "column": 1,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 210,
+              "candidatePixels": 311,
+              "overlapPixels": 9,
+              "missingPixels": 201,
+              "excessPixels": 302,
+              "localIoU": 0.017578125,
+              "residualShare": 0.03082296709357191
+            },
+            {
+              "id": "front:cell-5-3",
+              "column": 2,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 1961,
+              "candidatePixels": 1339,
+              "overlapPixels": 966,
+              "missingPixels": 995,
+              "excessPixels": 373,
+              "localIoU": 0.4138817480719794,
+              "residualShare": 0.08382866597217967
+            },
+            {
+              "id": "front:cell-5-4",
+              "column": 3,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 1601,
+              "candidatePixels": 1099,
+              "overlapPixels": 783,
+              "missingPixels": 818,
+              "excessPixels": 316,
+              "localIoU": 0.4084507042253521,
+              "residualShare": 0.06948955205588578
+            },
+            {
+              "id": "front:cell-5-5",
+              "column": 4,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 337,
+              "candidatePixels": 312,
+              "overlapPixels": 113,
+              "missingPixels": 224,
+              "excessPixels": 199,
+              "localIoU": 0.21082089552238806,
+              "residualShare": 0.025920705925608186
+            },
+            {
+              "id": "front:cell-5-6",
+              "column": 5,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-6-1",
+              "column": 0,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "front:cell-6-2",
+              "column": 1,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 31,
+              "candidatePixels": 393,
+              "overlapPixels": 0,
+              "missingPixels": 31,
+              "excessPixels": 393,
+              "localIoU": 0,
+              "residualShare": 0.025981984190207735
+            },
+            {
+              "id": "front:cell-6-3",
+              "column": 2,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 631,
+              "candidatePixels": 1088,
+              "overlapPixels": 147,
+              "missingPixels": 484,
+              "excessPixels": 941,
+              "localIoU": 0.09351145038167939,
+              "residualShare": 0.08732152705435382
+            },
+            {
+              "id": "front:cell-6-4",
+              "column": 3,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 31,
+              "candidatePixels": 632,
+              "overlapPixels": 0,
+              "missingPixels": 31,
+              "excessPixels": 632,
+              "localIoU": 0,
+              "residualShare": 0.040627489429499355
+            },
+            {
+              "id": "front:cell-6-5",
+              "column": 4,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 73,
+              "candidatePixels": 377,
+              "overlapPixels": 14,
+              "missingPixels": 59,
+              "excessPixels": 363,
+              "localIoU": 0.03211009174311927,
+              "residualShare": 0.02585942766100864
+            },
+            {
+              "id": "front:cell-6-6",
+              "column": 5,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            }
+          ],
+          "components": [
+            {
+              "kind": "excess",
+              "pixels": 2302,
+              "fractionOfViewResidual": 0.14106256510815612,
+              "normalizedBounds": {
+                "x": 0.275390625,
+                "y": 0.046875,
+                "width": 0.203125,
+                "height": 0.890625
+              },
+              "normalizedCentroid": {
+                "x": 0.31958453247176366,
+                "y": 0.5010877090573415
+              },
+              "id": "front:excess-1"
+            },
+            {
+              "kind": "excess",
+              "pixels": 1942,
+              "fractionOfViewResidual": 0.11900238985231938,
+              "normalizedBounds": {
+                "x": 0.3515625,
+                "y": 0.80859375,
+                "width": 0.373046875,
+                "height": 0.14453125
+              },
+              "normalizedCentroid": {
+                "x": 0.5328279882209063,
+                "y": 0.9012635974510813
+              },
+              "id": "front:excess-2"
+            },
+            {
+              "kind": "missing",
+              "pixels": 1345,
+              "fractionOfViewResidual": 0.08241926588639009,
+              "normalizedBounds": {
+                "x": 0.29296875,
+                "y": 0.5859375,
+                "width": 0.177734375,
+                "height": 0.296875
+              },
+              "normalizedCentroid": {
+                "x": 0.36276646723977696,
+                "y": 0.7957350720260223
+              },
+              "id": "front:missing-1"
+            },
+            {
+              "kind": "missing",
+              "pixels": 936,
+              "fractionOfViewResidual": 0.05735645566517556,
+              "normalizedBounds": {
+                "x": 0.474609375,
+                "y": 0.7265625,
+                "width": 0.2109375,
+                "height": 0.1328125
+              },
+              "normalizedCentroid": {
+                "x": 0.5741373697916666,
+                "y": 0.8114858774038461
+              },
+              "id": "front:missing-2"
+            },
+            {
+              "kind": "excess",
+              "pixels": 620,
+              "fractionOfViewResidual": 0.03799252405171886,
+              "normalizedBounds": {
+                "x": 0.556640625,
+                "y": 0.0703125,
+                "width": 0.12890625,
+                "height": 0.46484375
+              },
+              "normalizedCentroid": {
+                "x": 0.6489226310483871,
+                "y": 0.2923828125
+              },
+              "id": "front:excess-3"
+            },
+            {
+              "kind": "excess",
+              "pixels": 272,
+              "fractionOfViewResidual": 0.01666768797107666,
+              "normalizedBounds": {
+                "x": 0.3359375,
+                "y": 0.5390625,
+                "width": 0.068359375,
+                "height": 0.19921875
+              },
+              "normalizedCentroid": {
+                "x": 0.35869284237132354,
+                "y": 0.6493709788602942
+              },
+              "id": "front:excess-4"
+            },
+            {
+              "kind": "excess",
+              "pixels": 241,
+              "fractionOfViewResidual": 0.014768061768490716,
+              "normalizedBounds": {
+                "x": 0.673828125,
+                "y": 0.56640625,
+                "width": 0.021484375,
+                "height": 0.23046875
+              },
+              "normalizedCentroid": {
+                "x": 0.6856400739107884,
+                "y": 0.7016095046680498
+              },
+              "id": "front:excess-5"
+            },
+            {
+              "kind": "excess",
+              "pixels": 232,
+              "fractionOfViewResidual": 0.014216557387094797,
+              "normalizedBounds": {
+                "x": 0.357421875,
+                "y": 0.4765625,
+                "width": 0.076171875,
+                "height": 0.09765625
+              },
+              "normalizedCentroid": {
+                "x": 0.3983954067887931,
+                "y": 0.5302902747844828
+              },
+              "id": "front:excess-6"
+            },
+            {
+              "kind": "missing",
+              "pixels": 231,
+              "fractionOfViewResidual": 0.014155279122495252,
+              "normalizedBounds": {
+                "x": 0.689453125,
+                "y": 0.58203125,
+                "width": 0.01953125,
+                "height": 0.21875
+              },
+              "normalizedCentroid": {
+                "x": 0.6998740192099567,
+                "y": 0.7018821022727273
+              },
+              "id": "front:missing-3"
+            },
+            {
+              "kind": "excess",
+              "pixels": 223,
+              "fractionOfViewResidual": 0.013665053005698879,
+              "normalizedBounds": {
+                "x": 0.607421875,
+                "y": 0.4609375,
+                "width": 0.060546875,
+                "height": 0.234375
+              },
+              "normalizedCentroid": {
+                "x": 0.647916374719731,
+                "y": 0.5744727438340808
+              },
+              "id": "front:excess-7"
+            },
+            {
+              "kind": "excess",
+              "pixels": 204,
+              "fractionOfViewResidual": 0.012500765978307495,
+              "normalizedBounds": {
+                "x": 0.3515625,
+                "y": 0.3203125,
+                "width": 0.037109375,
+                "height": 0.12109375
+              },
+              "normalizedCentroid": {
+                "x": 0.3684129901960784,
+                "y": 0.3785424325980392
+              },
+              "id": "front:excess-8"
+            },
+            {
+              "kind": "missing",
+              "pixels": 66,
+              "fractionOfViewResidual": 0.0040443654635700715,
+              "normalizedBounds": {
+                "x": 0.330078125,
+                "y": 0.265625,
+                "width": 0.01953125,
+                "height": 0.13671875
+              },
+              "normalizedCentroid": {
+                "x": 0.33857125946969696,
+                "y": 0.3252840909090909
+              },
+              "id": "front:missing-4"
+            }
+          ],
+          "worstMissingCellId": "front:cell-5-3",
+          "worstExcessCellId": "front:cell-2-4"
+        },
+        {
+          "id": "right",
+          "referencePixels": 17183,
+          "candidatePixels": 24239,
+          "overlapPixels": 13614,
+          "unionPixels": 27808,
+          "missingPixels": 3569,
+          "excessPixels": 10625,
+          "silhouetteIoU": 0.4895713463751438,
+          "referenceRecall": 0.7922947098876797,
+          "candidatePrecision": 0.5616568340278064,
+          "missingFraction": 0.2077052901123203,
+          "excessFraction": 0.4383431659721936,
+          "cells": [
+            {
+              "id": "right:cell-1-1",
+              "column": 0,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-1-2",
+              "column": 1,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-1-3",
+              "column": 2,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 655,
+              "candidatePixels": 1664,
+              "overlapPixels": 521,
+              "missingPixels": 134,
+              "excessPixels": 1143,
+              "localIoU": 0.28976640711902113,
+              "residualShare": 0.08996759194025644
+            },
+            {
+              "id": "right:cell-1-4",
+              "column": 3,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 853,
+              "candidatePixels": 678,
+              "overlapPixels": 602,
+              "missingPixels": 251,
+              "excessPixels": 76,
+              "localIoU": 0.6480086114101185,
+              "residualShare": 0.0230379033394392
+            },
+            {
+              "id": "right:cell-1-5",
+              "column": 4,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-1-6",
+              "column": 5,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-2-1",
+              "column": 0,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-2-2",
+              "column": 1,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 314,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 314,
+              "localIoU": 0,
+              "residualShare": 0.02212202339016486
+            },
+            {
+              "id": "right:cell-2-3",
+              "column": 2,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 1769,
+              "candidatePixels": 2952,
+              "overlapPixels": 1502,
+              "missingPixels": 267,
+              "excessPixels": 1450,
+              "localIoU": 0.4666045355700528,
+              "residualShare": 0.12096660560800339
+            },
+            {
+              "id": "right:cell-2-4",
+              "column": 3,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2079,
+              "candidatePixels": 1755,
+              "overlapPixels": 1614,
+              "missingPixels": 465,
+              "excessPixels": 141,
+              "localIoU": 0.727027027027027,
+              "residualShare": 0.04269409609694237
+            },
+            {
+              "id": "right:cell-2-5",
+              "column": 4,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-2-6",
+              "column": 5,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-3-1",
+              "column": 0,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-3-2",
+              "column": 1,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 605,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 605,
+              "localIoU": 0,
+              "residualShare": 0.04262364379315203
+            },
+            {
+              "id": "right:cell-3-3",
+              "column": 2,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 2352,
+              "candidatePixels": 3520,
+              "overlapPixels": 2293,
+              "missingPixels": 59,
+              "excessPixels": 1227,
+              "localIoU": 0.6406817546800783,
+              "residualShare": 0.09060166267436945
+            },
+            {
+              "id": "right:cell-3-4",
+              "column": 3,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2322,
+              "candidatePixels": 2336,
+              "overlapPixels": 2200,
+              "missingPixels": 122,
+              "excessPixels": 136,
+              "localIoU": 0.8950366151342555,
+              "residualShare": 0.018176694377906158
+            },
+            {
+              "id": "right:cell-3-5",
+              "column": 4,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-3-6",
+              "column": 5,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-4-1",
+              "column": 0,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-4-2",
+              "column": 1,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 410,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 410,
+              "localIoU": 0,
+              "residualShare": 0.028885444554036917
+            },
+            {
+              "id": "right:cell-4-3",
+              "column": 2,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 2129,
+              "candidatePixels": 2961,
+              "overlapPixels": 1818,
+              "missingPixels": 311,
+              "excessPixels": 1143,
+              "localIoU": 0.5556234718826406,
+              "residualShare": 0.10243764971114555
+            },
+            {
+              "id": "right:cell-4-4",
+              "column": 3,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 1747,
+              "candidatePixels": 1820,
+              "overlapPixels": 1353,
+              "missingPixels": 394,
+              "excessPixels": 467,
+              "localIoU": 0.6111111111111112,
+              "residualShare": 0.06065943356347753
+            },
+            {
+              "id": "right:cell-4-5",
+              "column": 4,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-4-6",
+              "column": 5,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-5-1",
+              "column": 0,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-5-2",
+              "column": 1,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 313,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 313,
+              "localIoU": 0,
+              "residualShare": 0.022051571086374525
+            },
+            {
+              "id": "right:cell-5-3",
+              "column": 2,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 1210,
+              "candidatePixels": 1563,
+              "overlapPixels": 812,
+              "missingPixels": 398,
+              "excessPixels": 751,
+              "localIoU": 0.4140744518103009,
+              "residualShare": 0.08094969705509371
+            },
+            {
+              "id": "right:cell-5-4",
+              "column": 3,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 1515,
+              "candidatePixels": 1021,
+              "overlapPixels": 620,
+              "missingPixels": 895,
+              "excessPixels": 401,
+              "localIoU": 0.3235908141962422,
+              "residualShare": 0.0913061857122728
+            },
+            {
+              "id": "right:cell-5-5",
+              "column": 4,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-5-6",
+              "column": 5,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-6-1",
+              "column": 0,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "right:cell-6-2",
+              "column": 1,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 345,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 345,
+              "localIoU": 0,
+              "residualShare": 0.02430604480766521
+            },
+            {
+              "id": "right:cell-6-3",
+              "column": 2,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 760,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 760,
+              "localIoU": 0,
+              "residualShare": 0.053543750880653794
+            },
+            {
+              "id": "right:cell-6-4",
+              "column": 3,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 552,
+              "candidatePixels": 996,
+              "overlapPixels": 279,
+              "missingPixels": 273,
+              "excessPixels": 717,
+              "localIoU": 0.2198581560283688,
+              "residualShare": 0.0697477807524306
+            },
+            {
+              "id": "right:cell-6-5",
+              "column": 4,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 226,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 226,
+              "localIoU": 0,
+              "residualShare": 0.01592222065661547
+            },
+            {
+              "id": "right:cell-6-6",
+              "column": 5,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            }
+          ],
+          "components": [
+            {
+              "kind": "excess",
+              "pixels": 6631,
+              "fractionOfViewResidual": 0.4671692264337044,
+              "normalizedBounds": {
+                "x": 0.287109375,
+                "y": 0.046875,
+                "width": 0.263671875,
+                "height": 0.89453125
+              },
+              "normalizedCentroid": {
+                "x": 0.3672247598872719,
+                "y": 0.4610927249849193
+              },
+              "id": "right:excess-1"
+            },
+            {
+              "kind": "excess",
+              "pixels": 977,
+              "fractionOfViewResidual": 0.06883190080315627,
+              "normalizedBounds": {
+                "x": 0.357421875,
+                "y": 0.50390625,
+                "width": 0.1015625,
+                "height": 0.25
+              },
+              "normalizedCentroid": {
+                "x": 0.39426636866683723,
+                "y": 0.6713692265864892
+              },
+              "id": "right:excess-2"
+            },
+            {
+              "kind": "excess",
+              "pixels": 601,
+              "fractionOfViewResidual": 0.0423418345779907,
+              "normalizedBounds": {
+                "x": 0.572265625,
+                "y": 0.8828125,
+                "width": 0.140625,
+                "height": 0.0703125
+              },
+              "normalizedCentroid": {
+                "x": 0.6433239522670549,
+                "y": 0.9113294249168054
+              },
+              "id": "right:excess-3"
+            },
+            {
+              "kind": "excess",
+              "pixels": 442,
+              "fractionOfViewResidual": 0.031139918275327604,
+              "normalizedBounds": {
+                "x": 0.576171875,
+                "y": 0.4765625,
+                "width": 0.03515625,
+                "height": 0.27734375
+              },
+              "normalizedCentroid": {
+                "x": 0.5994812287895928,
+                "y": 0.6403068438914027
+              },
+              "id": "right:excess-4"
+            },
+            {
+              "kind": "missing",
+              "pixels": 368,
+              "fractionOfViewResidual": 0.02592644779484289,
+              "normalizedBounds": {
+                "x": 0.486328125,
+                "y": 0.75,
+                "width": 0.072265625,
+                "height": 0.12890625
+              },
+              "normalizedCentroid": {
+                "x": 0.5376984969429348,
+                "y": 0.804581351902174
+              },
+              "id": "right:missing-1"
+            },
+            {
+              "kind": "missing",
+              "pixels": 354,
+              "fractionOfViewResidual": 0.024940115541778215,
+              "normalizedBounds": {
+                "x": 0.55078125,
+                "y": 0.08203125,
+                "width": 0.060546875,
+                "height": 0.28125
+              },
+              "normalizedCentroid": {
+                "x": 0.5839898923022598,
+                "y": 0.1912738347457627
+              },
+              "id": "right:missing-2"
+            },
+            {
+              "kind": "missing",
+              "pixels": 218,
+              "fractionOfViewResidual": 0.0153586022262928,
+              "normalizedBounds": {
+                "x": 0.345703125,
+                "y": 0.6796875,
+                "width": 0.068359375,
+                "height": 0.10546875
+              },
+              "normalizedCentroid": {
+                "x": 0.373459002293578,
+                "y": 0.7482260607798165
+              },
+              "id": "right:missing-3"
+            },
+            {
+              "kind": "missing",
+              "pixels": 218,
+              "fractionOfViewResidual": 0.0153586022262928,
+              "normalizedBounds": {
+                "x": 0.609375,
+                "y": 0.734375,
+                "width": 0.044921875,
+                "height": 0.06640625
+              },
+              "normalizedCentroid": {
+                "x": 0.630707067087156,
+                "y": 0.7625250860091743
+              },
+              "id": "right:missing-4"
+            },
+            {
+              "kind": "missing",
+              "pixels": 199,
+              "fractionOfViewResidual": 0.014020008454276455,
+              "normalizedBounds": {
+                "x": 0.5546875,
+                "y": 0.68359375,
+                "width": 0.041015625,
+                "height": 0.1171875
+              },
+              "normalizedCentroid": {
+                "x": 0.5714166535804021,
+                "y": 0.7552704930904522
+              },
+              "id": "right:missing-5"
+            },
+            {
+              "kind": "excess",
+              "pixels": 123,
+              "fractionOfViewResidual": 0.008665633366211074,
+              "normalizedBounds": {
+                "x": 0.55859375,
+                "y": 0.82421875,
+                "width": 0.0390625,
+                "height": 0.08203125
+              },
+              "normalizedCentroid": {
+                "x": 0.5719877413617886,
+                "y": 0.8710461128048781
+              },
+              "id": "right:excess-5"
+            },
+            {
+              "kind": "missing",
+              "pixels": 119,
+              "fractionOfViewResidual": 0.008383824151049738,
+              "normalizedBounds": {
+                "x": 0.5625,
+                "y": 0.79296875,
+                "width": 0.033203125,
+                "height": 0.0546875
+              },
+              "normalizedCentroid": {
+                "x": 0.5796595982142857,
+                "y": 0.8218060661764706
+              },
+              "id": "right:missing-6"
+            },
+            {
+              "kind": "missing",
+              "pixels": 102,
+              "fractionOfViewResidual": 0.007186134986614062,
+              "normalizedBounds": {
+                "x": 0.494140625,
+                "y": 0.046875,
+                "width": 0.0546875,
+                "height": 0.03515625
+              },
+              "normalizedCentroid": {
+                "x": 0.5241268382352942,
+                "y": 0.06456801470588236
+              },
+              "id": "right:missing-7"
+            },
+            {
+              "kind": "missing",
+              "pixels": 78,
+              "fractionOfViewResidual": 0.005495279695646047,
+              "normalizedBounds": {
+                "x": 0.6015625,
+                "y": 0.83203125,
+                "width": 0.021484375,
+                "height": 0.05078125
+              },
+              "normalizedCentroid": {
+                "x": 0.6132061298076923,
+                "y": 0.8595753205128205
+              },
+              "id": "right:missing-8"
+            },
+            {
+              "kind": "missing",
+              "pixels": 74,
+              "fractionOfViewResidual": 0.0052134704804847115,
+              "normalizedBounds": {
+                "x": 0.53125,
+                "y": 0.19140625,
+                "width": 0.02734375,
+                "height": 0.0859375
+              },
+              "normalizedCentroid": {
+                "x": 0.5472972972972973,
+                "y": 0.22650971283783783
+              },
+              "id": "right:missing-9"
+            },
+            {
+              "kind": "missing",
+              "pixels": 67,
+              "fractionOfViewResidual": 0.004720304353952374,
+              "normalizedBounds": {
+                "x": 0.55078125,
+                "y": 0.90625,
+                "width": 0.025390625,
+                "height": 0.0234375
+              },
+              "normalizedCentroid": {
+                "x": 0.5642053404850746,
+                "y": 0.9188141324626866
+              },
+              "id": "right:missing-10"
+            }
+          ],
+          "worstMissingCellId": "right:cell-5-4",
+          "worstExcessCellId": "right:cell-2-3"
+        },
+        {
+          "id": "rear",
+          "referencePixels": 22889,
+          "candidatePixels": 26165,
+          "overlapPixels": 17161,
+          "unionPixels": 31893,
+          "missingPixels": 5728,
+          "excessPixels": 9004,
+          "silhouetteIoU": 0.5380804565265105,
+          "referenceRecall": 0.7497487876272445,
+          "candidatePrecision": 0.655876170456717,
+          "missingFraction": 0.2502512123727555,
+          "excessFraction": 0.344123829543283,
+          "cells": [
+            {
+              "id": "rear:cell-1-1",
+              "column": 0,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-1-2",
+              "column": 1,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-1-3",
+              "column": 2,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 880,
+              "candidatePixels": 1620,
+              "overlapPixels": 686,
+              "missingPixels": 194,
+              "excessPixels": 934,
+              "localIoU": 0.37816979051819183,
+              "residualShare": 0.07656801520499593
+            },
+            {
+              "id": "rear:cell-1-4",
+              "column": 3,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 1334,
+              "candidatePixels": 860,
+              "overlapPixels": 792,
+              "missingPixels": 542,
+              "excessPixels": 68,
+              "localIoU": 0.5649072753209701,
+              "residualShare": 0.041406462123269074
+            },
+            {
+              "id": "rear:cell-1-5",
+              "column": 4,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-1-6",
+              "column": 5,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-2-1",
+              "column": 0,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-2-2",
+              "column": 1,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 378,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 378,
+              "localIoU": 0,
+              "residualShare": 0.02565843062720608
+            },
+            {
+              "id": "rear:cell-2-3",
+              "column": 2,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 2307,
+              "candidatePixels": 3145,
+              "overlapPixels": 1987,
+              "missingPixels": 320,
+              "excessPixels": 1158,
+              "localIoU": 0.5734487734487734,
+              "residualShare": 0.10032582134129786
+            },
+            {
+              "id": "rear:cell-2-4",
+              "column": 3,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2639,
+              "candidatePixels": 2121,
+              "overlapPixels": 1806,
+              "missingPixels": 833,
+              "excessPixels": 315,
+              "localIoU": 0.6113744075829384,
+              "residualShare": 0.07792560412707032
+            },
+            {
+              "id": "rear:cell-2-5",
+              "column": 4,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-2-6",
+              "column": 5,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-3-1",
+              "column": 0,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-3-2",
+              "column": 1,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 204,
+              "candidatePixels": 711,
+              "overlapPixels": 152,
+              "missingPixels": 52,
+              "excessPixels": 559,
+              "localIoU": 0.19921363040629095,
+              "residualShare": 0.0414743415693728
+            },
+            {
+              "id": "rear:cell-3-3",
+              "column": 2,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 3221,
+              "candidatePixels": 3116,
+              "overlapPixels": 2767,
+              "missingPixels": 454,
+              "excessPixels": 349,
+              "localIoU": 0.7750700280112045,
+              "residualShare": 0.054507195221287
+            },
+            {
+              "id": "rear:cell-3-4",
+              "column": 3,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2941,
+              "candidatePixels": 2779,
+              "overlapPixels": 2345,
+              "missingPixels": 596,
+              "excessPixels": 434,
+              "localIoU": 0.6948148148148148,
+              "residualShare": 0.0699158294868314
+            },
+            {
+              "id": "rear:cell-3-5",
+              "column": 4,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 1,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 1,
+              "excessPixels": 0,
+              "localIoU": 0,
+              "residualShare": 0.00006787944610371979
+            },
+            {
+              "id": "rear:cell-3-6",
+              "column": 5,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-4-1",
+              "column": 0,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-4-2",
+              "column": 1,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 318,
+              "candidatePixels": 582,
+              "overlapPixels": 254,
+              "missingPixels": 64,
+              "excessPixels": 328,
+              "localIoU": 0.3931888544891641,
+              "residualShare": 0.02660874287265816
+            },
+            {
+              "id": "rear:cell-4-3",
+              "column": 2,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 2659,
+              "candidatePixels": 2988,
+              "overlapPixels": 2175,
+              "missingPixels": 484,
+              "excessPixels": 813,
+              "localIoU": 0.6264400921658986,
+              "residualShare": 0.08803964159652457
+            },
+            {
+              "id": "rear:cell-4-4",
+              "column": 3,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 2451,
+              "candidatePixels": 2212,
+              "overlapPixels": 1780,
+              "missingPixels": 671,
+              "excessPixels": 432,
+              "localIoU": 0.6174124176205341,
+              "residualShare": 0.07487102905240293
+            },
+            {
+              "id": "rear:cell-4-5",
+              "column": 4,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-4-6",
+              "column": 5,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-5-1",
+              "column": 0,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-5-2",
+              "column": 1,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 320,
+              "candidatePixels": 326,
+              "overlapPixels": 220,
+              "missingPixels": 100,
+              "excessPixels": 106,
+              "localIoU": 0.5164319248826291,
+              "residualShare": 0.013983165897366277
+            },
+            {
+              "id": "rear:cell-5-3",
+              "column": 2,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 952,
+              "candidatePixels": 1594,
+              "overlapPixels": 708,
+              "missingPixels": 244,
+              "excessPixels": 886,
+              "localIoU": 0.3852013057671382,
+              "residualShare": 0.07670377409720337
+            },
+            {
+              "id": "rear:cell-5-4",
+              "column": 3,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 812,
+              "candidatePixels": 1218,
+              "overlapPixels": 407,
+              "missingPixels": 405,
+              "excessPixels": 811,
+              "localIoU": 0.25077017868145407,
+              "residualShare": 0.08254140646212327
+            },
+            {
+              "id": "rear:cell-5-5",
+              "column": 4,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-5-6",
+              "column": 5,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-6-1",
+              "column": 0,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "rear:cell-6-2",
+              "column": 1,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 205,
+              "candidatePixels": 407,
+              "overlapPixels": 69,
+              "missingPixels": 136,
+              "excessPixels": 338,
+              "localIoU": 0.1270718232044199,
+              "residualShare": 0.03217485745316318
+            },
+            {
+              "id": "rear:cell-6-3",
+              "column": 2,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 641,
+              "candidatePixels": 760,
+              "overlapPixels": 510,
+              "missingPixels": 131,
+              "excessPixels": 250,
+              "localIoU": 0.5723905723905723,
+              "residualShare": 0.02586206896551724
+            },
+            {
+              "id": "rear:cell-6-4",
+              "column": 3,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 763,
+              "candidatePixels": 982,
+              "overlapPixels": 307,
+              "missingPixels": 456,
+              "excessPixels": 675,
+              "localIoU": 0.21349095966620307,
+              "residualShare": 0.07677165354330709
+            },
+            {
+              "id": "rear:cell-6-5",
+              "column": 4,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 241,
+              "candidatePixels": 366,
+              "overlapPixels": 196,
+              "missingPixels": 45,
+              "excessPixels": 170,
+              "localIoU": 0.4768856447688564,
+              "residualShare": 0.014594080912299755
+            },
+            {
+              "id": "rear:cell-6-6",
+              "column": 5,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            }
+          ],
+          "components": [
+            {
+              "kind": "excess",
+              "pixels": 2229,
+              "fractionOfViewResidual": 0.15130328536519141,
+              "normalizedBounds": {
+                "x": 0.291015625,
+                "y": 0.046875,
+                "width": 0.201171875,
+                "height": 0.58984375
+              },
+              "normalizedCentroid": {
+                "x": 0.3477267868158367,
+                "y": 0.25683549938313144
+              },
+              "id": "rear:excess-1"
+            },
+            {
+              "kind": "missing",
+              "pixels": 1395,
+              "fractionOfViewResidual": 0.09469182731468911,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.046875,
+                "width": 0.16796875,
+                "height": 0.54296875
+              },
+              "normalizedCentroid": {
+                "x": 0.6163705477150537,
+                "y": 0.2547365031362007
+              },
+              "id": "rear:missing-1"
+            },
+            {
+              "kind": "excess",
+              "pixels": 1373,
+              "fractionOfViewResidual": 0.09319847950040727,
+              "normalizedBounds": {
+                "x": 0.3125,
+                "y": 0.49609375,
+                "width": 0.263671875,
+                "height": 0.2890625
+              },
+              "normalizedCentroid": {
+                "x": 0.4296782535961398,
+                "y": 0.7052317575564457
+              },
+              "id": "rear:excess-2"
+            },
+            {
+              "kind": "excess",
+              "pixels": 561,
+              "fractionOfViewResidual": 0.03808036926418681,
+              "normalizedBounds": {
+                "x": 0.2734375,
+                "y": 0.80859375,
+                "width": 0.15234375,
+                "height": 0.12890625
+              },
+              "normalizedCentroid": {
+                "x": 0.32736777239304815,
+                "y": 0.9005159592245989
+              },
+              "id": "rear:excess-3"
+            },
+            {
+              "kind": "missing",
+              "pixels": 477,
+              "fractionOfViewResidual": 0.032378495791474345,
+              "normalizedBounds": {
+                "x": 0.48046875,
+                "y": 0.70703125,
+                "width": 0.146484375,
+                "height": 0.17578125
+              },
+              "normalizedCentroid": {
+                "x": 0.5738072425314465,
+                "y": 0.8510834316037735
+              },
+              "id": "rear:missing-2"
+            },
+            {
+              "kind": "excess",
+              "pixels": 476,
+              "fractionOfViewResidual": 0.03231061634537062,
+              "normalizedBounds": {
+                "x": 0.626953125,
+                "y": 0.62109375,
+                "width": 0.087890625,
+                "height": 0.29296875
+              },
+              "normalizedCentroid": {
+                "x": 0.6549944196428571,
+                "y": 0.8116547400210085
+              },
+              "id": "rear:excess-4"
+            },
+            {
+              "kind": "excess",
+              "pixels": 407,
+              "fractionOfViewResidual": 0.027626934564213956,
+              "normalizedBounds": {
+                "x": 0.478515625,
+                "y": 0.875,
+                "width": 0.1640625,
+                "height": 0.0390625
+              },
+              "normalizedCentroid": {
+                "x": 0.5685537277334153,
+                "y": 0.8980200015356266
+              },
+              "id": "rear:excess-5"
+            },
+            {
+              "kind": "excess",
+              "pixels": 394,
+              "fractionOfViewResidual": 0.0267445017648656,
+              "normalizedBounds": {
+                "x": 0.576171875,
+                "y": 0.51171875,
+                "width": 0.060546875,
+                "height": 0.328125
+              },
+              "normalizedCentroid": {
+                "x": 0.6038725412436549,
+                "y": 0.670605964467005
+              },
+              "id": "rear:excess-6"
+            },
+            {
+              "kind": "missing",
+              "pixels": 242,
+              "fractionOfViewResidual": 0.01642682595710019,
+              "normalizedBounds": {
+                "x": 0.294921875,
+                "y": 0.8125,
+                "width": 0.111328125,
+                "height": 0.0703125
+              },
+              "normalizedCentroid": {
+                "x": 0.329610020661157,
+                "y": 0.8654442148760331
+              },
+              "id": "rear:missing-3"
+            },
+            {
+              "kind": "missing",
+              "pixels": 233,
+              "fractionOfViewResidual": 0.01581591094216671,
+              "normalizedBounds": {
+                "x": 0.62109375,
+                "y": 0.62890625,
+                "width": 0.013671875,
+                "height": 0.2265625
+              },
+              "normalizedCentroid": {
+                "x": 0.6288349986587983,
+                "y": 0.7615259522532188
+              },
+              "id": "rear:missing-4"
+            },
+            {
+              "kind": "excess",
+              "pixels": 169,
+              "fractionOfViewResidual": 0.011471626391528645,
+              "normalizedBounds": {
+                "x": 0.6171875,
+                "y": 0.90625,
+                "width": 0.07421875,
+                "height": 0.03125
+              },
+              "normalizedCentroid": {
+                "x": 0.6488593287721893,
+                "y": 0.9222332655325444
+              },
+              "id": "rear:excess-7"
+            },
+            {
+              "kind": "excess",
+              "pixels": 154,
+              "fractionOfViewResidual": 0.010453434699972848,
+              "normalizedBounds": {
+                "x": 0.37890625,
+                "y": 0.1796875,
+                "width": 0.056640625,
+                "height": 0.11328125
+              },
+              "normalizedCentroid": {
+                "x": 0.4083806818181818,
+                "y": 0.2411728896103896
+              },
+              "id": "rear:excess-8"
+            },
+            {
+              "kind": "excess",
+              "pixels": 93,
+              "fractionOfViewResidual": 0.006312788487645941,
+              "normalizedBounds": {
+                "x": 0.291015625,
+                "y": 0.671875,
+                "width": 0.01171875,
+                "height": 0.1328125
+              },
+              "normalizedCentroid": {
+                "x": 0.29690650201612906,
+                "y": 0.7435945900537635
+              },
+              "id": "rear:excess-9"
+            },
+            {
+              "kind": "missing",
+              "pixels": 88,
+              "fractionOfViewResidual": 0.005973391257127342,
+              "normalizedBounds": {
+                "x": 0.27734375,
+                "y": 0.6640625,
+                "width": 0.01171875,
+                "height": 0.140625
+              },
+              "normalizedCentroid": {
+                "x": 0.28258167613636365,
+                "y": 0.740234375
+              },
+              "id": "rear:missing-5"
+            },
+            {
+              "kind": "excess",
+              "pixels": 81,
+              "fractionOfViewResidual": 0.005498235134401303,
+              "normalizedBounds": {
+                "x": 0.36328125,
+                "y": 0.15625,
+                "width": 0.05078125,
+                "height": 0.1015625
+              },
+              "normalizedCentroid": {
+                "x": 0.39090229552469136,
+                "y": 0.20083429783950618
+              },
+              "id": "rear:excess-10"
+            },
+            {
+              "kind": "missing",
+              "pixels": 80,
+              "fractionOfViewResidual": 0.005430355688297583,
+              "normalizedBounds": {
+                "x": 0.337890625,
+                "y": 0.578125,
+                "width": 0.048828125,
+                "height": 0.11328125
+              },
+              "normalizedCentroid": {
+                "x": 0.3610107421875,
+                "y": 0.641162109375
+              },
+              "id": "rear:missing-6"
+            },
+            {
+              "kind": "excess",
+              "pixels": 78,
+              "fractionOfViewResidual": 0.005294596796090144,
+              "normalizedBounds": {
+                "x": 0.40625,
+                "y": 0.578125,
+                "width": 0.044921875,
+                "height": 0.05078125
+              },
+              "normalizedCentroid": {
+                "x": 0.4274338942307692,
+                "y": 0.6037159455128205
+              },
+              "id": "rear:excess-11"
+            },
+            {
+              "kind": "missing",
+              "pixels": 67,
+              "fractionOfViewResidual": 0.004547922888949226,
+              "normalizedBounds": {
+                "x": 0.3203125,
+                "y": 0.43359375,
+                "width": 0.021484375,
+                "height": 0.1328125
+              },
+              "normalizedCentroid": {
+                "x": 0.32980118936567165,
+                "y": 0.5013118003731343
+              },
+              "id": "rear:missing-7"
+            }
+          ],
+          "worstMissingCellId": "rear:cell-2-4",
+          "worstExcessCellId": "rear:cell-2-3"
+        },
+        {
+          "id": "left",
+          "referencePixels": 15926,
+          "candidatePixels": 20057,
+          "overlapPixels": 11909,
+          "unionPixels": 24074,
+          "missingPixels": 4017,
+          "excessPixels": 8148,
+          "silhouetteIoU": 0.4946830605632633,
+          "referenceRecall": 0.7477709406002763,
+          "candidatePrecision": 0.5937577902976517,
+          "missingFraction": 0.25222905939972373,
+          "excessFraction": 0.4062422097023483,
+          "cells": [
+            {
+              "id": "left:cell-1-1",
+              "column": 0,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-1-2",
+              "column": 1,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-1-3",
+              "column": 2,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 843,
+              "candidatePixels": 522,
+              "overlapPixels": 439,
+              "missingPixels": 404,
+              "excessPixels": 83,
+              "localIoU": 0.4740820734341253,
+              "residualShare": 0.04003288121660501
+            },
+            {
+              "id": "left:cell-1-4",
+              "column": 3,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 617,
+              "candidatePixels": 1579,
+              "overlapPixels": 437,
+              "missingPixels": 180,
+              "excessPixels": 1142,
+              "localIoU": 0.24843661171119955,
+              "residualShare": 0.10867242087957255
+            },
+            {
+              "id": "left:cell-1-5",
+              "column": 4,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-1-6",
+              "column": 5,
+              "row": 0,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-2-1",
+              "column": 0,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-2-2",
+              "column": 1,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-2-3",
+              "column": 2,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 1828,
+              "candidatePixels": 912,
+              "overlapPixels": 833,
+              "missingPixels": 995,
+              "excessPixels": 79,
+              "localIoU": 0.4368117461982171,
+              "residualShare": 0.08828606658446363
+            },
+            {
+              "id": "left:cell-2-4",
+              "column": 3,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 1864,
+              "candidatePixels": 3124,
+              "overlapPixels": 1679,
+              "missingPixels": 185,
+              "excessPixels": 1445,
+              "localIoU": 0.5074040495618012,
+              "residualShare": 0.13399095766543362
+            },
+            {
+              "id": "left:cell-2-5",
+              "column": 4,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.1640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 131,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 131,
+              "localIoU": 0,
+              "residualShare": 0.01076859843814221
+            },
+            {
+              "id": "left:cell-2-6",
+              "column": 5,
+              "row": 1,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.1640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-3-1",
+              "column": 0,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-3-2",
+              "column": 1,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-3-3",
+              "column": 2,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 1837,
+              "candidatePixels": 1546,
+              "overlapPixels": 1538,
+              "missingPixels": 299,
+              "excessPixels": 8,
+              "localIoU": 0.8336043360433605,
+              "residualShare": 0.02523633374434854
+            },
+            {
+              "id": "left:cell-3-4",
+              "column": 3,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 2415,
+              "candidatePixels": 3643,
+              "overlapPixels": 2408,
+              "missingPixels": 7,
+              "excessPixels": 1235,
+              "localIoU": 0.6597260273972603,
+              "residualShare": 0.10209617755856967
+            },
+            {
+              "id": "left:cell-3-5",
+              "column": 4,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.33203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 231,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 231,
+              "localIoU": 0,
+              "residualShare": 0.01898890258939581
+            },
+            {
+              "id": "left:cell-3-6",
+              "column": 5,
+              "row": 2,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.33203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-4-1",
+              "column": 0,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-4-2",
+              "column": 1,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-4-3",
+              "column": 2,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 1008,
+              "candidatePixels": 1006,
+              "overlapPixels": 782,
+              "missingPixels": 226,
+              "excessPixels": 224,
+              "localIoU": 0.6347402597402597,
+              "residualShare": 0.036991368680641186
+            },
+            {
+              "id": "left:cell-4-4",
+              "column": 3,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 2409,
+              "candidatePixels": 3041,
+              "overlapPixels": 2061,
+              "missingPixels": 348,
+              "excessPixels": 980,
+              "localIoU": 0.6081439952788433,
+              "residualShare": 0.10916563912864775
+            },
+            {
+              "id": "left:cell-4-5",
+              "column": 4,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.5,
+                "width": 0.166015625,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 29,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 29,
+              "localIoU": 0,
+              "residualShare": 0.002383888203863543
+            },
+            {
+              "id": "left:cell-4-6",
+              "column": 5,
+              "row": 3,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.5,
+                "width": 0.16796875,
+                "height": 0.1640625
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-5-1",
+              "column": 0,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-5-2",
+              "column": 1,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-5-3",
+              "column": 2,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 672,
+              "candidatePixels": 594,
+              "overlapPixels": 172,
+              "missingPixels": 500,
+              "excessPixels": 422,
+              "localIoU": 0.15722120658135283,
+              "residualShare": 0.07579120427455815
+            },
+            {
+              "id": "left:cell-5-4",
+              "column": 3,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 961,
+              "candidatePixels": 1773,
+              "overlapPixels": 696,
+              "missingPixels": 265,
+              "excessPixels": 1077,
+              "localIoU": 0.34151128557409227,
+              "residualShare": 0.11031648170982326
+            },
+            {
+              "id": "left:cell-5-5",
+              "column": 4,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.6640625,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 51,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 51,
+              "excessPixels": 0,
+              "localIoU": 0,
+              "residualShare": 0.004192355117139334
+            },
+            {
+              "id": "left:cell-5-6",
+              "column": 5,
+              "row": 4,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.6640625,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-6-1",
+              "column": 0,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            },
+            {
+              "id": "left:cell-6-2",
+              "column": 1,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.166015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 5,
+              "candidatePixels": 65,
+              "overlapPixels": 5,
+              "missingPixels": 0,
+              "excessPixels": 60,
+              "localIoU": 0.07692307692307693,
+              "residualShare": 0.004932182490752158
+            },
+            {
+              "id": "left:cell-6-3",
+              "column": 2,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.33203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 772,
+              "candidatePixels": 967,
+              "overlapPixels": 396,
+              "missingPixels": 376,
+              "excessPixels": 571,
+              "localIoU": 0.29486224869694716,
+              "residualShare": 0.07784628031237156
+            },
+            {
+              "id": "left:cell-6-4",
+              "column": 3,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.5,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 643,
+              "candidatePixels": 796,
+              "overlapPixels": 463,
+              "missingPixels": 180,
+              "excessPixels": 333,
+              "localIoU": 0.47438524590163933,
+              "residualShare": 0.04217016029593095
+            },
+            {
+              "id": "left:cell-6-5",
+              "column": 4,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.666015625,
+                "y": 0.83203125,
+                "width": 0.166015625,
+                "height": 0.16796875
+              },
+              "referencePixels": 1,
+              "candidatePixels": 98,
+              "overlapPixels": 0,
+              "missingPixels": 1,
+              "excessPixels": 98,
+              "localIoU": 0,
+              "residualShare": 0.00813810110974106
+            },
+            {
+              "id": "left:cell-6-6",
+              "column": 5,
+              "row": 5,
+              "normalizedBounds": {
+                "x": 0.83203125,
+                "y": 0.83203125,
+                "width": 0.16796875,
+                "height": 0.16796875
+              },
+              "referencePixels": 0,
+              "candidatePixels": 0,
+              "overlapPixels": 0,
+              "missingPixels": 0,
+              "excessPixels": 0,
+              "localIoU": 1,
+              "residualShare": 0
+            }
+          ],
+          "components": [
+            {
+              "kind": "excess",
+              "pixels": 4140,
+              "fractionOfViewResidual": 0.3403205918618989,
+              "normalizedBounds": {
+                "x": 0.51953125,
+                "y": 0.046875,
+                "width": 0.158203125,
+                "height": 0.640625
+              },
+              "normalizedCentroid": {
+                "x": 0.6308947576992754,
+                "y": 0.30122943085748793
+              },
+              "id": "left:excess-1"
+            },
+            {
+              "kind": "missing",
+              "pixels": 1803,
+              "fractionOfViewResidual": 0.14821208384710235,
+              "normalizedBounds": {
+                "x": 0.408203125,
+                "y": 0.046875,
+                "width": 0.109375,
+                "height": 0.5078125
+              },
+              "normalizedCentroid": {
+                "x": 0.43929984314337217,
+                "y": 0.2422015824320577
+              },
+              "id": "left:missing-1"
+            },
+            {
+              "kind": "excess",
+              "pixels": 1306,
+              "fractionOfViewResidual": 0.10735717221537197,
+              "normalizedBounds": {
+                "x": 0.46875,
+                "y": 0.59765625,
+                "width": 0.171875,
+                "height": 0.26953125
+              },
+              "normalizedCentroid": {
+                "x": 0.5527313839969372,
+                "y": 0.7369532446401225
+              },
+              "id": "left:excess-2"
+            },
+            {
+              "kind": "excess",
+              "pixels": 385,
+              "fractionOfViewResidual": 0.03164817098232635,
+              "normalizedBounds": {
+                "x": 0.44921875,
+                "y": 0.8828125,
+                "width": 0.1796875,
+                "height": 0.0546875
+              },
+              "normalizedCentroid": {
+                "x": 0.5179104099025974,
+                "y": 0.9108715503246754
+              },
+              "id": "left:excess-3"
+            },
+            {
+              "kind": "excess",
+              "pixels": 303,
+              "fractionOfViewResidual": 0.024907521578298397,
+              "normalizedBounds": {
+                "x": 0.3203125,
+                "y": 0.828125,
+                "width": 0.134765625,
+                "height": 0.109375
+              },
+              "normalizedCentroid": {
+                "x": 0.3740878970709571,
+                "y": 0.8909021761551155
+              },
+              "id": "left:excess-4"
+            },
+            {
+              "kind": "missing",
+              "pixels": 294,
+              "fractionOfViewResidual": 0.024167694204685574,
+              "normalizedBounds": {
+                "x": 0.4140625,
+                "y": 0.65234375,
+                "width": 0.0546875,
+                "height": 0.140625
+              },
+              "normalizedCentroid": {
+                "x": 0.4498100021258503,
+                "y": 0.7331659226190477
+              },
+              "id": "left:missing-2"
+            },
+            {
+              "kind": "missing",
+              "pixels": 291,
+              "fractionOfViewResidual": 0.023921085080147966,
+              "normalizedBounds": {
+                "x": 0.404296875,
+                "y": 0.796875,
+                "width": 0.07421875,
+                "height": 0.0859375
+              },
+              "normalizedCentroid": {
+                "x": 0.44253718320446733,
+                "y": 0.8433674291237113
+              },
+              "id": "left:missing-3"
+            },
+            {
+              "kind": "excess",
+              "pixels": 241,
+              "fractionOfViewResidual": 0.019810933004521167,
+              "normalizedBounds": {
+                "x": 0.646484375,
+                "y": 0.84375,
+                "width": 0.033203125,
+                "height": 0.09375
+              },
+              "normalizedCentroid": {
+                "x": 0.664066552126556,
+                "y": 0.901103799273859
+              },
+              "id": "left:excess-5"
+            },
+            {
+              "kind": "missing",
+              "pixels": 171,
+              "fractionOfViewResidual": 0.01405672009864365,
+              "normalizedBounds": {
+                "x": 0.4921875,
+                "y": 0.84765625,
+                "width": 0.162109375,
+                "height": 0.03515625
+              },
+              "normalizedCentroid": {
+                "x": 0.5797297605994152,
+                "y": 0.8756053545321637
+              },
+              "id": "left:missing-4"
+            },
+            {
+              "kind": "excess",
+              "pixels": 159,
+              "fractionOfViewResidual": 0.013070283600493218,
+              "normalizedBounds": {
+                "x": 0.4140625,
+                "y": 0.5546875,
+                "width": 0.029296875,
+                "height": 0.203125
+              },
+              "normalizedCentroid": {
+                "x": 0.4307254815251572,
+                "y": 0.6602176690251572
+              },
+              "id": "left:excess-6"
+            },
+            {
+              "kind": "missing",
+              "pixels": 122,
+              "fractionOfViewResidual": 0.010028771064529388,
+              "normalizedBounds": {
+                "x": 0.3828125,
+                "y": 0.90234375,
+                "width": 0.064453125,
+                "height": 0.0390625
+              },
+              "normalizedCentroid": {
+                "x": 0.41710425204918034,
+                "y": 0.9238601434426229
+              },
+              "id": "left:missing-5"
+            },
+            {
+              "kind": "excess",
+              "pixels": 118,
+              "fractionOfViewResidual": 0.009699958898479244,
+              "normalizedBounds": {
+                "x": 0.64453125,
+                "y": 0.71484375,
+                "width": 0.015625,
+                "height": 0.12890625
+              },
+              "normalizedCentroid": {
+                "x": 0.6519465042372882,
+                "y": 0.783203125
+              },
+              "id": "left:excess-7"
+            },
+            {
+              "kind": "missing",
+              "pixels": 118,
+              "fractionOfViewResidual": 0.009699958898479244,
+              "normalizedBounds": {
+                "x": 0.658203125,
+                "y": 0.703125,
+                "width": 0.013671875,
+                "height": 0.13671875
+              },
+              "normalizedCentroid": {
+                "x": 0.6655521716101694,
+                "y": 0.7777078919491526
+              },
+              "id": "left:missing-6"
+            },
+            {
+              "kind": "missing",
+              "pixels": 100,
+              "fractionOfViewResidual": 0.008220304151253596,
+              "normalizedBounds": {
+                "x": 0.443359375,
+                "y": 0.5,
+                "width": 0.015625,
+                "height": 0.125
+              },
+              "normalizedCentroid": {
+                "x": 0.4504296875,
+                "y": 0.5678125
+              },
+              "id": "left:missing-7"
+            },
+            {
+              "kind": "missing",
+              "pixels": 96,
+              "fractionOfViewResidual": 0.007891491985203452,
+              "normalizedBounds": {
+                "x": 0.388671875,
+                "y": 0.76171875,
+                "width": 0.0234375,
+                "height": 0.0703125
+              },
+              "normalizedCentroid": {
+                "x": 0.39947509765625,
+                "y": 0.7931722005208334
+              },
+              "id": "left:missing-8"
+            }
+          ],
+          "worstMissingCellId": "left:cell-2-3",
+          "worstExcessCellId": "left:cell-2-4"
+        }
+      ],
+      "minimumReferenceRecall": 0.7419464225161072,
+      "minimumCandidatePrecision": 0.5616568340278064,
+      "maximumMissingFraction": 0.25805357748389285,
+      "maximumExcessFraction": 0.4383431659721936,
+      "worstRecallViewId": "front",
+      "worstPrecisionViewId": "right",
+      "limitation": "Residual cells and connected components localize 2D disagreement under locked framing; they do not identify depth, hidden geometry, or a unique 3D repair without calibrated multi-view correspondence."
+    },
     "semanticAttribution": {
       "schema": "morphloom.semantic-silhouette-attribution/0.1",
       "groups": [
@@ -7022,13 +10670,16 @@
           "dimension-fidelity": 0.9584803052879252,
           "silhouette-whole": 0.5967327405394227,
           "silhouette-primary": 0.6740996372002478,
-          "silhouette-thin": 0.7100422942531563
+          "silhouette-thin": 0.7100422942531563,
+          "silhouette-recall": 0.7419464225161072,
+          "silhouette-precision": 0.5616568340278064
         },
         "blockingGateIds": [
           "geometry-rms",
           "geometry-p95",
           "geometry-coverage",
-          "silhouette-whole"
+          "silhouette-whole",
+          "silhouette-precision"
         ]
       },
       "selected": {
@@ -7039,13 +10690,16 @@
           "dimension-fidelity": 0.9584803052879252,
           "silhouette-whole": 0.5967327405394227,
           "silhouette-primary": 0.6740996372002478,
-          "silhouette-thin": 0.7100422942531563
+          "silhouette-thin": 0.7100422942531563,
+          "silhouette-recall": 0.7419464225161072,
+          "silhouette-precision": 0.5616568340278064
         },
         "blockingGateIds": [
           "geometry-rms",
           "geometry-p95",
           "geometry-coverage",
-          "silhouette-whole"
+          "silhouette-whole",
+          "silhouette-precision"
         ]
       },
       "trials": [
@@ -7103,13 +10757,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.67436510043359,
-              "silhouette-thin": 0.7100649400578256
+              "silhouette-thin": 0.7100649400578256,
+              "silhouette-recall": 0.7419888097660223,
+              "silhouette-precision": 0.5616929994637185
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7173,13 +10830,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6746748075391559,
-              "silhouette-thin": 0.7101093778897285
+              "silhouette-thin": 0.7101093778897285,
+              "silhouette-recall": 0.7419888097660223,
+              "silhouette-precision": 0.5617240668179005
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7244,13 +10904,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.674940270772498,
-              "silhouette-thin": 0.7101538019950172
+              "silhouette-thin": 0.7101538019950172,
+              "silhouette-recall": 0.7421583587656833,
+              "silhouette-precision": 0.5617551239226359
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7317,13 +10980,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6752057340058402,
-              "silhouette-thin": 0.7102103667998382
+              "silhouette-thin": 0.7102103667998382,
+              "silhouette-recall": 0.7422007460155985,
+              "silhouette-precision": 0.5618454687886534
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7390,13 +11056,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6756039288558535,
-              "silhouette-thin": 0.7102660668540859
+              "silhouette-thin": 0.7102660668540859,
+              "silhouette-recall": 0.742285520515429,
+              "silhouette-precision": 0.5618945545982934
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7463,13 +11132,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6739669055835766,
-              "silhouette-thin": 0.7100309700478122
+              "silhouette-thin": 0.7100309700478122,
+              "silhouette-recall": 0.741904035266192,
+              "silhouette-precision": 0.5616387490717056
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7532,13 +11204,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6738341739669056,
-              "silhouette-thin": 0.7100309700478122
+              "silhouette-thin": 0.7100309700478122,
+              "silhouette-recall": 0.7418616480162767,
+              "silhouette-precision": 0.5616387490717056
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7601,13 +11276,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6736129546057871,
-              "silhouette-thin": 0.7100196449736581
+              "silhouette-thin": 0.7100196449736581,
+              "silhouette-recall": 0.7418616480162767,
+              "silhouette-precision": 0.5616206626232619
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7670,13 +11348,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6735687107335634,
-              "silhouette-thin": 0.7100091625700814
+              "silhouette-thin": 0.7100091625700814,
+              "silhouette-recall": 0.7417768735164463,
+              "silhouette-precision": 0.5616438356164384
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": true,
@@ -7736,13 +11417,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6733917352446687,
-              "silhouette-thin": 0.7099638501881009
+              "silhouette-thin": 0.7099638501881009,
+              "silhouette-recall": 0.7416920990166158,
+              "silhouette-precision": 0.5615714757345659
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7790,13 +11474,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.597609325995621,
               "silhouette-primary": 0.6742343777659763,
-              "silhouette-thin": 0.7114925343748536
+              "silhouette-thin": 0.7114925343748536,
+              "silhouette-recall": 0.7410562902678874,
+              "silhouette-precision": 0.5627535392002649
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7846,13 +11533,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5979161733364906,
               "silhouette-primary": 0.6742498008320793,
-              "silhouette-thin": 0.7115469046382813
+              "silhouette-thin": 0.7115469046382813,
+              "silhouette-recall": 0.7406324177687351,
+              "silhouette-precision": 0.5631570234252131
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7902,13 +11592,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5981106372897418,
               "silhouette-primary": 0.6744752457709681,
-              "silhouette-thin": 0.7116504060333281
+              "silhouette-thin": 0.7116504060333281,
+              "silhouette-recall": 0.7399542217700915,
+              "silhouette-precision": 0.563089915548932
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -7957,13 +11650,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.598323012651477,
               "silhouette-primary": 0.674757496567303,
-              "silhouette-thin": 0.7116389740271795
+              "silhouette-thin": 0.7116389740271795,
+              "silhouette-recall": 0.7402509325194981,
+              "silhouette-precision": 0.5630617570310235
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8012,18 +11708,22 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5990090197009257,
               "silhouette-primary": 0.6748637511630998,
-              "silhouette-thin": 0.7125163622792227
+              "silhouette-thin": 0.7125163622792227,
+              "silhouette-recall": 0.7396151237707698,
+              "silhouette-precision": 0.5632961287913365
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
           "blockers": [
             "geometry-coverage regressed by 0.0073",
+            "silhouette-recall regressed by 0.0023",
             "geometry-coverage target regressed by 0.0073"
           ]
         },
@@ -8067,13 +11767,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5962923603731255,
               "silhouette-primary": 0.6739351585651732,
-              "silhouette-thin": 0.7095117347721586
+              "silhouette-thin": 0.7095117347721586,
+              "silhouette-recall": 0.740971515768057,
+              "silhouette-precision": 0.5614404157901249
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8121,13 +11824,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5960647806719962,
               "silhouette-primary": 0.6739476476830563,
-              "silhouette-thin": 0.7093511471291144
+              "silhouette-thin": 0.7093511471291144,
+              "silhouette-recall": 0.7425398440149203,
+              "silhouette-precision": 0.5607568901686548
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8177,13 +11883,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5958675980782268,
               "silhouette-primary": 0.6737688975333745,
-              "silhouette-thin": 0.7101550244862673
+              "silhouette-thin": 0.7101550244862673,
+              "silhouette-recall": 0.743048491013903,
+              "silhouette-precision": 0.5610338299448514
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8233,13 +11942,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5956638289097711,
               "silhouette-primary": 0.6736488576605241,
-              "silhouette-thin": 0.7102976624588839
+              "silhouette-thin": 0.7102976624588839,
+              "silhouette-recall": 0.7425822312648356,
+              "silhouette-precision": 0.5608110887179698
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8289,13 +12001,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5949173480792987,
               "silhouette-primary": 0.673500950024303,
-              "silhouette-thin": 0.7103986816566809
+              "silhouette-thin": 0.7103986816566809,
+              "silhouette-recall": 0.7413953882672092,
+              "silhouette-precision": 0.5607288281989059
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8346,13 +12061,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8401,13 +12119,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966798605777751,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099980309513123
+              "silhouette-thin": 0.7099980309513123,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615873277782362
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8457,13 +12178,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966446124763705,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099454047276251
+              "silhouette-thin": 0.7099454047276251,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615409998350107
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8513,13 +12237,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966446124763705,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099475131691095
+              "silhouette-thin": 0.7099475131691095,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615409998350107
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8569,13 +12296,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966093685391931,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7098970034930064
+              "silhouette-thin": 0.7098970034930064,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5614946795347686
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8625,13 +12355,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": true,
@@ -8677,13 +12410,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8734,13 +12470,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.596767999054625,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100936731761485
+              "silhouette-thin": 0.7100936731761485,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617031810867682
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8791,13 +12530,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967856298747342,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7101187330556642
+              "silhouette-thin": 0.7101187330556642,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617263574847334
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8847,13 +12589,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967856298747342,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7101187330556642
+              "silhouette-thin": 0.7101187330556642,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617263574847334
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8902,13 +12647,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5972267392011353,
               "silhouette-primary": 0.6741304540224798,
-              "silhouette-thin": 0.7108893319982279
+              "silhouette-thin": 0.7108893319982279,
+              "silhouette-recall": 0.741353001017294,
+              "silhouette-precision": 0.5621228403736463
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -8958,13 +12706,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5973207948899929,
               "silhouette-primary": 0.6742045404257202,
-              "silhouette-thin": 0.71122784152021
+              "silhouette-thin": 0.71122784152021,
+              "silhouette-recall": 0.7418192607663615,
+              "silhouette-precision": 0.5623114123920142
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9014,13 +12765,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5975681912312881,
               "silhouette-primary": 0.6742199601681788,
-              "silhouette-thin": 0.7113340326695501
+              "silhouette-thin": 0.7113340326695501,
+              "silhouette-recall": 0.7405052560189895,
+              "silhouette-precision": 0.5627017630990812
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9070,13 +12824,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5977215564432609,
               "silhouette-primary": 0.6742498008320793,
-              "silhouette-thin": 0.7115858001159286
+              "silhouette-thin": 0.7115858001159286,
+              "silhouette-recall": 0.7406324177687351,
+              "silhouette-precision": 0.563260743562143
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9125,13 +12882,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5977215564432609,
               "silhouette-primary": 0.6742796441375647,
-              "silhouette-thin": 0.7113815321887118
+              "silhouette-thin": 0.7113815321887118,
+              "silhouette-recall": 0.7409291285181417,
+              "silhouette-precision": 0.5629007570429818
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9181,13 +12941,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5965684247829426,
               "silhouette-primary": 0.6739515130065475,
-              "silhouette-thin": 0.7101723135302318
+              "silhouette-thin": 0.7101723135302318,
+              "silhouette-recall": 0.7411834520176331,
+              "silhouette-precision": 0.5619302949061662
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9237,13 +13000,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5963923004251299,
               "silhouette-primary": 0.6738765038924275,
-              "silhouette-thin": 0.709698413644367
+              "silhouette-thin": 0.709698413644367,
+              "silhouette-recall": 0.740971515768057,
+              "silhouette-precision": 0.561469327176781
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9294,13 +13060,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.596274758685834,
               "silhouette-primary": 0.673963999823095,
-              "silhouette-thin": 0.7094751422782641
+              "silhouette-thin": 0.7094751422782641,
+              "silhouette-recall": 0.7418192607663615,
+              "silhouette-precision": 0.5614150826701851
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9350,13 +13119,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5962929075292938,
               "silhouette-primary": 0.6738745909613514,
-              "silhouette-thin": 0.7098622032944228
+              "silhouette-thin": 0.7098622032944228,
+              "silhouette-recall": 0.742115971515768,
+              "silhouette-precision": 0.5615936058009229
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9405,13 +13177,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5962287535410765,
               "silhouette-primary": 0.6739774485960646,
-              "silhouette-thin": 0.7096461290058987
+              "silhouette-thin": 0.7096461290058987,
+              "silhouette-recall": 0.7423279077653442,
+              "silhouette-precision": 0.5610569206074824
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9461,13 +13236,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": true,
@@ -9513,13 +13291,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9570,13 +13351,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.596767999054625,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100936731761485
+              "silhouette-thin": 0.7100936731761485,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617031810867682
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9627,13 +13411,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967856298747342,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7101187330556642
+              "silhouette-thin": 0.7101187330556642,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617263574847334
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9683,13 +13470,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967856298747342,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7101187330556642
+              "silhouette-thin": 0.7101187330556642,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5617263574847334
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9738,13 +13528,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5967327405394227,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7100422942531563
+              "silhouette-thin": 0.7100422942531563,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5616568340278064
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9793,13 +13586,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966798605777751,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099980309513123
+              "silhouette-thin": 0.7099980309513123,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615873277782362
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9849,13 +13645,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966446124763705,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099454047276251
+              "silhouette-thin": 0.7099454047276251,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615409998350107
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9905,13 +13704,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966446124763705,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7099475131691095
+              "silhouette-thin": 0.7099475131691095,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5615409998350107
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -9961,13 +13763,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5966093685391931,
               "silhouette-primary": 0.6740996372002478,
-              "silhouette-thin": 0.7098970034930064
+              "silhouette-thin": 0.7098970034930064,
+              "silhouette-recall": 0.7419464225161072,
+              "silhouette-precision": 0.5614946795347686
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10017,13 +13822,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5962923603731255,
               "silhouette-primary": 0.6739351585651732,
-              "silhouette-thin": 0.7095117347721586
+              "silhouette-thin": 0.7095117347721586,
+              "silhouette-recall": 0.740971515768057,
+              "silhouette-precision": 0.5614404157901249
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10071,13 +13879,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5960647806719962,
               "silhouette-primary": 0.6739476476830563,
-              "silhouette-thin": 0.7093511471291144
+              "silhouette-thin": 0.7093511471291144,
+              "silhouette-recall": 0.7425398440149203,
+              "silhouette-precision": 0.5607568901686548
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10127,13 +13938,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5958675980782268,
               "silhouette-primary": 0.6737688975333745,
-              "silhouette-thin": 0.7101550244862673
+              "silhouette-thin": 0.7101550244862673,
+              "silhouette-recall": 0.743048491013903,
+              "silhouette-precision": 0.5610338299448514
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10183,13 +13997,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5956638289097711,
               "silhouette-primary": 0.6736488576605241,
-              "silhouette-thin": 0.7102976624588839
+              "silhouette-thin": 0.7102976624588839,
+              "silhouette-recall": 0.7425822312648356,
+              "silhouette-precision": 0.5608110887179698
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10239,13 +14056,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5949173480792987,
               "silhouette-primary": 0.673500950024303,
-              "silhouette-thin": 0.7103986816566809
+              "silhouette-thin": 0.7103986816566809,
+              "silhouette-recall": 0.7413953882672092,
+              "silhouette-precision": 0.5607288281989059
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10296,13 +14116,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.597609325995621,
               "silhouette-primary": 0.6742343777659763,
-              "silhouette-thin": 0.7114925343748536
+              "silhouette-thin": 0.7114925343748536,
+              "silhouette-recall": 0.7410562902678874,
+              "silhouette-precision": 0.5627535392002649
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10352,13 +14175,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5979161733364906,
               "silhouette-primary": 0.6742498008320793,
-              "silhouette-thin": 0.7115469046382813
+              "silhouette-thin": 0.7115469046382813,
+              "silhouette-recall": 0.7406324177687351,
+              "silhouette-precision": 0.5631570234252131
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10408,13 +14234,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5981106372897418,
               "silhouette-primary": 0.6744752457709681,
-              "silhouette-thin": 0.7116504060333281
+              "silhouette-thin": 0.7116504060333281,
+              "silhouette-recall": 0.7399542217700915,
+              "silhouette-precision": 0.563089915548932
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10463,13 +14292,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.598323012651477,
               "silhouette-primary": 0.674757496567303,
-              "silhouette-thin": 0.7116389740271795
+              "silhouette-thin": 0.7116389740271795,
+              "silhouette-recall": 0.7402509325194981,
+              "silhouette-precision": 0.5630617570310235
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -10518,18 +14350,22 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5990090197009257,
               "silhouette-primary": 0.6748637511630998,
-              "silhouette-thin": 0.7125163622792227
+              "silhouette-thin": 0.7125163622792227,
+              "silhouette-recall": 0.7396151237707698,
+              "silhouette-precision": 0.5632961287913365
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
           "blockers": [
             "geometry-coverage regressed by 0.0073",
+            "silhouette-recall regressed by 0.0023",
             "geometry-coverage target regressed by 0.0073"
           ]
         },
@@ -11427,13 +15263,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.591939393939394,
               "silhouette-primary": 0.6922718084279272,
-              "silhouette-thin": 0.713555682752796
+              "silhouette-thin": 0.713555682752796,
+              "silhouette-recall": 0.7294845710410308,
+              "silhouette-precision": 0.5689203691779352
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -11442,6 +15281,7 @@
             "geometry-p95 regressed by 0.0020",
             "geometry-coverage regressed by 0.0388",
             "silhouette-whole regressed by 0.0048",
+            "silhouette-recall regressed by 0.0125",
             "geometry-rms target regressed by 0.0212",
             "geometry-p95 target regressed by 0.0020",
             "geometry-coverage target regressed by 0.0388",
@@ -12342,13 +16182,16 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5933532374317682,
               "silhouette-primary": 0.6934667542402349,
-              "silhouette-thin": 0.7139957731594324
+              "silhouette-thin": 0.7139957731594324,
+              "silhouette-recall": 0.7081213970837572,
+              "silhouette-precision": 0.5697615208351015
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
@@ -12356,6 +16199,7 @@
             "geometry-rms regressed by 0.0148",
             "geometry-coverage regressed by 0.0295",
             "silhouette-whole regressed by 0.0034",
+            "silhouette-recall regressed by 0.0338",
             "geometry-rms target regressed by 0.0148",
             "geometry-coverage target regressed by 0.0295",
             "no target gate improved by at least 0.0020"
@@ -13255,19 +17099,23 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5950517318938372,
               "silhouette-primary": 0.690904114588085,
-              "silhouette-thin": 0.7137888126861391
+              "silhouette-thin": 0.7137888126861391,
+              "silhouette-recall": 0.7032892505934215,
+              "silhouette-precision": 0.5682676966999748
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
           "blockers": [
             "geometry-rms regressed by 0.0089",
             "geometry-coverage regressed by 0.0178",
+            "silhouette-recall regressed by 0.0387",
             "geometry-rms target regressed by 0.0089",
             "geometry-coverage target regressed by 0.0178",
             "no target gate improved by at least 0.0020"
@@ -14167,19 +18015,23 @@
               "dimension-fidelity": 0.9584803052879252,
               "silhouette-whole": 0.5968544279288672,
               "silhouette-primary": 0.6818202237096267,
-              "silhouette-thin": 0.7118623593148232
+              "silhouette-thin": 0.7118623593148232,
+              "silhouette-recall": 0.7209223465581553,
+              "silhouette-precision": 0.5664585934248856
             },
             "blockingGateIds": [
               "geometry-rms",
               "geometry-p95",
               "geometry-coverage",
-              "silhouette-whole"
+              "silhouette-whole",
+              "silhouette-precision"
             ]
           },
           "accepted": false,
           "blockers": [
             "geometry-rms regressed by 0.0035",
             "geometry-coverage regressed by 0.0078",
+            "silhouette-recall regressed by 0.0210",
             "geometry-rms target regressed by 0.0035",
             "geometry-coverage target regressed by 0.0078",
             "no target gate improved by at least 0.0020"
