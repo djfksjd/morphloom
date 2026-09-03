@@ -62,6 +62,17 @@ describe('reference material evidence', () => {
     });
   });
 
+  it('preserves anisotropic repeat for directional reference materials', () => {
+    const root = new THREE.Group();
+    const material = new THREE.MeshPhysicalMaterial();
+    root.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material));
+    const receipt = applyReferenceMaterialEvidence(root, fixture(), { repeat: [2, 10] });
+    expect(receipt.status).toBe('applied');
+    expect(material.map?.repeat.toArray()).toEqual([2, 10]);
+    expect(material.normalMap?.repeat.toArray()).toEqual([2, 10]);
+    expect(material.roughnessMap?.repeat.toArray()).toEqual([2, 10]);
+  });
+
   it('rejects structurally sparse photographs instead of tiling object outlines onto every part', () => {
     const derivation = fixture();
     derivation.materialSuitability = {
@@ -90,6 +101,7 @@ describe('reference material evidence', () => {
 
   it('rejects unsafe texture repeat settings', () => {
     expect(() => applyReferenceMaterialEvidence(new THREE.Group(), fixture(), { repeat: 0 })).toThrow(/repeat/);
+    expect(() => applyReferenceMaterialEvidence(new THREE.Group(), fixture(), { repeat: [2, 100] })).toThrow(/repeat/);
   });
 
   it('binds source-derived factors without changing authored PBR values', () => {

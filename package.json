@@ -30,6 +30,7 @@
     "benchmark:visual-set": "vite-node scripts/audit-visual-capture-set.ts",
     "benchmark:dominance": "vite-node scripts/production-dominance-benchmark.ts",
     "benchmark:holdout:lock": "vite-node scripts/lock-abo-holdout.ts",
+    "benchmark:holdout:nightstand": "vite-node scripts/abo-nightstand-holdout-candidate.ts",
     "benchmark:ground-truth": "vite-node scripts/ground-truth-corpus-benchmark.ts",
     "benchmark:abo-scale": "vite-node scripts/abo-multiview-scale-pilot.ts",
     "benchmark:abo-hull": "vite-node scripts/abo-visual-hull-pilot.ts",

@@ -20,6 +20,10 @@ export default defineConfig({
     // bundle separate while warning only above the known vendor envelope.
     chunkSizeWarningLimit: 800,
     rollupOptions: {
+      input: {
+        main: 'index.html',
+        holdoutReview: 'holdout-review.html',
+      },
       output: {
         manualChunks(id) {
           if (id.includes('/node_modules/three/')) return 'three';
@@ -30,7 +34,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    entries: ['index.html'],
+    entries: ['index.html', 'holdout-review.html'],
   },
   server: {
     port: 4173,

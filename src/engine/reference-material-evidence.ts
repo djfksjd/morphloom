@@ -208,7 +208,8 @@ export function applyReferenceMaterialEvidence(
   derivation: MaskedReferenceSurfaceDerivation,
   options: {
     materialFilter?: (material: THREE.MeshPhysicalMaterial, mesh: THREE.Mesh) => boolean;
-    repeat?: number;
+    /** Scalar repeat remains backward compatible; a pair preserves directional materials such as wood grain. */
+    repeat?: number | [number, number];
     /**
      * `source-colour` is reserved for admitted stationary material close-ups.
      * Object photographs should keep the default neutral modulation so baked
@@ -218,8 +219,10 @@ export function applyReferenceMaterialEvidence(
   } = {},
 ): ReferenceMaterialApplicationReceipt {
   const repeat = options.repeat ?? 3;
+  const repeatPair: [number, number] = typeof repeat === 'number' ? [repeat, repeat] : repeat;
   const albedoMode = options.albedoMode ?? 'neutral-modulation';
-  if (!Number.isFinite(repeat) || repeat < 0.25 || repeat > 64) {
+  if (!Array.isArray(repeatPair) || repeatPair.length !== 2
+    || repeatPair.some((value) => !Number.isFinite(value) || value < 0.25 || value > 64)) {
     throw new Error('Reference material repeat must be within 0.25..64.');
   }
   if (!derivation.materialSuitability.pass) {
@@ -243,7 +246,7 @@ export function applyReferenceMaterialEvidence(
   const metallicRoughness = makeTexture(
     packedMetallicRoughness(derivation), derivation.textureSize, THREE.NoColorSpace, 'metallicRoughness',
   );
-  for (const texture of [baseColor, normal, metallicRoughness]) texture.repeat.set(repeat, repeat);
+  for (const texture of [baseColor, normal, metallicRoughness]) texture.repeat.set(repeatPair[0], repeatPair[1]);
 
   const applied = new Set<string>();
   const skippedMeshesWithoutUv: string[] = [];
