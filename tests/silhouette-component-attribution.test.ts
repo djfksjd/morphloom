@@ -17,7 +17,13 @@ describe('semantic silhouette component attribution', () => {
     });
     expect(report.groups[0]!.views[0]).toMatchObject({
       baselineIoU: 2 / 3, ablatedIoU: 1, removedExcessPixels: 1, removedOverlapPixels: 0,
+      removedExcessRegion: {
+        pixels: 1,
+        normalizedBounds: { x: 0.5, y: 0, width: 0.25, height: 1 },
+        normalizedCentroid: { x: 0.625, y: 0.5 },
+      },
     });
+    expect(report.groups[0]!.views[0].removedOverlapRegion).toBeUndefined();
   });
 
   it('protects a group whose ablation removes true-positive reference coverage', () => {

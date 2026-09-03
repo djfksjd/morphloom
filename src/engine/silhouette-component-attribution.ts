@@ -22,6 +22,16 @@ export interface SilhouetteGroupViewAttribution {
   removedOverlapPixels: number;
   revealedOverlapPixels: number;
   revealedExcessPixels: number;
+  removedExcessRegion?: SilhouettePixelRegion;
+  removedOverlapRegion?: SilhouettePixelRegion;
+  revealedOverlapRegion?: SilhouettePixelRegion;
+  revealedExcessRegion?: SilhouettePixelRegion;
+}
+
+export interface SilhouettePixelRegion {
+  pixels: number;
+  normalizedBounds: { x: number; y: number; width: number; height: number };
+  normalizedCentroid: { x: number; y: number };
 }
 
 export interface SilhouetteGroupAttribution {
@@ -57,6 +67,53 @@ function iou(reference: Uint8Array, candidate: Uint8Array): number {
     union += Number(left || right);
   }
   return union === 0 ? 1 : intersection / union;
+}
+
+interface PixelRegionAccumulator {
+  pixels: number;
+  sumX: number;
+  sumY: number;
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+function emptyRegion(width: number, height: number): PixelRegionAccumulator {
+  return { pixels: 0, sumX: 0, sumY: 0, minX: width, minY: height, maxX: -1, maxY: -1 };
+}
+
+function addPixel(region: PixelRegionAccumulator, pixel: number, width: number): void {
+  const x = pixel % width;
+  const y = Math.floor(pixel / width);
+  region.pixels += 1;
+  region.sumX += x + 0.5;
+  region.sumY += y + 0.5;
+  region.minX = Math.min(region.minX, x);
+  region.minY = Math.min(region.minY, y);
+  region.maxX = Math.max(region.maxX, x);
+  region.maxY = Math.max(region.maxY, y);
+}
+
+function finishRegion(
+  region: PixelRegionAccumulator,
+  width: number,
+  height: number,
+): SilhouettePixelRegion | undefined {
+  if (region.pixels === 0) return undefined;
+  return {
+    pixels: region.pixels,
+    normalizedBounds: {
+      x: region.minX / width,
+      y: region.minY / height,
+      width: (region.maxX - region.minX + 1) / width,
+      height: (region.maxY - region.minY + 1) / height,
+    },
+    normalizedCentroid: {
+      x: region.sumX / region.pixels / width,
+      y: region.sumY / region.pixels / height,
+    },
+  };
 }
 
 /**
@@ -108,21 +165,39 @@ export function auditSemanticSilhouetteAttribution(
       let removedOverlapPixels = 0;
       let revealedOverlapPixels = 0;
       let revealedExcessPixels = 0;
+      const removedExcessRegion = emptyRegion(view.width, view.height);
+      const removedOverlapRegion = emptyRegion(view.width, view.height);
+      const revealedOverlapRegion = emptyRegion(view.width, view.height);
+      const revealedExcessRegion = emptyRegion(view.width, view.height);
       for (let pixel = 0; pixel < view.referenceMask.length; pixel += 1) {
         const reference = view.referenceMask[pixel]! !== 0;
         const candidate = view.candidateMask[pixel]! !== 0;
         const ablated = without[pixel]! !== 0;
         if (candidate && !ablated) {
-          if (reference) removedOverlapPixels += 1;
-          else removedExcessPixels += 1;
+          if (reference) {
+            removedOverlapPixels += 1;
+            addPixel(removedOverlapRegion, pixel, view.width);
+          } else {
+            removedExcessPixels += 1;
+            addPixel(removedExcessRegion, pixel, view.width);
+          }
         } else if (!candidate && ablated) {
-          if (reference) revealedOverlapPixels += 1;
-          else revealedExcessPixels += 1;
+          if (reference) {
+            revealedOverlapPixels += 1;
+            addPixel(revealedOverlapRegion, pixel, view.width);
+          } else {
+            revealedExcessPixels += 1;
+            addPixel(revealedExcessRegion, pixel, view.width);
+          }
         }
       }
       return {
         viewId: view.id, baselineIoU, ablatedIoU, deltaIoU: ablatedIoU - baselineIoU,
         removedExcessPixels, removedOverlapPixels, revealedOverlapPixels, revealedExcessPixels,
+        removedExcessRegion: finishRegion(removedExcessRegion, view.width, view.height),
+        removedOverlapRegion: finishRegion(removedOverlapRegion, view.width, view.height),
+        revealedOverlapRegion: finishRegion(revealedOverlapRegion, view.width, view.height),
+        revealedExcessRegion: finishRegion(revealedExcessRegion, view.width, view.height),
       };
     });
     const totalWeight = views.reduce((sum, view) => sum + (view.weight ?? 1), 0);

@@ -29,6 +29,7 @@ import { compareReferenceFrames, compareThinFeatureSilhouettes, type ComparisonF
 import { auditMultiviewSilhouetteFidelity } from '../src/engine/silhouette-fidelity';
 import { auditSemanticSilhouetteAttribution } from '../src/engine/silhouette-component-attribution';
 import { auditSilhouetteResidualLocalization } from '../src/engine/silhouette-residual-localization';
+import { planSilhouetteSemanticRepairs } from '../src/engine/silhouette-semantic-repair';
 import { auditRigidMultiviewSet } from '../src/engine/multiview-consistency';
 import { auditPbrReferenceEvidence } from '../src/engine/pbr-reference-audit';
 import {
@@ -639,8 +640,7 @@ const fittedAudit = auditMultiviewSilhouetteFidelity(fittedViews.map((view) => (
   id: view.id, referenceDensity: view.referenceDensity, wholeIoU: view.wholeIoU,
   primaryMassIoU: view.primaryMassIoU, thinFeatureScore: view.thinFeature.score,
 })), { wholeIoU: 0.75, primaryMassIoU: 0.7, thinFeatureScore: 0.8 });
-const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
-  cameraFit.views.map((selection, index) => {
+const semanticAttributionInputs = cameraFit.views.map((selection, index) => {
     const reference = references[index]!;
     const camera = selectedCameras[index]!;
     const candidateMask = cachedSilhouette(selectedCaptureViews[index]!.triangles, selection.candidate.azimuthDegrees,
@@ -666,8 +666,25 @@ const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
         };
       }),
     };
-  }),
+  });
+const semanticSilhouetteAttribution = auditSemanticSilhouetteAttribution(
+  semanticAttributionInputs,
   { minimumActionableDeltaIoU: 0.001 },
+);
+const fittedSilhouetteResidual = auditSilhouetteResidualLocalization(
+  semanticAttributionInputs.map(({ groups: _groups, weight: _weight, ...view }) => view),
+  { columns: 6, rows: 6, minimumComponentPixels: 64 },
+);
+const semanticRepairHints = planSilhouetteSemanticRepairs(
+  semanticSilhouetteAttribution,
+  fittedSilhouetteResidual,
+  cameraFit.views.map((selection, index) => ({
+    viewId: viewIds[index]!,
+    azimuthDegrees: selection.candidate.azimuthDegrees,
+    projection: selectedCameras[index]!.projection ?? 'orthographic',
+    absolutePoseVerified: cameraFit.poseEvidenceAudit?.absolutePoseVerified ?? false,
+    intrinsicsVerified: cameraFit.poseEvidenceAudit?.intrinsicsVerified ?? false,
+  })),
 );
 const calibration = { views: fittedViews, audit: fittedAudit, gateMargin: cameraFit.minimumGateMargin };
 const visualPlanAudit = auditVisualPlan(visualPlan);
@@ -998,6 +1015,7 @@ const report = {
     audit: deliveryCalibration.audit,
     residualLocalization: deliverySilhouetteResidual,
     semanticAttribution: semanticSilhouetteAttribution,
+    semanticRepairHints,
     limitation: 'Foreground-normalized silhouettes and candidate-scored capture-pose residuals are development diagnostics only. The source contract proves nominal 90-degree turntable steps, but not object-frame absolute pose, camera intrinsics, crop homography, or zero residual pose.',
     observedArticulation: {
       headTiltDegrees: observedHeadTiltDegrees,
