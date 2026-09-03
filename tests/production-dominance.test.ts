@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
-  auditProductionDominance,
+  auditProductionDominance as auditProductionDominanceEngine,
   PRODUCTION_BENCHMARK_DOMAINS,
   type ProductionBenchmarkDomain,
   type ProductionDominanceCase,
 } from '../src/engine/production-dominance';
 import type { SameInputVisualBenchmarkReport } from '../src/engine/visual-benchmark';
+
+const auditProductionDominance = (cases: ProductionDominanceCase[]) => auditProductionDominanceEngine(cases, {
+  developmentExposureLedgerSha256: 'c'.repeat(64), exposedCorpusCases: [],
+});
 
 function visual(
   domain: SameInputVisualBenchmarkReport['domain'],
@@ -48,13 +52,35 @@ function benchmarkCase(domain: ProductionBenchmarkDomain, index: number): Produc
     independentReferenceFingerprint: `${index + 4}`.repeat(64).slice(0, 64),
     sameInputLocked: true,
     groundTruth: {
-      schema: 'morphloom.independent-ground-truth/0.1',
+      schema: 'morphloom.independent-ground-truth/0.2',
       corpusId: 'verified-fixture-corpus',
       corpusCaseId: `${domain}-${index}`,
       manifestSha256: 'f'.repeat(64),
       lockedInputSha256: inputFingerprint,
       referenceAssetSha256: `${index + 4}`.repeat(64).slice(0, 64),
       auditPass: true,
+      selectionProtocol: 'external-hidden-set',
+      inputLockedAt: '2026-01-01T00:00:00.000Z',
+      referenceRevealedAt: '2026-01-03T00:00:00.000Z',
+      referenceHiddenUntilCandidatesSealed: true,
+      developmentExposure: 'none',
+      contaminationAuditSha256: 'c'.repeat(64),
+      candidateSeals: {
+        morphloom: {
+          schema: 'morphloom.holdout-candidate-seal/0.1',
+          engineRevision: 'morphloom-compiler/0.30.0',
+          artifactSha256: `${index + 1}`.repeat(64).slice(0, 64),
+          sealedAt: '2026-01-02T00:00:00.000Z',
+          receiptSha256: `${index + 10}`.repeat(64).slice(0, 64),
+        },
+        img2threejs: {
+          schema: 'morphloom.holdout-candidate-seal/0.1',
+          engineRevision: 'img2threejs/test',
+          artifactSha256: `${index + 7}`.repeat(64).slice(0, 64),
+          sealedAt: '2026-01-02T01:00:00.000Z',
+          receiptSha256: `${index + 13}`.repeat(64).slice(0, 64),
+        },
+      },
     },
     morphloom: {
       engineRevision: 'morphloom-compiler/0.30.0', artifactSha256: `${index + 1}`.repeat(64).slice(0, 64),
@@ -151,6 +177,38 @@ describe('all-domain production dominance gate', () => {
     expect(() => auditProductionDominance([leaked])).toThrow(/ground-truth proof/);
   });
 
+  it('rejects a tuned case or a candidate sealed after holdout reference reveal', () => {
+    const tuned = benchmarkCase('industrial-design', 0);
+    tuned.groundTruth.developmentExposure = 'tuning';
+    expect(() => auditProductionDominance([tuned])).toThrow(/ground-truth proof/);
+
+    const late = benchmarkCase('industrial-design', 0);
+    late.groundTruth.candidateSeals.morphloom.sealedAt = '2026-01-04T00:00:00.000Z';
+    expect(() => auditProductionDominance([late])).toThrow(/ground-truth proof/);
+  });
+
+  it('binds both pre-reveal candidate seals to their exact engine and artifact', () => {
+    const wrongArtifact = benchmarkCase('industrial-design', 0);
+    wrongArtifact.groundTruth.candidateSeals.img2threejs.artifactSha256 = 'f'.repeat(64);
+    expect(() => auditProductionDominance([wrongArtifact])).toThrow(/ground-truth proof/);
+
+    const wrongRevision = benchmarkCase('industrial-design', 0);
+    wrongRevision.groundTruth.candidateSeals.morphloom.engineRevision = 'morphloom-compiler/older';
+    expect(() => auditProductionDominance([wrongRevision])).toThrow(/ground-truth proof/);
+
+    const looseTimestamp = benchmarkCase('industrial-design', 0);
+    looseTimestamp.groundTruth.candidateSeals.morphloom.sealedAt = '2026-01-02';
+    expect(() => auditProductionDominance([looseTimestamp])).toThrow(/ground-truth proof/);
+  });
+
+  it('rejects a case found in the hash-bound development exposure ledger', () => {
+    const item = benchmarkCase('industrial-design', 0);
+    expect(() => auditProductionDominanceEngine([item], {
+      developmentExposureLedgerSha256: 'c'.repeat(64),
+      exposedCorpusCases: [`${item.groundTruth.corpusId}/${item.groundTruth.corpusCaseId}`],
+    })).toThrow(/ground-truth proof/);
+  });
+
   it('blocks repeated inputs and reused candidate artifacts from satisfying case volume', () => {
     const cases = [0, 1, 2].map((index) => benchmarkCase('architecture', index));
     for (const item of cases) {
@@ -158,14 +216,24 @@ describe('all-domain production dominance gate', () => {
       item.visual.lockedInputFingerprint = item.inputFingerprint;
       item.groundTruth.lockedInputSha256 = item.inputFingerprint;
       item.morphloom.artifactSha256 = 'a'.repeat(64);
+      item.groundTruth.candidateSeals.morphloom.artifactSha256 = item.morphloom.artifactSha256;
       item.morphloom.referencePbr.candidateArtifactSha256 = item.morphloom.artifactSha256;
       item.morphloom.referencePbr.receiptSha256 = 'b'.repeat(64);
+      item.groundTruth.candidateSeals.morphloom.receiptSha256 = '9'.repeat(64);
     }
     const report = auditProductionDominance(cases);
     expect(report.blockers).toEqual(expect.arrayContaining([
       expect.stringContaining('architecture: 1/3 independent locked inputs'),
       expect.stringContaining('architecture: morphloom: artifact bytes were reused across cases'),
       expect.stringContaining('architecture: morphloom: PBR receipts were reused across cases'),
+      expect.stringContaining('architecture: morphloom: holdout candidate seals were reused across cases'),
     ]));
+  });
+
+  it('rejects one seal receipt reused for both engine candidates', () => {
+    const item = benchmarkCase('industrial-design', 0);
+    item.groundTruth.candidateSeals.img2threejs.receiptSha256
+      = item.groundTruth.candidateSeals.morphloom.receiptSha256;
+    expect(() => auditProductionDominance([item])).toThrow(/reuse evidence/);
   });
 });

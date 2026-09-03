@@ -7,7 +7,7 @@
 [한국어](./README.md) · [English](./README.en.md)
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-335cff?style=flat-square)](./LICENSE)
-![Tests](https://img.shields.io/badge/tests-495%20passing-28a879?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-499%20passing-28a879?style=flat-square)
 ![Three.js](https://img.shields.io/badge/Three.js-r179-111111?style=flat-square)
 ![Benchmark](https://img.shields.io/badge/model%20gate-100%25-28a879?style=flat-square)
 
@@ -151,6 +151,8 @@ Current locked benchmark:
 - Blender isolated partial-edit and reopen receipts: **100% (5/5)**
 
 The current partial-edit suite moves one named building window, knife ornament, USB-C connector, and separate hair mesh, plus applies a bounded asphalt relief edit. Two Blender reopen cycles preserve non-target geometry, UVs, PBR material assignments, hierarchy, and the character rig/animation payload; every final GLB passes Khronos with zero errors, warnings, or infos.
+
+`quality:production` also requires three independent same-input cases per domain, automatic and balanced five-rater blind wins over img2threejs, and the relevant native reopen evidence. Inputs must be locked before both candidates are sealed and references are revealed. Cases recorded in the hash-bound development-exposure ledger cannot count as holdouts, so a tuned fan or Talon result cannot be promoted into an independence claim.
 
 The seven browser receipts cover industrial design, measured/concept architecture, an electromechanical assembly, character previs, animation/game delivery, and a 3D-print surface. One asphalt receipt is deliberately reused to evaluate separate 3D-print and surface-delivery contracts for the same artifact. Three score-59 cases are intentional evidence rejections rather than technical failures. Texture pixels, samplers, and PBR/optical semantics must survive an actual GLB reopen. Browser-versus-Node colour conversion, script ordering, and wire-curve floating-point differences are normalized deterministically. These rates describe nine locked technical contracts, not independent blind comparisons or perfect visual quality for arbitrary input.
 

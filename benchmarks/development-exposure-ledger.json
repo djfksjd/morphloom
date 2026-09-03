@@ -1,0 +1,29 @@
+{
+  "schema": "morphloom.development-exposure-ledger/0.1",
+  "entries": [
+    {
+      "corpusId": "abo-pilot",
+      "corpusCaseId": "abo-industrial-tripod-lamp",
+      "exposure": "development-and-debugging",
+      "reason": "Used while implementing and tuning the semantic ABO lamp pipeline."
+    },
+    {
+      "corpusId": "abo-pilot",
+      "corpusCaseId": "abo-industrial-floor-fan",
+      "exposure": "development-and-tuning",
+      "reason": "Ground-truth geometry and four views were repeatedly used for recovery-engine development."
+    },
+    {
+      "corpusId": "abo-pilot",
+      "corpusCaseId": "abo-surface-fringed-wool-rug",
+      "exposure": "development-and-debugging",
+      "reason": "Included in the visible pilot corpus during surface-pipeline development."
+    },
+    {
+      "corpusId": "public-demo",
+      "corpusCaseId": "talon-doppler-ruby",
+      "exposure": "development-and-tuning",
+      "reason": "Used for repeated material, edge-geometry, render, and competitor comparison work."
+    }
+  ]
+}

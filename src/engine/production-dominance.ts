@@ -33,13 +33,31 @@ export interface ProductionCandidateResult {
 }
 
 export interface IndependentGroundTruthReceipt {
-  schema: 'morphloom.independent-ground-truth/0.1';
+  schema: 'morphloom.independent-ground-truth/0.2';
   corpusId: string;
   corpusCaseId: string;
   manifestSha256: string;
   lockedInputSha256: string;
   referenceAssetSha256: string;
   auditPass: boolean;
+  selectionProtocol: 'external-hidden-set' | 'precommitted-random-sample';
+  inputLockedAt: string;
+  referenceRevealedAt: string;
+  referenceHiddenUntilCandidatesSealed: boolean;
+  developmentExposure: 'none' | 'tuning' | 'debugging' | 'unknown';
+  contaminationAuditSha256: string;
+  candidateSeals: {
+    morphloom: HoldoutCandidateSeal;
+    img2threejs: HoldoutCandidateSeal;
+  };
+}
+
+export interface HoldoutCandidateSeal {
+  schema: 'morphloom.holdout-candidate-seal/0.1';
+  engineRevision: string;
+  artifactSha256: string;
+  sealedAt: string;
+  receiptSha256: string;
 }
 
 export interface ProductionDominanceCase {
@@ -76,11 +94,22 @@ export interface ProductionDominanceReport {
   limitation: string;
 }
 
+export interface ProductionDominanceAuditOptions {
+  developmentExposureLedgerSha256: string;
+  exposedCorpusCases: string[];
+}
+
 const ID = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,95}$/;
 const FINGERPRINT = /^[a-f0-9]{8,128}$/;
 const SHA256 = /^[a-f0-9]{64}$/;
 const REVISION = /^[a-zA-Z0-9][a-zA-Z0-9+_.\/-]{0,159}$/;
 const MINIMUM_CASES_PER_DOMAIN = 3;
+
+function strictTimestamp(value: unknown): number | undefined {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) return undefined;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) && new Date(parsed).toISOString() === value ? parsed : undefined;
+}
 
 function normalizedApplication(value: string): string {
   return value.trim().toLowerCase();
@@ -119,8 +148,24 @@ function safeReferencePbr(
     && typeof receipt.pass === 'boolean';
 }
 
-function safeGroundTruth(receipt: IndependentGroundTruthReceipt, item: ProductionDominanceCase): boolean {
-  return receipt?.schema === 'morphloom.independent-ground-truth/0.1'
+function safeGroundTruth(
+  receipt: IndependentGroundTruthReceipt,
+  item: ProductionDominanceCase,
+  options: ProductionDominanceAuditOptions,
+): boolean {
+  const inputLockedAt = strictTimestamp(receipt?.inputLockedAt);
+  const referenceRevealedAt = strictTimestamp(receipt?.referenceRevealedAt);
+  const safeSeal = (seal: HoldoutCandidateSeal | undefined, candidate: ProductionCandidateResult): boolean => {
+    const sealedAt = strictTimestamp(seal?.sealedAt);
+    return seal?.schema === 'morphloom.holdout-candidate-seal/0.1'
+      && seal.engineRevision === candidate.engineRevision
+      && seal.artifactSha256 === candidate.artifactSha256
+      && SHA256.test(seal.receiptSha256)
+      && sealedAt !== undefined && inputLockedAt !== undefined && referenceRevealedAt !== undefined
+      && sealedAt > inputLockedAt
+      && sealedAt <= referenceRevealedAt;
+  };
+  return receipt?.schema === 'morphloom.independent-ground-truth/0.2'
     && ID.test(receipt.corpusId)
     && ID.test(receipt.corpusCaseId)
     && SHA256.test(receipt.manifestSha256)
@@ -130,7 +175,16 @@ function safeGroundTruth(receipt: IndependentGroundTruthReceipt, item: Productio
     && receipt.lockedInputSha256 === item.inputFingerprint
     && receipt.referenceAssetSha256 === item.independentReferenceFingerprint
     && receipt.referenceAssetSha256 !== item.morphloom.artifactSha256
-    && receipt.referenceAssetSha256 !== item.img2threejs.artifactSha256;
+    && receipt.referenceAssetSha256 !== item.img2threejs.artifactSha256
+    && ['external-hidden-set', 'precommitted-random-sample'].includes(receipt.selectionProtocol)
+    && inputLockedAt !== undefined && referenceRevealedAt !== undefined
+    && inputLockedAt < referenceRevealedAt
+    && receipt.referenceHiddenUntilCandidatesSealed === true
+    && receipt.developmentExposure === 'none'
+    && receipt.contaminationAuditSha256 === options.developmentExposureLedgerSha256
+    && !options.exposedCorpusCases.includes(`${receipt.corpusId}/${receipt.corpusCaseId}`)
+    && safeSeal(receipt.candidateSeals?.morphloom, item.morphloom)
+    && safeSeal(receipt.candidateSeals?.img2threejs, item.img2threejs);
 }
 
 function visualDomainFor(domain: ProductionBenchmarkDomain): SameInputVisualBenchmarkReport['domain'] {
@@ -163,8 +217,17 @@ function safeVisualReport(report: SameInputVisualBenchmarkReport, item: Producti
     && report.scores.img2threejs.score >= 0 && report.scores.img2threejs.score <= 1;
 }
 
-export function auditProductionDominance(cases: ProductionDominanceCase[]): ProductionDominanceReport {
-  if (!Array.isArray(cases) || cases.length > 256) throw new Error('Production benchmark case collection is unsafe.');
+export function auditProductionDominance(
+  cases: ProductionDominanceCase[],
+  options: ProductionDominanceAuditOptions,
+): ProductionDominanceReport {
+  if (!Array.isArray(cases) || cases.length > 256
+    || !SHA256.test(options?.developmentExposureLedgerSha256 ?? '')
+    || !Array.isArray(options?.exposedCorpusCases) || options.exposedCorpusCases.length > 4_096
+    || new Set(options.exposedCorpusCases).size !== options.exposedCorpusCases.length
+    || options.exposedCorpusCases.some((id) => !/^[a-zA-Z0-9_.-]{1,96}\/[a-zA-Z0-9_.-]{1,96}$/.test(id))) {
+    throw new Error('Production benchmark case collection or exposure ledger is unsafe.');
+  }
   const blockers: string[] = [];
   const ids = new Set<string>();
   for (const item of cases) {
@@ -177,7 +240,7 @@ export function auditProductionDominance(cases: ProductionDominanceCase[]): Prod
     if (!safeCandidate(item.morphloom) || !safeCandidate(item.img2threejs)) {
       throw new Error(`Production benchmark candidate result is unsafe in ${item.id}`);
     }
-    if (!safeGroundTruth(item.groundTruth, item)) {
+    if (!safeGroundTruth(item.groundTruth, item, options)) {
       throw new Error(`Production benchmark ground-truth proof is unsafe or mismatched in ${item.id}`);
     }
     if (!safeReferencePbr(item.morphloom.referencePbr, item.morphloom, item.independentReferenceFingerprint)
@@ -189,7 +252,9 @@ export function auditProductionDominance(cases: ProductionDominanceCase[]): Prod
     }
     if (item.morphloom.artifactSha256 === item.img2threejs.artifactSha256
       || item.morphloom.releaseReceiptSha256 === item.img2threejs.releaseReceiptSha256
-      || item.morphloom.referencePbr.receiptSha256 === item.img2threejs.referencePbr.receiptSha256) {
+      || item.morphloom.referencePbr.receiptSha256 === item.img2threejs.referencePbr.receiptSha256
+      || item.groundTruth.candidateSeals.morphloom.receiptSha256
+        === item.groundTruth.candidateSeals.img2threejs.receiptSha256) {
       throw new Error(`Production benchmark candidates reuse evidence in ${item.id}`);
     }
   }
@@ -212,9 +277,11 @@ export function auditProductionDominance(cases: ProductionDominanceCase[]): Prod
       const artifacts = new Set(scoped.map((item) => item[candidate].artifactSha256));
       const receipts = new Set(scoped.map((item) => item[candidate].releaseReceiptSha256));
       const pbrReceipts = new Set(scoped.map((item) => item[candidate].referencePbr.receiptSha256));
+      const candidateSeals = new Set(scoped.map((item) => item.groundTruth.candidateSeals[candidate].receiptSha256));
       if (artifacts.size < scoped.length) domainBlockers.push(`${candidate}: artifact bytes were reused across cases`);
       if (receipts.size < scoped.length) domainBlockers.push(`${candidate}: release receipts were reused across cases`);
       if (pbrReceipts.size < scoped.length) domainBlockers.push(`${candidate}: PBR receipts were reused across cases`);
+      if (candidateSeals.size < scoped.length) domainBlockers.push(`${candidate}: holdout candidate seals were reused across cases`);
     }
     for (const item of scoped) {
       if (!item.sameInputLocked) domainBlockers.push(`${item.id}: input is not locked identically`);
