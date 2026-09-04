@@ -1,0 +1,138 @@
+{
+  "schema": "morphloom.holdout-candidate-seal/0.1",
+  "caseId": "abo-b075qmhyvd-industrial-design",
+  "engine": "morphloom",
+  "engineRevision": "241eb307d6b97fbc487246cb400188390bf43696",
+  "engineSourceSha256": "c8f3b7f6ed2af67fcae9ce459f35f7ccf7fac6beee3916760fbaac8bc7402cdd",
+  "lockedInputSha256": "18f7ba68daea9221d9a0077696c0611b5d32fe17fa4e77ca72db2fec5a227f5b",
+  "artifact": {
+    "file": "benchmarks/holdouts/artifacts/abo-b075qmhyvd/morphloom-post-reveal-241eb30.glb",
+    "sha256": "440fa5c7ef95266c3627ed817382d2d57a4504763ddef29de1d5a34ccef0e230",
+    "bytes": 1551964
+  },
+  "deterministicRepeatSha256": "440fa5c7ef95266c3627ed817382d2d57a4504763ddef29de1d5a34ccef0e230",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 0,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 42,
+      "meshes": 41,
+      "materials": 41,
+      "skins": 0,
+      "animations": 0
+    }
+  },
+  "detailAudit": {
+    "pass": false,
+    "modelPass": false,
+    "modelBlockers": [
+      "locked fidelity contract is required"
+    ],
+    "blockers": [
+      "evidence pack not delivery-ready: measured physical dimensions and calibrated BRDF",
+      "locked fidelity contract is required"
+    ],
+    "warnings": [],
+    "evidenceCoverage": 1,
+    "explicitSurfaceCoverage": 1,
+    "microSurfaceCoverage": 1,
+    "semanticDetailCoverage": 1,
+    "finiteTransformCoverage": 1,
+    "duplicateComponentIds": [],
+    "fidelityBlockers": [],
+    "fidelityWarnings": [],
+    "partDecompositionPass": true,
+    "partRequiredFeatureCoverage": 1,
+    "partSourceViewCoverage": 1,
+    "partMappedComponentCoverage": 1,
+    "partDecompositionBlockers": [],
+    "partDecompositionWarnings": [],
+    "visualPlanBlockers": [],
+    "visualPlanWarnings": []
+  },
+  "materialReceipt": {
+    "schema": "morphloom.reference-material-application/0.1",
+    "sourceId": "front",
+    "evidenceFingerprint": "39c0b5c517ca1e80eb93cccf47cae644137d17ef0953b3e819d1ed8a7e7003a5",
+    "status": "applied",
+    "appliedMaterials": [
+      "dark walnut carcass_bottom [wood]",
+      "dark walnut drawer_1_box [wood]",
+      "dark walnut drawer_2_box [wood]",
+      "golden walnut veneer drawer_1_inlay_2 [wood]",
+      "golden walnut veneer drawer_1_inlay_4 [wood]",
+      "golden walnut veneer drawer_1_inlay_6 [wood]",
+      "golden walnut veneer drawer_2_inlay_2 [wood]",
+      "golden walnut veneer drawer_2_inlay_4 [wood]",
+      "golden walnut veneer drawer_2_inlay_6 [wood]",
+      "reference walnut drawer_1_front [wood]",
+      "reference walnut drawer_2_front [wood]",
+      "reference walnut side_panel_left [wood]",
+      "reference walnut side_panel_right [wood]",
+      "reference walnut top_slab [wood]",
+      "warm walnut veneer drawer_1_inlay_1 [wood]",
+      "warm walnut veneer drawer_1_inlay_3 [wood]",
+      "warm walnut veneer drawer_1_inlay_5 [wood]",
+      "warm walnut veneer drawer_2_inlay_1 [wood]",
+      "warm walnut veneer drawer_2_inlay_3 [wood]",
+      "warm walnut veneer drawer_2_inlay_5 [wood]"
+    ],
+    "skippedMeshesWithoutUv": [],
+    "blockers": [],
+    "albedoMode": "neutral-modulation",
+    "channels": {
+      "baseColor": "reference",
+      "normal": "reference",
+      "roughness": "reference",
+      "metallic": "unverified"
+    }
+  },
+  "factorReceipt": {
+    "schema": "morphloom.reference-material-factor-binding/0.1",
+    "sourceId": "abo-nightstand-wood",
+    "evidenceFingerprint": "39c0b5c517ca1e80eb93cccf47cae644137d17ef0953b3e819d1ed8a7e7003a5",
+    "status": "applied",
+    "calibration": "appearance-estimated",
+    "channels": [
+      "baseColor",
+      "roughness",
+      "normal"
+    ],
+    "appliedMaterials": [
+      "dark walnut carcass_bottom [wood]",
+      "dark walnut drawer_1_box [wood]",
+      "dark walnut drawer_2_box [wood]",
+      "golden walnut veneer drawer_1_inlay_2 [wood]",
+      "golden walnut veneer drawer_1_inlay_4 [wood]",
+      "golden walnut veneer drawer_1_inlay_6 [wood]",
+      "golden walnut veneer drawer_2_inlay_2 [wood]",
+      "golden walnut veneer drawer_2_inlay_4 [wood]",
+      "golden walnut veneer drawer_2_inlay_6 [wood]",
+      "reference walnut drawer_1_front [wood]",
+      "reference walnut drawer_2_front [wood]",
+      "reference walnut side_panel_left [wood]",
+      "reference walnut side_panel_right [wood]",
+      "reference walnut top_slab [wood]",
+      "warm walnut veneer drawer_1_inlay_1 [wood]",
+      "warm walnut veneer drawer_1_inlay_3 [wood]",
+      "warm walnut veneer drawer_1_inlay_5 [wood]",
+      "warm walnut veneer drawer_2_inlay_1 [wood]",
+      "warm walnut veneer drawer_2_inlay_3 [wood]",
+      "warm walnut veneer drawer_2_inlay_5 [wood]"
+    ],
+    "blockers": []
+  },
+  "candidateKind": "post-seal-engine-iteration",
+  "baselineBlindArtifactSha256": "d84d75ffc727d98db6f248473810bff98e7648fe0af948a400a526e9b188749d",
+  "groundTruthRevealed": true,
+  "sealedAt": "2026-09-04T00:39:11.645Z"
+}

@@ -10,7 +10,8 @@ const ROOT = resolve('.');
 const LOCK_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-lock.json');
 const MORPHLOOM_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-3750dcd.json');
 const COMPETITOR_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-img2threejs-web-9fbd0ca.json');
-const POST_REVEAL_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-352b3e8.json');
+const FIRST_POST_REVEAL_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-352b3e8.json');
+const POST_REVEAL_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-241eb30.json');
 const GROUND_TRUTH_PATH = resolve('work/abo/holdouts/industrial-design-01/ground-truth.glb');
 const OUTPUT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-comparison.json');
 const SAMPLE_COUNT = 4_096;
@@ -87,9 +88,11 @@ function documentInventory(document: Awaited<ReturnType<NodeIO['read']>>) {
 const lock = readJson<HoldoutLock>(LOCK_PATH);
 const morphloomReceipt = readJson<CandidateReceipt>(MORPHLOOM_RECEIPT_PATH);
 const competitorReceipt = readJson<CandidateReceipt>(COMPETITOR_RECEIPT_PATH);
+const firstPostRevealReceipt = readJson<CandidateReceipt>(FIRST_POST_REVEAL_RECEIPT_PATH);
 const postRevealReceipt = readJson<CandidateReceipt>(POST_REVEAL_RECEIPT_PATH);
 const morphloomPath = verifyReceipt(lock, morphloomReceipt);
 const competitorPath = verifyReceipt(lock, competitorReceipt);
+const firstPostRevealPath = verifyReceipt(lock, firstPostRevealReceipt, true);
 const postRevealPath = verifyReceipt(lock, postRevealReceipt, true);
 if (postRevealReceipt.candidateKind !== 'post-seal-engine-iteration'
   || postRevealReceipt.baselineBlindArtifactSha256 !== morphloomReceipt.artifact.sha256) {
@@ -106,8 +109,9 @@ for (const receipt of [morphloomReceipt, competitorReceipt]) {
 }
 
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
-const [groundTruthDocument, morphloomDocument, competitorDocument, postRevealDocument] = await Promise.all([
-  io.read(GROUND_TRUTH_PATH), io.read(morphloomPath), io.read(competitorPath), io.read(postRevealPath),
+const [groundTruthDocument, morphloomDocument, competitorDocument, firstPostRevealDocument, postRevealDocument] = await Promise.all([
+  io.read(GROUND_TRUTH_PATH), io.read(morphloomPath), io.read(competitorPath),
+  io.read(firstPostRevealPath), io.read(postRevealPath),
 ]);
 const groundTruthSample = sampleTriangleSurface(collectGltfTriangles(groundTruthDocument), SAMPLE_COUNT);
 
@@ -123,6 +127,7 @@ function auditCandidate(document: Awaited<ReturnType<NodeIO['read']>>) {
 
 const morphloom = auditCandidate(morphloomDocument);
 const img2threejs = auditCandidate(competitorDocument);
+const firstPostReveal = auditCandidate(firstPostRevealDocument);
 const postReveal = auditCandidate(postRevealDocument);
 const lowerRatio = (left: number, right: number) => right === 0 ? null : left / right;
 const higherRatio = (left: number, right: number) => right === 0 ? null : left / right;
@@ -212,6 +217,24 @@ const report = {
         minimumSurfaceCoverage: [morphloom.geometry.minimumCoverage, postReveal.geometry.minimumCoverage],
         balancedGeometryObjective: [balancedGeometryObjective(morphloom), balancedGeometryObjective(postReveal)],
       },
+      iterationHistory: [
+        {
+          engineRevision: firstPostRevealReceipt.engineRevision,
+          artifactSha256: firstPostRevealReceipt.artifact.sha256,
+          maximumDimensionRelativeError: firstPostReveal.geometry.maximumDimensionRelativeError,
+          symmetricRmsChamfer: firstPostReveal.geometry.symmetricRmsChamfer,
+          minimumSurfaceCoverage: firstPostReveal.geometry.minimumCoverage,
+          balancedGeometryObjective: balancedGeometryObjective(firstPostReveal),
+        },
+        {
+          engineRevision: postRevealReceipt.engineRevision,
+          artifactSha256: postRevealReceipt.artifact.sha256,
+          maximumDimensionRelativeError: postReveal.geometry.maximumDimensionRelativeError,
+          symmetricRmsChamfer: postReveal.geometry.symmetricRmsChamfer,
+          minimumSurfaceCoverage: postReveal.geometry.minimumCoverage,
+          balancedGeometryObjective: balancedGeometryObjective(postReveal),
+        },
+      ],
     },
     conclusion: dominanceChecks.every((check) => check.winner === 'morphloom')
       ? 'Morphloom wins all three predeclared geometry metrics on this sealed holdout, but remains below the strict semi-professional geometry gate.'

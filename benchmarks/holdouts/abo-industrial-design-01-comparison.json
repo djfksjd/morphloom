@@ -2093,9 +2093,9 @@
       }
     },
     "morphloomPostRevealIteration": {
-      "seal": "benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-352b3e8.json",
-      "artifactSha256": "3b149113e8ddb2278cb823053b20553873fdc86815d5a30c72e833e711b40427",
-      "engineRevision": "352b3e86211a75f15f972cfb4009f1f4d8d8a1ff",
+      "seal": "benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-241eb30.json",
+      "artifactSha256": "440fa5c7ef95266c3627ed817382d2d57a4504763ddef29de1d5a34ccef0e230",
+      "engineRevision": "241eb307d6b97fbc487246cb400188390bf43696",
       "blindEvidence": false,
       "warning": "Ground truth was available before this engine iteration. This is a development diagnostic, not a new blind holdout result.",
       "inventory": {
@@ -2108,7 +2108,7 @@
         "skins": 0
       },
       "sourceTriangles": 8904,
-      "surfaceAreaSquareMeters": 4.5885335004925905,
+      "surfaceAreaSquareMeters": 4.520250953749653,
       "geometry": {
         "schema": "morphloom.surface-geometry-fidelity/0.1",
         "pass": false,
@@ -2136,48 +2136,48 @@
           "minimum": [
             -0.30500000715255743,
             -0.0004191630619825998,
-            -0.2400000001899898
+            -0.23500000018998982
           ],
           "maximum": [
             0.30500000715255743,
             0.6099999993890525,
-            0.21999999880790713
+            0.21500000357627871
           ],
           "size": [
             0.6100000143051149,
             0.6104191624510351,
-            0.4599999989978969
+            0.45000000376626853
           ]
         },
         "candidateBounds": {
           "minimum": [
             -0.30500000715255743,
             -0.0004191630619825998,
-            -0.21999999880790716
+            -0.21500000357627871
           ],
           "maximum": [
             0.30500000715255743,
             0.6099999993890525,
-            0.2400000001899898
+            0.23500000018998982
           ],
           "size": [
             0.6100000143051149,
             0.6104191624510351,
-            0.45999999899789695
+            0.45000000376626853
           ]
         },
         "dimensionRelativeErrors": [
           0.00028875483561762935,
           0.001315952939461183,
-          0.004017111269177643
+          0.017809337311338595
         ],
-        "maximumDimensionRelativeError": 0.004017111269177643,
-        "symmetricRmsChamfer": 0.0322056091228735,
-        "referenceP95Distance": 0.06089132867170866,
-        "candidateP95Distance": 0.05027082670189681,
-        "minimumCoverage": 0.8310546875,
-        "referenceCoverage": 0.841552734375,
-        "candidateCoverage": 0.8310546875,
+        "maximumDimensionRelativeError": 0.017809337311338595,
+        "symmetricRmsChamfer": 0.03175099642807291,
+        "referenceP95Distance": 0.06100471957677373,
+        "candidateP95Distance": 0.048696129065287926,
+        "minimumCoverage": 0.84423828125,
+        "referenceCoverage": 0.84423828125,
+        "candidateCoverage": 0.844970703125,
         "spatialCoverage": {
           "reference": [
             {
@@ -2186,9 +2186,9 @@
               "axis": "x",
               "band": "low",
               "samples": 1460,
-              "coverage": 0.8767123287671232,
-              "meanDistance": 0.027742731604419816,
-              "p95Distance": 0.05482718155444955
+              "coverage": 0.8719178082191781,
+              "meanDistance": 0.027881599156414992,
+              "p95Distance": 0.05418253506647229
             },
             {
               "id": "reference:x-middle",
@@ -2196,9 +2196,9 @@
               "axis": "x",
               "band": "middle",
               "samples": 1151,
-              "coverage": 0.7723718505647263,
-              "meanDistance": 0.03287845832756378,
-              "p95Distance": 0.0707533305267623
+              "coverage": 0.7819287576020851,
+              "meanDistance": 0.032506988577124626,
+              "p95Distance": 0.0677295765104678
             },
             {
               "id": "reference:x-high",
@@ -2206,9 +2206,9 @@
               "axis": "x",
               "band": "high",
               "samples": 1485,
-              "coverage": 0.8606060606060606,
-              "meanDistance": 0.0284158226813102,
-              "p95Distance": 0.053654079590588516
+              "coverage": 0.8653198653198653,
+              "meanDistance": 0.028064770336929137,
+              "p95Distance": 0.0542618168498985
             },
             {
               "id": "reference:y-low",
@@ -2216,9 +2216,9 @@
               "axis": "y",
               "band": "low",
               "samples": 317,
-              "coverage": 0.9305993690851735,
-              "meanDistance": 0.02523876290722674,
-              "p95Distance": 0.0417435024073874
+              "coverage": 0.8958990536277602,
+              "meanDistance": 0.026067062199889426,
+              "p95Distance": 0.04425180205607314
             },
             {
               "id": "reference:y-middle",
@@ -2226,9 +2226,9 @@
               "axis": "y",
               "band": "middle",
               "samples": 1810,
-              "coverage": 0.8861878453038674,
-              "meanDistance": 0.02705592139998141,
-              "p95Distance": 0.05199528467963882
+              "coverage": 0.8933701657458564,
+              "meanDistance": 0.02684400950987356,
+              "p95Distance": 0.05078623556873076
             },
             {
               "id": "reference:y-high",
@@ -2236,9 +2236,9 @@
               "axis": "y",
               "band": "high",
               "samples": 1969,
-              "coverage": 0.7861858811579482,
-              "meanDistance": 0.03228699074843435,
-              "p95Distance": 0.07381285762484618
+              "coverage": 0.7907567293042154,
+              "meanDistance": 0.03196950057934991,
+              "p95Distance": 0.07212349227211787
             },
             {
               "id": "reference:z-low",
@@ -2246,9 +2246,9 @@
               "axis": "z",
               "band": "low",
               "samples": 1668,
-              "coverage": 0.8627098321342925,
-              "meanDistance": 0.02790173405852597,
-              "p95Distance": 0.05374885856993069
+              "coverage": 0.8633093525179856,
+              "meanDistance": 0.02786855602177423,
+              "p95Distance": 0.053814008575689305
             },
             {
               "id": "reference:z-middle",
@@ -2256,9 +2256,9 @@
               "axis": "z",
               "band": "middle",
               "samples": 1135,
-              "coverage": 0.7682819383259912,
-              "meanDistance": 0.03322745730691062,
-              "p95Distance": 0.07212615046238868
+              "coverage": 0.775330396475771,
+              "meanDistance": 0.033034664784377596,
+              "p95Distance": 0.07117053368066067
             },
             {
               "id": "reference:z-high",
@@ -2266,9 +2266,9 @@
               "axis": "z",
               "band": "high",
               "samples": 1293,
-              "coverage": 0.8785769528228925,
-              "meanDistance": 0.028067852982412673,
-              "p95Distance": 0.05485114153110711
+              "coverage": 0.880123743232792,
+              "meanDistance": 0.027702835728064985,
+              "p95Distance": 0.05259212123240196
             }
           ],
           "candidate": [
@@ -2277,90 +2277,90 @@
               "side": "candidate",
               "axis": "x",
               "band": "low",
-              "samples": 1484,
-              "coverage": 0.8362533692722371,
-              "meanDistance": 0.028101160778447275,
-              "p95Distance": 0.04941186270315545
+              "samples": 1491,
+              "coverage": 0.85177733065057,
+              "meanDistance": 0.027520225488113507,
+              "p95Distance": 0.048112174669825016
             },
             {
               "id": "candidate:x-middle",
               "side": "candidate",
               "axis": "x",
               "band": "middle",
-              "samples": 1141,
-              "coverage": 0.8089395267309377,
-              "meanDistance": 0.029619679012555838,
-              "p95Distance": 0.05140908443132939
+              "samples": 1125,
+              "coverage": 0.8195555555555556,
+              "meanDistance": 0.028881903041448595,
+              "p95Distance": 0.04971726202271525
             },
             {
               "id": "candidate:x-high",
               "side": "candidate",
               "axis": "x",
               "band": "high",
-              "samples": 1471,
-              "coverage": 0.8429639700883752,
-              "meanDistance": 0.02840697037326361,
-              "p95Distance": 0.049776532344243285
+              "samples": 1480,
+              "coverage": 0.8574324324324324,
+              "meanDistance": 0.027740052241244723,
+              "p95Distance": 0.04719760178439428
             },
             {
               "id": "candidate:y-low",
               "side": "candidate",
               "axis": "y",
               "band": "low",
-              "samples": 593,
-              "coverage": 0.8920741989881956,
-              "meanDistance": 0.027247811425958553,
-              "p95Distance": 0.045458807281721254
+              "samples": 585,
+              "coverage": 0.8803418803418803,
+              "meanDistance": 0.027468378419388723,
+              "p95Distance": 0.04514752330151136
             },
             {
               "id": "candidate:y-middle",
               "side": "candidate",
               "axis": "y",
               "band": "middle",
-              "samples": 1788,
-              "coverage": 0.8059284116331096,
-              "meanDistance": 0.0291979382885234,
-              "p95Distance": 0.05120851953697287
+              "samples": 1792,
+              "coverage": 0.8348214285714286,
+              "meanDistance": 0.02831027917201599,
+              "p95Distance": 0.049079294723826584
             },
             {
               "id": "candidate:y-high",
               "side": "candidate",
               "axis": "y",
               "band": "high",
-              "samples": 1715,
-              "coverage": 0.8361516034985422,
-              "meanDistance": 0.028525343400664427,
-              "p95Distance": 0.04993777879255675
+              "samples": 1719,
+              "coverage": 0.8435136707388017,
+              "meanDistance": 0.027794678760822682,
+              "p95Distance": 0.04912236086651238
             },
             {
               "id": "candidate:z-low",
               "side": "candidate",
               "axis": "z",
               "band": "low",
-              "samples": 1447,
-              "coverage": 0.9011748445058743,
-              "meanDistance": 0.02580739175160516,
-              "p95Distance": 0.04587203874672425
+              "samples": 1442,
+              "coverage": 0.8952843273231623,
+              "meanDistance": 0.025644772303983796,
+              "p95Distance": 0.045766856430531536
             },
             {
               "id": "candidate:z-middle",
               "side": "candidate",
               "axis": "z",
               "band": "middle",
-              "samples": 921,
-              "coverage": 0.8295331161780674,
-              "meanDistance": 0.028815195999138364,
-              "p95Distance": 0.050419982955842435
+              "samples": 915,
+              "coverage": 0.8240437158469945,
+              "meanDistance": 0.028883492059862674,
+              "p95Distance": 0.04971941677042198
             },
             {
               "id": "candidate:z-high",
               "side": "candidate",
               "axis": "z",
               "band": "high",
-              "samples": 1728,
-              "coverage": 0.7731481481481481,
-              "meanDistance": 0.030904362492959216,
-              "p95Distance": 0.051587457781309035
+              "samples": 1739,
+              "coverage": 0.8142610695802185,
+              "meanDistance": 0.029426059542455498,
+              "p95Distance": 0.049549823240657084
             }
           ],
           "worstBand": {
@@ -2369,9 +2369,9 @@
             "axis": "z",
             "band": "middle",
             "samples": 1135,
-            "coverage": 0.7682819383259912,
-            "meanDistance": 0.03322745730691062,
-            "p95Distance": 0.07212615046238868
+            "coverage": 0.775330396475771,
+            "meanDistance": 0.033034664784377596,
+            "p95Distance": 0.07117053368066067
           },
           "referenceCells": [
             {
@@ -2383,9 +2383,9 @@
                 "z": "low"
               },
               "samples": 46,
-              "coverage": 0.8695652173913043,
-              "meanDistance": 0.028210896638044044,
-              "p95Distance": 0.0417435024073874
+              "coverage": 0.8043478260869565,
+              "meanDistance": 0.02846620829551409,
+              "p95Distance": 0.04365390677055256
             },
             {
               "id": "reference:cell:x-low:y-low:z-middle",
@@ -2396,9 +2396,9 @@
                 "z": "middle"
               },
               "samples": 24,
-              "coverage": 1,
-              "meanDistance": 0.020730599995533183,
-              "p95Distance": 0.032031475896523935
+              "coverage": 0.9583333333333334,
+              "meanDistance": 0.0202051398935976,
+              "p95Distance": 0.03607608940985369
             },
             {
               "id": "reference:cell:x-low:y-low:z-high",
@@ -2409,9 +2409,9 @@
                 "z": "high"
               },
               "samples": 48,
-              "coverage": 0.8958333333333334,
-              "meanDistance": 0.02463562582398474,
-              "p95Distance": 0.043496156666614924
+              "coverage": 0.9375,
+              "meanDistance": 0.025883487626865865,
+              "p95Distance": 0.03975970229659975
             },
             {
               "id": "reference:cell:x-low:y-middle:z-low",
@@ -2422,9 +2422,9 @@
                 "z": "low"
               },
               "samples": 272,
-              "coverage": 0.9191176470588235,
-              "meanDistance": 0.024516261089600942,
-              "p95Distance": 0.04132226036066816
+              "coverage": 0.9301470588235294,
+              "meanDistance": 0.02486435368644514,
+              "p95Distance": 0.04173933978504053
             },
             {
               "id": "reference:cell:x-low:y-middle:z-middle",
@@ -2435,9 +2435,9 @@
                 "z": "middle"
               },
               "samples": 176,
-              "coverage": 0.8522727272727273,
-              "meanDistance": 0.02815193562396097,
-              "p95Distance": 0.05482718155444955
+              "coverage": 0.8693181818181818,
+              "meanDistance": 0.02836102354723614,
+              "p95Distance": 0.053951164224677314
             },
             {
               "id": "reference:cell:x-low:y-middle:z-high",
@@ -2448,9 +2448,9 @@
                 "z": "high"
               },
               "samples": 199,
-              "coverage": 0.949748743718593,
-              "meanDistance": 0.025490882209313986,
-              "p95Distance": 0.03917743710693635
+              "coverage": 0.9095477386934674,
+              "meanDistance": 0.026430125597695076,
+              "p95Distance": 0.04553640690252476
             },
             {
               "id": "reference:cell:x-low:y-high:z-low",
@@ -2462,8 +2462,8 @@
               },
               "samples": 277,
               "coverage": 0.8592057761732852,
-              "meanDistance": 0.028469582858025737,
-              "p95Distance": 0.0596048459484347
+              "meanDistance": 0.028169291577015875,
+              "p95Distance": 0.05761314134021763
             },
             {
               "id": "reference:cell:x-low:y-high:z-middle",
@@ -2475,8 +2475,8 @@
               },
               "samples": 204,
               "coverage": 0.7598039215686274,
-              "meanDistance": 0.03447217641531718,
-              "p95Distance": 0.09171282382801858
+              "meanDistance": 0.034326413799293055,
+              "p95Distance": 0.0916838477222386
             },
             {
               "id": "reference:cell:x-low:y-high:z-high",
@@ -2487,9 +2487,9 @@
                 "z": "high"
               },
               "samples": 214,
-              "coverage": 0.8925233644859814,
-              "meanDistance": 0.027628012950555867,
-              "p95Distance": 0.05858727032877375
+              "coverage": 0.8785046728971962,
+              "meanDistance": 0.027339424768126872,
+              "p95Distance": 0.05259212123240196
             },
             {
               "id": "reference:cell:x-middle:y-low:z-low",
@@ -2500,9 +2500,9 @@
                 "z": "low"
               },
               "samples": 35,
-              "coverage": 0.9142857142857143,
-              "meanDistance": 0.027533189738702057,
-              "p95Distance": 0.04495014959098105
+              "coverage": 0.8571428571428571,
+              "meanDistance": 0.029391382429911666,
+              "p95Distance": 0.045260405517667336
             },
             {
               "id": "reference:cell:x-middle:y-low:z-middle",
@@ -2513,9 +2513,9 @@
                 "z": "middle"
               },
               "samples": 25,
-              "coverage": 1,
-              "meanDistance": 0.026438593536854876,
-              "p95Distance": 0.03593994992967544
+              "coverage": 0.96,
+              "meanDistance": 0.0250418550848795,
+              "p95Distance": 0.036654826642596186
             },
             {
               "id": "reference:cell:x-middle:y-low:z-high",
@@ -2527,8 +2527,8 @@
               },
               "samples": 23,
               "coverage": 1,
-              "meanDistance": 0.022161888140924534,
-              "p95Distance": 0.03120320431670736
+              "meanDistance": 0.022234735858254095,
+              "p95Distance": 0.03193683487732762
             },
             {
               "id": "reference:cell:x-middle:y-middle:z-low",
@@ -2539,9 +2539,9 @@
                 "z": "low"
               },
               "samples": 209,
-              "coverage": 0.8851674641148325,
-              "meanDistance": 0.027396409432417335,
-              "p95Distance": 0.052310798311231574
+              "coverage": 0.8803827751196173,
+              "meanDistance": 0.027252556527562925,
+              "p95Distance": 0.05018617429496483
             },
             {
               "id": "reference:cell:x-middle:y-middle:z-middle",
@@ -2552,9 +2552,9 @@
                 "z": "middle"
               },
               "samples": 138,
-              "coverage": 0.717391304347826,
-              "meanDistance": 0.034034685475497664,
-              "p95Distance": 0.05871492849377633
+              "coverage": 0.7463768115942029,
+              "meanDistance": 0.033341676309578815,
+              "p95Distance": 0.05804894158487309
             },
             {
               "id": "reference:cell:x-middle:y-middle:z-high",
@@ -2566,8 +2566,8 @@
               },
               "samples": 158,
               "coverage": 0.8924050632911392,
-              "meanDistance": 0.027236046021579422,
-              "p95Distance": 0.05399171405966669
+              "meanDistance": 0.026790267859168753,
+              "p95Distance": 0.05136120650762923
             },
             {
               "id": "reference:cell:x-middle:y-high:z-low",
@@ -2578,9 +2578,9 @@
                 "z": "low"
               },
               "samples": 233,
-              "coverage": 0.7467811158798283,
-              "meanDistance": 0.03345078074974095,
-              "p95Distance": 0.07194721401406143
+              "coverage": 0.7639484978540773,
+              "meanDistance": 0.03297233835251269,
+              "p95Distance": 0.07108856366419568
             },
             {
               "id": "reference:cell:x-middle:y-high:z-middle",
@@ -2591,9 +2591,9 @@
                 "z": "middle"
               },
               "samples": 151,
-              "coverage": 0.5231788079470199,
-              "meanDistance": 0.04699949244999032,
-              "p95Distance": 0.09609981357515326
+              "coverage": 0.5298013245033113,
+              "meanDistance": 0.04673756683542563,
+              "p95Distance": 0.09615959295025849
             },
             {
               "id": "reference:cell:x-middle:y-high:z-high",
@@ -2604,9 +2604,9 @@
                 "z": "high"
               },
               "samples": 179,
-              "coverage": 0.7318435754189944,
-              "meanDistance": 0.03403278723724601,
-              "p95Distance": 0.07401561025591631
+              "coverage": 0.7653631284916201,
+              "meanDistance": 0.033406004303607455,
+              "p95Distance": 0.07506499030278581
             },
             {
               "id": "reference:cell:x-high:y-low:z-low",
@@ -2617,9 +2617,9 @@
                 "z": "low"
               },
               "samples": 47,
-              "coverage": 0.9148936170212766,
-              "meanDistance": 0.025861818691654954,
-              "p95Distance": 0.0400736872985434
+              "coverage": 0.8297872340425532,
+              "meanDistance": 0.027553028080066835,
+              "p95Distance": 0.04641814564998472
             },
             {
               "id": "reference:cell:x-high:y-low:z-middle",
@@ -2631,8 +2631,8 @@
               },
               "samples": 25,
               "coverage": 0.96,
-              "meanDistance": 0.019366458291260435,
-              "p95Distance": 0.03422837769776094
+              "meanDistance": 0.02133112875481181,
+              "p95Distance": 0.03419356227350175
             },
             {
               "id": "reference:cell:x-high:y-low:z-high",
@@ -2643,9 +2643,9 @@
                 "z": "high"
               },
               "samples": 44,
-              "coverage": 0.9318181818181818,
-              "meanDistance": 0.027021029874779053,
-              "p95Distance": 0.03984724430216769
+              "coverage": 0.8863636363636364,
+              "meanDistance": 0.02800154878848232,
+              "p95Distance": 0.04150540854978291
             },
             {
               "id": "reference:cell:x-high:y-middle:z-low",
@@ -2656,9 +2656,9 @@
                 "z": "low"
               },
               "samples": 267,
-              "coverage": 0.9101123595505618,
-              "meanDistance": 0.02578324592060761,
-              "p95Distance": 0.04445178864591739
+              "coverage": 0.9213483146067416,
+              "meanDistance": 0.02576576827583513,
+              "p95Distance": 0.044746366962761144
             },
             {
               "id": "reference:cell:x-high:y-middle:z-middle",
@@ -2669,9 +2669,9 @@
                 "z": "middle"
               },
               "samples": 185,
-              "coverage": 0.8486486486486486,
-              "meanDistance": 0.02851170410541969,
-              "p95Distance": 0.0548145047422311
+              "coverage": 0.8702702702702703,
+              "meanDistance": 0.027589307746853694,
+              "p95Distance": 0.054695887322361476
             },
             {
               "id": "reference:cell:x-high:y-middle:z-high",
@@ -2682,9 +2682,9 @@
                 "z": "high"
               },
               "samples": 206,
-              "coverage": 0.9223300970873787,
-              "meanDistance": 0.0261681802398833,
-              "p95Distance": 0.04111604910934645
+              "coverage": 0.9466019417475728,
+              "meanDistance": 0.024563775933766848,
+              "p95Distance": 0.03947443368813275
             },
             {
               "id": "reference:cell:x-high:y-high:z-low",
@@ -2695,9 +2695,9 @@
                 "z": "low"
               },
               "samples": 282,
-              "coverage": 0.8297872340425532,
-              "meanDistance": 0.02874013627658626,
-              "p95Distance": 0.0578857049590573
+              "coverage": 0.8333333333333334,
+              "meanDistance": 0.028467439391223932,
+              "p95Distance": 0.05533947550166967
             },
             {
               "id": "reference:cell:x-high:y-high:z-middle",
@@ -2708,9 +2708,9 @@
                 "z": "middle"
               },
               "samples": 207,
-              "coverage": 0.7681159420289855,
-              "meanDistance": 0.03388919552722783,
-              "p95Distance": 0.07384594576202601
+              "coverage": 0.7584541062801933,
+              "meanDistance": 0.034267739910248514,
+              "p95Distance": 0.07412482288032407
             },
             {
               "id": "reference:cell:x-high:y-high:z-high",
@@ -2721,9 +2721,9 @@
                 "z": "high"
               },
               "samples": 222,
-              "coverage": 0.8423423423423423,
-              "meanDistance": 0.029908493142395562,
-              "p95Distance": 0.06017592318219266
+              "coverage": 0.8513513513513513,
+              "meanDistance": 0.029058492297722956,
+              "p95Distance": 0.05842445985732691
             }
           ],
           "candidateCells": [
@@ -2735,10 +2735,10 @@
                 "y": "low",
                 "z": "low"
               },
-              "samples": 76,
-              "coverage": 0.868421052631579,
-              "meanDistance": 0.02836804204228824,
-              "p95Distance": 0.04378176593140814
+              "samples": 77,
+              "coverage": 0.8831168831168831,
+              "meanDistance": 0.02766449739624388,
+              "p95Distance": 0.04698607254531845
             },
             {
               "id": "candidate:cell:x-low:y-low:z-middle",
@@ -2748,10 +2748,10 @@
                 "y": "low",
                 "z": "middle"
               },
-              "samples": 59,
-              "coverage": 0.8813559322033898,
-              "meanDistance": 0.026822070929195193,
-              "p95Distance": 0.04565021435269661
+              "samples": 58,
+              "coverage": 0.8620689655172413,
+              "meanDistance": 0.026108093303607364,
+              "p95Distance": 0.046171977057581894
             },
             {
               "id": "candidate:cell:x-low:y-low:z-high",
@@ -2761,10 +2761,10 @@
                 "y": "low",
                 "z": "high"
               },
-              "samples": 72,
-              "coverage": 0.875,
-              "meanDistance": 0.025606467655465218,
-              "p95Distance": 0.045458807281721254
+              "samples": 77,
+              "coverage": 0.8441558441558441,
+              "meanDistance": 0.02758906765513713,
+              "p95Distance": 0.046604256043515126
             },
             {
               "id": "candidate:cell:x-low:y-middle:z-low",
@@ -2775,9 +2775,9 @@
                 "z": "low"
               },
               "samples": 222,
-              "coverage": 0.8828828828828829,
-              "meanDistance": 0.025197860327266355,
-              "p95Distance": 0.04585240213655049
+              "coverage": 0.8918918918918919,
+              "meanDistance": 0.02534896942483148,
+              "p95Distance": 0.044677131575776116
             },
             {
               "id": "candidate:cell:x-low:y-middle:z-middle",
@@ -2787,10 +2787,10 @@
                 "y": "middle",
                 "z": "middle"
               },
-              "samples": 147,
-              "coverage": 0.8299319727891157,
-              "meanDistance": 0.027328976170531254,
-              "p95Distance": 0.04613490855573494
+              "samples": 143,
+              "coverage": 0.8321678321678322,
+              "meanDistance": 0.0280024815553642,
+              "p95Distance": 0.046414192636939855
             },
             {
               "id": "candidate:cell:x-low:y-middle:z-high",
@@ -2800,10 +2800,10 @@
                 "y": "middle",
                 "z": "high"
               },
-              "samples": 285,
-              "coverage": 0.7473684210526316,
-              "meanDistance": 0.03169148491925256,
-              "p95Distance": 0.05343777721442874
+              "samples": 283,
+              "coverage": 0.8091872791519434,
+              "meanDistance": 0.029858694429642778,
+              "p95Distance": 0.05036694385821448
             },
             {
               "id": "candidate:cell:x-low:y-high:z-low",
@@ -2813,10 +2813,10 @@
                 "y": "high",
                 "z": "low"
               },
-              "samples": 222,
-              "coverage": 0.9414414414414415,
-              "meanDistance": 0.024742974997834698,
-              "p95Distance": 0.040511081041785635
+              "samples": 228,
+              "coverage": 0.9210526315789473,
+              "meanDistance": 0.02437662790925746,
+              "p95Distance": 0.04339476992434756
             },
             {
               "id": "candidate:cell:x-low:y-high:z-middle",
@@ -2826,10 +2826,10 @@
                 "y": "high",
                 "z": "middle"
               },
-              "samples": 150,
-              "coverage": 0.84,
-              "meanDistance": 0.02878502637586651,
-              "p95Distance": 0.04825672383272778
+              "samples": 143,
+              "coverage": 0.8531468531468531,
+              "meanDistance": 0.02868674442874478,
+              "p95Distance": 0.04801303453040953
             },
             {
               "id": "candidate:cell:x-low:y-high:z-high",
@@ -2839,10 +2839,10 @@
                 "y": "high",
                 "z": "high"
               },
-              "samples": 251,
-              "coverage": 0.7729083665338645,
-              "meanDistance": 0.03054155954732387,
-              "p95Distance": 0.05090837334475231
+              "samples": 260,
+              "coverage": 0.8038461538461539,
+              "meanDistance": 0.028930577181815215,
+              "p95Distance": 0.05021888993756654
             },
             {
               "id": "candidate:cell:x-middle:y-low:z-low",
@@ -2852,10 +2852,10 @@
                 "y": "low",
                 "z": "low"
               },
-              "samples": 55,
-              "coverage": 0.9272727272727272,
-              "meanDistance": 0.026173894196305517,
-              "p95Distance": 0.0423560273039958
+              "samples": 48,
+              "coverage": 0.8541666666666666,
+              "meanDistance": 0.02675139753385296,
+              "p95Distance": 0.041568862467038385
             },
             {
               "id": "candidate:cell:x-middle:y-low:z-middle",
@@ -2865,10 +2865,10 @@
                 "y": "low",
                 "z": "middle"
               },
-              "samples": 57,
-              "coverage": 0.8947368421052632,
-              "meanDistance": 0.02716248804314675,
-              "p95Distance": 0.041745469102775476
+              "samples": 58,
+              "coverage": 0.896551724137931,
+              "meanDistance": 0.027268125952863785,
+              "p95Distance": 0.04275742163525855
             },
             {
               "id": "candidate:cell:x-middle:y-low:z-high",
@@ -2878,10 +2878,10 @@
                 "y": "low",
                 "z": "high"
               },
-              "samples": 59,
-              "coverage": 0.8305084745762712,
-              "meanDistance": 0.030422660727856522,
-              "p95Distance": 0.05050381124241355
+              "samples": 55,
+              "coverage": 0.9090909090909091,
+              "meanDistance": 0.028646488614059374,
+              "p95Distance": 0.04123385985879683
             },
             {
               "id": "candidate:cell:x-middle:y-middle:z-low",
@@ -2891,10 +2891,10 @@
                 "y": "middle",
                 "z": "low"
               },
-              "samples": 176,
-              "coverage": 0.9090909090909091,
-              "meanDistance": 0.026520271440488585,
-              "p95Distance": 0.04473396643280952
+              "samples": 175,
+              "coverage": 0.8857142857142857,
+              "meanDistance": 0.026550840610687472,
+              "p95Distance": 0.044471606867357995
             },
             {
               "id": "candidate:cell:x-middle:y-middle:z-middle",
@@ -2904,10 +2904,10 @@
                 "y": "middle",
                 "z": "middle"
               },
-              "samples": 81,
-              "coverage": 0.7160493827160493,
-              "meanDistance": 0.033289268128155254,
-              "p95Distance": 0.058842995153158266
+              "samples": 80,
+              "coverage": 0.6625,
+              "meanDistance": 0.03340771048358192,
+              "p95Distance": 0.05536703468265888
             },
             {
               "id": "candidate:cell:x-middle:y-middle:z-high",
@@ -2917,10 +2917,10 @@
                 "y": "middle",
                 "z": "high"
               },
-              "samples": 248,
-              "coverage": 0.7379032258064516,
-              "meanDistance": 0.03143775592447904,
-              "p95Distance": 0.05129062968358049
+              "samples": 250,
+              "coverage": 0.816,
+              "meanDistance": 0.02985345769614051,
+              "p95Distance": 0.048448581059386556
             },
             {
               "id": "candidate:cell:x-middle:y-high:z-low",
@@ -2930,10 +2930,10 @@
                 "y": "high",
                 "z": "low"
               },
-              "samples": 173,
-              "coverage": 0.8670520231213873,
-              "meanDistance": 0.026606082283906155,
-              "p95Distance": 0.04868942482299082
+              "samples": 168,
+              "coverage": 0.8690476190476191,
+              "meanDistance": 0.026021573936130155,
+              "p95Distance": 0.04980941319665036
             },
             {
               "id": "candidate:cell:x-middle:y-high:z-middle",
@@ -2944,9 +2944,9 @@
                 "z": "middle"
               },
               "samples": 77,
-              "coverage": 0.7532467532467533,
-              "meanDistance": 0.03168145648598605,
-              "p95Distance": 0.05675222444778388
+              "coverage": 0.7142857142857143,
+              "meanDistance": 0.03185681874895087,
+              "p95Distance": 0.057082208719468175
             },
             {
               "id": "candidate:cell:x-middle:y-high:z-high",
@@ -2956,10 +2956,10 @@
                 "y": "high",
                 "z": "high"
               },
-              "samples": 215,
-              "coverage": 0.7581395348837209,
-              "meanDistance": 0.03167629965308107,
-              "p95Distance": 0.05223696453135881
+              "samples": 214,
+              "coverage": 0.7757009345794392,
+              "meanDistance": 0.03011209264688934,
+              "p95Distance": 0.04912236086651238
             },
             {
               "id": "candidate:cell:x-high:y-low:z-low",
@@ -2969,10 +2969,10 @@
                 "y": "low",
                 "z": "low"
               },
-              "samples": 81,
-              "coverage": 0.8888888888888888,
-              "meanDistance": 0.027440357441101702,
-              "p95Distance": 0.04435610309903558
+              "samples": 80,
+              "coverage": 0.8625,
+              "meanDistance": 0.028787036159872003,
+              "p95Distance": 0.05028108901105777
             },
             {
               "id": "candidate:cell:x-high:y-low:z-middle",
@@ -2982,10 +2982,10 @@
                 "y": "low",
                 "z": "middle"
               },
-              "samples": 57,
-              "coverage": 0.9122807017543859,
-              "meanDistance": 0.02643104164866306,
-              "p95Distance": 0.04338025459162317
+              "samples": 60,
+              "coverage": 0.9333333333333333,
+              "meanDistance": 0.0259643252193628,
+              "p95Distance": 0.04113366448971433
             },
             {
               "id": "candidate:cell:x-high:y-low:z-high",
@@ -2995,10 +2995,10 @@
                 "y": "low",
                 "z": "high"
               },
-              "samples": 77,
-              "coverage": 0.948051948051948,
-              "meanDistance": 0.026802750850140077,
-              "p95Distance": 0.03984724430216769
+              "samples": 72,
+              "coverage": 0.8888888888888888,
+              "meanDistance": 0.027752913724458355,
+              "p95Distance": 0.043481521621597
             },
             {
               "id": "candidate:cell:x-high:y-middle:z-low",
@@ -3008,10 +3008,10 @@
                 "y": "middle",
                 "z": "low"
               },
-              "samples": 215,
-              "coverage": 0.8976744186046511,
-              "meanDistance": 0.025862504732865804,
-              "p95Distance": 0.04542170058638604
+              "samples": 222,
+              "coverage": 0.9054054054054054,
+              "meanDistance": 0.025425850278500247,
+              "p95Distance": 0.04363643110108819
             },
             {
               "id": "candidate:cell:x-high:y-middle:z-middle",
@@ -3021,10 +3021,10 @@
                 "y": "middle",
                 "z": "middle"
               },
-              "samples": 145,
-              "coverage": 0.8413793103448276,
-              "meanDistance": 0.029073473427845616,
-              "p95Distance": 0.050419982955842435
+              "samples": 147,
+              "coverage": 0.8231292517006803,
+              "meanDistance": 0.029072513463966068,
+              "p95Distance": 0.04882961889573381
             },
             {
               "id": "candidate:cell:x-high:y-middle:z-high",
@@ -3034,10 +3034,10 @@
                 "y": "middle",
                 "z": "high"
               },
-              "samples": 269,
-              "coverage": 0.7211895910780669,
-              "meanDistance": 0.03206654959996464,
-              "p95Distance": 0.053487870108978465
+              "samples": 270,
+              "coverage": 0.8,
+              "meanDistance": 0.02944298913819245,
+              "p95Distance": 0.04851028578265439
             },
             {
               "id": "candidate:cell:x-high:y-high:z-low",
@@ -3047,10 +3047,10 @@
                 "y": "high",
                 "z": "low"
               },
-              "samples": 227,
-              "coverage": 0.9118942731277533,
-              "meanDistance": 0.024702059768513,
-              "p95Distance": 0.04210454237812145
+              "samples": 222,
+              "coverage": 0.9144144144144144,
+              "meanDistance": 0.024390372625354356,
+              "p95Distance": 0.04195094576043302
             },
             {
               "id": "candidate:cell:x-high:y-high:z-middle",
@@ -3060,10 +3060,10 @@
                 "y": "high",
                 "z": "middle"
               },
-              "samples": 148,
-              "coverage": 0.831081081081081,
-              "meanDistance": 0.0284783254706999,
-              "p95Distance": 0.04589479168250831
+              "samples": 149,
+              "coverage": 0.8456375838926175,
+              "meanDistance": 0.028650364613764162,
+              "p95Distance": 0.04690059695139549
             },
             {
               "id": "candidate:cell:x-high:y-high:z-high",
@@ -3073,10 +3073,10 @@
                 "y": "high",
                 "z": "high"
               },
-              "samples": 252,
-              "coverage": 0.8095238095238095,
-              "meanDistance": 0.030831148939669532,
-              "p95Distance": 0.049957079552035884
+              "samples": 258,
+              "coverage": 0.8255813953488372,
+              "meanDistance": 0.02963128978413972,
+              "p95Distance": 0.05109091006198802
             }
           ],
           "worstCell": {
@@ -3088,25 +3088,25 @@
               "z": "middle"
             },
             "samples": 151,
-            "coverage": 0.5231788079470199,
-            "meanDistance": 0.04699949244999032,
-            "p95Distance": 0.09609981357515326
+            "coverage": 0.5298013245033113,
+            "meanDistance": 0.04673756683542563,
+            "p95Distance": 0.09615959295025849
           },
           "candidateAlignedNormalizedBounds": {
             "minimum": [
               -0.4996566718644307,
               -0.4999999999999999,
-              -0.3767902674867255
+              -0.3685991786032482
             ],
             "maximum": [
-              0.4996566718644307,
+              0.49965667186443063,
               0.5,
-              0.37679026748672545
+              0.3685991786032482
             ],
             "size": [
-              0.9993133437288614,
+              0.9993133437288613,
               0.9999999999999999,
-              0.753580534973451
+              0.7371983572064964
             ]
           }
         },
@@ -3119,7 +3119,7 @@
           "minimumCoverage": 0.9
         },
         "blockers": [
-          "Minimum surface coverage 83.1% is below 90.0%."
+          "Minimum surface coverage 84.4% is below 90.0%."
         ],
         "limitation": "Uniform translation, scale, and bounded yaw are removed only for shape distance; raw axis dimensions remain an independent blocking gate. Surface sampling does not prove semantic part identity, hidden interfaces, or material fidelity."
       }
@@ -3162,21 +3162,39 @@
       "baselineToIteration": {
         "maximumDimensionRelativeError": [
           0.06691759914301443,
-          0.004017111269177643
+          0.017809337311338595
         ],
         "symmetricRmsChamfer": [
           0.031968128184101795,
-          0.0322056091228735
+          0.03175099642807291
         ],
         "minimumSurfaceCoverage": [
           0.841064453125,
-          0.8310546875
+          0.84423828125
         ],
         "balancedGeometryObjective": [
           0.061245202700204684,
-          0.04990356262670903
+          0.05088903576534063
         ]
-      }
+      },
+      "iterationHistory": [
+        {
+          "engineRevision": "352b3e86211a75f15f972cfb4009f1f4d8d8a1ff",
+          "artifactSha256": "3b149113e8ddb2278cb823053b20553873fdc86815d5a30c72e833e711b40427",
+          "maximumDimensionRelativeError": 0.004017111269177643,
+          "symmetricRmsChamfer": 0.0322056091228735,
+          "minimumSurfaceCoverage": 0.8310546875,
+          "balancedGeometryObjective": 0.04990356262670903
+        },
+        {
+          "engineRevision": "241eb307d6b97fbc487246cb400188390bf43696",
+          "artifactSha256": "440fa5c7ef95266c3627ed817382d2d57a4504763ddef29de1d5a34ccef0e230",
+          "maximumDimensionRelativeError": 0.017809337311338595,
+          "symmetricRmsChamfer": 0.03175099642807291,
+          "minimumSurfaceCoverage": 0.84423828125,
+          "balancedGeometryObjective": 0.05088903576534063
+        }
+      ]
     },
     "conclusion": "Morphloom wins all three predeclared geometry metrics on this sealed holdout, but remains below the strict semi-professional geometry gate."
   }
