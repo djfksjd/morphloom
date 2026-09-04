@@ -23,6 +23,14 @@ class NodeOffscreenCanvas extends Canvas {
 Object.assign(globalThis, { FileReader: NodeFileReader, OffscreenCanvas: NodeOffscreenCanvas, ImageData });
 
 const workspace = resolve('.');
+const holdoutLock = JSON.parse(readFileSync(resolve(workspace, 'benchmarks/holdouts/abo-industrial-design-01-lock.json'), 'utf8')) as {
+  caseId?: unknown;
+  lockedInputSha256?: unknown;
+};
+if (typeof holdoutLock.caseId !== 'string' || typeof holdoutLock.lockedInputSha256 !== 'string'
+  || !/^[a-f0-9]{64}$/.test(holdoutLock.lockedInputSha256)) {
+  throw new Error('The industrial-design holdout lock is missing or invalid.');
+}
 const compiledPath = realpathSync(resolve(process.argv[2] ?? ''));
 const sourcePath = realpathSync(resolve(process.argv[3] ?? ''));
 const outputPath = resolve(process.argv[4] ?? 'benchmarks/holdouts/artifacts/abo-b075qmhyvd/img2threejs-web.glb');
@@ -62,7 +70,8 @@ const validation = await validateGlbStandard(bytes.buffer.slice(bytes.byteOffset
 if (validation.status !== 'pass') throw new Error(`Competitor GLB validation failed: ${validation.issueCodes.join(', ')}`);
 const receipt = {
   schema: 'morphloom.competitor-candidate-seal/0.1',
-  caseId: 'abo-b075qmhyvd-industrial-design',
+  caseId: holdoutLock.caseId,
+  lockedInputSha256: holdoutLock.lockedInputSha256,
   engine: 'img2threejs-web',
   engineRevision: '9fbd0ca5bbcc3b13bebe712745d6784d33db0b85',
   modelSurface: 'ChatGPT Free web',
