@@ -96,7 +96,7 @@ if (!surface.materialSuitability.pass) throw new Error(`Reference wood surface i
 const ir = createCaseworkFurnitureIR({
   name: lock.source.title,
   widthMm: 610,
-  depthMm: 430,
+  depthMm: 420,
   bodyHeightMm: 455,
   legHeightMm: 180,
   overallHeightMm: 610,

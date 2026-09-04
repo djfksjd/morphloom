@@ -60,6 +60,14 @@ const finalists = results.slice(0, 12).map((entry) => {
     minimumCoverage: audit.minimumCoverage,
     pass: audit.pass,
   } };
+}).sort((left, right) => {
+  const leftAudit = left.highResolution;
+  const rightAudit = right.highResolution;
+  const leftObjective = leftAudit.symmetricRmsChamfer + leftAudit.maximumDimensionRelativeError * 0.2
+    + (1 - leftAudit.minimumCoverage) * 0.1;
+  const rightObjective = rightAudit.symmetricRmsChamfer + rightAudit.maximumDimensionRelativeError * 0.2
+    + (1 - rightAudit.minimumCoverage) * 0.1;
+  return leftObjective - rightObjective;
 });
 console.log(JSON.stringify({
   schema: 'morphloom.casework-envelope-diagnostic/0.1',
