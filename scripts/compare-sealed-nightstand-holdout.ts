@@ -10,6 +10,7 @@ const ROOT = resolve('.');
 const LOCK_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-lock.json');
 const MORPHLOOM_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-3750dcd.json');
 const COMPETITOR_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-img2threejs-web-9fbd0ca.json');
+const POST_REVEAL_RECEIPT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-morphloom-post-reveal-352b3e8.json');
 const GROUND_TRUTH_PATH = resolve('work/abo/holdouts/industrial-design-01/ground-truth.glb');
 const OUTPUT_PATH = resolve('benchmarks/holdouts/abo-industrial-design-01-comparison.json');
 const SAMPLE_COUNT = 4_096;
@@ -24,6 +25,8 @@ interface CandidateReceipt {
   artifact: { file: string; sha256: string; bytes: number };
   groundTruthRevealed: boolean;
   sealedAt: string;
+  candidateKind?: string;
+  baselineBlindArtifactSha256?: string;
 }
 
 interface HoldoutLock {
@@ -50,12 +53,14 @@ function assertSafeFile(path: string): void {
   }
 }
 
-function verifyReceipt(lock: HoldoutLock, receipt: CandidateReceipt): string {
+function verifyReceipt(lock: HoldoutLock, receipt: CandidateReceipt, expectedGroundTruthState = false): string {
   if (receipt.caseId !== lock.caseId
     || (receipt.lockedInputSha256 !== undefined && receipt.lockedInputSha256 !== lock.lockedInputSha256)) {
     throw new Error('Candidate receipt does not bind to the locked holdout input.');
   }
-  if (receipt.groundTruthRevealed !== false) throw new Error('Candidate was not sealed before ground-truth reveal.');
+  if (receipt.groundTruthRevealed !== expectedGroundTruthState) {
+    throw new Error(`Candidate ground-truth state does not match the expected ${expectedGroundTruthState ? 'post-reveal' : 'blind'} phase.`);
+  }
   const artifactPath = resolve(receipt.artifact.file);
   assertSafeFile(artifactPath);
   const actualHash = sha256(artifactPath);
@@ -82,8 +87,14 @@ function documentInventory(document: Awaited<ReturnType<NodeIO['read']>>) {
 const lock = readJson<HoldoutLock>(LOCK_PATH);
 const morphloomReceipt = readJson<CandidateReceipt>(MORPHLOOM_RECEIPT_PATH);
 const competitorReceipt = readJson<CandidateReceipt>(COMPETITOR_RECEIPT_PATH);
+const postRevealReceipt = readJson<CandidateReceipt>(POST_REVEAL_RECEIPT_PATH);
 const morphloomPath = verifyReceipt(lock, morphloomReceipt);
 const competitorPath = verifyReceipt(lock, competitorReceipt);
+const postRevealPath = verifyReceipt(lock, postRevealReceipt, true);
+if (postRevealReceipt.candidateKind !== 'post-seal-engine-iteration'
+  || postRevealReceipt.baselineBlindArtifactSha256 !== morphloomReceipt.artifact.sha256) {
+  throw new Error('Post-reveal iteration does not bind to the sealed Morphloom baseline.');
+}
 assertSafeFile(GROUND_TRUTH_PATH);
 
 // A timestamp ordering check makes the blind boundary machine-auditable without
@@ -95,8 +106,8 @@ for (const receipt of [morphloomReceipt, competitorReceipt]) {
 }
 
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
-const [groundTruthDocument, morphloomDocument, competitorDocument] = await Promise.all([
-  io.read(GROUND_TRUTH_PATH), io.read(morphloomPath), io.read(competitorPath),
+const [groundTruthDocument, morphloomDocument, competitorDocument, postRevealDocument] = await Promise.all([
+  io.read(GROUND_TRUTH_PATH), io.read(morphloomPath), io.read(competitorPath), io.read(postRevealPath),
 ]);
 const groundTruthSample = sampleTriangleSurface(collectGltfTriangles(groundTruthDocument), SAMPLE_COUNT);
 
@@ -112,8 +123,12 @@ function auditCandidate(document: Awaited<ReturnType<NodeIO['read']>>) {
 
 const morphloom = auditCandidate(morphloomDocument);
 const img2threejs = auditCandidate(competitorDocument);
+const postReveal = auditCandidate(postRevealDocument);
 const lowerRatio = (left: number, right: number) => right === 0 ? null : left / right;
 const higherRatio = (left: number, right: number) => right === 0 ? null : left / right;
+const balancedGeometryObjective = (candidate: typeof morphloom) => candidate.geometry.symmetricRmsChamfer
+  + candidate.geometry.maximumDimensionRelativeError * 0.2
+  + (1 - candidate.geometry.minimumCoverage) * 0.1;
 const dominanceChecks = [
   {
     metric: 'maximum-dimension-relative-error', direction: 'lower-is-better',
@@ -174,6 +189,13 @@ const report = {
         : undefined,
       ...img2threejs,
     },
+    morphloomPostRevealIteration: {
+      seal: relative(ROOT, POST_REVEAL_RECEIPT_PATH), artifactSha256: postRevealReceipt.artifact.sha256,
+      engineRevision: postRevealReceipt.engineRevision,
+      blindEvidence: false,
+      warning: 'Ground truth was available before this engine iteration. This is a development diagnostic, not a new blind holdout result.',
+      ...postReveal,
+    },
   },
   verdict: {
     morphloomMetricWins: dominanceChecks.filter((check) => check.winner === 'morphloom').length,
@@ -181,6 +203,16 @@ const report = {
     dominanceChecks,
     morphloomStrictGeometryPass: morphloom.geometry.pass,
     img2threejsStrictGeometryPass: img2threejs.geometry.pass,
+    postRevealIteration: {
+      strictGeometryPass: postReveal.geometry.pass,
+      dimensionPass: postReveal.geometry.dimensionPass,
+      baselineToIteration: {
+        maximumDimensionRelativeError: [morphloom.geometry.maximumDimensionRelativeError, postReveal.geometry.maximumDimensionRelativeError],
+        symmetricRmsChamfer: [morphloom.geometry.symmetricRmsChamfer, postReveal.geometry.symmetricRmsChamfer],
+        minimumSurfaceCoverage: [morphloom.geometry.minimumCoverage, postReveal.geometry.minimumCoverage],
+        balancedGeometryObjective: [balancedGeometryObjective(morphloom), balancedGeometryObjective(postReveal)],
+      },
+    },
     conclusion: dominanceChecks.every((check) => check.winner === 'morphloom')
       ? 'Morphloom wins all three predeclared geometry metrics on this sealed holdout, but remains below the strict semi-professional geometry gate.'
       : 'Morphloom does not win every predeclared geometry metric on this sealed holdout.',
