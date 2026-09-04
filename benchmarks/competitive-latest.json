@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-09-03T08:42:06.676Z",
+  "generatedAt": "2026-09-04T00:51:11.605Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -2319,8 +2319,8 @@
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.4",
       "compilerRevision": "morphloom-compiler/0.31.0",
-      "fingerprintRevision": "morphloom-scene-fingerprint/0.5.0",
-      "generatedAt": "2026-09-03T08:08:59.930Z",
+      "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
+      "generatedAt": "2026-09-04T00:42:48.435Z",
       "receiptIntegrityPass": true,
       "assets": [
         {
@@ -2330,8 +2330,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "02f9e94f6e479f66",
-          "buildFingerprint": "cc3394a4e714001f",
-          "preparedSceneFingerprint": "0e46db527df133f5"
+          "buildFingerprint": "d551a6fff505d014",
+          "preparedSceneFingerprint": "0f37aca4277b3c18"
         },
         {
           "id": "cooling-service-assembly",
@@ -2340,8 +2340,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "fbdda22a32571e08",
-          "buildFingerprint": "ca755d08621f69a2",
-          "preparedSceneFingerprint": "ad83006a0534fa65"
+          "buildFingerprint": "641337a60bd3f86d",
+          "preparedSceneFingerprint": "c45e5c2ac92069d7"
         },
         {
           "id": "field-human-runtime-base",
@@ -2350,8 +2350,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "ccfccf14c4ea8271",
-          "buildFingerprint": "91ed80be19b55d27",
-          "preparedSceneFingerprint": "33f7af0613db3396"
+          "buildFingerprint": "b2f078bc0e9cd087",
+          "preparedSceneFingerprint": "9ac4dab658b20d9f"
         },
         {
           "id": "laurel-homes-architectural-review",
@@ -2360,8 +2360,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "cc3722c2a7647553",
-          "buildFingerprint": "c83bee357cdfa547",
-          "preparedSceneFingerprint": "6f2c9df9d2ed478b"
+          "buildFingerprint": "b61c2f9175fe7ae4",
+          "preparedSceneFingerprint": "75e95c2b8eb1e525"
         },
         {
           "id": "ornate-knife-product-visualization",
@@ -2370,8 +2370,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "9d01658c9594ecee",
-          "buildFingerprint": "8668442f85334b1d",
-          "preparedSceneFingerprint": "195fb5eea2538381"
+          "buildFingerprint": "8defd19c3bbac42f",
+          "preparedSceneFingerprint": "d70d1ebe673fd2d3"
         },
         {
           "id": "pinterest-concept-architectural-review",
@@ -2380,8 +2380,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "f6df604f1671dc8f",
-          "buildFingerprint": "5036c3dfeef7fadc",
-          "preparedSceneFingerprint": "f08e8c7cc7929ffd"
+          "buildFingerprint": "d617b036941a397b",
+          "preparedSceneFingerprint": "0dd3479b3d4177f6"
         },
         {
           "id": "single-view-character-previs",
@@ -2390,8 +2390,8 @@
           "texturePayloadParity": true,
           "materialPayloadParity": true,
           "inputFingerprint": "6ce68883c839bfe0",
-          "buildFingerprint": "4651530e91a994ac",
-          "preparedSceneFingerprint": "3ef01837c09a735c"
+          "buildFingerprint": "92d399300e9f3dc1",
+          "preparedSceneFingerprint": "a643566447cf76c3"
         }
       ],
       "currentEngineBinding": {
