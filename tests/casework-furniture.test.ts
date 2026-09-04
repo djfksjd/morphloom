@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { compileAssemblyIR } from '../src/engine/assembly-compiler';
 import { createCaseworkFurnitureIR } from '../src/engine/casework-furniture';
 import { auditPartDecomposition } from '../src/engine/part-decomposition';
+import * as THREE from 'three';
 
 describe('casework furniture engine', () => {
   const create = () => createCaseworkFurnitureIR({
@@ -38,5 +39,20 @@ describe('casework furniture engine', () => {
       name: 'invalid', widthMm: 0, depthMm: 430, bodyHeightMm: 455,
       legHeightMm: 190, drawerCount: 2, source: 'fixture',
     })).toThrow(/outside safe bounds/);
+  });
+
+  it('honors an evidence-backed overall width and height envelope', () => {
+    const ir = createCaseworkFurnitureIR({
+      name: 'Measured envelope fixture', widthMm: 610, depthMm: 430,
+      bodyHeightMm: 455, legHeightMm: 150, overallHeightMm: 610,
+      drawerCount: 2, source: 'measured-datasheet',
+    });
+    const build = compileAssemblyIR(ir, 'clay');
+    const size = new THREE.Box3().setFromObject(build.root).getSize(new THREE.Vector3());
+    expect(size.x).toBeCloseTo(0.61, 4);
+    expect(Math.abs(size.y - 0.61)).toBeLessThan(0.002);
+    expect(ir.metadata?.requestedEnvelopeHeightMm).toBe(610);
+    expect(ir.components.filter((component) => component.id.includes('_inlay_'))
+      .every((component) => component.geometry.op === 'extrude')).toBe(true);
   });
 });

@@ -28,10 +28,15 @@ class NodeOffscreenCanvas extends Canvas {
 }
 Object.assign(globalThis, { FileReader: NodeFileReader, OffscreenCanvas: NodeOffscreenCanvas, ImageData });
 
-const lockPath = resolve(process.argv[2] ?? 'benchmarks/holdouts/abo-industrial-design-01-lock.json');
-const outputPath = resolve(process.argv[3] ?? 'tmp/holdouts/abo-nightstand/morphloom-nightstand.glb');
-const receiptPath = resolve(process.argv[4] ?? 'benchmarks/holdouts/abo-industrial-design-01-morphloom-candidate.json');
+const positionalArguments = process.argv.slice(2).filter((value) => !value.startsWith('--'));
+const lockPath = resolve(positionalArguments[0] ?? 'benchmarks/holdouts/abo-industrial-design-01-lock.json');
+const outputPath = resolve(positionalArguments[1] ?? 'tmp/holdouts/abo-nightstand/morphloom-nightstand.glb');
+const receiptPath = resolve(positionalArguments[2] ?? 'benchmarks/holdouts/abo-industrial-design-01-morphloom-candidate.json');
 const workspace = resolve('.');
+const postReveal = process.argv.includes('--post-reveal');
+if (!postReveal) {
+  throw new Error('This holdout ground truth has been revealed. Further candidates must use --post-reveal and cannot be reported as blind evidence.');
+}
 const outputRoots = [resolve(workspace, 'tmp/holdouts'), resolve(workspace, 'benchmarks/holdouts/artifacts')];
 if (!isPathInside(resolve(workspace, 'benchmarks/holdouts'), lockPath)
   || !outputRoots.some((root) => isPathInside(root, outputPath))
@@ -93,7 +98,8 @@ const ir = createCaseworkFurnitureIR({
   widthMm: 610,
   depthMm: 430,
   bodyHeightMm: 455,
-  legHeightMm: 190,
+  legHeightMm: 180,
+  overallHeightMm: 610,
   drawerCount: 2,
   source: lock.caseId,
 });
@@ -150,7 +156,9 @@ const receipt = {
   detailAudit: auditAssemblyDetail(ir),
   materialReceipt,
   factorReceipt,
-  groundTruthRevealed: false,
+  candidateKind: 'post-seal-engine-iteration',
+  baselineBlindArtifactSha256: 'd84d75ffc727d98db6f248473810bff98e7648fe0af948a400a526e9b188749d',
+  groundTruthRevealed: true,
   sealedAt: new Date().toISOString(),
 };
 let artifactWritten = false;

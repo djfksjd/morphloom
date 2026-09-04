@@ -6,6 +6,8 @@ export interface CaseworkFurnitureSpec {
   depthMm: number;
   bodyHeightMm: number;
   legHeightMm: number;
+  /** Optional evidence-backed total envelope height, including feet and top. */
+  overallHeightMm?: number;
   drawerCount: number;
   source: string;
 }
@@ -45,35 +47,40 @@ const legMetal: AssemblyMaterialIR = {
 export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): AssemblyIR {
   if (![spec.widthMm, spec.depthMm, spec.bodyHeightMm, spec.legHeightMm].every(Number.isFinite)
     || spec.widthMm < 200 || spec.depthMm < 150 || spec.bodyHeightMm < 200 || spec.legHeightMm < 50
+    || (spec.overallHeightMm !== undefined && (!Number.isFinite(spec.overallHeightMm)
+      || spec.overallHeightMm < 250 || spec.overallHeightMm <= spec.legHeightMm + 100))
     || !Number.isInteger(spec.drawerCount) || spec.drawerCount < 1 || spec.drawerCount > 8) {
     throw new Error('Casework furniture dimensions or drawer count are outside safe bounds.');
   }
   const components: AssemblyComponentIR[] = [];
+  const bodyHeightMm = spec.overallHeightMm === undefined
+    ? spec.bodyHeightMm
+    : spec.overallHeightMm - spec.legHeightMm - 5;
   const bodyBottom = spec.legHeightMm;
-  const bodyCenter = bodyBottom + spec.bodyHeightMm / 2;
+  const bodyCenter = bodyBottom + bodyHeightMm / 2;
   const frontZ = -spec.depthMm / 2;
   const rearZ = spec.depthMm / 2;
   const sideThickness = 22;
   const topThickness = 38;
   const gap = 7;
-  const drawerHeight = (spec.bodyHeightMm - topThickness - gap * (spec.drawerCount + 1)) / spec.drawerCount;
+  const drawerHeight = (bodyHeightMm - topThickness - gap * (spec.drawerCount + 1)) / spec.drawerCount;
   const evidence = { status: 'estimated' as const, source: spec.source };
   const add = (component: AssemblyComponentIR) => components.push({ ...component, evidence });
 
   add({ id: 'top_slab', name: 'solid wood top slab', category: 'enclosure', materialName: 'reference walnut',
-    detail: 'Rounded independent top with visible edge thickness.', geometry: { op: 'roundedBox', size: [spec.widthMm + 12, topThickness, spec.depthMm + 10], radius: 5, segments: 4 },
-    position: [0, bodyBottom + spec.bodyHeightMm - topThickness / 2 + 5, 0], material: walnut });
+    detail: 'Rounded independent top constrained to the evidence-backed overall width.', geometry: { op: 'roundedBox', size: [spec.widthMm, topThickness, spec.depthMm + 10], radius: 5, segments: 4 },
+    position: [0, bodyBottom + bodyHeightMm - topThickness / 2 + 5, 0], material: walnut });
   for (const side of [-1, 1] as const) add({ id: `side_panel_${side < 0 ? 'left' : 'right'}`, name: `${side < 0 ? 'left' : 'right'} carcass side panel`,
     category: 'enclosure', materialName: 'reference walnut', detail: 'Full-depth independently editable side panel.',
-    geometry: { op: 'roundedBox', size: [sideThickness, spec.bodyHeightMm - topThickness, spec.depthMm], radius: 2.5, segments: 3 },
+    geometry: { op: 'roundedBox', size: [sideThickness, bodyHeightMm - topThickness, spec.depthMm], radius: 2.5, segments: 3 },
     position: [side * (spec.widthMm - sideThickness) / 2, bodyCenter - topThickness / 2, 0], material: walnut });
   add({ id: 'carcass_bottom', name: 'carcass bottom rail', category: 'mechanical', materialName: 'dark walnut',
     detail: 'Structural lower rail visible between the legs.', geometry: { op: 'roundedBox', size: [spec.widthMm - 34, 24, spec.depthMm - 30], radius: 2, segments: 3 },
     position: [0, bodyBottom + 15, 0], material: darkWood });
   add({ id: 'rear_panel', name: 'black inset rear panel with cable port', category: 'enclosure', materialName: 'black backing board',
     detail: 'Inset rear service panel with a real circular cable opening.', geometry: {
-      op: 'extrude', points: [[-spec.widthMm / 2 + 22, -spec.bodyHeightMm / 2 + 22], [spec.widthMm / 2 - 22, -spec.bodyHeightMm / 2 + 22], [spec.widthMm / 2 - 22, spec.bodyHeightMm / 2 - 24], [-spec.widthMm / 2 + 22, spec.bodyHeightMm / 2 - 24]],
-      ovalHoles: [{ center: [0, spec.bodyHeightMm * 0.23], radii: [14, 14], segments: 32 }], depth: 8, bevelSize: 0.8, bevelThickness: 0.8, bevelSegments: 1,
+      op: 'extrude', points: [[-spec.widthMm / 2 + 22, -bodyHeightMm / 2 + 22], [spec.widthMm / 2 - 22, -bodyHeightMm / 2 + 22], [spec.widthMm / 2 - 22, bodyHeightMm / 2 - 24], [-spec.widthMm / 2 + 22, bodyHeightMm / 2 - 24]],
+      ovalHoles: [{ center: [0, bodyHeightMm * 0.23], radii: [14, 14], segments: 32 }], depth: 8, bevelSize: 0.8, bevelThickness: 0.8, bevelSegments: 1,
     }, position: [0, bodyCenter - 8, rearZ - 5], material: rearBoard });
 
   for (let drawer = 0; drawer < spec.drawerCount; drawer += 1) {
@@ -85,23 +92,36 @@ export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): Assembly
     add({ id: `drawer_${index}_box`, name: `drawer ${index} storage box`, category: 'mechanical', materialName: 'dark walnut',
       detail: 'Editable drawer volume separated from its decorative face.', geometry: { op: 'roundedBox', size: [spec.widthMm - 82, drawerHeight - 30, spec.depthMm - 54], radius: 2, segments: 3 },
       position: [0, y, -2], material: darkWood });
-    const stripY = y + (drawer % 2 === 0 ? 0 : 3);
+    const faceWidth = spec.widthMm - 54;
+    const halfWidth = faceWidth / 2;
+    const halfHeight = drawerHeight / 2 - 0.7;
+    const segmentWidth = faceWidth / 6;
+    const diagonalShift = Math.min(segmentWidth * 0.28, drawerHeight * 0.16);
+    const boundaries = (atTop: boolean) => Array.from({ length: 7 }, (_, boundary) => {
+      if (boundary === 0) return -halfWidth;
+      if (boundary === 6) return halfWidth;
+      const direction = (boundary + drawer + (atTop ? 0 : 1)) % 2 === 0 ? -1 : 1;
+      return -halfWidth + boundary * segmentWidth + direction * diagonalShift;
+    });
+    const topBoundaries = boundaries(true);
+    const bottomBoundaries = boundaries(false);
     for (let strip = 0; strip < 6; strip += 1) {
-      const x = (strip - 2.5) * (spec.widthMm - 112) / 6;
-      const rotation = (strip % 2 === 0 ? 1 : -1) * Math.PI / 3.65;
       add({ id: `drawer_${index}_inlay_${strip + 1}`, name: `drawer ${index} chevron veneer ${strip + 1}`,
         category: 'mechanical', materialName: strip % 2 === 0 ? 'warm walnut veneer' : 'golden walnut veneer',
-        detail: 'Flush low-contrast veneer panel preserves the photographed grain direction without reading as an applied bar.',
-        geometry: { op: 'roundedBox', size: [drawerHeight * 0.7, Math.max(42, (spec.widthMm - 110) / 12), 0.12], radius: 0.05, segments: 3 },
-        position: [x, stripY, frontZ - 14.065], rotation: [0, 0, rotation], material: strip % 2 === 0 ? chevronWarm : chevronGolden });
+        detail: 'Flush full-height veneer field with alternating diagonal boundaries; no floating decorative bars.',
+        geometry: { op: 'extrude', points: [
+          [topBoundaries[strip]!, halfHeight], [topBoundaries[strip + 1]!, halfHeight],
+          [bottomBoundaries[strip + 1]!, -halfHeight], [bottomBoundaries[strip]!, -halfHeight],
+        ], depth: 0.12 },
+        position: [0, y, frontZ - 14.065], material: strip % 2 === 0 ? chevronWarm : chevronGolden });
     }
     add({ id: `drawer_${index}_handle`, name: `drawer ${index} brushed brass pull`, category: 'mechanical', materialName: 'brushed brass',
-      detail: 'Independent rectangular pull with visible stand-off depth.', geometry: { op: 'roundedBox', size: [92, 24, 12], radius: 2.2, segments: 3 },
-      position: [0, y + 6, frontZ - 29], material: brass });
+      detail: 'Independent compact pull with evidence-bounded stand-off depth.', geometry: { op: 'roundedBox', size: [92, 24, 8], radius: 2.2, segments: 3 },
+      position: [0, y + 6, frontZ - 21], material: brass });
     for (const side of [-1, 1] as const) add({ id: `drawer_${index}_handle_post_${side < 0 ? 'left' : 'right'}`,
       name: `drawer ${index} handle ${side < 0 ? 'left' : 'right'} post`, category: 'mechanical', materialName: 'brushed brass',
       detail: 'Mechanical pull stand-off retained as a separate edit unit.', geometry: { op: 'cylinder', radiusTop: 5, radiusBottom: 5, depth: 18, radialSegments: 20 },
-      position: [side * 32, y + 6, frontZ - 20], rotation: [Math.PI / 2, 0, 0], material: brass });
+      position: [side * 32, y + 6, frontZ - 16], rotation: [Math.PI / 2, 0, 0], material: brass });
   }
 
   for (const [id, x, z, rx, rz] of [
@@ -115,7 +135,7 @@ export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): Assembly
       detail: 'Replaceable floor-contact cap.', geometry: { op: 'cylinder', radiusTop: 10.5, radiusBottom: 10.5, depth: 7, radialSegments: 24 },
       position: [x * (spec.widthMm / 2 - 52), 3.5, z * (spec.depthMm / 2 - 47)], material: rubber });
   }
-  for (const [index, x, y] of [[1, -spec.widthMm * 0.44, spec.bodyHeightMm * 0.38], [2, 0, spec.bodyHeightMm * 0.38], [3, spec.widthMm * 0.44, spec.bodyHeightMm * 0.38], [4, -spec.widthMm * 0.44, -spec.bodyHeightMm * 0.38], [5, 0, -spec.bodyHeightMm * 0.38], [6, spec.widthMm * 0.44, -spec.bodyHeightMm * 0.38]] as const) {
+  for (const [index, x, y] of [[1, -spec.widthMm * 0.44, bodyHeightMm * 0.38], [2, 0, bodyHeightMm * 0.38], [3, spec.widthMm * 0.44, bodyHeightMm * 0.38], [4, -spec.widthMm * 0.44, -bodyHeightMm * 0.38], [5, 0, -bodyHeightMm * 0.38], [6, spec.widthMm * 0.44, -bodyHeightMm * 0.38]] as const) {
     add({ id: `rear_fastener_${index}`, name: `rear panel fastener ${index}`, category: 'mechanical', materialName: 'black steel',
       detail: 'Visible rear panel screw head.', geometry: { op: 'cylinder', radiusTop: 2.8, radiusBottom: 2.8, depth: 1.6, radialSegments: 16 },
       position: [x, bodyCenter + y, rearZ + 0.2], rotation: [Math.PI / 2, 0, 0], material: rearBoard });
@@ -152,6 +172,7 @@ export function createCaseworkFurnitureIR(spec: CaseworkFurnitureSpec): Assembly
       assetKind: 'product', qualityTarget: 'semi-professional-editable',
       evidenceDeliveryReady: false, evidenceUnresolvedCapabilities: 'measured physical dimensions and calibrated BRDF',
       benchmarkSource: 'locked-multiview-reference', furnitureSystem: 'casework-v1',
+      ...(spec.overallHeightMm === undefined ? {} : { requestedEnvelopeHeightMm: spec.overallHeightMm }),
     },
   };
   return ir;

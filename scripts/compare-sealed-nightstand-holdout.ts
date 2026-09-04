@@ -140,7 +140,6 @@ const dominanceChecks = [
 
 const report = {
   schema: 'morphloom.sealed-holdout-comparison/0.1',
-  generatedAt: new Date().toISOString(),
   protocol: {
     kind: 'post-seal-ground-truth-reveal',
     caseId: lock.caseId,
