@@ -1,0 +1,14 @@
+[
+  {
+    "case": "large-checker",
+    "exactBytes": true,
+    "nodeSha256": "b0a1935247463ea75acae246f81fc87700a3520ba1bc8a839d4d00f755c68f2d",
+    "browserSha256": "b0a1935247463ea75acae246f81fc87700a3520ba1bc8a839d4d00f755c68f2d"
+  },
+  {
+    "case": "torus",
+    "exactBytes": true,
+    "nodeSha256": "753140bb80c618d60e62a416c92bd7799a8681557c246776611a008cf445eaa0",
+    "browserSha256": "753140bb80c618d60e62a416c92bd7799a8681557c246776611a008cf445eaa0"
+  }
+]

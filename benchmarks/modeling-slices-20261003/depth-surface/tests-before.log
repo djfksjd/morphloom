@@ -1,0 +1,25 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/depth-surface.test.ts [ tests/depth-surface.test.ts ]
+Error: Cannot find module '../src/engine/depth-surface' imported from '/Users/danny/Documents/morphloom/tests/depth-surface.test.ts'
+ ❯ tests/depth-surface.test.ts:2:1
+      1| import {describe, it, expect} from 'vitest';
+      2| import {compileDepthSurface, type DepthSurfaceSource} from '../src/eng…
+       | ^
+      3| function source(): DepthSurfaceSource {
+      4|  const width=8,height=8, samples=Array.from({length:64},(_,i)=>1/(200+…
+
+Caused by: Error: Failed to load url ../src/engine/depth-surface (resolved id: ../src/engine/depth-surface) in /Users/danny/Documents/morphloom/tests/depth-surface.test.ts. Does the file exist?
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/config.js:22739:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  00:45:42
+   Duration  116ms (transform 13ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 28ms)

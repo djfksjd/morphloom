@@ -1,0 +1,62 @@
+[
+  {
+    "source": "outputs/depth-surface-20261003/large-checker-depth.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 1.483
+  },
+  {
+    "source": "outputs/depth-surface-20261003/large-matte-depth.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.689
+  },
+  {
+    "source": "outputs/depth-surface-20261003/small-matte-depth.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.696
+  },
+  {
+    "source": "outputs/depth-surface-20261003/small-checker-depth.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.986
+  },
+  {
+    "source": "outputs/depth-surface-20261003/small-matte-luma.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.762
+  },
+  {
+    "source": "outputs/depth-surface-20261003/torus-luma.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.99
+  },
+  {
+    "source": "outputs/depth-surface-20261003/torus-depth.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.744
+  },
+  {
+    "source": "outputs/depth-surface-20261003/large-checker-luma.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.81
+  },
+  {
+    "source": "outputs/depth-surface-20261003/small-checker-luma.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.757
+  },
+  {
+    "source": "outputs/depth-surface-20261003/large-matte-luma.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.762
+  },
+  {
+    "source": "outputs/depth-surface-20261003/browser/before.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.75
+  },
+  {
+    "source": "outputs/depth-surface-20261003/browser/torus.diagnostic.glb",
+    "exitCode": 0,
+    "seconds": 0.704
+  }
+]

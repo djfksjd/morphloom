@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "morphloom.depth-surface/0.1",
+  "title": "Experimental native relative depth source (not approved solid)",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "imageSha256",
+    "rawFieldSha256",
+    "width",
+    "height",
+    "samples",
+    "mask",
+    "camera",
+    "calibration",
+    "stride"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "morphloom.depth-surface/0.1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$"
+    },
+    "imageSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "rawFieldSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 256
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 256
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 65536,
+      "items": {
+        "type": "number",
+        "minimum": -1000000,
+        "maximum": 1000000
+      }
+    },
+    "mask": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 65536,
+      "items": {
+        "enum": [
+          0,
+          1
+        ]
+      }
+    },
+    "stride": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8
+    },
+    "camera": {
+      "type": "object",
+      "required": [
+        "projection",
+        "units",
+        "axes",
+        "frameMm",
+        "cameraZMm"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "projection": {
+          "const": "orthographic-front"
+        },
+        "units": {
+          "const": "mm"
+        },
+        "axes": {
+          "const": "right-handed-y-up"
+        },
+        "frameMm": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "number",
+            "minimum": -1000000,
+            "maximum": 1000000
+          }
+        },
+        "cameraZMm": {
+          "type": "number",
+          "minimum": -1000000,
+          "maximum": 1000000
+        }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "required": [
+        "basis",
+        "fit",
+        "validation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "enum": [
+            "user-measured",
+            "authored-fixture"
+          ]
+        },
+        "fit": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 512,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "pixel",
+              "depthMm"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96
+              },
+              "pixel": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "depthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0.001,
+                "maximum": 1000000
+              }
+            }
+          }
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 512,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "pixel",
+              "depthMm"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96
+              },
+              "pixel": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "depthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0.001,
+                "maximum": 1000000
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Engine also validates array lengths, foreground anchors, uniqueness, positive reciprocal fit, residuals, triangle count and Float32 collapse."
+}

@@ -78,13 +78,13 @@ def area_light(name, location, energy, size):
 
 
 args = sys.argv[sys.argv.index("--") + 1:]
-if len(args) not in {3, 4, 5}:
-    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso|axis-y] [material|clay|wire|grazing]")
+if len(args) not in {3, 4, 5, 6}:
+    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso|axis-y] [material|clay|wire|grazing] [fixed-space.json]")
 source = Path(args[0]).resolve()
 render_path = Path(args[1]).resolve()
 report_path = Path(args[2]).resolve()
 view_id = args[3] if len(args) >= 4 else "front"
-inspection_mode = args[4] if len(args) == 5 else "material"
+inspection_mode = args[4] if len(args) >= 5 else "material"
 if inspection_mode not in {"material", "clay", "wire", "grazing"}:
     raise RuntimeError("Unsupported inspection mode")
 camera_presets = {
@@ -111,7 +111,31 @@ if "FINISHED" not in result:
 meshes = delivery_meshes()
 if len(meshes) > 100_000:
     raise RuntimeError("Neutral renderer mesh-object budget exceeded")
-normalization = normalize_scene(meshes)
+normalization_method = "broadside-xz-max-extent"
+if len(args) == 6:
+    space_path = Path(args[5]).resolve()
+    if not space_path.is_file() or space_path.stat().st_size > 4096:
+        raise RuntimeError("Fixed neutral space must be a bounded local JSON")
+    space = json.loads(space_path.read_text())
+    scale = space.get("scale")
+    translation = space.get("translationMeters")
+    if (space.get("schema") != "morphloom.fixed-neutral-space/0.1"
+        or not isinstance(scale, (int, float)) or not math.isfinite(scale) or not 0 < scale <= 10000
+        or not isinstance(translation, list) or len(translation) != 3
+        or any(not isinstance(n, (int, float)) or not math.isfinite(n) or abs(n) > 10000 for n in translation)):
+        raise RuntimeError("Fixed neutral space transform is invalid")
+    minimum, maximum = world_bounds(meshes)
+    transform = Matrix.Scale(scale, 4) @ Matrix.Translation(Vector(translation))
+    for obj in [obj for obj in bpy.context.scene.objects if obj.parent is None]:
+        obj.matrix_world = transform @ obj.matrix_world
+    bpy.context.view_layer.update()
+    normalized_minimum, normalized_maximum = world_bounds(meshes)
+    normalization_method = "fixed-metre-datum"
+    normalization = {"sourceBounds": {"min": list(minimum), "max": list(maximum), "size": list(maximum-minimum)},
+        "scale": scale, "fixedSpaceSha256": digest(space_path), "translationMeters": translation,
+        "normalizedBounds": {"min": list(normalized_minimum), "max": list(normalized_maximum), "size": list(normalized_maximum-normalized_minimum)}}
+else:
+    normalization = normalize_scene(meshes)
 
 # Remove source cameras and lights. Both candidates receive this exact neutral studio.
 for obj in list(bpy.context.scene.objects):
@@ -219,8 +243,8 @@ report = {
     "meshes": len(meshes),
     "materials": len(bpy.data.materials),
     "normalization": {
-        "method": "broadside-xz-max-extent",
-        "targetExtent": 2.0,
+        "method": normalization_method,
+        "targetExtent": 2.0 if normalization_method == "broadside-xz-max-extent" else None,
         **normalization,
     },
     "camera": {
@@ -241,7 +265,7 @@ report = {
         ],
     },
 }
-if len(args) == 5:
+if len(args) >= 5:
     report["inspectionMode"] = inspection_mode
     report["actualLights"] = [{"name": obj.name, "position": list(obj.location), "energy": obj.data.energy, "size": obj.data.size} for obj in scene.objects if obj.type == "LIGHT"]
 

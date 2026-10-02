@@ -1,0 +1,37 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ❯ tests/depth-surface.test.ts (5 tests | 1 failed) 7ms
+   ✓ calibrated visible depth surfaces > creates actual reciprocal mm geometry, outward normals and pixel-centre UV deterministically 2ms
+   ✓ calibrated visible depth surfaces > preserves holes and refuses any cell across a masked interior at coarse stride 0ms
+   ✓ calibrated visible depth surfaces > blocks a critical validation failure instead of hiding it in an average 0ms
+   × calibrated visible depth surfaces > rejects unconstrained fit depths and float32-collapsed frames 3ms
+     → expected [Function] to throw an error
+   ✓ calibrated visible depth surfaces > rejects missing camera, invalid mask, duplicate/colliding anchors and reversed proxy 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/depth-surface.test.ts > calibrated visible depth surfaces > rejects unconstrained fit depths and float32-collapsed frames
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ tests/depth-surface.test.ts:39:46
+     37|   expect(()=>compileDepthSurface(flat)).toThrow(/unconstrained|range/);
+     38|   const collapsed=source();collapsed.camera.frameMm=[999999.999,100000…
+     39|   expect(()=>compileDepthSurface(collapsed)).toThrow(/precision/);
+       |                                              ^
+     40|  });
+     41|  it('rejects missing camera, invalid mask, duplicate/colliding anchors…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  00:56:14
+   Duration  149ms (transform 18ms, setup 0ms, collect 28ms, tests 7ms, environment 0ms, prepare 37ms)

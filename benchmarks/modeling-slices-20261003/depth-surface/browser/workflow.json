@@ -1,0 +1,65 @@
+{
+  "pass": true,
+  "cases": [
+    "actual mesh preview clay/iso/wire/checker",
+    "frame edit source preservation",
+    "undo redo exact native data",
+    "native save reopen",
+    "failed luma/torus generation blocked",
+    "explicit diagnostic export"
+  ],
+  "files": [
+    {
+      "path": "redo.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6"
+    },
+    {
+      "path": "before.diagnostic.glb",
+      "sha256": "b0a1935247463ea75acae246f81fc87700a3520ba1bc8a839d4d00f755c68f2d"
+    },
+    {
+      "path": "before-clay.png",
+      "sha256": "3dce0c8216de844548a2297fb4e999140f751147c086e8e6af4b40e959fce8ef"
+    },
+    {
+      "path": "edited.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6"
+    },
+    {
+      "path": "torus.diagnostic.glb",
+      "sha256": "753140bb80c618d60e62a416c92bd7799a8681557c246776611a008cf445eaa0"
+    },
+    {
+      "path": "undo.depth.json",
+      "sha256": "1d8cd3390265a57e172720095a9514dd8a6bf559df9f59f08bb4f2e20c6fae8d"
+    },
+    {
+      "path": "checker.png",
+      "sha256": "07f765259e337b1f16b749416cf44fdb8386c73f80229217b99b1b11f8360ced"
+    },
+    {
+      "path": "before.depth.json",
+      "sha256": "1d8cd3390265a57e172720095a9514dd8a6bf559df9f59f08bb4f2e20c6fae8d"
+    },
+    {
+      "path": "before-iso.png",
+      "sha256": "7e3a6181b6258e55caba98c7f289292585c4ea64079fd7746e8959acf8cca30e"
+    },
+    {
+      "path": "luma-diagnostic.png",
+      "sha256": "5ca4396fd6912e494da6f88c9e906079f62ba2347d3722d2e3afb26fbb7f2a9c"
+    },
+    {
+      "path": "wire.png",
+      "sha256": "80da0a8f8b1df57707a42dcf4bd2bfde3e6ddbd9447403e4a9a7f369d290edcd"
+    },
+    {
+      "path": "reopened.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6"
+    },
+    {
+      "path": "torus-diagnostic.png",
+      "sha256": "9c9900276f44d09d0c7e5b5645d9f24527c285f88355e0c5b95f7fc810f10df1"
+    }
+  ]
+}

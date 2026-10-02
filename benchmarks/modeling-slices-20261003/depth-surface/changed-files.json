@@ -1,0 +1,17 @@
+[
+  "src/engine/depth-surface.ts",
+  "src/DepthEditor.tsx",
+  "src/depth-editor.css",
+  "src/viewer-main.tsx",
+  "src/App.tsx",
+  "tests/depth-surface.test.ts",
+  "schemas/depth-surface.schema.json",
+  "scripts/depth-surface-fixtures.py",
+  "scripts/depth-surface-evidence.ts",
+  "scripts/depth-surface-vertex-audit.py",
+  "scripts/blender-depth-edit-audit.py",
+  "scripts/blender-neutral-render.py",
+  "docs/DEPTH_SURFACE_CONTRACT.ko.md",
+  "docs/DEPTH_SURFACE_STATUS.ko.md",
+  "docs/MORPHLOOM_WORK_STATE.ko.md"
+]

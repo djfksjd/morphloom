@@ -1,0 +1,47 @@
+{
+  "basePublishedCommit": "7fb958e84e19212ccdd706156a1c9fdb34e15fc0",
+  "purpose": "experimental visible depth mesh; no delivery approval",
+  "priorStudyTorusFail": true,
+  "nativeSources": [
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/large-checker-depth.depth.json",
+      "sha256": "2ae8ae24389ac386ae454ab2596eff77bdaef8f8ba3e0fad8b665b9a64093133"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/large-checker-luma.depth.json",
+      "sha256": "052205ea2d91488e190ced19a59ec1fb021e93bc21102bbbb50c61eba7c55780"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/large-matte-depth.depth.json",
+      "sha256": "8b909559db9983569573279ad66dede106beb74080ab6ffa956dbba020a7c539"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/large-matte-luma.depth.json",
+      "sha256": "0766e63bb3b34e69a1fcd57f6320f045cee02bd3aa0467e6378f76203bc36f61"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/small-checker-depth.depth.json",
+      "sha256": "5d94ddc38f1268a997748fd8b821654fe9bed4a738e834f9f0b6f149a95abf07"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/small-checker-luma.depth.json",
+      "sha256": "4b16ad4a762001aa6d0637f75517e7d4ab20870a260dec5b2bd63dc4d09fbf8c"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/small-matte-depth.depth.json",
+      "sha256": "d9b34c4b0a2a41a0c4a5ad9e987b9bc3ef6c5b04c64fda34c1f2f5e71e013812"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/small-matte-luma.depth.json",
+      "sha256": "3056c526bd58f6377fb75d8407ee0eb724b62780b21a648dd17778547fac8814"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/torus-depth.depth.json",
+      "sha256": "0328a6d1d29b1110e89ce8493f5d28c01c9ad30cd3c349369dc881334a30b9c2"
+    },
+    {
+      "path": "outputs/depth-surface-20261003/fixtures/torus-luma.depth.json",
+      "sha256": "6088ba24846fc3a1b1239a46273abb628647ccb12f3b54dc7336d62ce4625035"
+    }
+  ]
+}

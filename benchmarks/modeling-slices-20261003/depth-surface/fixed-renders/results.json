@@ -1,0 +1,26 @@
+[
+  {
+    "name": "large-checker-luma-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-luma-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "torus-depth-front-wire",
+    "exitCode": 0
+  },
+  {
+    "name": "torus-depth-iso-clay",
+    "exitCode": 0
+  }
+]

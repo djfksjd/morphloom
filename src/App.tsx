@@ -529,7 +529,7 @@ export function App({evidenceOnly = false}: {evidenceOnly?: boolean} = {}) {
 
   if (evidenceOnly) return (
     <main className="app-shell evidence-editor">
-      <header className="topbar"><b>MORPHLOOM · PHOTO EVIDENCE</b><a href="/">검수 뷰어로 돌아가기</a></header>
+      <header className="topbar"><b>MORPHLOOM · PHOTO EVIDENCE</b><a href="/?editor=depth">깊이 가시 표면 검수</a><a href="/">검수 뷰어로 돌아가기</a></header>
       <section className="evidence-editor-panel"><aside className="panel reference-panel">{referencePanel}</aside>
         <p>관측 자료와 합성 후보를 구분해 저장하세요. 실제 자료 표기는 사용자의 확인이며 실측 검증을 대신하지 않습니다.</p>
       </section>

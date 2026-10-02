@@ -1,0 +1,645 @@
+{
+  "schema": "morphloom.slice-evidence/0.1",
+  "date": "2026-10-03",
+  "basePublishedCommit": "7fb958e84e19212ccdd706156a1c9fdb34e15fc0",
+  "sourceFiles": [
+    {
+      "path": "src/engine/depth-surface.ts",
+      "sha256": "000cd747be58f02519ef0715a6f826b07dfad51e34298925b8535da646f56e15"
+    },
+    {
+      "path": "src/DepthEditor.tsx",
+      "sha256": "41698de8394360cf14efa9e218ba1e400ec2c7b7ac92943745e7fbd2b3e229f5"
+    },
+    {
+      "path": "src/depth-editor.css",
+      "sha256": "3463b5c23733693b51417348da41d11d3838bc0f6b6af08b42a7509f5e0c3a70"
+    },
+    {
+      "path": "src/viewer-main.tsx",
+      "sha256": "6be165c8234a6db9852b52d69c319878ac87aa6f1a44855615d1d2b9c76c86db"
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "91b0b380933656d0e3f986e9af902af7ea4f38dc48ede44468c145575cb39ae8"
+    },
+    {
+      "path": "tests/depth-surface.test.ts",
+      "sha256": "40b7b4c85300cd2812ef0111c2fd6c307329af193a8748b241b1b5278c51f1dd"
+    },
+    {
+      "path": "schemas/depth-surface.schema.json",
+      "sha256": "6984b08ac4889614e7180c1333a04392031ba912e3bb07b837c83103efe69b6c"
+    },
+    {
+      "path": "scripts/depth-surface-fixtures.py",
+      "sha256": "8499e895eb6999d967d0576787a26b9e665da187bdbec8c4c71680872fa9d4a9"
+    },
+    {
+      "path": "scripts/depth-surface-evidence.ts",
+      "sha256": "92a5c928230b8680640edb5ac3cbd68b08df51e36aec76fe02833ea73406697a"
+    },
+    {
+      "path": "scripts/depth-surface-vertex-audit.py",
+      "sha256": "99916e1098ed95d40fc75b387cfc58395283a0aa32b3b1722d69590e699d7681"
+    },
+    {
+      "path": "scripts/blender-depth-edit-audit.py",
+      "sha256": "c356e4566da535289a93396a13dcf4d9f7d54416328294d1d8ac0aa5095dd402"
+    },
+    {
+      "path": "scripts/blender-neutral-render.py",
+      "sha256": "befbc69856344a46f194a5499af90dff06ff52e18d45ae8f4e8681d105237e37"
+    },
+    {
+      "path": "docs/DEPTH_SURFACE_CONTRACT.ko.md",
+      "sha256": "ffa0cf55a9df75818a1e2d3a0da8918ffd6709dd2357ee55ccee816b76e18099"
+    },
+    {
+      "path": "docs/DEPTH_SURFACE_STATUS.ko.md",
+      "sha256": "5e9b71703e98f9f9d0c919ddf4623f76520c57e42e960368f69dc299a5b9eb42"
+    },
+    {
+      "path": "docs/MORPHLOOM_WORK_STATE.ko.md",
+      "sha256": "be5529f3f672a5355475a6a579f2f368adbb04bd71745286b45ee7fef9c06678"
+    }
+  ],
+  "sourceChecks": {
+    "files": 91,
+    "tests": 642,
+    "check": "pass",
+    "build": "pass"
+  },
+  "publishChecks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 2.221
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 54.835
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 3.574
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0,
+      "seconds": 3.999
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "quality:production"
+      ],
+      "exitCode": 1,
+      "seconds": 10.953
+    }
+  ],
+  "publishedTests": {
+    "files": 88,
+    "tests": 623
+  },
+  "modelGeometryAdopted": false,
+  "shapeQuality": "FAIL: boundary spikes up to50.08mm on authored sphere; torus anchors fail",
+  "expertReview": "not-run",
+  "physicalProductAccuracy": "not-run",
+  "production": "fail: independent comparison0/3",
+  "blenderReopenFiles": 12,
+  "blenderEdit": "pass:1mm actual edit/reopen/restore UV/names/hierarchy/material/extras",
+  "nodeBrowserExactBytesCases": 2,
+  "purpose": "diagnostic-open-visible-surface",
+  "releaseAllowed": false,
+  "newNpmDependencies": false,
+  "gateway": "models/chat/responses200 with explicit official client headers",
+  "modelReviewTokens": 4214,
+  "responsesSmokeTokens": 15,
+  "originalImageUpload": false,
+  "artifacts": [
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/actual-vertex-errors.json",
+      "sha256": "4300734559f10879265384344ec59f0f0e337698b39bd635b4a60efcb7ab64fe",
+      "bytes": 2905
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/baseline.json",
+      "sha256": "a094432c63b501f4b13a2097a082b23423f1f3df1d7b7681682028e3311f9a2e",
+      "bytes": 2009
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/00-large-checker-depth.diagnostic.json",
+      "sha256": "04d5997ba61ccfe849f2aac57fc168f30abfce784aef5f4f57c049b0153cdfe7",
+      "bytes": 2706
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/00-large-checker-depth.diagnostic.roundtrip.glb",
+      "sha256": "cc1c50ef46c7f603d29ac7a8dd362fd3533fb2f91ea8ccbb92d4894199d4a7ea",
+      "bytes": 276488
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/01-large-matte-depth.diagnostic.json",
+      "sha256": "7b6c5e82ce9dfb06eecdb5daf4e125faab1b62421dc718192d2de840e2a44852",
+      "bytes": 2698
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/01-large-matte-depth.diagnostic.roundtrip.glb",
+      "sha256": "82bc536a3b1731363dd468dbbf06f480d229bbbff1a331fd7221b41c748791e7",
+      "bytes": 276484
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/02-small-matte-depth.diagnostic.json",
+      "sha256": "6d39ff524b2f621c5e68dccae96aa6d8726576758658dfd70047949d929fc50c",
+      "bytes": 2696
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/02-small-matte-depth.diagnostic.roundtrip.glb",
+      "sha256": "aceb5e5e4e3391a4e301ff9ee546e527dd5c8f792f7e58c054237cc0733c0440",
+      "bytes": 130044
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/03-small-checker-depth.diagnostic.json",
+      "sha256": "726c193a746ac1ac0661a8f14668a13a1d86461ca49c9553b33b39fa1d56376c",
+      "bytes": 2704
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/03-small-checker-depth.diagnostic.roundtrip.glb",
+      "sha256": "47708171c5acfd1b1a214b427e8213da4e6f2c694f6cafe01db6644481828a20",
+      "bytes": 130044
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/04-small-matte-luma.diagnostic.json",
+      "sha256": "c256fc1efb5898cea04e1553635345941cbdf8bed5be8547354abdaebb6307b6",
+      "bytes": 2700
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/04-small-matte-luma.diagnostic.roundtrip.glb",
+      "sha256": "d0954b999d6696866fea99017e8931c2e5145621f75ccf368df6ed6bbeadf12a",
+      "bytes": 143000
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/05-torus-luma.diagnostic.json",
+      "sha256": "852bc7e2b9472110c0ba44fb26b38b94e1adc46098b45347962effb21eddbc7d",
+      "bytes": 2700
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/05-torus-luma.diagnostic.roundtrip.glb",
+      "sha256": "dcb3c3f81f3792610f3042e83dc103514c15bcc522f746dbee68f2718e4d6b9a",
+      "bytes": 156664
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/06-torus-depth.diagnostic.json",
+      "sha256": "4420ca3f1793b363880190953b6da52cdc9e95b8f6afb6ec4579fccf0afffc97",
+      "bytes": 2702
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/06-torus-depth.diagnostic.roundtrip.glb",
+      "sha256": "3dbf57a509a084c1c8ae1853d6bdc1ce35ecbcd4d8c02d1d6645c1becaa11df3",
+      "bytes": 156668
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/07-large-checker-luma.diagnostic.json",
+      "sha256": "f1ccba07a7422b3f2863728e58e0235e45bf09e2406fb12e80eeb5a21bd79379",
+      "bytes": 2706
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/07-large-checker-luma.diagnostic.roundtrip.glb",
+      "sha256": "82ef72d5d50780fcbf9ba8b7eeb7d1a963d31b403b554b8ae602de92f08753f7",
+      "bytes": 276484
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/08-small-checker-luma.diagnostic.json",
+      "sha256": "acd1e4ac846f070a0bb659a5497113cd12d1b1f2bc1d423fb2b2b153bc596e69",
+      "bytes": 2706
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/08-small-checker-luma.diagnostic.roundtrip.glb",
+      "sha256": "85965a7c833d37546599b911a2fd1bd73354c58865eceada792ea2437594569a",
+      "bytes": 130044
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/09-large-matte-luma.diagnostic.json",
+      "sha256": "18fe0e24e21b7f6a320de0b2a92cfceb06f94a1fa78a7620f54ca8a614fd974f",
+      "bytes": 2704
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/09-large-matte-luma.diagnostic.roundtrip.glb",
+      "sha256": "931adca7165eb1ef12b6c8a4a552dcc61d15028d54c31b43a4455fb70e35d245",
+      "bytes": 305252
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/10-before.diagnostic.json",
+      "sha256": "55230452e205e1ef9fa9a12c991b2b0e5f50910bcc5a8a030e05800661fad9fb",
+      "bytes": 2680
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/10-before.diagnostic.roundtrip.glb",
+      "sha256": "cc1c50ef46c7f603d29ac7a8dd362fd3533fb2f91ea8ccbb92d4894199d4a7ea",
+      "bytes": 276488
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/11-torus.diagnostic.json",
+      "sha256": "9fbfdc9a0d32f67a297045d01c8e24b44a9f1d604470acf2092c23eb4a8a0e7a",
+      "bytes": 2690
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/11-torus.diagnostic.roundtrip.glb",
+      "sha256": "3dbf57a509a084c1c8ae1853d6bdc1ce35ecbcd4d8c02d1d6645c1becaa11df3",
+      "bytes": 156668
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender/results.json",
+      "sha256": "8591b763e2d996cee956ddd363cd241472c8fdfed66b295b05319dedd0d1f568",
+      "bytes": 1544
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender-edit/audit.json",
+      "sha256": "d9795d6b01b5b2882887e6376921e09fda42717587024496771b1d9c30378ccf",
+      "bytes": 554
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender-edit/edited.glb",
+      "sha256": "7586083924b4b460b9bd14bc65eeba67b603a5783374d081c715f84b6a480bd6",
+      "bytes": 276592
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender-edit/restored.glb",
+      "sha256": "0c7cf5371c5fa0ebb56897883e299fb8c8b318d54e078c6da382a0ab2ada5647",
+      "bytes": 276592
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/blender-edit/standard-results.json",
+      "sha256": "1fc72101e7b198ea5e07627ed12be59565e58c23aa47927aa0385ae959b84333",
+      "bytes": 111
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/before-clay.png",
+      "sha256": "3dce0c8216de844548a2297fb4e999140f751147c086e8e6af4b40e959fce8ef",
+      "bytes": 36019
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/before-iso.png",
+      "sha256": "7e3a6181b6258e55caba98c7f289292585c4ea64079fd7746e8959acf8cca30e",
+      "bytes": 35665
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/before.depth.json",
+      "sha256": "1d8cd3390265a57e172720095a9514dd8a6bf559df9f59f08bb4f2e20c6fae8d",
+      "bytes": 1376624
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/before.diagnostic.glb",
+      "sha256": "b0a1935247463ea75acae246f81fc87700a3520ba1bc8a839d4d00f755c68f2d",
+      "bytes": 277156
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/checker.png",
+      "sha256": "07f765259e337b1f16b749416cf44fdb8386c73f80229217b99b1b11f8360ced",
+      "bytes": 37080
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/edited.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6",
+      "bytes": 1376624
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/luma-diagnostic.png",
+      "sha256": "5ca4396fd6912e494da6f88c9e906079f62ba2347d3722d2e3afb26fbb7f2a9c",
+      "bytes": 62622
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/redo.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6",
+      "bytes": 1376624
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/reopened.depth.json",
+      "sha256": "5afc898ce4fb5eac33e3052abd68715653bb2f1225d80f239b3d878454e9aaa6",
+      "bytes": 1376624
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/torus-diagnostic.png",
+      "sha256": "9c9900276f44d09d0c7e5b5645d9f24527c285f88355e0c5b95f7fc810f10df1",
+      "bytes": 58891
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/torus.diagnostic.glb",
+      "sha256": "753140bb80c618d60e62a416c92bd7799a8681557c246776611a008cf445eaa0",
+      "bytes": 157328
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/undo.depth.json",
+      "sha256": "1d8cd3390265a57e172720095a9514dd8a6bf559df9f59f08bb4f2e20c6fae8d",
+      "bytes": 1376624
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/wire.png",
+      "sha256": "80da0a8f8b1df57707a42dcf4bd2bfde3e6ddbd9447403e4a9a7f369d290edcd",
+      "bytes": 96393
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser/workflow.json",
+      "sha256": "d39c2f0c30d5bed25a82b1f20c9562a382a8239c6ec788af071e2f617df4cf17",
+      "bytes": 1972
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/browser-workflow-final.log",
+      "sha256": "aa7d02a0ecca7daed7c31f31fab5fcb97e360c4645d97f1edf2cd6ececc37039",
+      "bytes": 28
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/build-source-final.log",
+      "sha256": "9520f9839037a8b0e6d38de7e7a674b982ab262ad8f65874631ba07fc6139191",
+      "bytes": 2198
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/changed-files.json",
+      "sha256": "48bbcc6a6e70d94bc382307f4a085730fa4c0f437a4d7cd0a1bafbaa805c401b",
+      "bytes": 515
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/comparison-mesh.png",
+      "sha256": "9f01a4a5a380766e548f860f60e068415ecda965d530c9b12defecfe773937b5",
+      "bytes": 181305
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/evidence-summary.json",
+      "sha256": "d1677c9b13c4a9b6149dff0d71f55c66aeed9a5107d85308fca34dfbfedf763f",
+      "bytes": 495492
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/evidence-verified.log",
+      "sha256": "6d7b53c0b93ae77f71e6598fabe20e7c1708649e6d4106a79cab80bd2126b737",
+      "bytes": 1200
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-depth-front-clay.json",
+      "sha256": "f0f83986e30fa59a78c9f30ea0498d9afcd0087d55f92bed2e2c414ea8e462bf",
+      "bytes": 3251
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-depth-front-clay.png",
+      "sha256": "b417df9a288bfc6d8c150e83c96a77a5c1925f28c542bf885823df2df64023aa",
+      "bytes": 393250
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-depth-iso-clay.json",
+      "sha256": "5858b954372a3c94ed0e9e6e1b4d1c1938ca08926dd73479a0ab8430a699919d",
+      "bytes": 3251
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-depth-iso-clay.png",
+      "sha256": "ca8f8764ea09318f39b3cbe1547d161e8fabb5b0a5ef5d7beb8a8379ba46f491",
+      "bytes": 368133
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-luma-front-clay.json",
+      "sha256": "9c36307b4ea7e1651fcc0ce71a66c620e290e1f2a09cb8745693c0c5c6353a33",
+      "bytes": 3249
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-luma-front-clay.png",
+      "sha256": "34705c2e47d3c9191e2b168fd5c7eab1d5ee66ac599707a5275058b07572f2e8",
+      "bytes": 474044
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-luma-iso-clay.json",
+      "sha256": "98151696d8dfdc646671389efd3d3f4ae76f35d17c3532146d47f5acbac2b8d7",
+      "bytes": 3249
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/large-checker-luma-iso-clay.png",
+      "sha256": "a244aac298a30d386a1f0fdce0f41e9da3346f4786b3ec52fb71184fdec72d5b",
+      "bytes": 411026
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/results.json",
+      "sha256": "9a82cd0f219cafdc384651e6c653d2491511d81cef499b5c46ff0d22203b2efa",
+      "bytes": 417
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/torus-depth-front-wire.json",
+      "sha256": "8c735c77b7e42664d914dd6d7178579a494a7214be3f6f5de602e171972627eb",
+      "bytes": 3242
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/torus-depth-front-wire.png",
+      "sha256": "2772bedd3fa8f5330a8ede92846b87f4e8421cffb1392956f5215e140e064050",
+      "bytes": 447270
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/torus-depth-iso-clay.json",
+      "sha256": "4ecadd291289600e70f7a267cb0fd952374b9c0b6c92499f2dca90f03b6f484a",
+      "bytes": 3242
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-renders/torus-depth-iso-clay.png",
+      "sha256": "db9342762be4fd0555692b1f116f82208f0a6199e21fb8f6de112953fe220a4b",
+      "bytes": 328345
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixed-space.json",
+      "sha256": "3ae7a7d21f102bb462af35deb0a5c807fbc9efbbee50c8aeeaa5a6231d4f5368",
+      "bytes": 86
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/large-checker-depth.depth.json",
+      "sha256": "2ae8ae24389ac386ae454ab2596eff77bdaef8f8ba3e0fad8b665b9a64093133",
+      "bytes": 1376625
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/large-checker-luma.depth.json",
+      "sha256": "052205ea2d91488e190ced19a59ec1fb021e93bc21102bbbb50c61eba7c55780",
+      "bytes": 1424963
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/large-matte-depth.depth.json",
+      "sha256": "8b909559db9983569573279ad66dede106beb74080ab6ffa956dbba020a7c539",
+      "bytes": 1377493
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/large-matte-luma.depth.json",
+      "sha256": "0766e63bb3b34e69a1fcd57f6320f045cee02bd3aa0467e6378f76203bc36f61",
+      "bytes": 1407102
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/small-checker-depth.depth.json",
+      "sha256": "5d94ddc38f1268a997748fd8b821654fe9bed4a738e834f9f0b6f149a95abf07",
+      "bytes": 1365689
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/small-checker-luma.depth.json",
+      "sha256": "4b16ad4a762001aa6d0637f75517e7d4ab20870a260dec5b2bd63dc4d09fbf8c",
+      "bytes": 1398900
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/small-matte-depth.depth.json",
+      "sha256": "d9b34c4b0a2a41a0c4a5ad9e987b9bc3ef6c5b04c64fda34c1f2f5e71e013812",
+      "bytes": 1366172
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/small-matte-luma.depth.json",
+      "sha256": "3056c526bd58f6377fb75d8407ee0eb724b62780b21a648dd17778547fac8814",
+      "bytes": 1390635
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/torus-depth.depth.json",
+      "sha256": "0328a6d1d29b1110e89ce8493f5d28c01c9ad30cd3c349369dc881334a30b9c2",
+      "bytes": 1364675
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/fixtures/torus-luma.depth.json",
+      "sha256": "6088ba24846fc3a1b1239a46273abb628647ccb12f3b54dc7336d62ce4625035",
+      "bytes": 1394632
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/gateway-diagnostic.json",
+      "sha256": "3449e7124fcde38fefe28878075ac6aa77bc50c28b15a74eeffab2f74076e566",
+      "bytes": 3331
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/gateway-recheck.json",
+      "sha256": "e49c1fcb1ca358367fd0c6f260d081aa1eb6291438e3c4c5c23a40a74bfbeacf",
+      "bytes": 230
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/gateway-responses-test.json",
+      "sha256": "d734a258e3df6c931448f3a611af7e129347f60abebfbddb74eeb19ee7ccf009",
+      "bytes": 363
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/large-checker-depth.diagnostic.glb",
+      "sha256": "b0a1935247463ea75acae246f81fc87700a3520ba1bc8a839d4d00f755c68f2d",
+      "bytes": 277156
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/large-checker-luma.diagnostic.glb",
+      "sha256": "89deb2a1dfbbeae6aa8d74b662402feaaa6e8e0fdacb1a00fd96abb3c8d0fe6b",
+      "bytes": 277132
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/large-matte-depth.diagnostic.glb",
+      "sha256": "aa7045c77791e37415b167c84e6188e7db201f769d929cd5ecda8ad5e7fa9734",
+      "bytes": 277152
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/large-matte-luma.diagnostic.glb",
+      "sha256": "2ecb69ed6d62aab9de52b53e638d6cdead334092ac8ef79ce3ff1b9ade303214",
+      "bytes": 277128
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/node-browser.json",
+      "sha256": "7495ef0b56783f4a1c0cd583c879e5454ec895b1bd4f09e473d31cebec7d87d2",
+      "bytes": 467
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/benchmark.log",
+      "sha256": "d58107bbe56624a32e3b90573656f5a2a231068466cbda6fec7d8b63dce8bead",
+      "bytes": 11763
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/build.log",
+      "sha256": "aa62100717ab6685771634f6bbaf121b44e3901b82bda549743bfe2c8f71b024",
+      "bytes": 1478
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/check.log",
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030",
+      "bytes": 49
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/production.log",
+      "sha256": "548f0f0e9cfed7c8e58264d9eb93e5bea914d75275ad462692438d7e2d344d12",
+      "bytes": 205486
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/results.json",
+      "sha256": "5e4bddadc19e11b85761e55413748949190cc451f7f868684b2a8f108f7e2797",
+      "bytes": 573
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/publish-checks/test.log",
+      "sha256": "ab27fb2bff8976d39472586b52b654122b8aac49e9bad89734e7279d38322416",
+      "bytes": 11102
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/small-checker-depth.diagnostic.glb",
+      "sha256": "b3efd8ca4945ea7326fe9c6c2b74850d474370c37b93c6da10d2656bf5884f7b",
+      "bytes": 130712
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/small-checker-luma.diagnostic.glb",
+      "sha256": "51c04cd7bbb63b3b6d411a780d22cac52eee92006a1d3846f99064aa2d22107b",
+      "bytes": 130696
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/small-matte-depth.diagnostic.glb",
+      "sha256": "90c7b9f78d993ed1ee4f9a626e0cb0b955d21289bf00a19e523b66fe52810d09",
+      "bytes": 130712
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/small-matte-luma.diagnostic.glb",
+      "sha256": "bbfebbb57715da81c0e4fa7470f22549fc8b7d80c74b858756511acdedee314e",
+      "bytes": 130688
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/tests-before.log",
+      "sha256": "63b6232e32ee2f69aa3ae4cc3ffd59d5f31ba3bdfd93d3000cb09d34db59f9bb",
+      "bytes": 1151
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/tests-review-before.log",
+      "sha256": "9741807b1b31e46349d0b53358055db90a9995b8d57c98c2c70d7b0351bba8e9",
+      "bytes": 1774
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/tests-source-final.log",
+      "sha256": "f9cd0153add587c27be7f17a512786793c3b5957654d7c1f7e7b45464d997fd2",
+      "bytes": 11195
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/tests-verified.log",
+      "sha256": "f5323db2d35bd4a7dd0bf0bff06c36da74369d76a9a06ce4276e03fcb0ad7ab8",
+      "bytes": 273
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/torus-depth.diagnostic.glb",
+      "sha256": "753140bb80c618d60e62a416c92bd7799a8681557c246776611a008cf445eaa0",
+      "bytes": 157328
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/torus-luma.diagnostic.glb",
+      "sha256": "e926b761b6168f243ca59b392c0b9d91a9f4f03e614e58d9f83cbe3b4d254f0f",
+      "bytes": 157312
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/uniai-review-status.json",
+      "sha256": "6ad151bdd90ef483c0c7c89d4fa9b59b8ce2ae6e5380d03542ecf4584f4ebd4f",
+      "bytes": 577
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-surface/uniai-review.md",
+      "sha256": "0a327d47817622572cf88b8106c526320df9b7e1d03327fe45ed50c8e1e92e5b",
+      "bytes": 1432
+    }
+  ]
+}

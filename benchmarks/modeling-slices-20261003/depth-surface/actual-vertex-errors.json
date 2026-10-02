@@ -1,0 +1,92 @@
+[
+  {
+    "id": "large-checker-depth",
+    "generatedVertexCount": 6303,
+    "maeMm": 2.5341410636901855,
+    "maxErrorMm": 50.0797004699707,
+    "minimumZMm": -45.8249397277832,
+    "maximumZMm": 67.35527038574219,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "large-checker-luma",
+    "generatedVertexCount": 6303,
+    "maeMm": 13.02607536315918,
+    "maxErrorMm": 50.341609954833984,
+    "minimumZMm": 39.61055374145508,
+    "maximumZMm": 57.830413818359375,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "large-matte-depth",
+    "generatedVertexCount": 6303,
+    "maeMm": 3.1094465255737305,
+    "maxErrorMm": 44.11207962036133,
+    "minimumZMm": -39.85731887817383,
+    "maximumZMm": 67.43992614746094,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "large-matte-luma",
+    "generatedVertexCount": 6303,
+    "maeMm": 12.786151885986328,
+    "maxErrorMm": 47.900665283203125,
+    "minimumZMm": 38.50532913208008,
+    "maximumZMm": 55.94622039794922,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "small-checker-depth",
+    "generatedVertexCount": 2959,
+    "maeMm": 1.8798577785491943,
+    "maxErrorMm": 45.679344177246094,
+    "minimumZMm": -41.667198181152344,
+    "maximumZMm": 46.67189025878906,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "small-checker-luma",
+    "generatedVertexCount": 2959,
+    "maeMm": 8.819642066955566,
+    "maxErrorMm": 36.37617492675781,
+    "minimumZMm": 27.332286834716797,
+    "maximumZMm": 40.64557647705078,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "small-matte-depth",
+    "generatedVertexCount": 2959,
+    "maeMm": 2.4080002307891846,
+    "maxErrorMm": 32.53745651245117,
+    "minimumZMm": -30.565105438232422,
+    "maximumZMm": 46.45938491821289,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "small-matte-luma",
+    "generatedVertexCount": 2959,
+    "maeMm": 8.707686424255371,
+    "maxErrorMm": 35.08573532104492,
+    "minimumZMm": 27.574111938476562,
+    "maximumZMm": 38.48487091064453,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "torus-depth",
+    "generatedVertexCount": 3601,
+    "maeMm": 2.0493009090423584,
+    "maxErrorMm": 10.60013198852539,
+    "minimumZMm": 2.8879265785217285,
+    "maximumZMm": 14.377283096313477,
+    "claim": "authored known visible surface, not physical measurement"
+  },
+  {
+    "id": "torus-luma",
+    "generatedVertexCount": 3601,
+    "maeMm": 2.3005456924438477,
+    "maxErrorMm": 10.464212417602539,
+    "minimumZMm": 8.657259941101074,
+    "maximumZMm": 12.714035034179688,
+    "claim": "authored known visible surface, not physical measurement"
+  }
+]

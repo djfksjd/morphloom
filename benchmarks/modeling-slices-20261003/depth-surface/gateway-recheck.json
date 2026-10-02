@@ -1,0 +1,14 @@
+[
+  {
+    "auth": "x-api-key",
+    "endpoint": "/models/",
+    "status": 403,
+    "reasonCategory": "forbidden"
+  },
+  {
+    "auth": "bearer",
+    "endpoint": "/models/",
+    "status": 403,
+    "reasonCategory": "forbidden"
+  }
+]

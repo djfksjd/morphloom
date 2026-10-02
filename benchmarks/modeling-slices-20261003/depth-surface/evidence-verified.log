@@ -1,0 +1,10 @@
+{"id":"large-checker-depth","generationBlocked":false,"mae":0.03749090123650059,"max":0.1944421017562334,"triangles":12248}
+{"id":"large-checker-luma","generationBlocked":true,"mae":0.20180206627132144,"max":0.5439590239074491,"triangles":12248}
+{"id":"large-matte-depth","generationBlocked":false,"mae":0.046138933198122414,"max":0.195019204692515,"triangles":12248}
+{"id":"large-matte-luma","generationBlocked":true,"mae":0.20047804020020035,"max":0.5734217850485481,"triangles":12248}
+{"id":"small-checker-depth","generationBlocked":false,"mae":0.04317642461105842,"max":0.18714113016581263,"triangles":5676}
+{"id":"small-checker-luma","generationBlocked":true,"mae":0.21837452338686933,"max":0.6699550812097884,"triangles":5676}
+{"id":"small-matte-depth","generationBlocked":false,"mae":0.05729377387474189,"max":0.1833132998622341,"triangles":5676}
+{"id":"small-matte-luma","generationBlocked":true,"mae":0.21745040480979416,"max":0.6150681682965545,"triangles":5676}
+{"id":"torus-depth","generationBlocked":true,"mae":0.17797776233019236,"max":0.6846597376646462,"triangles":6690}
+{"id":"torus-luma","generationBlocked":true,"mae":0.19671599234570458,"max":0.7321337003650478,"triangles":6690}
