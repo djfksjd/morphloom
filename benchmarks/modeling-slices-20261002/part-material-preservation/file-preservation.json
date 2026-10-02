@@ -1,0 +1,18 @@
+[
+  {
+    "name": "gear",
+    "pass": true,
+    "actualMeshes": 1,
+    "before": "082d761bea968b9d498a869b2b4069d20bdc0fc41ce834503a85a6a634018351",
+    "after": "3f90804344211aedd3cd68e3f7161f4da91d19f70753f3b16a98b27acb0b3870",
+    "scope": "all geometry/UV/index/node transforms/hierarchy and non-target PBR exact; selected scalar factors changed, surface texture and repeat preserved"
+  },
+  {
+    "name": "ball",
+    "pass": true,
+    "actualMeshes": 11,
+    "before": "e0fcd781059b88ac646ec06e78e67a2d5115a24af94135f04e7daf1559b35ccc",
+    "after": "0a41a3453da5501656734d9ed887bc66957b50a2c3521fd40471a6c1f10e3231",
+    "scope": "all geometry/UV/index/node transforms/hierarchy and non-target PBR exact; selected scalar factors changed, surface texture and repeat preserved"
+  }
+]

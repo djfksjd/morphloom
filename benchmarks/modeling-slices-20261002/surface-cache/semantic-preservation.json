@@ -1,0 +1,273 @@
+{
+  "allEqual": true,
+  "method": "actual GLB JSON references plus SHA256 of every referenced binary bufferView, canonicalized only image buffer storage order",
+  "canonical": {
+    "asset": {
+      "version": "2.0",
+      "generator": "THREE.GLTFExporter r179"
+    },
+    "scenes": [
+      {
+        "name": "AuxScene",
+        "nodes": [
+          0
+        ]
+      }
+    ],
+    "scene": 0,
+    "nodes": [
+      {
+        "children": [
+          1
+        ]
+      },
+      {
+        "name": "cache_fixture",
+        "mesh": 0
+      }
+    ],
+    "buffers": [
+      {
+        "byteLength": 276752
+      }
+    ],
+    "accessors": [
+      {
+        "bufferView": {
+          "payloadSha256": "a6264263f41827ac28ebb30131301d2f4b2a0dc5901b7d326f08da32572cc5dc",
+          "byteLength": 288,
+          "target": 34962,
+          "byteStride": 12
+        },
+        "componentType": 5126,
+        "count": 24,
+        "max": [
+          0.05000000074505806,
+          0.004999999888241291,
+          0.05000000074505806
+        ],
+        "min": [
+          -0.05000000074505806,
+          -0.004999999888241291,
+          -0.05000000074505806
+        ],
+        "type": "VEC3"
+      },
+      {
+        "bufferView": {
+          "payloadSha256": "cf38d80691f04d52b9686807b830aec77584c7ecdc0ceed56144923548dd5593",
+          "byteLength": 288,
+          "target": 34962,
+          "byteStride": 12
+        },
+        "componentType": 5126,
+        "count": 24,
+        "max": [
+          1,
+          1,
+          1
+        ],
+        "min": [
+          -1,
+          -1,
+          -1
+        ],
+        "type": "VEC3"
+      },
+      {
+        "bufferView": {
+          "payloadSha256": "9acbda3fe508de1f96b8f061ef5888cfba15a3e6ae752467e73665e4dfe3182a",
+          "byteLength": 192,
+          "target": 34962,
+          "byteStride": 8
+        },
+        "componentType": 5126,
+        "count": 24,
+        "max": [
+          1,
+          1
+        ],
+        "min": [
+          0,
+          0
+        ],
+        "type": "VEC2"
+      },
+      {
+        "bufferView": {
+          "payloadSha256": "7d2c65fffb490f18b89d5d949a36ac6fe37f052789bdc3ad49759abb3ecd0898",
+          "byteLength": 72,
+          "target": 34963
+        },
+        "componentType": 5123,
+        "count": 36,
+        "max": [
+          23
+        ],
+        "min": [
+          0
+        ],
+        "type": "SCALAR"
+      }
+    ],
+    "materials": [
+      {
+        "pbrMetallicRoughness": {
+          "baseColorFactor": [
+            0.09084171117479915,
+            0.09084171117479915,
+            0.09084171117479915,
+            1
+          ],
+          "metallicFactor": 0,
+          "roughnessFactor": 0.94,
+          "metallicRoughnessTexture": {
+            "index": 0,
+            "texCoord": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "scale": [
+                  100,
+                  100
+                ]
+              }
+            }
+          },
+          "baseColorTexture": {
+            "index": 1,
+            "texCoord": 0,
+            "extensions": {
+              "KHR_texture_transform": {
+                "scale": [
+                  100,
+                  100
+                ]
+              }
+            }
+          }
+        },
+        "normalTexture": {
+          "index": 2,
+          "texCoord": 0,
+          "scale": 0.95,
+          "extensions": {
+            "KHR_texture_transform": {
+              "scale": [
+                100,
+                100
+              ]
+            }
+          }
+        },
+        "name": "asphalt [asphalt]",
+        "extras": {
+          "morphloomSurface": {
+            "finish": "asphalt",
+            "roughness": 0.94,
+            "metalness": 0,
+            "clearcoat": 0,
+            "ior": 1.5,
+            "transmission": 0,
+            "anisotropy": 0,
+            "microNormalStrength": 0.95,
+            "textureScale": [
+              100,
+              100
+            ],
+            "procedural": true
+          }
+        },
+        "extensions": {
+          "KHR_materials_specular": {
+            "specularFactor": 0.34,
+            "specularColorFactor": [
+              1,
+              1,
+              1
+            ]
+          }
+        }
+      }
+    ],
+    "textures": [
+      {
+        "sampler": 0,
+        "source": 0,
+        "name": "morphloom_asphalt_metallic_roughness"
+      },
+      {
+        "sampler": 1,
+        "source": 1,
+        "name": "morphloom_asphalt_albedo"
+      },
+      {
+        "sampler": 2,
+        "source": 2,
+        "name": "morphloom_asphalt_micro_normal"
+      }
+    ],
+    "samplers": [
+      {
+        "magFilter": 9729,
+        "minFilter": 9987,
+        "wrapS": 10497,
+        "wrapT": 10497
+      },
+      {
+        "magFilter": 9729,
+        "minFilter": 9987,
+        "wrapS": 10497,
+        "wrapT": 10497
+      },
+      {
+        "magFilter": 9729,
+        "minFilter": 9987,
+        "wrapS": 10497,
+        "wrapT": 10497
+      }
+    ],
+    "images": [
+      {
+        "mimeType": "image/png",
+        "bufferView": {
+          "payloadSha256": "95eb953ecff2ffd06162b7c8b34217c7072205c862c004ef70a20f661e9c10c6",
+          "byteLength": 33940
+        }
+      },
+      {
+        "mimeType": "image/png",
+        "bufferView": {
+          "payloadSha256": "e71040a31857bb02ace5b18750a022bb63c3bc7aa2ecced81e75f62428175de0",
+          "byteLength": 66872
+        }
+      },
+      {
+        "mimeType": "image/png",
+        "bufferView": {
+          "payloadSha256": "854267c636e18d5e648be9fe87457e2ca712ad916e5532fe388fd495aa57bd1e",
+          "byteLength": 175100
+        }
+      }
+    ],
+    "meshes": [
+      {
+        "primitives": [
+          {
+            "mode": 4,
+            "attributes": {
+              "POSITION": 0,
+              "NORMAL": 1,
+              "TEXCOORD_0": 2
+            },
+            "indices": 3,
+            "material": 0
+          }
+        ]
+      }
+    ],
+    "extensionsUsed": [
+      "KHR_texture_transform",
+      "KHR_materials_specular"
+    ]
+  }
+}

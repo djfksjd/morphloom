@@ -442,8 +442,8 @@ describe('AssemblyIR product pipeline', () => {
   });
 
   it('caps shared procedural PBR texture residency by bytes as well as entries', () => {
-    expect(surfaceMapAllocationBytes(64)).toBe(65_536);
-    expect(surfaceMapAllocationBytes(256)).toBe(1_048_576);
+    expect(surfaceMapAllocationBytes(64)).toBe(114_688);
+    expect(surfaceMapAllocationBytes(256)).toBe(1_835_008);
     expect(() => surfaceMapAllocationBytes(0)).toThrow(/unsafe/);
     const cache = inspectSharedSurfaceCache();
     expect(cache.estimatedBytes).toBeLessThanOrEqual(MAX_SHARED_SURFACE_BYTES);

@@ -1,0 +1,5 @@
+{
+  "pass": true,
+  "sourceSha256": "21e58807244cad70f9a5fe66423486021abaeb62c2368f3838e05944143c0c4d",
+  "scope": "deterministic source reconstructed from original fixture and recorded edit; matches actually observed pre-fix source fingerprint; not an original saved-file copy"
+}

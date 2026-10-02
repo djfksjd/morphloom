@@ -1,0 +1,20 @@
+{
+  "filled": true,
+  "cache": {
+    "entries": 32,
+    "estimatedBytes": 33554432,
+    "maximumEntries": 96,
+    "maximumBytes": 33554432
+  },
+  "cpuPayloadBytes": 25165824,
+  "gpuMipBytes": 33554304,
+  "combinedBytes": 58720128,
+  "allocation256": 1048576,
+  "targetShared": false,
+  "warmIdentity": false,
+  "sharedDisposes": 0,
+  "ownedTextures": 6,
+  "ownedDisposes": 0,
+  "pixelSha256": "a5d5d005fe6244835704292ed477b6aed1020a20de263f6253e4b3fa209cf3e9",
+  "glbSha256": "2ddeb190d3efb8f9d28a29f56fea972a777557635c014ca74b5c22a6f88b1772"
+}

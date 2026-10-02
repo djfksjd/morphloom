@@ -1,0 +1,250 @@
+{
+  "status": "scoped-verified",
+  "rendererRevision": "morphloom.element-renderer/0.9",
+  "sourceHashes": {
+    "src/engine/surface-system.ts": "8b9f25d2508bc908b4edc7ef75d3f4ef11df51ec33a3e4b6a520c4f43437a4a4",
+    "src/PartInspector.tsx": "74a75f1ab0f01d001d78943fb7fc3493ee897d730999f9d2dd670015a2b02ca4",
+    "tests/engine.test.ts": "c44ea78a316d673f7a73a5cb870b63bf615486737791a195eefa2776c5cb5fd9",
+    "tests/surface-cache.test.ts": "fe3ed9809cbcb6c87010a73a90d4c176094570d0cb7365cb52c4de49460c1c28",
+    "scripts/surface-cache-evidence.ts": "fbc7558d7c8aad6959c748e833db77ed4849c8ba6262f8d78ed677aeda327bd8"
+  },
+  "cacheFixtures": {
+    "before": {
+      "filled": true,
+      "cache": {
+        "entries": 32,
+        "estimatedBytes": 33554432,
+        "maximumEntries": 96,
+        "maximumBytes": 33554432
+      },
+      "cpuPayloadBytes": 25165824,
+      "gpuMipBytes": 33554304,
+      "combinedBytes": 58720128,
+      "allocation256": 1048576,
+      "targetShared": false,
+      "warmIdentity": false,
+      "sharedDisposes": 0,
+      "ownedTextures": 6,
+      "ownedDisposes": 0,
+      "pixelSha256": "a5d5d005fe6244835704292ed477b6aed1020a20de263f6253e4b3fa209cf3e9",
+      "glbSha256": "2ddeb190d3efb8f9d28a29f56fea972a777557635c014ca74b5c22a6f88b1772"
+    },
+    "filled": {
+      "filled": true,
+      "cache": {
+        "entries": 18,
+        "estimatedBytes": 33030144,
+        "maximumEntries": 96,
+        "maximumBytes": 33554432
+      },
+      "cpuPayloadBytes": 14155776,
+      "gpuMipBytes": 18874296,
+      "combinedBytes": 33030072,
+      "allocation256": 1835008,
+      "targetShared": false,
+      "warmIdentity": false,
+      "sharedDisposes": 0,
+      "ownedTextures": 48,
+      "ownedDisposes": 48,
+      "pixelSha256": "a5d5d005fe6244835704292ed477b6aed1020a20de263f6253e4b3fa209cf3e9",
+      "glbSha256": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0"
+    },
+    "cold": {
+      "filled": false,
+      "cache": {
+        "entries": 1,
+        "estimatedBytes": 1835008,
+        "maximumEntries": 96,
+        "maximumBytes": 33554432
+      },
+      "cpuPayloadBytes": 786432,
+      "gpuMipBytes": 1048572,
+      "combinedBytes": 1835004,
+      "allocation256": 1835008,
+      "targetShared": true,
+      "warmIdentity": true,
+      "sharedDisposes": 0,
+      "ownedTextures": 0,
+      "ownedDisposes": 0,
+      "pixelSha256": "a5d5d005fe6244835704292ed477b6aed1020a20de263f6253e4b3fa209cf3e9",
+      "glbSha256": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0"
+    }
+  },
+  "preservation": "all actual image and vertex/normal/UV/index buffer payloads and JSON scene/PBR references equal; full file hash can differ with async image buffer storage order",
+  "tests": "88files609tests/check/build PASS",
+  "gltf": "0errors,1generated-tangent warning; strict command exit1 retained",
+  "blender": {
+    "schema": "morphloom.blender-roundtrip/0.2",
+    "pass": true,
+    "exportTangentsRequiredBySource": true,
+    "blenderVersion": "5.2.1 LTS",
+    "source": "fixture.glb",
+    "sourceBytes": 279492,
+    "sourceSha256": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0",
+    "roundTrip": "roundtrip.glb",
+    "roundTripBytes": 279508,
+    "roundTripSha256": "5b6a8fa7e438f089044e20d9711a8a829860a1646e044f1c9bc9e7603317318b",
+    "boundsErrorMm": 0.0,
+    "boundsToleranceMm": 0.1,
+    "geometryParity": true,
+    "imageParity": true,
+    "skinningParity": true,
+    "lostImageDimensions": [],
+    "addedImageDimensions": [],
+    "imported": {
+      "objects": 2,
+      "excludedImporterHelpers": 0,
+      "meshes": 1,
+      "vertices": 24,
+      "polygons": 12,
+      "materials": 1,
+      "images": 3,
+      "imageNames": [
+        "Image_0",
+        "Image_1",
+        "Image_2"
+      ],
+      "imageDimensions": [
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ]
+      ],
+      "shapeKeys": 0,
+      "skinnedVertices": 0,
+      "weightedVertices": 0,
+      "weightedCoverage": 1.0,
+      "armatures": 0,
+      "bones": 0,
+      "boneNames": [],
+      "actions": 0,
+      "actionNames": [],
+      "geometryMoments": {
+        "cornerCount": 36,
+        "cornerSum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "cornerSumSquares": [
+          0.09000000268220903,
+          0.09000000268220903,
+          0.0008999999597668652
+        ],
+        "surfaceAreaSquareMeters": 0.024000001424894397
+      },
+      "boundsMeters": {
+        "min": [
+          -0.05000000074505806,
+          -0.05000000074505806,
+          -0.004999999888241291
+        ],
+        "max": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.004999999888241291
+        ]
+      }
+    },
+    "reopened": {
+      "objects": 2,
+      "excludedImporterHelpers": 0,
+      "meshes": 1,
+      "vertices": 24,
+      "polygons": 12,
+      "materials": 1,
+      "images": 3,
+      "imageNames": [
+        "Image_0",
+        "Image_1",
+        "Image_2"
+      ],
+      "imageDimensions": [
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          256,
+          256
+        ]
+      ],
+      "shapeKeys": 0,
+      "skinnedVertices": 0,
+      "weightedVertices": 0,
+      "weightedCoverage": 1.0,
+      "armatures": 0,
+      "bones": 0,
+      "boneNames": [],
+      "actions": 0,
+      "actionNames": [],
+      "geometryMoments": {
+        "cornerCount": 36,
+        "cornerSum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "cornerSumSquares": [
+          0.09000000268220903,
+          0.09000000268220903,
+          0.0008999999597668652
+        ],
+        "surfaceAreaSquareMeters": 0.024000001424894397
+      },
+      "boundsMeters": {
+        "min": [
+          -0.05000000074505806,
+          -0.05000000074505806,
+          -0.004999999888241291
+        ],
+        "max": [
+          0.05000000074505806,
+          0.05000000074505806,
+          0.004999999888241291
+        ]
+      }
+    }
+  },
+  "scope": "Persistent CPU data+estimated GPU full mips; no total RAM/VRAM measurements",
+  "harnessFailures": [
+    "Python stdin encoding corrected",
+    "initial material-only dispose expectation corrected; actual editor owner separately tested",
+    "full GLB hash assumption failed twice; diagnosed bufferView image storage order and compared all actual referenced payloads"
+  ],
+  "artifacts": {
+    "outputs/surface-cache-20261002/blender.log": "a3ad87d35dcf99d4aa207b3a5108d4f5b7407ebb13f4e59ad56a6c198b2ecc1d",
+    "outputs/surface-cache-20261002/after-filled.log": "d1f9fd6dc76e5a4ae5e3bafd3a45fc85421bcf2f5890729d602b2f9b2ec64328",
+    "outputs/surface-cache-20261002/roundtrip.glb": "5b6a8fa7e438f089044e20d9711a8a829860a1646e044f1c9bc9e7603317318b",
+    "outputs/surface-cache-20261002/targeted-tests.log": "b3547c20c1cfcb0cb01ed58ae85c286af9c7f947ee87834111661905ea356426",
+    "outputs/surface-cache-20261002/gltf.log": "227154111ffbdfee2f955c4dc23805e9142a1c8cd566cc2b50195cb66ec5d2a4",
+    "outputs/surface-cache-20261002/blender.json": "8347a790975be902cf723b7ac2c7688a2b5e0ba9a1d28ccc2ef2868198645795",
+    "outputs/surface-cache-20261002/semantic-preservation.json": "02669f15b1e895355939f81b3b04d3924cedf0a43fc7a76f285c7060dc50dc22",
+    "outputs/surface-cache-20261002/tests.log": "be86479758deee47357d5f4d1231176324ced06d4dd79d8995240bec58df4f51",
+    "outputs/surface-cache-20261002/check.log": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+    "outputs/surface-cache-20261002/before.log": "2a98596622601dacf0975b6abcd34c74837f96a54d56e8dd3512b947d64bf0e3",
+    "outputs/surface-cache-20261002/after-cold.log": "e1c0be8e8511715fee95a393cd2c474b9af126ce1b18f0291c3bdce7b4b8ae72",
+    "outputs/surface-cache-20261002/build.log": "a20af429b552c594fee586966228e3c9e9e3e15564078d4d9a6648ef84573b27",
+    "outputs/surface-cache-20261002/after-cold/evidence.json": "923d6624a26b8e7df89f524239df98083245e1afb92c265f4bcc2e257a7df873",
+    "outputs/surface-cache-20261002/after-cold/fixture.glb": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0",
+    "outputs/surface-cache-20261002/after-cold/gltf.json": "47f988ad63d9bac0ba94b1c012a243f83073f7d269dc88296825e6344ce67ef8",
+    "outputs/surface-cache-20261002/after-filled/evidence.json": "2948cc8191814d127a8c5a1b796704d493c072cc6c6bdc73cbeb8d15c9c255f1",
+    "outputs/surface-cache-20261002/after-filled/fixture.glb": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0",
+    "outputs/surface-cache-20261002/after-filled/gltf.json": "47f988ad63d9bac0ba94b1c012a243f83073f7d269dc88296825e6344ce67ef8",
+    "outputs/surface-cache-20261002/before/evidence.json": "e2bc389fb2c87fde82b8794928050d08eb80cd14ffc16fa579cb34a89addb131",
+    "outputs/surface-cache-20261002/before/fixture.glb": "2ddeb190d3efb8f9d28a29f56fea972a777557635c014ca74b5c22a6f88b1772",
+    "outputs/surface-cache-20261002/before/gltf.json": "e82106d015c5e4bcb72eca5c25b7f35c203d4ae5c24d502750113a5a7cd182b0"
+  }
+}

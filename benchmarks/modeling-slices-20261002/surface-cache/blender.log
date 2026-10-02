@@ -1,0 +1,162 @@
+22:54:19 | INFO: Data are loaded, start creating Blender stuff
+22:54:19 | INFO: Blender create Mesh node 0
+22:54:19 | INFO: glTF import finished in 0.01s
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+22:54:19 | INFO: Starting glTF 2.0 export
+22:54:19 | INFO: Extracting primitive: Mesh_0
+22:54:19 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+22:54:19 | INFO: Primitives created: 1
+22:54:19 | INFO: Finished glTF 2.0 export in 0.008363008499145508 s
+
+22:54:19 | INFO: Data are loaded, start creating Blender stuff
+22:54:19 | INFO: Blender create Mesh node Mesh_0
+22:54:19 | INFO: glTF import finished in 0.00s
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": true,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "fixture.glb",
+  "sourceBytes": 279492,
+  "sourceSha256": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0",
+  "roundTrip": "roundtrip.glb",
+  "roundTripBytes": 279508,
+  "roundTripSha256": "5b6a8fa7e438f089044e20d9711a8a829860a1646e044f1c9bc9e7603317318b",
+  "boundsErrorMm": 0.0,
+  "boundsToleranceMm": 0.1,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 2,
+    "excludedImporterHelpers": 0,
+    "meshes": 1,
+    "vertices": 24,
+    "polygons": 12,
+    "materials": 1,
+    "images": 3,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2"
+    ],
+    "imageDimensions": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 36,
+      "cornerSum": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cornerSumSquares": [
+        0.09000000268220903,
+        0.09000000268220903,
+        0.0008999999597668652
+      ],
+      "surfaceAreaSquareMeters": 0.024000001424894397
+    },
+    "boundsMeters": {
+      "min": [
+        -0.05000000074505806,
+        -0.05000000074505806,
+        -0.004999999888241291
+      ],
+      "max": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.004999999888241291
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 2,
+    "excludedImporterHelpers": 0,
+    "meshes": 1,
+    "vertices": 24,
+    "polygons": 12,
+    "materials": 1,
+    "images": 3,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2"
+    ],
+    "imageDimensions": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 36,
+      "cornerSum": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cornerSumSquares": [
+        0.09000000268220903,
+        0.09000000268220903,
+        0.0008999999597668652
+      ],
+      "surfaceAreaSquareMeters": 0.024000001424894397
+    },
+    "boundsMeters": {
+      "min": [
+        -0.05000000074505806,
+        -0.05000000074505806,
+        -0.004999999888241291
+      ],
+      "max": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.004999999888241291
+      ]
+    }
+  }
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

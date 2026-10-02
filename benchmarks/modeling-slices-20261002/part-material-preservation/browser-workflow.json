@@ -1,0 +1,64 @@
+[
+  {
+    "name": "gear",
+    "target": "spur_gear",
+    "pass": true,
+    "before": {
+      "source": "5efa52b3336ba1c10cf588b0e66adc8fa7fd4fbf1a883aa2a4736eab0fa580e0",
+      "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+    },
+    "roughness": {
+      "source": "3288499ff4a9d86b067bc4fd279434b2f174bc0ad71f8e343d500a360535b59f",
+      "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+    },
+    "after": {
+      "source": "1119ed43840cb74ac41a96a8b816268a71e81ac23b8af05de62c405587f007f8",
+      "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+    },
+    "reloaded": {
+      "source": "1119ed43840cb74ac41a96a8b816268a71e81ac23b8af05de62c405587f007f8",
+      "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+    },
+    "output": "3f90804344211aedd3cd68e3f7161f4da91d19f70753f3b16a98b27acb0b3870",
+    "source": "50043e3a20132402d0eafb3936db9562290c7ea6b922686d1cb0d3ca84508ae4",
+    "surface": {
+      "channels": "roughness-only",
+      "finish": "brushed-metal",
+      "repeat": [
+        8,
+        8
+      ]
+    }
+  },
+  {
+    "name": "ball",
+    "target": "ball_0000",
+    "pass": true,
+    "before": {
+      "source": "61dc7229d88c4b7a6a0c0d118d0489205e9e99525c0eeea2f0503efc171a88ad",
+      "geometry": "de404e9aad5a140ffc2338505f40783abe6327cb06e2954604880b85f9cf5d97"
+    },
+    "roughness": {
+      "source": "cd6135096e7bf671ace7e12764a1d7bb0789b130fd9e03a75fc5dcd7232ccd60",
+      "geometry": "de404e9aad5a140ffc2338505f40783abe6327cb06e2954604880b85f9cf5d97"
+    },
+    "after": {
+      "source": "24122a1a8b53688edab7ab8a60ac3f82a1d9f34a291054997705bc25d6aa7221",
+      "geometry": "de404e9aad5a140ffc2338505f40783abe6327cb06e2954604880b85f9cf5d97"
+    },
+    "reloaded": {
+      "source": "24122a1a8b53688edab7ab8a60ac3f82a1d9f34a291054997705bc25d6aa7221",
+      "geometry": "de404e9aad5a140ffc2338505f40783abe6327cb06e2954604880b85f9cf5d97"
+    },
+    "output": "0a41a3453da5501656734d9ed887bc66957b50a2c3521fd40471a6c1f10e3231",
+    "source": "46ac6f582a0950701c0fcf40eaa9beb4a8db1956ecb12ab4c08b9a6d6b991131",
+    "surface": {
+      "channels": "roughness-only",
+      "finish": "brushed-metal",
+      "repeat": [
+        8,
+        8
+      ]
+    }
+  }
+]

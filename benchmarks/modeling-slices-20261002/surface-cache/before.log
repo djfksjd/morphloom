@@ -1,0 +1,21 @@
+{"filled":true,"cache":{"entries":32,"estimatedBytes":33554432,"maximumEntries":96,"maximumBytes":33554432},"cpuPayloadBytes":25165824,"gpuMipBytes":33554304,"combinedBytes":58720128,"allocation256":1048576,"targetShared":false,"warmIdentity":false,"sharedDisposes":0,"ownedTextures":6,"ownedDisposes":0,"pixelSha256":"a5d5d005fe6244835704292ed477b6aed1020a20de263f6253e4b3fa209cf3e9","glbSha256":"2ddeb190d3efb8f9d28a29f56fea972a777557635c014ca74b5c22a6f88b1772"}
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+AssertionError [ERR_ASSERTION]: actual CPU + GPU mip payload exceeds cache budget
+    at /Users/danny/Documents/morphloom/scripts/surface-cache-evidence.ts:51:39
+    at ViteNodeRunner.runModule (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:397:4)
+    at ViteNodeRunner.directRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:375:3)
+    at ViteNodeRunner.cachedRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:189:11)
+    at ViteNodeRunner.executeFile (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:162:10)
+    at CAC.run (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/cli.mjs:102:28) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.13.1

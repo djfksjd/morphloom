@@ -1,0 +1,22 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/engine.test.ts (63 tests) 9161ms
+   ✓ OHPK human pipeline > builds a reference-derived web hero as named editable meshes  1016ms
+   ✓ AssemblyIR product pipeline > builds deterministic bumpy asphalt with real macro relief and aggregate PBR maps  1539ms
+   ✓ AssemblyIR product pipeline > compiles a complete nine-apartment HABS floor with rooms, stairs and façade openings  559ms
+   ✓ AssemblyIR product pipeline > compiles a measured HABS cabin with explicit openings and evidence boundaries  480ms
+   ✓ AssemblyIR product pipeline > builds the Pinterest concept residence but keeps semi-professional delivery blocked  621ms
+   ✓ AssemblyIR product pipeline > builds a detailed phone as independently named parts  483ms
+   ✓ AssemblyIR product pipeline > compiles the supplied exploded electronics image into a connected assembly regression case  884ms
+   ✓ AssemblyIR product pipeline > keeps every conductor attached when an electronic component moves without rebuilding idle wires  313ms
+   ✓ AssemblyIR product pipeline > keeps the detailed phone, Fold8 exterior, and image-derived cooling assembly closed and manifold  846ms
+   ✓ PBR micro-surface system > keeps unused humanoid joint slots zero and flattens skinned roots for glTF  396ms
+   ✓ short-prompt generation contract > passes the corrected plan footprint and blocks an unverified replacement  516ms
+ ✓ tests/surface-cache.test.ts (1 test) 4910ms
+   ✓ bounds actual retained CPU payload plus every GPU mip level, then preserves overflow ownership and pixels  4910ms
+
+ Test Files  2 passed (2)
+      Tests  64 passed (64)
+   Start at  22:53:08
+   Duration  14.63s (transform 275ms, setup 0ms, collect 386ms, tests 14.07s, environment 0ms, prepare 51ms)

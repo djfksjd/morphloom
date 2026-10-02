@@ -243,7 +243,7 @@ let iridescenceThicknessTexture: THREE.Texture | undefined;
 /** CPU RGBA8 bytes plus the approximate full mip chain uploaded to the GPU. */
 export function surfaceMapAllocationBytes(size: number): number {
   if (!Number.isInteger(size) || size < 1 || size > 4096) throw new Error('Surface map size is unsafe.');
-  return Math.ceil(size * size * 4 * 3 * (4 / 3));
+  return Math.ceil(size * size * 4 * 3 * (1 + 4 / 3));
 }
 
 export function inspectSharedSurfaceCache(): {

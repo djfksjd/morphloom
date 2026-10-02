@@ -1,0 +1,56 @@
+[
+  {
+    "name": "gear",
+    "target": "spur_gear",
+    "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+    "outputSha256": "3f90804344211aedd3cd68e3f7161f4da91d19f70753f3b16a98b27acb0b3870",
+    "standard": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "name": "ball",
+    "target": "ball_0000",
+    "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+    "outputSha256": "0a41a3453da5501656734d9ed887bc66957b50a2c3521fd40471a6c1f10e3231",
+    "standard": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 10,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 13,
+        "meshes": 11,
+        "materials": 11,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  }
+]

@@ -1,0 +1,145 @@
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": true,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "fixture.glb",
+  "sourceBytes": 279492,
+  "sourceSha256": "bd0da426a6cf05cd88b24871e8b00982a83eef2f72e9f8b4149316fd433855b0",
+  "roundTrip": "roundtrip.glb",
+  "roundTripBytes": 279508,
+  "roundTripSha256": "5b6a8fa7e438f089044e20d9711a8a829860a1646e044f1c9bc9e7603317318b",
+  "boundsErrorMm": 0.0,
+  "boundsToleranceMm": 0.1,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 2,
+    "excludedImporterHelpers": 0,
+    "meshes": 1,
+    "vertices": 24,
+    "polygons": 12,
+    "materials": 1,
+    "images": 3,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2"
+    ],
+    "imageDimensions": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 36,
+      "cornerSum": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cornerSumSquares": [
+        0.09000000268220903,
+        0.09000000268220903,
+        0.0008999999597668652
+      ],
+      "surfaceAreaSquareMeters": 0.024000001424894397
+    },
+    "boundsMeters": {
+      "min": [
+        -0.05000000074505806,
+        -0.05000000074505806,
+        -0.004999999888241291
+      ],
+      "max": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.004999999888241291
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 2,
+    "excludedImporterHelpers": 0,
+    "meshes": 1,
+    "vertices": 24,
+    "polygons": 12,
+    "materials": 1,
+    "images": 3,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2"
+    ],
+    "imageDimensions": [
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ],
+      [
+        256,
+        256
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 36,
+      "cornerSum": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cornerSumSquares": [
+        0.09000000268220903,
+        0.09000000268220903,
+        0.0008999999597668652
+      ],
+      "surfaceAreaSquareMeters": 0.024000001424894397
+    },
+    "boundsMeters": {
+      "min": [
+        -0.05000000074505806,
+        -0.05000000074505806,
+        -0.004999999888241291
+      ],
+      "max": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.004999999888241291
+      ]
+    }
+  }
+}

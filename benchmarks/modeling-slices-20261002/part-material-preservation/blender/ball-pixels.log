@@ -1,0 +1,16 @@
+22:35:57 | INFO: Data are loaded, start creating Blender stuff
+22:35:57 | INFO: Blender create Mesh node 0
+22:35:57 | INFO: Blender create Mesh node 1
+22:35:57 | INFO: Blender create Mesh node 2
+22:35:57 | INFO: Blender create Mesh node 3
+22:35:57 | INFO: Blender create Mesh node 4
+22:35:57 | INFO: Blender create Mesh node 5
+22:35:57 | INFO: Blender create Mesh node 6
+22:35:57 | INFO: Blender create Mesh node 7
+22:35:57 | INFO: Blender create Mesh node 8
+22:35:57 | INFO: Blender create Mesh node 9
+22:35:57 | INFO: Blender create Mesh node 10
+22:35:57 | INFO: glTF import finished in 0.10s
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

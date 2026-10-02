@@ -39,3 +39,9 @@ UI는 `/?editor=elements`와 `/?editor=workspace`다. Preview는 HMR 없이 검�
 사용자 승인으로2026-10-02 main push 완료: a8596af669e5c4e8f4012cf8fd3fe8e064680711. 별도 체크아웃의 scoped83파일585테스트/check/build/benchmark PASS,독립production evidence 부족FAIL. benchmarks/modeling-slices-20261002에 공개 IR/GLB/렌더/현재검수 포함. 원본 index/무관한 변경 보존. 새 활성 goal은 MESH_EXPORT_GATE_CONTRACT.ko.md: 일반 GLB 다운로드의 실제UV/critical feature 실패 차단과 명시적 진단 경로;후속변경 아직미게시.
 
 추가내보내기 goal 검수: MESH_EXPORT_GATE_STATUS.ko.md,outputs/mesh-export-gate-20261002. 일반UV/criticalfeature 실패 차단·명시진단purpose·actualGLB standard 검수·mixed undo/save/비대상파일 보존. 기존0.1진단은topology not-run을 명시하고20MB 상한을모든정보보존compactJSON으로지켰다.87파일608테스트/check/build PASS,4Blender reopen·8actualGLB Khronos 오류0,clay RGBA 동일. 원격게시 a8596af와후속로컬변경 구분. production 독립비교부족/전문가·제조·atlas 미검증 유지.
+
+내보내기 goal main push/원격검증 완료: beef8823d656fbb667462ab4fae64d6e4320c2bb. 게시범위84파일589테스트/check/build PASS. 원본범위87파일608테스트 PASS. 최초push/기하검수와후속20분+10분 검수·별도게시검증을합해약39분. 다음활성goal은 PBR scalar 편집의선언형surface 보존이며실제브라우저재현부터시작.
+
+PBR scalar 표면유실 goal 검수: PART_MATERIAL_PRESERVATION_STATUS.ko.md/outputs/part-material-preservation-20261002.2handler 최소수정,기어/볼 stage/history/save/export·actualgeometry/UV/non-targetPBR·Blenderpixels 보존,87파일608테스트/check/build PASS. 이것은로컬fix이며현재main beef882와구분하고다음의미있는batch에서게시. baselineworkingfile overwrite는재구성SourceSHA확인과명시로보정했다. 다음은surfacecache CPU/GPU accounting 실제측정.
+
+표면캐시 CPU payload 누락 수정: SURFACE_CACHE_STATUS.ko.md / outputs/surface-cache-20261002/verification.json. 기존32MiB/96entry 유지,actualpayload+mip56MiB→31.5MiB,actualGLB 참조/payload동일(이미지저장순서로wholehash차이),editorowneddispose,88files609tests/check/build/Blender PASS. Khronos tangent warning1(strict FAIL)보존. 이전PBRscalar actualelapsed1487s(15분계획 초과). 두fix를한checkpoint로게시.

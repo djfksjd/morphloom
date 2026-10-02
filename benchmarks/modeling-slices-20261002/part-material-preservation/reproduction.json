@@ -1,0 +1,27 @@
+{
+  "before": {
+    "source": "5efa52b3336ba1c10cf588b0e66adc8fa7fd4fbf1a883aa2a4736eab0fa580e0",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "after": {
+    "source": "3288499ff4a9d86b067bc4fd279434b2f174bc0ad71f8e343d500a360535b59f",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "expectedSurface": {
+    "channels": "roughness-only",
+    "finish": "brushed-metal",
+    "repeat": [
+      8,
+      8
+    ]
+  },
+  "actualSurface": {
+    "channels": "roughness-only",
+    "finish": "brushed-metal",
+    "repeat": [
+      8,
+      8
+    ]
+  },
+  "pass": true
+}

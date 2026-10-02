@@ -1,0 +1,15 @@
+{
+  "pass": true,
+  "sourceSha256": "3f90804344211aedd3cd68e3f7161f4da91d19f70753f3b16a98b27acb0b3870",
+  "target": "spur_gear",
+  "matches": [
+    {
+      "name": "Image_0",
+      "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+      "flipMatches": true,
+      "colorspace": "Non-Color"
+    }
+  ],
+  "expectedPixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+  "materialName": "spur_gear [brushed-metal]"
+}

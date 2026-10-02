@@ -1,0 +1,44 @@
+{
+  "scope": "PBR scalar UI source/surface preservation; not physical material measurements",
+  "rendererRevision": "morphloom.element-renderer/0.9",
+  "sourceSchema": "morphloom.elements/0.6",
+  "sourceFiles": {
+    "src/PartInspector.tsx": "74a75f1ab0f01d001d78943fb7fc3493ee897d730999f9d2dd670015a2b02ca4"
+  },
+  "artifacts": {
+    "outputs/part-material-preservation-20261002/baseline-reconstruction.json": "d8d9c5ea6a2533a820ccb0ab1d3c695e359bb95a92c7a323716ffd749f99993a",
+    "outputs/part-material-preservation-20261002/reproduction-before.json": "063e6c4e1adb01c268d15ec59ebd0e57109bb781ecb08ecd3e28e7a6d09158f4",
+    "outputs/part-material-preservation-20261002/file-preservation.json": "e520e443bfeac7ad258bacd04494cefc12085e28be4e4c1d95c5ea4c9a0ec580",
+    "outputs/part-material-preservation-20261002/edited.elements.json": "df5fd03b99792a3c7ef23ffd6a7e65151a00ef5f3c26d373ccacca8419616ba4",
+    "outputs/part-material-preservation-20261002/reproduction.json": "1a8d989b1583598b422f2ec0cd7cc95fdd40683c03b362b5185b5fc4238d6c86",
+    "outputs/part-material-preservation-20261002/reconstructed-before-source.elements.json": "21e58807244cad70f9a5fe66423486021abaeb62c2368f3838e05944143c0c4d",
+    "outputs/part-material-preservation-20261002/pixel-expectation.json": "f831afbc713593cfb09d79e299e51043f935f8f7c8be029a1fa0f1239b951158",
+    "outputs/part-material-preservation-20261002/ball.receipt.json": "577d6ab272aa300b379b9b2d1e581e3ff41b69c11bd2c96ce2e368708038c6aa",
+    "outputs/part-material-preservation-20261002/ball.rgba": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+    "outputs/part-material-preservation-20261002/gear.glb": "3f90804344211aedd3cd68e3f7161f4da91d19f70753f3b16a98b27acb0b3870",
+    "outputs/part-material-preservation-20261002/gear.elements.json": "50043e3a20132402d0eafb3936db9562290c7ea6b922686d1cb0d3ca84508ae4",
+    "outputs/part-material-preservation-20261002/ball.elements.json": "46ac6f582a0950701c0fcf40eaa9beb4a8db1956ecb12ab4c08b9a6d6b991131",
+    "outputs/part-material-preservation-20261002/browser-workflow.json": "22ec7e989673d350094208ef7d99a1a50327c2c6e4738d0c13e08fb74f022fd3",
+    "outputs/part-material-preservation-20261002/gear.receipt.json": "053318e78f36524d38a42ff4ad29c59b0fc672fbc5c309f51e3ebc128d641742",
+    "outputs/part-material-preservation-20261002/ball.glb": "0a41a3453da5501656734d9ed887bc66957b50a2c3521fd40471a6c1f10e3231",
+    "outputs/part-material-preservation-20261002/gear.rgba": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+    "outputs/part-material-preservation-20261002/blender/gear.json": "04fd9437136f25ae87ed1960eaa50cf74d1c2907c85b8aace317b16333e4769d",
+    "outputs/part-material-preservation-20261002/blender/ball-roundtrip-pixels.json": "d60dd1453ef3c175fff50b26b40f69555f1bf9adc276852c42d01d75905007a2",
+    "outputs/part-material-preservation-20261002/blender/ball.json": "7af938e750939dc3ce156c856e56ff33e4e7b39aef5ed3263210df301b494e00",
+    "outputs/part-material-preservation-20261002/blender/ball-pixels.json": "12fb525c3e24a8138c0f2566a9dd05e9f5f1ad919b7041fb0f5a3ce616f8dc95",
+    "outputs/part-material-preservation-20261002/blender/gear.glb": "fd407bd5462837bb387d8729935961a17e052c175e1e167df31320abdc12e41d",
+    "outputs/part-material-preservation-20261002/blender/gear-roundtrip-pixels.json": "b393246ed542999b2c1bcd7e8a78eacaba53c3199afe76e9fccb9d9e8d5188d5",
+    "outputs/part-material-preservation-20261002/blender/ball.glb": "1a4dd75d07f2838582ee9cff8ce56c3b7f5fba8c9fc883fa903d1198ebb4cb05",
+    "outputs/part-material-preservation-20261002/blender/gear-pixels.json": "df34d2763c0cdd4578cca177ac909ebd68a181e64c1f2adbcff4c0f67e6c3347"
+  },
+  "tests": {
+    "files": 87,
+    "tests": 608,
+    "pass": true
+  },
+  "baselineNote": "Pre-fix browser failure recorded; overwritten working source explicitly reconstructed and SHA matched; not an original saved-file copy",
+  "remoteMain": "beef8823d656fbb667462ab4fae64d6e4320c2bb",
+  "publication": "two-handler fix local only; bundle at next meaningful checkpoint",
+  "environment": "macOS M5 arm64;Node24.13.1;Blender5.2.1 LTS",
+  "uniAi": "models403/completion not-run/no source transmitted"
+}
