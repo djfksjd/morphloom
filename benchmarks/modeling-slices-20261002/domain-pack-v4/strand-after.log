@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/strand-uv-delivery.test.ts (2 tests) 21ms
+ ✓ tests/element-project.test.ts (17 tests) 31ms
+
+ Test Files  2 passed (2)
+      Tests  19 passed (19)
+   Start at  23:14:55
+   Duration  409ms (transform 140ms, setup 0ms, collect 206ms, tests 52ms, environment 0ms, prepare 47ms)

@@ -1,0 +1,24 @@
+{
+  "pass": true,
+  "generatedSource": {
+    "source": "519d17acc4ba7e05720f914e6b2131bb976d3187c3cd69de01943c0b9080cab0",
+    "geometry": "e92797b284b1d417bfb65b8575a372861b63d6d34e3de94b2f7f40c13e96e0bc"
+  },
+  "editedSource": {
+    "source": "dfbe4f6d78564a3aa66079474b32d23fa623f3fce129ba16cecea17540411458",
+    "geometry": "4bc286d235becbaa1d10bec2f69f16d4f626e6e878d03abaafbdb2152f945e3c"
+  },
+  "workspaceSource": {
+    "source": "fc3c25013c5d8be56831c6302ef410f061a46024ec159dac624469d4c72b562c",
+    "geometry": "e92797b284b1d417bfb65b8575a372861b63d6d34e3de94b2f7f40c13e96e0bc"
+  },
+  "checks": [
+    "registry generation",
+    "generic inspector staged cancel/apply",
+    "dimension and PBR edit",
+    "undo/redo",
+    "save/reopen",
+    "actual GLB UV/standard gate",
+    "mixed fur source preservation"
+  ]
+}

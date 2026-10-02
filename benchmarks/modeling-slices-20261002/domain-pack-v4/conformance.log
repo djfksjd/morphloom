@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/element-workspace.test.ts (5 tests) 642ms
+ ✓ tests/element-domain-packs.test.ts (5 tests) 7ms
+ ✓ tests/domain-pack-v4.test.ts (9 tests) 12ms
+
+ Test Files  3 passed (3)
+      Tests  19 passed (19)
+   Start at  23:06:43
+   Duration  1.25s (transform 179ms, setup 0ms, collect 336ms, tests 661ms, environment 0ms, prepare 83ms)

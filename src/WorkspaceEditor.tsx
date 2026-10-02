@@ -1,3 +1,4 @@
+import { surfaceGearPack } from '../examples/domain-packs/surface-gear-pack';
 import React, { useCallback, useRef, useState } from 'react';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import {inspectMeshExport} from './engine/mesh-export-policy';
@@ -9,7 +10,7 @@ import { serializeProject, type ElementProject, type Vec3 } from './engine/eleme
 import { appendWorkspaceAsset, buildWorkspaceScene, generateWorkspaceAsset, parseWorkspace, serializeWorkspace, validateWorkspace, WorkspaceHistory, type ElementWorkspace } from './engine/element-workspace';
 import { analyzeTopology } from './engine/topology';
 
-const registry=createElementDomainRegistry();registry.register(bearingPack);registry.register(gearPack);
+const registry=createElementDomainRegistry();registry.register(bearingPack);registry.register(gearPack);registry.register(surfaceGearPack);
 const empty=():ElementWorkspace=>({schema:'morphloom.workspace/0.1',units:'mm',coordinates:'right-handed-y-up',assets:[]});
 function initial():ElementWorkspace{
   return appendWorkspaceAsset(empty(),generateWorkspaceAsset(registry,{id:'animal',packId:'morphloom.fur',input:{seed:17},requiredCapabilities:['semantic-part-editing','selected-scene-export'],positionMm:[-100,0,0],rotationRad:[0,0,0]}));

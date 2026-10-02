@@ -43,9 +43,12 @@ describe('element renderer', () => {
       expect(built.root.userData.sourceUnits).toBe('mm');
       expect(built.root.userData.sourceSpec).toEqual(p);
       const g = (built.root.children[0] as THREE.Mesh).geometry as THREE.BufferGeometry;
+      // UV cuts duplicate coincident vertices; closure is measured on exact geometric identity.
       const edges = new Map<string, number>(); const index = g.getIndex()!;
+      const pos = g.getAttribute('position');
+      const pointId = (i: number): string => [pos.getX(i), pos.getY(i), pos.getZ(i)].join(',');
       for (let i = 0; i < index.count; i += 3) for (const [a,b] of [[0,1],[1,2],[2,0]]) {
-        const edge = [index.getX(i+a), index.getX(i+b)].sort((x,y) => x-y).join(':');
+        const edge = [pointId(index.getX(i+a)), pointId(index.getX(i+b))].sort().join(':');
         edges.set(edge, (edges.get(edge) ?? 0) + 1);
       }
       expect([...edges.values()].every(n => n === 2)).toBe(true);

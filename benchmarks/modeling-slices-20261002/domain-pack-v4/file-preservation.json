@@ -1,0 +1,73 @@
+{
+  "pass": true,
+  "nodeBrowserActualMeshImagePbrEqual": true,
+  "mixedNonTargetMeshImagePbrHierarchyEqual": true,
+  "rows": [
+    {
+      "path": "native/default.glb",
+      "outputSha256": "06065b637bf215f231fd815759c837c6b4adc32b2c9d0c9b0e85850f68e86ffb",
+      "roughness": 0.32,
+      "metalness": 0.9,
+      "imageSha256": "7f43620c8ffedb4f6a7295b4d628928822f1a2fd4625c01e091e67dc7daccb62",
+      "normalMap": false
+    },
+    {
+      "path": "native/small.glb",
+      "outputSha256": "c0378c395f35eacc98c71cf5297c92a441ae6cf79dd524b0849a30f341d469ec",
+      "roughness": 0.32,
+      "metalness": 0.9,
+      "imageSha256": "7f43620c8ffedb4f6a7295b4d628928822f1a2fd4625c01e091e67dc7daccb62",
+      "normalMap": false
+    },
+    {
+      "path": "native/large.glb",
+      "outputSha256": "43d9762adab14758cde61e51afcafef87d59b72d1375f49b27475883133d1a75",
+      "roughness": 0.32,
+      "metalness": 0.9,
+      "imageSha256": "7f43620c8ffedb4f6a7295b4d628928822f1a2fd4625c01e091e67dc7daccb62",
+      "normalMap": false
+    },
+    {
+      "path": "native/mixed-before.glb",
+      "outputSha256": "bbda06e928c87dc0a02bfe96a38157dbcdb61e66f1fd7380a6e059bc62756ce2",
+      "roughness": 0.32,
+      "metalness": 0.9,
+      "imageSha256": "7f43620c8ffedb4f6a7295b4d628928822f1a2fd4625c01e091e67dc7daccb62",
+      "normalMap": false
+    },
+    {
+      "path": "native/mixed-after.glb",
+      "outputSha256": "cd81ff794d9946c2d9e9978fb8231dcc4c71a844292a708098f03b2e5ab37327",
+      "roughness": 0.52,
+      "metalness": 0.9,
+      "imageSha256": "7f43620c8ffedb4f6a7295b4d628928822f1a2fd4625c01e091e67dc7daccb62",
+      "normalMap": false
+    },
+    {
+      "path": "browser/generated.glb",
+      "outputSha256": "c49af89d4e6b28f7945f75bd0af737886e70fa96574eb097940e6040d6cea4bb",
+      "roughness": 0.32,
+      "metalness": 0.9,
+      "imageSha256": "ab5c588b55b22278c50c8e9f5bf70292dcfe98f9ccea3cf6b31727bfb9a0f519",
+      "normalMap": false
+    },
+    {
+      "path": "browser/edited.glb",
+      "outputSha256": "5f5abdcb42fe8cb4cebe1eab844687aeb71af215576d31823e06542644fb2f5f",
+      "roughness": 0.52,
+      "metalness": 0.9,
+      "imageSha256": "ab5c588b55b22278c50c8e9f5bf70292dcfe98f9ccea3cf6b31727bfb9a0f519",
+      "normalMap": false
+    },
+    {
+      "path": "browser/workspace-edited.glb",
+      "outputSha256": "e86db6675f9c7b072393a7babcf06a1afcb02a46a14a617dcbd1f5538aacf500",
+      "roughness": 0.52,
+      "metalness": 0.9,
+      "imageSha256": "ab5c588b55b22278c50c8e9f5bf70292dcfe98f9ccea3cf6b31727bfb9a0f519",
+      "normalMap": false
+    }
+  ],
+  "nodeBrowserScope": "default spur gear only; strict fur Float64 matrices differ; full fur cross-runtime parity not verified",
+  "mixedScope": "same browser actual before/after; unchanged fur source JSON and actual mesh/UV/image/PBR/hierarchy exact"
+}

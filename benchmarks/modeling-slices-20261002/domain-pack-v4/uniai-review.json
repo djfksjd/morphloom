@@ -1,0 +1,29 @@
+{
+  "requestedModel": "gpt-6-sol",
+  "responseModel": "gpt-6-sol",
+  "finishReason": "stop",
+  "usage": {
+    "completion_tokens": 682,
+    "prompt_tokens": 698,
+    "total_tokens": 1380,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 33,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": null
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null
+    }
+  },
+  "content": "## Minimal additive design\n\nAdd `morphloom.domain-pack/0.4` to the accepted versions. For **0.4 only**, require `dependencies.engineApi === '0.4'` and an explicit `representation.id` from `morphloom.elements/0.1` through `/0.6`. Keep `representation.mode === 'native'`. Do not infer the output schema from the Pack version.\n\nLeave the 0.1–0.3 validation paths unchanged: their version-derived representation and engine API requirements, and every other existing metadata constraint, continue to apply. In particular, retain the current rules for status, units, coordinates, element limit, capabilities, single operation and tool, parameters, notes, evidence paths, export adapters, and copyability. Extend the metadata type as needed, without relaxing those checks.\n\nAt the generation boundary, continue to require the returned ElementProject’s schema to **equal the Pack’s declared `representation.id`**. Parser/renderer support for 0.1–0.6 is not permission to accept a different generated schema or silently migrate it.\n\n## Example Pack\n\nAdd a 0.4 gear Pack declared with native output `morphloom.elements/0.6`. Reuse the existing gear generator; make its migration to 0.6 an explicit step before returning the project. Apply UV scale and a roughness-only surface through that schema, without adding a dependency or changing the generator’s synchronous local contract. Register the Pack through the existing path so the shared inspector and workspace consume it, rather than adding Pack-specific UI. Describe it as an example, not as evidence of manufacturability.\n\n## Risks and rejected cases\n\n- **Version coupling:** reject a 0.4 Pack with `engineApi` other than `0.4`; do not derive its native schema from its API version.\n- **Accidental legacy relaxation:** reject any 0.1–0.3 metadata that the current validator rejects.\n- **Schema drift:** reject generated output whose schema differs from the declared native schema, even if both schemas are supported by the parser/renderer.\n- **Implicit conversion:** reject relying on the workspace or renderer to migrate generated output.\n- **Scope creep:** reject a new engine, dependency, asynchronous API, Pack-specific inspector, extra operation/tool/export adapter, or manufacturing claim.\n\n## Conformance tests\n\n1. Existing valid 0.1–0.3 fixtures still pass, and their existing invalid fixtures still fail.\n2. Valid 0.4 fixtures pass for each explicitly declared native schema 0.1–0.6; missing, unsupported, or version-inferred representation IDs fail.\n3. A 0.4 fixture with any non-`0.4` engine API fails.\n4. Generated-project schema equality is enforced for 0.4, including rejection of another otherwise supported schema.\n5. The example gear Pack returns 0.6 output after explicit migration, with UV scale and roughness-only surface, and opens through the shared inspector/workspace.\n6. Existing metadata constraints and source-JSON/baked-GLB export behavior remain covered for the new Pack.",
+  "inputChars": 2732,
+  "executionEvidence": false,
+  "modelsReads": 2,
+  "note": "First successful models probe discarded body; second lookup required for actual model choice, no completion retry."
+}

@@ -12,13 +12,11 @@ export class DomainPackError extends Error {
   }
 }
 
-export interface DomainPackMetadata {
-  version: typeof DOMAIN_PACK_VERSION | 'morphloom.domain-pack/0.2' | 'morphloom.domain-pack/0.3';
+interface DomainPackMetadataBase {
   id: string;
   domain: string;
   status: 'experimental';
   capabilities: string[];
-  representation: { id: 'morphloom.elements/0.1' | 'morphloom.elements/0.2' | 'morphloom.elements/0.3'; mode: 'native' };
   units: 'mm';
   coordinates: 'right-handed-y-up';
   parameters: { seed: 'uint-safe-integer'; dimensions: Record<string, { min: number; max: number; default: number }> };
@@ -31,8 +29,20 @@ export interface DomainPackMetadata {
     { id: 'source-json'; editing: 'full' },
     { id: 'baked-glb'; editing: 'baked-only' }
   ];
-  dependencies: { engineApi: '0.1' | '0.2' | '0.3' };
 }
+
+/** API compatibility and source schema are independent only in the new contract. */
+export type DomainPackMetadata = DomainPackMetadataBase & (
+  | { version: typeof DOMAIN_PACK_VERSION; representation: { id: 'morphloom.elements/0.1'; mode: 'native' }; dependencies: { engineApi: '0.1' } }
+  | { version: 'morphloom.domain-pack/0.2'; representation: { id: 'morphloom.elements/0.2'; mode: 'native' }; dependencies: { engineApi: '0.2' } }
+  | { version: 'morphloom.domain-pack/0.3'; representation: { id: 'morphloom.elements/0.3'; mode: 'native' }; dependencies: { engineApi: '0.3' } }
+  | { version: 'morphloom.domain-pack/0.4'; representation: { id: ElementProject['schema']; mode: 'native' }; dependencies: { engineApi: '0.4' } }
+);
+
+const nativeSchemas: readonly ElementProject['schema'][] = [
+  'morphloom.elements/0.1', 'morphloom.elements/0.2', 'morphloom.elements/0.3',
+  'morphloom.elements/0.4', 'morphloom.elements/0.5', 'morphloom.elements/0.6'
+];
 
 export interface DomainPack {
   metadata: DomainPackMetadata;
@@ -48,9 +58,11 @@ const copy = <T>(value: T): T => structuredClone(value);
 
 function checkMetadata(m: DomainPackMetadata): void {
   const fail = (): never => { throw new DomainPackError('invalid-pack', String(m?.id ?? 'unknown')); };
-  if (!m || ![DOMAIN_PACK_VERSION, 'morphloom.domain-pack/0.2', 'morphloom.domain-pack/0.3'].includes(m.version) || typeof m.id !== 'string' || !idPattern.test(m.id) ||
+  if (!m || ![DOMAIN_PACK_VERSION, 'morphloom.domain-pack/0.2', 'morphloom.domain-pack/0.3', 'morphloom.domain-pack/0.4'].includes(m.version) || typeof m.id !== 'string' || !idPattern.test(m.id) ||
       typeof m.domain !== 'string' || !m.domain.trim() || m.status !== 'experimental' ||
-      m.representation?.id !== ('morphloom.elements/'+m.version.split('/')[1]) || m.representation.mode !== 'native' ||
+      (m.version === 'morphloom.domain-pack/0.4'
+        ? !nativeSchemas.includes(m.representation?.id)
+        : m.representation?.id !== ('morphloom.elements/'+m.version.split('/')[1])) || m.representation.mode !== 'native' ||
       m.units !== 'mm' || m.coordinates !== 'right-handed-y-up' ||
       m.constraints?.maxElements !== 5000 || m.dependencies?.engineApi !== m.version.split('/')[1] ||
       !Array.isArray(m.capabilities) || !m.capabilities.every(x => typeof x === 'string' && x.length > 0) ||

@@ -1,0 +1,135 @@
+{
+  "rendererRevision": "morphloom.element-renderer/0.9",
+  "api": "0.4",
+  "rows": [
+    {
+      "name": "default",
+      "sourceSha256": "519d17acc4ba7e05720f914e6b2131bb976d3187c3cd69de01943c0b9080cab0",
+      "outputSha256": "3616d39dbf8d4d579228c7c470280e6875878eef168caa836edfdc99ed0b3717",
+      "standard": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "name": "small",
+      "sourceSha256": "eda062cacd3988dfa71baefb35adf13da648fa662324979b789ec2308d6c7636",
+      "outputSha256": "7d37d43cbd81f1d43c17e5d6efb17a6658fb188cddfeecf6dd41d4c9a7f63d6e",
+      "standard": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "name": "large",
+      "sourceSha256": "ec7e6785209466e860881e62beb75582ecbfd14a68a89de3f2953cf23ff0f1fd",
+      "outputSha256": "be2f02f1c780a62bdd2b58559794c94e988f7182f59800bdf6f075f4ab7071b0",
+      "standard": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "name": "mixed-before",
+      "sourceSha256": "28aa4568ab922c76608b429288f513e8e852f238db8b6a1ed4b1f832a30072b8",
+      "outputSha256": "e568349c4b66b376118452685b64fbfcb6a1f869501d1c52d1ba8d55a847332d",
+      "standard": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 1,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 55,
+          "meshes": 52,
+          "materials": 52,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "name": "mixed-after",
+      "sourceSha256": "df20c8ba00ac75df35dbb72c5096025b940c6028bf237178d6ab2d5b7eb016f2",
+      "outputSha256": "08d0e2f4b0de68201910aac7695bf2d6f3e237aee36fc498d9575c2d3df59977",
+      "standard": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 1,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 55,
+          "meshes": 52,
+          "materials": 52,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    }
+  ]
+}

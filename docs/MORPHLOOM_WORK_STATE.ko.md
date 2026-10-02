@@ -45,3 +45,7 @@ UI는 `/?editor=elements`와 `/?editor=workspace`다. Preview는 HMR 없이 검�
 PBR scalar 표면유실 goal 검수: PART_MATERIAL_PRESERVATION_STATUS.ko.md/outputs/part-material-preservation-20261002.2handler 최소수정,기어/볼 stage/history/save/export·actualgeometry/UV/non-targetPBR·Blenderpixels 보존,87파일608테스트/check/build PASS. 이것은로컬fix이며현재main beef882와구분하고다음의미있는batch에서게시. baselineworkingfile overwrite는재구성SourceSHA확인과명시로보정했다. 다음은surfacecache CPU/GPU accounting 실제측정.
 
 표면캐시 CPU payload 누락 수정: SURFACE_CACHE_STATUS.ko.md / outputs/surface-cache-20261002/verification.json. 기존32MiB/96entry 유지,actualpayload+mip56MiB→31.5MiB,actualGLB 참조/payload동일(이미지저장순서로wholehash차이),editorowneddispose,88files609tests/check/build/Blender PASS. Khronos tangent warning1(strict FAIL)보존. 이전PBRscalar actualelapsed1487s(15분계획 초과). 두fix를한checkpoint로게시.
+
+의미있는두fix main게시/원격SHA검증: aef595f4b36c69b4dd411b3f531ec803105f753e. 공개검수85files590tests/check/build PASS;productionFAIL 유지. 다음goal은 최신elements0.6 생성물을 선언하고 실행할수없는DomainPack version/representation 결합의후방호환 확장과 실제 mixed workspace 검수다.
+
+DomainPack API0.4 최신source0.6 생성/공통UI/혼합/actualGLB/Blender 검수: DOMAIN_PACK_V4_STATUS.ko.md,outputs/domain-pack-v4-20261002/verification.json. Mixed export에서 드러난 sectionUV누락/inward/tinycap을renderer0.10으로수정.90files622tests(게시87files603)/check/build PASS,5actualbrowser normalexports,8Blenderpixel/repeat PASS. production독립비교0/3FAIL,fur strictNode/browser matrix/poleUV/극단twist/제조·전문가 미검증 유지. UNI_AI2회2,845tokens.

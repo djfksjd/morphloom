@@ -1,0 +1,181 @@
+23:26:07 | INFO: Data are loaded, start creating Blender stuff
+23:26:07 | INFO: Blender create Mesh node 0
+23:26:07 | INFO: glTF import finished in 0.00s
+/Users/danny/Documents/morphloom/scripts/blender-neutral-render.py:137: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world.use_nodes = True
+/Users/danny/Documents/morphloom/scripts/blender-neutral-render.py:154: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  clay.use_nodes = True
+00:00.650  render           | Saved: '/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/renders/after-close.png'
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "after-close.glb",
+  "sourceBytes": 1466500,
+  "sourceSha256": "834af5c98b3159edf348963adaaaef1aacbd1bab6314520827f7445e1bdaae4f",
+  "render": "after-close.png",
+  "renderBytes": 255259,
+  "renderSha256": "053f479ae6a8d2475487f0dc0fe971ef28f45707830772ddb906dafb5ac24d25",
+  "meshes": 1,
+  "materials": 2,
+  "normalization": {
+    "method": "broadside-xz-max-extent",
+    "targetExtent": 2.0,
+    "sourceBounds": {
+      "min": [
+        -0.13228736817836761,
+        0.03513244912028313,
+        0.05693447217345238
+      ],
+      "max": [
+        -0.11714622378349304,
+        0.041398968547582626,
+        0.05938844010233879
+      ],
+      "size": [
+        0.015141144394874573,
+        0.0062665194272994995,
+        0.0024539679288864136
+      ]
+    },
+    "scale": 132.09041191609134,
+    "normalizedBounds": {
+      "min": [
+        -1.0000005960464478,
+        -0.413873553276062,
+        -0.1620730757713318
+      ],
+      "max": [
+        1.0,
+        0.4138736128807068,
+        0.1620730608701706
+      ],
+      "size": [
+        2.000000476837158,
+        0.8277471661567688,
+        0.3241461515426636
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      -3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.55
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        300,
+        413
+      ],
+      "max": [
+        723,
+        611
+      ]
+    },
+    "minimumMarginPixels": 300,
+    "touchesBorder": false
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "wire",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        -2.5,
+        -3.0,
+        3.5
+      ],
+      "energy": 900.0,
+      "size": 4.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 500.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

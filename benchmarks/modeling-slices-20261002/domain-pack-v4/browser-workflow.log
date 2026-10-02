@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/browser-workflow.py", line 35, in <module>
+    run('upload','input[aria-label="Load workspace JSON"]',str((p/'workspace-edited.json').resolve()));run('select',ref('Workspace asset','combobox'),'gear');wait(lambda x:x['source']==changed['source']);download_bundle('Export workspace GLB + JSON','workspace-edited');run('screenshot',str((p/'mixed-view.png').resolve()));(p/'workflow.json').write_text(json.dumps({'pass':True,'generatedSource':before,'editedSource':after,'workspaceSource':changed,'checks':['registry generation','generic inspector staged cancel/apply','dimension and PBR edit','undo/redo','save/reopen','actual GLB UV/standard gate','mixed fur source preservation']},indent=2));print('standalone + mixed UI and actual exports PASS')
+  File "/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/browser-workflow.py", line 18, in download_bundle
+    run('download',ref(label),str((p/(name+'.download')).resolve()))
+  File "/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/browser-workflow.py", line 4, in run
+    r=subprocess.run(['agent-browser','--session','morphloom-gear',*args],capture_output=True,text=True,timeout=35);assert r.returncode==0,r.stderr;return r.stdout
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 507, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1134, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1980, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1178, in _check_timeout
+    raise TimeoutExpired(
+subprocess.TimeoutExpired: Command '['agent-browser', '--session', 'morphloom-gear', 'download', '@e8', '/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/browser/workspace-edited.download']' timed out after 35 seconds

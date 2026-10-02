@@ -1,0 +1,17 @@
+file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3377
+		const URL = self.URL || self.webkitURL;
+		            ^
+
+ReferenceError: self is not defined
+    at GLTFParser.loadImageSource (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3377:15)
+    at GLTFParser.loadTextureImage (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3326:24)
+    at GLTFParser.loadTexture (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3305:15)
+    at file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3004:37
+    at GLTFParser._invokeOne (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:2911:19)
+    at GLTFParser.getDependency (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3002:24)
+    at GLTFParser.assignTexture (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3466:15)
+    at GLTFParser.loadMaterial (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:3667:26)
+    at file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:2996:38
+    at GLTFParser._invokeOne (file:///Users/danny/Documents/morphloom/node_modules/three/examples/jsm/loaders/GLTFLoader.js:2911:19)
+
+Node.js v24.13.1

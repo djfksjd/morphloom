@@ -1,0 +1,346 @@
+23:16:15 | INFO: Data are loaded, start creating Blender stuff
+23:16:15 | INFO: Blender create Mesh node 0
+23:16:15 | INFO: Blender create Mesh node 1
+23:16:15 | INFO: Blender create Mesh node 2
+23:16:15 | INFO: Blender create Mesh node 3
+23:16:15 | INFO: Blender create Mesh node 4
+23:16:15 | INFO: Blender create Mesh node 5
+23:16:15 | INFO: Blender create Mesh node 6
+23:16:15 | INFO: Blender create Mesh node 7
+23:16:15 | INFO: Blender create Mesh node 8
+23:16:15 | INFO: Blender create Mesh node 9
+23:16:15 | INFO: Blender create Mesh node 10
+23:16:15 | INFO: Blender create Mesh node 11
+23:16:15 | INFO: Blender create Mesh node 12
+23:16:15 | INFO: Blender create Mesh node 13
+23:16:15 | INFO: Blender create Mesh node 14
+23:16:15 | INFO: Blender create Mesh node 15
+23:16:15 | INFO: Blender create Mesh node 16
+23:16:15 | INFO: Blender create Mesh node 17
+23:16:15 | INFO: Blender create Mesh node 18
+23:16:15 | INFO: Blender create Mesh node 19
+23:16:15 | INFO: Blender create Mesh node 20
+23:16:15 | INFO: Blender create Mesh node 21
+23:16:15 | INFO: Blender create Mesh node 22
+23:16:15 | INFO: Blender create Mesh node 23
+23:16:15 | INFO: Blender create Mesh node 24
+23:16:15 | INFO: Blender create Mesh node 25
+23:16:15 | INFO: Blender create Mesh node 26
+23:16:15 | INFO: Blender create Mesh node 27
+23:16:15 | INFO: Blender create Mesh node 28
+23:16:15 | INFO: Blender create Mesh node 29
+23:16:15 | INFO: Blender create Mesh node 30
+23:16:15 | INFO: Blender create Mesh node 31
+23:16:15 | INFO: Blender create Mesh node 32
+23:16:15 | INFO: Blender create Mesh node 33
+23:16:15 | INFO: Blender create Mesh node 34
+23:16:15 | INFO: Blender create Mesh node 35
+23:16:15 | INFO: Blender create Mesh node 36
+23:16:15 | INFO: Blender create Mesh node 37
+23:16:15 | INFO: Blender create Mesh node 38
+23:16:15 | INFO: Blender create Mesh node 39
+23:16:15 | INFO: Blender create Mesh node 40
+23:16:15 | INFO: Blender create Mesh node 41
+23:16:15 | INFO: Blender create Mesh node 42
+23:16:15 | INFO: Blender create Mesh node 43
+23:16:15 | INFO: Blender create Mesh node 44
+23:16:15 | INFO: Blender create Mesh node 45
+23:16:15 | INFO: Blender create Mesh node 46
+23:16:15 | INFO: Blender create Mesh node 47
+23:16:15 | INFO: Blender create Mesh node 48
+23:16:15 | INFO: Blender create Mesh node 49
+23:16:15 | INFO: Blender create Mesh node 50
+23:16:15 | INFO: Blender create Mesh node 51
+23:16:15 | INFO: glTF import finished in 0.08s
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+23:16:15 | INFO: Starting glTF 2.0 export
+23:16:15 | INFO: Extracting primitive: Mesh_0
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_1
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_2
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_3
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_4
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_5
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_6
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_7
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_8
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_9
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_10
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_11
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_12
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_13
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_14
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_15
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_16
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_17
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_18
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_19
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_20
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_21
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_22
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_23
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_24
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_25
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_26
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_27
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_28
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_29
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_30
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_31
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_32
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_33
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_34
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_35
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_36
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_37
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_38
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_39
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_40
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_41
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_42
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_43
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_44
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_45
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_46
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_47
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_48
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_49
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_50
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Extracting primitive: Mesh_51
+23:16:15 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:16:15 | INFO: Primitives created: 1
+23:16:15 | INFO: Finished glTF 2.0 export in 0.06923890113830566 s
+
+23:16:15 | INFO: Data are loaded, start creating Blender stuff
+23:16:15 | INFO: Blender create Mesh node Mesh_0
+23:16:15 | INFO: Blender create Mesh node Mesh_1
+23:16:15 | INFO: Blender create Mesh node Mesh_2
+23:16:15 | INFO: Blender create Mesh node Mesh_3
+23:16:15 | INFO: Blender create Mesh node Mesh_4
+23:16:15 | INFO: Blender create Mesh node Mesh_5
+23:16:15 | INFO: Blender create Mesh node Mesh_6
+23:16:15 | INFO: Blender create Mesh node Mesh_7
+23:16:15 | INFO: Blender create Mesh node Mesh_8
+23:16:15 | INFO: Blender create Mesh node Mesh_9
+23:16:15 | INFO: Blender create Mesh node Mesh_10
+23:16:15 | INFO: Blender create Mesh node Mesh_11
+23:16:15 | INFO: Blender create Mesh node Mesh_12
+23:16:15 | INFO: Blender create Mesh node Mesh_13
+23:16:15 | INFO: Blender create Mesh node Mesh_14
+23:16:15 | INFO: Blender create Mesh node Mesh_15
+23:16:15 | INFO: Blender create Mesh node Mesh_16
+23:16:15 | INFO: Blender create Mesh node Mesh_17
+23:16:15 | INFO: Blender create Mesh node Mesh_18
+23:16:15 | INFO: Blender create Mesh node Mesh_19
+23:16:15 | INFO: Blender create Mesh node Mesh_20
+23:16:15 | INFO: Blender create Mesh node Mesh_21
+23:16:15 | INFO: Blender create Mesh node Mesh_22
+23:16:15 | INFO: Blender create Mesh node Mesh_23
+23:16:15 | INFO: Blender create Mesh node Mesh_24
+23:16:15 | INFO: Blender create Mesh node Mesh_25
+23:16:15 | INFO: Blender create Mesh node Mesh_26
+23:16:15 | INFO: Blender create Mesh node Mesh_27
+23:16:15 | INFO: Blender create Mesh node Mesh_28
+23:16:15 | INFO: Blender create Mesh node Mesh_29
+23:16:15 | INFO: Blender create Mesh node Mesh_30
+23:16:15 | INFO: Blender create Mesh node Mesh_31
+23:16:15 | INFO: Blender create Mesh node Mesh_32
+23:16:15 | INFO: Blender create Mesh node Mesh_33
+23:16:15 | INFO: Blender create Mesh node Mesh_34
+23:16:15 | INFO: Blender create Mesh node Mesh_35
+23:16:15 | INFO: Blender create Mesh node Mesh_36
+23:16:15 | INFO: Blender create Mesh node Mesh_37
+23:16:15 | INFO: Blender create Mesh node Mesh_38
+23:16:15 | INFO: Blender create Mesh node Mesh_39
+23:16:15 | INFO: Blender create Mesh node Mesh_40
+23:16:15 | INFO: Blender create Mesh node Mesh_41
+23:16:15 | INFO: Blender create Mesh node Mesh_42
+23:16:15 | INFO: Blender create Mesh node Mesh_43
+23:16:15 | INFO: Blender create Mesh node Mesh_44
+23:16:15 | INFO: Blender create Mesh node Mesh_45
+23:16:15 | INFO: Blender create Mesh node Mesh_46
+23:16:15 | INFO: Blender create Mesh node Mesh_47
+23:16:15 | INFO: Blender create Mesh node Mesh_48
+23:16:15 | INFO: Blender create Mesh node Mesh_49
+23:16:15 | INFO: Blender create Mesh node Mesh_50
+23:16:15 | INFO: Blender create Mesh node Mesh_51
+23:16:15 | INFO: glTF import finished in 0.06s
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": false,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "mixed-after.glb",
+  "sourceBytes": 1518936,
+  "sourceSha256": "cd81ff794d9946c2d9e9978fb8231dcc4c71a844292a708098f03b2e5ab37327",
+  "roundTrip": "mixed-after.glb",
+  "roundTripBytes": 1397512,
+  "roundTripSha256": "ebe6668e46644e2777c8a948f2ac55464539dedd0bafce04edd194feb6597665",
+  "boundsErrorMm": 3.725290298461914e-06,
+  "boundsToleranceMm": 0.1,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 55,
+    "excludedImporterHelpers": 0,
+    "meshes": 52,
+    "vertices": 39617,
+    "polygons": 35360,
+    "materials": 52,
+    "images": 1,
+    "imageNames": [
+      "Image_0"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 106080,
+      "cornerSum": [
+        -5404.957647442818,
+        490.7466372132185,
+        5192.042244761833
+      ],
+      "cornerSumSquares": [
+        1048.8348473839742,
+        59.35148068291292,
+        355.9961093491344
+      ],
+      "surfaceAreaSquareMeters": 0.0174373574892995
+    },
+    "boundsMeters": {
+      "min": [
+        -0.13280367851257324,
+        -0.04812030494213104,
+        -0.013000000268220901
+      ],
+      "max": [
+        0.11300000548362732,
+        0.05693097412586212,
+        0.10615948587656021
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 55,
+    "excludedImporterHelpers": 0,
+    "meshes": 52,
+    "vertices": 39617,
+    "polygons": 35360,
+    "materials": 52,
+    "images": 1,
+    "imageNames": [
+      "Image_0"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 106080,
+      "cornerSum": [
+        -5404.957647323608,
+        490.74664099828806,
+        5192.042250737199
+      ],
+      "cornerSumSquares": [
+        1048.8348471767104,
+        59.3514804380749,
+        355.99610979405054
+      ],
+      "surfaceAreaSquareMeters": 0.017437357544383997
+    },
+    "boundsMeters": {
+      "min": [
+        -0.13280367851257324,
+        -0.04812030866742134,
+        -0.013000000268220901
+      ],
+      "max": [
+        0.11300000548362732,
+        0.05693097412586212,
+        0.10615948587656021
+      ]
+    }
+  }
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

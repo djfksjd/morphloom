@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/locked-close-render.py", line 26, in <module>
+    exec(compile(script,'scripts/blender-neutral-render.py','exec'))
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "scripts/blender-neutral-render.py", line 99, in <module>
+    raise RuntimeError("Neutral renderer requires GLB input, PNG output and JSON report paths")
+RuntimeError: Usage: blender ... -- source.glb render.png report.json [front|rear|iso|axis-y] [material|clay|wire|grazing]
+
+Error: script failed, file: 'outputs/domain-pack-v4-20261002/locked-close-render.py', exiting.
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

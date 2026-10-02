@@ -1,0 +1,31 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ❯ tests/strand-uv-delivery.test.ts (2 tests | 2 failed) 21ms
+   × exports closed tapered sections with usable UVs and no microscopic end-cap triangles 15ms
+     → expected false to be true // Object.is equality
+   × exports closed tapered sections with usable UVs and no microscopic end-cap triangles 6ms
+     → expected false to be true // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/strand-uv-delivery.test.ts > exports closed tapered sections with usable UVs and no microscopic end-cap triangles
+ FAIL  tests/strand-uv-delivery.test.ts > exports closed tapered sections with usable UVs and no microscopic end-cap triangles
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/strand-uv-delivery.test.ts:9:200
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  23:13:39
+   Duration  311ms (transform 144ms, setup 0ms, collect 178ms, tests 21ms, environment 0ms, prepare 31ms)

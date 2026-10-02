@@ -1,0 +1,186 @@
+{
+  "assets": [
+    {
+      "id": "animal",
+      "packId": "morphloom.fur",
+      "positionMm": [
+        -100,
+        0,
+        0
+      ],
+      "requiredCapabilities": [
+        "semantic-part-editing",
+        "selected-scene-export"
+      ],
+      "rotationRad": [
+        0,
+        0,
+        0
+      ],
+      "source": {
+        "coordinates": "right-handed-y-up",
+        "elements": [],
+        "groups": [
+          {
+            "count": 50,
+            "deleted": [],
+            "distribution": "ellipsoid-surface",
+            "evidence": {
+              "source": "Original Morphloom demo geometry; illustrative, not anatomy validation.",
+              "status": "authored"
+            },
+            "fan": 0.08,
+            "id": "body_fur",
+            "kind": "strand",
+            "overrides": {},
+            "params": {
+              "color": "#805b40",
+              "curvature": 0.12,
+              "length": 16,
+              "roughness": 0.8,
+              "thickness": 0.5,
+              "twist": 0,
+              "width": 1
+            },
+            "regionId": "body_fur_region",
+            "root": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0.3,
+              0,
+              0
+            ],
+            "spread": [
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "parts": [
+          {
+            "color": "#805b40",
+            "evidence": {
+              "source": "Original Morphloom demo geometry; illustrative, not anatomy validation.",
+              "status": "authored"
+            },
+            "id": "animal_body",
+            "locked": false,
+            "name": "animal_body",
+            "position": [
+              0,
+              65,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              55,
+              55,
+              95
+            ],
+            "shape": "ellipsoid",
+            "visible": true
+          }
+        ],
+        "regions": [
+          {
+            "id": "body_fur_region",
+            "name": "body_fur",
+            "partId": "animal_body"
+          }
+        ],
+        "schema": "morphloom.elements/0.1",
+        "seed": 17,
+        "units": "mm"
+      }
+    },
+    {
+      "id": "gear",
+      "packId": "example.surface-gear.visual",
+      "positionMm": [
+        100,
+        0,
+        0
+      ],
+      "requiredCapabilities": [
+        "semantic-part-editing",
+        "selected-scene-export"
+      ],
+      "rotationRad": [
+        0,
+        0,
+        0
+      ],
+      "source": {
+        "coordinates": "right-handed-y-up",
+        "elements": [],
+        "groups": [],
+        "parts": [
+          {
+            "color": "#aeb8c2",
+            "creaseAngle": 0.5235987755982988,
+            "evidence": {
+              "source": "morphloom.spur-gear/0.1; zero profile shift; radial root connector, not manufacturing trochoid or approved tolerances",
+              "status": "authored"
+            },
+            "geometry": {
+              "boreDiameterMm": 6,
+              "faceWidthMm": 8,
+              "moduleMm": 1,
+              "op": "spur-gear",
+              "pressureAngleDeg": 20,
+              "toothCount": 24
+            },
+            "id": "spur_gear",
+            "locked": false,
+            "material": {
+              "metalness": 0.9,
+              "roughness": 0.52,
+              "surface": {
+                "channels": "roughness-only",
+                "finish": "brushed-metal",
+                "repeat": [
+                  8,
+                  8
+                ]
+              }
+            },
+            "name": "External involute spur gear · radial root approximation",
+            "position": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1,
+              1
+            ],
+            "shape": "assembly-geometry",
+            "uvScale": 100,
+            "visible": true
+          }
+        ],
+        "regions": [],
+        "schema": "morphloom.elements/0.6",
+        "seed": 42,
+        "units": "mm"
+      }
+    }
+  ],
+  "coordinates": "right-handed-y-up",
+  "schema": "morphloom.workspace/0.1",
+  "units": "mm"
+}

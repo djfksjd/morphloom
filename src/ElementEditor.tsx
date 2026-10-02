@@ -1,3 +1,4 @@
+import { surfaceGearPack } from '../examples/domain-packs/surface-gear-pack';
 import './element-editor.css';
 import {attachUvChecker} from './engine/uv-checker';
 import { PartInspector } from './PartInspector';
@@ -23,6 +24,7 @@ const domainRegistry = createElementDomainRegistry();
 domainRegistry.register(minimalPack);
 domainRegistry.register(bearingPack);
 domainRegistry.register(gearPack);
+domainRegistry.register(surfaceGearPack);
 
 function download(blob: Blob, name: string): void {
   const url = URL.createObjectURL(blob);

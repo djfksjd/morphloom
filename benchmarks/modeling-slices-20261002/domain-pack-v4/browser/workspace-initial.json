@@ -1,0 +1,108 @@
+{
+  "assets": [
+    {
+      "id": "animal",
+      "packId": "morphloom.fur",
+      "positionMm": [
+        -100,
+        0,
+        0
+      ],
+      "requiredCapabilities": [
+        "semantic-part-editing",
+        "selected-scene-export"
+      ],
+      "rotationRad": [
+        0,
+        0,
+        0
+      ],
+      "source": {
+        "coordinates": "right-handed-y-up",
+        "elements": [],
+        "groups": [
+          {
+            "count": 50,
+            "deleted": [],
+            "distribution": "ellipsoid-surface",
+            "evidence": {
+              "source": "Original Morphloom demo geometry; illustrative, not anatomy validation.",
+              "status": "authored"
+            },
+            "fan": 0.08,
+            "id": "body_fur",
+            "kind": "strand",
+            "overrides": {},
+            "params": {
+              "color": "#805b40",
+              "curvature": 0.12,
+              "length": 16,
+              "roughness": 0.8,
+              "thickness": 0.5,
+              "twist": 0,
+              "width": 1
+            },
+            "regionId": "body_fur_region",
+            "root": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0.3,
+              0,
+              0
+            ],
+            "spread": [
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "parts": [
+          {
+            "color": "#805b40",
+            "evidence": {
+              "source": "Original Morphloom demo geometry; illustrative, not anatomy validation.",
+              "status": "authored"
+            },
+            "id": "animal_body",
+            "locked": false,
+            "name": "animal_body",
+            "position": [
+              0,
+              65,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0
+            ],
+            "scale": [
+              55,
+              55,
+              95
+            ],
+            "shape": "ellipsoid",
+            "visible": true
+          }
+        ],
+        "regions": [
+          {
+            "id": "body_fur_region",
+            "name": "body_fur",
+            "partId": "animal_body"
+          }
+        ],
+        "schema": "morphloom.elements/0.1",
+        "seed": 17,
+        "units": "mm"
+      }
+    }
+  ],
+  "coordinates": "right-handed-y-up",
+  "schema": "morphloom.workspace/0.1",
+  "units": "mm"
+}

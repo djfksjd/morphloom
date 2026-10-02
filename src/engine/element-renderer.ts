@@ -9,7 +9,7 @@ import { resolveElements, validateProject, type ElementProject, type ResolvedEle
 import { compileAssemblyGeometry,compileDerivedGearGeometry } from './assembly-compiler';
 import { creasePartNormals } from './part-geometry';
 import { toothIds } from './spur-gear';
-export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.9';
+export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.10';
 
 const MAX_TRIANGLES = 2_000_000;
 const MAX_BATCHES = 128;
@@ -49,39 +49,52 @@ function disposeOwnedMaterial(m:THREE.Material):void{
 
 type Plan = { key: string; members: ResolvedElement[]; triangles: number };
 
-/** Closed, indexed oval sections. Degenerate end rings seal both tips without open edges. */
+/** Closed tapered sections with single pole vertices and a cylindrical UV seam. */
 function sectionGeometry(kind: 'feather' | 'strand', curvature: number, twist: number, lod: Lod): THREE.BufferGeometry {
   const rings = lod === 'low' ? 6 : 16;
   const sides = lod === 'low' ? 8 : 16;
-  const positions: number[] = [], indices: number[] = [];
-  for (let r = 0; r <= rings; r++) {
+  const stride = sides + 1;
+  const positions: number[] = [], indices: number[] = [], uvs: number[] = [];
+  // Interior rings only: microscopic duplicate end rings created tiny cap faces.
+  for (let r = 1; r < rings; r++) {
     const t = r / rings;
-    const envelope = Math.max(0.001, Math.sin(Math.PI * t)) * (kind === 'feather' ? 0.65 + 0.35 * t : 1 - 0.55 * t);
+    const envelope = Math.sin(Math.PI * t) * (kind === 'feather' ? 0.65 + 0.35 * t : 1 - 0.55 * t);
     const angle = twist * t;
-    for (let s = 0; s < sides; s++) {
-      const a = s * 2 * Math.PI / sides;
+    for (let side = 0; side <= sides; side++) {
+      const a = (side % sides) * 2 * Math.PI / sides;
       const x = Math.cos(a) * envelope * 0.5;
-      // The dorsal surface has a raised central ridge, not a flat vane.
       const ridge = Math.pow(1 - Math.abs(Math.cos(a)), 6);
       const z = Math.sin(a) * envelope * (kind === 'feather' && Math.sin(a) > 0 ? 0.12 + 0.38 * ridge : kind === 'feather' ? 0.12 : 0.5);
       positions.push(x * Math.cos(angle) - z * Math.sin(angle) + curvature * t * t * 0.3, t,
         x * Math.sin(angle) + z * Math.cos(angle));
+      uvs.push(side / sides, t);
     }
   }
-  for (let r = 0; r < rings; r++) for (let s = 0; s < sides; s++) {
-    const a = r * sides + s, b = r * sides + (s + 1) % sides, c = a + sides, d = b + sides;
-    indices.push(a, b, c, b, d, c);
+  for (let r = 0; r < rings - 2; r++) for (let side = 0; side < sides; side++) {
+    const a = r * stride + side, b = a + 1, c = a + stride, d = c + 1;
+    indices.push(a, c, b, b, c, d); // outward winding
   }
   const base = positions.length / 3;
   positions.push(0, 0, 0, curvature * 0.3, 1, 0);
-  for (let s = 0; s < sides; s++) {
-    indices.push(base, (s + 1) % sides, s);
-    indices.push(base + 1, rings * sides + s, rings * sides + (s + 1) % sides);
+  uvs.push(0.5, 0, 0.5, 1);
+  const last = (rings - 2) * stride;
+  for (let side = 0; side < sides; side++) {
+    indices.push(base, side, side + 1);
+    indices.push(base + 1, last + side + 1, last + side);
   }
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
+  // UV seam duplicates positions, but shading remains continuous across the seam.
+  const normals = geometry.getAttribute('normal');
+  const n = new THREE.Vector3(), other = new THREE.Vector3();
+  for (let r = 0; r < rings - 1; r++) {
+    const first = r * stride, end = first + sides;
+    n.fromBufferAttribute(normals, first).add(other.fromBufferAttribute(normals, end)).normalize();
+    normals.setXYZ(first, n.x, n.y, n.z); normals.setXYZ(end, n.x, n.y, n.z);
+  }
   return geometry;
 }
 

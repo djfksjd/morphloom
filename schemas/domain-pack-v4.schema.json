@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://morphloom.local/schemas/domain-pack-v4.schema.json",
+  "title": "Domain Pack API0.4 metadata; runtime generation validation remains required",
+  "type": "object",
+  "required": [
+    "version",
+    "id",
+    "domain",
+    "status",
+    "capabilities",
+    "representation",
+    "units",
+    "coordinates",
+    "parameters",
+    "constraints",
+    "operations",
+    "tools",
+    "evidencePaths",
+    "exportAdapters",
+    "dependencies"
+  ],
+  "properties": {
+    "version": {
+      "const": "morphloom.domain-pack/0.4"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?$"
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "status": {
+      "const": "experimental"
+    },
+    "capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "representation": {
+      "type": "object",
+      "required": [
+        "id",
+        "mode"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "morphloom.elements/0.1",
+            "morphloom.elements/0.2",
+            "morphloom.elements/0.3",
+            "morphloom.elements/0.4",
+            "morphloom.elements/0.5",
+            "morphloom.elements/0.6"
+          ]
+        },
+        "mode": {
+          "const": "native"
+        }
+      }
+    },
+    "units": {
+      "const": "mm"
+    },
+    "coordinates": {
+      "const": "right-handed-y-up"
+    },
+    "parameters": {
+      "type": "object",
+      "required": [
+        "seed",
+        "dimensions"
+      ],
+      "properties": {
+        "seed": {
+          "const": "uint-safe-integer"
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "min",
+              "max",
+              "default"
+            ],
+            "properties": {
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "default": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": [
+        "maxElements"
+      ],
+      "properties": {
+        "maxElements": {
+          "const": 5000
+        }
+      }
+    },
+    "operations": {
+      "const": [
+        "generate"
+      ]
+    },
+    "tools": {
+      "const": [
+        "generic-inspector"
+      ]
+    },
+    "evidencePaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parameterNotes": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "maxLength": 256
+      }
+    },
+    "exportAdapters": {
+      "const": [
+        {
+          "id": "source-json",
+          "editing": "full"
+        },
+        {
+          "id": "baked-glb",
+          "editing": "baked-only"
+        }
+      ]
+    },
+    "dependencies": {
+      "type": "object",
+      "required": [
+        "engineApi"
+      ],
+      "properties": {
+        "engineApi": {
+          "const": "0.4"
+        }
+      }
+    }
+  },
+  "$comment": "Runtime additionally checks min<=default<=max, finite numeric values, structuredClone compatibility, maximum10 input keys, allowed input keys, output schema equality and actual validateProject. Registration does not verify quality."
+}

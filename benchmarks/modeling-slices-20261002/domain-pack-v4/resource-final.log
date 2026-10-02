@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/surface-cache.test.ts (2 tests) 3206ms
+   ✓ bounds actual retained CPU payload plus every GPU mip level, then preserves overflow ownership and pixels  3076ms
+ ✓ tests/strand-uv-delivery.test.ts (3 tests) 20ms
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  23:23:34
+   Duration  3.57s (transform 143ms, setup 0ms, collect 208ms, tests 3.23s, environment 0ms, prepare 38ms)

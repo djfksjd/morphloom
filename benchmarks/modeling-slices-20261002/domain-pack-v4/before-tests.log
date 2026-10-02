@@ -1,0 +1,46 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ❯ tests/domain-pack-v4.test.ts (2 tests | 2 failed) 3ms
+   × registers API0.4 independently of native schema0.6, retaining old Pack output 3ms
+     → invalid-pack: example.surface-gear.visual
+   × rejects incompatible metadata/output, input conflicts and required capabilities and isolates provider errors 0ms
+     → invalid-pack: example.surface-gear.visual
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/domain-pack-v4.test.ts > registers API0.4 independently of native schema0.6, retaining old Pack output
+DomainPackError: invalid-pack: example.surface-gear.visual
+ ❯ fail src/engine/element-domain-packs.ts:50:37
+     48|
+     49| function checkMetadata(m: DomainPackMetadata): void {
+     50|   const fail = (): never => { throw new DomainPackError('invalid-pack'…
+       |                                     ^
+     51|   if (!m || ![DOMAIN_PACK_VERSION, 'morphloom.domain-pack/0.2', 'morph…
+     52|       typeof m.domain !== 'string' || !m.domain.trim() || m.status !==…
+ ❯ checkMetadata src/engine/element-domain-packs.ts:68:96
+ ❯ ElementDomainRegistry.register src/engine/element-domain-packs.ts:92:5
+ ❯ tests/domain-pack-v4.test.ts:6:109
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/domain-pack-v4.test.ts > rejects incompatible metadata/output, input conflicts and required capabilities and isolates provider errors
+DomainPackError: invalid-pack: example.surface-gear.visual
+ ❯ fail src/engine/element-domain-packs.ts:50:37
+     48|
+     49| function checkMetadata(m: DomainPackMetadata): void {
+     50|   const fail = (): never => { throw new DomainPackError('invalid-pack'…
+       |                                     ^
+     51|   if (!m || ![DOMAIN_PACK_VERSION, 'morphloom.domain-pack/0.2', 'morph…
+     52|       typeof m.domain !== 'string' || !m.domain.trim() || m.status !==…
+ ❯ checkMetadata src/engine/element-domain-packs.ts:68:96
+ ❯ ElementDomainRegistry.register src/engine/element-domain-packs.ts:92:5
+ ❯ tests/domain-pack-v4.test.ts:10:42
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  23:05:02
+   Duration  336ms (transform 164ms, setup 0ms, collect 213ms, tests 3ms, environment 0ms, prepare 33ms)

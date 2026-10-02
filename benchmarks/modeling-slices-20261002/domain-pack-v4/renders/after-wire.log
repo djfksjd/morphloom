@@ -1,0 +1,232 @@
+23:17:03 | INFO: Data are loaded, start creating Blender stuff
+23:17:03 | INFO: Blender create Mesh node 0
+23:17:03 | INFO: Blender create Mesh node 1
+23:17:03 | INFO: Blender create Mesh node 2
+23:17:03 | INFO: Blender create Mesh node 3
+23:17:03 | INFO: Blender create Mesh node 4
+23:17:03 | INFO: Blender create Mesh node 5
+23:17:03 | INFO: Blender create Mesh node 6
+23:17:03 | INFO: Blender create Mesh node 7
+23:17:03 | INFO: Blender create Mesh node 8
+23:17:03 | INFO: Blender create Mesh node 9
+23:17:03 | INFO: Blender create Mesh node 10
+23:17:03 | INFO: Blender create Mesh node 11
+23:17:03 | INFO: Blender create Mesh node 12
+23:17:03 | INFO: Blender create Mesh node 13
+23:17:03 | INFO: Blender create Mesh node 14
+23:17:03 | INFO: Blender create Mesh node 15
+23:17:03 | INFO: Blender create Mesh node 16
+23:17:03 | INFO: Blender create Mesh node 17
+23:17:03 | INFO: Blender create Mesh node 18
+23:17:03 | INFO: Blender create Mesh node 19
+23:17:03 | INFO: Blender create Mesh node 20
+23:17:03 | INFO: Blender create Mesh node 21
+23:17:03 | INFO: Blender create Mesh node 22
+23:17:03 | INFO: Blender create Mesh node 23
+23:17:03 | INFO: Blender create Mesh node 24
+23:17:03 | INFO: Blender create Mesh node 25
+23:17:03 | INFO: Blender create Mesh node 26
+23:17:03 | INFO: Blender create Mesh node 27
+23:17:03 | INFO: Blender create Mesh node 28
+23:17:03 | INFO: Blender create Mesh node 29
+23:17:03 | INFO: Blender create Mesh node 30
+23:17:03 | INFO: Blender create Mesh node 31
+23:17:03 | INFO: Blender create Mesh node 32
+23:17:03 | INFO: Blender create Mesh node 33
+23:17:03 | INFO: Blender create Mesh node 34
+23:17:03 | INFO: Blender create Mesh node 35
+23:17:03 | INFO: Blender create Mesh node 36
+23:17:03 | INFO: Blender create Mesh node 37
+23:17:03 | INFO: Blender create Mesh node 38
+23:17:03 | INFO: Blender create Mesh node 39
+23:17:03 | INFO: Blender create Mesh node 40
+23:17:03 | INFO: Blender create Mesh node 41
+23:17:03 | INFO: Blender create Mesh node 42
+23:17:03 | INFO: Blender create Mesh node 43
+23:17:03 | INFO: Blender create Mesh node 44
+23:17:03 | INFO: Blender create Mesh node 45
+23:17:03 | INFO: Blender create Mesh node 46
+23:17:03 | INFO: Blender create Mesh node 47
+23:17:03 | INFO: Blender create Mesh node 48
+23:17:03 | INFO: Blender create Mesh node 49
+23:17:03 | INFO: Blender create Mesh node 50
+23:17:03 | INFO: Blender create Mesh node 51
+23:17:03 | INFO: glTF import finished in 0.06s
+/Users/danny/Documents/morphloom/scripts/blender-neutral-render.py:137: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world.use_nodes = True
+/Users/danny/Documents/morphloom/scripts/blender-neutral-render.py:154: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  clay.use_nodes = True
+00:00.771  render           | Saved: '/Users/danny/Documents/morphloom/outputs/domain-pack-v4-20261002/renders/after-wire.png'
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "mixed-before.glb",
+  "sourceBytes": 1518936,
+  "sourceSha256": "bbda06e928c87dc0a02bfe96a38157dbcdb61e66f1fd7380a6e059bc62756ce2",
+  "render": "after-wire.png",
+  "renderBytes": 316681,
+  "renderSha256": "96a7a8cf9dad6b4c0cbba58f23ffb5bd2d32fdaa347280f5caece4f3ce5e8865",
+  "meshes": 52,
+  "materials": 53,
+  "normalization": {
+    "method": "broadside-xz-max-extent",
+    "targetExtent": 2.0,
+    "sourceBounds": {
+      "min": [
+        -0.13280367851257324,
+        -0.04812030494213104,
+        -0.013000000268220901
+      ],
+      "max": [
+        0.11300000548362732,
+        0.05693097412586212,
+        0.10615948587656021
+      ],
+      "size": [
+        0.24580368399620056,
+        0.10505127906799316,
+        0.11915948987007141
+      ]
+    },
+    "scale": 8.13657455203525,
+    "normalizedBounds": {
+      "min": [
+        -1.0,
+        -0.4273788034915924,
+        -0.48477500677108765
+      ],
+      "max": [
+        1.0,
+        0.42737877368927,
+        0.4847750961780548
+      ],
+      "size": [
+        2.0,
+        0.85475754737854,
+        0.9695501327514648
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      -3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.55
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        105,
+        235
+      ],
+      "max": [
+        821,
+        766
+      ]
+    },
+    "minimumMarginPixels": 105,
+    "touchesBorder": false
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "wire",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        -2.5,
+        -3.0,
+        3.5
+      ],
+      "energy": 900.0,
+      "size": 4.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 500.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

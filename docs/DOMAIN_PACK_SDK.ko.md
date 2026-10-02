@@ -64,3 +64,11 @@ migrateElementProjectToV6는 기본값을 넣지 않는다. material.surface는 
 ## 실제 texel density
 
 UV quality report0.2는 지원 가능한 static UV0의 metallic-roughness 해상도·texture matrix로 texels/mm를 측정한다. 등록된 Pack의 품질 승인 상태를 자동 올리지 않는다. 여러 material/미로드 이미지/다른UV channel은 not-run이며 feature 누락은 평균으로 숨기지 않는다. TEXEL_DENSITY_STATUS.ko.md와 actual GLB receipt를 따른다.
+
+## API0.4: Pack API와 원본 표현 분리
+
+기존0.1~0.3 Pack의 계약은 유지한다. 새 metadata.version0.4 / dependencies.engineApi0.4는 native representation.id를 지원 중인 elements0.1~0.6 중 명시적으로 선언한다. 실제 generator 결과 schema가 달라지면 invalid-project다. 알려지지 않은 API/schema·다른 단위/좌표·필수 capability 누락·provider 오류를 typed 오류로 거부한다. 자동 migration이나 유사 capability 대체는 없다. 등록은 여전히 experimental이다.
+
+신규 Pack은 examples/domain-packs/surface-gear-pack.ts를 복사해 고유ID/domain/입력범위/capability를 선언하고 registry.register(pack)로 등록한다. core compiler/inspector를 바꿀 필요는 없다. UI 진입점 두 곳의 로컬 registry 등록은 필요하며 동적 파일 로딩·외부코드 sandbox는 지원하지 않는다. 예제는 기존 gear generator에 명시적 migrateElementProjectToV6·editPart uvScale/material.surface를 조합한다. metadata를0.4로 바꾸는 것만으로 원본 IR을 migration한 것으로 간주하지 않는다.
+
+스키마: schemas/domain-pack-v4.schema.json; 타입/실행 경계: src/engine/element-domain-packs.ts; conformance: tests/domain-pack-v4.test.ts; 생성/공통편집/혼합/실제GLB/Blender 증거와 미지원 범위: DOMAIN_PACK_V4_STATUS.ko.md. JSON Schema만으로 bounds 관계·clone 가능성·실행 출력·품질을 승인할 수 없다. 기존 source-json/full와 GLB/baked-only 의미를 유지한다.
