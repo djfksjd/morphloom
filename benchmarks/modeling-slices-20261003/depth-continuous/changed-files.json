@@ -1,0 +1,13 @@
+[
+  "src/engine/depth-surface.ts",
+  "src/engine/depth-continuous.ts",
+  "src/DepthEditor.tsx",
+  "schemas/depth-surface.schema.json",
+  "tests/depth-continuous.test.ts",
+  "scripts/depth-continuous-evidence.ts",
+  "scripts/depth-continuous-compare.ts",
+  "docs/DEPTH_CONTINUOUS_CONTRACT.ko.md",
+  "docs/DEPTH_CONTINUOUS_STATUS.ko.md",
+  "docs/DEPTH_BOUNDARY_STATUS.ko.md",
+  "docs/MORPHLOOM_WORK_STATE.ko.md"
+]

@@ -1,0 +1,74 @@
+{
+  "schema": "morphloom.completion-audit/0.1",
+  "scope": "explicit declared sphere front continuous diagnostic mesh",
+  "requirements": [
+    {
+      "requirement": "Existing sphere operation reused",
+      "evidence": "assembly-compiler.ts SphereGeometry; depth-continuous.ts same library partial sphere",
+      "status": "verified"
+    },
+    {
+      "requirement": "Version, lossless migration, strict errors and old paths",
+      "evidence": "native0.3/depth-meshing0.1; tests/depth-continuous.test.ts; tests/depth-surface.test.ts; five grid actual GLBs byte-equal f734ce0",
+      "status": "verified"
+    },
+    {
+      "requirement": "Immutable raw/mm contract, inferred front-only, release disabled",
+      "evidence": "evidence.json sources samples/mask/calibration/quality/fingerprints preserved; boundary.ts unchanged; every report.releaseAllowed:false",
+      "status": "verified"
+    },
+    {
+      "requirement": "Fixed limits / actual silhouette and curvature improvement",
+      "evidence": "DEPTH_CONTINUOUS_CONTRACT.ko.md; five actual GLB geometries/evidence.json metrics; whole-face closest-point deviation and fixed maxSagitta; 256²/100k/8MiB/1second bound",
+      "status": "verified"
+    },
+    {
+      "requirement": "Two scales/matte/checker/3mm ball and unsupported masks",
+      "evidence": "evidence.json five cases; script explicit torus/hole/crop refusal; boundary and continuous tests",
+      "status": "verified"
+    },
+    {
+      "requirement": "Normals, topology and UV",
+      "evidence": "surface boundaryLoops1, unit radial normals; Khronos/UV integrity; degenerate/non-manifold/self-intersection0; globalclosed-solid topology.pass remainsfalse",
+      "status": "verified"
+    },
+    {
+      "requirement": "UI opt-in apply cancel failure undo/redo save reopen",
+      "evidence": "browser/workflow.json actual screenshots+saved native sources; failed budget state equal; operation/tolerance history",
+      "status": "verified"
+    },
+    {
+      "requirement": "Actual file exchange / preserved unrelated components",
+      "evidence": "ten Blender reports+input SHA; ball edit/reopen/restore audit+two Khronos validations; prior bearing source unchanged; assembly/edit/compiler unchanged; two Node/browser byteequal files",
+      "status": "verified"
+    },
+    {
+      "requirement": "Same-condition visual evidence",
+      "evidence": "comparison.png / comparison.json; six render receipts camera/studio/settings/fixedspace SHA equality; same ROI",
+      "status": "verified"
+    },
+    {
+      "requirement": "Required current commands and production failure",
+      "evidence": "publish-checks results90files633tests; source93files652tests; final check/test/build and reproducible evidence; production exit1 comparison0/3 preserved",
+      "status": "verified"
+    },
+    {
+      "requirement": "Bounded UNI_AI and limitations",
+      "evidence": "uniai-status.json models200, one public-code review timedout55s, no automaticretry, token/billing unknown; no images/keys sent; no dependencies added",
+      "status": "verified"
+    },
+    {
+      "requirement": "Hash linkage and publication",
+      "evidence": "verification.json source/input/artifact SHA; meaningful allowlist commit+remoteSHA checked after push",
+      "status": "publication-pending"
+    }
+  ],
+  "notAchieved": [
+    "general 3D/real-photo reconstruction accuracy",
+    "closed solid delivery approval",
+    "photographic texture bake",
+    "expert/manufacturing/BREP approval",
+    "production independent-comparison0/3"
+  ],
+  "verificationCorrection": "Initial audit incorrectly compared source package.json with clone despite preserved unrelated sim:test change; corrected to dependency parity and unchanged published package. No geometry or quality thresholds changed."
+}

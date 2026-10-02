@@ -1,0 +1,28 @@
+02:17:23 | INFO: Data are loaded, start creating Blender stuff
+02:17:23 | INFO: Blender create Mesh node 0
+02:17:23 | INFO: glTF import finished in 0.02s
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+02:17:23 | INFO: Starting glTF 2.0 export
+02:17:23 | INFO: Extracting primitive: Mesh_0
+02:17:23 | INFO: Primitives created: 1
+02:17:23 | INFO: Finished glTF 2.0 export in 0.013068675994873047 s
+
+02:17:23 | INFO: Data are loaded, start creating Blender stuff
+02:17:23 | INFO: Blender create Mesh node Mesh_0
+02:17:23 | INFO: glTF import finished in 0.01s
+02:17:23 | INFO: Data are loaded, start creating Blender stuff
+02:17:23 | INFO: Blender create Mesh node 0
+02:17:23 | INFO: glTF import finished in 0.01s
+02:17:23 | INFO: Starting glTF 2.0 export
+02:17:23 | INFO: Extracting primitive: Mesh_0
+02:17:23 | INFO: Primitives created: 1
+02:17:23 | INFO: Finished glTF 2.0 export in 0.008665084838867188 s
+
+02:17:23 | INFO: Data are loaded, start creating Blender stuff
+02:17:23 | INFO: Blender create Mesh node Mesh_0
+02:17:23 | INFO: glTF import finished in 0.01s
+{"schema": "morphloom.blender-depth-edit/0.1", "status": "pass", "blenderVersion": "5.2.1 LTS", "sourceSha256": "a4e614c05b6eb389d89908a39b564cf73ea52877d2cba6d46de6c4a84b72d693", "editedSha256": "7dcacc96e4a36675287dd87ab7e3048a459aed063dad4b9d5845570425f341ff", "restoredSha256": "eecef08b5b8a9d7e87ae010d9f4080ba70925b81215bc360eb551a1fb3dcad87", "editMm": 1, "preserved": ["UV", "naming", "hierarchy", "materials", "source lineage extras"], "purpose": "diagnostic-open-surface", "releaseAllowed": false}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

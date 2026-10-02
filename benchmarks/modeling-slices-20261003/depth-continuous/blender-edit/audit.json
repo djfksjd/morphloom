@@ -1,0 +1,18 @@
+{
+  "schema": "morphloom.blender-depth-edit/0.1",
+  "status": "pass",
+  "blenderVersion": "5.2.1 LTS",
+  "sourceSha256": "a4e614c05b6eb389d89908a39b564cf73ea52877d2cba6d46de6c4a84b72d693",
+  "editedSha256": "7dcacc96e4a36675287dd87ab7e3048a459aed063dad4b9d5845570425f341ff",
+  "restoredSha256": "eecef08b5b8a9d7e87ae010d9f4080ba70925b81215bc360eb551a1fb3dcad87",
+  "editMm": 1,
+  "preserved": [
+    "UV",
+    "naming",
+    "hierarchy",
+    "materials",
+    "source lineage extras"
+  ],
+  "purpose": "diagnostic-open-surface",
+  "releaseAllowed": false
+}

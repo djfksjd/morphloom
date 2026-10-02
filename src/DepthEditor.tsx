@@ -2,7 +2,7 @@ import {useEffect, useMemo, useRef, useState} from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
-import {compileDepthSurface, migrateDepthSurface, validateDepthSurfaceSource, type DepthSurfaceSource} from './engine/depth-surface';
+import {compileDepthSurface, migrateDepthSurface, migrateDepthSurfaceMeshing, validateDepthSurfaceSource, type DepthSurfaceSource} from './engine/depth-surface';
 import {validateGlbStandard} from './engine/gltf-standard-validation';
 import {ViewportErrorBoundary} from './components/ViewportErrorBoundary';
 import './depth-editor.css';
@@ -37,9 +37,11 @@ export default function DepthEditor() {
  const [history,setHistory]=useState<DepthSurfaceSource[]>([]),[cursor,setCursor]=useState(0),[error,setError]=useState('');
  const [diagnostic,setDiagnostic]=useState(false),[mode,setMode]=useState('clay'),[view,setView]=useState('front'),[busy,setBusy]=useState(false);
  const [qualityDraft,setQualityDraft]=useState({near:'',far:'',envelopeTolerance:'',band:'2',boundaryTolerance:'',anchors:'',basis:'user-measured'});
+ const [meshTolerance,setMeshTolerance]=useState('.02');
  const [draft,setDraft]=useState({frame:'',camera:'',stride:'2'});
  const current=history[cursor],active=useRef(current),diagnosticRef=useRef(diagnostic),mounted=useRef(true),loadToken=useRef(0);active.current=current;diagnosticRef.current=diagnostic;
  useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;loadToken.current++;};},[]);
+ useEffect(()=>{if(current)setMeshTolerance(String(current.meshing?.maxSagittaMm??Math.min(.02,(current.primaryForm?.radiusMm??60)/3000)));},[current]);
  useEffect(()=>{if(!current)return;const e=current.quality?.depthEnvelope,b=current.quality?.boundary;
   setQualityDraft({near:e?.status==='declared'?String(e.nearMm):'',far:e?.status==='declared'?String(e.farMm):'',envelopeTolerance:e?.status==='declared'?String(e.toleranceMm):'',band:b?.status==='declared'?String(b.bandPixels):'2',boundaryTolerance:b?.status==='declared'?String(b.toleranceMm):'',anchors:b?.status==='declared'?b.anchors.map(a=>`${a.pixel%current.width},${Math.floor(a.pixel/current.width)},${a.depthMm}`).join('\n'):'',basis:e?.status==='declared'?e.basis:'user-measured'});
  },[current]);
@@ -53,13 +55,19 @@ export default function DepthEditor() {
   }catch(e){if(mounted.current&&token===loadToken.current)setError(e instanceof Error?e.message:'Invalid depth JSON');}
  };
  const commit=(next:DepthSurfaceSource)=>{const items=[...history.slice(0,cursor+1),next].slice(-16);setHistory(items);setCursor(items.length-1);};
- const declareQuality=()=>{if(!current||current.schema!=='morphloom.depth-surface/0.2')return;try{
+ const declareQuality=()=>{if(!current||current.schema==='morphloom.depth-surface/0.1')return;try{
   const q=qualityDraft;if([q.near,q.far,q.envelopeTolerance,q.band,q.boundaryTolerance,q.anchors].some(v=>!v.trim()))throw new Error('Enter confirmed mm range, tolerances and independent boundary anchors.');
   const lines=q.anchors.trim().split('\n');if(lines.length>512)throw new Error('Maximum 512 boundary anchors.');
   const anchors=lines.map((line,i)=>{const fields=line.split(',');if(fields.length!==3||fields.some(v=>!v.trim()))throw new Error('Boundary CSV requires x,y,depthMm.');const [x,y,depthMm]=fields.map(Number);if(!Number.isInteger(x)||!Number.isInteger(y)||x!<0||x!>=current.width||y!<0||y!>=current.height)throw new Error('Boundary pixel coordinates are outside source image.');return {id:`boundary-user-${i}`,pixel:y!*current.width+x!,depthMm:depthMm!};});
   const basis=q.basis as 'user-measured'|'authored-fixture';const next:DepthSurfaceSource={...current,quality:{depthEnvelope:{status:'declared',nearMm:Number(q.near),farMm:Number(q.far),toleranceMm:Number(q.envelopeTolerance),basis},boundary:{status:'declared',bandPixels:Number(q.band),toleranceMm:Number(q.boundaryTolerance),basis,anchors}}};
   validateDepthSurfaceSource(next);commit(next);setDiagnostic(true);setError('');
  }catch(e){setError(e instanceof Error?e.message:'Invalid depth declaration');}};
+ const applyContinuous=(enabled:boolean)=>{if(!current)return;try{
+  if(!enabled){const next={...current};delete next.meshing;commit(next);setError('');return;}
+  if(!meshTolerance.trim())throw new Error('Enter an explicit curvature tolerance in mm.');
+  const next=migrateDepthSurfaceMeshing(current);next.preview='declared-sphere-front';next.meshing={schema:'morphloom.depth-meshing/0.1',mode:'declared-sphere-front',maxSagittaMm:Number(meshTolerance)};
+  const check=compileDepthSurface(next,{diagnostic:true});check.geometry.dispose();commit(next);setDiagnostic(true);setError('');
+ }catch(e){setError(e instanceof Error?e.message:'Invalid continuous boundary');}};
  const apply=()=>{if(!current)return;try{
   if(!draft.camera.trim()||!draft.stride.trim()||draft.frame.split(',').some(n=>!n.trim()))throw new Error('Enter explicit numeric camera parameters.');
   const frame=draft.frame.split(',').map(Number);if(frame.length!==4)throw new Error('Frame requires left,right,bottom,top in mm.');
@@ -71,7 +79,7 @@ export default function DepthEditor() {
   const root=new THREE.Group();root.name='depth-reference';root.userData={purpose:'diagnostic',releaseAllowed:false,originalRepresentation:'relative-depth-field'};
   const material=new THREE.MeshStandardMaterial({color:'#a7a7a7',roughness:.75,side:THREE.DoubleSide});const geometry=compiled.geometry.clone(),mesh=new THREE.Mesh(geometry,material);mesh.name=current.id;root.add(mesh);
   try{const bytes=await new GLTFExporter().parseAsync(root,{binary:true}) as ArrayBuffer;const audit=await validateGlbStandard(bytes);
-   if(audit.status!=='pass')throw new Error('Actual diagnostic GLB standard validation failed.');if(mounted.current&&active.current===before&&(compiled.report.calibrationPass||diagnosticRef.current))download(new Blob([bytes],{type:'model/gltf-binary'}),`${current.id}.diagnostic.glb`);
+   if(audit.status!=='pass')throw new Error('Actual diagnostic GLB standard validation failed.');if(mounted.current&&active.current===before&&((compiled.report.calibrationPass&&(compiled.report.quality.pass||compiled.report.quality.envelope.status==='not-run')&&!compiled.report.candidate)||diagnosticRef.current))download(new Blob([bytes],{type:'model/gltf-binary'}),`${current.id}.diagnostic.glb`);
   }catch(e){if(mounted.current)setError(e instanceof Error?e.message:'Diagnostic export failed');}finally{geometry.dispose();material.dispose();if(mounted.current)setBusy(false);}
  };
  return <main className="depth-editor">
@@ -86,21 +94,29 @@ export default function DepthEditor() {
     <button onClick={apply}>적용</button><button onClick={()=>setDraft({frame:current.camera.frameMm.join(', '),camera:String(current.camera.cameraZMm),stride:String(current.stride)})}>취소</button>
     <button disabled={cursor===0} onClick={()=>setCursor(cursor-1)}>Undo</button><button disabled={cursor>=history.length-1} onClick={()=>setCursor(cursor+1)}>Redo</button>
    </div>
-   <button disabled={current.schema==='morphloom.depth-surface/0.2'} onClick={()=>{commit(migrateDepthSurface(current));setDiagnostic(true);}}>경계 계약0.2로 무손실 이전</button>
-   {current.schema==='morphloom.depth-surface/0.2'&&<details><summary>확인한 깊이 범위·경계 검증점 선언</summary>
+   <button disabled={current.schema!=='morphloom.depth-surface/0.1'} onClick={()=>{commit(migrateDepthSurface(current));setDiagnostic(true);}}>경계 계약0.2로 무손실 이전</button>
+   {current.schema!=='morphloom.depth-surface/0.1'&&<details><summary>확인한 깊이 범위·경계 검증점 선언</summary>
     <small>원본 이미지 픽셀 좌표와 독립 mm 자료를 입력하세요. 이 선언은 실측 인증을 대신하지 않습니다.</small>
     <div className="depth-tools">{([['near','가장 가까운 깊이 mm'],['far','가장 먼 깊이 mm'],['envelopeTolerance','범위 허용오차 mm'],['band','경계 밴드 pixels'],['boundaryTolerance','경계 허용오차 mm']] as const).map(([key,label])=><label key={key}>{label}<input type="number" value={qualityDraft[key]} onChange={e=>setQualityDraft({...qualityDraft,[key]:e.target.value})}/></label>)}</div>
     <label>검증 자료 유형<select value={qualityDraft.basis} onChange={e=>setQualityDraft({...qualityDraft,basis:e.target.value})}><option value="user-measured">사용자가 확인한 치수</option><option value="authored-fixture">작성한 검증 fixture</option></select></label>
     <label>경계 CSV: x,y,depthMm<textarea rows={6} maxLength={60000} value={qualityDraft.anchors} onChange={e=>setQualityDraft({...qualityDraft,anchors:e.target.value})}/></label>
     <button onClick={declareQuality}>경계 계약 적용</button>
    </details>}
-   <label><input type="checkbox" disabled={!current.primaryForm} checked={current.preview==='declared-sphere-front'} onChange={e=>{commit({...current,preview:e.target.checked?'declared-sphere-front':'raw-depth'});if(e.target.checked)setDiagnostic(true);}}/> 선언된 IR 구면으로 가시 표면 후보</label>
+   <label><input type="checkbox" disabled={!current.primaryForm} checked={current.preview==='declared-sphere-front'} onChange={e=>{const next={...current,preview:e.target.checked?'declared-sphere-front' as const:'raw-depth' as const};if(!e.target.checked)delete next.meshing;commit(next);if(e.target.checked)setDiagnostic(true);}}/> 선언된 IR 구면으로 가시 표면 후보</label>
+   <details><summary>선택적 연속 구면 경계 · native0.3</summary>
+    <small>선언된 구면 전면만 생성합니다. 선택한 대상의 topology·UV·index가 바뀌며 원본 필드와 기존 격자 경로는 보존됩니다.</small>
+    <label>구면 chord 허용오차 mm<input type="number" min="0.00001" max="10" value={meshTolerance} onChange={e=>setMeshTolerance(e.target.value)}/></label>
+    <label><input type="checkbox" disabled={!current.primaryForm} checked={Boolean(current.meshing)} onChange={e=>applyContinuous(e.target.checked)}/> 연속 구면 전면 (대상 topology·UV 변경)</label>
+    <button disabled={!current.primaryForm} onClick={()=>applyContinuous(true)}>연속 경계 적용</button>
+    <button onClick={()=>setMeshTolerance(String(current.meshing?.maxSagittaMm??Math.min(.02,(current.primaryForm?.radiusMm??60)/3000)))}>연속 경계 입력 취소</button>
+   </details>
    {!current.primaryForm&&<small>구면 반지름·중심 선언이 없어 후보 연산을 사용할 수 없습니다.</small>}
    <label><input type="checkbox" checked={diagnostic} onChange={e=>setDiagnostic(e.target.checked)}/> 실패 결과를 진단용으로만 보기</label>
    <label>표시<select value={mode} onChange={e=>setMode(e.target.value)}><option value="clay">Clay</option><option value="wire">Wireframe</option><option value="checker">UV checker</option></select></label>
    <label>시점<select value={view} onChange={e=>setView(e.target.value)}><option value="front">정면</option><option value="iso">등각 · 구조 검수</option></select></label>
    {compiled&&'report' in compiled&&<p role="status">{compiled.report.calibrationPass?'기존 깊이 검증점 통과':'검증점 깊이 실패'} · normalized MAE {compiled.report.validation.normalizedMae.toFixed(4)} · {compiled.report.triangles} triangles · releaseAllowed:false</p>}
    {compiled&&'report' in compiled&&<div role="status">원본 경계 계약: {compiled.report.quality.pass?'통과':compiled.report.quality.envelope.status==='not-run'?'미검증':'실패/미확정'} · 범위 위반 {compiled.report.quality.envelope.violations} samples · 경계 최대오차 {compiled.report.quality.boundary.maximumErrorMm.toFixed(4)}mm
+    {compiled.report.meshing&&<p>연속 전면: 최대 chord 편차 {compiled.report.meshing.maximumChordDeviationMm.toFixed(6)}mm · 선언된 파라메트릭 정점 · 원본 픽셀 정점 아님</p>}
     {compiled.report.candidate&&<p>선언된 구면 후보: {compiled.report.candidate.validationPass?'검증 통과':'검증 실패'} · 관측 가능한 전면만 · 실측 승인 없음</p>}
     <details><summary>현재 실패 원인 · 최대32개 표시</summary>{compiled.report.blockers.slice(0,32).map((b,i)=><p key={i}>{b}</p>)}</details>
    </div>}

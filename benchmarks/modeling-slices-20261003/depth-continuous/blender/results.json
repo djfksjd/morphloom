@@ -1,0 +1,42 @@
+[
+  {
+    "source": "ball_0000.continuous.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "ball_0000.grid.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-checker-depth.continuous.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-checker-depth.grid.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-matte-depth.continuous.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-matte-depth.grid.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-checker-depth.continuous.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-checker-depth.grid.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-matte-depth.continuous.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-matte-depth.grid.glb",
+    "exitCode": 0
+  }
+]

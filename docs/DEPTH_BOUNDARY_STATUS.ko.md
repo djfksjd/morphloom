@@ -19,6 +19,6 @@ UNI_AI공식헤더models/chat200,gpt-6-sol1회3545tokens. 범위/NaN/fitanchor�
 현재 게시scope89files628tests/check/build/benchmark PASS,quality:production exit1(기존qualitygate통과,독립비교0/3부족). 볼후보는분리한부품의로컬datum을사용하며기존조립배치는원본project에보존된다. 공개증거는benchmarks/modeling-slices-20261003/depth-boundary에있다.
 
 
-최초30분 이후에도 UI 선언 입력·보존 검사·최종 재검증을 진행하여 실제 작업은50분 이상으로 늘어났다. 기하/입력 예산과 합격 임계값은 변경하지 않았다. 마지막 원본과 후보는 모두 보존했다.
+최초30분 이후에도 UI 선언 입력·보존 검사·최종 재검증을 진행하여 실제 goal 작업은2959초(약49분)였다. 기하/입력 예산과 합격 임계값은 변경하지 않았다. 마지막 원본과 후보는 모두 보존했다.
 
 공개 증거 재실행: `npx vite-node scripts/depth-boundary-evidence.ts benchmarks/modeling-slices-20261003/depth-boundary`. 이 명령은 해당 폴더의 fixture와 함께 보존한 bearing.elements.json을 읽어 실제 GLB와 검증 보고서를 재생성한다. 실행은 증거 파일을 갱신하므로 작업 복사본에서 수행한다. 엔진 revision은 morphloom.depth-surface-engine/0.2이며 source SHA와 각 파일 SHA는 verification.json에 있다.

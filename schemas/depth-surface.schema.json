@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "morphloom.depth-surface/0.2",
+  "$id": "morphloom.depth-surface/0.3",
   "title": "Experimental native relative depth source (not approved solid)",
   "type": "object",
   "required": [
@@ -21,7 +21,8 @@
     "schema": {
       "enum": [
         "morphloom.depth-surface/0.1",
-        "morphloom.depth-surface/0.2"
+        "morphloom.depth-surface/0.2",
+        "morphloom.depth-surface/0.3"
       ]
     },
     "id": {
@@ -377,6 +378,28 @@
         "raw-depth",
         "declared-sphere-front"
       ]
+    },
+    "meshing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "mode",
+        "maxSagittaMm"
+      ],
+      "properties": {
+        "schema": {
+          "const": "morphloom.depth-meshing/0.1"
+        },
+        "mode": {
+          "const": "declared-sphere-front"
+        },
+        "maxSagittaMm": {
+          "type": "number",
+          "minimum": 1e-05,
+          "maximum": 10
+        }
+      }
     }
   },
   "$comment": "Engine also validates array lengths, foreground anchors, uniqueness, positive reciprocal fit, residuals, triangle count and Float32 collapse.",
@@ -385,7 +408,10 @@
       "if": {
         "properties": {
           "schema": {
-            "const": "morphloom.depth-surface/0.2"
+            "enum": [
+              "morphloom.depth-surface/0.2",
+              "morphloom.depth-surface/0.3"
+            ]
           }
         }
       },
@@ -411,9 +437,35 @@
               "required": [
                 "preview"
               ]
+            },
+            {
+              "required": [
+                "meshing"
+              ]
             }
           ]
         }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "meshing"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema": {
+            "const": "morphloom.depth-surface/0.3"
+          },
+          "preview": {
+            "const": "declared-sphere-front"
+          }
+        },
+        "required": [
+          "primaryForm",
+          "preview"
+        ]
       }
     }
   ]

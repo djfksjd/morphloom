@@ -55,3 +55,5 @@ DomainPack API0.4 최신source0.6 생성/공통UI/혼합/actualGLB/Blender 검�
 선택적 depth 가시표면0.1·카메라/독립mm anchor·nativefield보존/Undo/save/reopen·실제진단GLB/Blender 구현. DEPTH_SURFACE_STATUS.ko.md.12Blender/2Node-browser bytes/10UV-Khronos PASS, 토러스 anchor FAIL 및 구형 경계최대32–50mm 오류 FAIL. calibration 평균통과≠형상합격, 모든GLB releaseAllowed:false. UNI_AI정상헤더 models/chat/responses200 재확인·4214+15tokens, 기존403점검 헤더누락수정. 다음은 경계ROI와declareddepthbounds이며 자동depth채택없음.
 
 가시깊이 경계0.2: 전체전경 깊이범위/독립경계검증점,unknown무손실migration,선언된IR구면전면후보5사례와토러스거부. DEPTH_BOUNDARY_STATUS.ko.md. Knownfixture정점최대32–50mm→<.001mm(3mm볼포함),원본실패보존·픽셀경계앨리어싱남음·releasefalse.11Blender/2Node-browser바이트/UIUndo-save-reopen/CSV검증. 다음은원본보존하며연속경계를다루는연산이다.
+
+2026-10-03 연속 구면 전면: depth0.3 opt-in topology/UV 변경·선언Sagitta·single-open-rim, 원본/grid/native0.1/0.2 보존. 큰경계deficit1.7378→0.0090mm,3mm볼0.1061→0.000447mm;10Blender왕복·볼편집복원·2Node/browser바이트동일. source93/652PASS, production비교증거부족은유지. docs/DEPTH_CONTINUOUS_STATUS.ko.md 및 outputs/depth-continuous-20261003. UNI_AI1회timeout,토큰/과금unknown,자동재시도없음. 일반3D/실측/제조/전문가승인아님.

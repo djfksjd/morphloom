@@ -1,0 +1,9 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createCanvas,loadImage} from '@napi-rs/canvas';import {createHash} from 'node:crypto';
+const out=path.resolve(process.argv[2]??'outputs/depth-continuous-20261003'),canvas=createCanvas(1024,1620),ctx=canvas.getContext('2d'),roi=[520,180,860,620] as const;
+ctx.fillStyle='#dededb';ctx.fillRect(0,0,1024,1620);ctx.fillStyle='#111';ctx.font='14px sans-serif';
+for(const [row,view,style] of [[0,'front','clay'],[1,'iso','clay'],[2,'iso','clay']] as const){
+ const a=JSON.parse(fs.readFileSync(path.join(out,'renders',`large-checker-depth.grid-${view}-${style}.json`),'utf8')),b=JSON.parse(fs.readFileSync(path.join(out,'renders',`large-checker-depth.continuous-${view}-${style}.json`),'utf8'));
+ for(const key of ['camera','renderSettings','studio','actualLights'])assert.deepEqual(a[key],b[key]);assert.equal(a.normalization.fixedSpaceSha256,b.normalization.fixedSpaceSha256);
+ for(const [column,mode] of [[0,'grid'],[1,'continuous']] as const){const name=`large-checker-depth.${mode}-${view}-${style}.png`,file=path.join(out,'renders',name),bytes=fs.readFileSync(file),receipt=column===0?a:b;assert.equal(createHash('sha256').update(bytes).digest('hex'),receipt.renderSha256);const picture=await loadImage(bytes);ctx.fillStyle='#111';ctx.fillText(`${row===2?'same ROI':view} | ${mode} | declared sphere front only`,column*512+8,row*540+18);if(row===2)ctx.drawImage(picture,roi[0],roi[1],roi[2]-roi[0],roi[3]-roi[1],column*512,row*540+30,512,480);else ctx.drawImage(picture,column*512,row*540+28,512,512);}
+}
+fs.writeFileSync(path.join(out,'comparison.png'),canvas.toBuffer('image/png'));fs.writeFileSync(path.join(out,'comparison.json'),JSON.stringify({schema:'morphloom.fixed-comparison/0.1',roiRect:roi,renderResolution:[1024,1024],cameraLightSettingsEqual:true,interpretation:'declared IR sphere front, not measured reconstruction'},null,2));

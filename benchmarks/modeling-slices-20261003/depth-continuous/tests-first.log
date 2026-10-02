@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/depth-continuous.test.ts (5 tests) 522ms
+ ✓ tests/depth-boundary.test.ts (5 tests) 5ms
+ ✓ tests/depth-surface.test.ts (5 tests) 4ms
+
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Start at  02:10:27
+   Duration  816ms (transform 31ms, setup 0ms, collect 72ms, tests 531ms, environment 0ms, prepare 63ms)

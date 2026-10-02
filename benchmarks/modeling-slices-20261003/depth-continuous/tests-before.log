@@ -1,0 +1,45 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ❯ tests/depth-continuous.test.ts (5 tests | 5 failed) 4ms
+   × continuous declared sphere front > migrates without changing raw or existing candidate geometry 2ms
+     → (0 , migrateDepthSurfaceMeshing) is not a function
+   × continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 3 0ms
+     → (0 , migrateDepthSurfaceMeshing) is not a function
+   × continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 48 0ms
+     → (0 , migrateDepthSurfaceMeshing) is not a function
+   × continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 128 0ms
+     → (0 , migrateDepthSurfaceMeshing) is not a function
+   × continuous declared sphere front > rejects undeclared modes, unsupported old versions, holes and budgets 0ms
+     → (0 , migrateDepthSurfaceMeshing) is not a function
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/depth-continuous.test.ts > continuous declared sphere front > migrates without changing raw or existing candidate geometry
+TypeError: (0 , migrateDepthSurfaceMeshing) is not a function
+ ❯ tests/depth-continuous.test.ts:14:100
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/depth-continuous.test.ts > continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 3
+ FAIL  tests/depth-continuous.test.ts > continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 48
+ FAIL  tests/depth-continuous.test.ts > continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 128
+TypeError: (0 , migrateDepthSurfaceMeshing) is not a function
+ ❯ tests/depth-continuous.test.ts:15:105
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/depth-continuous.test.ts > continuous declared sphere front > rejects undeclared modes, unsupported old versions, holes and budgets
+TypeError: (0 , migrateDepthSurfaceMeshing) is not a function
+ ❯ tests/depth-continuous.test.ts:16:90
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  02:09:00
+   Duration  137ms (transform 23ms, setup 0ms, collect 34ms, tests 4ms, environment 0ms, prepare 28ms)

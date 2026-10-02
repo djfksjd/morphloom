@@ -1,0 +1,15 @@
+{
+  "schema": "morphloom.fixed-comparison/0.1",
+  "roiRect": [
+    520,
+    180,
+    860,
+    620
+  ],
+  "renderResolution": [
+    1024,
+    1024
+  ],
+  "cameraLightSettingsEqual": true,
+  "interpretation": "declared IR sphere front, not measured reconstruction"
+}

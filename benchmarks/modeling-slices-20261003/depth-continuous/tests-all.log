@@ -1,0 +1,146 @@
+
+> morphloom@0.4.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/domain-readiness.test.ts (36 tests) 12953ms
+   ✓ cross-domain semi-professional readiness > separates a digitally connected electronics assembly from physical production evidence  1162ms
+   ✓ cross-domain semi-professional readiness > requires the compiled architecture footprint to match its measured plan contract  1263ms
+   ✓ cross-domain semi-professional readiness > re-measures evidence-bound vertical dimensions and blocks a height regression that leaves the plan intact  1298ms
+   ✓ cross-domain semi-professional readiness > exports a real weighted humanoid skeleton with a deterministic delivery animation set  318ms
+   ✓ cross-domain semi-professional readiness > passes separate animation and real-time game contracts for the editable base  966ms
+   ✓ cross-domain semi-professional readiness > blocks a humanoid whose lower-body joints exist but no longer deform the primary skin  312ms
+   ✓ cross-domain semi-professional readiness > blocks anatomically misplaced joint weights even when every critical joint still moves vertices  303ms
+   ✓ cross-domain semi-professional readiness > blocks a declared LOD that collapses the silhouette or loses valid skin weights  501ms
+   ✓ cross-domain semi-professional readiness > keeps the collision rig valid in the asymmetric reference-action pose  937ms
+   ✓ cross-domain semi-professional readiness > blocks animation and game delivery when a required runtime clip is missing  323ms
+   ✓ cross-domain semi-professional readiness > blocks facial morph names whose actual deltas were moved onto the lower body  306ms
+   ✓ cross-domain semi-professional readiness > blocks facial morph dictionaries whose left-right and vertical meanings were swapped  303ms
+   ✓ cross-domain semi-professional readiness > passes industrial-design and millimetre 3D-print contracts on appropriate assets  1620ms
+   ✓ cross-domain semi-professional readiness > blocks flattened relief geometry even when the original audit metadata remains  1180ms
+   ✓ cross-domain semi-professional readiness > blocks a missing roughness response even when relief and normal maps remain  372ms
+   ✓ cross-domain semi-professional readiness > finds a small thin tab attached to one densely tessellated closed shell  363ms
+ ✓ tests/engine.test.ts (63 tests) 9035ms
+   ✓ OHPK human pipeline > builds a reference-derived web hero as named editable meshes  1013ms
+   ✓ AssemblyIR product pipeline > builds deterministic bumpy asphalt with real macro relief and aggregate PBR maps  1405ms
+   ✓ AssemblyIR product pipeline > compiles a complete nine-apartment HABS floor with rooms, stairs and façade openings  571ms
+   ✓ AssemblyIR product pipeline > compiles a measured HABS cabin with explicit openings and evidence boundaries  471ms
+   ✓ AssemblyIR product pipeline > builds the Pinterest concept residence but keeps semi-professional delivery blocked  588ms
+   ✓ AssemblyIR product pipeline > builds a detailed phone as independently named parts  473ms
+   ✓ AssemblyIR product pipeline > compiles the supplied exploded electronics image into a connected assembly regression case  917ms
+   ✓ AssemblyIR product pipeline > keeps every conductor attached when an electronic component moves without rebuilding idle wires  311ms
+   ✓ AssemblyIR product pipeline > keeps the detailed phone, Fold8 exterior, and image-derived cooling assembly closed and manifold  898ms
+   ✓ PBR micro-surface system > keeps unused humanoid joint slots zero and flattens skinned roots for glTF  394ms
+   ✓ short-prompt generation contract > passes the corrected plan footprint and blocks an unverified replacement  521ms
+ ✓ tests/delivery-validation.test.ts (21 tests) 3310ms
+   ✓ delivery validation and deterministic output > fingerprints the compiled plan audit and blocks a GLB that drops it  692ms
+   ✓ delivery validation and deterministic output > fingerprints compiled dimension evidence and blocks a GLB that drops it  549ms
+   ✓ delivery validation and deterministic output > preserves a compiled datum-pitch audit through an actual binary GLB export and reopen  748ms
+   ✓ delivery validation and deterministic output > keeps conductor and terminal semantic IDs unique for interchange tools  1056ms
+ ✓ tests/workspace-history.test.ts (5 tests) 3213ms
+   ✓ workspace-wide bounded history > evicts snapshots by bytes before reaching the state count cap  2986ms
+ ✓ tests/surface-cache.test.ts (2 tests) 3247ms
+   ✓ bounds actual retained CPU payload plus every GPU mip level, then preserves overflow ownership and pixels  3119ms
+ ✓ tests/gear-chamfer.test.ts (4 tests) 2254ms
+   ✓ creates real 45 degree chamfers without changing middle outline or width across scales  1833ms
+ ✓ tests/reference-surface.test.ts (17 tests) 1503ms
+   ✓ reference-conditioned surface compilation > compiles the same photo field identically with closed topology and assembly-XZ UVs  1467ms
+ ✓ tests/bearing-pack.test.ts (7 tests) 1443ms
+   ✓ bearing Domain Pack vertical slice > compiles closed geometry, finite UV and unit normals in a different size case {}  463ms
+   ✓ bearing Domain Pack vertical slice > compiles closed geometry, finite UV and unit normals in a different size case {"boreDiameterMm":12,"outerDiameterMm":30,"widthMm":10,"ballDiameterMm":5,"ballCount":7}  368ms
+   ✓ bearing Domain Pack vertical slice > compiles closed geometry, finite UV and unit normals in a different size case {"boreDiameterMm":40,"outerDiameterMm":80,"widthMm":24,"ballDiameterMm":12,"ballCount":12}  427ms
+ ✓ tests/uv-scale.test.ts (3 tests) 822ms
+   ✓ opt-in native UV scalar > changes only selected UV data; preserves all other buffers and parts; history restores  682ms
+ ✓ tests/morphloom-job.test.ts (6 tests) 532ms
+   ✓ standard Morphloom job runner > provides one fixed CLI command that writes a real GLB and machine-readable receipt  471ms
+ ✓ tests/depth-continuous.test.ts (5 tests) 531ms
+ ✓ tests/element-workspace.test.ts (5 tests) 547ms
+ ✓ tests/spur-gear.test.ts (5 tests) 385ms
+   ✓ declared external involute spur gear > checks analytic diameters and bounds actual bore/width geometry across sizes  373ms
+ ✓ tests/gltf-interchange-repair.test.ts (1 test) 273ms
+ ✓ tests/part-surface.test.ts (3 tests) 267ms
+ ✓ tests/mesh-export-policy.test.ts (4 tests) 264ms
+ ✓ tests/implicit-surface.test.ts (4 tests) 201ms
+ ✓ tests/uv-quality.test.ts (6 tests) 173ms
+ ✓ tests/assembly-edit.test.ts (7 tests) 123ms
+ ✓ tests/visual-benchmark.test.ts (14 tests) 115ms
+ ✓ tests/modeling-orchestrator.test.ts (11 tests) 105ms
+ ✓ tests/texel-density.test.ts (4 tests) 99ms
+ ✓ tests/casework-furniture.test.ts (4 tests) 86ms
+ ✓ tests/geometry-recovery-plan.test.ts (7 tests) 76ms
+ ✓ tests/surface-geometry-fidelity.test.ts (6 tests) 66ms
+ ✓ tests/thermal-v2-parity.test.ts (6 tests) 52ms
+ ✓ tests/geometry-recovery-executor.test.ts (29 tests) 52ms
+ ✓ tests/visual-capture-frames.test.ts (2 tests) 42ms
+ ✓ tests/gear-picking.test.ts (2 tests) 45ms
+ ✓ tests/material-comparison.test.ts (5 tests) 28ms
+ ✓ tests/element-renderer.test.ts (7 tests) 33ms
+ ✓ tests/plan-footprint.test.ts (3 tests) 32ms
+ ✓ tests/element-project.test.ts (17 tests) 29ms
+ ✓ tests/visual-hull.test.ts (8 tests) 28ms
+ ✓ tests/deterministic-rotation.test.ts (2 tests) 27ms
+ ✓ tests/fidelity-pipeline.test.ts (15 tests) 26ms
+ ✓ tests/strand-uv-delivery.test.ts (3 tests) 20ms
+ ✓ tests/gltf-standard-validation.test.ts (3 tests) 20ms
+ ✓ tests/texture-fingerprint.test.ts (10 tests) 18ms
+ ✓ tests/power-allocator.test.ts (6 tests) 17ms
+ ✓ tests/reference-material-evidence.test.ts (8 tests) 13ms
+ ✓ tests/reference-projection-image.test.ts (5 tests) 11ms
+ ✓ tests/semantic-product-pilot.test.ts (2 tests) 11ms
+ ✓ tests/material-payload-fingerprint.test.ts (10 tests) 9ms
+ ✓ tests/thermal-safety-adopted.test.ts (7 tests) 8ms
+ ✓ tests/silhouette-skeleton.test.ts (3 tests) 8ms
+ ✓ tests/multiview-consistency.test.ts (3 tests) 6ms
+ ✓ tests/reference-image-decoder.test.ts (5 tests) 6ms
+ ✓ tests/element-domain-packs.test.ts (5 tests) 6ms
+ ✓ tests/rigged-payload-audit.test.ts (2 tests) 6ms
+ ✓ tests/depth-boundary.test.ts (5 tests) 5ms
+ ✓ tests/thin-feature-comparison.test.ts (3 tests) 5ms
+ ✓ tests/static-mesh-roundtrip.test.ts (8 tests) 5ms
+ ✓ tests/domain-pack-v4.test.ts (9 tests) 5ms
+ ✓ tests/self-intersection.test.ts (4 tests) 4ms
+ ✓ tests/depth-surface.test.ts (5 tests) 4ms
+ ✓ tests/reference-set.test.ts (18 tests) 4ms
+ ✓ tests/holdout-lock.test.ts (5 tests) 4ms
+ ✓ tests/evidence-claim-audit.test.ts (7 tests) 4ms
+ ✓ tests/reference-comparison.test.ts (5 tests) 4ms
+ ✓ tests/pbr-reference-audit.test.ts (11 tests) 3ms
+ ✓ tests/evidence-readiness.test.ts (7 tests) 4ms
+ ✓ tests/production-dominance.test.ts (12 tests) 4ms
+ ✓ tests/visual-plan-audit.test.ts (8 tests) 3ms
+ ✓ tests/surface-component-attribution.test.ts (4 tests) 4ms
+ ✓ tests/visual-capture-manifest.test.ts (8 tests) 4ms
+ ✓ tests/neutral-render-proof.test.ts (6 tests) 3ms
+ ✓ tests/serialized-task-queue.test.ts (3 tests) 3ms
+ ✓ tests/usdz-conformance.test.ts (3 tests) 3ms
+ ✓ tests/multiview-landmark-reconstruction.test.ts (6 tests) 3ms
+ ✓ tests/ground-truth-corpus.test.ts (5 tests) 3ms
+ ✓ tests/silhouette-semantic-repair.test.ts (3 tests) 3ms
+ ✓ tests/extrude-uv-stability.test.ts (1 test) 3ms
+ ✓ tests/silhouette-mask.test.ts (4 tests) 3ms
+ ✓ tests/discrete-multiview-camera-fit.test.ts (8 tests) 2ms
+ ✓ tests/camera-pose-evidence.test.ts (5 tests) 2ms
+ ✓ tests/glb-canonicalization.test.ts (2 tests) 2ms
+ ✓ tests/part-decomposition.test.ts (6 tests) 2ms
+ ✓ tests/silhouette-residual-localization.test.ts (4 tests) 2ms
+ ✓ tests/visual-plan-provider-adapter.test.ts (4 tests) 2ms
+ ✓ tests/usdz-texture-bridge.test.ts (2 tests) 2ms
+ ✓ tests/perspective-camera-calibration.test.ts (4 tests) 2ms
+ ✓ tests/silhouette-component-attribution.test.ts (4 tests) 2ms
+ ✓ tests/browser-roundtrip-proof.test.ts (13 tests) 2ms
+ ✓ tests/thin-feature-reconstruction.test.ts (4 tests) 2ms
+ ✓ tests/multiview-scale.test.ts (4 tests) 2ms
+ ✓ tests/multiview-extents.test.ts (5 tests) 2ms
+ ✓ tests/capture-pose-residual-fit.test.ts (3 tests) 2ms
+ ✓ tests/silhouette-fidelity.test.ts (5 tests) 2ms
+ ✓ tests/articulation-state-fit.test.ts (3 tests) 1ms
+ ✓ tests/assembly-transform.test.ts (3 tests) 2ms
+ ✓ tests/browser-proof-recorder.test.ts (2 tests) 1ms
+ ✓ tests/orthographic-camera-calibration.test.ts (3 tests) 1ms
+
+ Test Files  93 passed (93)
+      Tests  652 passed (652)
+   Start at  02:17:22
+   Duration  50.21s (transform 793ms, setup 0ms, collect 2.52s, tests 42.30s, environment 6ms, prepare 1.74s)

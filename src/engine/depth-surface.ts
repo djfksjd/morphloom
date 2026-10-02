@@ -1,11 +1,12 @@
 import * as THREE from 'three';
+import {continuousSphereFront,type DepthMeshing,type ContinuousSphereReport} from './depth-continuous';
 import {validateDepthQuality,inspectDepthQuality,sphereFrontDepths,type DepthQualityContract,type DepthQualityReport,type SphereFrontConstraint} from './depth-boundary';
 
-export const DEPTH_SURFACE_ENGINE_REVISION='morphloom.depth-surface-engine/0.2';
+export const DEPTH_SURFACE_ENGINE_REVISION='morphloom.depth-surface-engine/0.3';
 export interface DepthAnchor {id: string; pixel: number; depthMm: number}
 /** Source field remains independent of this explicitly approximate display mesh. */
 export interface DepthSurfaceSource {
-  schema: 'morphloom.depth-surface/0.1'|'morphloom.depth-surface/0.2';
+  schema: 'morphloom.depth-surface/0.1'|'morphloom.depth-surface/0.2'|'morphloom.depth-surface/0.3';
   id: string;
   imageSha256: string;
   rawFieldSha256: string;
@@ -20,12 +21,13 @@ export interface DepthSurfaceSource {
   };
   calibration: {basis: 'user-measured' | 'authored-fixture'; fit: DepthAnchor[]; validation: DepthAnchor[]};
   stride: number;
+  meshing?:DepthMeshing;
   quality?:DepthQualityContract;
   primaryForm?:SphereFrontConstraint;
   preview?:'raw-depth'|'declared-sphere-front';
 }
 export interface DepthSurfaceReport {
-  schema: 'morphloom.depth-surface-report/0.2';
+  schema: 'morphloom.depth-surface-report/0.2'|'morphloom.depth-surface-report/0.3';
   engineRevision:typeof DEPTH_SURFACE_ENGINE_REVISION;
   calibrationPass: boolean; releaseAllowed: false; representation: 'inferred-open-visible-surface';
   inverseDepthFit: {scale: number; offset: number};
@@ -33,6 +35,7 @@ export interface DepthSurfaceReport {
   triangles: number; vertices: number; skippedCells: number;
   blockers: string[];
   quality:DepthQualityReport;
+  meshing?:ContinuousSphereReport;
   candidate?:{kind:'declared-sphere-front';validationPass:boolean;maximumAnchorErrorMm:number;quality:DepthQualityReport};
 }
 const bounded = (n: number) => Number.isFinite(n) && Math.abs(n) <= 1e6;
@@ -42,8 +45,8 @@ export function validateDepthSurfaceSource(input: unknown): asserts input is Dep
   if (!input || typeof input !== 'object') throw new Error('Invalid depth source.');
   const s = input as DepthSurfaceSource;
   const allowed=(value:object,keys:string[])=>Object.keys(value).every(key=>keys.includes(key));
-  if(!allowed(s,['schema','id','imageSha256','rawFieldSha256','width','height','samples','mask','camera','calibration','stride','quality','primaryForm','preview']))throw new Error('Unknown depth source parameters.');
-  if (!['morphloom.depth-surface/0.1','morphloom.depth-surface/0.2'].includes(s.schema) || !/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$/.test(s.id)
+  if(!allowed(s,['schema','id','imageSha256','rawFieldSha256','width','height','samples','mask','camera','calibration','stride','quality','primaryForm','preview','meshing']))throw new Error('Unknown depth source parameters.');
+  if (!['morphloom.depth-surface/0.1','morphloom.depth-surface/0.2','morphloom.depth-surface/0.3'].includes(s.schema) || !/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$/.test(s.id)
     || typeof s.id !== 'string' || !SHA.test(s.imageSha256) || !SHA.test(s.rawFieldSha256)
     || !Number.isInteger(s.width) || !Number.isInteger(s.height) || s.width < 2 || s.height < 2
     || s.width > 256 || s.height > 256 || !Array.isArray(s.samples) || !Array.isArray(s.mask)
@@ -66,7 +69,9 @@ export function validateDepthSurfaceSource(input: unknown): asserts input is Dep
       ids.add(a.id); pixels.add(a.pixel);
     }
   }
-  if(s.preview!==undefined&&(s.schema!=='morphloom.depth-surface/0.2'||!['raw-depth','declared-sphere-front'].includes(s.preview)))throw new Error('Unsupported native depth preview operation.');
+  if(s.preview!==undefined&&(s.schema==='morphloom.depth-surface/0.1'||!['raw-depth','declared-sphere-front'].includes(s.preview)))throw new Error('Unsupported native depth preview operation.');
+  if(s.meshing!==undefined){const m=s.meshing;if(s.schema!=='morphloom.depth-surface/0.3')throw new Error('Continuous meshing requires native0.3.');
+   if(!m||!allowed(m,['schema','mode','maxSagittaMm'])||m.schema!=='morphloom.depth-meshing/0.1'||m.mode!=='declared-sphere-front'||typeof m.maxSagittaMm!=='number'||!Number.isFinite(m.maxSagittaMm)||m.maxSagittaMm<.00001||m.maxSagittaMm>10||!s.primaryForm||s.preview!=='declared-sphere-front')throw new Error('Invalid continuous sphere meshing declaration.');}
   validateDepthQuality(s);
 }
 
@@ -74,6 +79,8 @@ export function migrateDepthSurface(input:unknown):DepthSurfaceSource{
  validateDepthSurfaceSource(input);
  const s=structuredClone(input);if(s.schema==='morphloom.depth-surface/0.1'){s.schema='morphloom.depth-surface/0.2';s.quality={depthEnvelope:{status:'unknown'},boundary:{status:'unknown'}};}return s;
 }
+
+export function migrateDepthSurfaceMeshing(input:unknown):DepthSurfaceSource{const s=migrateDepthSurface(input);s.schema='morphloom.depth-surface/0.3';return s;}
 
 export function compileDepthSurface(input: unknown, options: {diagnostic?: boolean;candidate?:'declared-sphere-front'} = {}): {
   geometry: THREE.BufferGeometry; report: DepthSurfaceReport; sourcePixels: number[];
@@ -122,6 +129,12 @@ export function compileDepthSurface(input: unknown, options: {diagnostic?: boole
     candidate={kind:'declared-sphere-front',validationPass,maximumAnchorErrorMm:maxError,quality:candidateQuality};
   }
   if (blockers.length && !options.diagnostic) throw new Error(blockers.join(' '));
+  if(s.meshing){
+    if(!candidate?.validationPass)throw new Error('Continuous sphere requires all candidate validation and boundary contracts to pass.');
+    const continuous=continuousSphereFront(s,depths),geometry=continuous.geometry;
+    geometry.userData.depthSource={candidate:candidateMode,schema:s.schema,id:s.id,imageSha256:s.imageSha256,rawFieldSha256:s.rawFieldSha256,representation:'inferred-open-visible-surface',releaseAllowed:false,meshing:s.meshing,vertexProvenance:'declared-parametric-surface'};
+    return {geometry,sourcePixels:[],report:{schema:'morphloom.depth-surface-report/0.3',engineRevision:DEPTH_SURFACE_ENGINE_REVISION,calibrationPass,releaseAllowed:false,representation:'inferred-open-visible-surface',inverseDepthFit:{scale,offset},validation:{normalizedMae,maximumNormalizedError,errors},triangles:geometry.index!.count/3,vertices:geometry.attributes.position!.count,skippedCells:0,blockers,quality,candidate,meshing:continuous.report}};
+  }
   const axis = (count:number) => {const values:number[]=[];for(let n=0;n<count-1;n+=s.stride)values.push(n);values.push(count-1);return values;};
   const xs=axis(s.width),ys=axis(s.height), cells:number[][]=[];
   let skippedCells=0;

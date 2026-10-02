@@ -1,0 +1,43 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.379
+  },
+  {
+    "command": [
+      "npx",
+      "vitest",
+      "run",
+      "tests/depth-continuous.test.ts",
+      "tests/depth-surface.test.ts",
+      "tests/depth-boundary.test.ts"
+    ],
+    "exitCode": 0,
+    "seconds": 1.431
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 4.0
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/depth-continuous-evidence.ts",
+      "benchmarks/modeling-slices-20261003/depth-continuous",
+      "benchmarks/modeling-slices-20261003/depth-boundary"
+    ],
+    "exitCode": 0,
+    "seconds": 1.726
+  }
+]
