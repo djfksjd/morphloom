@@ -1,0 +1,42 @@
+[
+  {
+    "file": "large-matte.png",
+    "exact": true
+  },
+  {
+    "file": "torus.png",
+    "exact": true
+  },
+  {
+    "file": "small-checker-truth.npy",
+    "exact": true
+  },
+  {
+    "file": "small-matte.png",
+    "exact": true
+  },
+  {
+    "file": "large-checker-truth.npy",
+    "exact": true
+  },
+  {
+    "file": "small-checker.png",
+    "exact": true
+  },
+  {
+    "file": "torus-truth.npy",
+    "exact": true
+  },
+  {
+    "file": "large-checker.png",
+    "exact": true
+  },
+  {
+    "file": "small-matte-truth.npy",
+    "exact": true
+  },
+  {
+    "file": "large-matte-truth.npy",
+    "exact": true
+  }
+]

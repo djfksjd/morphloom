@@ -532,6 +532,7 @@ export function ViewerApp() {
         <div className="topbar-status">
           <span><i className="pulse-dot" /> LOCAL · NO UPLOAD</span>
           <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
+          <a href="?editor=evidence">PHOTO EVIDENCE</a>
           <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
         </div>
       </header>

@@ -135,3 +135,29 @@ describe('evidence claim audit', () => {
     ]));
   });
 });
+
+describe('candidate evidence cannot become strong source evidence', () => {
+  it.each(['synthetic','unknown'] as const)('rejects %s CAD claims and camera credit after JSON pack roundtrip', kind => {
+    const candidate=view({sourceType:'cad', provenance:{schema:'morphloom.reference-provenance/0.1',kind}});
+    const pack=buildSemiProfessionalEvidencePack([candidate],{
+      profile:'product-visualization', dimensions:[dimension()],
+      cameraCalibrations:[{viewId:'drawing',projection:'orthographic',anchorCount:6,reprojectionErrorPx:0}],
+      sourceAudits:[audit({provenance:'official-record'})],
+    });
+    expect(pack.baseManifest.schema).toBe('morphloom.evidence/0.2');
+    expect(pack.baseManifest.views).toHaveLength(1);
+    const roundtrip=JSON.parse(JSON.stringify(pack));
+    const result=recomputeEvidencePackReadiness(roundtrip);
+    expect(result.deliveryReady).toBe(false);
+    expect(result.strongDimensionProperties).toEqual([]);
+    expect(result.calibratedViews).toEqual([]);
+    expect(auditAssemblyEvidenceClaims(assembly(),roundtrip).pass).toBe(false);
+  });
+  it('rejects forged old schema and missing provenance source on imported evidence packs', () => {
+    const pack=buildSemiProfessionalEvidencePack([view({provenance:{schema:'morphloom.reference-provenance/0.1',kind:'synthetic'}})],{profile:'product-visualization'});
+    const forged=structuredClone(pack);forged.baseManifest.schema='morphloom.evidence/0.1';
+    expect(()=>recomputeEvidencePackReadiness(forged)).toThrow();
+    pack.baseManifest.views[0].provenance!.sourceViewIds=['missing'];
+    expect(()=>recomputeEvidencePackReadiness(pack)).toThrow();
+  });
+});

@@ -1557,3 +1557,22 @@ h2 {
     animation-iteration-count: 1 !important;
   }
 }
+
+.evidence-editor-panel { max-width: 1000px; padding: 24px; margin: auto; }
+.evidence-editor .reference-filmstrip { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.evidence-editor .reference-view-fields select,
+.evidence-editor .reference-view-fields input { height: 30px; font-size: 12px; }
+.evidence-editor .reference-view-fields small { font-size: 11px; }
+.evidence-editor .reference-view { min-height: 100px; }
+
+.evidence-editor .topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; min-height: 64px; }
+.evidence-editor .reference-drop { height: 280px; }
+.evidence-editor .reference-drop img,
+.evidence-editor .reference-thumb img { object-fit: contain; }
+.evidence-editor .reference-drop.has-image::before,
+.evidence-editor .reference-drop.has-image::after { display: none; }
+.evidence-editor .reference-view { grid-template-columns: 80px minmax(0, 1fr) 20px; }
+.evidence-editor .evidence-summary small { font-size: 11px; }
+
+.evidence-editor .reference-drop img { position: absolute; inset: 0; width: 100%; height: 100%; filter: none; }
+.evidence-editor .reference-drop.has-image { background: #e6e6e0; }

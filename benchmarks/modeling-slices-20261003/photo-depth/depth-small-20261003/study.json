@@ -1,0 +1,78 @@
+{
+  "schema": "morphloom.depth-study/0.1",
+  "perCase": [
+    {
+      "case": "large-matte",
+      "luma": {
+        "mae": 0.19521994358853056,
+        "positiveScale": true
+      },
+      "depth": {
+        "mae": 0.04493230973070373,
+        "positiveScale": true
+      },
+      "improvement": 0.769837502743016,
+      "pass": true
+    },
+    {
+      "case": "large-checker",
+      "luma": {
+        "mae": 0.19879416548910522,
+        "positiveScale": true
+      },
+      "depth": {
+        "mae": 0.03629810002154451,
+        "positiveScale": true
+      },
+      "improvement": 0.8174086249853555,
+      "pass": true
+    },
+    {
+      "case": "small-matte",
+      "luma": {
+        "mae": 0.19014949460338168,
+        "positiveScale": true
+      },
+      "depth": {
+        "mae": 0.05063156299987563,
+        "positiveScale": true
+      },
+      "improvement": 0.733727596250076,
+      "pass": true
+    },
+    {
+      "case": "small-checker",
+      "luma": {
+        "mae": 0.19283500667036232,
+        "positiveScale": true
+      },
+      "depth": {
+        "mae": 0.039025241955785286,
+        "positiveScale": true
+      },
+      "improvement": 0.7976236647607446,
+      "pass": true
+    },
+    {
+      "case": "torus",
+      "luma": {
+        "mae": 0.16765151889511637,
+        "positiveScale": true
+      },
+      "depth": {
+        "mae": 0.15006651813951916,
+        "positiveScale": true
+      },
+      "improvement": 0.10489019647116038,
+      "pass": false
+    }
+  ],
+  "spherePass": true,
+  "structuralHoldoutPass": false,
+  "automaticGeometryAdopted": false,
+  "thresholds": {
+    "maxNormalizedMAE": 0.1,
+    "minimumImprovement": 0.1
+  },
+  "scope": "authored synthetic visible-depth study, no product/hidden-surface accuracy certification"
+}

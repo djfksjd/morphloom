@@ -1,0 +1,30 @@
+{
+  "workerSha256": "412b0881bba235f34295a8c84608da42c33016102144ec930383a1aed190c3a9",
+  "runs": [
+    {
+      "case": "large-matte",
+      "exitCode": 0,
+      "wallSeconds": 3.658038042
+    },
+    {
+      "case": "large-checker",
+      "exitCode": 0,
+      "wallSeconds": 2.588764042
+    },
+    {
+      "case": "small-matte",
+      "exitCode": 0,
+      "wallSeconds": 2.523996500000001
+    },
+    {
+      "case": "small-checker",
+      "exitCode": 0,
+      "wallSeconds": 2.670296208
+    },
+    {
+      "case": "torus",
+      "exitCode": 0,
+      "wallSeconds": 2.6383184580000005
+    }
+  ]
+}

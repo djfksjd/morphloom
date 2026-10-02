@@ -18,6 +18,7 @@
     "agentInstructions": { "type": "array", "minItems": 1, "maxItems": 16, "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
   },
   "$defs": {
+    "referenceProvenance": {"type": "object", "additionalProperties": false, "required": ["schema", "kind"], "properties": {"schema": {"const": "morphloom.reference-provenance/0.1"}, "kind": {"enum": ["observed", "synthetic", "unknown"]}, "sourceViewIds": {"type": "array", "maxItems": 24, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}}, "model": {"type": "string", "minLength": 1, "maxLength": 256}, "revision": {"type": "string", "minLength": 1, "maxLength": 256}, "seed": {"type": "integer", "minimum": 0, "maximum": 9007199254740991}}, "allOf": [{"if": {"properties": {"kind": {"enum": ["observed", "unknown"]}}}, "then": {"not": {"anyOf": [{"required": ["sourceViewIds"]}, {"required": ["model"]}, {"required": ["revision"]}, {"required": ["seed"]}]}}}]},
     "profile": { "enum": ["product-visualization", "service-assembly", "architectural-review", "game-character"] },
     "role": { "enum": ["front", "rear", "left", "right", "top", "bottom", "plan", "elevation", "section", "exploded", "component", "detail", "material", "measurement"] },
     "capability": { "enum": ["shape", "depth", "scale", "surface", "interfaces", "internals", "assembly-order", "layout", "verticals", "openings", "circulation", "pose", "identity"] },
@@ -26,8 +27,9 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["schema", "assetKind", "units", "evidencePolicy", "coverage", "views", "agentInstructions"],
+      "allOf": [{"if": {"properties": {"schema": {"const": "morphloom.evidence/0.1"}}}, "then": {"properties": {"views": {"items": {"not": {"required": ["provenance"]}}}}}}],
       "properties": {
-        "schema": { "const": "morphloom.evidence/0.1" },
+        "schema": { "enum": ["morphloom.evidence/0.1", "morphloom.evidence/0.2"] },
         "assetKind": { "enum": ["human", "product"] },
         "units": { "const": "mm" },
         "evidencePolicy": {
@@ -56,6 +58,8 @@
         "role": { "$ref": "#/$defs/role" },
         "coveredRoles": { "type": "array", "maxItems": 14, "uniqueItems": true, "items": { "$ref": "#/$defs/role" } },
         "capabilities": { "type": "array", "maxItems": 13, "uniqueItems": true, "items": { "$ref": "#/$defs/capability" } },
+        "provenance": { "$ref": "#/$defs/referenceProvenance" },
+        "fingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
         "sourceType": { "enum": ["photo", "technical-drawing", "datasheet", "scan", "cad"] },
         "componentId": { "$ref": "#/$defs/asciiId" },
         "width": { "type": "integer", "minimum": 1, "maximum": 20000 },

@@ -1,0 +1,109 @@
+{
+  "perCase": [
+    {
+      "case": "large-matte",
+      "inputSha256": "614b8f9f857868c772bcaf0522c6ba2276bbed356ef70af35b00dad593474c3c",
+      "rawSha256": "b3d63e1c28e79ed5bc5dd6c5eec0e53f86fae727bfc8b06431f86b942e670d04",
+      "sameRawAsInitial": true,
+      "luma": {
+        "mae": 0.19521994358853056,
+        "positiveScale": true,
+        "anchorCount": 262,
+        "heldoutCount": 24950
+      },
+      "depth": {
+        "mae": 0.04493230973070373,
+        "positiveScale": true,
+        "anchorCount": 262,
+        "heldoutCount": 24950
+      },
+      "improvement": 0.769837502743016,
+      "pass": true
+    },
+    {
+      "case": "large-checker",
+      "inputSha256": "0df1a436a0f535b36df0b4bd27fcff575a4af3bbbcd97daa2252dd4f28c43938",
+      "rawSha256": "bd0637c7a6b532df7e1ab93509b0a3e9a3e0235b749783bd839989408ff030d1",
+      "sameRawAsInitial": true,
+      "luma": {
+        "mae": 0.19879416548910522,
+        "positiveScale": true,
+        "anchorCount": 262,
+        "heldoutCount": 24950
+      },
+      "depth": {
+        "mae": 0.03629810002154451,
+        "positiveScale": true,
+        "anchorCount": 262,
+        "heldoutCount": 24950
+      },
+      "improvement": 0.8174086249853555,
+      "pass": true
+    },
+    {
+      "case": "small-matte",
+      "inputSha256": "68c230fc409d59af995961c45d8aa5c0047f8d61d0d5751badcc8d4e7b679730",
+      "rawSha256": "f1b6b334a135b523ae91ccbf25ef5acb2470369ad8ef719f54af95c6fc64077a",
+      "sameRawAsInitial": true,
+      "luma": {
+        "mae": 0.19014949460338168,
+        "positiveScale": true,
+        "anchorCount": 119,
+        "heldoutCount": 11717
+      },
+      "depth": {
+        "mae": 0.05063156299987563,
+        "positiveScale": true,
+        "anchorCount": 119,
+        "heldoutCount": 11717
+      },
+      "improvement": 0.733727596250076,
+      "pass": true
+    },
+    {
+      "case": "small-checker",
+      "inputSha256": "80e2e83e707b3d81135fa6030d182d413055b7d4d3207c79c5c5f377b3aaa0f2",
+      "rawSha256": "e87ee4f491dcb1a3a2539b0976a92e2272ab4a432608bedeeda086cfcee9a54e",
+      "sameRawAsInitial": true,
+      "luma": {
+        "mae": 0.19283500667036232,
+        "positiveScale": true,
+        "anchorCount": 119,
+        "heldoutCount": 11717
+      },
+      "depth": {
+        "mae": 0.039025241955785286,
+        "positiveScale": true,
+        "anchorCount": 119,
+        "heldoutCount": 11717
+      },
+      "improvement": 0.7976236647607446,
+      "pass": true
+    },
+    {
+      "case": "torus",
+      "inputSha256": "11860c88ee1d1912049179c836268864f2327d2a9365b16d86f5e660876ce752",
+      "rawSha256": "8621b21ffa9b8656c33606023c2a2d9e223645a94fa376c4a1a7992e7e0dc17a",
+      "sameRawAsInitial": true,
+      "luma": {
+        "mae": 0.16765151889511637,
+        "positiveScale": true,
+        "anchorCount": 150,
+        "heldoutCount": 14254
+      },
+      "depth": {
+        "mae": 0.15006651813951916,
+        "positiveScale": true,
+        "anchorCount": 150,
+        "heldoutCount": 14254
+      },
+      "improvement": 0.10489019647116038,
+      "pass": false
+    }
+  ],
+  "sphereProtocolPass": true,
+  "structuralHoldoutPass": false,
+  "adoptedForAutomaticGeometry": false,
+  "thresholdsUnchanged": true,
+  "reason": "torus visible-depth normalized MAE .150 exceeds frozen .100; no averaging away failure"
+}

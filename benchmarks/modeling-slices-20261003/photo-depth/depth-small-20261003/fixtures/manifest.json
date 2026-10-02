@@ -1,0 +1,102 @@
+[
+  {
+    "name": "large-matte",
+    "radius": 0.7,
+    "finish": "matte",
+    "camera": {
+      "projection": "orthographic",
+      "position": [
+        0,
+        0,
+        3
+      ],
+      "frame": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "resolution": [
+        256,
+        256
+      ]
+    },
+    "source": "analytic sphere ray intersection, authored synthetic fixture",
+    "truth": "normalized inverse-camera-depth foreground only"
+  },
+  {
+    "name": "large-checker",
+    "radius": 0.7,
+    "finish": "checker",
+    "camera": {
+      "projection": "orthographic",
+      "position": [
+        0,
+        0,
+        3
+      ],
+      "frame": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "resolution": [
+        256,
+        256
+      ]
+    },
+    "source": "analytic sphere ray intersection, authored synthetic fixture",
+    "truth": "normalized inverse-camera-depth foreground only"
+  },
+  {
+    "name": "small-matte",
+    "radius": 0.48,
+    "finish": "matte",
+    "camera": {
+      "projection": "orthographic",
+      "position": [
+        0,
+        0,
+        3
+      ],
+      "frame": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "resolution": [
+        256,
+        256
+      ]
+    },
+    "source": "analytic sphere ray intersection, authored synthetic fixture",
+    "truth": "normalized inverse-camera-depth foreground only"
+  },
+  {
+    "name": "small-checker",
+    "radius": 0.48,
+    "finish": "checker",
+    "camera": {
+      "projection": "orthographic",
+      "position": [
+        0,
+        0,
+        3
+      ],
+      "frame": [
+        -1,
+        1,
+        -1,
+        1
+      ],
+      "resolution": [
+        256,
+        256
+      ]
+    },
+    "source": "analytic sphere ray intersection, authored synthetic fixture",
+    "truth": "normalized inverse-camera-depth foreground only"
+  }
+]

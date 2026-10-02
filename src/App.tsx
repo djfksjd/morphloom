@@ -18,7 +18,9 @@ import {
   REFERENCE_ROLE_LABELS,
   REFERENCE_ROLES,
   referenceIdentity,
+  restoreReferenceManifest,
   type ReferenceRole,
+  type ReferenceProvenance,
   type ReferenceView,
 } from './engine/reference-set';
 import { loadHumanPack } from './engine/ohpk';
@@ -101,7 +103,7 @@ function downloadJson(payload: unknown, fileName: string): void {
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function App() {
+export function App({evidenceOnly = false}: {evidenceOnly?: boolean} = {}) {
   const [pack, setPack] = useState<HumanPack>();
   const [packError, setPackError] = useState<string>();
   const [assetKind, setAssetKind] = useState<AssetKind>('product');
@@ -121,6 +123,7 @@ export function App() {
   const [busyAction, setBusyAction] = useState<string>();
   const viewportRef = useRef<ViewportHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const evidenceInputRef = useRef<HTMLInputElement>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
   const referenceViewsRef = useRef<ReferenceView[]>([]);
   const processingReferencesRef = useRef(false);
@@ -235,6 +238,14 @@ export function App() {
         const batch = uniqueFiles.slice(start, start + 2);
         const results = await Promise.allSettled(batch.map(async (file, offset) => {
           const analyzed = await analyzeReference(file, assetKind);
+          let fingerprint: string;
+          try {
+            const digest = await crypto.subtle.digest('SHA-256', await file.arrayBuffer());
+            fingerprint = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+          } catch (error) {
+            URL.revokeObjectURL(analyzed.url);
+            throw error;
+          }
           const role = inferReferenceRole(file.name, referenceViews.length + start + offset);
           return {
             id: crypto.randomUUID(),
@@ -244,8 +255,10 @@ export function App() {
             fileSize: file.size,
             mimeType: file.type,
             lastModified: file.lastModified,
+            fingerprint,
             role,
             sourceType: inferReferenceSourceType(file.name, role),
+            provenance: {schema: 'morphloom.reference-provenance/0.1', kind: 'unknown'},
             evidence: analyzed.evidence,
           } satisfies ReferenceView;
         }));
@@ -286,7 +299,7 @@ export function App() {
     }
   }, [activeReferenceViews, assetKind, referenceViews]);
 
-  const updateReferenceView = useCallback((id: string, patch: Partial<Pick<ReferenceView, 'role' | 'componentId'>>) => {
+  const updateReferenceView = useCallback((id: string, patch: Partial<Pick<ReferenceView, 'role' | 'componentId' | 'provenance'>>) => {
     setReferenceViews((current) => current.map((view) => view.id === id ? { ...view, ...patch } : view));
   }, []);
 
@@ -297,9 +310,29 @@ export function App() {
     setActiveReferenceId((current) => current === id ? undefined : current);
   }, []);
 
+  const loadEvidenceManifest = async (file: File) => {
+    const before = referenceViewsRef.current;
+    try {
+      if (file.size < 1 || file.size > 512 * 1024) throw new Error('근거 JSON은 최대 512KiB입니다.');
+      const input: unknown = JSON.parse(await file.text());
+      if (!mountedRef.current) return;
+      if (referenceViewsRef.current !== before) throw new Error('자료가 변경됐습니다. 다시 불러오세요.');
+      setReferenceViews(restoreReferenceManifest(before, input, assetKind));
+      setReferenceError(undefined);
+      setPromptNote('근거 분류와 출처 복원 완료');
+    } catch (error) {
+      if (mountedRef.current) setReferenceError(error instanceof Error ? error.message : '근거 JSON을 확인하세요.');
+    }
+  };
+
   const saveEvidenceManifest = useCallback(() => {
     if (activeReferenceViews.length === 0) return;
-    downloadJson(buildReferenceManifest(activeReferenceViews, assetKind), 'morphloom-evidence.json');
+    try {
+      downloadJson(buildReferenceManifest(activeReferenceViews, assetKind), 'morphloom-evidence.json');
+    } catch (error) {
+      setReferenceError(error instanceof Error ? error.message : '근거 출처를 확인하세요.');
+      return;
+    }
     setPromptNote(referenceCoverage.ready
       ? 'EVIDENCE JSON 저장 완료 · 원본 근거 파일들과 함께 Codex/Claude에 전달하세요.'
       : `EVIDENCE JSON 저장 완료 · ${referenceCoverage.warnings[0] ?? '누락 증거를 확인하세요.'}`);
@@ -335,23 +368,7 @@ export function App() {
     }
   };
 
-  return (
-    <main className="app-shell">
-      <header className="topbar">
-        <div className="brand-lockup">
-          <span className="brand-mark"><AppIcon /></span>
-          <span className="brand-name">MORPHLOOM</span>
-          <span className="brand-edition">Asset Foundry / α04</span>
-        </div>
-        <div className="topbar-status">
-          <span><i className="pulse-dot" /> LOCAL MESH</span>
-          <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
-          <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
-        </div>
-      </header>
-
-      <section className="studio-grid">
-        <aside className="panel reference-panel">
+  const referencePanel = (<>
           <div className="panel-heading">
             <div>
               <span className="eyebrow">01 / visual evidence</span>
@@ -398,6 +415,14 @@ export function App() {
             }}
           />
 
+          <button onClick={() => evidenceInputRef.current?.click()} disabled={activeReferenceViews.length === 0}>LOAD EVIDENCE JSON</button>
+          <input ref={evidenceInputRef} className="visually-hidden" type="file" accept="application/json,.json"
+            aria-label="Load evidence JSON" onChange={event => {
+              const file = event.target.files?.[0];
+              if (file) void loadEvidenceManifest(file);
+              event.target.value = '';
+            }} />
+          <small>재열기: 같은 사진을 다시 추가한 뒤 근거 JSON을 불러오세요.</small>
           {referenceError && <p className="inline-error">{referenceError}</p>}
           {activeReferenceViews.length > 0 && (
             <div className="evidence-set">
@@ -435,6 +460,40 @@ export function App() {
                         >
                           {REFERENCE_ROLES.map((role) => <option value={role} key={role}>{REFERENCE_ROLE_LABELS[role]}</option>)}
                         </select>
+                        <select
+                          value={view.provenance?.kind ?? 'legacy'}
+                          aria-label={`${index + 1}번 자료 출처`}
+                          onChange={(event) => updateReferenceView(view.id, {provenance: {
+                            schema: 'morphloom.reference-provenance/0.1',
+                            kind: event.target.value as ReferenceProvenance['kind'],
+                          }})}
+                        >
+                          {!view.provenance && <option value="legacy" disabled>이전 미분류 · 호환 계산</option>}
+                          <option value="unknown">출처 미확정</option>
+                          <option value="observed">실제 자료 · 사용자 확인</option>
+                          <option value="synthetic">합성·생성 후보</option>
+                        </select>
+                        {view.provenance?.kind === 'synthetic' && (<>
+                          <input aria-label={`${index + 1}번 생성 모델`} placeholder="모델 · 미입력은 미확정" maxLength={256}
+                            value={view.provenance.model ?? ''}
+                            onChange={event => updateReferenceView(view.id, {provenance: {...view.provenance!, model: event.target.value.trim() || undefined}})} />
+                          <input aria-label={`${index + 1}번 모델 버전`} placeholder="모델 revision" maxLength={256}
+                            value={view.provenance.revision ?? ''}
+                            onChange={event => updateReferenceView(view.id, {provenance: {...view.provenance!, revision: event.target.value.trim() || undefined}})} />
+                          <select aria-label={`${index + 1}번 생성 원본`} value={view.provenance.sourceViewIds?.[0] ?? ''}
+                            onChange={event => updateReferenceView(view.id, {provenance: {...view.provenance!, sourceViewIds: event.target.value ? [event.target.value] : undefined}})}>
+                            <option value="">원본 미확정</option>
+                            {activeReferenceViews.filter(source => source.id !== view.id).map(source => <option key={source.id} value={source.id}>{source.fileName}</option>)}
+                          </select>
+                          <input aria-label={`${index + 1}번 생성 seed`} type="number" min={0} max={Number.MAX_SAFE_INTEGER}
+                            placeholder="seed · 미입력은 미확정" value={view.provenance.seed ?? ''}
+                            onChange={event => {
+                              const seed = event.target.value === '' ? undefined : Number(event.target.value);
+                              if (seed !== undefined && (!Number.isSafeInteger(seed) || seed < 0)) return;
+                              updateReferenceView(view.id, {provenance: {...view.provenance!, seed}});
+                            }} />
+                          <small>숨은 면 추정 · 실측/근거 점수 제외</small>
+                        </>)}
                         {needsComponentId ? (
                           <input
                             value={view.componentId ?? ''}
@@ -465,6 +524,36 @@ export function App() {
               </div>
             </div>
           )}
+
+  </>);
+
+  if (evidenceOnly) return (
+    <main className="app-shell evidence-editor">
+      <header className="topbar"><b>MORPHLOOM · PHOTO EVIDENCE</b><a href="/">검수 뷰어로 돌아가기</a></header>
+      <section className="evidence-editor-panel"><aside className="panel reference-panel">{referencePanel}</aside>
+        <p>관측 자료와 합성 후보를 구분해 저장하세요. 실제 자료 표기는 사용자의 확인이며 실측 검증을 대신하지 않습니다.</p>
+      </section>
+    </main>
+  );
+
+  return (
+    <main className="app-shell">
+      <header className="topbar">
+        <div className="brand-lockup">
+          <span className="brand-mark"><AppIcon /></span>
+          <span className="brand-name">MORPHLOOM</span>
+          <span className="brand-edition">Asset Foundry / α04</span>
+        </div>
+        <div className="topbar-status">
+          <span><i className="pulse-dot" /> LOCAL MESH</span>
+          <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
+          <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
+        </div>
+      </header>
+
+      <section className="studio-grid">
+        <aside className="panel reference-panel">
+          {referencePanel}
 
           <div className="prompt-block">
             <div className="subheading-row">

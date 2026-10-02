@@ -6,7 +6,7 @@ import {
   type SemiProfessionalReadinessReport,
   type SourceAuditObservation,
 } from './evidence-readiness';
-import type { ReferenceManifest, ReferenceView } from './reference-set';
+import { buildReferenceManifest, isObservedReference, validateReferenceProvenance, type ReferenceManifest, type ReferenceView } from './reference-set';
 
 export interface EvidenceClaimAudit {
   schema: 'morphloom.evidence-claim-audit/0.1';
@@ -39,6 +39,8 @@ function sourceViewFromManifest(view: ReferenceManifest['views'][number], assetK
     capabilities: [...view.capabilities],
     sourceType: view.sourceType,
     componentId: view.componentId,
+    fingerprint: view.fingerprint,
+    provenance: view.provenance ? structuredClone(view.provenance) : undefined,
     evidence: {
       fileName: view.fileName,
       width: view.width,
@@ -56,7 +58,7 @@ function manifestShapeBlockers(pack: SemiProfessionalEvidencePack): string[] {
   const manifest = pack?.baseManifest;
   if (pack?.schema !== 'morphloom.evidence-pack/0.2'
     || pack?.target !== 'semi-professional-editable'
-    || !manifest || manifest.schema !== 'morphloom.evidence/0.1'
+    || !manifest || !['morphloom.evidence/0.1', 'morphloom.evidence/0.2'].includes(manifest.schema)
     || manifest.units !== 'mm') {
     return ['unsupported or missing evidence-pack schema'];
   }
@@ -68,6 +70,11 @@ function manifestShapeBlockers(pack: SemiProfessionalEvidencePack): string[] {
   for (const view of manifest.views) {
     if (!SAFE_ID.test(view?.id ?? '') || ids.has(view.id)) blockers.push(`invalid or duplicate evidence view id: ${view?.id ?? 'missing'}`);
     ids.add(view.id);
+    if (manifest.schema === 'morphloom.evidence/0.1' && view.provenance) blockers.push('Provenance requires evidence manifest 0.2.');
+    if (view.provenance) {
+      try { validateReferenceProvenance(view.provenance); }
+      catch { blockers.push(`invalid reference provenance: ${view.id}`); }
+    }
     if (!boundedText(view?.fileName, 500) || !boundedText(view?.mimeType, 120)
       || !Number.isSafeInteger(view?.fileSize) || view.fileSize < 0 || view.fileSize > 96 * 1024 * 1024
       || !Number.isSafeInteger(view?.width) || view.width < 1 || view.width > 100_000
@@ -75,6 +82,10 @@ function manifestShapeBlockers(pack: SemiProfessionalEvidencePack): string[] {
       || !Number.isFinite(view?.inputFit) || view.inputFit < 0 || view.inputFit > 100) {
       blockers.push(`unsafe evidence view metadata: ${view?.id ?? 'missing'}`);
     }
+  }
+  if (blockers.length === 0) {
+    try { buildReferenceManifest(manifest.views.map(view => sourceViewFromManifest(view, manifest.assetKind)), manifest.assetKind); }
+    catch { blockers.push('invalid or cyclic evidence provenance source graph'); }
   }
   return blockers;
 }
@@ -86,6 +97,7 @@ function claimIssue(
 ): string | undefined {
   if (status === 'estimated' || status === 'inferred') return undefined;
   if (!view) return 'does not reference a listed evidence view';
+  if (!isObservedReference(view)) return 'claims strong evidence from synthetic or unknown-origin source';
   if (status === 'datasheet') {
     return view.sourceType === 'datasheet' ? undefined : `claims datasheet evidence from ${view.sourceType}`;
   }

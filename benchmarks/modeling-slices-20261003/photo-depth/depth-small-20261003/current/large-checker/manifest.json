@@ -1,0 +1,46 @@
+{
+  "schema": "morphloom.relative-depth-evidence/0.1",
+  "status": "experimental",
+  "workerVersion": "morphloom.local-depth-small/0.1",
+  "workerSha256": "412b0881bba235f34295a8c84608da42c33016102144ec930383a1aed190c3a9",
+  "semantics": "relative-inverse-depth-proxy",
+  "units": "arbitrary",
+  "metricCalibrated": false,
+  "sourceSha256": "0df1a436a0f535b36df0b4bd27fcff575a4af3bbbcd97daa2252dd4f28c43938",
+  "model": "Distill-Any-Depth-Small",
+  "upstreamCommit": "6d8f415392eafb49c96a38cc4dedbd09a1607f50",
+  "checkpointRevision": "38095a41cca1e28a28e8bb6372c68df721455a2d",
+  "checkpointSha256": "56a173c0e1b5045bf6296a5c1fb16eace0bbde2eddc24b37532cb1774ac09caa",
+  "preprocess": {
+    "version": "square-cv2-cubic-700-v1",
+    "originalSize": [
+      256,
+      256
+    ],
+    "modelSize": [
+      700,
+      700
+    ],
+    "mapping": "stretch-original-pixel-centres",
+    "preservesAspectRatio": false,
+    "resampleOutput": "bilinear-align-corners-false"
+  },
+  "seed": 17,
+  "device": "cpu",
+  "threads": 4,
+  "torchVersion": "2.8.0",
+  "secondsIncludingImportsAndLoad": 2.325502583,
+  "peakRssNativeUnits": 2008875008,
+  "rssUnits": "bytes-on-macOS-KiB-on-Linux",
+  "artifacts": {
+    "depth.npy": "bd0637c7a6b532df7e1ab93509b0a3e9a3e0235b749783bd839989408ff030d1",
+    "mask.npy": "6aff44cddef3d6e6b74d5d92e1d93dfd4fd31f8cf50f5053c72adcb540f14316"
+  },
+  "limitations": [
+    "relative depth, no absolute millimetres",
+    "hidden surfaces are not observed",
+    "no IR fitting or delivery approval",
+    "square stretching may affect shape estimates",
+    "alpha mask is input validity, not model confidence"
+  ]
+}

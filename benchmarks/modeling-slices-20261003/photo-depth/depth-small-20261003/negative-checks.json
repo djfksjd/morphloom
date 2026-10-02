@@ -1,0 +1,13 @@
+{
+  "workerSha256": "412b0881bba235f34295a8c84608da42c33016102144ec930383a1aed190c3a9",
+  "checks": [
+    {
+      "case": "unreviewed checkpoint",
+      "blockedBeforeModelImport": true
+    },
+    {
+      "case": "oversized image",
+      "blockedBeforeModelImport": true
+    }
+  ]
+}

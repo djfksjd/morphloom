@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "cases": [
+    "new upload unknown",
+    "synthetic no depth credit",
+    "unknown no scale credit",
+    "model revision seed",
+    "stable source ID",
+    "save reupload reopen exact manifest",
+    "no geometry-export bypass"
+  ],
+  "syntheticFixtureUsed": true,
+  "physicalProductAccuracyClaim": false
+}

@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildReferenceManifest,
+  validateReferenceProvenance,
+  migrateReferenceManifestProvenance,
+  restoreReferenceManifest,
   evaluateReferenceSet,
   inferHumanOutfitFromReferenceNames,
   inferReferenceRole,
@@ -98,4 +101,78 @@ describe('multi-view evidence set', () => {
     });
     expect(buildReferenceManifest(mixed, 'human').views).toHaveLength(1);
   });
+});
+
+// Generated/unknown views cannot replace actual source evidence.
+describe('reference provenance', () => {
+  it('excludes synthetic and unknown depth/scale even when sourceType is CAD', () => {
+    const sources = [view('front', 1),
+      { ...view('left', 2), sourceType: 'cad' as const, provenance: { schema: 'morphloom.reference-provenance/0.1', kind: 'synthetic' } },
+      { ...view('measurement', 3), provenance: { schema: 'morphloom.reference-provenance/0.1', kind: 'unknown' } }];
+    expect(evaluateReferenceSet(sources as ReferenceView[], 'product')).toMatchObject({ready:false, presentRecommendedRoles:['front']});
+    expect(evaluateReferenceSet(sources as ReferenceView[], 'product').warnings.join(' ')).toContain('depth');
+  });
+  it('keeps candidates and remaps lineage to exported stable source IDs', () => {
+    const sources = [view('front', 1), { ...view('rear', 2), provenance: {
+      schema: 'morphloom.reference-provenance/0.1', kind: 'synthetic', sourceViewIds:['runtime-1'], model:'test-model', revision:'fixed', seed:17,
+    }}];
+    const manifest=buildReferenceManifest(sources as ReferenceView[], 'product');
+    expect(manifest.schema).toBe('morphloom.evidence/0.2');
+    expect(manifest.views[1]).toMatchObject({capabilities:[],provenance:{kind:'synthetic',sourceViewIds:['view_01'],seed:17}});
+    expect(JSON.stringify(manifest)).not.toContain('runtime-1');
+  });
+  it('rejects missing or cyclic lineage rather than silently inventing a source', () => {
+    const a={...view('front', 1),provenance:{schema:'morphloom.reference-provenance/0.1',kind:'synthetic',sourceViewIds:['missing']}};
+    expect(()=>buildReferenceManifest([a] as ReferenceView[],'product')).toThrow();
+    a.provenance.sourceViewIds=['runtime-2'];
+    const b={...view('rear',2),provenance:{schema:'morphloom.reference-provenance/0.1',kind:'synthetic',sourceViewIds:['runtime-1']}};
+    expect(()=>buildReferenceManifest([a,b] as ReferenceView[],'product')).toThrow();
+  });
+});
+
+describe('provenance boundary and legacy migration', () => {
+  it.each([
+    {schema:'wrong',kind:'synthetic'},
+    {schema:'morphloom.reference-provenance/0.1',kind:'observed',model:'spoof'},
+    {schema:'morphloom.reference-provenance/0.1',kind:'synthetic',seed:-1},
+    {schema:'morphloom.reference-provenance/0.1',kind:'synthetic',model:'x'.repeat(257)},
+    {schema:'morphloom.reference-provenance/0.1',kind:'synthetic',sourceViewIds:['a','a']},
+    {schema:'morphloom.reference-provenance/0.1',kind:'measured'},
+  ])('rejects invalid parameters %#', bad => expect(()=>validateReferenceProvenance(bad)).toThrow());
+  it('keeps legacy bytes and scoring semantics without inventing observed provenance on migration', () => {
+    const legacy=buildReferenceManifest([view('front',1),view('left',2),view('measurement',3)],'product');
+    const before=JSON.stringify(legacy);
+    const migrated=migrateReferenceManifestProvenance(legacy);
+    expect(legacy.schema).toBe('morphloom.evidence/0.1');
+    expect(migrated.schema).toBe('morphloom.evidence/0.2');
+    expect(migrated.views).toEqual(legacy.views);
+    expect(migrated.coverage).toEqual(legacy.coverage);
+    expect(JSON.stringify(legacy)).toBe(before);
+    expect(migrated.views.every(v=>v.provenance===undefined)).toBe(true);
+  });
+});
+
+describe('local image evidence reopen', () => {
+  it('restores provenance to new runtime IDs and leaves input pixels/analysis and unrelated assets untouched', () => {
+    const sources:ReferenceView[]=[view('front',1),{...view('rear',2),provenance:{schema:'morphloom.reference-provenance/0.1',kind:'synthetic',sourceViewIds:['runtime-1'],seed:17}}];
+    const manifest=JSON.parse(JSON.stringify(buildReferenceManifest(sources,'product')));
+    const fresh=sources.map(v=>({...v,id:'fresh-'+v.id,provenance:undefined}));
+    const unrelated=view('front',3,undefined,'human');
+    const restored=restoreReferenceManifest([...fresh,unrelated],manifest,'product');
+    expect(restored[1].provenance?.sourceViewIds).toEqual(['fresh-runtime-1']);
+    expect(restored[0].url).toBe(fresh[0].url);
+    expect(restored[0].evidence).toBe(fresh[0].evidence);
+    expect(restored[2]).toBe(unrelated);
+    expect(buildReferenceManifest(restored,'product')).toEqual(manifest);
+    manifest.views[0].fileSize++;
+    expect(()=>restoreReferenceManifest(fresh,manifest,'product')).toThrow();
+    expect(fresh.every(v=>!v.provenance)).toBe(true);
+  });
+});
+
+it('requires exact content fingerprint when reattaching new image metadata',()=>{
+  const sources=[{...view('front',1),fingerprint:'a'.repeat(64),provenance:{schema:'morphloom.reference-provenance/0.1' as const,kind:'observed' as const}}];
+  const manifest=buildReferenceManifest(sources,'product');
+  expect(()=>restoreReferenceManifest([{...sources[0],fingerprint:'b'.repeat(64)}],manifest,'product')).toThrow();
+  expect(restoreReferenceManifest(sources,manifest,'product')[0].fingerprint).toBe('a'.repeat(64));
 });

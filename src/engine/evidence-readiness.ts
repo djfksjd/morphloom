@@ -3,6 +3,7 @@ import type { AssemblyIR } from './assembly-ir';
 import {
   buildReferenceManifest,
   inferReferenceCapabilities,
+  isObservedReference,
   MAX_REFERENCE_FILES,
   normalizeComponentId,
   type ReferenceCapability,
@@ -276,7 +277,7 @@ export function evaluateSemiProfessionalReadiness(
   const sourceAuditInputs = options.sourceAudits ?? [];
   const expectedComponentInputs = options.expectedComponentIds ?? [];
   const boundedViews = views.slice(0, MAX_REFERENCE_FILES);
-  const scopedViews = boundedViews.filter((view) => view.assetKind === requirements.assetKind);
+  const scopedViews = boundedViews.filter((view) => view.assetKind === requirements.assetKind && isObservedReference(view));
   const viewIds = new Set(scopedViews.map((view) => view.id));
   const present = resolvedRoles(scopedViews);
   const resolvedCapabilitySet = new Set(scopedViews.flatMap(inferReferenceCapabilities));

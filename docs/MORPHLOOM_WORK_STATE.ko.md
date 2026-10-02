@@ -49,3 +49,5 @@ PBR scalar 표면유실 goal 검수: PART_MATERIAL_PRESERVATION_STATUS.ko.md/out
 의미있는두fix main게시/원격SHA검증: aef595f4b36c69b4dd411b3f531ec803105f753e. 공개검수85files590tests/check/build PASS;productionFAIL 유지. 다음goal은 최신elements0.6 생성물을 선언하고 실행할수없는DomainPack version/representation 결합의후방호환 확장과 실제 mixed workspace 검수다.
 
 DomainPack API0.4 최신source0.6 생성/공통UI/혼합/actualGLB/Blender 검수: DOMAIN_PACK_V4_STATUS.ko.md,outputs/domain-pack-v4-20261002/verification.json. Mixed export에서 드러난 sectionUV누락/inward/tinycap을renderer0.10으로수정.90files622tests(게시87files603)/check/build PASS,5actualbrowser normalexports,8Blenderpixel/repeat PASS. production독립비교0/3FAIL,fur strictNode/browser matrix/poleUV/극단twist/제조·전문가 미검증 유지. UNI_AI2회2,845tokens.
+
+2026-10-03 사진 출처 보호·선택적 깊이 실험: PHOTO_DEPTH_SLICE_STATUS.ko.md. manifest0.2/legacy0.1 호환, synthetic/unknown 강한 근거 제외, SHA 기반 atomic 저장/재열기, 좁은 PHOTO EVIDENCE UI. 원본90files637tests/check/build/benchmark PASS. pinned Small CPU5실행·raw byte replay; 구형4사례 MAE .036–.051 통과, 토러스 .150>.100 실패. 자동 geometry 채택 보류, 실제제품/Blender 납품 not-run. UNI_AI models403, production독립비교부족FAIL 유지. 다음은 실제 기하·관통 제약 검수이며 모든분야 완료가 아니다.
