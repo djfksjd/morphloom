@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "rawBytes": 12807447,
+  "prettyBytes": 21655441,
+  "rawSha256": "3a5d23ac5afaedcff3ca0a425901b05455f0ae8c6ca71c08fa7e528a0fd22cc0",
+  "preservedTriangleRows": 79584,
+  "meshes": 99,
+  "jsonObjectEqual": true,
+  "budgetBytes": 20000000
+}

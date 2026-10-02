@@ -1,0 +1,202 @@
+[
+  {
+    "file": "good.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "blender/good.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "diagnostic.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "blender/diagnostic.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "workspace-good.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 12,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 16,
+        "meshes": 12,
+        "materials": 12,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "blender/workspace-good.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 12,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 16,
+        "meshes": 12,
+        "materials": 12,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "workspace-diagnostic.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 12,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 16,
+        "meshes": 12,
+        "materials": 12,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "file": "blender/workspace-diagnostic.glb",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 12,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 16,
+        "meshes": 12,
+        "materials": 12,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  }
+]

@@ -1,0 +1,70 @@
+{
+  "pass": true,
+  "sourceFiles": [
+    "430b4a63e8d2f2a4eeb8e419a972fb96ee1852659d1bff98fa3938e712a0e61f",
+    "9b84821f416c6170742a943e1ec99cd5ea97cd4965378d5e8ee9507d711d3355"
+  ],
+  "scope": "selected gear UV-only difference permitted; actual geometry/normals/indices/PBR/hierarchy/datums and all non-target UV exact",
+  "meshes": [
+    {
+      "name": "bearing::inner_race",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::outer_race",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::cage",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0000",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0001",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0002",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0003",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0004",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0005",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0006",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "bearing::ball_0007",
+      "target": false,
+      "preservedAttributes": true
+    },
+    {
+      "name": "gear::spur_gear",
+      "target": true,
+      "preservedAttributes": true
+    }
+  ]
+}

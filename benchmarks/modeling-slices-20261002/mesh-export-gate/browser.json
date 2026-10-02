@@ -1,0 +1,12 @@
+{
+  "pass": true,
+  "blockedReason": "Error: Mesh export blocked: spur_gear: UV integrity failed: 1490/8384 degenerate; 0 invalid vertices; 0 invalid world triangles; spur_gear/tooth_0000: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0001: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0002: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0003: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0004: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0005: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0006: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0007: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0008: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0009: Critical feature UV failed: 62/294 degenerate; spur_gear/tooth_0010: Critical feature UV failed: 62/294 degenerate. Fix the affected UVs or use explicit diagnostic export. This is not production approval.",
+  "bad": {
+    "source": "4acf1f23f53586780d85e47de6f1af38b7ffdead60fdc0305e3f89143611d88a",
+    "geometry": "b97662db63eabbb980b813bdbce7050160de0d1f3263fa7b6f3c235c6403a8a1"
+  },
+  "good": {
+    "source": "7efb2ce322cca21fe0b86c3bff01881a4ffc3602ae4f229d44c568cd25b450c0",
+    "geometry": "e92797b284b1d417bfb65b8575a372861b63d6d34e3de94b2f7f40c13e96e0bc"
+  }
+}

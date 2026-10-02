@@ -1,0 +1,79 @@
+{
+  "scope": "static edited mesh UV/standard gates; legacy diagnostic topology not-run; no production approval",
+  "sourceFiles": {
+    "src/engine/mesh-export-policy.ts": "57c44111dac2d042800b42c53d8130fda62756cd75a96c1996079098d33631b1",
+    "src/ElementEditor.tsx": "a0cda487eac1dc030b9647726d9c23ad2ea64ced0981200bc662c4914672e0be",
+    "src/WorkspaceEditor.tsx": "9ff8120c9a016f2b862ee16592f392794466329651c694b3d0cba1ec838fa730",
+    "tests/mesh-export-policy.test.ts": "96a3460c3d8cf49a67c38637048b71bc55eb241c1f20330fbd4a623e609388be"
+  },
+  "artifacts": {
+    "outputs/mesh-export-gate-20261002/good.receipt.json": "ae92c0721aa9d313b90dc40343c38c98986a1fd1cf42eee5edfd0abbdba3cbd1",
+    "outputs/mesh-export-gate-20261002/competitive-latest.json": "92fcd2910bcbe69801eb26981c25cea484a837d9b1f41ad1abd9dc49803535c0",
+    "outputs/mesh-export-gate-20261002/workspace-diagnostic.receipt.json": "633135ecf40d483d4b3a3a23d62754ebe2671e22262ac9379abe1c70b40efe32",
+    "outputs/mesh-export-gate-20261002/production-dominance-latest.json": "a79a8da96fcaa7095b9e9689b9220042cd7ce187b2f0c815afa62152d023e9ff",
+    "outputs/mesh-export-gate-20261002/good-clay.png": "8239adbb3d7bbce5869e83b4131992f57e225d641c7c4417f0f2263d1c5f1915",
+    "outputs/mesh-export-gate-20261002/good.elements.json": "7efb2ce322cca21fe0b86c3bff01881a4ffc3602ae4f229d44c568cd25b450c0",
+    "outputs/mesh-export-gate-20261002/legacy-diagnostic.receipt.json": "4d40f3e2668985cd0f5fcb0091da0e929fdb834c0277e1b6505f8bae2f88717f",
+    "outputs/mesh-export-gate-20261002/workspace-file-preservation.json": "4ab778293a7951fa7195bd6b76aa0684256a201f6aebfe95b92dc4f9046e5cfa",
+    "outputs/mesh-export-gate-20261002/render-preservation.json": "c16a18ae6c266bc3d5655bbb3c36306851930400e5dc60de2695b33ba34d7b33",
+    "outputs/mesh-export-gate-20261002/legacy.elements.json": "a1e9276d959eb55331cb825d5a2520ecd42110ec1729ec581def33e4548e3a27",
+    "outputs/mesh-export-gate-20261002/legacy-diagnostic.glb": "889cb9b8c91c50219808bf6e1165e4f5321a2bb34190a4ca8f23d60f5eb27e8f",
+    "outputs/mesh-export-gate-20261002/good-clay.json": "78db5a06226b2a58494af1244bc38f275ccd227e4c76951af8762208e07bdee2",
+    "outputs/mesh-export-gate-20261002/workspace-good.receipt.json": "c3ef742029730d1e20f026164f4d9b8ac55daf53accfe2d8822be48e1e45c506",
+    "outputs/mesh-export-gate-20261002/commands.json": "2aed56f11134317c1394960db56229d841bbd5888d11dcda8301254158252eb8",
+    "outputs/mesh-export-gate-20261002/good.glb": "731fa0e8bfc1bd3a00f362e626b836e4acbba49c87c91b1cc4f7ca0a3eecbccb",
+    "outputs/mesh-export-gate-20261002/saved.workspace.json": "d92d71bbd59598aeb5700cbc64a67ee33e32aac3af7dc4169fc9f44e4505d614",
+    "outputs/mesh-export-gate-20261002/diagnostic.receipt.json": "bbd819346fcf5654b778dae5d2ce61104503b9146f4fbe5e2fed3826e4b6c5b8",
+    "outputs/mesh-export-gate-20261002/workspace-browser.json": "fd403f28fb9ff77f38ceb4001ab7c0ee89cc078901d6d922379c0bfe578ca59c",
+    "outputs/mesh-export-gate-20261002/diagnostic-clay.json": "e1fefbabea7dcb36f4e092bab7fec5938368449b54e533f81ccb1e545e74f66a",
+    "outputs/mesh-export-gate-20261002/diagnostic.glb": "b98ecf3bb13078592485290d7a0b34d456ea10548baef8c6c5a6bbc2b4ec4a49",
+    "outputs/mesh-export-gate-20261002/legacy-browser.json": "6555cd35ad6bef11c532aa627780adae82ff4a0321d364c8335746377479b299",
+    "outputs/mesh-export-gate-20261002/workspace-diagnostic.glb": "430b4a63e8d2f2a4eeb8e419a972fb96ee1852659d1bff98fa3938e712a0e61f",
+    "outputs/mesh-export-gate-20261002/bad.elements.json": "4acf1f23f53586780d85e47de6f1af38b7ffdead60fdc0305e3f89143611d88a",
+    "outputs/mesh-export-gate-20261002/blocked.png": "1e71e8eaaed749f3f5660009058054903e60d0b2f8e23860060e09e5b20d2235",
+    "outputs/mesh-export-gate-20261002/bad.workspace.json": "624229e2fc75590d5bbb6199c2598389d536b882520cdd94315f56b4af8923e9",
+    "outputs/mesh-export-gate-20261002/quality-latest.json": "fcbfd485dd0c6b4d45f477f0fe8a3a9af72a1505e37b61cd72a3115f0c228386",
+    "outputs/mesh-export-gate-20261002/workspace-good.glb": "9b84821f416c6170742a943e1ec99cd5ea97cd4965378d5e8ee9507d711d3355",
+    "outputs/mesh-export-gate-20261002/browser.json": "4b906b39392427b9d39a3a518dc9dc6d53f9c617baf2f1405edf650e2f61d8f1",
+    "outputs/mesh-export-gate-20261002/standard-validation.json": "929de869a68ef81f4125da3894bd73ffe227530468cfb1e360357c5548479117",
+    "outputs/mesh-export-gate-20261002/compact-receipt-verification.json": "092a1e05e2c947f11eac67b21c66dd58c57c479eaef8ed80b6dfd4ac63cca46c",
+    "outputs/mesh-export-gate-20261002/diagnostic-clay.png": "62d1b37cae962b8c1cbbbc91d6d202398c9e27f6610ef8d685aa483db1418ccb",
+    "outputs/mesh-export-gate-20261002/blender/workspace-good.json": "8b302eea44dafa580ca41f35678c26e961d7aff7c36a82b3ee8ea729f102e9b1",
+    "outputs/mesh-export-gate-20261002/blender/workspace-diagnostic.json": "862acd0eb500b9b9d2c4eeada43e181e37bac858f8e15d5cecf62287bbfe4ab3",
+    "outputs/mesh-export-gate-20261002/blender/good.json": "1c27866f60ce4495f59ce82685c6eda784f791e463d1528f676a7b986f2d6b53",
+    "outputs/mesh-export-gate-20261002/blender/good.glb": "1f556e5b392eb62ef2d46958e253bff0836d199f30dbd8e17326e2ab91d01cb0",
+    "outputs/mesh-export-gate-20261002/blender/diagnostic.glb": "0b757b1fd45dd6cb646165e2fe249f5f986d3d1e95a874deb02c9714a81c6c01",
+    "outputs/mesh-export-gate-20261002/blender/diagnostic.json": "81f894b3cb608bfcd300e84e44dc30673e63614953f536c0fa41a127a54a5b00",
+    "outputs/mesh-export-gate-20261002/blender/workspace-diagnostic.glb": "ee53b8e80304a8b46be4dd535dc9d8a7cf5114f28b4c61d3dfd381750255f808",
+    "outputs/mesh-export-gate-20261002/blender/workspace-good.glb": "da7ccaa2dd071f61fc8d5ffb676117f5d5822b06f04514b7dc8e95024d15dd02"
+  },
+  "previousRemoteCommit": "a8596af669e5c4e8f4012cf8fd3fe8e064680711",
+  "commands": {
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    "quality-production": {
+      "command": "npm run quality:production",
+      "exitCode": 1
+    }
+  },
+  "tests": {
+    "files": 87,
+    "tests": 608,
+    "pass": true,
+    "seconds": 54.38
+  },
+  "freshUi": [
+    "browser-compact.log",
+    "workspace-browser-compact.log",
+    "legacy-browser-final.log"
+  ],
+  "limits": "Existing UV5%/1e-10,static mesh/scene bounds,20MB receipt guard preserved",
+  "environment": "macOS M5 arm64;Node24.13.1;Blender5.2.1 LTS",
+  "uniAi": "models403;completion not-run;no source sent"
+}

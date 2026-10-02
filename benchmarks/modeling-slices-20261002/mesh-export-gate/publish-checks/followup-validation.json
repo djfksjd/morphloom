@@ -1,0 +1,14 @@
+{
+  "check": {
+    "command": "npm run check",
+    "exitCode": 0
+  },
+  "test": {
+    "command": "npm test",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "pass": true,
+  "source": "13ef9881b23cd46b99d65f20809eb2dcd5196aeb709b409d8277baccb133a9e7",
+  "output": "889cb9b8c91c50219808bf6e1165e4f5321a2bb34190a4ca8f23d60f5eb27e8f",
+  "topology": {
+    "status": "not-run",
+    "reason": "Legacy 0.1 diagnostic retains prior export compatibility; not certified closed topology"
+  }
+}

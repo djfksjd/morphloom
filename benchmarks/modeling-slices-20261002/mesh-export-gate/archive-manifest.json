@@ -1,0 +1,150 @@
+{
+  "scope": "actual-byte mesh UV/standard export gates; not production approval",
+  "files": {
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/browser-compact.log": {
+      "sha256": "58cf15ae4f072d25c97a94a45835827e1a3575b2240e161ee78897cc64736eb7",
+      "bytes": 95
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/good-clay.png": {
+      "sha256": "8239adbb3d7bbce5869e83b4131992f57e225d641c7c4417f0f2263d1c5f1915",
+      "bytes": 484796
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/legacy-browser-final.log": {
+      "sha256": "a07c8ee31cda71e652af3fa2757db786dc778aae48fff7439c4e96208d519794",
+      "bytes": 93
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/good.elements.json": {
+      "sha256": "7efb2ce322cca21fe0b86c3bff01881a4ffc3602ae4f229d44c568cd25b450c0",
+      "bytes": 727
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/workspace-file-preservation.json": {
+      "sha256": "4ab778293a7951fa7195bd6b76aa0684256a201f6aebfe95b92dc4f9046e5cfa",
+      "bytes": 1607
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/build-compact.log": {
+      "sha256": "40dd4eaea72c597682f9a22f1f55ea4cf936e77780d1b68eb145c8e0b6fd981f",
+      "bytes": 1830
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/render-preservation.json": {
+      "sha256": "c16a18ae6c266bc3d5655bbb3c36306851930400e5dc60de2695b33ba34d7b33",
+      "bytes": 520
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/tests-compact.log": {
+      "sha256": "7a73c506ad1175cacd324a544b2c34e8792fd479445ecf41a2ab87c9a43eddc9",
+      "bytes": 11326
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/legacy-diagnostic.glb": {
+      "sha256": "889cb9b8c91c50219808bf6e1165e4f5321a2bb34190a4ca8f23d60f5eb27e8f",
+      "bytes": 1755852
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/test-feature-final.log": {
+      "sha256": "646c5b2667ae3f00a307d17c538b8df881846c865fe96bb7d60bed653abe11d3",
+      "bytes": 284
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/commands.json": {
+      "sha256": "2aed56f11134317c1394960db56229d841bbd5888d11dcda8301254158252eb8",
+      "bytes": 232
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/workspace-browser-compact.log": {
+      "sha256": "6d0e20a3f3442cd3ed05da487f7e675e7b2b301b1924c0db0cc6783c4d6a884e",
+      "bytes": 106
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/good.glb": {
+      "sha256": "731fa0e8bfc1bd3a00f362e626b836e4acbba49c87c91b1cc4f7ca0a3eecbccb",
+      "bytes": 809144
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/saved.workspace.json": {
+      "sha256": "d92d71bbd59598aeb5700cbc64a67ee33e32aac3af7dc4169fc9f44e4505d614",
+      "bytes": 102383
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/check-compact.log": {
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030",
+      "bytes": 49
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/workspace-browser.json": {
+      "sha256": "fd403f28fb9ff77f38ceb4001ab7c0ee89cc078901d6d922379c0bfe578ca59c",
+      "bytes": 1679
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/diagnostic.glb": {
+      "sha256": "b98ecf3bb13078592485290d7a0b34d456ea10548baef8c6c5a6bbc2b4ec4a49",
+      "bytes": 809136
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/legacy-browser.json": {
+      "sha256": "6555cd35ad6bef11c532aa627780adae82ff4a0321d364c8335746377479b299",
+      "bytes": 328
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/workspace-diagnostic.glb": {
+      "sha256": "430b4a63e8d2f2a4eeb8e419a972fb96ee1852659d1bff98fa3938e712a0e61f",
+      "bytes": 3359436
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/bad.elements.json": {
+      "sha256": "4acf1f23f53586780d85e47de6f1af38b7ffdead60fdc0305e3f89143611d88a",
+      "bytes": 713
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/blocked.png": {
+      "sha256": "1e71e8eaaed749f3f5660009058054903e60d0b2f8e23860060e09e5b20d2235",
+      "bytes": 156642
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/verification.json": {
+      "sha256": "031153adc73490f0f03a5a4424a3def86d0aba4633548cd702a0d989da4900a4",
+      "bytes": 6456
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/bad.workspace.json": {
+      "sha256": "624229e2fc75590d5bbb6199c2598389d536b882520cdd94315f56b4af8923e9",
+      "bytes": 102372
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/workspace-good.glb": {
+      "sha256": "9b84821f416c6170742a943e1ec99cd5ea97cd4965378d5e8ee9507d711d3355",
+      "bytes": 3359460
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/browser.json": {
+      "sha256": "4b906b39392427b9d39a3a518dc9dc6d53f9c617baf2f1405edf650e2f61d8f1",
+      "bytes": 1380
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/standard-validation.json": {
+      "sha256": "929de869a68ef81f4125da3894bd73ffe227530468cfb1e360357c5548479117",
+      "bytes": 4410
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/compact-receipt-verification.json": {
+      "sha256": "092a1e05e2c947f11eac67b21c66dd58c57c479eaef8ed80b6dfd4ac63cca46c",
+      "bytes": 256
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/diagnostic-clay.png": {
+      "sha256": "62d1b37cae962b8c1cbbbc91d6d202398c9e27f6610ef8d685aa483db1418ccb",
+      "bytes": 484796
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/blender/workspace-good.json": {
+      "sha256": "8b302eea44dafa580ca41f35678c26e961d7aff7c36a82b3ee8ea729f102e9b1",
+      "bytes": 2688
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/blender/workspace-diagnostic.json": {
+      "sha256": "862acd0eb500b9b9d2c4eeada43e181e37bac858f8e15d5cecf62287bbfe4ab3",
+      "bytes": 2700
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/blender/good.json": {
+      "sha256": "1c27866f60ce4495f59ce82685c6eda784f791e463d1528f676a7b986f2d6b53",
+      "bytes": 2631
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/blender/diagnostic.json": {
+      "sha256": "81f894b3cb608bfcd300e84e44dc30673e63614953f536c0fa41a127a54a5b00",
+      "bytes": 2643
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/publish-checks/followup-check.log": {
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030",
+      "bytes": 49
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/publish-checks/followup-test.log": {
+      "sha256": "dc38f2cda97ad5250be9cc36cb72409175a9f44a37e970308582a76f50bea28e",
+      "bytes": 10636
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/publish-checks/followup-build.log": {
+      "sha256": "909182ddc6aacf16e658857851fe9ca4b2d8062144674fa9e80114c28c352fea",
+      "bytes": 1162
+    },
+    "benchmarks/modeling-slices-20261002/mesh-export-gate/publish-checks/followup-validation.json": {
+      "sha256": "f97a5e48d6536fb0fce77aae03bc9ecbc68070f6e86f4a9b619d31668b1cdb5d",
+      "bytes": 200
+    }
+  },
+  "fullReceipts": "Full runtime triangle reports remain in local outputs; compact serialization preserves all information and existing20MB guard"
+}

@@ -1,0 +1,9 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/mesh-export-policy.test.ts (4 tests) 297ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  21:55:34
+   Duration  585ms (transform 150ms, setup 0ms, collect 195ms, tests 297ms, environment 0ms, prepare 27ms)

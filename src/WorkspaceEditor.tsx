@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
-import {inspectExportedUv} from './engine/uv-delivery';
+import {inspectMeshExport} from './engine/mesh-export-policy';
 import ElementEditor from './ElementEditor';
 import { bearingPack } from './engine/bearing-pack';
 import { gearPack } from './engine/gear-pack';
@@ -40,16 +40,16 @@ export default function WorkspaceEditor():React.JSX.Element{
     if(!next.assets.some(a=>a.id===activeId))setActiveId(next.assets[0]?.id??'');
     loadTicket.current++;setLoadRevision(n=>n+1);setError('');
   }catch(e){setError(String(e));}};
-  const exportAll=async():Promise<void>=>{
+  const exportAll=async(diagnostic=false):Promise<void>=>{
     if(exportBusy.current)return;exportBusy.current=true;setBusy(true);const captured=current.current;
     let built:ReturnType<typeof buildWorkspaceScene>|undefined;
     try{
       built=buildWorkspaceScene(captured,'detail',true);if(!analyzeTopology(built.root).pass)throw new Error('Topology gate failed');
       const sourceJson=serializeWorkspace(captured);
       const data=await new GLTFExporter().parseAsync(built.root,{binary:true,onlyVisible:false});
-      const uvReceipt=await inspectExportedUv(data as ArrayBuffer,sourceJson);const uvJson=JSON.stringify(uvReceipt,null,2);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
+      const uvReceipt=await inspectMeshExport(data as ArrayBuffer,sourceJson,diagnostic?'diagnostic':'editable-mesh');const uvJson=JSON.stringify(uvReceipt);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
       if(current.current!==captured)return;
-      download(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}),'morphloom-workspace.glb');
+      download(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}),diagnostic?'morphloom-workspace-uv-diagnostic.glb':'morphloom-workspace.glb');
       download(new Blob([sourceJson],{type:'application/json'}),'morphloom-workspace.json');
       download(new Blob([uvJson],{type:'application/json'}),'morphloom-workspace-uv-quality.json');setError('');
     }catch(e){setError(String(e));}finally{built?.dispose();exportBusy.current=false;setBusy(false);}
@@ -69,5 +69,6 @@ export default function WorkspaceEditor():React.JSX.Element{
       const el=e.currentTarget,ticket=++loadTicket.current;try{const f=el.files?.[0];if(!f)return;if(f.size>2_000_000)throw new Error('File exceeds 2 MB');const next=parseWorkspace(await f.text());if(ticket!==loadTicket.current)return;history.current=new WorkspaceHistory(next);current.current=next;setWorkspace(next);setActiveId(next.assets[0]?.id??'');setLoadRevision(n=>n+1);setError('');}catch(err){if(ticket===loadTicket.current)setError(String(err));}el.value='';
     }}/></label><button disabled={busy||!workspace.assets.length} onClick={()=>{void exportAll();}}>Export workspace GLB + JSON</button>
     <p role="alert">{error}</p>
-  </section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={setActiveId} onProjectChange={receive}/>}</>;
+  <button disabled={busy} onClick={()=>{void exportAll(true);}}>Export workspace UV diagnostic GLB + source JSON</button>
+</section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={setActiveId} onProjectChange={receive}/>}</>;
 }

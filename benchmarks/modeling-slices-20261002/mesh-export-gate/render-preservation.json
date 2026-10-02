@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "exactRgbaPixels": true,
+  "pixelSha256": "6b8d34b16474421243e6afa2233ce61575497d514f8076b8f2e3623387cee51d",
+  "beforeFileSha256": "62d1b37cae962b8c1cbbbc91d6d202398c9e27f6610ef8d685aa483db1418ccb",
+  "afterFileSha256": "8239adbb3d7bbce5869e83b4131992f57e225d641c7c4417f0f2263d1c5f1915",
+  "resolution": [
+    1024,
+    1024
+  ],
+  "fileBytesNote": "PNG embeds filename/date/render time metadata, so file bytes differ while pixels are exact",
+  "scope": "UV repair/export gate; geometry unchanged"
+}

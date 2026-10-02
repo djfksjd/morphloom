@@ -8,7 +8,7 @@ import { extractToothGeometry, gearProfile, toothIds } from './engine/spur-gear'
 import { pickGearTooth } from './engine/gear-picking';
 import { analyzeTopology } from './engine/topology';
 import {LatestUvInspection,type UvInspectionReceipt} from './engine/uv-quality';
-import {inspectExportedUv} from './engine/uv-delivery';
+import {inspectMeshExport} from './engine/mesh-export-policy';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -176,7 +176,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
   const currentProject = useRef(project);
   currentProject.current = project;
   const savedProject = (): ElementProject => ({ ...project, selection: selection ? [selection] : [] });
-  const exportGlb = async (wholeProject = false,diagnosticChecker=false): Promise<void> => {
+  const exportGlb = async (wholeProject = false,diagnosticChecker=false,diagnosticUv=false): Promise<void> => {
     if (exportBusy.current) return;
     exportBusy.current = true;
     let built: ReturnType<typeof exportSelectedScene> | undefined;
@@ -185,15 +185,16 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       const ids = wholeProject ? [...project.parts.map(p=>p.id),...elements.map(e=>e.id)] : group ? elements.filter(e => e.groupId === group.id).map(e => e.id) : selection ? [selection] : [];
       if (!ids.length) throw new Error('Select an element or body part first');
       built = exportSelectedScene(project, ids);
-      if (project.schema !== 'morphloom.elements/0.1' && !analyzeTopology(built.root).pass) throw new Error('Export blocked: topology gate failed');
+      const legacyDiagnostic=project.schema==='morphloom.elements/0.1'&&(diagnosticChecker||diagnosticUv);
+      if (!legacyDiagnostic&&!analyzeTopology(built.root).pass) throw new Error('Export blocked: topology gate failed');
       if(diagnosticChecker){restoreChecker=attachUvChecker(built.root);built.root.userData.diagnosticAppearance='synthetic-checker; original PBR retained in source IR';}
       const sourceJson=serializeProject(savedProject());
       const data = await new GLTFExporter().parseAsync(built.root, { binary: true });
-      const uvDelivery=await inspectExportedUv(data as ArrayBuffer,sourceJson);
-      const uvJson=JSON.stringify(uvDelivery,null,2);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
+      const uvDelivery=await inspectMeshExport(data as ArrayBuffer,sourceJson,diagnosticChecker||diagnosticUv?'diagnostic':'editable-mesh');
+      const uvJson=JSON.stringify({...uvDelivery,topologyInspection:legacyDiagnostic?{status:'not-run',reason:'Legacy 0.1 diagnostic retains prior export compatibility; not certified closed topology'}:{status:'pass',scope:'Current native volumetric generators only; intentional open representations unsupported'}});if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
       if (currentProject.current !== project) return; // discard an export from a superseded project
       const blob = new Blob([data as ArrayBuffer], { type: 'model/gltf-binary' });
-      download(blob, diagnosticChecker ? 'morphloom-checker-diagnostic.glb' : wholeProject ? 'morphloom-project.glb' : 'morphloom-selection.glb'); setGlbBytes(blob.size);
+      download(blob, diagnosticChecker ? 'morphloom-checker-diagnostic.glb' : diagnosticUv ? 'morphloom-uv-diagnostic.glb' : wholeProject ? 'morphloom-project.glb' : 'morphloom-selection.glb'); setGlbBytes(blob.size);
       download(new Blob([sourceJson], { type: 'application/json' }), 'morphloom-source.json');
       download(new Blob([uvJson],{type:'application/json'}),'morphloom-uv-quality.json');
       setError('');
@@ -212,7 +213,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       if(!analyzeTopology(built.root).pass)throw new Error('Diagnostic feature topology failed');
       const sourceJson=serializeProject(project);
       const data=await new GLTFExporter().parseAsync(built.root,{binary:true});
-      const uvDelivery=await inspectExportedUv(data as ArrayBuffer,sourceJson);const uvJson=JSON.stringify(uvDelivery,null,2);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
+      const uvDelivery=await inspectMeshExport(data as ArrayBuffer,sourceJson,'diagnostic');const uvJson=JSON.stringify(uvDelivery);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
       if(currentProject.current!==project)return;
       download(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}),`${part.id}-${id}-diagnostic.glb`);
       download(new Blob([sourceJson],{type:'application/json'}),'morphloom-gear-source.json');
@@ -226,7 +227,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       {button('Undo', () => setProject(history.current.undo()))}{button('Redo', () => setProject(history.current.redo()))}
       {button('Save project JSON', () => { try { download(new Blob([serializeProject(savedProject())], { type: 'application/json' }), 'morphloom-elements.json'); } catch (e) { setError(String(e)); } })}
       <label>Load JSON (max 2 MB) <input type="file" accept=".json,application/json" onChange={async e => { const input = e.currentTarget; const ticket = ++loadTicket.current; try { const f = input.files?.[0]; if (!f) return; if (f.size > 2_000_000) throw new Error('File exceeds 2 MB'); const p = parseProject(await f.text()); const savedSelection = p.selection?.[0] ?? ''; delete p.selection; if (ticket !== loadTicket.current) return; resetPose.current = true; history.current = new ElementHistory(p); setProject(p); setPackChoice(''); setPackInputs({}); select(savedSelection); setError(''); } catch (err) { if (ticket === loadTicket.current) setError(String(err)); } input.value = ''; }} /></label>
-      {button('Export selected GLB + source JSON', () => { void exportGlb(); })}{button('Export project GLB + source JSON', () => { void exportGlb(true); })}</nav>
+      {button('Export selected GLB + source JSON', () => { void exportGlb(); })}{button('Export project GLB + source JSON', () => { void exportGlb(true); })}{button('Export project UV diagnostic GLB + source JSON', () => { void exportGlb(true,false,true); })}</nav>
     <p>GLB contains independently named baked meshes in meters, not a native procedural groom. Companion JSON preserves the editable source.</p>
     {button('Fit view', () => { resetPose.current = true; setCameraRevision(n => n + 1); })}<form onSubmit={e => { e.preventDefault(); if (project.parts.some(p => p.id === targetId) || project.groups.some(g => g.id === targetId) || elements.some(x => x.id === targetId)) { select(targetId); setError(''); } else setError(`Unknown element ID: ${targetId}`); }}><label>Select by ID <input value={targetId} onChange={e => setTargetId(e.target.value)} /></label><button type="submit">Select</button></form><label>LOD <select value={lod} onChange={e => setLod(e.target.value as 'low' | 'detail')}><option value="detail">Detail</option><option value="low">Low</option></select></label>
     <label><input type="checkbox" disabled={!!workspace} checked={isolate} onChange={e => setIsolate(e.target.checked)} /> Isolate selection</label>

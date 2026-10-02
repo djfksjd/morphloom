@@ -36,4 +36,6 @@ UI는 `/?editor=elements`와 `/?editor=workspace`다. Preview는 HMR 없이 검�
 
 열두 번째 좁은 goal 검수: 실제 metallic-roughness map 해상도/transform의 per-triangle·mesh·feature texel density와 누락 표시. TEXEL_DENSITY_STATUS.ko.md/outputs/texel-density-20261002에서 재개.86파일604테스트 PASS,실제4browser reports와 native density exact,납품4GLB bytes 보존·현재Blender pixels 확인. report0.2,원본IR·geometry/PBR·기존임계값 불변. Atlas/padding/mip/unique coverage 미검증.
 
-2026-10-02 게시 검수: 요소 편집·베어링/기어·workspace·표면/UV 검사를 포함한 별도 체크아웃에서83파일585테스트/check/build/benchmark를 확인했다. 기존 회로·시뮬 작업과 원본 dataless index는 보존했다. 선택 공개 IR/GLB/중립 렌더/현재검수 로그·SHA는 benchmarks/modeling-slices-20261002에 보관한다. 이 문서의 과거 no-push 기록은 해당 단계 시점의 기록이며 현재 게시 요청과 구분한다.
+사용자 승인으로2026-10-02 main push 완료: a8596af669e5c4e8f4012cf8fd3fe8e064680711. 별도 체크아웃의 scoped83파일585테스트/check/build/benchmark PASS,독립production evidence 부족FAIL. benchmarks/modeling-slices-20261002에 공개 IR/GLB/렌더/현재검수 포함. 원본 index/무관한 변경 보존. 새 활성 goal은 MESH_EXPORT_GATE_CONTRACT.ko.md: 일반 GLB 다운로드의 실제UV/critical feature 실패 차단과 명시적 진단 경로;후속변경 아직미게시.
+
+추가내보내기 goal 검수: MESH_EXPORT_GATE_STATUS.ko.md,outputs/mesh-export-gate-20261002. 일반UV/criticalfeature 실패 차단·명시진단purpose·actualGLB standard 검수·mixed undo/save/비대상파일 보존. 기존0.1진단은topology not-run을 명시하고20MB 상한을모든정보보존compactJSON으로지켰다.87파일608테스트/check/build PASS,4Blender reopen·8actualGLB Khronos 오류0,clay RGBA 동일. 원격게시 a8596af와후속로컬변경 구분. production 독립비교부족/전문가·제조·atlas 미검증 유지.
