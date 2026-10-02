@@ -1,0 +1,27 @@
+{
+  "pass": true,
+  "nativeVersion": "0.3",
+  "cases": [
+    "explicit topology/UV opt-in",
+    "invalid budget preserved state",
+    "input cancel",
+    "undo/redo operation+tolerance",
+    "raw source preservation",
+    "save/reopen",
+    "checker/wire",
+    "ball export",
+    "torus disabled"
+  ],
+  "nodeBrowser": [
+    {
+      "case": "sphere",
+      "exactBytes": true,
+      "sha256": "e72584fd9487fd3d9ef443c04079296bacc6eea98df9a3ace85d38fd6760d210"
+    },
+    {
+      "case": "ball",
+      "exactBytes": true,
+      "sha256": "760d8131884fbbad066211025d5b8cd4329264615e16ce7bb52e082e486a1d06"
+    }
+  ]
+}

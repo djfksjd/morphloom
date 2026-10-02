@@ -1,8 +1,9 @@
 import * as THREE from 'three';
+import {sampleDepthMesh} from './depth-mesh-sampling';
 import {continuousSphereFront,type DepthMeshing,type ContinuousSphereReport} from './depth-continuous';
 import {validateDepthQuality,inspectDepthQuality,sphereFrontDepths,type DepthQualityContract,type DepthQualityReport,type SphereFrontConstraint} from './depth-boundary';
 
-export const DEPTH_SURFACE_ENGINE_REVISION='morphloom.depth-surface-engine/0.3';
+export const DEPTH_SURFACE_ENGINE_REVISION='morphloom.depth-surface-engine/0.3.1';
 export interface DepthAnchor {id: string; pixel: number; depthMm: number}
 /** Source field remains independent of this explicitly approximate display mesh. */
 export interface DepthSurfaceSource {
@@ -35,7 +36,7 @@ export interface DepthSurfaceReport {
   triangles: number; vertices: number; skippedCells: number;
   blockers: string[];
   quality:DepthQualityReport;
-  meshing?:ContinuousSphereReport;
+  meshing?:ContinuousSphereReport & {missingForegroundPixels:number;maximumAnchorErrorMm:number|null;projectedQuality:DepthQualityReport|null;validationPass:boolean};
   candidate?:{kind:'declared-sphere-front';validationPass:boolean;maximumAnchorErrorMm:number;quality:DepthQualityReport};
 }
 const bounded = (n: number) => Number.isFinite(n) && Math.abs(n) <= 1e6;
@@ -132,8 +133,17 @@ export function compileDepthSurface(input: unknown, options: {diagnostic?: boole
   if(s.meshing){
     if(!candidate?.validationPass)throw new Error('Continuous sphere requires all candidate validation and boundary contracts to pass.');
     const continuous=continuousSphereFront(s,depths),geometry=continuous.geometry;
-    geometry.userData.depthSource={candidate:candidateMode,schema:s.schema,id:s.id,imageSha256:s.imageSha256,rawFieldSha256:s.rawFieldSha256,representation:'inferred-open-visible-surface',releaseAllowed:false,meshing:s.meshing,vertexProvenance:'declared-parametric-surface'};
-    return {geometry,sourcePixels:[],report:{schema:'morphloom.depth-surface-report/0.3',engineRevision:DEPTH_SURFACE_ENGINE_REVISION,calibrationPass,releaseAllowed:false,representation:'inferred-open-visible-surface',inverseDepthFit:{scale,offset},validation:{normalizedMae,maximumNormalizedError,errors},triangles:geometry.index!.count/3,vertices:geometry.attributes.position!.count,skippedCells:0,blockers,quality,candidate,meshing:continuous.report}};
+    try{
+    const sampled=sampleDepthMesh(s,geometry),projectedQuality=sampled.missingForegroundPixels?null:inspectDepthQuality(s,sampled.depths);
+    const meshErrors=[...fit,...validation].map(a=>Math.abs(sampled.depths[a.pixel]!-a.depthMm));
+    const meshNormalized=validation.map(a=>Math.abs(1/sampled.depths[a.pixel]!-1/a.depthMm)/range);
+    const meshPass=sampled.missingForegroundPixels===0&&projectedQuality?.pass===true&&meshNormalized.every(Number.isFinite)&&meshNormalized.reduce((a,b)=>a+b,0)/validation.length<=.1&&Math.max(...meshNormalized)<=.25;
+    candidate.validationPass=candidate.validationPass&&meshPass;
+    const meshing={...continuous.report,missingForegroundPixels:sampled.missingForegroundPixels,maximumAnchorErrorMm:meshErrors.every(Number.isFinite)?Math.max(...meshErrors):null,projectedQuality,validationPass:meshPass};
+    if(!meshPass)blockers.push('Actual continuous mesh depth/coverage validation failed; analytic field validation is insufficient.');
+    geometry.userData.depthSource={engineRevision:DEPTH_SURFACE_ENGINE_REVISION,candidate:candidateMode,schema:s.schema,id:s.id,imageSha256:s.imageSha256,rawFieldSha256:s.rawFieldSha256,representation:'inferred-open-visible-surface',releaseAllowed:false,meshing:s.meshing,vertexProvenance:'declared-parametric-surface'};
+    return {geometry,sourcePixels:[],report:{schema:'morphloom.depth-surface-report/0.3',engineRevision:DEPTH_SURFACE_ENGINE_REVISION,calibrationPass,releaseAllowed:false,representation:'inferred-open-visible-surface',inverseDepthFit:{scale,offset},validation:{normalizedMae,maximumNormalizedError,errors},triangles:geometry.index!.count/3,vertices:geometry.attributes.position!.count,skippedCells:0,blockers,quality,candidate,meshing}};
+    }catch(error){geometry.dispose();throw error;}
   }
   const axis = (count:number) => {const values:number[]=[];for(let n=0;n<count-1;n+=s.stride)values.push(n);values.push(count-1);return values;};
   const xs=axis(s.width),ys=axis(s.height), cells:number[][]=[];

@@ -1,0 +1,32 @@
+{
+  "model": "gpt-6-sol",
+  "reviewCallNumber": 2,
+  "previousReview": "timeout55s; token/billing unknown",
+  "publicFiles": [
+    "src/engine/depth-sphere-refinement.ts",
+    "src/engine/depth-mesh-sampling.ts"
+  ],
+  "sourceImagesUploaded": false,
+  "status": "HTTP200",
+  "returnedModel": "gpt-6-sol",
+  "usage": {
+    "completion_tokens": 905,
+    "prompt_tokens": 1596,
+    "total_tokens": 2501,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 512,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": null
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1593,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null
+    }
+  },
+  "finishReason": "stop"
+}

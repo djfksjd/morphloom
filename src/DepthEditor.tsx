@@ -66,7 +66,7 @@ export default function DepthEditor() {
   if(!enabled){const next={...current};delete next.meshing;commit(next);setError('');return;}
   if(!meshTolerance.trim())throw new Error('Enter an explicit curvature tolerance in mm.');
   const next=migrateDepthSurfaceMeshing(current);next.preview='declared-sphere-front';next.meshing={schema:'morphloom.depth-meshing/0.1',mode:'declared-sphere-front',maxSagittaMm:Number(meshTolerance)};
-  const check=compileDepthSurface(next,{diagnostic:true});check.geometry.dispose();commit(next);setDiagnostic(true);setError('');
+  const check=compileDepthSurface(next,{diagnostic:true});check.geometry.dispose();if(!check.report.meshing?.validationPass)throw new Error('실제 메시 깊이/전경 coverage 검증 실패: 기존 격자 상태를 보존합니다.');commit(next);setDiagnostic(true);setError('');
  }catch(e){setError(e instanceof Error?e.message:'Invalid continuous boundary');}};
  const apply=()=>{if(!current)return;try{
   if(!draft.camera.trim()||!draft.stride.trim()||draft.frame.split(',').some(n=>!n.trim()))throw new Error('Enter explicit numeric camera parameters.');
@@ -116,7 +116,7 @@ export default function DepthEditor() {
    <label>시점<select value={view} onChange={e=>setView(e.target.value)}><option value="front">정면</option><option value="iso">등각 · 구조 검수</option></select></label>
    {compiled&&'report' in compiled&&<p role="status">{compiled.report.calibrationPass?'기존 깊이 검증점 통과':'검증점 깊이 실패'} · normalized MAE {compiled.report.validation.normalizedMae.toFixed(4)} · {compiled.report.triangles} triangles · releaseAllowed:false</p>}
    {compiled&&'report' in compiled&&<div role="status">원본 경계 계약: {compiled.report.quality.pass?'통과':compiled.report.quality.envelope.status==='not-run'?'미검증':'실패/미확정'} · 범위 위반 {compiled.report.quality.envelope.violations} samples · 경계 최대오차 {compiled.report.quality.boundary.maximumErrorMm.toFixed(4)}mm
-    {compiled.report.meshing&&<p>연속 전면: 최대 chord 편차 {compiled.report.meshing.maximumChordDeviationMm.toFixed(6)}mm · 선언된 파라메트릭 정점 · 원본 픽셀 정점 아님</p>}
+    {compiled.report.meshing&&<p>연속 전면: 최대 chord 편차 {compiled.report.meshing.maximumChordDeviationMm.toFixed(6)}mm · 실제 메시 깊이 {compiled.report.meshing.validationPass?'통과':'실패'} · 전경 누락 {compiled.report.meshing.missingForegroundPixels} pixels · 선언된 파라메트릭 정점</p>}
     {compiled.report.candidate&&<p>선언된 구면 후보: {compiled.report.candidate.validationPass?'검증 통과':'검증 실패'} · 관측 가능한 전면만 · 실측 승인 없음</p>}
     <details><summary>현재 실패 원인 · 최대32개 표시</summary>{compiled.report.blockers.slice(0,32).map((b,i)=><p key={i}>{b}</p>)}</details>
    </div>}

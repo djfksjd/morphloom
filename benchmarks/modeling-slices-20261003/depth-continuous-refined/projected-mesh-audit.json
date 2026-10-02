@@ -1,0 +1,3326 @@
+{
+  "schema": "morphloom.projected-mesh-audit/0.1",
+  "source": "actual GLB Float32 triangle interpolation at original pixel centres",
+  "rows": [
+    {
+      "name": "ball_0000.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.0000024466258885524894,
+      "meshQuality": {
+        "pass": true,
+        "blockers": [],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "pass",
+          "bandPixels": 2,
+          "pixels": 684,
+          "anchors": 128,
+          "maximumErrorMm": 0.0000024466258885524894,
+          "errors": [
+            {
+              "id": "boundary-17269",
+              "pixel": 17269,
+              "errorMm": 0.0000013069419004807514
+            },
+            {
+              "id": "boundary-17274",
+              "pixel": 17274,
+              "errorMm": 0.0000010348522536673954
+            },
+            {
+              "id": "boundary-17279",
+              "pixel": 17279,
+              "errorMm": 3.115766986638846e-7
+            },
+            {
+              "id": "boundary-17284",
+              "pixel": 17284,
+              "errorMm": 7.888190936000683e-7
+            },
+            {
+              "id": "boundary-17290",
+              "pixel": 17290,
+              "errorMm": 0.0000013069419004807514
+            },
+            {
+              "id": "boundary-17525",
+              "pixel": 17525,
+              "errorMm": 8.811682654652486e-7
+            },
+            {
+              "id": "boundary-17530",
+              "pixel": 17530,
+              "errorMm": 4.475239663292996e-7
+            },
+            {
+              "id": "boundary-17537",
+              "pixel": 17537,
+              "errorMm": 0.0000011316458881083236
+            },
+            {
+              "id": "boundary-17542",
+              "pixel": 17542,
+              "errorMm": 1.4740671616664258e-7
+            },
+            {
+              "id": "boundary-17547",
+              "pixel": 17547,
+              "errorMm": 4.692177348886162e-7
+            },
+            {
+              "id": "boundary-17775",
+              "pixel": 17775,
+              "errorMm": 7.075309369497518e-7
+            },
+            {
+              "id": "boundary-17780",
+              "pixel": 17780,
+              "errorMm": 5.24964569592612e-7
+            },
+            {
+              "id": "boundary-17807",
+              "pixel": 17807,
+              "errorMm": 0.0000010249383706195658
+            },
+            {
+              "id": "boundary-18028",
+              "pixel": 18028,
+              "errorMm": 5.162395559921151e-7
+            },
+            {
+              "id": "boundary-18063",
+              "pixel": 18063,
+              "errorMm": 5.201739696758523e-7
+            },
+            {
+              "id": "boundary-18069",
+              "pixel": 18069,
+              "errorMm": 1.2420229111853587e-7
+            },
+            {
+              "id": "boundary-18323",
+              "pixel": 18323,
+              "errorMm": 8.721772104536285e-8
+            },
+            {
+              "id": "boundary-18534",
+              "pixel": 18534,
+              "errorMm": 1.7668728347075557e-7
+            },
+            {
+              "id": "boundary-18583",
+              "pixel": 18583,
+              "errorMm": 0.0000011173801652830662
+            },
+            {
+              "id": "boundary-18790",
+              "pixel": 18790,
+              "errorMm": 6.22614685141798e-7
+            },
+            {
+              "id": "boundary-19042",
+              "pixel": 19042,
+              "errorMm": 0.0000014596692317070392
+            },
+            {
+              "id": "boundary-19099",
+              "pixel": 19099,
+              "errorMm": 7.175687919414031e-7
+            },
+            {
+              "id": "boundary-19298",
+              "pixel": 19298,
+              "errorMm": 9.569797967401428e-7
+            },
+            {
+              "id": "boundary-19550",
+              "pixel": 19550,
+              "errorMm": 2.1163960894909906e-7
+            },
+            {
+              "id": "boundary-19615",
+              "pixel": 19615,
+              "errorMm": 0.0000012169423726504647
+            },
+            {
+              "id": "boundary-19807",
+              "pixel": 19807,
+              "errorMm": 7.32641325384975e-8
+            },
+            {
+              "id": "boundary-20130",
+              "pixel": 20130,
+              "errorMm": 4.627660814549017e-7
+            },
+            {
+              "id": "boundary-20387",
+              "pixel": 20387,
+              "errorMm": 6.511821943888663e-7
+            },
+            {
+              "id": "boundary-20571",
+              "pixel": 20571,
+              "errorMm": 3.027878641148618e-7
+            },
+            {
+              "id": "boundary-20902",
+              "pixel": 20902,
+              "errorMm": 0.000001499548606176404
+            },
+            {
+              "id": "boundary-21160",
+              "pixel": 21160,
+              "errorMm": 9.961034450611805e-7
+            },
+            {
+              "id": "boundary-21589",
+              "pixel": 21589,
+              "errorMm": 8.628005581101661e-7
+            },
+            {
+              "id": "boundary-21930",
+              "pixel": 21930,
+              "errorMm": 9.150244295597076e-7
+            },
+            {
+              "id": "boundary-22188",
+              "pixel": 22188,
+              "errorMm": 1.4615297061482124e-7
+            },
+            {
+              "id": "boundary-22609",
+              "pixel": 22609,
+              "errorMm": 0.0000010830827470442728
+            },
+            {
+              "id": "boundary-22958",
+              "pixel": 22958,
+              "errorMm": 0.0000014995486132818314
+            },
+            {
+              "id": "boundary-23216",
+              "pixel": 23216,
+              "errorMm": 0.0000011138993514236972
+            },
+            {
+              "id": "boundary-23630",
+              "pixel": 23630,
+              "errorMm": 6.12073240091604e-7
+            },
+            {
+              "id": "boundary-23886",
+              "pixel": 23886,
+              "errorMm": 4.4824883005389893e-7
+            },
+            {
+              "id": "boundary-24243",
+              "pixel": 24243,
+              "errorMm": 1.9091012859462353e-7
+            },
+            {
+              "id": "boundary-24651",
+              "pixel": 24651,
+              "errorMm": 5.47233316439133e-7
+            },
+            {
+              "id": "boundary-24908",
+              "pixel": 24908,
+              "errorMm": 4.03865964671013e-7
+            },
+            {
+              "id": "boundary-25269",
+              "pixel": 25269,
+              "errorMm": 0.0000014951983224875676
+            },
+            {
+              "id": "boundary-25673",
+              "pixel": 25673,
+              "errorMm": 7.119597640325992e-7
+            },
+            {
+              "id": "boundary-25930",
+              "pixel": 25930,
+              "errorMm": 4.105486581806872e-7
+            },
+            {
+              "id": "boundary-26295",
+              "pixel": 26295,
+              "errorMm": 1.5698467592528687e-7
+            },
+            {
+              "id": "boundary-26695",
+              "pixel": 26695,
+              "errorMm": 0.0000012604666039806034
+            },
+            {
+              "id": "boundary-26952",
+              "pixel": 26952,
+              "errorMm": 9.672864607068732e-7
+            },
+            {
+              "id": "boundary-27462",
+              "pixel": 27462,
+              "errorMm": 9.179003512826966e-8
+            },
+            {
+              "id": "boundary-27719",
+              "pixel": 27719,
+              "errorMm": 8.94803093842711e-8
+            },
+            {
+              "id": "boundary-28089",
+              "pixel": 28089,
+              "errorMm": 3.7370467964592535e-7
+            },
+            {
+              "id": "boundary-28485",
+              "pixel": 28485,
+              "errorMm": 7.419645733364177e-7
+            },
+            {
+              "id": "boundary-28742",
+              "pixel": 28742,
+              "errorMm": 5.202793893488433e-7
+            },
+            {
+              "id": "boundary-29114",
+              "pixel": 29114,
+              "errorMm": 5.824819240274337e-7
+            },
+            {
+              "id": "boundary-29509",
+              "pixel": 29509,
+              "errorMm": 9.54817799936336e-7
+            },
+            {
+              "id": "boundary-29882",
+              "pixel": 29882,
+              "errorMm": 5.371583426949655e-7
+            },
+            {
+              "id": "boundary-30140",
+              "pixel": 30140,
+              "errorMm": 0.000001440898632409926
+            },
+            {
+              "id": "boundary-30531",
+              "pixel": 30531,
+              "errorMm": 3.7622793769287455e-7
+            },
+            {
+              "id": "boundary-30908",
+              "pixel": 30908,
+              "errorMm": 4.281557899332711e-7
+            },
+            {
+              "id": "boundary-31299",
+              "pixel": 31299,
+              "errorMm": 0.0000010277471460540255
+            },
+            {
+              "id": "boundary-31556",
+              "pixel": 31556,
+              "errorMm": 8.495342029846142e-7
+            },
+            {
+              "id": "boundary-31932",
+              "pixel": 31932,
+              "errorMm": 0.0000015794208216846073
+            },
+            {
+              "id": "boundary-32323",
+              "pixel": 32323,
+              "errorMm": 2.51723960786876e-7
+            },
+            {
+              "id": "boundary-32580",
+              "pixel": 32580,
+              "errorMm": 3.0006616213995585e-7
+            },
+            {
+              "id": "boundary-32956",
+              "pixel": 32956,
+              "errorMm": 3.12049486694832e-7
+            },
+            {
+              "id": "boundary-33347",
+              "pixel": 33347,
+              "errorMm": 4.072500026097714e-7
+            },
+            {
+              "id": "boundary-33604",
+              "pixel": 33604,
+              "errorMm": 0.0000015348128670211736
+            },
+            {
+              "id": "boundary-33980",
+              "pixel": 33980,
+              "errorMm": 7.969864164181217e-7
+            },
+            {
+              "id": "boundary-34371",
+              "pixel": 34371,
+              "errorMm": 0.0000010342519303208064
+            },
+            {
+              "id": "boundary-34628",
+              "pixel": 34628,
+              "errorMm": 3.940304793559335e-7
+            },
+            {
+              "id": "boundary-35004",
+              "pixel": 35004,
+              "errorMm": 3.7622793769287455e-7
+            },
+            {
+              "id": "boundary-35395",
+              "pixel": 35395,
+              "errorMm": 0.000001440898632409926
+            },
+            {
+              "id": "boundary-35653",
+              "pixel": 35653,
+              "errorMm": 5.371583426949655e-7
+            },
+            {
+              "id": "boundary-36026",
+              "pixel": 36026,
+              "errorMm": 9.54817799936336e-7
+            },
+            {
+              "id": "boundary-36420",
+              "pixel": 36420,
+              "errorMm": 0.000002294377107858736
+            },
+            {
+              "id": "boundary-36678",
+              "pixel": 36678,
+              "errorMm": 5.202793893488433e-7
+            },
+            {
+              "id": "boundary-37049",
+              "pixel": 37049,
+              "errorMm": 7.631111280659297e-7
+            },
+            {
+              "id": "boundary-37445",
+              "pixel": 37445,
+              "errorMm": 0.0000013238194185305474
+            },
+            {
+              "id": "boundary-37703",
+              "pixel": 37703,
+              "errorMm": 8.94803093842711e-8
+            },
+            {
+              "id": "boundary-38072",
+              "pixel": 38072,
+              "errorMm": 0.000001068929151415432
+            },
+            {
+              "id": "boundary-38471",
+              "pixel": 38471,
+              "errorMm": 3.4027658912805236e-7
+            },
+            {
+              "id": "boundary-38728",
+              "pixel": 38728,
+              "errorMm": 0.0000011120452292345817
+            },
+            {
+              "id": "boundary-39094",
+              "pixel": 39094,
+              "errorMm": 3.728056334750818e-7
+            },
+            {
+              "id": "boundary-39497",
+              "pixel": 39497,
+              "errorMm": 6.647025898587344e-7
+            },
+            {
+              "id": "boundary-39861",
+              "pixel": 39861,
+              "errorMm": 7.195118314484716e-7
+            },
+            {
+              "id": "boundary-40117",
+              "pixel": 40117,
+              "errorMm": 5.491859234041385e-7
+            },
+            {
+              "id": "boundary-40524",
+              "pixel": 40524,
+              "errorMm": 4.03865964671013e-7
+            },
+            {
+              "id": "boundary-40883",
+              "pixel": 40883,
+              "errorMm": 0.0000012105663955708224
+            },
+            {
+              "id": "boundary-41139",
+              "pixel": 41139,
+              "errorMm": 9.577143558203716e-7
+            },
+            {
+              "id": "boundary-41550",
+              "pixel": 41550,
+              "errorMm": 4.4824883005389893e-7
+            },
+            {
+              "id": "boundary-42063",
+              "pixel": 42063,
+              "errorMm": 7.005824400607708e-7
+            },
+            {
+              "id": "boundary-42320",
+              "pixel": 42320,
+              "errorMm": 7.296912372112274e-7
+            },
+            {
+              "id": "boundary-42670",
+              "pixel": 42670,
+              "errorMm": 0.0000014995486132818314
+            },
+            {
+              "id": "boundary-43090",
+              "pixel": 43090,
+              "errorMm": 0.0000010954937863516534
+            },
+            {
+              "id": "boundary-43348",
+              "pixel": 43348,
+              "errorMm": 4.684946901534204e-7
+            },
+            {
+              "id": "boundary-43690",
+              "pixel": 43690,
+              "errorMm": 9.150244295597076e-7
+            },
+            {
+              "id": "boundary-44118",
+              "pixel": 44118,
+              "errorMm": 1.5518994089802618e-7
+            },
+            {
+              "id": "boundary-44376",
+              "pixel": 44376,
+              "errorMm": 0.0000011971258651044536
+            },
+            {
+              "id": "boundary-44710",
+              "pixel": 44710,
+              "errorMm": 0.000001499548606176404
+            },
+            {
+              "id": "boundary-44965",
+              "pixel": 44965,
+              "errorMm": 7.296912372112274e-7
+            },
+            {
+              "id": "boundary-45219",
+              "pixel": 45219,
+              "errorMm": 6.511821943888663e-7
+            },
+            {
+              "id": "boundary-45474",
+              "pixel": 45474,
+              "errorMm": 4.627660814549017e-7
+            },
+            {
+              "id": "boundary-45729",
+              "pixel": 45729,
+              "errorMm": 0.0000013573553871992772
+            },
+            {
+              "id": "boundary-45921",
+              "pixel": 45921,
+              "errorMm": 4.0720773242242103e-7
+            },
+            {
+              "id": "boundary-46176",
+              "pixel": 46176,
+              "errorMm": 5.327752603534464e-7
+            },
+            {
+              "id": "boundary-46238",
+              "pixel": 46238,
+              "errorMm": 6.421348572871466e-7
+            },
+            {
+              "id": "boundary-46437",
+              "pixel": 46437,
+              "errorMm": 4.088715321870495e-7
+            },
+            {
+              "id": "boundary-46692",
+              "pixel": 46692,
+              "errorMm": 6.097627220924551e-7
+            },
+            {
+              "id": "boundary-46746",
+              "pixel": 46746,
+              "errorMm": 6.523405282621297e-7
+            },
+            {
+              "id": "boundary-46953",
+              "pixel": 46953,
+              "errorMm": 9.690794549044313e-7
+            },
+            {
+              "id": "boundary-47208",
+              "pixel": 47208,
+              "errorMm": 0.0000012883990798684408
+            },
+            {
+              "id": "boundary-47251",
+              "pixel": 47251,
+              "errorMm": 8.721772104536285e-8
+            },
+            {
+              "id": "boundary-47467",
+              "pixel": 47467,
+              "errorMm": 8.204288448609987e-8
+            },
+            {
+              "id": "boundary-47472",
+              "pixel": 47472,
+              "errorMm": 5.201739696758523e-7
+            },
+            {
+              "id": "boundary-47507",
+              "pixel": 47507,
+              "errorMm": 5.162395559921151e-7
+            },
+            {
+              "id": "boundary-47728",
+              "pixel": 47728,
+              "errorMm": 0.0000010249383706195658
+            },
+            {
+              "id": "boundary-47755",
+              "pixel": 47755,
+              "errorMm": 5.24964569592612e-7
+            },
+            {
+              "id": "boundary-47760",
+              "pixel": 47760,
+              "errorMm": 7.075309369497518e-7
+            },
+            {
+              "id": "boundary-47988",
+              "pixel": 47988,
+              "errorMm": 4.692177348886162e-7
+            },
+            {
+              "id": "boundary-47993",
+              "pixel": 47993,
+              "errorMm": 1.4740671616664258e-7
+            },
+            {
+              "id": "boundary-47998",
+              "pixel": 47998,
+              "errorMm": 0.0000011316458881083236
+            },
+            {
+              "id": "boundary-48004",
+              "pixel": 48004,
+              "errorMm": 8.447243295961471e-7
+            },
+            {
+              "id": "boundary-48009",
+              "pixel": 48009,
+              "errorMm": 2.9875543461344023e-7
+            },
+            {
+              "id": "boundary-48014",
+              "pixel": 48014,
+              "errorMm": 0.0000024466258885524894
+            },
+            {
+              "id": "boundary-48250",
+              "pixel": 48250,
+              "errorMm": 0.0000010348522536673954
+            },
+            {
+              "id": "boundary-48255",
+              "pixel": 48255,
+              "errorMm": 3.115766986638846e-7
+            },
+            {
+              "id": "boundary-48260",
+              "pixel": 48260,
+              "errorMm": 7.888190936000683e-7
+            },
+            {
+              "id": "boundary-48266",
+              "pixel": 48266,
+              "errorMm": 0.0000013069419004807514
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "large-checker-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.00013527168800919753,
+      "meshQuality": {
+        "pass": true,
+        "blockers": [],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "pass",
+          "bandPixels": 2,
+          "pixels": 1004,
+          "anchors": 128,
+          "maximumErrorMm": 0.00013527168800919753,
+          "errors": [
+            {
+              "id": "boundary-9852",
+              "pixel": 9852,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-9859",
+              "pixel": 9859,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-10105",
+              "pixel": 10105,
+              "errorMm": 0.000015448662850303663
+            },
+            {
+              "id": "boundary-10113",
+              "pixel": 10113,
+              "errorMm": 0.00002492609286264269
+            },
+            {
+              "id": "boundary-10120",
+              "pixel": 10120,
+              "errorMm": 0.00004133394890004638
+            },
+            {
+              "id": "boundary-10351",
+              "pixel": 10351,
+              "errorMm": 0.000013309325254340365
+            },
+            {
+              "id": "boundary-10359",
+              "pixel": 10359,
+              "errorMm": 0.000005756293830927461
+            },
+            {
+              "id": "boundary-10375",
+              "pixel": 10375,
+              "errorMm": 0.000005781650543212891
+            },
+            {
+              "id": "boundary-10383",
+              "pixel": 10383,
+              "errorMm": 0.00000951861323983394
+            },
+            {
+              "id": "boundary-10605",
+              "pixel": 10605,
+              "errorMm": 0.00000606625985710707
+            },
+            {
+              "id": "boundary-10641",
+              "pixel": 10641,
+              "errorMm": 0.000029178600698287482
+            },
+            {
+              "id": "boundary-10855",
+              "pixel": 10855,
+              "errorMm": 0.00000690028122107833
+            },
+            {
+              "id": "boundary-10901",
+              "pixel": 10901,
+              "errorMm": 0.000009470173267800419
+            },
+            {
+              "id": "boundary-11108",
+              "pixel": 11108,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-11162",
+              "pixel": 11162,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-11364",
+              "pixel": 11364,
+              "errorMm": 0.000007474713072497252
+            },
+            {
+              "id": "boundary-11614",
+              "pixel": 11614,
+              "errorMm": 0.0000157791733954582
+            },
+            {
+              "id": "boundary-11682",
+              "pixel": 11682,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-11938",
+              "pixel": 11938,
+              "errorMm": 0.000014269579253323172
+            },
+            {
+              "id": "boundary-12196",
+              "pixel": 12196,
+              "errorMm": 0.0000251393345820361
+            },
+            {
+              "id": "boundary-12453",
+              "pixel": 12453,
+              "errorMm": 8.260535651061218e-7
+            },
+            {
+              "id": "boundary-12711",
+              "pixel": 12711,
+              "errorMm": 0.000021369556179706706
+            },
+            {
+              "id": "boundary-12969",
+              "pixel": 12969,
+              "errorMm": 0.000004183179044048302
+            },
+            {
+              "id": "boundary-13227",
+              "pixel": 13227,
+              "errorMm": 0.000008573058551064605
+            },
+            {
+              "id": "boundary-13485",
+              "pixel": 13485,
+              "errorMm": 0.000010519284785459604
+            },
+            {
+              "id": "boundary-13745",
+              "pixel": 13745,
+              "errorMm": 0.00006062900098413593
+            },
+            {
+              "id": "boundary-14156",
+              "pixel": 14156,
+              "errorMm": 0.000011186944220753503
+            },
+            {
+              "id": "boundary-14516",
+              "pixel": 14516,
+              "errorMm": 0.000008257395109012577
+            },
+            {
+              "id": "boundary-14921",
+              "pixel": 14921,
+              "errorMm": 0.000002886116760691948
+            },
+            {
+              "id": "boundary-15288",
+              "pixel": 15288,
+              "errorMm": 0.00000677354177014422
+            },
+            {
+              "id": "boundary-15802",
+              "pixel": 15802,
+              "errorMm": 0.00001646053840431705
+            },
+            {
+              "id": "boundary-16316",
+              "pixel": 16316,
+              "errorMm": 0.000009441750080441125
+            },
+            {
+              "id": "boundary-16705",
+              "pixel": 16705,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-17344",
+              "pixel": 17344,
+              "errorMm": 0.000009441750080441125
+            },
+            {
+              "id": "boundary-17858",
+              "pixel": 17858,
+              "errorMm": 0.00001646053840431705
+            },
+            {
+              "id": "boundary-18372",
+              "pixel": 18372,
+              "errorMm": 0.00000677354177014422
+            },
+            {
+              "id": "boundary-18746",
+              "pixel": 18746,
+              "errorMm": 0.000002886116760691948
+            },
+            {
+              "id": "boundary-19256",
+              "pixel": 19256,
+              "errorMm": 0.000008257395109012577
+            },
+            {
+              "id": "boundary-19912",
+              "pixel": 19912,
+              "errorMm": 0.000015092672526861861
+            },
+            {
+              "id": "boundary-20425",
+              "pixel": 20425,
+              "errorMm": 0.000010886849338476168
+            },
+            {
+              "id": "boundary-20788",
+              "pixel": 20788,
+              "errorMm": 0.000014090471040617558
+            },
+            {
+              "id": "boundary-21299",
+              "pixel": 21299,
+              "errorMm": 0.0000034966035400429973
+            },
+            {
+              "id": "boundary-21810",
+              "pixel": 21810,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-22321",
+              "pixel": 22321,
+              "errorMm": 0.000002220282794951345
+            },
+            {
+              "id": "boundary-22831",
+              "pixel": 22831,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-23342",
+              "pixel": 23342,
+              "errorMm": 0.000040843589886208065
+            },
+            {
+              "id": "boundary-23853",
+              "pixel": 23853,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-24365",
+              "pixel": 24365,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-24787",
+              "pixel": 24787,
+              "errorMm": 0.00004140198819868601
+            },
+            {
+              "id": "boundary-25300",
+              "pixel": 25300,
+              "errorMm": 0.000039194292867250624
+            },
+            {
+              "id": "boundary-25812",
+              "pixel": 25812,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-26410",
+              "pixel": 26410,
+              "errorMm": 0.00000690028122107833
+            },
+            {
+              "id": "boundary-26837",
+              "pixel": 26837,
+              "errorMm": 0.000011265514842762059
+            },
+            {
+              "id": "boundary-27350",
+              "pixel": 27350,
+              "errorMm": 0.000042010431059225084
+            },
+            {
+              "id": "boundary-27862",
+              "pixel": 27862,
+              "errorMm": 0.000017520206881727063
+            },
+            {
+              "id": "boundary-28375",
+              "pixel": 28375,
+              "errorMm": 0.000004049390554428101
+            },
+            {
+              "id": "boundary-28887",
+              "pixel": 28887,
+              "errorMm": 0.00000951861323983394
+            },
+            {
+              "id": "boundary-29400",
+              "pixel": 29400,
+              "errorMm": 0.00006190555876628423
+            },
+            {
+              "id": "boundary-29912",
+              "pixel": 29912,
+              "errorMm": 0.000043442604862775624
+            },
+            {
+              "id": "boundary-30503",
+              "pixel": 30503,
+              "errorMm": 0.00004133394890004638
+            },
+            {
+              "id": "boundary-30936",
+              "pixel": 30936,
+              "errorMm": 0.00003214231884385299
+            },
+            {
+              "id": "boundary-31448",
+              "pixel": 31448,
+              "errorMm": 0.00002293972170264169
+            },
+            {
+              "id": "boundary-31961",
+              "pixel": 31961,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-32473",
+              "pixel": 32473,
+              "errorMm": 0.00004334443934794763
+            },
+            {
+              "id": "boundary-32984",
+              "pixel": 32984,
+              "errorMm": 0.0000213125958339333
+            },
+            {
+              "id": "boundary-33496",
+              "pixel": 33496,
+              "errorMm": 0.00001549379720700017
+            },
+            {
+              "id": "boundary-34007",
+              "pixel": 34007,
+              "errorMm": 0.000009762919717104523
+            },
+            {
+              "id": "boundary-34520",
+              "pixel": 34520,
+              "errorMm": 0.000015448662850303663
+            },
+            {
+              "id": "boundary-35031",
+              "pixel": 35031,
+              "errorMm": 0.000005756293830927461
+            },
+            {
+              "id": "boundary-35543",
+              "pixel": 35543,
+              "errorMm": 0.000011751446209018468
+            },
+            {
+              "id": "boundary-36055",
+              "pixel": 36055,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-36567",
+              "pixel": 36567,
+              "errorMm": 0.000004843938597787201
+            },
+            {
+              "id": "boundary-37078",
+              "pixel": 37078,
+              "errorMm": 2.924724640251952e-7
+            },
+            {
+              "id": "boundary-37590",
+              "pixel": 37590,
+              "errorMm": 0.00000606625985710707
+            },
+            {
+              "id": "boundary-38101",
+              "pixel": 38101,
+              "errorMm": 0.000021144934351013944
+            },
+            {
+              "id": "boundary-38613",
+              "pixel": 38613,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-38955",
+              "pixel": 38955,
+              "errorMm": 0.0000066154306637145055
+            },
+            {
+              "id": "boundary-39467",
+              "pixel": 39467,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-39980",
+              "pixel": 39980,
+              "errorMm": 0.000020471489847295743
+            },
+            {
+              "id": "boundary-40493",
+              "pixel": 40493,
+              "errorMm": 0.00001039970089777853
+            },
+            {
+              "id": "boundary-41005",
+              "pixel": 41005,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-41517",
+              "pixel": 41517,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-42030",
+              "pixel": 42030,
+              "errorMm": 0.000040843589886208065
+            },
+            {
+              "id": "boundary-42543",
+              "pixel": 42543,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-42959",
+              "pixel": 42959,
+              "errorMm": 0.000020583386060479825
+            },
+            {
+              "id": "boundary-43470",
+              "pixel": 43470,
+              "errorMm": 0.0000051281060109431564
+            },
+            {
+              "id": "boundary-43981",
+              "pixel": 43981,
+              "errorMm": 1.575412511556351e-7
+            },
+            {
+              "id": "boundary-44492",
+              "pixel": 44492,
+              "errorMm": 0.000012645010883716168
+            },
+            {
+              "id": "boundary-45002",
+              "pixel": 45002,
+              "errorMm": 0.0000022854447365716624
+            },
+            {
+              "id": "boundary-45513",
+              "pixel": 45513,
+              "errorMm": 0.0000319272899673706
+            },
+            {
+              "id": "boundary-46023",
+              "pixel": 46023,
+              "errorMm": 0.0000046736256535950815
+            },
+            {
+              "id": "boundary-46535",
+              "pixel": 46535,
+              "errorMm": 0.00000500500544831084
+            },
+            {
+              "id": "boundary-47044",
+              "pixel": 47044,
+              "errorMm": 0.0000028737886736962537
+            },
+            {
+              "id": "boundary-47556",
+              "pixel": 47556,
+              "errorMm": 0.000004344669207512197
+            },
+            {
+              "id": "boundary-48066",
+              "pixel": 48066,
+              "errorMm": 0.0000016844119272718672
+            },
+            {
+              "id": "boundary-48576",
+              "pixel": 48576,
+              "errorMm": 0.000005889312944873382
+            },
+            {
+              "id": "boundary-49085",
+              "pixel": 49085,
+              "errorMm": 0.000023280606228581746
+            },
+            {
+              "id": "boundary-49595",
+              "pixel": 49595,
+              "errorMm": 0.000010391695468570106
+            },
+            {
+              "id": "boundary-50105",
+              "pixel": 50105,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-50504",
+              "pixel": 50504,
+              "errorMm": 0.00002048078448524393
+            },
+            {
+              "id": "boundary-50869",
+              "pixel": 50869,
+              "errorMm": 0.000008584650402099214
+            },
+            {
+              "id": "boundary-51275",
+              "pixel": 51275,
+              "errorMm": 0.000009072944521903992
+            },
+            {
+              "id": "boundary-51535",
+              "pixel": 51535,
+              "errorMm": 0.000010886849338476168
+            },
+            {
+              "id": "boundary-51889",
+              "pixel": 51889,
+              "errorMm": 0.00006062900098413593
+            },
+            {
+              "id": "boundary-52305",
+              "pixel": 52305,
+              "errorMm": 0.000028185747169118258
+            },
+            {
+              "id": "boundary-52563",
+              "pixel": 52563,
+              "errorMm": 0.000007143011373500485
+            },
+            {
+              "id": "boundary-52821",
+              "pixel": 52821,
+              "errorMm": 0.0000016950818348959729
+            },
+            {
+              "id": "boundary-53079",
+              "pixel": 53079,
+              "errorMm": 0.00001741453553449901
+            },
+            {
+              "id": "boundary-53160",
+              "pixel": 53160,
+              "errorMm": 0.00001741453553449901
+            },
+            {
+              "id": "boundary-53414",
+              "pixel": 53414,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-53666",
+              "pixel": 53666,
+              "errorMm": 0.000014269579253323172
+            },
+            {
+              "id": "boundary-53919",
+              "pixel": 53919,
+              "errorMm": 0.00001055264129945499
+            },
+            {
+              "id": "boundary-54116",
+              "pixel": 54116,
+              "errorMm": 0.000007474713072497252
+            },
+            {
+              "id": "boundary-54372",
+              "pixel": 54372,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-54426",
+              "pixel": 54426,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-54633",
+              "pixel": 54633,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-54678",
+              "pixel": 54678,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-54892",
+              "pixel": 54892,
+              "errorMm": 0.000017520206881727063
+            },
+            {
+              "id": "boundary-54928",
+              "pixel": 54928,
+              "errorMm": 2.924724640251952e-7
+            },
+            {
+              "id": "boundary-55150",
+              "pixel": 55150,
+              "errorMm": 0.000004049390554428101
+            },
+            {
+              "id": "boundary-55157",
+              "pixel": 55157,
+              "errorMm": 0.000011751446209018468
+            },
+            {
+              "id": "boundary-55173",
+              "pixel": 55173,
+              "errorMm": 0.000007850252814023406
+            },
+            {
+              "id": "boundary-55182",
+              "pixel": 55182,
+              "errorMm": 0.000004843938597787201
+            },
+            {
+              "id": "boundary-55413",
+              "pixel": 55413,
+              "errorMm": 0.00002520071313938388
+            },
+            {
+              "id": "boundary-55420",
+              "pixel": 55420,
+              "errorMm": 8.462336040793161e-7
+            },
+            {
+              "id": "boundary-55428",
+              "pixel": 55428,
+              "errorMm": 0.000002984707464293024
+            },
+            {
+              "id": "boundary-55436",
+              "pixel": 55436,
+              "errorMm": 0.00003944027167790409
+            },
+            {
+              "id": "boundary-55683",
+              "pixel": 55683,
+              "errorMm": 0.00013527168800919753
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "large-matte-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.00013527168800919753,
+      "meshQuality": {
+        "pass": true,
+        "blockers": [],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "pass",
+          "bandPixels": 2,
+          "pixels": 1004,
+          "anchors": 128,
+          "maximumErrorMm": 0.00013527168800919753,
+          "errors": [
+            {
+              "id": "boundary-9852",
+              "pixel": 9852,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-9859",
+              "pixel": 9859,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-10105",
+              "pixel": 10105,
+              "errorMm": 0.000015448662850303663
+            },
+            {
+              "id": "boundary-10113",
+              "pixel": 10113,
+              "errorMm": 0.00002492609286264269
+            },
+            {
+              "id": "boundary-10120",
+              "pixel": 10120,
+              "errorMm": 0.00004133394890004638
+            },
+            {
+              "id": "boundary-10351",
+              "pixel": 10351,
+              "errorMm": 0.000013309325254340365
+            },
+            {
+              "id": "boundary-10359",
+              "pixel": 10359,
+              "errorMm": 0.000005756293830927461
+            },
+            {
+              "id": "boundary-10375",
+              "pixel": 10375,
+              "errorMm": 0.000005781650543212891
+            },
+            {
+              "id": "boundary-10383",
+              "pixel": 10383,
+              "errorMm": 0.00000951861323983394
+            },
+            {
+              "id": "boundary-10605",
+              "pixel": 10605,
+              "errorMm": 0.00000606625985710707
+            },
+            {
+              "id": "boundary-10641",
+              "pixel": 10641,
+              "errorMm": 0.000029178600698287482
+            },
+            {
+              "id": "boundary-10855",
+              "pixel": 10855,
+              "errorMm": 0.00000690028122107833
+            },
+            {
+              "id": "boundary-10901",
+              "pixel": 10901,
+              "errorMm": 0.000009470173267800419
+            },
+            {
+              "id": "boundary-11108",
+              "pixel": 11108,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-11162",
+              "pixel": 11162,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-11364",
+              "pixel": 11364,
+              "errorMm": 0.000007474713072497252
+            },
+            {
+              "id": "boundary-11614",
+              "pixel": 11614,
+              "errorMm": 0.0000157791733954582
+            },
+            {
+              "id": "boundary-11682",
+              "pixel": 11682,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-11938",
+              "pixel": 11938,
+              "errorMm": 0.000014269579253323172
+            },
+            {
+              "id": "boundary-12196",
+              "pixel": 12196,
+              "errorMm": 0.0000251393345820361
+            },
+            {
+              "id": "boundary-12453",
+              "pixel": 12453,
+              "errorMm": 8.260535651061218e-7
+            },
+            {
+              "id": "boundary-12711",
+              "pixel": 12711,
+              "errorMm": 0.000021369556179706706
+            },
+            {
+              "id": "boundary-12969",
+              "pixel": 12969,
+              "errorMm": 0.000004183179044048302
+            },
+            {
+              "id": "boundary-13227",
+              "pixel": 13227,
+              "errorMm": 0.000008573058551064605
+            },
+            {
+              "id": "boundary-13485",
+              "pixel": 13485,
+              "errorMm": 0.000010519284785459604
+            },
+            {
+              "id": "boundary-13745",
+              "pixel": 13745,
+              "errorMm": 0.00006062900098413593
+            },
+            {
+              "id": "boundary-14156",
+              "pixel": 14156,
+              "errorMm": 0.000011186944220753503
+            },
+            {
+              "id": "boundary-14516",
+              "pixel": 14516,
+              "errorMm": 0.000008257395109012577
+            },
+            {
+              "id": "boundary-14921",
+              "pixel": 14921,
+              "errorMm": 0.000002886116760691948
+            },
+            {
+              "id": "boundary-15288",
+              "pixel": 15288,
+              "errorMm": 0.00000677354177014422
+            },
+            {
+              "id": "boundary-15802",
+              "pixel": 15802,
+              "errorMm": 0.00001646053840431705
+            },
+            {
+              "id": "boundary-16316",
+              "pixel": 16316,
+              "errorMm": 0.000009441750080441125
+            },
+            {
+              "id": "boundary-16705",
+              "pixel": 16705,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-17344",
+              "pixel": 17344,
+              "errorMm": 0.000009441750080441125
+            },
+            {
+              "id": "boundary-17858",
+              "pixel": 17858,
+              "errorMm": 0.00001646053840431705
+            },
+            {
+              "id": "boundary-18372",
+              "pixel": 18372,
+              "errorMm": 0.00000677354177014422
+            },
+            {
+              "id": "boundary-18746",
+              "pixel": 18746,
+              "errorMm": 0.000002886116760691948
+            },
+            {
+              "id": "boundary-19256",
+              "pixel": 19256,
+              "errorMm": 0.000008257395109012577
+            },
+            {
+              "id": "boundary-19912",
+              "pixel": 19912,
+              "errorMm": 0.000015092672526861861
+            },
+            {
+              "id": "boundary-20425",
+              "pixel": 20425,
+              "errorMm": 0.000010886849338476168
+            },
+            {
+              "id": "boundary-20788",
+              "pixel": 20788,
+              "errorMm": 0.000014090471040617558
+            },
+            {
+              "id": "boundary-21299",
+              "pixel": 21299,
+              "errorMm": 0.0000034966035400429973
+            },
+            {
+              "id": "boundary-21810",
+              "pixel": 21810,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-22321",
+              "pixel": 22321,
+              "errorMm": 0.000002220282794951345
+            },
+            {
+              "id": "boundary-22831",
+              "pixel": 22831,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-23342",
+              "pixel": 23342,
+              "errorMm": 0.000040843589886208065
+            },
+            {
+              "id": "boundary-23853",
+              "pixel": 23853,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-24365",
+              "pixel": 24365,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-24787",
+              "pixel": 24787,
+              "errorMm": 0.00004140198819868601
+            },
+            {
+              "id": "boundary-25300",
+              "pixel": 25300,
+              "errorMm": 0.000039194292867250624
+            },
+            {
+              "id": "boundary-25812",
+              "pixel": 25812,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-26410",
+              "pixel": 26410,
+              "errorMm": 0.00000690028122107833
+            },
+            {
+              "id": "boundary-26837",
+              "pixel": 26837,
+              "errorMm": 0.000011265514842762059
+            },
+            {
+              "id": "boundary-27350",
+              "pixel": 27350,
+              "errorMm": 0.000042010431059225084
+            },
+            {
+              "id": "boundary-27862",
+              "pixel": 27862,
+              "errorMm": 0.000017520206881727063
+            },
+            {
+              "id": "boundary-28375",
+              "pixel": 28375,
+              "errorMm": 0.000004049390554428101
+            },
+            {
+              "id": "boundary-28887",
+              "pixel": 28887,
+              "errorMm": 0.00000951861323983394
+            },
+            {
+              "id": "boundary-29400",
+              "pixel": 29400,
+              "errorMm": 0.00006190555876628423
+            },
+            {
+              "id": "boundary-29912",
+              "pixel": 29912,
+              "errorMm": 0.000043442604862775624
+            },
+            {
+              "id": "boundary-30503",
+              "pixel": 30503,
+              "errorMm": 0.00004133394890004638
+            },
+            {
+              "id": "boundary-30936",
+              "pixel": 30936,
+              "errorMm": 0.00003214231884385299
+            },
+            {
+              "id": "boundary-31448",
+              "pixel": 31448,
+              "errorMm": 0.00002293972170264169
+            },
+            {
+              "id": "boundary-31961",
+              "pixel": 31961,
+              "errorMm": 0.00013527168800919753
+            },
+            {
+              "id": "boundary-32473",
+              "pixel": 32473,
+              "errorMm": 0.00004334443934794763
+            },
+            {
+              "id": "boundary-32984",
+              "pixel": 32984,
+              "errorMm": 0.0000213125958339333
+            },
+            {
+              "id": "boundary-33496",
+              "pixel": 33496,
+              "errorMm": 0.00001549379720700017
+            },
+            {
+              "id": "boundary-34007",
+              "pixel": 34007,
+              "errorMm": 0.000009762919717104523
+            },
+            {
+              "id": "boundary-34520",
+              "pixel": 34520,
+              "errorMm": 0.000015448662850303663
+            },
+            {
+              "id": "boundary-35031",
+              "pixel": 35031,
+              "errorMm": 0.000005756293830927461
+            },
+            {
+              "id": "boundary-35543",
+              "pixel": 35543,
+              "errorMm": 0.000011751446209018468
+            },
+            {
+              "id": "boundary-36055",
+              "pixel": 36055,
+              "errorMm": 0.00001605600118637085
+            },
+            {
+              "id": "boundary-36567",
+              "pixel": 36567,
+              "errorMm": 0.000004843938597787201
+            },
+            {
+              "id": "boundary-37078",
+              "pixel": 37078,
+              "errorMm": 2.924724640251952e-7
+            },
+            {
+              "id": "boundary-37590",
+              "pixel": 37590,
+              "errorMm": 0.00000606625985710707
+            },
+            {
+              "id": "boundary-38101",
+              "pixel": 38101,
+              "errorMm": 0.000021144934351013944
+            },
+            {
+              "id": "boundary-38613",
+              "pixel": 38613,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-38955",
+              "pixel": 38955,
+              "errorMm": 0.0000066154306637145055
+            },
+            {
+              "id": "boundary-39467",
+              "pixel": 39467,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-39980",
+              "pixel": 39980,
+              "errorMm": 0.000020471489847295743
+            },
+            {
+              "id": "boundary-40493",
+              "pixel": 40493,
+              "errorMm": 0.00001039970089777853
+            },
+            {
+              "id": "boundary-41005",
+              "pixel": 41005,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-41517",
+              "pixel": 41517,
+              "errorMm": 0.000008460302922230767
+            },
+            {
+              "id": "boundary-42030",
+              "pixel": 42030,
+              "errorMm": 0.000040843589886208065
+            },
+            {
+              "id": "boundary-42543",
+              "pixel": 42543,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-42959",
+              "pixel": 42959,
+              "errorMm": 0.000020583386060479825
+            },
+            {
+              "id": "boundary-43470",
+              "pixel": 43470,
+              "errorMm": 0.0000051281060109431564
+            },
+            {
+              "id": "boundary-43981",
+              "pixel": 43981,
+              "errorMm": 1.575412511556351e-7
+            },
+            {
+              "id": "boundary-44492",
+              "pixel": 44492,
+              "errorMm": 0.000012645010883716168
+            },
+            {
+              "id": "boundary-45002",
+              "pixel": 45002,
+              "errorMm": 0.0000022854447365716624
+            },
+            {
+              "id": "boundary-45513",
+              "pixel": 45513,
+              "errorMm": 0.0000319272899673706
+            },
+            {
+              "id": "boundary-46023",
+              "pixel": 46023,
+              "errorMm": 0.0000046736256535950815
+            },
+            {
+              "id": "boundary-46535",
+              "pixel": 46535,
+              "errorMm": 0.00000500500544831084
+            },
+            {
+              "id": "boundary-47044",
+              "pixel": 47044,
+              "errorMm": 0.0000028737886736962537
+            },
+            {
+              "id": "boundary-47556",
+              "pixel": 47556,
+              "errorMm": 0.000004344669207512197
+            },
+            {
+              "id": "boundary-48066",
+              "pixel": 48066,
+              "errorMm": 0.0000016844119272718672
+            },
+            {
+              "id": "boundary-48576",
+              "pixel": 48576,
+              "errorMm": 0.000005889312944873382
+            },
+            {
+              "id": "boundary-49085",
+              "pixel": 49085,
+              "errorMm": 0.000023280606228581746
+            },
+            {
+              "id": "boundary-49595",
+              "pixel": 49595,
+              "errorMm": 0.000010391695468570106
+            },
+            {
+              "id": "boundary-50105",
+              "pixel": 50105,
+              "errorMm": 0.0000035762786865234375
+            },
+            {
+              "id": "boundary-50504",
+              "pixel": 50504,
+              "errorMm": 0.00002048078448524393
+            },
+            {
+              "id": "boundary-50869",
+              "pixel": 50869,
+              "errorMm": 0.000008584650402099214
+            },
+            {
+              "id": "boundary-51275",
+              "pixel": 51275,
+              "errorMm": 0.000009072944521903992
+            },
+            {
+              "id": "boundary-51535",
+              "pixel": 51535,
+              "errorMm": 0.000010886849338476168
+            },
+            {
+              "id": "boundary-51889",
+              "pixel": 51889,
+              "errorMm": 0.00006062900098413593
+            },
+            {
+              "id": "boundary-52305",
+              "pixel": 52305,
+              "errorMm": 0.000028185747169118258
+            },
+            {
+              "id": "boundary-52563",
+              "pixel": 52563,
+              "errorMm": 0.000007143011373500485
+            },
+            {
+              "id": "boundary-52821",
+              "pixel": 52821,
+              "errorMm": 0.0000016950818348959729
+            },
+            {
+              "id": "boundary-53079",
+              "pixel": 53079,
+              "errorMm": 0.00001741453553449901
+            },
+            {
+              "id": "boundary-53160",
+              "pixel": 53160,
+              "errorMm": 0.00001741453553449901
+            },
+            {
+              "id": "boundary-53414",
+              "pixel": 53414,
+              "errorMm": 0.000014382492281583836
+            },
+            {
+              "id": "boundary-53666",
+              "pixel": 53666,
+              "errorMm": 0.000014269579253323172
+            },
+            {
+              "id": "boundary-53919",
+              "pixel": 53919,
+              "errorMm": 0.00001055264129945499
+            },
+            {
+              "id": "boundary-54116",
+              "pixel": 54116,
+              "errorMm": 0.000007474713072497252
+            },
+            {
+              "id": "boundary-54372",
+              "pixel": 54372,
+              "errorMm": 0.000021844770571988192
+            },
+            {
+              "id": "boundary-54426",
+              "pixel": 54426,
+              "errorMm": 0.0000013304677395353792
+            },
+            {
+              "id": "boundary-54633",
+              "pixel": 54633,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-54678",
+              "pixel": 54678,
+              "errorMm": 3.2572029340371955e-7
+            },
+            {
+              "id": "boundary-54892",
+              "pixel": 54892,
+              "errorMm": 0.000017520206881727063
+            },
+            {
+              "id": "boundary-54928",
+              "pixel": 54928,
+              "errorMm": 2.924724640251952e-7
+            },
+            {
+              "id": "boundary-55150",
+              "pixel": 55150,
+              "errorMm": 0.000004049390554428101
+            },
+            {
+              "id": "boundary-55157",
+              "pixel": 55157,
+              "errorMm": 0.000011751446209018468
+            },
+            {
+              "id": "boundary-55173",
+              "pixel": 55173,
+              "errorMm": 0.000007850252814023406
+            },
+            {
+              "id": "boundary-55182",
+              "pixel": 55182,
+              "errorMm": 0.000004843938597787201
+            },
+            {
+              "id": "boundary-55413",
+              "pixel": 55413,
+              "errorMm": 0.00002520071313938388
+            },
+            {
+              "id": "boundary-55420",
+              "pixel": 55420,
+              "errorMm": 8.462336040793161e-7
+            },
+            {
+              "id": "boundary-55428",
+              "pixel": 55428,
+              "errorMm": 0.000002984707464293024
+            },
+            {
+              "id": "boundary-55436",
+              "pixel": 55436,
+              "errorMm": 0.00003944027167790409
+            },
+            {
+              "id": "boundary-55683",
+              "pixel": 55683,
+              "errorMm": 0.00013527168800919753
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "small-checker-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.00003914601421683983,
+      "meshQuality": {
+        "pass": true,
+        "blockers": [],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "pass",
+          "bandPixels": 2,
+          "pixels": 684,
+          "anchors": 128,
+          "maximumErrorMm": 0.00003914601421683983,
+          "errors": [
+            {
+              "id": "boundary-17269",
+              "pixel": 17269,
+              "errorMm": 0.000020911070407692023
+            },
+            {
+              "id": "boundary-17274",
+              "pixel": 17274,
+              "errorMm": 0.000016557636058678327
+            },
+            {
+              "id": "boundary-17279",
+              "pixel": 17279,
+              "errorMm": 0.000004985227178622154
+            },
+            {
+              "id": "boundary-17284",
+              "pixel": 17284,
+              "errorMm": 0.000012621105497601093
+            },
+            {
+              "id": "boundary-17290",
+              "pixel": 17290,
+              "errorMm": 0.000020911070407692023
+            },
+            {
+              "id": "boundary-17525",
+              "pixel": 17525,
+              "errorMm": 0.000014098692247443978
+            },
+            {
+              "id": "boundary-17530",
+              "pixel": 17530,
+              "errorMm": 0.000007160383461268793
+            },
+            {
+              "id": "boundary-17537",
+              "pixel": 17537,
+              "errorMm": 0.000018106334209733177
+            },
+            {
+              "id": "boundary-17542",
+              "pixel": 17542,
+              "errorMm": 0.0000023585074586662813
+            },
+            {
+              "id": "boundary-17547",
+              "pixel": 17547,
+              "errorMm": 0.000007507483758217859
+            },
+            {
+              "id": "boundary-17775",
+              "pixel": 17775,
+              "errorMm": 0.000011320494991196028
+            },
+            {
+              "id": "boundary-17780",
+              "pixel": 17780,
+              "errorMm": 0.000008399433113481791
+            },
+            {
+              "id": "boundary-17807",
+              "pixel": 17807,
+              "errorMm": 0.000016399013929913053
+            },
+            {
+              "id": "boundary-18028",
+              "pixel": 18028,
+              "errorMm": 0.000008259832895873842
+            },
+            {
+              "id": "boundary-18063",
+              "pixel": 18063,
+              "errorMm": 0.000008322783514813636
+            },
+            {
+              "id": "boundary-18069",
+              "pixel": 18069,
+              "errorMm": 0.000001987236657896574
+            },
+            {
+              "id": "boundary-18323",
+              "pixel": 18323,
+              "errorMm": 0.0000013954835367258056
+            },
+            {
+              "id": "boundary-18534",
+              "pixel": 18534,
+              "errorMm": 0.000002826996535532089
+            },
+            {
+              "id": "boundary-18583",
+              "pixel": 18583,
+              "errorMm": 0.00001787808264452906
+            },
+            {
+              "id": "boundary-18790",
+              "pixel": 18790,
+              "errorMm": 0.000009961834962268767
+            },
+            {
+              "id": "boundary-19042",
+              "pixel": 19042,
+              "errorMm": 0.000023354707707312627
+            },
+            {
+              "id": "boundary-19099",
+              "pixel": 19099,
+              "errorMm": 0.00001148110067106245
+            },
+            {
+              "id": "boundary-19298",
+              "pixel": 19298,
+              "errorMm": 0.000015311676747842284
+            },
+            {
+              "id": "boundary-19550",
+              "pixel": 19550,
+              "errorMm": 0.000003386233743185585
+            },
+            {
+              "id": "boundary-19615",
+              "pixel": 19615,
+              "errorMm": 0.000019471077962407435
+            },
+            {
+              "id": "boundary-19807",
+              "pixel": 19807,
+              "errorMm": 0.00000117222612061596
+            },
+            {
+              "id": "boundary-20130",
+              "pixel": 20130,
+              "errorMm": 0.0000074042573032784276
+            },
+            {
+              "id": "boundary-20387",
+              "pixel": 20387,
+              "errorMm": 0.00001041891511022186
+            },
+            {
+              "id": "boundary-20571",
+              "pixel": 20571,
+              "errorMm": 0.000004844605825837789
+            },
+            {
+              "id": "boundary-20902",
+              "pixel": 20902,
+              "errorMm": 0.000023992777698822465
+            },
+            {
+              "id": "boundary-21160",
+              "pixel": 21160,
+              "errorMm": 0.00001593765512097889
+            },
+            {
+              "id": "boundary-21589",
+              "pixel": 21589,
+              "errorMm": 0.000013804808929762657
+            },
+            {
+              "id": "boundary-21930",
+              "pixel": 21930,
+              "errorMm": 0.000014640390872955322
+            },
+            {
+              "id": "boundary-22188",
+              "pixel": 22188,
+              "errorMm": 0.00000233844752983714
+            },
+            {
+              "id": "boundary-22609",
+              "pixel": 22609,
+              "errorMm": 0.000017329323952708364
+            },
+            {
+              "id": "boundary-22958",
+              "pixel": 22958,
+              "errorMm": 0.000023992777812509303
+            },
+            {
+              "id": "boundary-23216",
+              "pixel": 23216,
+              "errorMm": 0.000017822389622779156
+            },
+            {
+              "id": "boundary-23630",
+              "pixel": 23630,
+              "errorMm": 0.000009793171841465664
+            },
+            {
+              "id": "boundary-23886",
+              "pixel": 23886,
+              "errorMm": 0.000007171981280862383
+            },
+            {
+              "id": "boundary-24243",
+              "pixel": 24243,
+              "errorMm": 0.0000030545620575139765
+            },
+            {
+              "id": "boundary-24651",
+              "pixel": 24651,
+              "errorMm": 0.000008755733063026128
+            },
+            {
+              "id": "boundary-24908",
+              "pixel": 24908,
+              "errorMm": 0.000006461855434736208
+            },
+            {
+              "id": "boundary-25269",
+              "pixel": 25269,
+              "errorMm": 0.00002392317315980108
+            },
+            {
+              "id": "boundary-25673",
+              "pixel": 25673,
+              "errorMm": 0.000011391356224521587
+            },
+            {
+              "id": "boundary-25930",
+              "pixel": 25930,
+              "errorMm": 0.000006568778530890995
+            },
+            {
+              "id": "boundary-26295",
+              "pixel": 26295,
+              "errorMm": 0.00000251175481480459
+            },
+            {
+              "id": "boundary-26695",
+              "pixel": 26695,
+              "errorMm": 0.000020167465663689654
+            },
+            {
+              "id": "boundary-26952",
+              "pixel": 26952,
+              "errorMm": 0.00001547658337130997
+            },
+            {
+              "id": "boundary-27462",
+              "pixel": 27462,
+              "errorMm": 0.0000014686405620523146
+            },
+            {
+              "id": "boundary-27719",
+              "pixel": 27719,
+              "errorMm": 0.0000014316849501483375
+            },
+            {
+              "id": "boundary-28089",
+              "pixel": 28089,
+              "errorMm": 0.000005979274874334806
+            },
+            {
+              "id": "boundary-28485",
+              "pixel": 28485,
+              "errorMm": 0.000011871433173382684
+            },
+            {
+              "id": "boundary-28742",
+              "pixel": 28742,
+              "errorMm": 0.000008324470229581493
+            },
+            {
+              "id": "boundary-29114",
+              "pixel": 29114,
+              "errorMm": 0.00000931971078443894
+            },
+            {
+              "id": "boundary-29509",
+              "pixel": 29509,
+              "errorMm": 0.000015277084798981377
+            },
+            {
+              "id": "boundary-29882",
+              "pixel": 29882,
+              "errorMm": 0.000008594533483119449
+            },
+            {
+              "id": "boundary-30140",
+              "pixel": 30140,
+              "errorMm": 0.0000230557840268375
+            },
+            {
+              "id": "boundary-30531",
+              "pixel": 30531,
+              "errorMm": 0.000006019647003085993
+            },
+            {
+              "id": "boundary-30908",
+              "pixel": 30908,
+              "errorMm": 0.000006850492638932337
+            },
+            {
+              "id": "boundary-31299",
+              "pixel": 31299,
+              "errorMm": 0.000016443954336864408
+            },
+            {
+              "id": "boundary-31556",
+              "pixel": 31556,
+              "errorMm": 0.000013592547247753828
+            },
+            {
+              "id": "boundary-31932",
+              "pixel": 31932,
+              "errorMm": 0.000025270733146953717
+            },
+            {
+              "id": "boundary-32323",
+              "pixel": 32323,
+              "errorMm": 0.000004027583372590016
+            },
+            {
+              "id": "boundary-32580",
+              "pixel": 32580,
+              "errorMm": 0.000004801058594239294
+            },
+            {
+              "id": "boundary-32956",
+              "pixel": 32956,
+              "errorMm": 0.000004992791787117312
+            },
+            {
+              "id": "boundary-33347",
+              "pixel": 33347,
+              "errorMm": 0.000006516000041756342
+            },
+            {
+              "id": "boundary-33604",
+              "pixel": 33604,
+              "errorMm": 0.000024557005872338777
+            },
+            {
+              "id": "boundary-33980",
+              "pixel": 33980,
+              "errorMm": 0.000012751782662689948
+            },
+            {
+              "id": "boundary-34371",
+              "pixel": 34371,
+              "errorMm": 0.000016548030885132903
+            },
+            {
+              "id": "boundary-34628",
+              "pixel": 34628,
+              "errorMm": 0.000006304487669694936
+            },
+            {
+              "id": "boundary-35004",
+              "pixel": 35004,
+              "errorMm": 0.000006019647003085993
+            },
+            {
+              "id": "boundary-35395",
+              "pixel": 35395,
+              "errorMm": 0.0000230557840268375
+            },
+            {
+              "id": "boundary-35653",
+              "pixel": 35653,
+              "errorMm": 0.000008594533483119449
+            },
+            {
+              "id": "boundary-36026",
+              "pixel": 36026,
+              "errorMm": 0.000015277084798981377
+            },
+            {
+              "id": "boundary-36420",
+              "pixel": 36420,
+              "errorMm": 0.00003671003372573978
+            },
+            {
+              "id": "boundary-36678",
+              "pixel": 36678,
+              "errorMm": 0.000008324470229581493
+            },
+            {
+              "id": "boundary-37049",
+              "pixel": 37049,
+              "errorMm": 0.000012209778049054876
+            },
+            {
+              "id": "boundary-37445",
+              "pixel": 37445,
+              "errorMm": 0.00002118111069648876
+            },
+            {
+              "id": "boundary-37703",
+              "pixel": 37703,
+              "errorMm": 0.0000014316849501483375
+            },
+            {
+              "id": "boundary-38072",
+              "pixel": 38072,
+              "errorMm": 0.000017102866422646912
+            },
+            {
+              "id": "boundary-38471",
+              "pixel": 38471,
+              "errorMm": 0.000005444425426048838
+            },
+            {
+              "id": "boundary-38728",
+              "pixel": 38728,
+              "errorMm": 0.000017792723667753307
+            },
+            {
+              "id": "boundary-39094",
+              "pixel": 39094,
+              "errorMm": 0.0000059648901356013084
+            },
+            {
+              "id": "boundary-39497",
+              "pixel": 39497,
+              "errorMm": 0.00001063524143773975
+            },
+            {
+              "id": "boundary-39861",
+              "pixel": 39861,
+              "errorMm": 0.000011512189303175546
+            },
+            {
+              "id": "boundary-40117",
+              "pixel": 40117,
+              "errorMm": 0.000008786974774466216
+            },
+            {
+              "id": "boundary-40524",
+              "pixel": 40524,
+              "errorMm": 0.000006461855434736208
+            },
+            {
+              "id": "boundary-40883",
+              "pixel": 40883,
+              "errorMm": 0.000019369062329133158
+            },
+            {
+              "id": "boundary-41139",
+              "pixel": 41139,
+              "errorMm": 0.000015323429693125945
+            },
+            {
+              "id": "boundary-41550",
+              "pixel": 41550,
+              "errorMm": 0.000007171981280862383
+            },
+            {
+              "id": "boundary-42063",
+              "pixel": 42063,
+              "errorMm": 0.000011209319040972332
+            },
+            {
+              "id": "boundary-42320",
+              "pixel": 42320,
+              "errorMm": 0.000011675059795379639
+            },
+            {
+              "id": "boundary-42670",
+              "pixel": 42670,
+              "errorMm": 0.000023992777812509303
+            },
+            {
+              "id": "boundary-43090",
+              "pixel": 43090,
+              "errorMm": 0.000017527900581626454
+            },
+            {
+              "id": "boundary-43348",
+              "pixel": 43348,
+              "errorMm": 0.000007495915042454726
+            },
+            {
+              "id": "boundary-43690",
+              "pixel": 43690,
+              "errorMm": 0.000014640390872955322
+            },
+            {
+              "id": "boundary-44118",
+              "pixel": 44118,
+              "errorMm": 0.000002483039054368419
+            },
+            {
+              "id": "boundary-44376",
+              "pixel": 44376,
+              "errorMm": 0.000019154013841671258
+            },
+            {
+              "id": "boundary-44710",
+              "pixel": 44710,
+              "errorMm": 0.000023992777698822465
+            },
+            {
+              "id": "boundary-44965",
+              "pixel": 44965,
+              "errorMm": 0.000011675059795379639
+            },
+            {
+              "id": "boundary-45219",
+              "pixel": 45219,
+              "errorMm": 0.00001041891511022186
+            },
+            {
+              "id": "boundary-45474",
+              "pixel": 45474,
+              "errorMm": 0.0000074042573032784276
+            },
+            {
+              "id": "boundary-45729",
+              "pixel": 45729,
+              "errorMm": 0.000021717686195188435
+            },
+            {
+              "id": "boundary-45921",
+              "pixel": 45921,
+              "errorMm": 0.0000065153237187587365
+            },
+            {
+              "id": "boundary-46176",
+              "pixel": 46176,
+              "errorMm": 0.000008524404165655142
+            },
+            {
+              "id": "boundary-46238",
+              "pixel": 46238,
+              "errorMm": 0.000010274157716594345
+            },
+            {
+              "id": "boundary-46437",
+              "pixel": 46437,
+              "errorMm": 0.000006541944514992792
+            },
+            {
+              "id": "boundary-46692",
+              "pixel": 46692,
+              "errorMm": 0.000009756203553479281
+            },
+            {
+              "id": "boundary-46746",
+              "pixel": 46746,
+              "errorMm": 0.000010437448452194076
+            },
+            {
+              "id": "boundary-46953",
+              "pixel": 46953,
+              "errorMm": 0.0000155052712784709
+            },
+            {
+              "id": "boundary-47208",
+              "pixel": 47208,
+              "errorMm": 0.000020614385277895053
+            },
+            {
+              "id": "boundary-47251",
+              "pixel": 47251,
+              "errorMm": 0.0000013954835367258056
+            },
+            {
+              "id": "boundary-47467",
+              "pixel": 47467,
+              "errorMm": 0.0000013126861517775978
+            },
+            {
+              "id": "boundary-47472",
+              "pixel": 47472,
+              "errorMm": 0.000008322783514813636
+            },
+            {
+              "id": "boundary-47507",
+              "pixel": 47507,
+              "errorMm": 0.000008259832895873842
+            },
+            {
+              "id": "boundary-47728",
+              "pixel": 47728,
+              "errorMm": 0.000016399013929913053
+            },
+            {
+              "id": "boundary-47755",
+              "pixel": 47755,
+              "errorMm": 0.000008399433113481791
+            },
+            {
+              "id": "boundary-47760",
+              "pixel": 47760,
+              "errorMm": 0.000011320494991196028
+            },
+            {
+              "id": "boundary-47988",
+              "pixel": 47988,
+              "errorMm": 0.000007507483758217859
+            },
+            {
+              "id": "boundary-47993",
+              "pixel": 47993,
+              "errorMm": 0.0000023585074586662813
+            },
+            {
+              "id": "boundary-47998",
+              "pixel": 47998,
+              "errorMm": 0.000018106334209733177
+            },
+            {
+              "id": "boundary-48004",
+              "pixel": 48004,
+              "errorMm": 0.000013515589273538353
+            },
+            {
+              "id": "boundary-48009",
+              "pixel": 48009,
+              "errorMm": 0.000004780086953815044
+            },
+            {
+              "id": "boundary-48014",
+              "pixel": 48014,
+              "errorMm": 0.00003914601421683983
+            },
+            {
+              "id": "boundary-48250",
+              "pixel": 48250,
+              "errorMm": 0.000016557636058678327
+            },
+            {
+              "id": "boundary-48255",
+              "pixel": 48255,
+              "errorMm": 0.000004985227178622154
+            },
+            {
+              "id": "boundary-48260",
+              "pixel": 48260,
+              "errorMm": 0.000012621105497601093
+            },
+            {
+              "id": "boundary-48266",
+              "pixel": 48266,
+              "errorMm": 0.000020911070407692023
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "small-matte-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.00003914601421683983,
+      "meshQuality": {
+        "pass": true,
+        "blockers": [],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "pass",
+          "bandPixels": 2,
+          "pixels": 684,
+          "anchors": 128,
+          "maximumErrorMm": 0.00003914601421683983,
+          "errors": [
+            {
+              "id": "boundary-17269",
+              "pixel": 17269,
+              "errorMm": 0.000020911070407692023
+            },
+            {
+              "id": "boundary-17274",
+              "pixel": 17274,
+              "errorMm": 0.000016557636058678327
+            },
+            {
+              "id": "boundary-17279",
+              "pixel": 17279,
+              "errorMm": 0.000004985227178622154
+            },
+            {
+              "id": "boundary-17284",
+              "pixel": 17284,
+              "errorMm": 0.000012621105497601093
+            },
+            {
+              "id": "boundary-17290",
+              "pixel": 17290,
+              "errorMm": 0.000020911070407692023
+            },
+            {
+              "id": "boundary-17525",
+              "pixel": 17525,
+              "errorMm": 0.000014098692247443978
+            },
+            {
+              "id": "boundary-17530",
+              "pixel": 17530,
+              "errorMm": 0.000007160383461268793
+            },
+            {
+              "id": "boundary-17537",
+              "pixel": 17537,
+              "errorMm": 0.000018106334209733177
+            },
+            {
+              "id": "boundary-17542",
+              "pixel": 17542,
+              "errorMm": 0.0000023585074586662813
+            },
+            {
+              "id": "boundary-17547",
+              "pixel": 17547,
+              "errorMm": 0.000007507483758217859
+            },
+            {
+              "id": "boundary-17775",
+              "pixel": 17775,
+              "errorMm": 0.000011320494991196028
+            },
+            {
+              "id": "boundary-17780",
+              "pixel": 17780,
+              "errorMm": 0.000008399433113481791
+            },
+            {
+              "id": "boundary-17807",
+              "pixel": 17807,
+              "errorMm": 0.000016399013929913053
+            },
+            {
+              "id": "boundary-18028",
+              "pixel": 18028,
+              "errorMm": 0.000008259832895873842
+            },
+            {
+              "id": "boundary-18063",
+              "pixel": 18063,
+              "errorMm": 0.000008322783514813636
+            },
+            {
+              "id": "boundary-18069",
+              "pixel": 18069,
+              "errorMm": 0.000001987236657896574
+            },
+            {
+              "id": "boundary-18323",
+              "pixel": 18323,
+              "errorMm": 0.0000013954835367258056
+            },
+            {
+              "id": "boundary-18534",
+              "pixel": 18534,
+              "errorMm": 0.000002826996535532089
+            },
+            {
+              "id": "boundary-18583",
+              "pixel": 18583,
+              "errorMm": 0.00001787808264452906
+            },
+            {
+              "id": "boundary-18790",
+              "pixel": 18790,
+              "errorMm": 0.000009961834962268767
+            },
+            {
+              "id": "boundary-19042",
+              "pixel": 19042,
+              "errorMm": 0.000023354707707312627
+            },
+            {
+              "id": "boundary-19099",
+              "pixel": 19099,
+              "errorMm": 0.00001148110067106245
+            },
+            {
+              "id": "boundary-19298",
+              "pixel": 19298,
+              "errorMm": 0.000015311676747842284
+            },
+            {
+              "id": "boundary-19550",
+              "pixel": 19550,
+              "errorMm": 0.000003386233743185585
+            },
+            {
+              "id": "boundary-19615",
+              "pixel": 19615,
+              "errorMm": 0.000019471077962407435
+            },
+            {
+              "id": "boundary-19807",
+              "pixel": 19807,
+              "errorMm": 0.00000117222612061596
+            },
+            {
+              "id": "boundary-20130",
+              "pixel": 20130,
+              "errorMm": 0.0000074042573032784276
+            },
+            {
+              "id": "boundary-20387",
+              "pixel": 20387,
+              "errorMm": 0.00001041891511022186
+            },
+            {
+              "id": "boundary-20571",
+              "pixel": 20571,
+              "errorMm": 0.000004844605825837789
+            },
+            {
+              "id": "boundary-20902",
+              "pixel": 20902,
+              "errorMm": 0.000023992777698822465
+            },
+            {
+              "id": "boundary-21160",
+              "pixel": 21160,
+              "errorMm": 0.00001593765512097889
+            },
+            {
+              "id": "boundary-21589",
+              "pixel": 21589,
+              "errorMm": 0.000013804808929762657
+            },
+            {
+              "id": "boundary-21930",
+              "pixel": 21930,
+              "errorMm": 0.000014640390872955322
+            },
+            {
+              "id": "boundary-22188",
+              "pixel": 22188,
+              "errorMm": 0.00000233844752983714
+            },
+            {
+              "id": "boundary-22609",
+              "pixel": 22609,
+              "errorMm": 0.000017329323952708364
+            },
+            {
+              "id": "boundary-22958",
+              "pixel": 22958,
+              "errorMm": 0.000023992777812509303
+            },
+            {
+              "id": "boundary-23216",
+              "pixel": 23216,
+              "errorMm": 0.000017822389622779156
+            },
+            {
+              "id": "boundary-23630",
+              "pixel": 23630,
+              "errorMm": 0.000009793171841465664
+            },
+            {
+              "id": "boundary-23886",
+              "pixel": 23886,
+              "errorMm": 0.000007171981280862383
+            },
+            {
+              "id": "boundary-24243",
+              "pixel": 24243,
+              "errorMm": 0.0000030545620575139765
+            },
+            {
+              "id": "boundary-24651",
+              "pixel": 24651,
+              "errorMm": 0.000008755733063026128
+            },
+            {
+              "id": "boundary-24908",
+              "pixel": 24908,
+              "errorMm": 0.000006461855434736208
+            },
+            {
+              "id": "boundary-25269",
+              "pixel": 25269,
+              "errorMm": 0.00002392317315980108
+            },
+            {
+              "id": "boundary-25673",
+              "pixel": 25673,
+              "errorMm": 0.000011391356224521587
+            },
+            {
+              "id": "boundary-25930",
+              "pixel": 25930,
+              "errorMm": 0.000006568778530890995
+            },
+            {
+              "id": "boundary-26295",
+              "pixel": 26295,
+              "errorMm": 0.00000251175481480459
+            },
+            {
+              "id": "boundary-26695",
+              "pixel": 26695,
+              "errorMm": 0.000020167465663689654
+            },
+            {
+              "id": "boundary-26952",
+              "pixel": 26952,
+              "errorMm": 0.00001547658337130997
+            },
+            {
+              "id": "boundary-27462",
+              "pixel": 27462,
+              "errorMm": 0.0000014686405620523146
+            },
+            {
+              "id": "boundary-27719",
+              "pixel": 27719,
+              "errorMm": 0.0000014316849501483375
+            },
+            {
+              "id": "boundary-28089",
+              "pixel": 28089,
+              "errorMm": 0.000005979274874334806
+            },
+            {
+              "id": "boundary-28485",
+              "pixel": 28485,
+              "errorMm": 0.000011871433173382684
+            },
+            {
+              "id": "boundary-28742",
+              "pixel": 28742,
+              "errorMm": 0.000008324470229581493
+            },
+            {
+              "id": "boundary-29114",
+              "pixel": 29114,
+              "errorMm": 0.00000931971078443894
+            },
+            {
+              "id": "boundary-29509",
+              "pixel": 29509,
+              "errorMm": 0.000015277084798981377
+            },
+            {
+              "id": "boundary-29882",
+              "pixel": 29882,
+              "errorMm": 0.000008594533483119449
+            },
+            {
+              "id": "boundary-30140",
+              "pixel": 30140,
+              "errorMm": 0.0000230557840268375
+            },
+            {
+              "id": "boundary-30531",
+              "pixel": 30531,
+              "errorMm": 0.000006019647003085993
+            },
+            {
+              "id": "boundary-30908",
+              "pixel": 30908,
+              "errorMm": 0.000006850492638932337
+            },
+            {
+              "id": "boundary-31299",
+              "pixel": 31299,
+              "errorMm": 0.000016443954336864408
+            },
+            {
+              "id": "boundary-31556",
+              "pixel": 31556,
+              "errorMm": 0.000013592547247753828
+            },
+            {
+              "id": "boundary-31932",
+              "pixel": 31932,
+              "errorMm": 0.000025270733146953717
+            },
+            {
+              "id": "boundary-32323",
+              "pixel": 32323,
+              "errorMm": 0.000004027583372590016
+            },
+            {
+              "id": "boundary-32580",
+              "pixel": 32580,
+              "errorMm": 0.000004801058594239294
+            },
+            {
+              "id": "boundary-32956",
+              "pixel": 32956,
+              "errorMm": 0.000004992791787117312
+            },
+            {
+              "id": "boundary-33347",
+              "pixel": 33347,
+              "errorMm": 0.000006516000041756342
+            },
+            {
+              "id": "boundary-33604",
+              "pixel": 33604,
+              "errorMm": 0.000024557005872338777
+            },
+            {
+              "id": "boundary-33980",
+              "pixel": 33980,
+              "errorMm": 0.000012751782662689948
+            },
+            {
+              "id": "boundary-34371",
+              "pixel": 34371,
+              "errorMm": 0.000016548030885132903
+            },
+            {
+              "id": "boundary-34628",
+              "pixel": 34628,
+              "errorMm": 0.000006304487669694936
+            },
+            {
+              "id": "boundary-35004",
+              "pixel": 35004,
+              "errorMm": 0.000006019647003085993
+            },
+            {
+              "id": "boundary-35395",
+              "pixel": 35395,
+              "errorMm": 0.0000230557840268375
+            },
+            {
+              "id": "boundary-35653",
+              "pixel": 35653,
+              "errorMm": 0.000008594533483119449
+            },
+            {
+              "id": "boundary-36026",
+              "pixel": 36026,
+              "errorMm": 0.000015277084798981377
+            },
+            {
+              "id": "boundary-36420",
+              "pixel": 36420,
+              "errorMm": 0.00003671003372573978
+            },
+            {
+              "id": "boundary-36678",
+              "pixel": 36678,
+              "errorMm": 0.000008324470229581493
+            },
+            {
+              "id": "boundary-37049",
+              "pixel": 37049,
+              "errorMm": 0.000012209778049054876
+            },
+            {
+              "id": "boundary-37445",
+              "pixel": 37445,
+              "errorMm": 0.00002118111069648876
+            },
+            {
+              "id": "boundary-37703",
+              "pixel": 37703,
+              "errorMm": 0.0000014316849501483375
+            },
+            {
+              "id": "boundary-38072",
+              "pixel": 38072,
+              "errorMm": 0.000017102866422646912
+            },
+            {
+              "id": "boundary-38471",
+              "pixel": 38471,
+              "errorMm": 0.000005444425426048838
+            },
+            {
+              "id": "boundary-38728",
+              "pixel": 38728,
+              "errorMm": 0.000017792723667753307
+            },
+            {
+              "id": "boundary-39094",
+              "pixel": 39094,
+              "errorMm": 0.0000059648901356013084
+            },
+            {
+              "id": "boundary-39497",
+              "pixel": 39497,
+              "errorMm": 0.00001063524143773975
+            },
+            {
+              "id": "boundary-39861",
+              "pixel": 39861,
+              "errorMm": 0.000011512189303175546
+            },
+            {
+              "id": "boundary-40117",
+              "pixel": 40117,
+              "errorMm": 0.000008786974774466216
+            },
+            {
+              "id": "boundary-40524",
+              "pixel": 40524,
+              "errorMm": 0.000006461855434736208
+            },
+            {
+              "id": "boundary-40883",
+              "pixel": 40883,
+              "errorMm": 0.000019369062329133158
+            },
+            {
+              "id": "boundary-41139",
+              "pixel": 41139,
+              "errorMm": 0.000015323429693125945
+            },
+            {
+              "id": "boundary-41550",
+              "pixel": 41550,
+              "errorMm": 0.000007171981280862383
+            },
+            {
+              "id": "boundary-42063",
+              "pixel": 42063,
+              "errorMm": 0.000011209319040972332
+            },
+            {
+              "id": "boundary-42320",
+              "pixel": 42320,
+              "errorMm": 0.000011675059795379639
+            },
+            {
+              "id": "boundary-42670",
+              "pixel": 42670,
+              "errorMm": 0.000023992777812509303
+            },
+            {
+              "id": "boundary-43090",
+              "pixel": 43090,
+              "errorMm": 0.000017527900581626454
+            },
+            {
+              "id": "boundary-43348",
+              "pixel": 43348,
+              "errorMm": 0.000007495915042454726
+            },
+            {
+              "id": "boundary-43690",
+              "pixel": 43690,
+              "errorMm": 0.000014640390872955322
+            },
+            {
+              "id": "boundary-44118",
+              "pixel": 44118,
+              "errorMm": 0.000002483039054368419
+            },
+            {
+              "id": "boundary-44376",
+              "pixel": 44376,
+              "errorMm": 0.000019154013841671258
+            },
+            {
+              "id": "boundary-44710",
+              "pixel": 44710,
+              "errorMm": 0.000023992777698822465
+            },
+            {
+              "id": "boundary-44965",
+              "pixel": 44965,
+              "errorMm": 0.000011675059795379639
+            },
+            {
+              "id": "boundary-45219",
+              "pixel": 45219,
+              "errorMm": 0.00001041891511022186
+            },
+            {
+              "id": "boundary-45474",
+              "pixel": 45474,
+              "errorMm": 0.0000074042573032784276
+            },
+            {
+              "id": "boundary-45729",
+              "pixel": 45729,
+              "errorMm": 0.000021717686195188435
+            },
+            {
+              "id": "boundary-45921",
+              "pixel": 45921,
+              "errorMm": 0.0000065153237187587365
+            },
+            {
+              "id": "boundary-46176",
+              "pixel": 46176,
+              "errorMm": 0.000008524404165655142
+            },
+            {
+              "id": "boundary-46238",
+              "pixel": 46238,
+              "errorMm": 0.000010274157716594345
+            },
+            {
+              "id": "boundary-46437",
+              "pixel": 46437,
+              "errorMm": 0.000006541944514992792
+            },
+            {
+              "id": "boundary-46692",
+              "pixel": 46692,
+              "errorMm": 0.000009756203553479281
+            },
+            {
+              "id": "boundary-46746",
+              "pixel": 46746,
+              "errorMm": 0.000010437448452194076
+            },
+            {
+              "id": "boundary-46953",
+              "pixel": 46953,
+              "errorMm": 0.0000155052712784709
+            },
+            {
+              "id": "boundary-47208",
+              "pixel": 47208,
+              "errorMm": 0.000020614385277895053
+            },
+            {
+              "id": "boundary-47251",
+              "pixel": 47251,
+              "errorMm": 0.0000013954835367258056
+            },
+            {
+              "id": "boundary-47467",
+              "pixel": 47467,
+              "errorMm": 0.0000013126861517775978
+            },
+            {
+              "id": "boundary-47472",
+              "pixel": 47472,
+              "errorMm": 0.000008322783514813636
+            },
+            {
+              "id": "boundary-47507",
+              "pixel": 47507,
+              "errorMm": 0.000008259832895873842
+            },
+            {
+              "id": "boundary-47728",
+              "pixel": 47728,
+              "errorMm": 0.000016399013929913053
+            },
+            {
+              "id": "boundary-47755",
+              "pixel": 47755,
+              "errorMm": 0.000008399433113481791
+            },
+            {
+              "id": "boundary-47760",
+              "pixel": 47760,
+              "errorMm": 0.000011320494991196028
+            },
+            {
+              "id": "boundary-47988",
+              "pixel": 47988,
+              "errorMm": 0.000007507483758217859
+            },
+            {
+              "id": "boundary-47993",
+              "pixel": 47993,
+              "errorMm": 0.0000023585074586662813
+            },
+            {
+              "id": "boundary-47998",
+              "pixel": 47998,
+              "errorMm": 0.000018106334209733177
+            },
+            {
+              "id": "boundary-48004",
+              "pixel": 48004,
+              "errorMm": 0.000013515589273538353
+            },
+            {
+              "id": "boundary-48009",
+              "pixel": 48009,
+              "errorMm": 0.000004780086953815044
+            },
+            {
+              "id": "boundary-48014",
+              "pixel": 48014,
+              "errorMm": 0.00003914601421683983
+            },
+            {
+              "id": "boundary-48250",
+              "pixel": 48250,
+              "errorMm": 0.000016557636058678327
+            },
+            {
+              "id": "boundary-48255",
+              "pixel": 48255,
+              "errorMm": 0.000004985227178622154
+            },
+            {
+              "id": "boundary-48260",
+              "pixel": 48260,
+              "errorMm": 0.000012621105497601093
+            },
+            {
+              "id": "boundary-48266",
+              "pixel": 48266,
+              "errorMm": 0.000020911070407692023
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createCanvas,loadImage} from '@napi-rs/canvas';import {createHash} from 'node:crypto';
-const out=path.resolve(process.argv[2]??'outputs/depth-continuous-20261003'),canvas=createCanvas(1024,1620),ctx=canvas.getContext('2d'),roi=[520,180,860,620] as const;
+const out=path.resolve(process.argv[2]??'outputs/depth-continuous-20261003/refined'),canvas=createCanvas(1024,1620),ctx=canvas.getContext('2d'),roi=[520,180,860,620] as const;
 ctx.fillStyle='#dededb';ctx.fillRect(0,0,1024,1620);ctx.fillStyle='#111';ctx.font='14px sans-serif';
 for(const [row,view,style] of [[0,'front','clay'],[1,'iso','clay'],[2,'iso','clay']] as const){
  const a=JSON.parse(fs.readFileSync(path.join(out,'renders',`large-checker-depth.grid-${view}-${style}.json`),'utf8')),b=JSON.parse(fs.readFileSync(path.join(out,'renders',`large-checker-depth.continuous-${view}-${style}.json`),'utf8'));

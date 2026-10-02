@@ -1,0 +1,26 @@
+[
+  {
+    "name": "large-checker-depth.grid-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.grid-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.grid-iso-wire",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.continuous-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.continuous-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.continuous-iso-wire",
+    "exitCode": 0
+  }
+]

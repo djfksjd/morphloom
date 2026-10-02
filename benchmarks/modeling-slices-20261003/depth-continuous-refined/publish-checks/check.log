@@ -1,0 +1,3 @@
+
+> morphloom@0.4.0 check
+> tsc -b --pretty false

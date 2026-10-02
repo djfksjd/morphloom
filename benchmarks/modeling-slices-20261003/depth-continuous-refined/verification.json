@@ -1,0 +1,826 @@
+{
+  "schema": "morphloom.slice-evidence/0.1",
+  "basePublishedCommit": "c8e4dba41b1748c112425fdc9046fa760649dd02",
+  "baselineGridCommit": "f734ce0c941464daa0fb87bd82024d48ef38b09b",
+  "engineRevision": "morphloom.depth-surface-engine/0.3.1",
+  "sourceFiles": [
+    {
+      "path": "src/engine/depth-surface.ts",
+      "sha256": "17dcdaebbd1fc56230a0789d9d2db0f076311a99c53937b0bfcd824fff61e81c"
+    },
+    {
+      "path": "src/engine/depth-continuous.ts",
+      "sha256": "0d632729cb71bf7e66345fde2bc76688d870894f0f0405ba0c3e53a3d5321160"
+    },
+    {
+      "path": "src/engine/depth-sphere-refinement.ts",
+      "sha256": "4d5b01dfcde72fe54eac7afb8b4df12badee72144a34fe85712915487f4c7eb9"
+    },
+    {
+      "path": "src/engine/depth-mesh-sampling.ts",
+      "sha256": "dd7c2a5d12776c894d0e7c19fc929c2ce4353a77152ceb8d7eccc7bbb3112381"
+    },
+    {
+      "path": "src/DepthEditor.tsx",
+      "sha256": "bd17f32e31324dbc450dd20f4c150923779711c50bb4c7ea0010df637f048360"
+    },
+    {
+      "path": "tests/depth-continuous.test.ts",
+      "sha256": "5f2b824af3b9ab0c7c8fa02283b59a4f647b1d45da21a6d9a6e1ac5841e94350"
+    },
+    {
+      "path": "scripts/depth-continuous-evidence.ts",
+      "sha256": "cd6736c1a2b76666007508996d0eece7aa0fa86259ed65eb7d51e5dbb24cc1bc"
+    },
+    {
+      "path": "scripts/depth-continuous-projected-audit.ts",
+      "sha256": "6e8ad2c5a51a416af3a799b2c49cbdfb25bff50ade40fc4f1551c1208e402a05"
+    },
+    {
+      "path": "scripts/depth-continuous-compare.ts",
+      "sha256": "4ec7edb7c39e2ac1c0d37bce189ce3f8d6d817450dfd42998b73f0ed702d7d18"
+    },
+    {
+      "path": "docs/DEPTH_CONTINUOUS_CONTRACT.ko.md",
+      "sha256": "51042c9395b68b4aa995a3b1cf452bdd96cee58e9e3c23c70f37ba6ec5ab32d3"
+    },
+    {
+      "path": "docs/DEPTH_CONTINUOUS_STATUS.ko.md",
+      "sha256": "850b9e892fab4edd9688cf1219e0d95325c27ebe7c5f9577267c10f07b8f2b18"
+    },
+    {
+      "path": "docs/MORPHLOOM_WORK_STATE.ko.md",
+      "sha256": "57c53bbb7238d30b73a8248fdf0b1a563a5cf58a5d174f8cbc17404af7b575b1"
+    },
+    {
+      "path": "schemas/depth-surface.schema.json",
+      "sha256": "163fe7cad606c7b14ddee894289f3482e9e87b7477bfc6933e862a87aa427952"
+    }
+  ],
+  "inputFiles": [
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/bearing-ball-depth.depth.json",
+      "sha256": "f7f0c101687a438908764fa1b8f2703637add75d7f5cdab6a3ac80a8704c4083"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/large-matte-depth.depth.json",
+      "sha256": "edc143a3f6ad29b856a806ef90865fe0eca3927c89331a82576b43fb74430afb"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/large-checker-depth.depth.json",
+      "sha256": "3b677be8b073cbe2baf461ad7017c340ffbb8753ef1f5c4633c3c4e7cb6e1418"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/torus-depth.depth.json",
+      "sha256": "ee60504b24d0b55881796b8b71c16ac1a04d3e6d4dc11e6391164c26070e41fd"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/small-matte-depth.depth.json",
+      "sha256": "3805dd618a05c34d82c1690447ec462a8dedc603ad3951c9c996023056be6458"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/fixtures/small-checker-depth.depth.json",
+      "sha256": "23692f5b0993fb87c3e864798dd1cf520ef82a2c32952d24f9196f388dc7c6b0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-boundary/bearing.elements.json",
+      "sha256": "791c0a39aa09ad053f954318792d97fde5ebcef438070b85917097a6b857ab8c"
+    }
+  ],
+  "sourceTests": {
+    "files": 93,
+    "tests": 655,
+    "status": "pass"
+  },
+  "publishedTests": {
+    "files": 90,
+    "tests": 636,
+    "status": "pass"
+  },
+  "publishedChecks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 4.407
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 65.039
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 5.618
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0,
+      "seconds": 6.104
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "quality:production"
+      ],
+      "exitCode": 1,
+      "seconds": 14.358
+    }
+  ],
+  "freshCloneReplayExactNativeAndGlb": 10,
+  "actualGlbMaximumAnchorErrorMm": 0.00013527168800919753,
+  "missingForegroundPixels": 0,
+  "blenderFiles": 10,
+  "nodeBrowserExactBytes": 2,
+  "blenderBallEditReopenRestore": "pass",
+  "requirements": [
+    {
+      "id": "existing-geometry-reuse",
+      "status": "proven",
+      "evidence": "src/engine/depth-continuous.ts + depth-sphere-refinement.ts: Three SphereGeometry/ConvexHull, no dependency changes"
+    },
+    {
+      "id": "preserve-source-contract-and-release",
+      "status": "proven",
+      "evidence": "evidence.json rawSourcesPreserved/priorBearingProjectUnchanged; tests; all GLB releasefalse"
+    },
+    {
+      "id": "versioned-opt-in-and-legacy",
+      "status": "proven",
+      "evidence": "native0.3/op0.1; migrations/tests; 5 grid GLB hashes identical to f734ce0"
+    },
+    {
+      "id": "bounded-continuous-geometry",
+      "status": "proven",
+      "evidence": "evidence.json all5 chord/vertex/normal/rim/topology/UV and existing budget assertions"
+    },
+    {
+      "id": "actual-mesh-depth-and-independent-boundary",
+      "status": "proven",
+      "evidence": "projected-mesh-audit.json all5 .001mm/no missing; held-out independence regression"
+    },
+    {
+      "id": "two-scales-finishes-ball-rejections",
+      "status": "proven",
+      "evidence": "evidence generator passing torus/hole/crop assertions plus test rejection cases"
+    },
+    {
+      "id": "same-neutral-view-and-closeup",
+      "status": "proven",
+      "evidence": "renders/*.json six current source/image hashes; comparison.json/png inspected"
+    },
+    {
+      "id": "editing-history-native-export",
+      "status": "proven",
+      "evidence": "browser/workflow.json and actual saves/source preservation; 2exact Node/browser GLBs"
+    },
+    {
+      "id": "Blender-reopen-edit-restore",
+      "status": "proven",
+      "evidence": "blender-canonical10 current hash receipts; blender-edit actual1mm edit/restoration/2Khronos"
+    },
+    {
+      "id": "checkpoint-and-failure-rediagnosis",
+      "status": "proven",
+      "evidence": "prior-failure/checkpoint and old actualmesh audit, status historical failure preserved"
+    },
+    {
+      "id": "UNI_AI-bounded-public-review",
+      "status": "proven",
+      "evidence": "uniai-status/review second2501tokens, prior-failure firsttimeout unknown; no raw images/key"
+    },
+    {
+      "id": "current-checks-reproduction",
+      "status": "proven",
+      "evidence": "publish-checks fivecommands; fresh clone replay output/native exact"
+    },
+    {
+      "id": "limitations-and-failed-production",
+      "status": "proven",
+      "evidence": "status: production0/3blocked; open surface; UVdistortion; expert/product/manufacturing not-run"
+    },
+    {
+      "id": "preserve-user-work",
+      "status": "proven",
+      "evidence": "source index unchanged; isolated clone12sourcefileallowlist; user19simtests excluded"
+    }
+  ],
+  "publication": "pending remote verification",
+  "limitations": [
+    "diagnostic authored fixture; inferred open visible surface; releaseAllowed:false",
+    "large projected UV distortion at rim; texel density/padding/mip/baking not-run",
+    "expert/real product/manufacturing/BREP not-run",
+    "production independent evidence0/3 FAIL",
+    "source Git index128; user changes preserved",
+    "first UNI_AI review token/billing unknown"
+  ],
+  "artifactFiles": [
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/ball_0000.continuous.depth.json",
+      "bytes": 1375330,
+      "sha256": "3a5508fc9b4c0e652c285dc3506f6c0fa4ac0288caf421025b9f9e35c332efb3"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/ball_0000.continuous.glb",
+      "bytes": 897184,
+      "sha256": "760d8131884fbbad066211025d5b8cd4329264615e16ce7bb52e082e486a1d06"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/ball_0000.grid.depth.json",
+      "bytes": 1375227,
+      "sha256": "26be6224542bc57b2149c6d252f1aa449f51e10aba7a9c87f8fa9a77fc03d348"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/ball_0000.grid.glb",
+      "bytes": 130740,
+      "sha256": "d9978deee82aeacbaba3600d17493202a3058b8d497aad8aaebe85d2980d32a3"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.continuous.json",
+      "bytes": 2697,
+      "sha256": "bcc71750f20d9f66437ca201a497f611aaedfc39f931ddd5e363939ca7919404"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.continuous.log",
+      "bytes": 3605,
+      "sha256": "12ebdb8a6c842d09540a4bbe44125c52c755278cfbeebd2846b7a93ab2d6ae27"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.continuous.roundtrip.glb",
+      "bytes": 896304,
+      "sha256": "f57f88d539005c002821cdb74247f2a3fd34e62fc54399744a29ad9aa66bf673"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.grid.json",
+      "bytes": 2709,
+      "sha256": "38a782788e577671dcc6a797ce892c21c7f1b35ed4e08175c04acdeee2ac1a64"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.grid.log",
+      "bytes": 3618,
+      "sha256": "9a2e2a70babc690a00840f1e628ab879beb31826eb8bf3d3fd69b455f6eba9ca"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/ball_0000.grid.roundtrip.glb",
+      "bytes": 130044,
+      "sha256": "b0b2bb90d59c010c80c4a1c3ad14a11f4e6dda23f8c3b5657180ac7064fb6a5b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.continuous.json",
+      "bytes": 2727,
+      "sha256": "2f0e987e601ef41491d9c636ea2184004c88daea105ae34c6917736d267c56e0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.continuous.log",
+      "bytes": 3635,
+      "sha256": "df71dcf9e6a20cf7aadadc9b312b2215981b98df7693cf71f79b1827d1d128f7"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.continuous.roundtrip.glb",
+      "bytes": 1532076,
+      "sha256": "71db2c857957fcad8bfb73194ee34d74805bffbc47cff21dcae814317d72b24f"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.grid.json",
+      "bytes": 2695,
+      "sha256": "1a807f972ca305fb5969c9ded037356f829b393a26a64aacff7605b805e77b70"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.grid.log",
+      "bytes": 3604,
+      "sha256": "faeca3e4ee39b19aae864b665163e0073798373299581651e5ffc49bc17f7789"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-checker-depth.grid.roundtrip.glb",
+      "bytes": 276488,
+      "sha256": "ba585625fc7578004a0c0b8f3e5a8ba03a1f03c4d3dd6d16cea2c40117e826c7"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.continuous.json",
+      "bytes": 2723,
+      "sha256": "fe17166bbf04dfde1ce00357243038ce5b8dd423d8abc825e940e7e9076ca499"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.continuous.log",
+      "bytes": 3631,
+      "sha256": "136b47d0e0f9cb5589db882601da726ed529cc21a8f51003a8dc43649efe3e1e"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.continuous.roundtrip.glb",
+      "bytes": 1532072,
+      "sha256": "33a5e3e174a7df4fc3cc78da1c95284e739e575aadd9a1327a58ef30073faae3"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.grid.json",
+      "bytes": 2691,
+      "sha256": "33937d7117d560460d85e16badca8f00e291ff8d49f188af0584cdca9c4e0fa0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.grid.log",
+      "bytes": 3600,
+      "sha256": "a084ebe7d83812950e86b1bef33ed483a9664f6d4c073f96b533bbe521f27a0e"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/large-matte-depth.grid.roundtrip.glb",
+      "bytes": 276484,
+      "sha256": "f950f4595ac213e7a03c733f3e79ec422f0c401213341d0e62c81f6ccedb4c6c"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/results.json",
+      "bytes": 735,
+      "sha256": "db11fbf007454d7f1918f9d8030cbec1b2c4c594729606ae237b7460095d8268"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.continuous.json",
+      "bytes": 2687,
+      "sha256": "6c74c9547f188bc5fc57e236af00a817db1b0c96bde292fef1a181e75a976152"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.continuous.log",
+      "bytes": 3595,
+      "sha256": "beb91a9cbe6a4005a1ebed59adb51f5a053ffdba31a451ec6e58e2bd3e695500"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.continuous.roundtrip.glb",
+      "bytes": 899476,
+      "sha256": "94de4f737d7ed41bf00e23118e26fe76d682c482fb592969b4408e7cfaa3f20e"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.grid.json",
+      "bytes": 2695,
+      "sha256": "665a28f003d3e5b59c7de42b2d2060a039b7e4a6e54078b2d2f7a93a9ecbbf2b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.grid.log",
+      "bytes": 3604,
+      "sha256": "ed9c0570444ad8594ab8a222c2c574651850aa89c1e20b05ca02086258bd44dd"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-checker-depth.grid.roundtrip.glb",
+      "bytes": 130048,
+      "sha256": "6cc4decfca6f2d435d68019262a729623a410d39a4afd8b914b3a7cade988d1c"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.continuous.json",
+      "bytes": 2683,
+      "sha256": "a661c8c90480c07576afac00554946e2e89fe0017e655f3841ac4d4a7fe3fc53"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.continuous.log",
+      "bytes": 3592,
+      "sha256": "ebe59f05eb22aacac4d527cdb6579a27f5177554ccb0e5d8df1fa20b02cb8516"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.continuous.roundtrip.glb",
+      "bytes": 899476,
+      "sha256": "68f14d6d4d99d9fa5391c9e8cd20e21229d66aea71da7496d4dfc0279eda6314"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.grid.json",
+      "bytes": 2691,
+      "sha256": "f152f470cfe7eb692862f609f573efbab51e7698f4a8f5623e22cf0a7e865d22"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.grid.log",
+      "bytes": 3600,
+      "sha256": "4582214063947cc14440bc89c2541599d25e3b2b4961d58a5905b553931189cd"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-canonical/small-matte-depth.grid.roundtrip.glb",
+      "bytes": 130044,
+      "sha256": "d54e11d6cef110bbd5a557c66f638c8d8644aef9d3670c72d4c3bd4e0912e93a"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/audit.json",
+      "bytes": 554,
+      "sha256": "3f374a3121c5511719fbec124bb20c65aa1039bda5debbbef0ac3ce100881591"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/edited.glb",
+      "bytes": 896412,
+      "sha256": "f39ac3adb61dcb4c28c6e93b15f6f010b399dd6d815177db757d0657b6215496"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/edited.glb.validate.log",
+      "bytes": 861,
+      "sha256": "5fc3ba1053c13b32d2f15cb8a3033e625e90ae658e6377a48667721d537ea59f"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/restored.glb",
+      "bytes": 896412,
+      "sha256": "897211ee31023220139fd6a82abb888c66d0863049c6565d8fbdb8600d213c28"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/restored.glb.validate.log",
+      "bytes": 865,
+      "sha256": "90be4d3c89949c2fe9e688a436d99f98c46a08d2ae75c06463c85df1c1d96821"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/blender-edit/standard-results.json",
+      "bytes": 111,
+      "sha256": "a0324e363f80ad79101fe0c698a4bd01ae83d6acc7362eecf8dc662bbbf25fb5"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/ball-continuous.glb",
+      "bytes": 897184,
+      "sha256": "760d8131884fbbad066211025d5b8cd4329264615e16ce7bb52e082e486a1d06"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/ball.png",
+      "bytes": 31141,
+      "sha256": "0d707e36273df2c956782ba9b8f316c23b3cf79135312d79a8936f3700bef8a2"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/checker.png",
+      "bytes": 31858,
+      "sha256": "9ba5dbac1f74c53166b9efae9272b93767088bb6bd484bb026c218f2f33122aa"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/continuous.depth.json",
+      "bytes": 1385592,
+      "sha256": "c7286c2e87ac3c1130e6fc037d408bce0a37c3ae765abc6d4b8021bad8c96582"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/continuous.glb",
+      "bytes": 1532912,
+      "sha256": "e72584fd9487fd3d9ef443c04079296bacc6eea98df9a3ace85d38fd6760d210"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/continuous.png",
+      "bytes": 29645,
+      "sha256": "1fc52d95e52d4b621cbc83f129dcacdba464466087dfc060175372af14eead77"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/edited.depth.json",
+      "bytes": 1385593,
+      "sha256": "9892fd342566ea2d7d0093f4c3f48dc744abe5932ffdf8dbc72b66e068f2370b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/failed.depth.json",
+      "bytes": 1385490,
+      "sha256": "695afc0d95cc62792393df72089d618a2c2d7738b0a6be8ebf87f0f05e8e7f69"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/grid.depth.json",
+      "bytes": 1385490,
+      "sha256": "695afc0d95cc62792393df72089d618a2c2d7738b0a6be8ebf87f0f05e8e7f69"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/grid.png",
+      "bytes": 83770,
+      "sha256": "eed657bd669622ca4d266af717dfa29411f7605f36eadb4cbcd92ceb181d7f94"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/redo-tolerance.depth.json",
+      "bytes": 1385593,
+      "sha256": "9892fd342566ea2d7d0093f4c3f48dc744abe5932ffdf8dbc72b66e068f2370b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/redo.depth.json",
+      "bytes": 1385592,
+      "sha256": "c7286c2e87ac3c1130e6fc037d408bce0a37c3ae765abc6d4b8021bad8c96582"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/reopened.depth.json",
+      "bytes": 1385593,
+      "sha256": "9892fd342566ea2d7d0093f4c3f48dc744abe5932ffdf8dbc72b66e068f2370b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/undo-tolerance.depth.json",
+      "bytes": 1385592,
+      "sha256": "c7286c2e87ac3c1130e6fc037d408bce0a37c3ae765abc6d4b8021bad8c96582"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/undo.depth.json",
+      "bytes": 1385490,
+      "sha256": "695afc0d95cc62792393df72089d618a2c2d7738b0a6be8ebf87f0f05e8e7f69"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/wire.png",
+      "bytes": 35833,
+      "sha256": "b693dc591a24b038f724b634e75e748412675859ef9359a935a96b1882483de0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser/workflow.json",
+      "bytes": 616,
+      "sha256": "f20664682abd741722ac7a81cae6a30c126fd2879b599cefa058bb2ef1516c33"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser-canonical.log",
+      "bytes": 40,
+      "sha256": "6c169404b66f0bb0ee574cec1345b545a93a484e59769d003bc886318125e2c5"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/browser-workflow.py",
+      "bytes": 4037,
+      "sha256": "be6ca28387e5871fa2e66f14d21a5aa7aa1565f4a6c0a5edb1a5dde68b9e2392"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/changed-files.json",
+      "bytes": 347,
+      "sha256": "059706d0e708ccde8e2bad0697da38ccc173a153f10c26d382afe1e5ee640a6f"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/comparison.json",
+      "bytes": 264,
+      "sha256": "4ea8ba7fd843751e5ae498e4128671b5ac5851341e1ae35f2541399d0424d220"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/comparison.log",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/comparison.png",
+      "bytes": 202115,
+      "sha256": "7ebfe5e03cde89c864605a0e70391c7ee038c840ce4fa7d05ee12f939c5cab29"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/evidence-canonical.log",
+      "bytes": 1864,
+      "sha256": "34004cd21860abab98a31d0f9d7d0958e919c325edfccf5edae8352115baaa0a"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/evidence.json",
+      "bytes": 1162062,
+      "sha256": "9d7e55501075c60da5d639ece2233aeec3ac98595b5318834f1fb753e6991707"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-checker-depth.continuous.depth.json",
+      "bytes": 1385592,
+      "sha256": "c7286c2e87ac3c1130e6fc037d408bce0a37c3ae765abc6d4b8021bad8c96582"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-checker-depth.continuous.glb",
+      "bytes": 1532912,
+      "sha256": "e72584fd9487fd3d9ef443c04079296bacc6eea98df9a3ace85d38fd6760d210"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-checker-depth.grid.depth.json",
+      "bytes": 1385490,
+      "sha256": "695afc0d95cc62792393df72089d618a2c2d7738b0a6be8ebf87f0f05e8e7f69"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-checker-depth.grid.glb",
+      "bytes": 277188,
+      "sha256": "d2eececb5ec9bee012648464dbe48342c9aabadd929e2c4fe0beaa71456f34a0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-matte-depth.continuous.depth.json",
+      "bytes": 1386460,
+      "sha256": "b8e369541cff773d7299ed75039c805e233404324453bfa86ba834228b837c5d"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-matte-depth.continuous.glb",
+      "bytes": 1532908,
+      "sha256": "01f1b16e498480e08d568143fbd2f2a00d6f1d96160b592530ce1f0a84c6c3ae"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-matte-depth.grid.depth.json",
+      "bytes": 1386358,
+      "sha256": "881d1c51b2f0d99d95d570dfd565004089efd684ebf568da2ef3e82845220349"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/large-matte-depth.grid.glb",
+      "bytes": 277184,
+      "sha256": "a8438853127510cc1e42ce7f571e4fc34e2a85bb0f1fa446dc0f6fd15a8292f3"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/prior-failure/checkpoint.json",
+      "bytes": 1648,
+      "sha256": "98a7d743c0c002a7211d65b50245a3fb86423bd0db88f66d2cf69a41a7ac47b7"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/prior-failure/projected-mesh-audit.json",
+      "bytes": 53587,
+      "sha256": "f007e31d3c3aa70c989be6c4d93b024595b66187d48394f8f1e8402f557d1b93"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/prior-failure/uniai-status.json",
+      "bytes": 394,
+      "sha256": "5b8411318bea67081dcaaaba6f468eb812a499eb560fa769eb42901f2a017672"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/projected-canonical.log",
+      "bytes": 503,
+      "sha256": "4d5a2bc7efe0317dcbef7c92b213070b24e9bdd960ee0138d7a803e0af2853ac"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/projected-mesh-audit.json",
+      "bytes": 96270,
+      "sha256": "a88e9e0e4bad500cc105da7c809beb17840168ab90015e6f5d07e070d8a56067"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/benchmark.log",
+      "bytes": 11763,
+      "sha256": "88659e57e339bde9190ad705513334c5ff93e0753f983fe976e55308d1b11bb7"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/build.log",
+      "bytes": 1478,
+      "sha256": "c289c2f504178139b95d1dad33404a894dcfd42dd051ffa6bf59ee9a7901197b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/check.log",
+      "bytes": 49,
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/production.log",
+      "bytes": 205486,
+      "sha256": "6bdbd46ddde14e7fe110c452b35a4487cb96d98a76f00e5b0aab8a981bf401ef"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/projected-replay.log",
+      "bytes": 503,
+      "sha256": "4d5a2bc7efe0317dcbef7c92b213070b24e9bdd960ee0138d7a803e0af2853ac"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/replay.log",
+      "bytes": 1888,
+      "sha256": "c8e41426e8eb56fcff460ad7bf791d6a8b9e4754d9983f06ae97c06ebb050868"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/results.json",
+      "bytes": 573,
+      "sha256": "18d2f8c8d6e282a8671a9ddce6692f5d8fa22f35ec46c6dfd29b7b9b44152d39"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/publish-checks/test.log",
+      "bytes": 11780,
+      "sha256": "5d62af95ceef9890029143548f546f470b054182ebc2b15ba5cabdaeec3461a5"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-front-clay.json",
+      "bytes": 3314,
+      "sha256": "91778b345850b4fc521dfae608b66bdc1e3e7bec6b1c557da6488d1609e0e587"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-front-clay.log",
+      "bytes": 4068,
+      "sha256": "b494e46161a49fd76adeec051d8b0b872ec2314e060bf06c58bebded3315e201"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-front-clay.png",
+      "bytes": 384904,
+      "sha256": "d1f1e8be4f402b6f9b2da52449c36de73bb3a36ccc795d34c10b2b324f3ceb66"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-clay.json",
+      "bytes": 3314,
+      "sha256": "ef6840ae642c35fb71d44426ed1c332478843504223a9ff4f075c18201345418"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-clay.log",
+      "bytes": 4066,
+      "sha256": "ed7b8744ef2049fab0e4995cee50132cf239893f1a787474d13a6bc95d9da136"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-clay.png",
+      "bytes": 352957,
+      "sha256": "be37297a410cb854b41f182e21da46298c6619d91b1800efcf0b02688fc54144"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-wire.json",
+      "bytes": 3314,
+      "sha256": "eedd223cbb0dc70bc6e2604b456078e26f7e542c1a9b18a19fc8404405d4c3d4"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-wire.log",
+      "bytes": 4066,
+      "sha256": "25689845c7bf4669f1e05b7630ffa618b085ae99abcef4e2a68afcdfcab8fb40"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.continuous-iso-wire.png",
+      "bytes": 512622,
+      "sha256": "86c8c541e8326613b161681d9bb4ae9452b4cca0d7c6a68a9a93c2fcfc693ce0"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-front-clay.json",
+      "bytes": 3252,
+      "sha256": "ed7f8d7b4af99b04e3ced644b4bd3a799f0eb3a4450571d5f3997a04b5a4a52b"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-front-clay.log",
+      "bytes": 4000,
+      "sha256": "25bc617de9db090877628bef3edb38ec1b79500133dd71810f5f1f08f4cf0f89"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-front-clay.png",
+      "bytes": 394456,
+      "sha256": "25e55d109d5dc64d4edfd9cc4edb58b657c26c8ef389b64692069b4346a2e65e"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-clay.json",
+      "bytes": 3252,
+      "sha256": "37171e654f7d3d1e7bcde3201c6566304dff67d5dc1e248e01e0d1b261184e03"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-clay.log",
+      "bytes": 3998,
+      "sha256": "2aac51fc9f5582e4efaff4974b34344c7ff81aa59365647ef6b84a43eb7c871c"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-clay.png",
+      "bytes": 350754,
+      "sha256": "cf0d2d6e22b661ea94907a94c711984d39e68fcecca1abfaf23a55df3f6216f5"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-wire.json",
+      "bytes": 3252,
+      "sha256": "c9025897d2aeb449c5f651b11d85e664ac8cbd8a77e6740a3415d0191d3faeed"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-wire.log",
+      "bytes": 3998,
+      "sha256": "88879eb5cf71a432712e9e76f99f10f5eeaf2756feee8b509e17874ce9527342"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/large-checker-depth.grid-iso-wire.png",
+      "bytes": 497117,
+      "sha256": "6f324daf2838dccbd00cbe614ea11fe980652a7c56a8491f7e0bb74a31f9f383"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/renders/results.json",
+      "bytes": 481,
+      "sha256": "31cd0655ce77cbb03697105c677470aabebc4ade49610396f05d9e5808936c4a"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-checker-depth.continuous.depth.json",
+      "bytes": 1374661,
+      "sha256": "f2d0f4e09cf1a118fab80a4a986e9f286084b50d1b1b006d15a31795fe2466dd"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-checker-depth.continuous.glb",
+      "bytes": 900368,
+      "sha256": "db89972581f2bfc407ca5cf055e3a9a0a3b6c10137f8536703713eccea1ed118"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-checker-depth.grid.depth.json",
+      "bytes": 1374558,
+      "sha256": "add01f0a08a986827ee57d4763750f36c05abff9881f2f5b651ab4d30d61edc8"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-checker-depth.grid.glb",
+      "bytes": 130752,
+      "sha256": "672321c23c52deff81f7bb48f308284089e270f47d3aa5a794cd27ea51335d94"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-matte-depth.continuous.depth.json",
+      "bytes": 1375144,
+      "sha256": "31278102f165141aa5a1e49b611e2020999f92e5beb649a9436f92f3b95fb4cb"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-matte-depth.continuous.glb",
+      "bytes": 900364,
+      "sha256": "b46c0957ca4984e89bfdf42bfa740abcd5ea6177738440348a78414f1cbc7535"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-matte-depth.grid.depth.json",
+      "bytes": 1375041,
+      "sha256": "2b37098efda7c9ebc8fad09450449702b36f1a78f3fac714e99b102a3f287d41"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/small-matte-depth.grid.glb",
+      "bytes": 130748,
+      "sha256": "6827565e594804e9b94ffaf78f381b70721d321530491054dd06f442d8bf70e9"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/tests-all-final.log",
+      "bytes": 11838,
+      "sha256": "ca3411b14dc786a6c95f2d0a605acc867ffc67f6fd1fd71570e3114a41f4c119"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/tests-canonical.log",
+      "bytes": 497,
+      "sha256": "65fafcc9f214c01ee5bfe450ed6a0ce35b751d97bd5edd9ad0d74f684e945179"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/uniai-review.md",
+      "bytes": 1456,
+      "sha256": "f0fcb37812926f91fc128fc5e483c3380c3fa334b5283c7b45b44855605d73c4"
+    },
+    {
+      "path": "benchmarks/modeling-slices-20261003/depth-continuous-refined/uniai-status.json",
+      "bytes": 811,
+      "sha256": "1afe84414b96740a1eb38ad8c07d51804086e5de2c9eba6b7c1100bd53a70c0e"
+    }
+  ],
+  "archivalLogNormalization": "Trailing blank lines removed only; original logs retained in local outputs. Test results and binary/native artifacts unchanged."
+}

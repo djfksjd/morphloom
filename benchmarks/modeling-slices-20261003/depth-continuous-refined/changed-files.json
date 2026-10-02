@@ -1,0 +1,11 @@
+[
+  "src/engine/depth-surface.ts",
+  "src/engine/depth-continuous.ts",
+  "src/engine/depth-sphere-refinement.ts",
+  "src/engine/depth-mesh-sampling.ts",
+  "src/DepthEditor.tsx",
+  "tests/depth-continuous.test.ts",
+  "scripts/depth-continuous-evidence.ts",
+  "scripts/depth-continuous-projected-audit.ts",
+  "scripts/depth-continuous-compare.ts"
+]

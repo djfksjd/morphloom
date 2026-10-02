@@ -1,0 +1,1610 @@
+{
+  "schema": "morphloom.projected-mesh-audit/0.1",
+  "source": "actual GLB Float32 triangle interpolation at original pixel centres",
+  "rows": [
+    {
+      "name": "ball_0000.continuous.depth.json",
+      "missingForegroundPixels": 8,
+      "maximumAnchorErrorMm": 0.026415708599319743,
+      "meshQuality": null
+    },
+    {
+      "name": "large-checker-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.7031088430147179,
+      "meshQuality": {
+        "pass": false,
+        "blockers": [
+          "Depth boundary boundary-9852 exceeds 0.001mm.",
+          "Depth boundary boundary-9859 exceeds 0.001mm.",
+          "Depth boundary boundary-10105 exceeds 0.001mm.",
+          "Depth boundary boundary-10113 exceeds 0.001mm.",
+          "Depth boundary boundary-10120 exceeds 0.001mm.",
+          "Depth boundary boundary-10351 exceeds 0.001mm.",
+          "Depth boundary boundary-10359 exceeds 0.001mm.",
+          "Depth boundary boundary-10375 exceeds 0.001mm.",
+          "Depth boundary boundary-10383 exceeds 0.001mm.",
+          "Depth boundary boundary-10605 exceeds 0.001mm.",
+          "Depth boundary boundary-10641 exceeds 0.001mm.",
+          "Depth boundary boundary-10855 exceeds 0.001mm.",
+          "Depth boundary boundary-10901 exceeds 0.001mm.",
+          "Depth boundary boundary-11108 exceeds 0.001mm.",
+          "Depth boundary boundary-11162 exceeds 0.001mm.",
+          "Depth boundary boundary-11364 exceeds 0.001mm.",
+          "Depth boundary boundary-11614 exceeds 0.001mm.",
+          "Depth boundary boundary-11682 exceeds 0.001mm.",
+          "Depth boundary boundary-11938 exceeds 0.001mm.",
+          "Depth boundary boundary-12196 exceeds 0.001mm.",
+          "Depth boundary boundary-12453 exceeds 0.001mm.",
+          "Depth boundary boundary-12711 exceeds 0.001mm.",
+          "Depth boundary boundary-12969 exceeds 0.001mm.",
+          "Depth boundary boundary-13227 exceeds 0.001mm.",
+          "Depth boundary boundary-13485 exceeds 0.001mm.",
+          "Depth boundary boundary-13745 exceeds 0.001mm.",
+          "Depth boundary boundary-14156 exceeds 0.001mm.",
+          "Depth boundary boundary-14516 exceeds 0.001mm.",
+          "Depth boundary boundary-14921 exceeds 0.001mm.",
+          "Depth boundary boundary-15288 exceeds 0.001mm.",
+          "Depth boundary boundary-15802 exceeds 0.001mm.",
+          "Depth boundary boundary-16316 exceeds 0.001mm.",
+          "Depth boundary boundary-16705 exceeds 0.001mm.",
+          "Depth boundary boundary-17344 exceeds 0.001mm.",
+          "Depth boundary boundary-17858 exceeds 0.001mm.",
+          "Depth boundary boundary-18372 exceeds 0.001mm.",
+          "Depth boundary boundary-18746 exceeds 0.001mm.",
+          "Depth boundary boundary-19256 exceeds 0.001mm.",
+          "Depth boundary boundary-19912 exceeds 0.001mm.",
+          "Depth boundary boundary-20425 exceeds 0.001mm.",
+          "Depth boundary boundary-20788 exceeds 0.001mm.",
+          "Depth boundary boundary-21299 exceeds 0.001mm.",
+          "Depth boundary boundary-21810 exceeds 0.001mm.",
+          "Depth boundary boundary-22321 exceeds 0.001mm.",
+          "Depth boundary boundary-22831 exceeds 0.001mm.",
+          "Depth boundary boundary-23342 exceeds 0.001mm.",
+          "Depth boundary boundary-23853 exceeds 0.001mm.",
+          "Depth boundary boundary-24365 exceeds 0.001mm.",
+          "Depth boundary boundary-24787 exceeds 0.001mm.",
+          "Depth boundary boundary-25300 exceeds 0.001mm.",
+          "Depth boundary boundary-25812 exceeds 0.001mm.",
+          "Depth boundary boundary-26410 exceeds 0.001mm.",
+          "Depth boundary boundary-26837 exceeds 0.001mm.",
+          "Depth boundary boundary-27350 exceeds 0.001mm.",
+          "Depth boundary boundary-27862 exceeds 0.001mm.",
+          "Depth boundary boundary-28375 exceeds 0.001mm.",
+          "Depth boundary boundary-28887 exceeds 0.001mm.",
+          "Depth boundary boundary-29400 exceeds 0.001mm.",
+          "Depth boundary boundary-29912 exceeds 0.001mm.",
+          "Depth boundary boundary-30503 exceeds 0.001mm.",
+          "Depth boundary boundary-30936 exceeds 0.001mm.",
+          "Depth boundary boundary-31448 exceeds 0.001mm.",
+          "Depth boundary boundary-31961 exceeds 0.001mm.",
+          "Depth boundary boundary-32473 exceeds 0.001mm.",
+          "Depth boundary boundary-32984 exceeds 0.001mm.",
+          "Depth boundary boundary-33496 exceeds 0.001mm.",
+          "Depth boundary boundary-34007 exceeds 0.001mm.",
+          "Depth boundary boundary-34520 exceeds 0.001mm.",
+          "Depth boundary boundary-35031 exceeds 0.001mm.",
+          "Depth boundary boundary-35543 exceeds 0.001mm.",
+          "Depth boundary boundary-36055 exceeds 0.001mm.",
+          "Depth boundary boundary-36567 exceeds 0.001mm.",
+          "Depth boundary boundary-37078 exceeds 0.001mm.",
+          "Depth boundary boundary-37590 exceeds 0.001mm.",
+          "Depth boundary boundary-38101 exceeds 0.001mm.",
+          "Depth boundary boundary-38613 exceeds 0.001mm.",
+          "Depth boundary boundary-38955 exceeds 0.001mm.",
+          "Depth boundary boundary-39467 exceeds 0.001mm.",
+          "Depth boundary boundary-39980 exceeds 0.001mm.",
+          "Depth boundary boundary-40493 exceeds 0.001mm.",
+          "Depth boundary boundary-41005 exceeds 0.001mm.",
+          "Depth boundary boundary-41517 exceeds 0.001mm.",
+          "Depth boundary boundary-42030 exceeds 0.001mm.",
+          "Depth boundary boundary-42543 exceeds 0.001mm.",
+          "Depth boundary boundary-42959 exceeds 0.001mm.",
+          "Depth boundary boundary-43470 exceeds 0.001mm.",
+          "Depth boundary boundary-43981 exceeds 0.001mm.",
+          "Depth boundary boundary-44492 exceeds 0.001mm.",
+          "Depth boundary boundary-45002 exceeds 0.001mm.",
+          "Depth boundary boundary-45513 exceeds 0.001mm.",
+          "Depth boundary boundary-46023 exceeds 0.001mm.",
+          "Depth boundary boundary-46535 exceeds 0.001mm.",
+          "Depth boundary boundary-47044 exceeds 0.001mm.",
+          "Depth boundary boundary-47556 exceeds 0.001mm.",
+          "Depth boundary boundary-48066 exceeds 0.001mm.",
+          "Depth boundary boundary-48576 exceeds 0.001mm.",
+          "Depth boundary boundary-49085 exceeds 0.001mm.",
+          "Depth boundary boundary-49595 exceeds 0.001mm.",
+          "Depth boundary boundary-50105 exceeds 0.001mm.",
+          "Depth boundary boundary-50504 exceeds 0.001mm.",
+          "Depth boundary boundary-50869 exceeds 0.001mm.",
+          "Depth boundary boundary-51275 exceeds 0.001mm.",
+          "Depth boundary boundary-51535 exceeds 0.001mm.",
+          "Depth boundary boundary-51889 exceeds 0.001mm.",
+          "Depth boundary boundary-52305 exceeds 0.001mm.",
+          "Depth boundary boundary-52563 exceeds 0.001mm.",
+          "Depth boundary boundary-52821 exceeds 0.001mm.",
+          "Depth boundary boundary-53079 exceeds 0.001mm.",
+          "Depth boundary boundary-53160 exceeds 0.001mm.",
+          "Depth boundary boundary-53414 exceeds 0.001mm.",
+          "Depth boundary boundary-53666 exceeds 0.001mm.",
+          "Depth boundary boundary-53919 exceeds 0.001mm.",
+          "Depth boundary boundary-54116 exceeds 0.001mm.",
+          "Depth boundary boundary-54372 exceeds 0.001mm.",
+          "Depth boundary boundary-54426 exceeds 0.001mm.",
+          "Depth boundary boundary-54633 exceeds 0.001mm.",
+          "Depth boundary boundary-54678 exceeds 0.001mm.",
+          "Depth boundary boundary-54892 exceeds 0.001mm.",
+          "Depth boundary boundary-54928 exceeds 0.001mm.",
+          "Depth boundary boundary-55150 exceeds 0.001mm.",
+          "Depth boundary boundary-55157 exceeds 0.001mm.",
+          "Depth boundary boundary-55173 exceeds 0.001mm.",
+          "Depth boundary boundary-55182 exceeds 0.001mm.",
+          "Depth boundary boundary-55413 exceeds 0.001mm.",
+          "Depth boundary boundary-55420 exceeds 0.001mm.",
+          "Depth boundary boundary-55428 exceeds 0.001mm.",
+          "Depth boundary boundary-55436 exceeds 0.001mm.",
+          "Depth boundary boundary-55683 exceeds 0.001mm."
+        ],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "fail",
+          "bandPixels": 2,
+          "pixels": 1004,
+          "anchors": 128,
+          "maximumErrorMm": 0.7031088430147179,
+          "errors": [
+            {
+              "id": "boundary-9852",
+              "pixel": 9852,
+              "errorMm": 0.7031088430147179
+            },
+            {
+              "id": "boundary-9859",
+              "pixel": 9859,
+              "errorMm": 0.703051485491585
+            },
+            {
+              "id": "boundary-10105",
+              "pixel": 10105,
+              "errorMm": 0.10546913134527358
+            },
+            {
+              "id": "boundary-10113",
+              "pixel": 10113,
+              "errorMm": 0.09023907943719678
+            },
+            {
+              "id": "boundary-10120",
+              "pixel": 10120,
+              "errorMm": 0.037633746259643885
+            },
+            {
+              "id": "boundary-10351",
+              "pixel": 10351,
+              "errorMm": 0.1282489228791519
+            },
+            {
+              "id": "boundary-10359",
+              "pixel": 10359,
+              "errorMm": 0.013959729502175833
+            },
+            {
+              "id": "boundary-10375",
+              "pixel": 10375,
+              "errorMm": 0.06751941313882526
+            },
+            {
+              "id": "boundary-10383",
+              "pixel": 10383,
+              "errorMm": 0.07699169287360519
+            },
+            {
+              "id": "boundary-10605",
+              "pixel": 10605,
+              "errorMm": 0.06236788227931811
+            },
+            {
+              "id": "boundary-10641",
+              "pixel": 10641,
+              "errorMm": 0.08476011443650577
+            },
+            {
+              "id": "boundary-10855",
+              "pixel": 10855,
+              "errorMm": 0.11994117219381906
+            },
+            {
+              "id": "boundary-10901",
+              "pixel": 10901,
+              "errorMm": 0.09220684573426752
+            },
+            {
+              "id": "boundary-11108",
+              "pixel": 11108,
+              "errorMm": 0.04592577405810516
+            },
+            {
+              "id": "boundary-11162",
+              "pixel": 11162,
+              "errorMm": 0.10641928051165905
+            },
+            {
+              "id": "boundary-11364",
+              "pixel": 11364,
+              "errorMm": 0.022180890419519983
+            },
+            {
+              "id": "boundary-11614",
+              "pixel": 11614,
+              "errorMm": 0.09013006270237156
+            },
+            {
+              "id": "boundary-11682",
+              "pixel": 11682,
+              "errorMm": 0.19943157955822244
+            },
+            {
+              "id": "boundary-11938",
+              "pixel": 11938,
+              "errorMm": 0.08564496093225671
+            },
+            {
+              "id": "boundary-12196",
+              "pixel": 12196,
+              "errorMm": 0.0641444671976501
+            },
+            {
+              "id": "boundary-12453",
+              "pixel": 12453,
+              "errorMm": 0.04495386980789817
+            },
+            {
+              "id": "boundary-12711",
+              "pixel": 12711,
+              "errorMm": 0.06058762130209061
+            },
+            {
+              "id": "boundary-12969",
+              "pixel": 12969,
+              "errorMm": 0.04779418935805779
+            },
+            {
+              "id": "boundary-13227",
+              "pixel": 13227,
+              "errorMm": 0.04086971771289427
+            },
+            {
+              "id": "boundary-13485",
+              "pixel": 13485,
+              "errorMm": 0.06319726335726727
+            },
+            {
+              "id": "boundary-13745",
+              "pixel": 13745,
+              "errorMm": 0.2594747621155875
+            },
+            {
+              "id": "boundary-14156",
+              "pixel": 14156,
+              "errorMm": 0.10983151932151713
+            },
+            {
+              "id": "boundary-14516",
+              "pixel": 14516,
+              "errorMm": 0.10577317243468087
+            },
+            {
+              "id": "boundary-14921",
+              "pixel": 14921,
+              "errorMm": 0.07900161792218796
+            },
+            {
+              "id": "boundary-15288",
+              "pixel": 15288,
+              "errorMm": 0.09907705363457353
+            },
+            {
+              "id": "boundary-15802",
+              "pixel": 15802,
+              "errorMm": 0.10976692793059328
+            },
+            {
+              "id": "boundary-16316",
+              "pixel": 16316,
+              "errorMm": 0.05748361468579333
+            },
+            {
+              "id": "boundary-16705",
+              "pixel": 16705,
+              "errorMm": 0.07384867895655134
+            },
+            {
+              "id": "boundary-17344",
+              "pixel": 17344,
+              "errorMm": 0.05748371262211549
+            },
+            {
+              "id": "boundary-17858",
+              "pixel": 17858,
+              "errorMm": 0.10977568989159181
+            },
+            {
+              "id": "boundary-18372",
+              "pixel": 18372,
+              "errorMm": 0.09907450856951527
+            },
+            {
+              "id": "boundary-18746",
+              "pixel": 18746,
+              "errorMm": 0.0790000247608873
+            },
+            {
+              "id": "boundary-19256",
+              "pixel": 19256,
+              "errorMm": 0.10577317243468087
+            },
+            {
+              "id": "boundary-19912",
+              "pixel": 19912,
+              "errorMm": 0.03782606334527827
+            },
+            {
+              "id": "boundary-20425",
+              "pixel": 20425,
+              "errorMm": 0.06483587485251974
+            },
+            {
+              "id": "boundary-20788",
+              "pixel": 20788,
+              "errorMm": 0.10459927647406175
+            },
+            {
+              "id": "boundary-21299",
+              "pixel": 21299,
+              "errorMm": 0.08461804379805926
+            },
+            {
+              "id": "boundary-21810",
+              "pixel": 21810,
+              "errorMm": 0.06953635390766522
+            },
+            {
+              "id": "boundary-22321",
+              "pixel": 22321,
+              "errorMm": 0.0631715755025084
+            },
+            {
+              "id": "boundary-22831",
+              "pixel": 22831,
+              "errorMm": 0.0991678534110747
+            },
+            {
+              "id": "boundary-23342",
+              "pixel": 23342,
+              "errorMm": 0.16313686491093904
+            },
+            {
+              "id": "boundary-23853",
+              "pixel": 23853,
+              "errorMm": 0.19943157955822244
+            },
+            {
+              "id": "boundary-24365",
+              "pixel": 24365,
+              "errorMm": 0.11338520661450957
+            },
+            {
+              "id": "boundary-24787",
+              "pixel": 24787,
+              "errorMm": 0.16100412838829925
+            },
+            {
+              "id": "boundary-25300",
+              "pixel": 25300,
+              "errorMm": 0.3723831865193574
+            },
+            {
+              "id": "boundary-25812",
+              "pixel": 25812,
+              "errorMm": 0.04592577405810516
+            },
+            {
+              "id": "boundary-26410",
+              "pixel": 26410,
+              "errorMm": 0.11993930896613847
+            },
+            {
+              "id": "boundary-26837",
+              "pixel": 26837,
+              "errorMm": 0.11948369265758174
+            },
+            {
+              "id": "boundary-27350",
+              "pixel": 27350,
+              "errorMm": 0.12567870541909087
+            },
+            {
+              "id": "boundary-27862",
+              "pixel": 27862,
+              "errorMm": 0.08126131668461767
+            },
+            {
+              "id": "boundary-28375",
+              "pixel": 28375,
+              "errorMm": 0.12410337830323215
+            },
+            {
+              "id": "boundary-28887",
+              "pixel": 28887,
+              "errorMm": 0.07699054471839872
+            },
+            {
+              "id": "boundary-29400",
+              "pixel": 29400,
+              "errorMm": 0.303080980237155
+            },
+            {
+              "id": "boundary-29912",
+              "pixel": 29912,
+              "errorMm": 0.09009153050124041
+            },
+            {
+              "id": "boundary-30503",
+              "pixel": 30503,
+              "errorMm": 0.037633746259643885
+            },
+            {
+              "id": "boundary-30936",
+              "pixel": 30936,
+              "errorMm": 0.08436209118349325
+            },
+            {
+              "id": "boundary-31448",
+              "pixel": 31448,
+              "errorMm": 0.07718804513143596
+            },
+            {
+              "id": "boundary-31961",
+              "pixel": 31961,
+              "errorMm": 0.7031088430147179
+            },
+            {
+              "id": "boundary-32473",
+              "pixel": 32473,
+              "errorMm": 0.3622835885970517
+            },
+            {
+              "id": "boundary-32984",
+              "pixel": 32984,
+              "errorMm": 0.060014386896398264
+            },
+            {
+              "id": "boundary-33496",
+              "pixel": 33496,
+              "errorMm": 0.0636033826900757
+            },
+            {
+              "id": "boundary-34007",
+              "pixel": 34007,
+              "errorMm": 0.0822625763570386
+            },
+            {
+              "id": "boundary-34520",
+              "pixel": 34520,
+              "errorMm": 0.10547073480933022
+            },
+            {
+              "id": "boundary-35031",
+              "pixel": 35031,
+              "errorMm": 0.013959442426482838
+            },
+            {
+              "id": "boundary-35543",
+              "pixel": 35543,
+              "errorMm": 0.08537795000825099
+            },
+            {
+              "id": "boundary-36055",
+              "pixel": 36055,
+              "errorMm": 0.07277328159483432
+            },
+            {
+              "id": "boundary-36567",
+              "pixel": 36567,
+              "errorMm": 0.08809790225143388
+            },
+            {
+              "id": "boundary-37078",
+              "pixel": 37078,
+              "errorMm": 0.05467679827046368
+            },
+            {
+              "id": "boundary-37590",
+              "pixel": 37590,
+              "errorMm": 0.06236808751805256
+            },
+            {
+              "id": "boundary-38101",
+              "pixel": 38101,
+              "errorMm": 0.04486053827372416
+            },
+            {
+              "id": "boundary-38613",
+              "pixel": 38613,
+              "errorMm": 0.021633797372942354
+            },
+            {
+              "id": "boundary-38955",
+              "pixel": 38955,
+              "errorMm": 0.04279258675734354
+            },
+            {
+              "id": "boundary-39467",
+              "pixel": 39467,
+              "errorMm": 0.10641701438589735
+            },
+            {
+              "id": "boundary-39980",
+              "pixel": 39980,
+              "errorMm": 0.08925802636315439
+            },
+            {
+              "id": "boundary-40493",
+              "pixel": 40493,
+              "errorMm": 0.012285541598430427
+            },
+            {
+              "id": "boundary-41005",
+              "pixel": 41005,
+              "errorMm": 0.11336990789607171
+            },
+            {
+              "id": "boundary-41517",
+              "pixel": 41517,
+              "errorMm": 0.1994316188652192
+            },
+            {
+              "id": "boundary-42030",
+              "pixel": 42030,
+              "errorMm": 0.1631460384727461
+            },
+            {
+              "id": "boundary-42543",
+              "pixel": 42543,
+              "errorMm": 0.09917356215902373
+            },
+            {
+              "id": "boundary-42959",
+              "pixel": 42959,
+              "errorMm": 0.10417128494242434
+            },
+            {
+              "id": "boundary-43470",
+              "pixel": 43470,
+              "errorMm": 0.0724450228869955
+            },
+            {
+              "id": "boundary-43981",
+              "pixel": 43981,
+              "errorMm": 0.02142856405941984
+            },
+            {
+              "id": "boundary-44492",
+              "pixel": 44492,
+              "errorMm": 0.13926963386904845
+            },
+            {
+              "id": "boundary-45002",
+              "pixel": 45002,
+              "errorMm": 0.07504564590499285
+            },
+            {
+              "id": "boundary-45513",
+              "pixel": 45513,
+              "errorMm": 0.11945405870716286
+            },
+            {
+              "id": "boundary-46023",
+              "pixel": 46023,
+              "errorMm": 0.09376964355305972
+            },
+            {
+              "id": "boundary-46535",
+              "pixel": 46535,
+              "errorMm": 0.1276559531349335
+            },
+            {
+              "id": "boundary-47044",
+              "pixel": 47044,
+              "errorMm": 0.08573658643337012
+            },
+            {
+              "id": "boundary-47556",
+              "pixel": 47556,
+              "errorMm": 0.195520485022314
+            },
+            {
+              "id": "boundary-48066",
+              "pixel": 48066,
+              "errorMm": 0.14415652198937323
+            },
+            {
+              "id": "boundary-48576",
+              "pixel": 48576,
+              "errorMm": 0.11488756438149039
+            },
+            {
+              "id": "boundary-49085",
+              "pixel": 49085,
+              "errorMm": 0.02056498755030134
+            },
+            {
+              "id": "boundary-49595",
+              "pixel": 49595,
+              "errorMm": 0.020386824781098767
+            },
+            {
+              "id": "boundary-50105",
+              "pixel": 50105,
+              "errorMm": 0.06490952550808515
+            },
+            {
+              "id": "boundary-50504",
+              "pixel": 50504,
+              "errorMm": 0.060530214018967854
+            },
+            {
+              "id": "boundary-50869",
+              "pixel": 50869,
+              "errorMm": 0.07035470166624691
+            },
+            {
+              "id": "boundary-51275",
+              "pixel": 51275,
+              "errorMm": 0.3607150948793105
+            },
+            {
+              "id": "boundary-51535",
+              "pixel": 51535,
+              "errorMm": 0.06483779095714226
+            },
+            {
+              "id": "boundary-51889",
+              "pixel": 51889,
+              "errorMm": 0.2594693230444136
+            },
+            {
+              "id": "boundary-52305",
+              "pixel": 52305,
+              "errorMm": 0.1799872420146471
+            },
+            {
+              "id": "boundary-52563",
+              "pixel": 52563,
+              "errorMm": 0.16984692189600992
+            },
+            {
+              "id": "boundary-52821",
+              "pixel": 52821,
+              "errorMm": 0.2070316206349503
+            },
+            {
+              "id": "boundary-53079",
+              "pixel": 53079,
+              "errorMm": 0.14560500377297103
+            },
+            {
+              "id": "boundary-53160",
+              "pixel": 53160,
+              "errorMm": 0.1456067187006056
+            },
+            {
+              "id": "boundary-53414",
+              "pixel": 53414,
+              "errorMm": 0.09917356215902373
+            },
+            {
+              "id": "boundary-53666",
+              "pixel": 53666,
+              "errorMm": 0.08564915129693418
+            },
+            {
+              "id": "boundary-53919",
+              "pixel": 53919,
+              "errorMm": 0.08995200869441078
+            },
+            {
+              "id": "boundary-54116",
+              "pixel": 54116,
+              "errorMm": 0.022182612908466126
+            },
+            {
+              "id": "boundary-54372",
+              "pixel": 54372,
+              "errorMm": 0.04592590854531409
+            },
+            {
+              "id": "boundary-54426",
+              "pixel": 54426,
+              "errorMm": 0.10641701438589735
+            },
+            {
+              "id": "boundary-54633",
+              "pixel": 54633,
+              "errorMm": 0.021633797372942354
+            },
+            {
+              "id": "boundary-54678",
+              "pixel": 54678,
+              "errorMm": 0.021632964941886712
+            },
+            {
+              "id": "boundary-54892",
+              "pixel": 54892,
+              "errorMm": 0.08126176174494049
+            },
+            {
+              "id": "boundary-54928",
+              "pixel": 54928,
+              "errorMm": 0.05468175552033472
+            },
+            {
+              "id": "boundary-55150",
+              "pixel": 55150,
+              "errorMm": 0.1241015842178399
+            },
+            {
+              "id": "boundary-55157",
+              "pixel": 55157,
+              "errorMm": 0.08537795000825099
+            },
+            {
+              "id": "boundary-55173",
+              "pixel": 55173,
+              "errorMm": 0.050087360843008355
+            },
+            {
+              "id": "boundary-55182",
+              "pixel": 55182,
+              "errorMm": 0.08810137105319882
+            },
+            {
+              "id": "boundary-55413",
+              "pixel": 55413,
+              "errorMm": 0.12520176769629643
+            },
+            {
+              "id": "boundary-55420",
+              "pixel": 55420,
+              "errorMm": 0.09233660099789631
+            },
+            {
+              "id": "boundary-55428",
+              "pixel": 55428,
+              "errorMm": 0.11773140887385125
+            },
+            {
+              "id": "boundary-55436",
+              "pixel": 55436,
+              "errorMm": 0.17526972214193393
+            },
+            {
+              "id": "boundary-55683",
+              "pixel": 55683,
+              "errorMm": 0.7031088430147179
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "large-matte-depth.continuous.depth.json",
+      "missingForegroundPixels": 0,
+      "maximumAnchorErrorMm": 0.7031088430147179,
+      "meshQuality": {
+        "pass": false,
+        "blockers": [
+          "Depth boundary boundary-9852 exceeds 0.001mm.",
+          "Depth boundary boundary-9859 exceeds 0.001mm.",
+          "Depth boundary boundary-10105 exceeds 0.001mm.",
+          "Depth boundary boundary-10113 exceeds 0.001mm.",
+          "Depth boundary boundary-10120 exceeds 0.001mm.",
+          "Depth boundary boundary-10351 exceeds 0.001mm.",
+          "Depth boundary boundary-10359 exceeds 0.001mm.",
+          "Depth boundary boundary-10375 exceeds 0.001mm.",
+          "Depth boundary boundary-10383 exceeds 0.001mm.",
+          "Depth boundary boundary-10605 exceeds 0.001mm.",
+          "Depth boundary boundary-10641 exceeds 0.001mm.",
+          "Depth boundary boundary-10855 exceeds 0.001mm.",
+          "Depth boundary boundary-10901 exceeds 0.001mm.",
+          "Depth boundary boundary-11108 exceeds 0.001mm.",
+          "Depth boundary boundary-11162 exceeds 0.001mm.",
+          "Depth boundary boundary-11364 exceeds 0.001mm.",
+          "Depth boundary boundary-11614 exceeds 0.001mm.",
+          "Depth boundary boundary-11682 exceeds 0.001mm.",
+          "Depth boundary boundary-11938 exceeds 0.001mm.",
+          "Depth boundary boundary-12196 exceeds 0.001mm.",
+          "Depth boundary boundary-12453 exceeds 0.001mm.",
+          "Depth boundary boundary-12711 exceeds 0.001mm.",
+          "Depth boundary boundary-12969 exceeds 0.001mm.",
+          "Depth boundary boundary-13227 exceeds 0.001mm.",
+          "Depth boundary boundary-13485 exceeds 0.001mm.",
+          "Depth boundary boundary-13745 exceeds 0.001mm.",
+          "Depth boundary boundary-14156 exceeds 0.001mm.",
+          "Depth boundary boundary-14516 exceeds 0.001mm.",
+          "Depth boundary boundary-14921 exceeds 0.001mm.",
+          "Depth boundary boundary-15288 exceeds 0.001mm.",
+          "Depth boundary boundary-15802 exceeds 0.001mm.",
+          "Depth boundary boundary-16316 exceeds 0.001mm.",
+          "Depth boundary boundary-16705 exceeds 0.001mm.",
+          "Depth boundary boundary-17344 exceeds 0.001mm.",
+          "Depth boundary boundary-17858 exceeds 0.001mm.",
+          "Depth boundary boundary-18372 exceeds 0.001mm.",
+          "Depth boundary boundary-18746 exceeds 0.001mm.",
+          "Depth boundary boundary-19256 exceeds 0.001mm.",
+          "Depth boundary boundary-19912 exceeds 0.001mm.",
+          "Depth boundary boundary-20425 exceeds 0.001mm.",
+          "Depth boundary boundary-20788 exceeds 0.001mm.",
+          "Depth boundary boundary-21299 exceeds 0.001mm.",
+          "Depth boundary boundary-21810 exceeds 0.001mm.",
+          "Depth boundary boundary-22321 exceeds 0.001mm.",
+          "Depth boundary boundary-22831 exceeds 0.001mm.",
+          "Depth boundary boundary-23342 exceeds 0.001mm.",
+          "Depth boundary boundary-23853 exceeds 0.001mm.",
+          "Depth boundary boundary-24365 exceeds 0.001mm.",
+          "Depth boundary boundary-24787 exceeds 0.001mm.",
+          "Depth boundary boundary-25300 exceeds 0.001mm.",
+          "Depth boundary boundary-25812 exceeds 0.001mm.",
+          "Depth boundary boundary-26410 exceeds 0.001mm.",
+          "Depth boundary boundary-26837 exceeds 0.001mm.",
+          "Depth boundary boundary-27350 exceeds 0.001mm.",
+          "Depth boundary boundary-27862 exceeds 0.001mm.",
+          "Depth boundary boundary-28375 exceeds 0.001mm.",
+          "Depth boundary boundary-28887 exceeds 0.001mm.",
+          "Depth boundary boundary-29400 exceeds 0.001mm.",
+          "Depth boundary boundary-29912 exceeds 0.001mm.",
+          "Depth boundary boundary-30503 exceeds 0.001mm.",
+          "Depth boundary boundary-30936 exceeds 0.001mm.",
+          "Depth boundary boundary-31448 exceeds 0.001mm.",
+          "Depth boundary boundary-31961 exceeds 0.001mm.",
+          "Depth boundary boundary-32473 exceeds 0.001mm.",
+          "Depth boundary boundary-32984 exceeds 0.001mm.",
+          "Depth boundary boundary-33496 exceeds 0.001mm.",
+          "Depth boundary boundary-34007 exceeds 0.001mm.",
+          "Depth boundary boundary-34520 exceeds 0.001mm.",
+          "Depth boundary boundary-35031 exceeds 0.001mm.",
+          "Depth boundary boundary-35543 exceeds 0.001mm.",
+          "Depth boundary boundary-36055 exceeds 0.001mm.",
+          "Depth boundary boundary-36567 exceeds 0.001mm.",
+          "Depth boundary boundary-37078 exceeds 0.001mm.",
+          "Depth boundary boundary-37590 exceeds 0.001mm.",
+          "Depth boundary boundary-38101 exceeds 0.001mm.",
+          "Depth boundary boundary-38613 exceeds 0.001mm.",
+          "Depth boundary boundary-38955 exceeds 0.001mm.",
+          "Depth boundary boundary-39467 exceeds 0.001mm.",
+          "Depth boundary boundary-39980 exceeds 0.001mm.",
+          "Depth boundary boundary-40493 exceeds 0.001mm.",
+          "Depth boundary boundary-41005 exceeds 0.001mm.",
+          "Depth boundary boundary-41517 exceeds 0.001mm.",
+          "Depth boundary boundary-42030 exceeds 0.001mm.",
+          "Depth boundary boundary-42543 exceeds 0.001mm.",
+          "Depth boundary boundary-42959 exceeds 0.001mm.",
+          "Depth boundary boundary-43470 exceeds 0.001mm.",
+          "Depth boundary boundary-43981 exceeds 0.001mm.",
+          "Depth boundary boundary-44492 exceeds 0.001mm.",
+          "Depth boundary boundary-45002 exceeds 0.001mm.",
+          "Depth boundary boundary-45513 exceeds 0.001mm.",
+          "Depth boundary boundary-46023 exceeds 0.001mm.",
+          "Depth boundary boundary-46535 exceeds 0.001mm.",
+          "Depth boundary boundary-47044 exceeds 0.001mm.",
+          "Depth boundary boundary-47556 exceeds 0.001mm.",
+          "Depth boundary boundary-48066 exceeds 0.001mm.",
+          "Depth boundary boundary-48576 exceeds 0.001mm.",
+          "Depth boundary boundary-49085 exceeds 0.001mm.",
+          "Depth boundary boundary-49595 exceeds 0.001mm.",
+          "Depth boundary boundary-50105 exceeds 0.001mm.",
+          "Depth boundary boundary-50504 exceeds 0.001mm.",
+          "Depth boundary boundary-50869 exceeds 0.001mm.",
+          "Depth boundary boundary-51275 exceeds 0.001mm.",
+          "Depth boundary boundary-51535 exceeds 0.001mm.",
+          "Depth boundary boundary-51889 exceeds 0.001mm.",
+          "Depth boundary boundary-52305 exceeds 0.001mm.",
+          "Depth boundary boundary-52563 exceeds 0.001mm.",
+          "Depth boundary boundary-52821 exceeds 0.001mm.",
+          "Depth boundary boundary-53079 exceeds 0.001mm.",
+          "Depth boundary boundary-53160 exceeds 0.001mm.",
+          "Depth boundary boundary-53414 exceeds 0.001mm.",
+          "Depth boundary boundary-53666 exceeds 0.001mm.",
+          "Depth boundary boundary-53919 exceeds 0.001mm.",
+          "Depth boundary boundary-54116 exceeds 0.001mm.",
+          "Depth boundary boundary-54372 exceeds 0.001mm.",
+          "Depth boundary boundary-54426 exceeds 0.001mm.",
+          "Depth boundary boundary-54633 exceeds 0.001mm.",
+          "Depth boundary boundary-54678 exceeds 0.001mm.",
+          "Depth boundary boundary-54892 exceeds 0.001mm.",
+          "Depth boundary boundary-54928 exceeds 0.001mm.",
+          "Depth boundary boundary-55150 exceeds 0.001mm.",
+          "Depth boundary boundary-55157 exceeds 0.001mm.",
+          "Depth boundary boundary-55173 exceeds 0.001mm.",
+          "Depth boundary boundary-55182 exceeds 0.001mm.",
+          "Depth boundary boundary-55413 exceeds 0.001mm.",
+          "Depth boundary boundary-55420 exceeds 0.001mm.",
+          "Depth boundary boundary-55428 exceeds 0.001mm.",
+          "Depth boundary boundary-55436 exceeds 0.001mm.",
+          "Depth boundary boundary-55683 exceeds 0.001mm."
+        ],
+        "envelope": {
+          "status": "pass",
+          "violations": 0,
+          "maximumExcessMm": 0,
+          "samplePixels": []
+        },
+        "boundary": {
+          "status": "fail",
+          "bandPixels": 2,
+          "pixels": 1004,
+          "anchors": 128,
+          "maximumErrorMm": 0.7031088430147179,
+          "errors": [
+            {
+              "id": "boundary-9852",
+              "pixel": 9852,
+              "errorMm": 0.7031088430147179
+            },
+            {
+              "id": "boundary-9859",
+              "pixel": 9859,
+              "errorMm": 0.703051485491585
+            },
+            {
+              "id": "boundary-10105",
+              "pixel": 10105,
+              "errorMm": 0.10546913134527358
+            },
+            {
+              "id": "boundary-10113",
+              "pixel": 10113,
+              "errorMm": 0.09023907943719678
+            },
+            {
+              "id": "boundary-10120",
+              "pixel": 10120,
+              "errorMm": 0.037633746259643885
+            },
+            {
+              "id": "boundary-10351",
+              "pixel": 10351,
+              "errorMm": 0.1282489228791519
+            },
+            {
+              "id": "boundary-10359",
+              "pixel": 10359,
+              "errorMm": 0.013959729502175833
+            },
+            {
+              "id": "boundary-10375",
+              "pixel": 10375,
+              "errorMm": 0.06751941313882526
+            },
+            {
+              "id": "boundary-10383",
+              "pixel": 10383,
+              "errorMm": 0.07699169287360519
+            },
+            {
+              "id": "boundary-10605",
+              "pixel": 10605,
+              "errorMm": 0.06236788227931811
+            },
+            {
+              "id": "boundary-10641",
+              "pixel": 10641,
+              "errorMm": 0.08476011443650577
+            },
+            {
+              "id": "boundary-10855",
+              "pixel": 10855,
+              "errorMm": 0.11994117219381906
+            },
+            {
+              "id": "boundary-10901",
+              "pixel": 10901,
+              "errorMm": 0.09220684573426752
+            },
+            {
+              "id": "boundary-11108",
+              "pixel": 11108,
+              "errorMm": 0.04592577405810516
+            },
+            {
+              "id": "boundary-11162",
+              "pixel": 11162,
+              "errorMm": 0.10641928051165905
+            },
+            {
+              "id": "boundary-11364",
+              "pixel": 11364,
+              "errorMm": 0.022180890419519983
+            },
+            {
+              "id": "boundary-11614",
+              "pixel": 11614,
+              "errorMm": 0.09013006270237156
+            },
+            {
+              "id": "boundary-11682",
+              "pixel": 11682,
+              "errorMm": 0.19943157955822244
+            },
+            {
+              "id": "boundary-11938",
+              "pixel": 11938,
+              "errorMm": 0.08564496093225671
+            },
+            {
+              "id": "boundary-12196",
+              "pixel": 12196,
+              "errorMm": 0.0641444671976501
+            },
+            {
+              "id": "boundary-12453",
+              "pixel": 12453,
+              "errorMm": 0.04495386980789817
+            },
+            {
+              "id": "boundary-12711",
+              "pixel": 12711,
+              "errorMm": 0.06058762130209061
+            },
+            {
+              "id": "boundary-12969",
+              "pixel": 12969,
+              "errorMm": 0.04779418935805779
+            },
+            {
+              "id": "boundary-13227",
+              "pixel": 13227,
+              "errorMm": 0.04086971771289427
+            },
+            {
+              "id": "boundary-13485",
+              "pixel": 13485,
+              "errorMm": 0.06319726335726727
+            },
+            {
+              "id": "boundary-13745",
+              "pixel": 13745,
+              "errorMm": 0.2594747621155875
+            },
+            {
+              "id": "boundary-14156",
+              "pixel": 14156,
+              "errorMm": 0.10983151932151713
+            },
+            {
+              "id": "boundary-14516",
+              "pixel": 14516,
+              "errorMm": 0.10577317243468087
+            },
+            {
+              "id": "boundary-14921",
+              "pixel": 14921,
+              "errorMm": 0.07900161792218796
+            },
+            {
+              "id": "boundary-15288",
+              "pixel": 15288,
+              "errorMm": 0.09907705363457353
+            },
+            {
+              "id": "boundary-15802",
+              "pixel": 15802,
+              "errorMm": 0.10976692793059328
+            },
+            {
+              "id": "boundary-16316",
+              "pixel": 16316,
+              "errorMm": 0.05748361468579333
+            },
+            {
+              "id": "boundary-16705",
+              "pixel": 16705,
+              "errorMm": 0.07384867895655134
+            },
+            {
+              "id": "boundary-17344",
+              "pixel": 17344,
+              "errorMm": 0.05748371262211549
+            },
+            {
+              "id": "boundary-17858",
+              "pixel": 17858,
+              "errorMm": 0.10977568989159181
+            },
+            {
+              "id": "boundary-18372",
+              "pixel": 18372,
+              "errorMm": 0.09907450856951527
+            },
+            {
+              "id": "boundary-18746",
+              "pixel": 18746,
+              "errorMm": 0.0790000247608873
+            },
+            {
+              "id": "boundary-19256",
+              "pixel": 19256,
+              "errorMm": 0.10577317243468087
+            },
+            {
+              "id": "boundary-19912",
+              "pixel": 19912,
+              "errorMm": 0.03782606334527827
+            },
+            {
+              "id": "boundary-20425",
+              "pixel": 20425,
+              "errorMm": 0.06483587485251974
+            },
+            {
+              "id": "boundary-20788",
+              "pixel": 20788,
+              "errorMm": 0.10459927647406175
+            },
+            {
+              "id": "boundary-21299",
+              "pixel": 21299,
+              "errorMm": 0.08461804379805926
+            },
+            {
+              "id": "boundary-21810",
+              "pixel": 21810,
+              "errorMm": 0.06953635390766522
+            },
+            {
+              "id": "boundary-22321",
+              "pixel": 22321,
+              "errorMm": 0.0631715755025084
+            },
+            {
+              "id": "boundary-22831",
+              "pixel": 22831,
+              "errorMm": 0.0991678534110747
+            },
+            {
+              "id": "boundary-23342",
+              "pixel": 23342,
+              "errorMm": 0.16313686491093904
+            },
+            {
+              "id": "boundary-23853",
+              "pixel": 23853,
+              "errorMm": 0.19943157955822244
+            },
+            {
+              "id": "boundary-24365",
+              "pixel": 24365,
+              "errorMm": 0.11338520661450957
+            },
+            {
+              "id": "boundary-24787",
+              "pixel": 24787,
+              "errorMm": 0.16100412838829925
+            },
+            {
+              "id": "boundary-25300",
+              "pixel": 25300,
+              "errorMm": 0.3723831865193574
+            },
+            {
+              "id": "boundary-25812",
+              "pixel": 25812,
+              "errorMm": 0.04592577405810516
+            },
+            {
+              "id": "boundary-26410",
+              "pixel": 26410,
+              "errorMm": 0.11993930896613847
+            },
+            {
+              "id": "boundary-26837",
+              "pixel": 26837,
+              "errorMm": 0.11948369265758174
+            },
+            {
+              "id": "boundary-27350",
+              "pixel": 27350,
+              "errorMm": 0.12567870541909087
+            },
+            {
+              "id": "boundary-27862",
+              "pixel": 27862,
+              "errorMm": 0.08126131668461767
+            },
+            {
+              "id": "boundary-28375",
+              "pixel": 28375,
+              "errorMm": 0.12410337830323215
+            },
+            {
+              "id": "boundary-28887",
+              "pixel": 28887,
+              "errorMm": 0.07699054471839872
+            },
+            {
+              "id": "boundary-29400",
+              "pixel": 29400,
+              "errorMm": 0.303080980237155
+            },
+            {
+              "id": "boundary-29912",
+              "pixel": 29912,
+              "errorMm": 0.09009153050124041
+            },
+            {
+              "id": "boundary-30503",
+              "pixel": 30503,
+              "errorMm": 0.037633746259643885
+            },
+            {
+              "id": "boundary-30936",
+              "pixel": 30936,
+              "errorMm": 0.08436209118349325
+            },
+            {
+              "id": "boundary-31448",
+              "pixel": 31448,
+              "errorMm": 0.07718804513143596
+            },
+            {
+              "id": "boundary-31961",
+              "pixel": 31961,
+              "errorMm": 0.7031088430147179
+            },
+            {
+              "id": "boundary-32473",
+              "pixel": 32473,
+              "errorMm": 0.3622835885970517
+            },
+            {
+              "id": "boundary-32984",
+              "pixel": 32984,
+              "errorMm": 0.060014386896398264
+            },
+            {
+              "id": "boundary-33496",
+              "pixel": 33496,
+              "errorMm": 0.0636033826900757
+            },
+            {
+              "id": "boundary-34007",
+              "pixel": 34007,
+              "errorMm": 0.0822625763570386
+            },
+            {
+              "id": "boundary-34520",
+              "pixel": 34520,
+              "errorMm": 0.10547073480933022
+            },
+            {
+              "id": "boundary-35031",
+              "pixel": 35031,
+              "errorMm": 0.013959442426482838
+            },
+            {
+              "id": "boundary-35543",
+              "pixel": 35543,
+              "errorMm": 0.08537795000825099
+            },
+            {
+              "id": "boundary-36055",
+              "pixel": 36055,
+              "errorMm": 0.07277328159483432
+            },
+            {
+              "id": "boundary-36567",
+              "pixel": 36567,
+              "errorMm": 0.08809790225143388
+            },
+            {
+              "id": "boundary-37078",
+              "pixel": 37078,
+              "errorMm": 0.05467679827046368
+            },
+            {
+              "id": "boundary-37590",
+              "pixel": 37590,
+              "errorMm": 0.06236808751805256
+            },
+            {
+              "id": "boundary-38101",
+              "pixel": 38101,
+              "errorMm": 0.04486053827372416
+            },
+            {
+              "id": "boundary-38613",
+              "pixel": 38613,
+              "errorMm": 0.021633797372942354
+            },
+            {
+              "id": "boundary-38955",
+              "pixel": 38955,
+              "errorMm": 0.04279258675734354
+            },
+            {
+              "id": "boundary-39467",
+              "pixel": 39467,
+              "errorMm": 0.10641701438589735
+            },
+            {
+              "id": "boundary-39980",
+              "pixel": 39980,
+              "errorMm": 0.08925802636315439
+            },
+            {
+              "id": "boundary-40493",
+              "pixel": 40493,
+              "errorMm": 0.012285541598430427
+            },
+            {
+              "id": "boundary-41005",
+              "pixel": 41005,
+              "errorMm": 0.11336990789607171
+            },
+            {
+              "id": "boundary-41517",
+              "pixel": 41517,
+              "errorMm": 0.1994316188652192
+            },
+            {
+              "id": "boundary-42030",
+              "pixel": 42030,
+              "errorMm": 0.1631460384727461
+            },
+            {
+              "id": "boundary-42543",
+              "pixel": 42543,
+              "errorMm": 0.09917356215902373
+            },
+            {
+              "id": "boundary-42959",
+              "pixel": 42959,
+              "errorMm": 0.10417128494242434
+            },
+            {
+              "id": "boundary-43470",
+              "pixel": 43470,
+              "errorMm": 0.0724450228869955
+            },
+            {
+              "id": "boundary-43981",
+              "pixel": 43981,
+              "errorMm": 0.02142856405941984
+            },
+            {
+              "id": "boundary-44492",
+              "pixel": 44492,
+              "errorMm": 0.13926963386904845
+            },
+            {
+              "id": "boundary-45002",
+              "pixel": 45002,
+              "errorMm": 0.07504564590499285
+            },
+            {
+              "id": "boundary-45513",
+              "pixel": 45513,
+              "errorMm": 0.11945405870716286
+            },
+            {
+              "id": "boundary-46023",
+              "pixel": 46023,
+              "errorMm": 0.09376964355305972
+            },
+            {
+              "id": "boundary-46535",
+              "pixel": 46535,
+              "errorMm": 0.1276559531349335
+            },
+            {
+              "id": "boundary-47044",
+              "pixel": 47044,
+              "errorMm": 0.08573658643337012
+            },
+            {
+              "id": "boundary-47556",
+              "pixel": 47556,
+              "errorMm": 0.195520485022314
+            },
+            {
+              "id": "boundary-48066",
+              "pixel": 48066,
+              "errorMm": 0.14415652198937323
+            },
+            {
+              "id": "boundary-48576",
+              "pixel": 48576,
+              "errorMm": 0.11488756438149039
+            },
+            {
+              "id": "boundary-49085",
+              "pixel": 49085,
+              "errorMm": 0.02056498755030134
+            },
+            {
+              "id": "boundary-49595",
+              "pixel": 49595,
+              "errorMm": 0.020386824781098767
+            },
+            {
+              "id": "boundary-50105",
+              "pixel": 50105,
+              "errorMm": 0.06490952550808515
+            },
+            {
+              "id": "boundary-50504",
+              "pixel": 50504,
+              "errorMm": 0.060530214018967854
+            },
+            {
+              "id": "boundary-50869",
+              "pixel": 50869,
+              "errorMm": 0.07035470166624691
+            },
+            {
+              "id": "boundary-51275",
+              "pixel": 51275,
+              "errorMm": 0.3607150948793105
+            },
+            {
+              "id": "boundary-51535",
+              "pixel": 51535,
+              "errorMm": 0.06483779095714226
+            },
+            {
+              "id": "boundary-51889",
+              "pixel": 51889,
+              "errorMm": 0.2594693230444136
+            },
+            {
+              "id": "boundary-52305",
+              "pixel": 52305,
+              "errorMm": 0.1799872420146471
+            },
+            {
+              "id": "boundary-52563",
+              "pixel": 52563,
+              "errorMm": 0.16984692189600992
+            },
+            {
+              "id": "boundary-52821",
+              "pixel": 52821,
+              "errorMm": 0.2070316206349503
+            },
+            {
+              "id": "boundary-53079",
+              "pixel": 53079,
+              "errorMm": 0.14560500377297103
+            },
+            {
+              "id": "boundary-53160",
+              "pixel": 53160,
+              "errorMm": 0.1456067187006056
+            },
+            {
+              "id": "boundary-53414",
+              "pixel": 53414,
+              "errorMm": 0.09917356215902373
+            },
+            {
+              "id": "boundary-53666",
+              "pixel": 53666,
+              "errorMm": 0.08564915129693418
+            },
+            {
+              "id": "boundary-53919",
+              "pixel": 53919,
+              "errorMm": 0.08995200869441078
+            },
+            {
+              "id": "boundary-54116",
+              "pixel": 54116,
+              "errorMm": 0.022182612908466126
+            },
+            {
+              "id": "boundary-54372",
+              "pixel": 54372,
+              "errorMm": 0.04592590854531409
+            },
+            {
+              "id": "boundary-54426",
+              "pixel": 54426,
+              "errorMm": 0.10641701438589735
+            },
+            {
+              "id": "boundary-54633",
+              "pixel": 54633,
+              "errorMm": 0.021633797372942354
+            },
+            {
+              "id": "boundary-54678",
+              "pixel": 54678,
+              "errorMm": 0.021632964941886712
+            },
+            {
+              "id": "boundary-54892",
+              "pixel": 54892,
+              "errorMm": 0.08126176174494049
+            },
+            {
+              "id": "boundary-54928",
+              "pixel": 54928,
+              "errorMm": 0.05468175552033472
+            },
+            {
+              "id": "boundary-55150",
+              "pixel": 55150,
+              "errorMm": 0.1241015842178399
+            },
+            {
+              "id": "boundary-55157",
+              "pixel": 55157,
+              "errorMm": 0.08537795000825099
+            },
+            {
+              "id": "boundary-55173",
+              "pixel": 55173,
+              "errorMm": 0.050087360843008355
+            },
+            {
+              "id": "boundary-55182",
+              "pixel": 55182,
+              "errorMm": 0.08810137105319882
+            },
+            {
+              "id": "boundary-55413",
+              "pixel": 55413,
+              "errorMm": 0.12520176769629643
+            },
+            {
+              "id": "boundary-55420",
+              "pixel": 55420,
+              "errorMm": 0.09233660099789631
+            },
+            {
+              "id": "boundary-55428",
+              "pixel": 55428,
+              "errorMm": 0.11773140887385125
+            },
+            {
+              "id": "boundary-55436",
+              "pixel": 55436,
+              "errorMm": 0.17526972214193393
+            },
+            {
+              "id": "boundary-55683",
+              "pixel": 55683,
+              "errorMm": 0.7031088430147179
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "small-checker-depth.continuous.depth.json",
+      "missingForegroundPixels": 8,
+      "maximumAnchorErrorMm": 0.4226513375891159,
+      "meshQuality": null
+    },
+    {
+      "name": "small-matte-depth.continuous.depth.json",
+      "missingForegroundPixels": 8,
+      "maximumAnchorErrorMm": 0.4226513375891159,
+      "meshQuality": null
+    }
+  ]
+}

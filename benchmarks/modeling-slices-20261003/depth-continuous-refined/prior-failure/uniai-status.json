@@ -1,0 +1,15 @@
+{
+  "model": "gpt-6-sol",
+  "modelsQuery": "HTTP200 model available",
+  "review": "not-run: completion response timed out after55s",
+  "requestSent": true,
+  "billingOutcome": "unknown",
+  "tokens": "unknown",
+  "callCount": 1,
+  "automaticRetry": false,
+  "sourceImagesUploaded": false,
+  "publicFiles": [
+    "docs/DEPTH_CONTINUOUS_CONTRACT.ko.md",
+    "src/engine/depth-continuous.ts"
+  ]
+}

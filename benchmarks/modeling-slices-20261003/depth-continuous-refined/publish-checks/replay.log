@@ -1,0 +1,10 @@
+{"name":"ball_0000.grid","compileMs":202.87004100000001,"priorBoundaryDeficitMm":0.10613538073686213,"triangles":5676}
+{"name":"ball_0000.continuous","compileMs":202.87004100000001,"priorBoundaryDeficitMm":0.10613538073686213,"continuous":{"chordDeviationMm":0.0008835693225521801,"boundaryErrorMm":0.0000024466258885524894,"missingForegroundPixels":0},"triangles":40355}
+{"name":"large-checker-depth.grid","compileMs":277.11075000000005,"priorBoundaryDeficitMm":1.7377951189342014,"triangles":12248}
+{"name":"large-checker-depth.continuous","compileMs":277.11075000000005,"priorBoundaryDeficitMm":1.7377951189342014,"continuous":{"chordDeviationMm":0.0179826727468253,"boundaryErrorMm":0.00013527168800919753,"missingForegroundPixels":0},"triangles":69436}
+{"name":"large-matte-depth.grid","compileMs":224.485541,"priorBoundaryDeficitMm":1.7377951189342014,"triangles":12248}
+{"name":"large-matte-depth.continuous","compileMs":224.485541,"priorBoundaryDeficitMm":1.7377951189342014,"continuous":{"chordDeviationMm":0.0179826727468253,"boundaryErrorMm":0.00013527168800919753,"missingForegroundPixels":0},"triangles":69436}
+{"name":"small-checker-depth.grid","compileMs":143.36425000000008,"priorBoundaryDeficitMm":1.698166091789794,"triangles":5676}
+{"name":"small-checker-depth.continuous","compileMs":143.36425000000008,"priorBoundaryDeficitMm":1.698166091789794,"continuous":{"chordDeviationMm":0.01412839579096925,"boundaryErrorMm":0.00003914601421683983,"missingForegroundPixels":0},"triangles":40499}
+{"name":"small-matte-depth.grid","compileMs":141.87062500000002,"priorBoundaryDeficitMm":1.698166091789794,"triangles":5676}
+{"name":"small-matte-depth.continuous","compileMs":141.87062500000002,"priorBoundaryDeficitMm":1.698166091789794,"continuous":{"chordDeviationMm":0.01412839579096925,"boundaryErrorMm":0.00003914601421683983,"missingForegroundPixels":0},"triangles":40499}

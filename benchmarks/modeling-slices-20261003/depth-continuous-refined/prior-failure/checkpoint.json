@@ -1,0 +1,13 @@
+{
+  "schema": "morphloom.continuation-checkpoint/0.1",
+  "publishedCommit": "c8e4dba41b1748c112425fdc9046fa760649dd02",
+  "remoteMain": "c8e4dba41b1748c112425fdc9046fa760649dd02",
+  "goalStatus": "active, not complete",
+  "first30MinuteDiagnosis": "Actual GLB projected pixel-depth interpolation contradicts analytic-field candidate validation. Five continuous meshes have boundary depth errors up to.7031mm and three cases omit8foreground pixels. Existing.001mm boundary tolerance must remain unchanged.",
+  "currentLocalCode": "sampleDepthMesh actual Float32 triangle raster implemented; meshing projectedQuality and coverage flags added; candidate.validationPass includes actual mesh results; UI apply rejects failing actual mesh and preserves previous state",
+  "check": "PASS",
+  "focusedTests": "3FAIL/2PASS: tests still require actual continuous candidate validationPass; do not weaken these assertions",
+  "uniai": "one review timeout55s, token/billing unknown, no retry",
+  "next": "Refine the continuous front deterministically around independent fit/validation/boundary constraints and uncovered foreground/rim points. Keep exact existing depth data and thresholds, topology manifold/single rim and sagitta budget. Re-audit actual exported GLB interpolation, then rerun UI/Blender/current gates and corrective meaningful push.",
+  "possibleApproach": "Reuse SphereGeometry baseline; insert true parametric projected constraint vertices into affected faces (split shared edges consistently), refine rim only where actual projected mask missing; measure <=100ktri and <=1s. Do not simply increase unbounded tessellation or clamp field."
+}

@@ -1,0 +1,12 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ✓ tests/depth-continuous.test.ts (8 tests) 1320ms
+   ✓ continuous declared sphere front > creates a bounded front-only surface with analytic normals radius 128  527ms
+ ✓ tests/depth-boundary.test.ts (5 tests) 5ms
+ ✓ tests/depth-surface.test.ts (5 tests) 4ms
+
+ Test Files  3 passed (3)
+      Tests  18 passed (18)
+   Start at  03:07:08
+   Duration  1.67s (transform 49ms, setup 0ms, collect 99ms, tests 1.33s, environment 0ms, prepare 73ms)
