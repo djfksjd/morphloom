@@ -1,0 +1,51 @@
+
+ RUN  v3.2.7 /Users/danny/Documents/morphloom
+
+ ❯ tests/depth-boundary.test.ts (4 tests | 4 failed) 3ms
+   × independent depth boundary quality > migrates losslessly to unknown contracts and refuses silent approval 2ms
+     → (0 , migrateDepthSurface) is not a function
+   × independent depth boundary quality > blocks a single foreground spike outside envelope even when mean anchors pass 0ms
+     → (0 , migrateDepthSurface) is not a function
+   × independent depth boundary quality > blocks a single independent boundary error and rejects interior/colliding anchors 0ms
+     → (0 , migrateDepthSurface) is not a function
+   × independent depth boundary quality > preserves geometry UV and indices when only the verified contract is added 1ms
+     → (0 , migrateDepthSurface) is not a function
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/depth-boundary.test.ts > independent depth boundary quality > migrates losslessly to unknown contracts and refuses silent approval
+TypeError: (0 , migrateDepthSurface) is not a function
+ ❯ tests/depth-boundary.test.ts:9:105
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/depth-boundary.test.ts > independent depth boundary quality > blocks a single foreground spike outside envelope even when mean anchors pass
+TypeError: (0 , migrateDepthSurface) is not a function
+ ❯ declared tests/depth-boundary.test.ts:7:29
+
+ ❯ tests/depth-boundary.test.ts:10:98
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/depth-boundary.test.ts > independent depth boundary quality > blocks a single independent boundary error and rejects interior/colliding anchors
+TypeError: (0 , migrateDepthSurface) is not a function
+ ❯ declared tests/depth-boundary.test.ts:7:29
+
+ ❯ tests/depth-boundary.test.ts:11:102
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/depth-boundary.test.ts > independent depth boundary quality > preserves geometry UV and indices when only the verified contract is added
+TypeError: (0 , migrateDepthSurface) is not a function
+ ❯ declared tests/depth-boundary.test.ts:7:29
+
+ ❯ tests/depth-boundary.test.ts:14:147
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  01:19:22
+   Duration  161ms (transform 18ms, setup 0ms, collect 29ms, tests 3ms, environment 0ms, prepare 28ms)

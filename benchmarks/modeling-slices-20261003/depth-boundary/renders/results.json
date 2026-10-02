@@ -1,0 +1,22 @@
+[
+  {
+    "name": "large-checker-depth.raw-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.candidate-front-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.raw-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.candidate-iso-clay",
+    "exitCode": 0
+  },
+  {
+    "name": "large-checker-depth.candidate-iso-wire",
+    "exitCode": 0
+  }
+]

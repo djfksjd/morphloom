@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/danny/Documents/morphloom/outputs/depth-boundary-20261003/browser-workflow.py", line 28, in <module>
+    load(root/'outputs/depth-boundary-20261003/fixtures/torus-depth.depth.json');assert '선언된 IR 구면으로 가시 표면 후보" [disabled' in run('snapshot','-i')
+AssertionError

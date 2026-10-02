@@ -1,0 +1,24 @@
+{
+  "calls": 1,
+  "modelsStatus": 200,
+  "completionStatus": 200,
+  "usage": {
+    "completion_tokens": 453,
+    "prompt_tokens": 3092,
+    "total_tokens": 3545,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 185,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": null
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 3089,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null
+    }
+  }
+}

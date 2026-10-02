@@ -1,0 +1,14 @@
+[
+  {
+    "case": "sphere",
+    "exactBytes": true,
+    "nodeSha256": "d2eececb5ec9bee012648464dbe48342c9aabadd929e2c4fe0beaa71456f34a0",
+    "browserSha256": "d2eececb5ec9bee012648464dbe48342c9aabadd929e2c4fe0beaa71456f34a0"
+  },
+  {
+    "case": "ball",
+    "exactBytes": true,
+    "nodeSha256": "d9978deee82aeacbaba3600d17493202a3058b8d497aad8aaebe85d2980d32a3",
+    "browserSha256": "d9978deee82aeacbaba3600d17493202a3058b8d497aad8aaebe85d2980d32a3"
+  }
+]

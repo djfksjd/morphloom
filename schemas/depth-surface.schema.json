@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "morphloom.depth-surface/0.1",
+  "$id": "morphloom.depth-surface/0.2",
   "title": "Experimental native relative depth source (not approved solid)",
   "type": "object",
   "required": [
@@ -19,7 +19,10 @@
   "additionalProperties": false,
   "properties": {
     "schema": {
-      "const": "morphloom.depth-surface/0.1"
+      "enum": [
+        "morphloom.depth-surface/0.1",
+        "morphloom.depth-surface/0.2"
+      ]
     },
     "id": {
       "type": "string",
@@ -184,7 +187,234 @@
           }
         }
       }
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "depthEnvelope",
+        "boundary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "depthEnvelope": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "const": "unknown"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "status",
+                "nearMm",
+                "farMm",
+                "toleranceMm",
+                "basis"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "const": "declared"
+                },
+                "nearMm": {
+                  "type": "number",
+                  "exclusiveMinimum": 0.001,
+                  "maximum": 1000000.0
+                },
+                "farMm": {
+                  "type": "number",
+                  "exclusiveMinimum": 0.001,
+                  "maximum": 1000000.0
+                },
+                "toleranceMm": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "basis": {
+                  "enum": [
+                    "user-measured",
+                    "authored-fixture"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "boundary": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "const": "unknown"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "status",
+                "bandPixels",
+                "toleranceMm",
+                "basis",
+                "anchors"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "status": {
+                  "const": "declared"
+                },
+                "bandPixels": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 8
+                },
+                "toleranceMm": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "basis": {
+                  "enum": [
+                    "user-measured",
+                    "authored-fixture"
+                  ]
+                },
+                "anchors": {
+                  "type": "array",
+                  "minItems": 4,
+                  "maxItems": 512,
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "pixel",
+                      "depthMm"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 96
+                      },
+                      "pixel": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 65535
+                      },
+                      "depthMm": {
+                        "type": "number",
+                        "exclusiveMinimum": 0.001,
+                        "maximum": 1000000
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "primaryForm": {
+      "type": "object",
+      "required": [
+        "schema",
+        "radiusMm",
+        "centerMm",
+        "basis",
+        "centerFitToleranceMm"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "const": "morphloom.sphere-front-constraint/0.1"
+        },
+        "radiusMm": {
+          "type": "number",
+          "exclusiveMinimum": 0.001,
+          "maximum": 100000
+        },
+        "centerMm": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number",
+            "minimum": -1000000,
+            "maximum": 1000000
+          }
+        },
+        "centerFitToleranceMm": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "basis": {
+          "enum": [
+            "user-declared",
+            "authored-fixture"
+          ]
+        }
+      }
+    },
+    "preview": {
+      "enum": [
+        "raw-depth",
+        "declared-sphere-front"
+      ]
     }
   },
-  "$comment": "Engine also validates array lengths, foreground anchors, uniqueness, positive reciprocal fit, residuals, triangle count and Float32 collapse."
+  "$comment": "Engine also validates array lengths, foreground anchors, uniqueness, positive reciprocal fit, residuals, triangle count and Float32 collapse.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema": {
+            "const": "morphloom.depth-surface/0.2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "quality"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "quality"
+              ]
+            },
+            {
+              "required": [
+                "primaryForm"
+              ]
+            },
+            {
+              "required": [
+                "preview"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
 }

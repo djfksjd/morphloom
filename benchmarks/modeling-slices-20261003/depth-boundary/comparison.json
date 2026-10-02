@@ -1,0 +1,14 @@
+{
+  "sameTransformCameraLights": true,
+  "roiPixelRect": [
+    520,
+    180,
+    860,
+    620
+  ],
+  "resolution": [
+    1024,
+    1024
+  ],
+  "purpose": "authored front-only diagnostic; pixel clipping boundary alias remains"
+}

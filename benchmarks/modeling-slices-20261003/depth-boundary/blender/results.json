@@ -1,0 +1,46 @@
+[
+  {
+    "source": "ball_0000.candidate.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "ball_0000.raw.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-checker-depth.candidate.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-checker-depth.raw.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-matte-depth.candidate.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "large-matte-depth.raw.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-checker-depth.candidate.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-checker-depth.raw.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-matte-depth.candidate.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "small-matte-depth.raw.glb",
+    "exitCode": 0
+  },
+  {
+    "source": "torus-depth.raw.glb",
+    "exitCode": 0
+  }
+]

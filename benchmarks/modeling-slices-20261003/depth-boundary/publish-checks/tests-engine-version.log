@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ✓ tests/depth-boundary.test.ts (5 tests) 5ms
+ ✓ tests/depth-surface.test.ts (5 tests) 4ms
+
+ Test Files  2 passed (2)
+      Tests  10 passed (10)
+   Start at  02:01:37
+   Duration  196ms (transform 25ms, setup 0ms, collect 52ms, tests 9ms, environment 0ms, prepare 47ms)

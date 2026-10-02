@@ -1,0 +1,7 @@
+Three correctness bugs could produce a passing diagnostic when they should block:
+
+1. **A truncated depth array skips foreground envelope coverage.** `inspectDepthQuality` iterates to `depths.length`, not the source pixel count. If the array is shorter than the mask, unvisited foreground pixels cannot violate the envelope. Require `depths.length === s.width * s.height === s.mask.length` before reporting a pass, then iterate the full mask.
+
+2. **Non-finite candidate depths can pass both checks.** For `NaN`, the envelope comparison `excess > toleranceMm` is false; boundary `errorMm > toleranceMm` is false too. Thus a foreground or anchored `NaN` can leave `report.pass === true`. Explicitly reject every non-finite foreground depth and every non-finite anchor error, preserving their pixel/anchor IDs in the failure report.
+
+3. **The sphere’s fit anchors are only checked in aggregate.** `sphereFrontDepths` averages their implied center Z values and checks that average against the declared datum. Large, opposing fit-anchor residuals can cancel, yielding a candidate despite individually bad fit anchors. Check each fit-anchor residual against an explicit tolerance before admitting the candidate; keep that failure separate from the raw inverse-fit report.

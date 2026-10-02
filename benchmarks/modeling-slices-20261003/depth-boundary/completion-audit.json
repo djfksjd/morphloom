@@ -1,0 +1,70 @@
+{
+  "schema": "morphloom.completion-audit/0.1",
+  "scope": "declared visible-depth boundary guards and opt-in spherical prior; not general 3D delivery",
+  "requirements": [
+    {
+      "requirement": "Independent boundary and full foreground envelope",
+      "evidence": "tests/depth-boundary.test.ts; evidence.json raw quality failures, one-sample guard",
+      "status": "verified"
+    },
+    {
+      "requirement": "Version migration / unknown / strict failure conditions",
+      "evidence": "tests/depth-boundary.test.ts; browser/migrated.depth.json; schemas/depth-surface.schema.json",
+      "status": "verified"
+    },
+    {
+      "requirement": "Raw arrays, raw geometry, unrelated bearing source preserved",
+      "evidence": "scripts/depth-boundary-evidence.ts legacy arrays, original bearing SHA; browser saved-source equality",
+      "status": "verified"
+    },
+    {
+      "requirement": "Explicit Assembly sphere prior / inferred front only",
+      "evidence": "src/engine/depth-boundary.ts; ball_0000 fixture and evidence; releaseAllowed:false",
+      "status": "verified"
+    },
+    {
+      "requirement": "Actual depth-error reduction across sizes/material cases",
+      "evidence": "evidence.json five candidates maximum vertex error below fixed .001mm; comparison.png",
+      "status": "verified"
+    },
+    {
+      "requirement": "Torus unsupported operation rejected",
+      "evidence": "scripts/depth-boundary-evidence.ts explicit silhouette refusal; browser disabled candidate",
+      "status": "verified"
+    },
+    {
+      "requirement": "Editing undo redo save reopen export",
+      "evidence": "browser/workflow.json, named native saved files; node-browser.json exact bytes",
+      "status": "verified"
+    },
+    {
+      "requirement": "Blender import export reopen and selected ball edit/restore",
+      "evidence": "blender 11 receipts; blender-edit/audit.json; edited/restored standard results",
+      "status": "verified"
+    },
+    {
+      "requirement": "Existing gates and immutable thresholds",
+      "evidence": "publish-checks/results.json; final-results.json; production failure retained; .100/.250/.001 unchanged",
+      "status": "verified"
+    },
+    {
+      "requirement": "Resources and bounded UNI_AI",
+      "evidence": "256x256 <=100k <=8MiB assertions; uniai-status.json one review3545tokens; no image upload/new dependencies",
+      "status": "verified"
+    },
+    {
+      "requirement": "Remaining limits, source/output hashes, reusable run",
+      "evidence": "DEPTH_BOUNDARY_STATUS.ko.md; verification.json; archived bearing source / reproducible evidence command",
+      "status": "verified"
+    }
+  ],
+  "publish": "pending remote SHA verification",
+  "notAchieved": [
+    "continuous pixel boundary smoothing",
+    "independent expert approval",
+    "real-product reconstruction accuracy",
+    "manufacturing/BREP",
+    "production comparator evidence0/3"
+  ],
+  "elapsedPolicy": "First30minute checkpoint exceeded; additional UI/source-preservation/final evidence work explicitly documented; no thresholds or geometry budgets relaxed"
+}

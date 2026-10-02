@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "cases": [
+    "raw boundary failure visible",
+    "explicit declared-IR candidate",
+    "raw source/anchors/quality preserved",
+    "candidate and stride undo/redo",
+    "candidate save/reopen",
+    "ball export",
+    "unsupported torus disabled",
+    "legacy lossless migration unknown"
+  ],
+  "sourceArrayEquality": true
+}

@@ -1,9 +1,11 @@
 import * as THREE from 'three';
+import {validateDepthQuality,inspectDepthQuality,sphereFrontDepths,type DepthQualityContract,type DepthQualityReport,type SphereFrontConstraint} from './depth-boundary';
 
+export const DEPTH_SURFACE_ENGINE_REVISION='morphloom.depth-surface-engine/0.2';
 export interface DepthAnchor {id: string; pixel: number; depthMm: number}
 /** Source field remains independent of this explicitly approximate display mesh. */
 export interface DepthSurfaceSource {
-  schema: 'morphloom.depth-surface/0.1';
+  schema: 'morphloom.depth-surface/0.1'|'morphloom.depth-surface/0.2';
   id: string;
   imageSha256: string;
   rawFieldSha256: string;
@@ -18,14 +20,20 @@ export interface DepthSurfaceSource {
   };
   calibration: {basis: 'user-measured' | 'authored-fixture'; fit: DepthAnchor[]; validation: DepthAnchor[]};
   stride: number;
+  quality?:DepthQualityContract;
+  primaryForm?:SphereFrontConstraint;
+  preview?:'raw-depth'|'declared-sphere-front';
 }
 export interface DepthSurfaceReport {
-  schema: 'morphloom.depth-surface-report/0.1';
+  schema: 'morphloom.depth-surface-report/0.2';
+  engineRevision:typeof DEPTH_SURFACE_ENGINE_REVISION;
   calibrationPass: boolean; releaseAllowed: false; representation: 'inferred-open-visible-surface';
   inverseDepthFit: {scale: number; offset: number};
   validation: {normalizedMae: number; maximumNormalizedError: number; errors: Array<{id: string; errorMm: number; normalizedError: number}>};
   triangles: number; vertices: number; skippedCells: number;
   blockers: string[];
+  quality:DepthQualityReport;
+  candidate?:{kind:'declared-sphere-front';validationPass:boolean;maximumAnchorErrorMm:number;quality:DepthQualityReport};
 }
 const bounded = (n: number) => Number.isFinite(n) && Math.abs(n) <= 1e6;
 const SHA = /^[a-f0-9]{64}$/;
@@ -34,8 +42,8 @@ export function validateDepthSurfaceSource(input: unknown): asserts input is Dep
   if (!input || typeof input !== 'object') throw new Error('Invalid depth source.');
   const s = input as DepthSurfaceSource;
   const allowed=(value:object,keys:string[])=>Object.keys(value).every(key=>keys.includes(key));
-  if(!allowed(s,['schema','id','imageSha256','rawFieldSha256','width','height','samples','mask','camera','calibration','stride']))throw new Error('Unknown depth source parameters.');
-  if (s.schema !== 'morphloom.depth-surface/0.1' || !/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$/.test(s.id)
+  if(!allowed(s,['schema','id','imageSha256','rawFieldSha256','width','height','samples','mask','camera','calibration','stride','quality','primaryForm','preview']))throw new Error('Unknown depth source parameters.');
+  if (!['morphloom.depth-surface/0.1','morphloom.depth-surface/0.2'].includes(s.schema) || !/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,95}$/.test(s.id)
     || typeof s.id !== 'string' || !SHA.test(s.imageSha256) || !SHA.test(s.rawFieldSha256)
     || !Number.isInteger(s.width) || !Number.isInteger(s.height) || s.width < 2 || s.height < 2
     || s.width > 256 || s.height > 256 || !Array.isArray(s.samples) || !Array.isArray(s.mask)
@@ -58,11 +66,20 @@ export function validateDepthSurfaceSource(input: unknown): asserts input is Dep
       ids.add(a.id); pixels.add(a.pixel);
     }
   }
+  if(s.preview!==undefined&&(s.schema!=='morphloom.depth-surface/0.2'||!['raw-depth','declared-sphere-front'].includes(s.preview)))throw new Error('Unsupported native depth preview operation.');
+  validateDepthQuality(s);
 }
 
-export function compileDepthSurface(input: unknown, options: {diagnostic?: boolean} = {}): {
+export function migrateDepthSurface(input:unknown):DepthSurfaceSource{
+ validateDepthSurfaceSource(input);
+ const s=structuredClone(input);if(s.schema==='morphloom.depth-surface/0.1'){s.schema='morphloom.depth-surface/0.2';s.quality={depthEnvelope:{status:'unknown'},boundary:{status:'unknown'}};}return s;
+}
+
+export function compileDepthSurface(input: unknown, options: {diagnostic?: boolean;candidate?:'declared-sphere-front'} = {}): {
   geometry: THREE.BufferGeometry; report: DepthSurfaceReport; sourcePixels: number[];
 } {
+  if(options.candidate!==undefined&&options.candidate!=='declared-sphere-front')throw new Error('Unsupported depth candidate operation.');
+  if(options.diagnostic!==undefined&&typeof options.diagnostic!=='boolean')throw new Error('Diagnostic mode must be explicit boolean.');
   validateDepthSurfaceSource(input);
   const s = input, fit = s.calibration.fit;
   const fitInverse=fit.map(a=>1/a.depthMm);
@@ -73,7 +90,7 @@ export function compileDepthSurface(input: unknown, options: {diagnostic?: boole
   for (const a of fit) {const dx=s.samples[a.pixel]!-meanX; variance+=dx*dx; covariance+=dx*(1/a.depthMm-meanY);}
   const scale = covariance/variance, offset = meanY-scale*meanX;
   if (!(variance > 1e-14) || !Number.isFinite(scale) || scale <= 0 || !Number.isFinite(offset)) throw new Error('Inverse-depth calibration is unconstrained or reversed.');
-  const depths = new Float64Array(s.samples.length);
+  let depths:Float64Array = new Float64Array(s.samples.length);
   for (let i=0;i<depths.length;i++) if (s.mask[i] === 1) {
     const inverse = scale*s.samples[i]!+offset;
     if (!(inverse > 0) || !bounded(1/inverse)) throw new Error('Calibrated foreground depth is non-positive or outside mm bounds.');
@@ -90,6 +107,20 @@ export function compileDepthSurface(input: unknown, options: {diagnostic?: boole
   const blockers: string[] = [];
   if (normalizedMae > .1) blockers.push('Depth validation normalized MAE exceeds .100.');
   for (const a of errors) if (a.normalizedError > .25) blockers.push(`Depth validation ${a.id} exceeds .250.`);
+  const calibrationPass=blockers.length===0;
+  const quality=inspectDepthQuality(s,depths);blockers.push(...quality.blockers);
+  let candidate:DepthSurfaceReport['candidate'];
+  const candidateMode=options.candidate??(s.preview==='declared-sphere-front'?'declared-sphere-front':undefined);
+  if(candidateMode){
+    if(!options.diagnostic)throw new Error('Primary-form candidates require explicit diagnostic mode.');
+    depths=sphereFrontDepths(s);const candidateQuality=inspectDepthQuality(s,depths);
+    const candidateErrors=[...fit,...validation].map(a=>Math.abs(depths[a.pixel]!-a.depthMm));
+    const maxError=Math.max(...candidateErrors);
+    // Candidate validation remains separate; failed raw reports are never replaced.
+    const candidateNormalized=validation.map(a=>Math.abs(1/depths[a.pixel]!-1/a.depthMm)/range);
+    const validationPass=candidateNormalized.reduce((a,b)=>a+b,0)/validation.length<=.1&&Math.max(...candidateNormalized)<=.25&&candidateQuality.pass;
+    candidate={kind:'declared-sphere-front',validationPass,maximumAnchorErrorMm:maxError,quality:candidateQuality};
+  }
   if (blockers.length && !options.diagnostic) throw new Error(blockers.join(' '));
   const axis = (count:number) => {const values:number[]=[];for(let n=0;n<count-1;n+=s.stride)values.push(n);values.push(count-1);return values;};
   const xs=axis(s.width),ys=axis(s.height), cells:number[][]=[];
@@ -123,9 +154,9 @@ export function compileDepthSurface(input: unknown, options: {diagnostic?: boole
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
   geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.setIndex(indices);geometry.computeVertexNormals();
   geometry.computeBoundingBox();geometry.computeBoundingSphere();
-  geometry.userData.depthSource={schema:s.schema,id:s.id,imageSha256:s.imageSha256,rawFieldSha256:s.rawFieldSha256,
+  geometry.userData.depthSource={candidate:candidateMode??null,schema:s.schema,id:s.id,imageSha256:s.imageSha256,rawFieldSha256:s.rawFieldSha256,
     representation:'inferred-open-visible-surface',releaseAllowed:false};
-  return {geometry,sourcePixels,report:{schema:'morphloom.depth-surface-report/0.1',calibrationPass:blockers.length===0,
+  return {geometry,sourcePixels,report:{schema:'morphloom.depth-surface-report/0.2',engineRevision:DEPTH_SURFACE_ENGINE_REVISION,calibrationPass,
     releaseAllowed:false,representation:'inferred-open-visible-surface',inverseDepthFit:{scale,offset},
-    validation:{normalizedMae,maximumNormalizedError,errors},triangles:indices.length/3,vertices:sourcePixels.length,skippedCells,blockers}};
+    validation:{normalizedMae,maximumNormalizedError,errors},triangles:indices.length/3,vertices:sourcePixels.length,skippedCells,blockers,quality,...(candidate?{candidate}:{})}};
 }

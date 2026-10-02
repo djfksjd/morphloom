@@ -1,0 +1,11 @@
+{"name":"ball_0000.raw","vertexMaeMm":0.15049996239855362,"vertexMaxMm":2.033590124072315,"rawBlocked":true,"quality":false}
+{"name":"ball_0000.candidate","vertexMaeMm":3.6599185500619013e-7,"vertexMaxMm":0.000002927259110441227,"rawBlocked":true,"quality":false,"candidate":true}
+{"name":"large-checker-depth.raw","vertexMaeMm":2.53414116806533,"vertexMaxMm":50.07970586628413,"rawBlocked":true,"quality":false}
+{"name":"large-checker-depth.candidate","vertexMaeMm":0.000004727852025336323,"vertexMaxMm":0.00007618052564195565,"rawBlocked":true,"quality":false,"candidate":true}
+{"name":"large-matte-depth.raw","vertexMaeMm":3.1094465382016385,"vertexMaxMm":44.11208510608172,"rawBlocked":true,"quality":false}
+{"name":"large-matte-depth.candidate","vertexMaeMm":0.000004727852025336323,"vertexMaxMm":0.00007618052564195565,"rawBlocked":true,"quality":false,"candidate":true}
+{"name":"small-checker-depth.raw","vertexMaeMm":1.879858145585348,"vertexMaxMm":45.679319940876795,"rawBlocked":true,"quality":false}
+{"name":"small-checker-depth.candidate","vertexMaeMm":0.000005855869680099042,"vertexMaxMm":0.000046836145767059634,"rawBlocked":true,"quality":false,"candidate":true}
+{"name":"small-matte-depth.raw","vertexMaeMm":2.407999398376858,"vertexMaxMm":32.53744198515704,"rawBlocked":true,"quality":false}
+{"name":"small-matte-depth.candidate","vertexMaeMm":0.000005855869680099042,"vertexMaxMm":0.000046836145767059634,"rawBlocked":true,"quality":false,"candidate":true}
+{"name":"torus-depth.raw","vertexMaeMm":0,"vertexMaxMm":0,"rawBlocked":true,"quality":false}

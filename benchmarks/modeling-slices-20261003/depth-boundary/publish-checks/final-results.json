@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.381
+  },
+  {
+    "command": [
+      "npx",
+      "vitest",
+      "run",
+      "tests/depth-surface.test.ts",
+      "tests/depth-boundary.test.ts"
+    ],
+    "exitCode": 0,
+    "seconds": 0.701
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.575
+  }
+]

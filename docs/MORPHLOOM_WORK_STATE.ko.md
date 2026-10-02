@@ -53,3 +53,5 @@ DomainPack API0.4 최신source0.6 생성/공통UI/혼합/actualGLB/Blender 검�
 2026-10-03 사진 출처 보호·선택적 깊이 실험: PHOTO_DEPTH_SLICE_STATUS.ko.md. manifest0.2/legacy0.1 호환, synthetic/unknown 강한 근거 제외, SHA 기반 atomic 저장/재열기, 좁은 PHOTO EVIDENCE UI. 원본90files637tests/check/build/benchmark PASS. pinned Small CPU5실행·raw byte replay; 구형4사례 MAE .036–.051 통과, 토러스 .150>.100 실패. 자동 geometry 채택 보류, 실제제품/Blender 납품 not-run. UNI_AI models403, production독립비교부족FAIL 유지. 다음은 실제 기하·관통 제약 검수이며 모든분야 완료가 아니다.
 
 선택적 depth 가시표면0.1·카메라/독립mm anchor·nativefield보존/Undo/save/reopen·실제진단GLB/Blender 구현. DEPTH_SURFACE_STATUS.ko.md.12Blender/2Node-browser bytes/10UV-Khronos PASS, 토러스 anchor FAIL 및 구형 경계최대32–50mm 오류 FAIL. calibration 평균통과≠형상합격, 모든GLB releaseAllowed:false. UNI_AI정상헤더 models/chat/responses200 재확인·4214+15tokens, 기존403점검 헤더누락수정. 다음은 경계ROI와declareddepthbounds이며 자동depth채택없음.
+
+가시깊이 경계0.2: 전체전경 깊이범위/독립경계검증점,unknown무손실migration,선언된IR구면전면후보5사례와토러스거부. DEPTH_BOUNDARY_STATUS.ko.md. Knownfixture정점최대32–50mm→<.001mm(3mm볼포함),원본실패보존·픽셀경계앨리어싱남음·releasefalse.11Blender/2Node-browser바이트/UIUndo-save-reopen/CSV검증. 다음은원본보존하며연속경계를다루는연산이다.

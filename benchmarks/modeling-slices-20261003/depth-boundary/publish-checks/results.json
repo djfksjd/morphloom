@@ -1,0 +1,46 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.072
+  },
+  {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 51.334
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.576
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "exitCode": 0,
+    "seconds": 3.917
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "quality:production"
+    ],
+    "exitCode": 1,
+    "seconds": 11.084
+  }
+]
