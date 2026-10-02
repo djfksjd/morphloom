@@ -1,0 +1,1 @@
+Scoped isolated publish validation: check/build/benchmark pass;83 files585 tests pass. Python policy discover passes; the initial module-style command failed because its import path was wrong. Production gate fails for existing independent comparison evidence shortage; not a production release.

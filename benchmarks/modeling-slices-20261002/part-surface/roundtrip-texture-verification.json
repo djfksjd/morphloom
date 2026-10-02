@@ -1,0 +1,98 @@
+[
+  {
+    "name": "gear",
+    "pass": true,
+    "textureScale": [
+      8,
+      8
+    ],
+    "wrap": "repeat",
+    "pixelReport": {
+      "pass": true,
+      "sourceSha256": "bc6ceb05681e6f31ed91416fb51c0bb64d93522a2aa83f4a9c22e68414cdb3ca",
+      "target": "spur_gear",
+      "matches": [
+        {
+          "name": "Image_0",
+          "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+          "flipMatches": true,
+          "colorspace": "Non-Color"
+        }
+      ],
+      "expectedPixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+      "materialName": "spur_gear [brushed-metal]"
+    }
+  },
+  {
+    "name": "small",
+    "pass": true,
+    "textureScale": [
+      8,
+      8
+    ],
+    "wrap": "repeat",
+    "pixelReport": {
+      "pass": true,
+      "sourceSha256": "a77a376e9168d321d4a96cf102e5b230fd3f18c325d1f478dcd16b6b51f7a3af",
+      "target": "spur_gear",
+      "matches": [
+        {
+          "name": "Image_0",
+          "pixelSha256": "eb1d28e414868e010f7e25d4bc1318af370ed8a3b4da6a43b5e04afe2482c809",
+          "flipMatches": true,
+          "colorspace": "Non-Color"
+        }
+      ],
+      "expectedPixelSha256": "570467cc08feba0b395f164ad76d3092e5dab83cb159a965d337d9aa6c587b5b",
+      "materialName": "spur_gear [anodized-metal]"
+    }
+  },
+  {
+    "name": "bearing",
+    "pass": true,
+    "textureScale": [
+      8,
+      8
+    ],
+    "wrap": "repeat",
+    "pixelReport": {
+      "pass": true,
+      "sourceSha256": "6171c530b521f34659e792a371dd1271749b19a91777d45068570ec62d3bebe7",
+      "target": "cage",
+      "matches": [
+        {
+          "name": "Image_0",
+          "pixelSha256": "7563bc1c03ced310e83e89e4bcdd5a2cb8f8a65d1727a7a37d68eb961bc57ad0",
+          "flipMatches": true,
+          "colorspace": "Non-Color"
+        }
+      ],
+      "expectedPixelSha256": "0dc0085db15e76ca9d8254bc17226294a7b0f50e1b1dd5737fdfc8264578a9e5",
+      "materialName": "cage [bead-blasted-metal]"
+    }
+  },
+  {
+    "name": "ball",
+    "pass": true,
+    "textureScale": [
+      8,
+      8
+    ],
+    "wrap": "repeat",
+    "pixelReport": {
+      "pass": true,
+      "sourceSha256": "78cadb80dbf017f4463ced5b29a1818794cf56ea44362b951609e45acb014571",
+      "target": "ball_0000",
+      "matches": [
+        {
+          "name": "Image_0",
+          "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+          "flipMatches": true,
+          "colorspace": "Non-Color"
+        }
+      ],
+      "expectedPixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+      "materialName": "ball_0000 [brushed-metal]"
+    }
+  }
+]

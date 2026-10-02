@@ -1,0 +1,13 @@
+.element-editor button, .element-editor input, .element-editor select { color: #edf1f5; background: #353e48; border: 1px solid #536171; border-radius: 5px; padding: 6px 9px; font: inherit; }
+.element-editor button { cursor: pointer; margin: 2px; }
+.element-editor button:hover, .element-editor button:focus-visible { background: #495b70; outline: 2px solid #88b8df; }
+.element-editor input[type=number] { width: 95px; margin: 4px; }
+.element-editor input[type=checkbox] { margin: 8px; }
+.element-editor fieldset { border: 1px solid #536171; margin: 10px 0; }
+.element-editor summary { cursor: pointer; }
+.element-editor details details { margin-left: 14px; }
+.element-editor nav { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.element-editor h1 { margin: 6px 0; }
+.element-editor h2 { font-size: 17px; }
+.element-editor [role=status] { font: 12px monospace; color: #acccdf; }
+@media (max-width: 800px) { .element-editor .element-columns { grid-template-columns: 1fr !important; height: auto !important; } .element-editor .element-viewport { height: 50vh; } }

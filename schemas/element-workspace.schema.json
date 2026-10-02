@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ElementWorkspace 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "units",
+    "coordinates",
+    "assets"
+  ],
+  "properties": {
+    "schema": {
+      "const": "morphloom.workspace/0.1"
+    },
+    "units": {
+      "const": "mm"
+    },
+    "coordinates": {
+      "const": "right-handed-y-up"
+    },
+    "assets": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "packId",
+          "requiredCapabilities",
+          "source",
+          "positionMm",
+          "rotationRad"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,47}$"
+          },
+          "packId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "requiredCapabilities": {
+            "type": "array",
+            "maxItems": 32,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "source": {
+            "oneOf": [
+              {
+                "$ref": "element-project.schema.json"
+              },
+              {
+                "$ref": "element-project-v2.schema.json"
+              },
+              {
+                "$ref": "element-project-v3.schema.json"
+              },
+              {"$ref":"element-project-v4.schema.json"},
+              {"$ref":"element-project-v5.schema.json"},
+              {"$ref":"element-project-v6.schema.json"}
+            ]
+          },
+          "positionMm": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": -1000000,
+              "maximum": 1000000
+            }
+          },
+          "rotationRad": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": -6.283185307179586,
+              "maximum": 6.283185307179586
+            }
+          }
+        }
+      }
+    }
+  }
+}

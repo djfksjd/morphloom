@@ -1,0 +1,298 @@
+{
+  "base": "a200aa4593aa14a9f0348b014962d144d119c741",
+  "scope": [
+    "README.md",
+    "docs/BEARING_QUALITY_CONTRACT.ko.md",
+    "docs/BEARING_SLICE_STATUS.ko.md",
+    "docs/DATUM_ROTATION_CONTRACT.ko.md",
+    "docs/DATUM_ROTATION_STATUS.ko.md",
+    "docs/DOMAIN_PACK_SDK.ko.md",
+    "docs/ELEMENT_PLATFORM.ko.md",
+    "docs/ELEMENT_SLICE_STATUS.ko.md",
+    "docs/EXTRUDE_UV_STABILITY_CONTRACT.ko.md",
+    "docs/EXTRUDE_UV_STABILITY_STATUS.ko.md",
+    "docs/GEAR_CHAMFER_CONTRACT.ko.md",
+    "docs/GEAR_CHAMFER_STATUS.ko.md",
+    "docs/GEAR_PICKING_CONTRACT.ko.md",
+    "docs/GEAR_PICKING_STATUS.ko.md",
+    "docs/MODELING_AUDIT.ko.md",
+    "docs/MORPHLOOM_WORK_STATE.ko.md",
+    "docs/PART_SURFACE_CONTRACT.ko.md",
+    "docs/PART_SURFACE_STATUS.ko.md",
+    "docs/SPUR_GEAR_QUALITY_CONTRACT.ko.md",
+    "docs/SPUR_GEAR_SLICE_STATUS.ko.md",
+    "docs/TEXEL_DENSITY_CONTRACT.ko.md",
+    "docs/TEXEL_DENSITY_STATUS.ko.md",
+    "docs/UV_QUALITY_CONTRACT.ko.md",
+    "docs/UV_QUALITY_STATUS.ko.md",
+    "docs/UV_SCALE_CONTRACT.ko.md",
+    "docs/UV_SCALE_STATUS.ko.md",
+    "docs/WORKSPACE_HISTORY_CONTRACT.ko.md",
+    "docs/WORKSPACE_HISTORY_STATUS.ko.md",
+    "docs/WORKSPACE_QUALITY_CONTRACT.ko.md",
+    "docs/WORKSPACE_SLICE_STATUS.ko.md",
+    "examples/domain-packs/minimal-pack.ts",
+    "examples/elements/bearing-ball.elements.json",
+    "examples/elements/bird.elements.json",
+    "examples/elements/fur.elements.json",
+    "schemas/element-project-v2.schema.json",
+    "schemas/element-project-v3.schema.json",
+    "schemas/element-project-v4.schema.json",
+    "schemas/element-project-v5.schema.json",
+    "schemas/element-project-v6.schema.json",
+    "schemas/element-project.schema.json",
+    "schemas/element-workspace.schema.json",
+    "scripts/ball-curvature-evidence.ts",
+    "scripts/bearing-slice-evidence.ts",
+    "scripts/blender-component-edit-audit.py",
+    "scripts/blender-glb-roundtrip.py",
+    "scripts/blender-neutral-render.py",
+    "scripts/blender_export_policy.py",
+    "scripts/compare-glb-attributes.py",
+    "scripts/datum-rotation-evidence.ts",
+    "scripts/element-slice-evidence.ts",
+    "scripts/extrude-uv-evidence.ts",
+    "scripts/gear-chamfer-evidence.ts",
+    "scripts/part-surface-evidence.ts",
+    "scripts/repair-glb-interchange.ts",
+    "scripts/spur-gear-evidence.ts",
+    "scripts/test_blender_export_policy.py",
+    "scripts/uv-quality-evidence.ts",
+    "scripts/uv-scale-evidence.ts",
+    "scripts/workspace-slice-evidence.ts",
+    "src/ElementEditor.tsx",
+    "src/PartInspector.tsx",
+    "src/WorkspaceEditor.tsx",
+    "src/element-editor.css",
+    "src/engine/assembly-compiler.ts",
+    "src/engine/bearing-pack.ts",
+    "src/engine/bird-element-demo.ts",
+    "src/engine/deterministic-rotation.ts",
+    "src/engine/domain-readiness.ts",
+    "src/engine/element-domain-packs.ts",
+    "src/engine/element-project.ts",
+    "src/engine/element-renderer.ts",
+    "src/engine/element-workspace.ts",
+    "src/engine/extrude-uv.ts",
+    "src/engine/gear-chamfer.ts",
+    "src/engine/gear-pack.ts",
+    "src/engine/gear-picking.ts",
+    "src/engine/part-geometry.ts",
+    "src/engine/part-uv.ts",
+    "src/engine/spur-gear.ts",
+    "src/engine/surface-system.ts",
+    "src/engine/texel-density.ts",
+    "src/engine/uv-checker.ts",
+    "src/engine/uv-delivery.ts",
+    "src/engine/uv-quality.ts",
+    "src/viewer-main.tsx",
+    "tests/bearing-pack.test.ts",
+    "tests/deterministic-rotation.test.ts",
+    "tests/element-domain-packs.test.ts",
+    "tests/element-project.test.ts",
+    "tests/element-renderer.test.ts",
+    "tests/element-workspace.test.ts",
+    "tests/extrude-uv-stability.test.ts",
+    "tests/gear-chamfer.test.ts",
+    "tests/gear-picking.test.ts",
+    "tests/gltf-interchange-repair.test.ts",
+    "tests/part-surface.test.ts",
+    "tests/spur-gear.test.ts",
+    "tests/texel-density.test.ts",
+    "tests/uv-quality.test.ts",
+    "tests/uv-scale.test.ts",
+    "tests/workspace-history.test.ts"
+  ],
+  "files": {
+    "benchmarks/modeling-slices-20261002/README.md": {
+      "sha256": "060ea1e775e7df8c46923cbefadef267c91d7dcbe62ec24703849c0a141f278c",
+      "bytes": 1538
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/browser-edit.json": {
+      "sha256": "e18c8c8e2ebbd6b4e4cd4df6bebbbe9724d8afb03aac40b95ddd1860ad2030d6",
+      "bytes": 933
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-material-full.png": {
+      "sha256": "72cbd843d9acb458e8d87b717a9d1b11dba58687a253415c798a4b64c9121f34",
+      "bytes": 749920
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-before.glb": {
+      "sha256": "08e5df4c97d5533333329561623db169cd53bcd8526dea60fb15fb90b8d9f961",
+      "bytes": 1614048
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/browser-edit-final.log": {
+      "sha256": "1b70bdd7c782f09d41ad15387c03a6bf7e1709478834914b39ef650a1cef278e",
+      "bytes": 86
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-before-material-close.png": {
+      "sha256": "891110ace772bffd195a7c708b75ed8df0b1109e43ffbb9e5d2868c52faf839c",
+      "bytes": 569351
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-roughness-close.png": {
+      "sha256": "767cdf5de500ea5359417ff19f7456222856bdda862214e6f6cb8244946969ec",
+      "bytes": 429180
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/commands.json": {
+      "sha256": "2aed56f11134317c1394960db56229d841bbd5888d11dcda8301254158252eb8",
+      "bytes": 232
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/file-verification.json": {
+      "sha256": "0debd2903ae2a43646035984cb65b878abe6bdd10597b086fec824c503ab8af4",
+      "bytes": 12906
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/roundtrip-texture-verification.json": {
+      "sha256": "173f69580ad2ae750a550126f7f40b907e07f725f7954c8ec856ed9779bfcba7",
+      "bytes": 2663
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/ui-surface.png": {
+      "sha256": "dd687b5a1b1b005c086e448f9b7490afd108e450da5541fdfdca5c63fb4f4415",
+      "bytes": 105162
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/verification.json": {
+      "sha256": "cd97534daf07da9bd80939046c7679cd26ccb2512ddf5edca2b52ba26b7574ef",
+      "bytes": 11057
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-before-material-full.png": {
+      "sha256": "6344dc8ec200afd30911faa4768e175dbb945a4ed5b57af5470e61a759328f24",
+      "bytes": 704039
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-before.elements.json": {
+      "sha256": "14d3777d3f079c13b084d18e04f0a78ac069521b7735fd94b7863e5b10e81a5f",
+      "bytes": 749
+    },
+    "benchmarks/modeling-slices-20261002/part-surface/gear-material-close.png": {
+      "sha256": "8078efdf484b099c755c27df841fce683bf1388650c1da49fd94eefcfbcb6be3",
+      "bytes": 577967
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/build-report.log": {
+      "sha256": "9ca5b7d68fc35f7fe0aeabf1ac9bdad77ecdedd0f9d3f6ef6f74b684c1946709",
+      "bytes": 1830
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/small.glb": {
+      "sha256": "8bff421011c869062e23ef3fb1117ab2d247bea7b4d6b9cf37e2279ee07a81ff",
+      "bytes": 1242108
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/comparison.json": {
+      "sha256": "642db644f0f2653800df2e64cbfcafcfd15dbd05a28a3df9df03f1c4297729e6",
+      "bytes": 22683
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/commands.json": {
+      "sha256": "2aed56f11134317c1394960db56229d841bbd5888d11dcda8301254158252eb8",
+      "bytes": 232
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/previous-delivery-byte-preservation.json": {
+      "sha256": "f3c6eaccad18021ab670bf9220fbbc6bec02f2e82bce312813af47861b6a201a",
+      "bytes": 526
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/gear.glb": {
+      "sha256": "0f29ccca9a29b8faf63b2570734a3c0fe2724af1c739d20632f0ffc4b05d15fb",
+      "bytes": 1615144
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/small.elements.json": {
+      "sha256": "39783ebc610ecf876364a595b1fe9cf1d45a6b85e13c96603fef18969d47fa51",
+      "bytes": 863
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/tests-report.log": {
+      "sha256": "b17b4b54e6bb099784793c344ae022ae327fce3452610022733a01127b90c76f",
+      "bytes": 12137
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/bearing.elements.json": {
+      "sha256": "791c0a39aa09ad053f954318792d97fde5ebcef438070b85917097a6b857ab8c",
+      "bytes": 28235
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/bearing.glb": {
+      "sha256": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef",
+      "bytes": 2526504
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/gear.elements.json": {
+      "sha256": "446626c371874cc43507484eef9c9c2b96f57284f009c2e11197770f726307f7",
+      "bytes": 844
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/ball.elements.json": {
+      "sha256": "aa0789659f215675e65b32323cb485a9dd8f97f13463ca1fc902a3bc6cad57a0",
+      "bytes": 28230
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/ball.glb": {
+      "sha256": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7",
+      "bytes": 2521208
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/check-report.log": {
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030",
+      "bytes": 49
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/verification.json": {
+      "sha256": "a4c993fdf7cf7529f34dffe04accdd3cdc0cf971b05d9712392688a8904f4abc",
+      "bytes": 4911
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/standard-validation.json": {
+      "sha256": "266e41a10718d01ccb876ab5bc83860640327b5f40c85459a2a90a76873cfe58",
+      "bytes": 2084
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/ui-density-ball.png": {
+      "sha256": "16b8ffabe37350745b7830eacce38101d459aabc6ca660caac990017b0d9faa9",
+      "bytes": 253470
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/blender/bearing-pixels.json": {
+      "sha256": "eace1b1034834e0bf2d39269db592aa027e5aa2996ed61cfbbf97282b125fd09",
+      "bytes": 469
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/blender/small-pixels.json": {
+      "sha256": "fcb21738e06a7fbb4fa0a904650eafad47afa41b93caf204d1694d615282d432",
+      "bytes": 475
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/blender/ball-pixels.json": {
+      "sha256": "f2fcf21ff06e7b3733c6a5a0cd66fffe062fe2e9ff02fe24faa47eaa03b742cb",
+      "bytes": 474
+    },
+    "benchmarks/modeling-slices-20261002/texel-density/blender/gear-pixels.json": {
+      "sha256": "2c75769ac9098e83c818bca12c421152779e89af0c4dcdc7b0d9d49451bad439",
+      "bytes": 474
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/python-policy-final.log": {
+      "sha256": "d10ffbd9f0faa72cd6837063279524e199b59fbc3d035051302a1e8dbc4b36ad",
+      "bytes": 98
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/test.log": {
+      "sha256": "a8b389240efc2daa3d1307434d6ba9901223335eeae401d3ec834e5602b45bf4",
+      "bytes": 10299
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/benchmark.log": {
+      "sha256": "04a9e7f14da5a5880564ecf67afdff6ac9ce8ef462a6a36b0048e78a591452ff",
+      "bytes": 11763
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/README.md": {
+      "sha256": "a93704920cc1ed9b851ebaaeecefbbc317f516a1a4b8e1c4d3b4014a3f702b1f",
+      "bytes": 296
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/quality-production.log": {
+      "sha256": "619a95a2a090b2d5d175d5a0cdb2a5a8489a330679abdb25430e1e474067f444",
+      "bytes": 205486
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/validation.json": {
+      "sha256": "a5b7c149794a3482f8176042dc3443de9ac2695b2e67b511504a15e1a66fc3a8",
+      "bytes": 635
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/check.log": {
+      "sha256": "7ef2c79bb6d339671d9ae375ef665784bc076eb021a29f305043e10ee785e030",
+      "bytes": 49
+    },
+    "benchmarks/modeling-slices-20261002/publish-checks/build.log": {
+      "sha256": "9ccd3cc59aefe642239b8361310bd16499983b5b5f7cda4db21133d14830ab56",
+      "bytes": 1162
+    }
+  },
+  "excluded": [
+    "package.json sim:test",
+    "vite.config.ts guide entry",
+    "circuit/robot/simulation assets and tests",
+    "env/secrets/API logs",
+    "node_modules/dist",
+    "all unrelated user changes"
+  ],
+  "normalizedLogs": [
+    "benchmarks/modeling-slices-20261002/texel-density/tests-report.log",
+    "benchmarks/modeling-slices-20261002/texel-density/check-report.log",
+    "benchmarks/modeling-slices-20261002/publish-checks/test.log",
+    "benchmarks/modeling-slices-20261002/publish-checks/check.log"
+  ]
+}

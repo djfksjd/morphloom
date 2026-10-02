@@ -78,6 +78,11 @@ Codex/Claude 요청 예시:
 
 ## 로컬 뷰어 기능
 
+미세 요소 편집의 실험적 첫 슬라이스는 [`?editor=elements`](http://127.0.0.1:4173/?editor=elements)에서 엽니다.
+새 기관·개별 깃털과 털의 안정 ID/override, 분리·복원, 원본 JSON과 선택 baked GLB를 제공합니다.
+구현·미지원·실제 Blender 재열기 범위는 [현재 상태](./docs/ELEMENT_SLICE_STATUS.ko.md),
+확장 계약은 [Domain Pack SDK](./docs/DOMAIN_PACK_SDK.ko.md)를 참고하세요.
+
 - Beauty · Clay · Wire · X-Ray
 - 정면 · 등각 · 평면 · 후면 보기
 - 드래그 회전 · 휠 광학 확대 · `Space`+드래그 화면 이동

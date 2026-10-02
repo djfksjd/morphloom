@@ -1,0 +1,794 @@
+[
+  {
+    "name": "gear",
+    "pass": true,
+    "source": "446626c371874cc43507484eef9c9c2b96f57284f009c2e11197770f726307f7",
+    "output": "0f29ccca9a29b8faf63b2570734a3c0fe2724af1c739d20632f0ffc4b05d15fb",
+    "geometryHashNote": "Native root parent name is sanitized by GLTFLoader; density/scoped IDs compared exactly, hashes retain actual node identity",
+    "meshes": [
+      {
+        "id": "spur_gear",
+        "density": {
+          "status": "measured",
+          "rangeTexelsPerMm": [
+            25.59050263703888,
+            51.32227289857983
+          ],
+          "measuredTriangles": 16768,
+          "unmeasuredTriangles": 0,
+          "channel": "metallic-roughness",
+          "features": [
+            {
+              "id": "spur_gear/tooth_0012",
+              "rangeTexelsPerMm": [
+                31.95458852847116,
+                51.30243960860269
+              ],
+              "measuredTriangles": 584,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0013",
+              "rangeTexelsPerMm": [
+                26.471757608114416,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0014",
+              "rangeTexelsPerMm": [
+                25.748018560071078,
+                51.27068862202307
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0015",
+              "rangeTexelsPerMm": [
+                25.678252586307973,
+                51.26167297654332
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0016",
+              "rangeTexelsPerMm": [
+                25.74802648006858,
+                51.27068862201999
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0017",
+              "rangeTexelsPerMm": [
+                26.47180267218582,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0018",
+              "rangeTexelsPerMm": [
+                31.95458852847116,
+                51.30243960860269
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0019",
+              "rangeTexelsPerMm": [
+                26.471757608114416,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0020",
+              "rangeTexelsPerMm": [
+                25.748018560071078,
+                51.27068862201999
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0021",
+              "rangeTexelsPerMm": [
+                25.678252586307973,
+                51.26167297654332
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0022",
+              "rangeTexelsPerMm": [
+                25.74802648006858,
+                51.27068862202307
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0023",
+              "rangeTexelsPerMm": [
+                26.47180267218582,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0000",
+              "rangeTexelsPerMm": [
+                31.95458852847116,
+                51.30243960860269
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0001",
+              "rangeTexelsPerMm": [
+                26.471757608114416,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0002",
+              "rangeTexelsPerMm": [
+                25.748018560071078,
+                51.27068862202307
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0003",
+              "rangeTexelsPerMm": [
+                25.678252586307973,
+                51.26167297654332
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0004",
+              "rangeTexelsPerMm": [
+                25.74802648006858,
+                51.27068862201999
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0005",
+              "rangeTexelsPerMm": [
+                26.47180267218582,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0006",
+              "rangeTexelsPerMm": [
+                31.95458852847116,
+                51.30243960860269
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0007",
+              "rangeTexelsPerMm": [
+                26.471757608114416,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0008",
+              "rangeTexelsPerMm": [
+                25.748018560071078,
+                51.27068862201999
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0009",
+              "rangeTexelsPerMm": [
+                25.678252586307973,
+                51.26167297654332
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0010",
+              "rangeTexelsPerMm": [
+                25.74802648006858,
+                51.27068862202307
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0011",
+              "rangeTexelsPerMm": [
+                26.47180267218582,
+                51.32227289857983
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            }
+          ],
+          "imageSize": [
+            64,
+            64
+          ],
+          "textureTransform": [
+            8,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            1
+          ],
+          "wrapModes": [
+            1000,
+            1000
+          ],
+          "sampling": "local-before-wrap"
+        }
+      }
+    ]
+  },
+  {
+    "name": "small",
+    "pass": true,
+    "source": "39783ebc610ecf876364a595b1fe9cf1d45a6b85e13c96603fef18969d47fa51",
+    "output": "8bff421011c869062e23ef3fb1117ab2d247bea7b4d6b9cf37e2279ee07a81ff",
+    "geometryHashNote": "Native root parent name is sanitized by GLTFLoader; density/scoped IDs compared exactly, hashes retain actual node identity",
+    "meshes": [
+      {
+        "id": "spur_gear",
+        "density": {
+          "status": "measured",
+          "rangeTexelsPerMm": [
+            25.59057126143708,
+            51.321376925386
+          ],
+          "measuredTriangles": 12832,
+          "unmeasuredTriangles": 0,
+          "channel": "metallic-roughness",
+          "features": [
+            {
+              "id": "spur_gear/tooth_0009",
+              "rangeTexelsPerMm": [
+                31.342282887228233,
+                51.27312785732241
+              ],
+              "measuredTriangles": 584,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0010",
+              "rangeTexelsPerMm": [
+                25.688336211169226,
+                51.320746116700455
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0011",
+              "rangeTexelsPerMm": [
+                25.874494515841118,
+                51.31982849167542
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0012",
+              "rangeTexelsPerMm": [
+                25.692375246264042,
+                51.32070536356064
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0013",
+              "rangeTexelsPerMm": [
+                27.72645103360056,
+                51.30669460768909
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0014",
+              "rangeTexelsPerMm": [
+                27.72664954292443,
+                51.306655245855396
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0015",
+              "rangeTexelsPerMm": [
+                25.692374619398425,
+                51.32070661609595
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0016",
+              "rangeTexelsPerMm": [
+                25.874624401355728,
+                51.319726792602594
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0017",
+              "rangeTexelsPerMm": [
+                25.6881299936493,
+                51.321003576304705
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0000",
+              "rangeTexelsPerMm": [
+                31.342282887228233,
+                51.27312785732241
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0001",
+              "rangeTexelsPerMm": [
+                25.688336211169226,
+                51.320746116700455
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0002",
+              "rangeTexelsPerMm": [
+                25.874494515841118,
+                51.31982849167542
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0003",
+              "rangeTexelsPerMm": [
+                25.692375246264042,
+                51.32070536356064
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0004",
+              "rangeTexelsPerMm": [
+                27.72645103360056,
+                51.30669460768909
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0005",
+              "rangeTexelsPerMm": [
+                27.72664954292443,
+                51.306655245855396
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0006",
+              "rangeTexelsPerMm": [
+                25.692374619398425,
+                51.32070661609595
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0007",
+              "rangeTexelsPerMm": [
+                25.874624401355728,
+                51.319726792602594
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            },
+            {
+              "id": "spur_gear/tooth_0008",
+              "rangeTexelsPerMm": [
+                25.6881299936493,
+                51.321003576304705
+              ],
+              "measuredTriangles": 590,
+              "unmeasuredTriangles": 0
+            }
+          ],
+          "imageSize": [
+            64,
+            64
+          ],
+          "textureTransform": [
+            8,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            1
+          ],
+          "wrapModes": [
+            1000,
+            1000
+          ],
+          "sampling": "local-before-wrap"
+        }
+      }
+    ]
+  },
+  {
+    "name": "bearing",
+    "pass": true,
+    "source": "791c0a39aa09ad053f954318792d97fde5ebcef438070b85917097a6b857ab8c",
+    "output": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef",
+    "geometryHashNote": "Native root parent name is sanitized by GLTFLoader; density/scoped IDs compared exactly, hashes retain actual node identity",
+    "meshes": [
+      {
+        "id": "inner_race",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 8448,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "outer_race",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 8448,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "cage",
+        "density": {
+          "status": "measured",
+          "rangeTexelsPerMm": [
+            37.08145284494686,
+            51.21582098885199
+          ],
+          "measuredTriangles": 3104,
+          "unmeasuredTriangles": 0,
+          "channel": "metallic-roughness",
+          "features": [],
+          "imageSize": [
+            64,
+            64
+          ],
+          "textureTransform": [
+            8,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            1
+          ],
+          "wrapModes": [
+            1000,
+            1000
+          ],
+          "sampling": "local-before-wrap"
+        }
+      },
+      {
+        "id": "ball_0000",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0001",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0002",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0003",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0004",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0005",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0006",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0007",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      }
+    ]
+  },
+  {
+    "name": "ball",
+    "pass": true,
+    "source": "aa0789659f215675e65b32323cb485a9dd8f97f13463ca1fc902a3bc6cad57a0",
+    "output": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7",
+    "geometryHashNote": "Native root parent name is sanitized by GLTFLoader; density/scoped IDs compared exactly, hashes retain actual node identity",
+    "meshes": [
+      {
+        "id": "inner_race",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 8448,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "outer_race",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 8448,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "cage",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 3104,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0000",
+        "density": {
+          "status": "measured",
+          "rangeTexelsPerMm": [
+            27.18176962751609,
+            277.9231697275682
+          ],
+          "measuredTriangles": 2976,
+          "unmeasuredTriangles": 0,
+          "channel": "metallic-roughness",
+          "features": [],
+          "imageSize": [
+            64,
+            64
+          ],
+          "textureTransform": [
+            8,
+            0,
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            1
+          ],
+          "wrapModes": [
+            1000,
+            1000
+          ],
+          "sampling": "local-before-wrap"
+        }
+      },
+      {
+        "id": "ball_0001",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0002",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0003",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0004",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0005",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0006",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      },
+      {
+        "id": "ball_0007",
+        "density": {
+          "status": "not-run",
+          "rangeTexelsPerMm": null,
+          "measuredTriangles": 0,
+          "unmeasuredTriangles": 2976,
+          "channel": "metallic-roughness",
+          "features": [],
+          "reason": "No metallic-roughness texture"
+        }
+      }
+    ]
+  }
+]

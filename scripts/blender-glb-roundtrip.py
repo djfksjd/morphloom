@@ -7,6 +7,10 @@ from pathlib import Path
 from mathutils import Vector
 
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from blender_export_policy import tangent_export_required
+
+
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -99,7 +103,7 @@ bpy.ops.export_scene.gltf(
     export_format="GLB",
     export_yup=True,
     export_apply=False,
-    export_tangents=True,
+    export_tangents=tangent_export_required(source),
     export_morph_tangent=True,
     export_armature_object_remove=True,
 )
@@ -155,6 +159,7 @@ passed = parity and bounds_error_mm <= bounds_tolerance_mm
 report = {
     "schema": "morphloom.blender-roundtrip/0.2",
     "pass": passed,
+    "exportTangentsRequiredBySource": tangent_export_required(source),
     "blenderVersion": bpy.app.version_string,
     "source": source.name,
     "sourceBytes": source.stat().st_size,

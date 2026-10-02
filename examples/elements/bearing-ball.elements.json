@@ -1,0 +1,1 @@
+{"schema":"morphloom.elements/0.1","seed":42,"units":"mm","coordinates":"right-handed-y-up","parts":[{"id":"bearing_ball","name":"bearing_ball","position":[10,0,0],"rotation":[0,0,0],"scale":[8,8,8],"shape":"ellipsoid","color":"#b8bec6","evidence":{"status":"authored","source":"minimal-pack"},"visible":true,"locked":false}],"regions":[],"groups":[],"elements":[]}

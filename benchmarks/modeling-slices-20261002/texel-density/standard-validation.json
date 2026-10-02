@@ -1,0 +1,98 @@
+[
+  {
+    "name": "gear",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "name": "small",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "name": "bearing",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 10,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 13,
+        "meshes": 11,
+        "materials": 11,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  {
+    "name": "ball",
+    "report": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 10,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 13,
+        "meshes": 11,
+        "materials": 11,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  }
+]

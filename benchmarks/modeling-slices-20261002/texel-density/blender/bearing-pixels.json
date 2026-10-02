@@ -1,0 +1,15 @@
+{
+  "pass": true,
+  "sourceSha256": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef",
+  "target": "cage",
+  "matches": [
+    {
+      "name": "Image_0",
+      "pixelSha256": "7563bc1c03ced310e83e89e4bcdd5a2cb8f8a65d1727a7a37d68eb961bc57ad0",
+      "flipMatches": true,
+      "colorspace": "Non-Color"
+    }
+  ],
+  "expectedPixelSha256": "0dc0085db15e76ca9d8254bc17226294a7b0f50e1b1dd5737fdfc8264578a9e5",
+  "materialName": "cage [bead-blasted-metal]"
+}

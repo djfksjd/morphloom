@@ -1,0 +1,30 @@
+{
+  "check": {
+    "command": "npm run check",
+    "exitCode": 0
+  },
+  "test": {
+    "command": "npm test",
+    "exitCode": 0
+  },
+  "build": {
+    "command": "npm run build",
+    "exitCode": 0
+  },
+  "benchmark": {
+    "command": "npm run benchmark",
+    "exitCode": 0
+  },
+  "python-policy": {
+    "command": "python3 -m unittest scripts/test_blender_export_policy.py",
+    "exitCode": 1
+  },
+  "python-policy-corrected": {
+    "command": "python3 -m unittest discover -s scripts -p test_blender_export_policy.py",
+    "exitCode": 0
+  },
+  "quality-production": {
+    "command": "npm run quality:production",
+    "exitCode": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "pass": true,
+  "before": {
+    "source": "14d3777d3f079c13b084d18e04f0a78ac069521b7735fd94b7863e5b10e81a5f",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "after": {
+    "source": "5efa52b3336ba1c10cf588b0e66adc8fa7fd4fbf1a883aa2a4736eab0fa580e0",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "undo": {
+    "source": "14d3777d3f079c13b084d18e04f0a78ac069521b7735fd94b7863e5b10e81a5f",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "redo": {
+    "source": "5efa52b3336ba1c10cf588b0e66adc8fa7fd4fbf1a883aa2a4736eab0fa580e0",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  },
+  "reload": {
+    "source": "5efa52b3336ba1c10cf588b0e66adc8fa7fd4fbf1a883aa2a4736eab0fa580e0",
+    "geometry": "29626c16a8fd55494f29599bc59db07505738c967d94763bb215ea81fdd03a2b"
+  }
+}

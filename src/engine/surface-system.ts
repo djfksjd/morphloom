@@ -18,7 +18,7 @@ interface SurfaceRecipe {
   specularIntensity: number;
   microNormalStrength: number;
   textureScale: [number, number];
-  pattern: 'none' | 'directional' | 'grain' | 'aggregate' | 'orange-peel' | 'fibrous' | 'hex-weave' | 'mineral-flow';
+  pattern: 'none' | 'directional-periodic' | 'directional' | 'grain' | 'aggregate' | 'orange-peel' | 'fibrous' | 'hex-weave' | 'mineral-flow';
 }
 
 export interface SurfaceReport {
@@ -128,6 +128,7 @@ function hash(x: number, y: number, seed: number): number {
 }
 
 function heightAt(x: number, y: number, seed: number, pattern: SurfaceRecipe['pattern']): number {
+  if(pattern==='directional-periodic')return Math.sin(2*Math.PI*8*x/64)*0.68;
   const noise = hash(x, y, seed) * 2 - 1;
   const broad = hash(Math.floor(x / 4), Math.floor(y / 4), seed + 17) * 2 - 1;
   if (pattern === 'directional') return Math.sin(x * 2.3 + broad * 0.8) * 0.68 + noise * 0.18;
@@ -378,6 +379,8 @@ interface SurfaceMaterialContext {
   mode: ViewMode;
   category: string;
   materialName: string;
+  surfaceChannels?: 'full' | 'roughness-only';
+  periodicDirectional?: boolean;
 }
 
 export function createSurfaceMaterial(source: AssemblyMaterialIR, context: SurfaceMaterialContext): THREE.MeshPhysicalMaterial {
@@ -435,11 +438,11 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     // thickness texture, so make the intended uniform maximum explicit.
     material.iridescenceThicknessMap = getIridescenceThicknessTexture();
   }
-  if (context.mode === 'beauty' && effectivePattern !== 'none' && microNormalStrength > 0) {
+  if (context.mode === 'beauty' && effectivePattern !== 'none' && (microNormalStrength > 0 || context.surfaceChannels==='roughness-only')) {
     const scale = source.textureScale ?? preset.textureScale;
-    const maps = createMicroSurfaceMaps(finish, scale, effectivePattern);
-    material.normalMap = maps.normal;
-    material.normalScale.set(microNormalStrength, microNormalStrength);
+    const maps = createMicroSurfaceMaps(finish, scale, context.periodicDirectional&&effectivePattern==='directional'?'directional-periodic':effectivePattern);
+    if(context.surfaceChannels!=='roughness-only'){material.normalMap = maps.normal;material.normalScale.set(microNormalStrength, microNormalStrength);}
+    else if(!maps.normal.userData.morphloomShared){maps.normal.dispose();maps.albedo.dispose();}
     material.roughnessMap = maps.roughness;
     material.metalnessMap = maps.roughness;
     if (finish === 'hex-knit' || finish === 'asphalt') material.map = maps.albedo;
@@ -453,7 +456,8 @@ export function createSurfaceMaterial(source: AssemblyMaterialIR, context: Surfa
     ior: material.ior,
     transmission: material.transmission,
     anisotropy: material.anisotropy,
-    microNormalStrength: context.mode === 'beauty' ? microNormalStrength : 0,
+    microNormalStrength: context.mode === 'beauty'&&context.surfaceChannels!=='roughness-only' ? microNormalStrength : 0,
+    ...(context.surfaceChannels?{channels:context.surfaceChannels}:{}),
     textureScale: source.textureScale ?? preset.textureScale,
     procedural: effectivePattern !== 'none',
   };

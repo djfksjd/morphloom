@@ -1,4 +1,6 @@
+import {validateSpurGear,gearExtrude,type SpurGearGeometry} from './spur-gear';
 import * as THREE from 'three';
+import { stableExtrudeUV } from './extrude-uv';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { ViewMode } from '../types';
 import type { ProductBuild, ProductPartInfo } from './product';
@@ -489,7 +491,7 @@ function applyExtrudeEdgeTapers(
   });
 }
 
-function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
+function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.BufferGeometry {
   switch (geometry.op) {
     case 'roundedBox':
       return geometry.radius > 0
@@ -534,15 +536,17 @@ function compileGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
         path.closePath();
         shape.holes.push(path);
       }
-      const depth = mm(geometry.depth);
+      const depth = mm(geometry.depth-2*insetChamferMm);
       const result = new THREE.ExtrudeGeometry(shape, {
         depth,
         steps: 1,
         curveSegments: 24,
-        bevelEnabled: Boolean(geometry.bevelSize || geometry.bevelThickness),
-        bevelSize: mm(geometry.bevelSize ?? 0),
-        bevelThickness: mm(geometry.bevelThickness ?? 0),
-        bevelSegments: geometry.bevelSegments ?? 3,
+        UVGenerator: stableExtrudeUV,
+        bevelEnabled: Boolean(insetChamferMm || geometry.bevelSize || geometry.bevelThickness),
+        bevelSize: mm(insetChamferMm || geometry.bevelSize || 0),
+        bevelThickness: mm(insetChamferMm || geometry.bevelThickness || 0),
+        bevelSegments: insetChamferMm ? 1 : geometry.bevelSegments ?? 3,
+        bevelOffset: -mm(insetChamferMm),
       });
       result.translate(0, 0, -depth * 0.5);
       if (geometry.edgeTapers?.length) applyExtrudeEdgeTapers(result, geometry.edgeTapers);
@@ -1314,6 +1318,23 @@ export async function waitForReferenceProjections(root: THREE.Object3D, timeoutM
   } finally {
     if (timeout !== undefined) clearTimeout(timeout);
   }
+}
+
+/** Same validated geometry and UV path used by AssemblyIR, without allocating a material. */
+export function compileAssemblyGeometry(geometry: AssemblyGeometryIR): THREE.BufferGeometry {
+  validateAssemblyIR({ schema: 'morphloom.assembly/0.1', units: 'mm', name: 'declared part',
+    components: [{ id: 'part', name: 'part', category: 'mechanical', materialName: 'raw',
+      detail: 'declared part geometry', geometry, material: { color: '#808080' } }] });
+  return ensurePrimaryUv(compileGeometry(geometry));
+}
+
+/** Only engine-derived, bounded gear profiles. Raw AssemblyIR array limits stay unchanged. */
+export function compileDerivedGearGeometry(spec:SpurGearGeometry,insetChamferMm=0):THREE.BufferGeometry{
+ validateSpurGear(spec);
+ if(!Number.isFinite(insetChamferMm)||insetChamferMm<0||2*insetChamferMm>=spec.faceWidthMm)throw new Error('Invalid derived gear chamfer');
+ const derived=gearExtrude(spec); // source parameters and profile curve budget are validated by the gear engine
+ if(derived.points.length>8192||derived.holes?.some(h=>h.length>4096)||derived.points.some(p=>p.some(v=>!Number.isFinite(v))))throw new Error('Derived gear profile budget');
+ return ensurePrimaryUv(compileGeometry(derived,insetChamferMm));
 }
 
 export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild {

@@ -1,0 +1,15 @@
+{
+  "pass": true,
+  "sourceSha256": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7",
+  "target": "ball_0000",
+  "matches": [
+    {
+      "name": "Image_0",
+      "pixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+      "flipMatches": true,
+      "colorspace": "Non-Color"
+    }
+  ],
+  "expectedPixelSha256": "5c84ecd7cc65237fba63558d6c9521f054d5776bf401cdde9895176ade815704",
+  "materialName": "ball_0000 [brushed-metal]"
+}

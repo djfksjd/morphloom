@@ -1,0 +1,18 @@
+{
+  "gear": {
+    "exactGlbBytes": true,
+    "currentHash": "0f29ccca9a29b8faf63b2570734a3c0fe2724af1c739d20632f0ffc4b05d15fb"
+  },
+  "small": {
+    "exactGlbBytes": true,
+    "currentHash": "8bff421011c869062e23ef3fb1117ab2d247bea7b4d6b9cf37e2279ee07a81ff"
+  },
+  "bearing": {
+    "exactGlbBytes": true,
+    "currentHash": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef"
+  },
+  "ball": {
+    "exactGlbBytes": true,
+    "currentHash": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7"
+  }
+}

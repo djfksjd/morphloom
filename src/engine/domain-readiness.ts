@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { inspectUvAttribute, signedUvDoubleArea, UV_DOUBLE_AREA_EPSILON, WORLD_DOUBLE_AREA_EPSILON } from './uv-quality';
 import type { AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
 import { snapshotScene } from './delivery-validation';
 import { inspectSurfaceSystem } from './surface-system';
@@ -729,16 +730,10 @@ function inspectGeometry(root: THREE.Object3D): {
     }
     const uv = geometry.getAttribute('uv');
     const normal = geometry.getAttribute('normal');
-    if (uv && uv.itemSize >= 2 && uv.count === position.count) {
-      uvMeshes += 1;
-      uvVertices += uv.count;
-      for (let vertex = 0; vertex < uv.count; vertex += 1) {
-        if (!Number.isFinite(uv.getX(vertex)) || !Number.isFinite(uv.getY(vertex))) invalidUvVertices += 1;
-      }
-    } else if (uv) {
-      uvVertices += position.count;
-      invalidUvVertices += position.count;
-    }
+    const uvInspection=inspectUvAttribute(position.count,uv);
+    if(uvInspection.valid)uvMeshes+=1;
+    uvVertices+=uvInspection.vertices;
+    invalidUvVertices+=uvInspection.invalidVertices;
     if (normal && normal.itemSize >= 3 && normal.count === position.count) {
       normalMeshes += 1;
       normalVertices += normal.count;
@@ -804,7 +799,7 @@ function inspectGeometry(root: THREE.Object3D): {
       enclosedVolumeM3 += a.dot(cross.crossVectors(b, c)) / 6;
       faceNormal.crossVectors(edgeA.copy(b).sub(a), edgeB.copy(c).sub(a));
       const doubledArea = faceNormal.length();
-      if (doubledArea > 1e-14) {
+      if (doubledArea > WORLD_DOUBLE_AREA_EPSILON) {
         const area = doubledArea * 0.5;
         totalSurfaceAreaM2 += area;
         const centroidY = (a.y + b.y + c.y) / 3;
@@ -814,11 +809,8 @@ function inspectGeometry(root: THREE.Object3D): {
         }
         if (uv && uv.itemSize >= 2 && uv.count === position.count) {
           uvTriangles += 1;
-          const ua = uv.getX(ia); const va = uv.getY(ia);
-          const ub = uv.getX(ib); const vb = uv.getY(ib);
-          const uc = uv.getX(ic); const vc = uv.getY(ic);
-          const signedDoubleUvArea = (ub - ua) * (vc - va) - (vb - va) * (uc - ua);
-          if (!Number.isFinite(signedDoubleUvArea) || Math.abs(signedDoubleUvArea) <= 1e-10) degenerateUvTriangles += 1;
+          const signedDoubleUvArea = signedUvDoubleArea(uv,ia,ib,ic);
+          if (!Number.isFinite(signedDoubleUvArea) || Math.abs(signedDoubleUvArea) <= UV_DOUBLE_AREA_EPSILON) degenerateUvTriangles += 1;
         }
       }
     }

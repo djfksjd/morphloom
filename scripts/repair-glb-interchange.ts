@@ -149,7 +149,9 @@ for (const mesh of document.getRoot().listMeshes()) {
   }
 }
 
-await document.transform(prune({ keepAttributes: false, keepSolidTextures: true, keepExtras: true }));
+// Editable UVs and vertex attributes remain meaningful without a texture.
+// Unused tangents were removed explicitly above; pruning must not erase UVs.
+await document.transform(prune({ keepAttributes: true, keepSolidTextures: true, keepExtras: true }));
 const output = await io.writeBinary(document);
 const validation = await validateGlbStandard(output.buffer.slice(output.byteOffset, output.byteOffset + output.byteLength));
 if (validation.status !== 'pass') {

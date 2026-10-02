@@ -1,0 +1,437 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "name": "gear",
+      "target": "spur_gear",
+      "preservation": true,
+      "validation": [
+        {
+          "file": "current/gear.glb",
+          "sha256": "082d761bea968b9d498a869b2b4069d20bdc0fc41ce834503a85a6a634018351",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "current/gear-before.glb",
+          "sha256": "08e5df4c97d5533333329561623db169cd53bcd8526dea60fb15fb90b8d9f961",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 1,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "blender/gear-roundtrip.glb",
+          "sha256": "bc6ceb05681e6f31ed91416fb51c0bb64d93522a2aa83f4a9c22e68414cdb3ca",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "browser/gear.glb",
+          "sha256": "0f29ccca9a29b8faf63b2570734a3c0fe2724af1c739d20632f0ffc4b05d15fb",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "small",
+      "target": "spur_gear",
+      "preservation": true,
+      "validation": [
+        {
+          "file": "current/small.glb",
+          "sha256": "25f60c7bdf16e81374acf7b9f2f59c17a51b9d0c5637e3dc7cccaba23da45667",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "current/small-before.glb",
+          "sha256": "9e18ed6139251ff98f07a89686b20e631d003caa3570bd77710b7fe1262c8650",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 1,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "blender/small-roundtrip.glb",
+          "sha256": "a77a376e9168d321d4a96cf102e5b230fd3f18c325d1f478dcd16b6b51f7a3af",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "browser/small.glb",
+          "sha256": "8bff421011c869062e23ef3fb1117ab2d247bea7b4d6b9cf37e2279ee07a81ff",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bearing",
+      "target": "cage",
+      "preservation": true,
+      "validation": [
+        {
+          "file": "current/bearing.glb",
+          "sha256": "cbe068613c98433d57f86b8b1adad43d23c16dec7888ef848d9f5ee466762109",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "current/bearing-before.glb",
+          "sha256": "86cb815dc533be61f2a59b92cb877a3fc2ad77dbf22225b74cfc8c7303e466e7",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 11,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "blender/bearing-roundtrip.glb",
+          "sha256": "6171c530b521f34659e792a371dd1271749b19a91777d45068570ec62d3bebe7",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "browser/bearing.glb",
+          "sha256": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ball",
+      "target": "ball_0000",
+      "preservation": true,
+      "validation": [
+        {
+          "file": "current/ball.glb",
+          "sha256": "e0fcd781059b88ac646ec06e78e67a2d5115a24af94135f04e7daf1559b35ccc",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "current/ball-before.glb",
+          "sha256": "86cb815dc533be61f2a59b92cb877a3fc2ad77dbf22225b74cfc8c7303e466e7",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 11,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "blender/ball-roundtrip.glb",
+          "sha256": "78cadb80dbf017f4463ced5b29a1818794cf56ea44362b951609e45acb014571",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "file": "browser/ball.glb",
+          "sha256": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7",
+          "report": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 10,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 13,
+              "meshes": 11,
+              "materials": 11,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "revision": "morphloom.uv-quality/0.2",
+  "rendererRevision": "morphloom.element-renderer/0.9",
+  "sourceFiles": {
+    "src/engine/texel-density.ts": "cbd31b481c164bf31ed84d9b28b58e5b0d3beba1b49762f3f1712989787ae426",
+    "src/engine/uv-quality.ts": "77c623a16e73e05b32e9644f2d9b7a19ac68f4b15f6870cadcc572f13354467e",
+    "src/ElementEditor.tsx": "f82efef5e5cc47d968740cb32855c6e9c5cb73ddc2c54879a888f7bc5ad41e25",
+    "tests/texel-density.test.ts": "37ae1515155f63f00eeb27a24f0ccfe96ace089d20a31195bfea3911528eaa58"
+  },
+  "artifacts": {
+    "outputs/texel-density-20261002/ui-density-expanded.png": "024a1791888353022532151516fc116b304e7376f709aacc3bf70550590a653b",
+    "outputs/texel-density-20261002/competitive-latest.json": "d7371895b29e92110ff1e8dcd59f5f40b7df0e039b8e4e1af80234994187ae39",
+    "outputs/texel-density-20261002/production-dominance-latest.json": "a79a8da96fcaa7095b9e9689b9220042cd7ce187b2f0c815afa62152d023e9ff",
+    "outputs/texel-density-20261002/browser-verification.json": "003cd207beeebc710a09b557806226a51a94e713a00a8863ffe9ce9250db4e55",
+    "outputs/texel-density-20261002/comparison.json": "642db644f0f2653800df2e64cbfcafcfd15dbd05a28a3df9df03f1c4297729e6",
+    "outputs/texel-density-20261002/commands.json": "2aed56f11134317c1394960db56229d841bbd5888d11dcda8301254158252eb8",
+    "outputs/texel-density-20261002/native.json": "a2f07309beb56da8c8881d8b27f7a701087b3df797669bcb524838b60e590c85",
+    "outputs/texel-density-20261002/previous-delivery-byte-preservation.json": "f3c6eaccad18021ab670bf9220fbbc6bec02f2e82bce312813af47861b6a201a",
+    "outputs/texel-density-20261002/ui-density.png": "91a0f424aec32f88579b84bfcb324c7e46b621de5e7381367d5f588846f685c5",
+    "outputs/texel-density-20261002/quality-latest.json": "8ea82be4c6a705cfa65b87dc74cc2a3a60b433d5e0410b874154adc570328b5e",
+    "outputs/texel-density-20261002/standard-validation.json": "266e41a10718d01ccb876ab5bc83860640327b5f40c85459a2a90a76873cfe58",
+    "outputs/texel-density-20261002/ui-density-ball.png": "16b8ffabe37350745b7830eacce38101d459aabc6ca660caac990017b0d9faa9",
+    "outputs/texel-density-20261002/browser/ball.uv.json": "cd03cfe93f33d6db453c05646e1fffdd55b0422ffad33ef41418a6a1b6d05aca",
+    "outputs/texel-density-20261002/browser/small.glb": "8bff421011c869062e23ef3fb1117ab2d247bea7b4d6b9cf37e2279ee07a81ff",
+    "outputs/texel-density-20261002/browser/gear.glb": "0f29ccca9a29b8faf63b2570734a3c0fe2724af1c739d20632f0ffc4b05d15fb",
+    "outputs/texel-density-20261002/browser/small.elements.json": "39783ebc610ecf876364a595b1fe9cf1d45a6b85e13c96603fef18969d47fa51",
+    "outputs/texel-density-20261002/browser/bearing.elements.json": "791c0a39aa09ad053f954318792d97fde5ebcef438070b85917097a6b857ab8c",
+    "outputs/texel-density-20261002/browser/bearing.glb": "ae19c19b6f11e93b752a70b4f6bac3e9e4e6322a805251e64249c2e2c47acaef",
+    "outputs/texel-density-20261002/browser/gear.elements.json": "446626c371874cc43507484eef9c9c2b96f57284f009c2e11197770f726307f7",
+    "outputs/texel-density-20261002/browser/ball.elements.json": "aa0789659f215675e65b32323cb485a9dd8f97f13463ca1fc902a3bc6cad57a0",
+    "outputs/texel-density-20261002/browser/ball.glb": "1e9f42a975594eab08479e50b53d1cef1bce6e716abcf40c1a75ecf20e23edb7",
+    "outputs/texel-density-20261002/browser/bearing.uv.json": "14fb1d362fe2ccd7d7e543bcbc614b0c8a46afdd9245097fbe00c256ce8d5b71",
+    "outputs/texel-density-20261002/browser/gear.uv.json": "86fc259b3dfc5705d240bc80fc816d569b5f0a430a5119ced94841f81b4b09f8",
+    "outputs/texel-density-20261002/browser/small.uv.json": "9f2785cc7dbcf8e8656ad5125247b92b8350d153bf5573af6fd914fccf14eb2a",
+    "outputs/texel-density-20261002/blender/bearing-pixels.json": "eace1b1034834e0bf2d39269db592aa027e5aa2996ed61cfbbf97282b125fd09",
+    "outputs/texel-density-20261002/blender/small-pixels.json": "fcb21738e06a7fbb4fa0a904650eafad47afa41b93caf204d1694d615282d432",
+    "outputs/texel-density-20261002/blender/ball-pixels.json": "f2fcf21ff06e7b3733c6a5a0cd66fffe062fe2e9ff02fe24faa47eaa03b742cb",
+    "outputs/texel-density-20261002/blender/gear-pixels.json": "2c75769ac9098e83c818bca12c421152779e89af0c4dcdc7b0d9d49451bad439"
+  },
+  "commands": {
+    "check": {
+      "command": "npm run check",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    "quality-production": {
+      "command": "npm run quality:production",
+      "exitCode": 1
+    }
+  },
+  "tests": {
+    "files": 86,
+    "tests": 604,
+    "pass": true,
+    "seconds": 76.78
+  },
+  "limitations": [
+    "single static material UV0 metallic-roughness only",
+    "sampling before wrap/clamp; not unique texel coverage",
+    "atlas/padding/mip bleeding not-run",
+    "human expert/physical material/manufacturing approval not-run"
+  ],
+  "uniAi": "models403; completion not-run; no source transmitted",
+  "git": "status/diff blocked; no index mutation/commit/push"
+}

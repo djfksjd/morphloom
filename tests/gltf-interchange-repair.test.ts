@@ -26,7 +26,14 @@ async function fixture(options: { alpha: 'OPAQUE' | 'BLEND'; iridescence: number
     material.setExtension('KHR_materials_iridescence', extension.createIridescence()
       .setIridescenceFactor(options.iridescence));
   }
-  const primitive = document.createPrimitive().setAttribute('POSITION', positions).setIndices(indices).setMaterial(material);
+  const uv = document.createAccessor('uv').setType(Accessor.Type.VEC2)
+    .setArray(new Float32Array([0, 0, 1, 0, 0, 1])).setBuffer(buffer);
+  const normal = document.createAccessor('normal').setType(Accessor.Type.VEC3)
+    .setArray(new Float32Array([0, 0, 1, 0, 0, 1, 0, 0, 1])).setBuffer(buffer);
+  const unusedTangent = document.createAccessor('unused tangent').setType(Accessor.Type.VEC4)
+    .setArray(new Float32Array([2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1])).setBuffer(buffer);
+  const primitive = document.createPrimitive().setAttribute('POSITION', positions).setAttribute('NORMAL', normal)
+    .setAttribute('TEXCOORD_0', uv).setAttribute('TANGENT', unusedTangent).setIndices(indices).setMaterial(material);
   const mesh = document.createMesh('fixture-mesh').addPrimitive(primitive);
   const node = document.createNode(options.nodeName).setMesh(mesh)
     .setExtras({ morphloomStableNodeId: 'stable-part' });
@@ -66,6 +73,11 @@ describe('glTF interchange material recovery', () => {
       expect(material?.getAlphaMode()).toBe('BLEND');
       expect(material?.getRoughnessFactor()).toBeCloseTo(0.21, 6);
       expect(iridescence?.getIridescenceFactor()).toBeCloseTo(0.64, 6);
+      // An untextured material does not authorize discarding editable UVs.
+      const primitive = node?.getMesh()?.listPrimitives()[0];
+      expect(Array.from(primitive?.getAttribute('TEXCOORD_0')?.getArray() ?? [])).toEqual([0, 0, 1, 0, 0, 1]);
+      expect(Array.from(primitive?.getAttribute('NORMAL')?.getArray() ?? [])).toEqual([0, 0, 1, 0, 0, 1, 0, 0, 1]);
+      expect(primitive?.getAttribute('TANGENT')).toBeNull();
 
       const report = JSON.parse(await readFile(reportPath, 'utf8')) as {
         pass: boolean;

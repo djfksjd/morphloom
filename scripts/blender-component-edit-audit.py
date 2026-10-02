@@ -8,6 +8,10 @@ import sys
 from pathlib import Path
 
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from blender_export_policy import tangent_export_required
+
+
 def fail(message):
     raise RuntimeError(message)
 
@@ -294,7 +298,7 @@ bpy.ops.export_scene.gltf(
     use_visible=True,
     export_apply=False,
     export_yup=True,
-    export_tangents=True,
+    export_tangents=tangent_export_required(input_path),
     export_extras=True,
     export_armature_object_remove=True,
     export_force_sampling=False,
@@ -316,7 +320,7 @@ bpy.ops.export_scene.gltf(
     use_visible=True,
     export_apply=False,
     export_yup=True,
-    export_tangents=True,
+    export_tangents=tangent_export_required(input_path),
     export_extras=True,
     export_armature_object_remove=True,
     export_force_sampling=False,

@@ -78,13 +78,17 @@ def area_light(name, location, energy, size):
 
 
 args = sys.argv[sys.argv.index("--") + 1:]
-if len(args) not in {3, 4}:
-    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso]")
+if len(args) not in {3, 4, 5}:
+    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso|axis-y] [material|clay|wire|grazing]")
 source = Path(args[0]).resolve()
 render_path = Path(args[1]).resolve()
 report_path = Path(args[2]).resolve()
-view_id = args[3] if len(args) == 4 else "front"
+view_id = args[3] if len(args) >= 4 else "front"
+inspection_mode = args[4] if len(args) == 5 else "material"
+if inspection_mode not in {"material", "clay", "wire", "grazing"}:
+    raise RuntimeError("Unsupported inspection mode")
 camera_presets = {
+    "axis-y": {"position": (0, 0, 4.0), "orthographicHeight": 2.35},
     "front": {"position": (0, -4.0, 0), "orthographicHeight": 2.35},
     "rear": {"position": (0, 4.0, 0), "orthographicHeight": 2.35},
     "iso": {"position": (2.8, -3.4, 1.8), "orthographicHeight": 2.55},
@@ -145,9 +149,38 @@ camera.location = camera_preset["position"]
 look_at(camera, (0, 0, 0))
 scene.camera = camera
 
+if inspection_mode in {"clay", "wire", "grazing"}:
+    clay = bpy.data.materials.new("Morphloom inspection clay")
+    clay.use_nodes = True
+    shader = clay.node_tree.nodes.get("Principled BSDF")
+    shader.inputs["Base Color"].default_value = (0.5, 0.5, 0.5, 1)
+    shader.inputs["Metallic"].default_value = 0
+    shader.inputs["Roughness"].default_value = 0.72
+    if inspection_mode == "wire":
+        wire = clay.node_tree.nodes.new("ShaderNodeWireframe")
+        wire.use_pixel_size = True
+        wire.inputs["Size"].default_value = 0.7
+        mix = clay.node_tree.nodes.new("ShaderNodeMixRGB")
+        mix.inputs[1].default_value = (0.5, 0.5, 0.5, 1)
+        mix.inputs[2].default_value = (0.025, 0.025, 0.025, 1)
+        clay.node_tree.links.new(wire.outputs["Fac"], mix.inputs[0])
+        clay.node_tree.links.new(mix.outputs[0], shader.inputs["Base Color"])
+    for obj in meshes:
+        obj.data.materials.clear()
+        obj.data.materials.append(clay)
+        for polygon in obj.data.polygons:
+            polygon.material_index = 0
+
 area_light("Neutral key", (-2.5, -3.0, 3.5), 900, 4.0)
 area_light("Neutral fill", (3.0, -2.0, 1.2), 500, 3.0)
 area_light("Neutral rim", (0.5, 2.5, 2.5), 700, 2.5)
+
+if inspection_mode == "grazing":
+    bpy.data.objects["Neutral key"].location = (3, -0.5, 0.3)
+    bpy.data.objects["Neutral key"].data.size = 1.0
+    bpy.data.objects["Neutral fill"].data.energy = 70
+    for name in ["Neutral key", "Neutral fill", "Neutral rim"]:
+        look_at(bpy.data.objects[name], (0, 0, 0))
 
 bpy.ops.render.render(write_still=True)
 if not render_path.is_file() or render_path.stat().st_size < 100:
@@ -208,5 +241,9 @@ report = {
         ],
     },
 }
+if len(args) == 5:
+    report["inspectionMode"] = inspection_mode
+    report["actualLights"] = [{"name": obj.name, "position": list(obj.location), "energy": obj.data.energy, "size": obj.data.size} for obj in scene.objects if obj.type == "LIGHT"]
+
 report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 print(json.dumps(report, indent=2))
