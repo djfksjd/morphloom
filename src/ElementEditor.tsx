@@ -32,12 +32,13 @@ function download(blob: Blob, name: string): void {
   const a = document.createElement('a'); a.href = url; a.download = name; a.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export default function ElementEditor({initialProject,workspace,activeAsset,onAssetPick,onProjectChange}: {initialProject?:ElementProject;workspace?:ElementWorkspace;activeAsset?:string;onAssetPick?:(id:string)=>void;onProjectChange?:(project:ElementProject)=>void} = {}): React.JSX.Element {
+export default function ElementEditor({initialProject,workspace,activeAsset,onAssetPick,onProjectChange,initialSelection,onSelectionChange}: {initialProject?:ElementProject;workspace?:ElementWorkspace;activeAsset?:string;onAssetPick?:(id:string)=>void;onProjectChange?:(project:ElementProject)=>void;initialSelection?:string;onSelectionChange?:(id:string)=>void} = {}): React.JSX.Element {
   const [project, setProject] = useState<ElementProject>(() => initialProject ? structuredClone(initialProject) : createBirdProject());
   useEffect(()=>{onProjectChange?.(project);},[project,onProjectChange]);
   const [initialHistory] = useState(() => new ElementHistory(project));
   const history = useRef(initialHistory);
-  const [selection, setSelection] = useState('');
+  const [selection, setSelection] = useState(initialSelection ?? '');
+  useEffect(()=>{onSelectionChange?.(selection);},[selection,onSelectionChange]);
   const [featureId,setFeatureId]=useState('');
   const uvInspector=useRef(new LatestUvInspection());
   const [uvState,setUvState]=useState<{project:ElementProject;status:'checking'|'ready'|'error';receipt?:UvInspectionReceipt;error?:string}|null>(null);

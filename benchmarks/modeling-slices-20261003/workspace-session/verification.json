@@ -1,0 +1,195 @@
+{
+  "schema": "morphloom.workspace-session-evidence/0.1",
+  "baseCommit": "14d6a433e8c2b5a9d3855700c8e2ce77d6f3de81",
+  "sessionSchema": "morphloom.workspace-editor-session/0.1",
+  "workspaceRevision": "morphloom.workspace-engine/0.3",
+  "sourceHashes": {
+    "src/ElementEditor.tsx": "1d3b0f4ef8e209fbf202813a09122c4237c7e101bd8864e7f9e1bd8e4ff9393c",
+    "src/WorkspaceEditor.tsx": "ede3693b9870b0179d6fdc5b9df8143be309164a4299d320c5937e9932f3ad15",
+    "src/engine/workspace-editor-session.ts": "6f9760351d9ff68a10b3d5f41d1189629ebe80e2cad6da042280af0088d2e53f",
+    "schemas/workspace-editor-session-v1.schema.json": "5b9912abb219f394cf18d053f2cad39de27b8e2cf418af003665354a434680e9",
+    "tests/workspace-editor-session.test.ts": "73644529161c47b575e3d38feb754ba869750e2c033ce3125be3efa3ebc4b6f3",
+    "scripts/workspace-session-browser-regression.py": "651e0fd77c8d14d09455a3172702b589b9d9b875d173d07a66f062888cb74be6",
+    "docs/WORKSPACE_SESSION_CONTRACT.ko.md": "4f383862fbd0f9e6561686a89945ee959a1134a7fb0623b9767a7339a84474d2",
+    "docs/WORKSPACE_SESSION_STATUS.ko.md": "c393786a80549ee084afce35d8b2064c5aa8e3fb0a59c62abc02da6f5a5c5808",
+    "docs/MORPHLOOM_WORK_STATE.ko.md": "4028e45a3623f9a83ab899b52e369759b50adeba620ff3a88124e579c04f5377",
+    "docs/WORKSPACE_ISOLATE_STATUS.ko.md": "01fd6cc866e8488616096ff6bd44fb1cd9e689ccf08c80d46cd538a861f665b9"
+  },
+  "files": {
+    "baseline.json.gz": {
+      "sha256": "5d0e23e200da80ff51e2aae7398b1e6fb59d60f221a80751c691ea6a4a985bdc",
+      "bytes": 287
+    },
+    "browser/after-reopen.png": {
+      "sha256": "82e2231e5b1470e99e49f56447145a1bfa7ca236793ac9364cb26b58c5420ea0",
+      "bytes": 266604
+    },
+    "browser/before-save.png": {
+      "sha256": "0d59f9e5ca105b4a0697a238216accf8e24a9c30cbd1c7203ad1d30399f7fef8",
+      "bytes": 268280
+    },
+    "browser/before.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser/browser-evidence.json.gz": {
+      "sha256": "7170cc98f38aa1e136f200421b5c0044ed8787782e8ad67e979d7df566fa82dd",
+      "bytes": 425
+    },
+    "browser/invalid-rejected.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser/invalid-rejected.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser/invalid.session.json.gz": {
+      "sha256": "4ec354eda57217f1e0d7ea8a0f0aad463f672ada66fbea99c513053bcf440625",
+      "bytes": 5460
+    },
+    "browser/legacy.session.json.gz": {
+      "sha256": "858df313d1501ed6ff743848f440832ab9d1c87f420c1b244ba0c3a556558ff6",
+      "bytes": 6750
+    },
+    "browser/restored.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser/restored.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser/saved.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser-current/after-reopen.png": {
+      "sha256": "e143faae79984b0f88f38dfca02db3da44878b32d285b788f0c704ec54a04d0f",
+      "bytes": 266853
+    },
+    "browser-current/applied.workspace.json.gz": {
+      "sha256": "9e7de58bade5d3aeef7716a029848e53b9649a969a6def1dea59b8a8c36d09fd",
+      "bytes": 6609
+    },
+    "browser-current/async-session.json.gz": {
+      "sha256": "e37c7420ca0dc9441e0340a2bec122b91a7ef888f9741fb70e8966e43ee1df26",
+      "bytes": 5455
+    },
+    "browser-current/before-save.png": {
+      "sha256": "44b1124303318c410d51e6758769d2b351466b8af9986db51d5d7fa4fe8b5462",
+      "bytes": 268262
+    },
+    "browser-current/before.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser-current/browser-evidence.json.gz": {
+      "sha256": "cffd5af804d6417de7a3ccecedf1ec61098b123b662a2dfdbbea67eb5159bc42",
+      "bytes": 494
+    },
+    "browser-current/draft.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser-current/invalid-rejected.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser-current/invalid-rejected.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser-current/invalid.session.json.gz": {
+      "sha256": "4ec354eda57217f1e0d7ea8a0f0aad463f672ada66fbea99c513053bcf440625",
+      "bytes": 5460
+    },
+    "browser-current/legacy.session.json.gz": {
+      "sha256": "858df313d1501ed6ff743848f440832ab9d1c87f420c1b244ba0c3a556558ff6",
+      "bytes": 6750
+    },
+    "browser-current/restored.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser-current/restored.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "browser-current/saved.session.json.gz": {
+      "sha256": "efebe8e2cf79486885c8bb68f08155309e093cd7ebcc7b4b1a7a293bdea0ecae",
+      "bytes": 6760
+    },
+    "browser-current/undo.workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "build.log.gz": {
+      "sha256": "364848db92cda10095ad69c97ec81fa43c8a3ef93a6259edacf58dc2607c5b19",
+      "bytes": 602
+    },
+    "check.log.gz": {
+      "sha256": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192",
+      "bytes": 70
+    },
+    "delivery/current-delivery.json.gz": {
+      "sha256": "8bf2b40efc341dd840887f487e412c39426d9e1acee99a44c303db04bf99c7dd",
+      "bytes": 309
+    },
+    "delivery/workspace/morphloom-workspace-uv-quality.json.gz": {
+      "sha256": "00644e15744191816973baf47f7533e41001e5d89da5dfe884f2f261c362dcfc",
+      "bytes": 1698553
+    },
+    "delivery/workspace/morphloom-workspace.json.gz": {
+      "sha256": "09ae4892785bbdd7f386be49fc03a89f35460e874780c298de6812ddedd3d598",
+      "bytes": 6609
+    },
+    "green.log.gz": {
+      "sha256": "e05ff6deb084dbb931f20b4fc0559d88048694050d11c5ea5730d7da7a3697c7",
+      "bytes": 277
+    },
+    "red.log.gz": {
+      "sha256": "312422b25261dc6be25e40b857ea113db6b7848f8f38c675a76b4e88f981d12f",
+      "bytes": 632
+    },
+    "source-tests.log.gz": {
+      "sha256": "8c627b75e8c6c71e1bae98e5a9c2385df65551e1452245d96ffc27dafba73fae",
+      "bytes": 3879
+    },
+    "tests.log.gz": {
+      "sha256": "2468579199e0ff1883e9d9cd6c6a7e4bfe3c39c73551b11945785d4ceacdb873",
+      "bytes": 3887
+    }
+  },
+  "actualGlbs": {
+    "delivery/workspace/morphloom-workspace.glb": {
+      "sha256": "ced0c70de3b24199d71e710d9be439d1455ac7df1daa01873c78005e9d330944",
+      "bytes": 3256956
+    }
+  },
+  "results": {
+    "parser": 12,
+    "nativeCases": 10,
+    "cloneTests": 753,
+    "originalTests": 772,
+    "checkBuild": "PASS",
+    "nativeThreeFileExport": "PASS; actual GLB/source byte-exact identified prior baseline",
+    "schema": "PASS actual native file with local refs; relational checks runtime",
+    "freshDCC": "not-run; previous identified exact bytes reused honestly",
+    "globalGate": "not-run; previous strict cooling infos23 FAIL unresolved",
+    "dominance": "previous independent comparison0/3 FAIL unresolved"
+  },
+  "limits": [
+    "active asset/selection only",
+    "camera/isolate/history not serialized",
+    "source source-policy stays first asset/empty selection",
+    "no geometry/quality approval claim",
+    "UNI_AI confirmed credit shortage; Claude weekly limit; additional paid calls0"
+  ],
+  "timing": {
+    "startKST": "19:19 approx",
+    "verificationKST": "19:40",
+    "contractMinutes": 25
+  },
+  "next": "actual geometry/shading audit; continuous goal ACTIVE"
+}

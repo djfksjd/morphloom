@@ -113,3 +113,7 @@ Reuse existing corner framing helper in the editor; remove0.1m scale floor, use 
 ## 2026-10-03 Namespaced workspace isolate preview
 
 Reuse local isolate for active asset/part/element/group; preserve datum, source, whole delivery and namespace identity. Real Fit view helper loss also corrected. Native8cases/current actual6downloads pass;61 non-target GLB meshes exact; Blender full62/selected1 mesh named edits and two reopen cycles pass. Publish741/source760/check/build pass; old global gate blockers unresolved/not rerun. See [status](WORKSPACE_ISOLATE_STATUS.ko.md). Next audit selected asset/part persistence on source reopen. Goal remains active.
+
+## 2026-10-03 Separate Workspace editor session
+
+Add versioned source-preserving session envelope for active asset/local selection, additive save/load UI; old source policy and actual GLB/source bytes unchanged.12parser tests/native10cases/current3file export pass; pending real File.text cannot overwrite draft/Apply, Undo and non-target source preserved. Clone753/check/build pass; fresh original test result recorded in current verification. Camera/isolate/history not serialized; global blockers unchanged/not rerun. See [status](WORKSPACE_SESSION_STATUS.ko.md). Goal remains ACTIVE; next audit actual geometry/shading defects.

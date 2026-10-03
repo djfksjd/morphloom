@@ -7,7 +7,8 @@ import { bearingPack } from './engine/bearing-pack';
 import { gearPack } from './engine/gear-pack';
 import { createElementDomainRegistry } from './engine/element-domain-packs';
 import { serializeProject, type ElementProject, type Vec3 } from './engine/element-project';
-import { appendWorkspaceAsset, buildWorkspaceScene, generateWorkspaceAsset, parseWorkspace, serializeWorkspace, validateWorkspace, WorkspaceHistory, type ElementWorkspace } from './engine/element-workspace';
+import { appendWorkspaceAsset, buildWorkspaceScene, generateWorkspaceAsset, serializeWorkspace, validateWorkspace, WorkspaceHistory, type ElementWorkspace } from './engine/element-workspace';
+import { createWorkspaceEditorSession, parseWorkspaceEditorFile, serializeWorkspaceEditorSession } from './engine/workspace-editor-session';
 import { analyzeTopology } from './engine/topology';
 
 const registry=createElementDomainRegistry();registry.register(bearingPack);registry.register(gearPack);registry.register(surfaceGearPack);
@@ -22,6 +23,9 @@ export default function WorkspaceEditor():React.JSX.Element{
   const [pack,setPack]=useState('mechanical.bearing.visual'),[instanceId,setInstanceId]=useState('bearing'),[inputs,setInputs]=useState<Record<string,number>>({});
   const [position,setPosition]=useState<Vec3>([100,0,0]),[rotation,setRotation]=useState<Vec3>([0,0,0]);
   const [error,setError]=useState(''),[busy,setBusy]=useState(false);
+  const selectedByAsset=useRef(new Map<string,string>());
+  const [loadedFormat,setLoadedFormat]=useState('workspace-source');
+  const selectionChanged=useCallback((id:string):void=>{selectedByAsset.current.set(activeId,id);},[activeId]);
   const current=useRef(workspace);current.current=workspace;
   const exportBusy=useRef(false),loadTicket=useRef(0),mounted=useRef(true);
   useEffect(() => { mounted.current=true; return () => { mounted.current=false;loadTicket.current++; }; }, []);
@@ -68,10 +72,12 @@ export default function WorkspaceEditor():React.JSX.Element{
     {Object.entries(meta.parameters.dimensions).map(([key,b])=><label key={key}>{key}<input aria-label={`Append ${key}`} type="number" min={b.min} max={b.max} value={inputs[key]??b.default} onChange={e=>setInputs(p=>({...p,[key]:e.currentTarget.valueAsNumber}))}/></label>)}
     {vector('New asset position (mm)',position,setPosition)}{vector('New asset rotation (rad)',rotation,setRotation)}
     <button onClick={append}>Append asset</button><button onClick={()=>{try{download(new Blob([serializeWorkspace(workspace)],{type:'application/json'}),'morphloom-workspace.json');}catch(e){setError(String(e));}}}>Save workspace JSON</button>
-    <label>Load workspace JSON<input aria-label="Load workspace JSON" type="file" accept=".json" onChange={async e=>{
-      const el=e.currentTarget,ticket=++loadTicket.current;try{const f=el.files?.[0];el.value='';if(!f)return;if(f.size>2_000_000)throw new Error('File exceeds 2 MB');const next=parseWorkspace(await f.text());if(ticket!==loadTicket.current)return;history.current=new WorkspaceHistory(next);current.current=next;setWorkspace(next);setActiveId(next.assets[0]?.id??'');setLoadRevision(n=>n+1);setError('');}catch(err){if(ticket===loadTicket.current)setError(String(err));}
+    <button onClick={()=>{try{const session=createWorkspaceEditorSession(current.current,activeId,selectedByAsset.current.get(activeId)??'');download(new Blob([serializeWorkspaceEditorSession(session)],{type:'application/json'}),'morphloom-workspace-editor-session.json');setError('');}catch(e){setError(String(e));}}}>Save editor session JSON</button>
+    <p aria-label="Loaded workspace format">Loaded: {loadedFormat}. Session saves active asset and selected ID; camera, isolate and undo history are not stored.</p>
+    <label>Load workspace or editor session JSON<input aria-label="Load workspace JSON" type="file" accept=".json" onChange={async e=>{
+      const el=e.currentTarget,ticket=++loadTicket.current;try{const f=el.files?.[0];el.value='';if(!f)return;if(f.size>2_000_000)throw new Error('File exceeds 2 MB');const parsed=parseWorkspaceEditorFile(await f.text());if(ticket!==loadTicket.current||!mounted.current)return;const next=parsed.session.workspace;selectedByAsset.current=new Map([[parsed.session.activeAssetId,parsed.session.selectedId]]);setLoadedFormat(parsed.format);history.current=new WorkspaceHistory(next);current.current=next;setWorkspace(next);setActiveId(parsed.session.activeAssetId);setLoadRevision(n=>n+1);setError('');}catch(err){if(ticket===loadTicket.current)setError(String(err));}
     }}/></label><button disabled={busy||!workspace.assets.length} onClick={()=>{void exportAll();}}>Export workspace GLB + JSON</button>
     <p role="alert">{error}</p>
   <button disabled={busy} onClick={()=>{void exportAll(true);}}>Export workspace UV diagnostic GLB + source JSON</button>
-</section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={pickAsset} onProjectChange={receive}/>}</div>;
+</section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={pickAsset} onProjectChange={receive} initialSelection={selectedByAsset.current.get(active.id)??''} onSelectionChange={selectionChanged}/>}</div>;
 }

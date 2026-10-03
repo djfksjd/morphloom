@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkspaceEditorSession 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "workspace", "activeAssetId", "selectedId"],
+  "properties": {
+    "schema": {"const": "morphloom.workspace-editor-session/0.1"},
+    "workspace": {"$ref": "element-workspace.schema.json"},
+    "activeAssetId": {"type": "string", "maxLength": 48},
+    "selectedId": {"type": "string", "maxLength": 135}
+  }
+}
