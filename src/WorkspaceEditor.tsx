@@ -1,5 +1,5 @@
 import { surfaceGearPack } from '../examples/domain-packs/surface-gear-pack';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import {inspectMeshExport} from './engine/mesh-export-policy';
 import ElementEditor from './ElementEditor';
@@ -24,12 +24,14 @@ export default function WorkspaceEditor():React.JSX.Element{
   const [error,setError]=useState(''),[busy,setBusy]=useState(false);
   const current=useRef(workspace);current.current=workspace;
   const exportBusy=useRef(false),loadTicket=useRef(0);
+  useEffect(() => () => { loadTicket.current++; }, []);
+  const pickAsset=useCallback((id:string):void=>{loadTicket.current++;setActiveId(id);},[]);
   const meta=registry.list().find(p=>p.id===pack)!,active=workspace.assets.find(a=>a.id===activeId);
   const receive=useCallback((source:ElementProject):void=>{
     try{
       const w=current.current,old=w.assets.find(a=>a.id===activeId);if(!old||serializeProject(old.source)===serializeProject(source))return;
       const next=validateWorkspace({...w,assets:w.assets.map(a=>a.id===activeId?{...a,source:structuredClone(source)}:a)});
-      history.current.commit(next);current.current=next;setWorkspace(next);setError('');
+      loadTicket.current++;history.current.commit(next);current.current=next;setWorkspace(next);setError('');
     }catch(e){setError(`Workspace update rejected: ${String(e)}`);setLoadRevision(n=>n+1);}
   },[activeId]);
   const append=():void=>{try{
@@ -56,7 +58,7 @@ export default function WorkspaceEditor():React.JSX.Element{
     }catch(e){setError(String(e));}finally{built?.dispose();exportBusy.current=false;setBusy(false);}
   };
   const vector=(label:string,value:Vec3,change:(v:Vec3)=>void):React.JSX.Element=><fieldset><legend>{label}</legend>{value.map((v,i)=><label key={i}>{['X','Y','Z'][i]}<input aria-label={`${label} ${['X','Y','Z'][i]}`} type="number" step="0.1" value={v} onChange={e=>{const next=[...value] as Vec3;next[i]=e.currentTarget.valueAsNumber;change(next);}}/></label>)}</fieldset>;
-  return <><section style={{padding:16,font:'14px system-ui'}} aria-label="Workspace actions">
+  return <div onClickCapture={e => { if (e.target instanceof Element && e.target.closest('button')) loadTicket.current++; }} onChangeCapture={e => { if (!(e.target instanceof HTMLInputElement && e.target.type === 'file')) loadTicket.current++; }}><section style={{padding:16,font:'14px system-ui'}} aria-label="Workspace actions">
     <h1>Mixed workspace · experimental</h1><p>Sources keep their own seed, IDs and edits. Explicit mm / right-handed Y-up datums affect the derived viewport and combined GLB. Workspace history spans assets; each source editor has a separate local undo session.</p>
     <button disabled={!history.current.canUndo} onClick={()=>travel('undo')}>Undo workspace</button><button disabled={!history.current.canRedo} onClick={()=>travel('redo')}>Redo workspace</button>
     <p>History: {history.current.retainedStates}/30 states · {history.current.retainedBytes} / 8388608 UTF-8 snapshot bytes. Reopening JSON starts a new history.</p>
@@ -67,9 +69,9 @@ export default function WorkspaceEditor():React.JSX.Element{
     {vector('New asset position (mm)',position,setPosition)}{vector('New asset rotation (rad)',rotation,setRotation)}
     <button onClick={append}>Append asset</button><button onClick={()=>{try{download(new Blob([serializeWorkspace(workspace)],{type:'application/json'}),'morphloom-workspace.json');}catch(e){setError(String(e));}}}>Save workspace JSON</button>
     <label>Load workspace JSON<input aria-label="Load workspace JSON" type="file" accept=".json" onChange={async e=>{
-      const el=e.currentTarget,ticket=++loadTicket.current;try{const f=el.files?.[0];if(!f)return;if(f.size>2_000_000)throw new Error('File exceeds 2 MB');const next=parseWorkspace(await f.text());if(ticket!==loadTicket.current)return;history.current=new WorkspaceHistory(next);current.current=next;setWorkspace(next);setActiveId(next.assets[0]?.id??'');setLoadRevision(n=>n+1);setError('');}catch(err){if(ticket===loadTicket.current)setError(String(err));}el.value='';
+      const el=e.currentTarget,ticket=++loadTicket.current;try{const f=el.files?.[0];el.value='';if(!f)return;if(f.size>2_000_000)throw new Error('File exceeds 2 MB');const next=parseWorkspace(await f.text());if(ticket!==loadTicket.current)return;history.current=new WorkspaceHistory(next);current.current=next;setWorkspace(next);setActiveId(next.assets[0]?.id??'');setLoadRevision(n=>n+1);setError('');}catch(err){if(ticket===loadTicket.current)setError(String(err));}
     }}/></label><button disabled={busy||!workspace.assets.length} onClick={()=>{void exportAll();}}>Export workspace GLB + JSON</button>
     <p role="alert">{error}</p>
   <button disabled={busy} onClick={()=>{void exportAll(true);}}>Export workspace UV diagnostic GLB + source JSON</button>
-</section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={setActiveId} onProjectChange={receive}/>}</>;
+</section>{active&&<ElementEditor key={`${loadRevision}:${active.id}`} initialProject={active.source} workspace={workspace} activeAsset={active.id} onAssetPick={pickAsset} onProjectChange={receive}/>}</div>;
 }

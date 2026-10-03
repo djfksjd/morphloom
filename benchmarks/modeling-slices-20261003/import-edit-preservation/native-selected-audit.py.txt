@@ -1,0 +1,12 @@
+import bpy,sys,json,hashlib,math
+from pathlib import Path
+args=sys.argv[sys.argv.index('--')+1:];before,selected,source,out=map(Path,args)
+def read(path):
+ bpy.ops.wm.read_factory_settings(use_empty=True);bpy.ops.import_scene.gltf(filepath=str(path));return [o for o in bpy.context.scene.objects if o.type=='MESH']
+def volume(o):
+ o.data.calc_loop_triangles();return sum(o.data.vertices[t.vertices[0]].co.dot(o.data.vertices[t.vertices[1]].co.cross(o.data.vertices[t.vertices[2]].co))/6 for t in o.data.loop_triangles)*abs(o.matrix_world.determinant())
+def measure(o):
+ pts=[o.matrix_world@v.co for v in o.data.vertices];return {'centerMm':[(min(p[i]for p in pts)+max(p[i]for p in pts))*500 for i in range(3)],'sizeMm':[(max(p[i]for p in pts)-min(p[i]for p in pts))*1000 for i in range(3)],'signedVolumeMm3':volume(o)*1e9,'triangles':len(o.data.loop_triangles),'uvLayers':len(o.data.uv_layers)}
+meshes=read(before);baseline=measure(next(o for o in meshes if o.name=='ball_0000'));meshes=read(selected);assert len(meshes)==1 and meshes[0].name=='ball_0000';o=meshes[0];actual=measure(o);p=next(p for p in json.loads(source.read_text())['parts']if p['id']=='ball_0000');r=p['geometry']['radius'];assert all(abs(s-2*r)<.001 for s in actual['sizeMm']);assert all(abs(a-b)<.001 for a,b in zip(actual['centerMm'],baseline['centerMm']));assert abs(actual['signedVolumeMm3']/baseline['signedVolumeMm3']-(r/3)**3)<1e-6;assert actual['signedVolumeMm3']>0 and actual['uvLayers']==1
+mat=o.active_material;bsdf=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED');pbr={k:bsdf.inputs[k].default_value for k in ['Roughness','Metallic']};assert abs(pbr['Roughness']-p['material']['roughness'])<1e-6 and abs(pbr['Metallic']-p['material']['metalness'])<1e-6
+report={'pass':True,'blenderVersion':bpy.app.version_string,'baseline':baseline,'actual':actual,'pbr':pbr,'parent':o.parent.name if o.parent else None,'hashes':{x.name:hashlib.sha256(x.read_bytes()).hexdigest()for x in [before,selected,source]},'scope':'actual imported sphere vertex bounds/volume/PBR/UV and selected-only mesh; authored visualization, no manufacturing approval'};out.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

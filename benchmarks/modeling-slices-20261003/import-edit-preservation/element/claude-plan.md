@@ -1,0 +1,9 @@
+**Critical failures a narrow regression would miss:** the main risk is a false pass, where the edited ball looks right in the UI while the serialized data is wrong. This is a review of the supplied summary only; nothing was run.
+
+- **Shared geometry leak:** if the balls (8, inferred from 11 meshes) share one buffer or instance, editing `ball_0000` can silently change the others or be re-merged on save. Checking only the edited ball misses this. Compare each untouched ball's actual vertices and its 112.50 mm³ volume before the edit, after it, after Undo/Redo and after reopen. Undo must restore exact vertices, not an approximate inverse scale.
+
+- **Scale instead of real geometry:** the radius change may be stored as a node scale or as session-only state, so the display looks correct while the vertices are unchanged. Read the vertex positions from the saved file and the exported GLB. The volume should change by the cube of the radius ratio and stay positive, with winding and normals intact.
+
+- **Datum and ID drift:** after edit, detach, restore, save and reopen, the ball could return to a stale or recomputed datum (e.g. a bounding-box centre) or lose the radius edit. It could also be duplicated as a twelfth mesh or renumbered. Assert the mesh count is still 11, `ball_0000` is the same part, and the datum matches the original after reopen.
+
+- **Lossy Blender round-trip:** the single-ball GLB may carry extra siblings, empty parents or unused materials. Blender can also rename the part (`ball_0000.001`), add a root node, swap the up axis, misread mm as metres, or split vertices at seams. Compare positions within tolerance and in world units, not by vertex count, and check the PBR values, name and hierarchy on the file reopened after the Blender edit.

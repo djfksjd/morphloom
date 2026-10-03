@@ -39,16 +39,18 @@ describe('bearing Domain Pack vertical slice', () => {
         const n = o.geometry.getAttribute('normal');
         for (let i = 0; i < n.count; i++) expect(new THREE.Vector3().fromBufferAttribute(n,i).length()).toBeCloseTo(1,4);
         const positions=o.geometry.getAttribute('position'),index=o.geometry.index;
-        let minimumAlignment=1;
+        let minimumAlignment=1, signedVolume=0;
         for(let i=0;i<(index?.count??positions.count);i+=3) {
           const ids=[0,1,2].map(j=>index?index.getX(i+j):i+j);
           const a=new THREE.Vector3().fromBufferAttribute(positions,ids[0]);
           const b=new THREE.Vector3().fromBufferAttribute(positions,ids[1]);
           const c=new THREE.Vector3().fromBufferAttribute(positions,ids[2]);
+          signedVolume+=a.dot(b.clone().cross(c))/6;
           const face=b.sub(a).cross(c.sub(a)).normalize(),shading=new THREE.Vector3();
           for(const j of ids)shading.add(new THREE.Vector3().fromBufferAttribute(n,j));
           minimumAlignment=Math.min(minimumAlignment,face.dot(shading.normalize()));
         }
+        expect(signedVolume).toBeGreaterThan(0); // closed outward shells; consistent inward winding must not pass
         expect(minimumAlignment).toBeGreaterThan(0); // unit normals alone cannot detect flipped shading
 
       });

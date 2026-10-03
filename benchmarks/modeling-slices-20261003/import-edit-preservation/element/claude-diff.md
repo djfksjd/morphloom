@@ -1,0 +1,1 @@
+You've hit your weekly limit · resets Oct 5 at 5am (Asia/Seoul)

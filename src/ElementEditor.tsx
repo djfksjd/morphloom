@@ -43,7 +43,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
   const uvReceipt=uvState?.project===project&&uvState.status==='ready'?uvState.receipt??null:null;
   const uvError=uvState?.project===project&&uvState.status==='error'?uvState.error??'UV inspection failed':'';
   const uvPending=uvState?.project!==project||uvState.status==='checking';
-  const select=(id:string):void=>{setSelection(id);setFeatureId('');};
+  const select=(id:string):void=>{loadTicket.current++;setSelection(id);setFeatureId('');};
   const [checker,setChecker]=useState(false);
   const [lod, setLod] = useState<'low' | 'detail'>('detail');
   const [isolate, setIsolate] = useState(false), [explode, setExplode] = useState(false);
@@ -52,6 +52,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
   const host = useRef<HTMLDivElement>(null);
   const pose = useRef<{ position: THREE.Vector3; target: THREE.Vector3 } | null>(null);
   const loadTicket = useRef(0);
+  useEffect(() => () => { loadTicket.current++; }, []);
   const resetPose = useRef(false);
   const [receiptNote, setReceiptNote] = useState('');
   const [cameraRevision, setCameraRevision] = useState(0);
@@ -63,7 +64,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
   const [actualCalls, setActualCalls] = useState(0);
   const elements = useMemo(() => resolveElements(project), [project]);
   const sceneRef = useRef<ReturnType<typeof buildElementScene> | null>(null);
-  const run = (fn: () => ElementProject): void => { try { const next = fn(); history.current.commit(next); setProject(next); setError(''); } catch (e) { setError(String(e)); } };
+  const run = (fn: () => ElementProject): void => { loadTicket.current++; try { const next = fn(); history.current.commit(next); setProject(next); setError(''); } catch (e) { setError(String(e)); } };
   const selected = elements.find(e => e.id === selection);
   const part = project.parts.find(p => p.id === selection);
   const group = project.groups.find(g => g.id === selection);
@@ -223,12 +224,12 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
     }catch(e){setError(String(e));}finally{built?.dispose();exportBusy.current=false;}
   };
   const button = (text: string, action: () => void): React.JSX.Element => <button type="button" onClick={action}>{text}</button>;
-  return <main className="element-editor" style={{ font: '14px system-ui', color: '#eee', background: '#292d33', minHeight: '100vh', padding: 12 }}>
+  return <main className="element-editor" onClickCapture={e => { if (e.target instanceof Element && e.target.closest('button')) loadTicket.current++; }} onChangeCapture={e => { if (!(e.target instanceof HTMLInputElement && e.target.type === 'file')) loadTicket.current++; }} style={{ font: '14px system-ui', color: '#eee', background: '#292d33', minHeight: '100vh', padding: 12 }}>
     <h1>Element editor</h1><label>Domain Pack <select value={packChoice} onChange={e => switchPack(e.target.value)}><option value="" disabled>Loaded project · generator association unknown</option>{domainRegistry.list().map(p => <option key={p.id} value={p.id}>{p.id} · {p.domain} · {p.status}</option>)}</select></label>{Object.entries(packMetadata?.parameters.dimensions ?? {}).map(([key, bounds]) => <label key={key}>{key}<input type="number" min={bounds.min} max={bounds.max} value={packInputs[key] ?? bounds.default} onChange={e => setPackInputs(v => ({ ...v, [key]: Number(e.target.value) }))} /></label>)}{packMetadata?.parameterNotes?.map(note=><p key={note}>{note}</p>)}<button disabled={!packChoice} onClick={() => switchPack(packChoice, packInputs)}>Generate pack</button><p>Authored visualization. Bearing clearances are design choices, not manufacturer tolerances; no load or kinematics certification. Bird/fur use representation B; no barbs or groom simulation.</p>
     <nav aria-label="Project actions">{button('Bird example', () => switchPack('morphloom.bird'))}{button('Fur example', () => switchPack('morphloom.fur'))}
-      {button('Undo', () => setProject(history.current.undo()))}{button('Redo', () => setProject(history.current.redo()))}
+      {button('Undo', () => { loadTicket.current++; setProject(history.current.undo()); })}{button('Redo', () => { loadTicket.current++; setProject(history.current.redo()); })}
       {button('Save project JSON', () => { try { download(new Blob([serializeProject(savedProject())], { type: 'application/json' }), 'morphloom-elements.json'); } catch (e) { setError(String(e)); } })}
-      <label>Load JSON (max 2 MB) <input type="file" accept=".json,application/json" onChange={async e => { const input = e.currentTarget; const ticket = ++loadTicket.current; try { const f = input.files?.[0]; if (!f) return; if (f.size > 2_000_000) throw new Error('File exceeds 2 MB'); const p = parseProject(await f.text()); const savedSelection = p.selection?.[0] ?? ''; delete p.selection; if (ticket !== loadTicket.current) return; resetPose.current = true; history.current = new ElementHistory(p); setProject(p); setPackChoice(''); setPackInputs({}); select(savedSelection); setError(''); } catch (err) { if (ticket === loadTicket.current) setError(String(err)); } input.value = ''; }} /></label>
+      <label>Load JSON (max 2 MB) <input type="file" accept=".json,application/json" onChange={async e => { const input = e.currentTarget; const ticket = ++loadTicket.current; try { const f = input.files?.[0]; input.value = ''; if (!f) return; if (f.size > 2_000_000) throw new Error('File exceeds 2 MB'); const p = parseProject(await f.text()); const savedSelection = p.selection?.[0] ?? ''; delete p.selection; if (ticket !== loadTicket.current) return; resetPose.current = true; history.current = new ElementHistory(p); setProject(p); setPackChoice(''); setPackInputs({}); setSelection(savedSelection); setFeatureId(''); setError(''); } catch (err) { if (ticket === loadTicket.current) setError(String(err)); } }} /></label>
       {button('Export selected GLB + source JSON', () => { void exportGlb(); })}{button('Export project GLB + source JSON', () => { void exportGlb(true); })}{button('Export project UV diagnostic GLB + source JSON', () => { void exportGlb(true,false,true); })}</nav>
     <p>GLB contains independently named baked meshes in meters, not a native procedural groom. Companion JSON preserves the editable source.</p>
     {button('Fit view', () => { resetPose.current = true; setCameraRevision(n => n + 1); })}<form onSubmit={e => { e.preventDefault(); if (project.parts.some(p => p.id === targetId) || project.groups.some(g => g.id === targetId) || elements.some(x => x.id === targetId)) { select(targetId); setError(''); } else setError(`Unknown element ID: ${targetId}`); }}><label>Select by ID <input value={targetId} onChange={e => setTargetId(e.target.value)} /></label><button type="submit">Select</button></form><label>LOD <select value={lod} onChange={e => setLod(e.target.value as 'low' | 'detail')}><option value="detail">Detail</option><option value="low">Low</option></select></label>
