@@ -17,3 +17,5 @@ MORPHLOOM_BLENDER_BINARY=/Applications/Blender.app/Contents/MacOS/Blender ./node
 [계약](BENCHMARK_RUN_ISOLATION_CONTRACT.ko.md), [현재 코드·원본 SHA·환경·결과](../benchmarks/modeling-slices-20261004/benchmark-run-isolation/verification.json), [현재 실제4회 실행](../benchmarks/modeling-slices-20261004/benchmark-run-isolation/actual-runs.json), [인체 tangent 실패 진단](../benchmarks/modeling-slices-20261004/benchmark-run-isolation/human-repeat-accessors.json). 실제 파일은 outputs/benchmark-rerun-goal-20261004에 보존한다.
 
 이번 구현은 재실행·산출물 보존 흐름을 해결했다. 전체 납품 완료가 아니다. 다음 한 작업은 기존 tangent 생성/검사 경로를 재사용해 인체 normal-mapped mesh의 Blender tangent 반복 차이를 해결하는 것이다.
+
+후속 기록: 이 문서의 인체 tangent FAIL은 당시 기본 실행 결과다. 이후 [single-thread 검증 profile](BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)에서 실제10 반복 SHA 쌍이 일치했다. 이전 실패 기록은 보존한다. 기본 GUI export의 해결로 일반화하지 않는다.

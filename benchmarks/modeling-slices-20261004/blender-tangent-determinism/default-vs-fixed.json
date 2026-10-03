@@ -1,0 +1,126 @@
+[
+  {
+    "kind": "roundtrip",
+    "id": "laurel-homes-architecture",
+    "defaultSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+    "singleThreadSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "roundtrip",
+    "id": "ornate-knife-product",
+    "defaultSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+    "singleThreadSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "roundtrip",
+    "id": "cooling-electronics-assembly",
+    "defaultSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "singleThreadSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "roundtrip",
+    "id": "field-human-runtime",
+    "defaultSha256": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+    "singleThreadSha256": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [
+      10
+    ],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0.0017828106240448047,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "roundtrip",
+    "id": "asphalt-print-surface",
+    "defaultSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+    "singleThreadSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "edit",
+    "id": "laurel-homes-architecture",
+    "defaultSha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+    "singleThreadSha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "edit",
+    "id": "ornate-knife-product",
+    "defaultSha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+    "singleThreadSha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "edit",
+    "id": "cooling-electronics-assembly",
+    "defaultSha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+    "singleThreadSha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "edit",
+    "id": "field-human-runtime",
+    "defaultSha256": "14a2d1fed9a59d548f5e4c5b3938ae7394b3bb46829946149c0caa242f00f7d0",
+    "singleThreadSha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [
+      10
+    ],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0.002786417664678227,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  },
+  {
+    "kind": "edit",
+    "id": "asphalt-print-surface",
+    "defaultSha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+    "singleThreadSha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+    "jsonExact": true,
+    "nonTangentAccessorsExact": true,
+    "changedTangents": [],
+    "tangentHandednessExact": true,
+    "maxTangentAngleDifferenceDeg": 0,
+    "scope": "Default versus fixed profile diagnostics; no existing gate threshold change"
+  }
+]

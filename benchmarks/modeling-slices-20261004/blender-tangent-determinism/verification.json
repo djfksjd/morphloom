@@ -1,0 +1,56 @@
+{
+  "schema": "morphloom.blender-tangent-determinism-evidence/0.1",
+  "baseHead": "a57aee219713e4869c6d19eb7ee1fb00c3062544",
+  "implementationSha256": {
+    "scripts/lib/blender-execution-profile.ts": "c56ea4758e6c11f595a187ef7db6e605fbd18789ab340ff4fefa05e83e8f7f8a",
+    "scripts/blender-cross-domain-benchmark.ts": "fc5d719c2030f7bc00fca21f8d7282a4b66fb437851305fe1f7b49e81440238c",
+    "scripts/blender-cross-domain-edit-benchmark.ts": "9bf0e3a9ccd5c218112d4828b03745d8c696f9c7c5504f7bb13c6f519866f697",
+    "tests/blender-execution-profile.test.ts": "d6be13f0e571963c6a2289844474fad111df5996e1d68794470fdf7e88cee936"
+  },
+  "environment": {
+    "node": "24.13.1",
+    "blender": "5.2.1 LTS",
+    "build": "9e2066aef7ef",
+    "machine": "Apple M5 macOS",
+    "strictCliTypes": "local existing @types/node22.20.4 MIT; no repository dependency addition"
+  },
+  "results": {
+    "testFiles": 110,
+    "tests": 795,
+    "check": 0,
+    "strictCliTypeCheck": 0,
+    "benchmark": 0,
+    "build": 0,
+    "qualityGate": 1,
+    "qualityProduction": 1,
+    "globalFalsePathsUnchanged": true,
+    "actualNativeRuns": 4,
+    "casesPerRun": 5,
+    "roundtripByteRepeat": true,
+    "editByteRepeat": true,
+    "priorSourcesAndOutputsPreserved": true,
+    "defaultVsFixedNonTangentByteExact": true,
+    "defaultVsFixedJsonExact": true,
+    "browserCloseupChangedChannels": 0,
+    "browserCloseupResolution": [
+      512,
+      512
+    ],
+    "diskMiB": 744,
+    "budgetMiB": 2048,
+    "apiCalls": 0,
+    "qualityAfterFreshNativeReceipts": {
+      "qualityGate": 1,
+      "qualityProduction": 1,
+      "blenderCrossDomainBenchmarkAccepted": false,
+      "blenderCrossDomainEditBenchmarkAccepted": false
+    }
+  },
+  "sourceEvidence": "same-build intern/mikktspace/mikktspace.hh: face count >10000 and concurrency >1 enable parallel mode; group tangents use atomic float additions",
+  "evidenceRoot": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004",
+  "scope": "Explicit single-thread local Blender benchmark profile; not default GUI export determinism, normal drift fix or global production readiness",
+  "freshPinnedReceipts": {
+    "benchmarks/blender-cross-domain-latest.json": "7d84a8fb48f50021b5807633ca7ee12e233f40b09a2b1a8988df280d982fbfa0",
+    "benchmarks/blender-cross-domain-edit-latest.json": "18c10198edd4d3e0bad04e7ca3dc6ba394196311644993062fbdfdbd660b4d25"
+  }
+}

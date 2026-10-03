@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 import { createBenchmarkRunDirectory, writeBenchmarkReport } from './lib/benchmark-run-directory';
+import { BLENDER_EXECUTION_PROFILE, blenderBackgroundArguments } from './lib/blender-execution-profile';
 
 interface FixtureManifest {
   pass: boolean;
@@ -77,10 +78,11 @@ for (const fixture of manifest.results) {
   const blenderReportPath = resolve(artifactDirectory, `${fixture.id}.blender.json`);
   const repaired = resolve(artifactDirectory, `${fixture.id}.blender.repaired.glb`);
   const repairReportPath = resolve(artifactDirectory, `${fixture.id}.repair.json`);
-  const blender = spawnSync(blenderBinary, [
-    '--background', '--python-exit-code', '1', '--python', blenderScript, '--',
+  const blenderStarted = performance.now();
+  const blender = spawnSync(blenderBinary, blenderBackgroundArguments(blenderScript, [
     source, rawRoundTrip, blenderReportPath,
-  ], { encoding: 'utf8', timeout: 300_000, maxBuffer: 64 * 1024 * 1024 });
+  ]), { encoding: 'utf8', timeout: 300_000, maxBuffer: 64 * 1024 * 1024 });
+  const blenderElapsedMs = performance.now() - blenderStarted;
   if (blender.status !== 0) {
     throw new Error([
       `Blender failed for ${fixture.id} (status ${String(blender.status)}, signal ${String(blender.signal)}).`,
@@ -120,6 +122,8 @@ for (const fixture of manifest.results) {
     },
     blender: {
       version: blenderReport.blenderVersion,
+      executionProfile: BLENDER_EXECUTION_PROFILE,
+      elapsedMs: blenderElapsedMs,
       artifactPaths: { rawRoundTrip, blenderReportPath, repaired, repairReportPath },
       semanticRoundTrip: {
         pass: blenderReport.pass,
@@ -149,6 +153,7 @@ const report = {
   compilerRevision: manifest.compilerRevision,
   generatedAt: new Date().toISOString(),
   artifactDirectory,
+  executionProfile: BLENDER_EXECUTION_PROFILE,
   pass: cases.length === 5 && cases.every((item) => item.pass),
   scope: 'actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation',
   cases,

@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm run quality:gate",
+    "exitCode": 1,
+    "freshNativeReceipts": true,
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run quality:production",
+    "exitCode": 1,
+    "freshNativeReceipts": true,
+    "externalServiceCalls": false
+  }
+]

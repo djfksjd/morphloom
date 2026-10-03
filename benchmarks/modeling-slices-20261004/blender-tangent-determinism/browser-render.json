@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "mesh": "LOD1_morphloom_human_body",
+      "vertices": 10992,
+      "tangentAccessor": true,
+      "normalMappedMaterials": 1,
+      "renderer": "WebKit WebGL"
+    },
+    {
+      "mesh": "LOD1_morphloom_human_body",
+      "vertices": 10992,
+      "tangentAccessor": true,
+      "normalMappedMaterials": 1,
+      "renderer": "WebKit WebGL"
+    }
+  ],
+  "changedChannels": 0,
+  "maxChannelDifference": 0,
+  "byteExact": true,
+  "resolution": [
+    512,
+    512
+  ],
+  "targetName": "LOD1_morphloom_human_body",
+  "worstVertex": 3057,
+  "worstAngleDeg": 0.0017828106240448049,
+  "scope": "actual GLTFLoader normal-map material and raw TANGENT rendering; neutral worst-tangent vertex closeup; no accuracy/expert/production approval",
+  "actualFiles": {
+    "before": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+    "after": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1"
+  }
+}

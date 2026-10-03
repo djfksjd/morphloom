@@ -1,0 +1,147 @@
+{
+  "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+  "blenderVersion": "5.2.1 LTS",
+  "threads": 10,
+  "rows": [
+    {
+      "mesh": "Icosphere",
+      "attributes": {
+        "tangent": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "normal": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "uv": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "position": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "index": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "sign": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        }
+      }
+    },
+    {
+      "mesh": "Mesh_0",
+      "attributes": {
+        "tangent": {
+          "exact": false,
+          "differingValues": 16422,
+          "maxAbsDiff": 1.7881393432617188e-07
+        },
+        "normal": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "uv": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "position": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "index": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "sign": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        }
+      }
+    },
+    {
+      "mesh": "Mesh_1",
+      "attributes": {
+        "tangent": {
+          "exact": false,
+          "differingValues": 11707,
+          "maxAbsDiff": 1.7881393432617188e-07
+        },
+        "normal": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "uv": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "position": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "index": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "sign": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        }
+      }
+    },
+    {
+      "mesh": "Mesh_2",
+      "attributes": {
+        "tangent": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "normal": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "uv": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "position": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "index": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        },
+        "sign": {
+          "exact": true,
+          "differingValues": 0,
+          "maxAbsDiff": 0.0
+        }
+      }
+    }
+  ]
+}

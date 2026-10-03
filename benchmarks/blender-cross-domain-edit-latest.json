@@ -1,7 +1,13 @@
 {
   "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
   "compilerRevision": "morphloom-compiler/0.39.0",
-  "generatedAt": "2026-10-03T06:56:38.812Z",
+  "generatedAt": "2026-10-03T18:06:51.090Z",
+  "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-yfAJ9X",
+  "executionProfile": {
+    "schema": "morphloom.blender-execution-profile/0.1",
+    "name": "background-single-thread",
+    "threads": 1
+  },
   "pass": true,
   "scope": "five-domain named or bounded-local edits, two Blender reopen cycles, non-target semantic invariants, and exact final GLB validation",
   "cases": [
@@ -37,6 +43,12 @@
         "actions": 0,
         "preserved": true
       },
+      "executionProfile": {
+        "schema": "morphloom.blender-execution-profile/0.1",
+        "name": "background-single-thread",
+        "threads": 1
+      },
+      "elapsedMs": 15955.055790999999,
       "riggedPayload": null,
       "rawValidation": {
         "status": "blocked",
@@ -151,6 +163,12 @@
         "actions": 0,
         "preserved": true
       },
+      "executionProfile": {
+        "schema": "morphloom.blender-execution-profile/0.1",
+        "name": "background-single-thread",
+        "threads": 1
+      },
+      "elapsedMs": 1872.8214590000025,
       "riggedPayload": null,
       "rawValidation": {
         "status": "pass",
@@ -262,6 +280,12 @@
         "actions": 0,
         "preserved": true
       },
+      "executionProfile": {
+        "schema": "morphloom.blender-execution-profile/0.1",
+        "name": "background-single-thread",
+        "threads": 1
+      },
+      "elapsedMs": 18537.253875,
       "riggedPayload": null,
       "rawValidation": {
         "status": "blocked",
@@ -381,6 +405,12 @@
         "actions": 22,
         "preserved": true
       },
+      "executionProfile": {
+        "schema": "morphloom.blender-execution-profile/0.1",
+        "name": "background-single-thread",
+        "threads": 1
+      },
+      "elapsedMs": 3825.8677499999976,
       "riggedPayload": {
         "schema": "morphloom.rigged-payload-audit/0.1",
         "pass": true,
@@ -437,7 +467,7 @@
       "finalDelivery": {
         "file": "field-human-runtime.edited.delivery.glb",
         "bytes": 3167100,
-        "sha256": "a914cf01afa99cac7ff8a56433a376835934fc7cad682f5e62e2074745f15d54",
+        "sha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
         "repairApplied": true,
         "repair": {
           "repairedTangents": 0,
@@ -507,6 +537,12 @@
         "actions": 0,
         "preserved": true
       },
+      "executionProfile": {
+        "schema": "morphloom.blender-execution-profile/0.1",
+        "name": "background-single-thread",
+        "threads": 1
+      },
+      "elapsedMs": 6787.542999999998,
       "riggedPayload": null,
       "rawValidation": {
         "status": "pass",

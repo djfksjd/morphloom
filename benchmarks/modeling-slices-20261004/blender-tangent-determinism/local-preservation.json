@@ -1,0 +1,40 @@
+{
+  "files": [
+    "scripts/lib/blender-execution-profile.ts",
+    "scripts/blender-cross-domain-benchmark.ts",
+    "scripts/blender-cross-domain-edit-benchmark.ts",
+    "tests/blender-execution-profile.test.ts",
+    "docs/BLENDER_TANGENT_DETERMINISM_CONTRACT.ko.md",
+    "docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md",
+    "docs/BENCHMARK_RUN_ISOLATION_STATUS.ko.md",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/single-thread-probe.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/default-probe.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/inspection.html",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/gates-fresh-receipts.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/default-vs-fixed.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/normalmap-closeup.png",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/actual-runs.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/browser-render.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/probe.py",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/fresh-pinned.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/repeat.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/gates.json",
+    "benchmarks/modeling-slices-20261004/blender-tangent-determinism/verification.json"
+  ],
+  "conflicts": [
+    {
+      "file": "benchmarks/blender-cross-domain-latest.json",
+      "originalSha256": "074dff7707b82dec1ec9dcc98a1ae8bd5facb2d66c06f2b7f8ca14a5f00855fd",
+      "publishedBaseSha256": "2ad26163b829bbf82ff66725980ea39af90d4e72485cbed5239c4b0f8820d74d",
+      "action": "preserved; not overwritten"
+    },
+    {
+      "file": "benchmarks/blender-cross-domain-edit-latest.json",
+      "originalSha256": "fd8526864d89f320f2235e3186b7c69c74e5bf79c920c361244e1d0e1b63a93b",
+      "publishedBaseSha256": "34c26ac0cfa2d559a8a6bd24def48c3fb98e4b052da0be4b1e56f56a579ffdf8",
+      "action": "preserved; not overwritten"
+    }
+  ],
+  "workingAuthority": "isolated publisher main based on a57aee2; original receipt differences preserved",
+  "userEditsPreserved": true
+}

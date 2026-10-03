@@ -1,0 +1,606 @@
+[
+  {
+    "kind": "roundtrip",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/roundtrip-1.json",
+    "sha256": "f01fa007462bfd04a49ec28c32bcd312f29a805324fc11e8a498fdaa79fea161",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-m0OFvq",
+    "executionProfile": {
+      "schema": "morphloom.blender-execution-profile/0.1",
+      "name": "background-single-thread",
+      "threads": 1
+    },
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "sourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+        "outputSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+        "elapsedMs": 5588.335125,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "sourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+        "outputSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+        "elapsedMs": 834.1857499999996,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "sourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+        "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+        "elapsedMs": 4824.031000000001,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+        "outputSha256": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1",
+        "elapsedMs": 3133.8687089999985,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "sourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+        "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+        "elapsedMs": 2043.4058330000007,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "roundtrip",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/roundtrip-2.json",
+    "sha256": "7d84a8fb48f50021b5807633ca7ee12e233f40b09a2b1a8988df280d982fbfa0",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi",
+    "executionProfile": {
+      "schema": "morphloom.blender-execution-profile/0.1",
+      "name": "background-single-thread",
+      "threads": 1
+    },
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "sourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+        "outputSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+        "elapsedMs": 4786.441834,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "sourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+        "outputSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+        "elapsedMs": 805.5076669999999,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "sourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+        "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+        "elapsedMs": 4742.061083,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+        "outputSha256": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1",
+        "elapsedMs": 3190.8622079999986,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "sourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+        "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+        "elapsedMs": 2115.8906659999993,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "edit",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/edit-1.json",
+    "sha256": "35deb8d4dc76cf8a5507080712bb48a7d23e918ee7c09298835a1044ed8f4d24",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-HuK1pE",
+    "executionProfile": {
+      "schema": "morphloom.blender-execution-profile/0.1",
+      "name": "background-single-thread",
+      "threads": 1
+    },
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "sourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+        "outputSha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+        "elapsedMs": 13167.559916,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "sourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+        "outputSha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+        "elapsedMs": 1570.4719579999983,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "sourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+        "outputSha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+        "elapsedMs": 15690.162708,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+        "outputSha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
+        "elapsedMs": 3531.7707500000033,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "sourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+        "outputSha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+        "elapsedMs": 6798.254458000003,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "edit",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/edit-2.json",
+    "sha256": "18c10198edd4d3e0bad04e7ca3dc6ba394196311644993062fbdfdbd660b4d25",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-yfAJ9X",
+    "executionProfile": {
+      "schema": "morphloom.blender-execution-profile/0.1",
+      "name": "background-single-thread",
+      "threads": 1
+    },
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "sourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+        "outputSha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+        "elapsedMs": 15955.055790999999,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "sourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+        "outputSha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+        "elapsedMs": 1872.8214590000025,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "sourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+        "outputSha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+        "elapsedMs": 18537.253875,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+        "outputSha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
+        "elapsedMs": 3825.8677499999976,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "sourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+        "outputSha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+        "elapsedMs": 6787.542999999998,
+        "standard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  }
+]

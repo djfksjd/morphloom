@@ -6,6 +6,7 @@ import { validateGlbStandard, type GltfStandardValidation } from '../src/engine/
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 import { auditRiggedGlbPayload } from './lib/rigged-payload-audit';
 import { createBenchmarkRunDirectory, writeBenchmarkReport } from './lib/benchmark-run-directory';
+import { BLENDER_EXECUTION_PROFILE, blenderBackgroundArguments } from './lib/blender-execution-profile';
 
 type Domain = 'architecture' | 'industrial-design' | 'electronics' | 'animation-game' | '3d-printing';
 
@@ -171,10 +172,11 @@ for (const editCase of EDIT_CASES) {
       assertInside(editDirectory, path);
     }
 
-    run(blenderBinary, [
-      '--background', '--python-exit-code', '1', '--python', blenderScript, '--',
+    const blenderStarted = performance.now();
+    run(blenderBinary, blenderBackgroundArguments(blenderScript, [
       sourcePath, rawOutput, receiptPath, editCase.component, ...editCase.operationArguments,
-    ], `${editCase.fixtureId} Blender component edit`);
+    ]), `${editCase.fixtureId} Blender component edit`);
+    const blenderElapsedMs = performance.now() - blenderStarted;
     const receipt = JSON.parse(readFileSync(receiptPath, 'utf8')) as EditAuditReceipt;
     if (!receipt.pass || receipt.schema !== 'morphloom.blender-component-edit-audit/0.2') {
       throw new Error(`Blender edit audit failed: ${receipt.blockers.join('; ') || 'invalid receipt'}`);
@@ -238,6 +240,8 @@ for (const editCase of EDIT_CASES) {
         stabilityChangeCount: receipt.stabilityChanges.length,
       },
       runtime: receipt.runtime,
+      executionProfile: BLENDER_EXECUTION_PROFILE,
+      elapsedMs: blenderElapsedMs,
       riggedPayload,
       rawValidation,
       stabilityValidation,
@@ -271,6 +275,7 @@ const report = {
   compilerRevision: manifest.compilerRevision,
   generatedAt: new Date().toISOString(),
   artifactDirectory: editDirectory,
+  executionProfile: BLENDER_EXECUTION_PROFILE,
   pass: results.length === EDIT_CASES.length && results.every((item) => item.pass === true),
   scope: 'five-domain named or bounded-local edits, two Blender reopen cycles, non-target semantic invariants, and exact final GLB validation',
   cases: results,

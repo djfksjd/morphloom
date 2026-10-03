@@ -1,0 +1,14 @@
+[
+  {
+    "target": "benchmarks/blender-cross-domain-latest.json",
+    "oldSha256": "2ad26163b829bbf82ff66725980ea39af90d4e72485cbed5239c4b0f8820d74d",
+    "currentSha256": "7d84a8fb48f50021b5807633ca7ee12e233f40b09a2b1a8988df280d982fbfa0",
+    "source": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/roundtrip-2.json"
+  },
+  {
+    "target": "benchmarks/blender-cross-domain-edit-latest.json",
+    "oldSha256": "34c26ac0cfa2d559a8a6bd24def48c3fb98e4b052da0be4b1e56f56a579ffdf8",
+    "currentSha256": "18c10198edd4d3e0bad04e7ca3dc6ba394196311644993062fbdfdbd660b4d25",
+    "source": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/edit-2.json"
+  }
+]
