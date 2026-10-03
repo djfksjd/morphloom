@@ -1,0 +1,11 @@
+**No blocking issue found in this scoped change by inspection.** The gate addresses the described selection-ABA race.
+
+- **ABA cancellation:** Once selection B commits, the layout-effect cleanup/setup invalidates A’s pending token. Returning to A cannot restore that token, even though `source` and the selected ID match again. The old −63 result therefore cannot commit over the reset −65 draft.
+- **Lifecycle:** Changes to `selectedId` or the IR reference invalidate ownership during the layout-effect phase; unmount cleanup does likewise. This closes the result-ownership window before passive-effect cleanup sets `alive.current=false`. Strict Mode’s effect cleanup/setup cycle also leaves the gate usable: the next `begin()` creates a fresh token.
+- **Stale errors:** The same `ownsResult()` check protects `catch`, so a cancelled operation’s later rejection or validation failure cannot populate the current editor’s error state. Errors from a still-current apply remain visible.
+- **Single-flight cleanup:** Keeping `finally` independent of ownership is correct here. Cancellation does not release `inFlight`, so another apply cannot start before the old operation finishes. Its `finally` must clear that lock and, while mounted, clear `busy`; it cannot accidentally clear a newer operation’s lock under this design.
+- **Undo/Redo:** A successful current apply still records exactly one history entry before notifying the parent. Receiving that expected IR preserves history; Undo/Redo continue setting `expected` before `onCommit`. Selection changes do not reset history, external IR replacements do, and cancelled results neither commit nor add entries.
+
+**Intentional limitation:** Cancellation suppresses publication, not underlying work. The editor remains busy—and Undo/Redo remain disabled—until that work settles. Also, invalidation follows *committed* selection/IR changes; a batched A→B→A that never commits B is not a cancellation boundary.
+
+Before accepting the fix, the focused UI checks are: the reported delayed-digest ABA case, the same case with a delayed rejection, IR replacement/unmount while pending, and a normal apply→Undo→Redo sequence. This review does not establish those runtime outcomes.

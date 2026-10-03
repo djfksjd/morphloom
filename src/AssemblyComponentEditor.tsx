@@ -1,4 +1,5 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useLayoutEffect,useRef,useState} from 'react';
+import {createLatestIntentGate} from './engine/latest-intent';
 import type {AssemblyIR,AssemblyComponentIR} from './engine/assembly-ir';
 import {applyAssemblyComponentPatch,fingerprintAssemblyIR,type AssemblyComponentPatch} from './engine/assembly-edit';
 import {validateAssemblyIR} from './engine/assembly-compiler';
@@ -15,6 +16,8 @@ export default function AssemblyComponentEditor({ir,selectedId,onCommit}:{ir:Ass
  const component=ir.components.find(c=>c.id===selectedId),latest=useRef(ir),alive=useRef(true),expected=useRef(ir),inFlight=useRef(false),selected=useRef(selectedId),history=useRef<AssemblyIR[]>([ir]),cursor=useRef(0);
  latest.current=ir;selected.current=selectedId;
  const draftSource=useRef<{ir:AssemblyIR;id?:string}>({ir, id:undefined});
+ const [intentGate]=useState(createLatestIntentGate);
+ useLayoutEffect(()=>{intentGate.cancel();return()=>intentGate.cancel();},[intentGate,ir,selectedId]);
  const [draft,setDraft]=useState<Draft>(),[busy,setBusy]=useState(false),[error,setError]=useState(''),[,refresh]=useState(0);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
  useEffect(()=>{if(ir!==expected.current){history.current=[ir];cursor.current=0;expected.current=ir;}draftSource.current={ir,id:component?.id};setDraft(component?draftFor(component):undefined);setError('');},[ir,component]);
@@ -23,7 +26,8 @@ export default function AssemblyComponentEditor({ir,selectedId,onCommit}:{ir:Ass
  const apply=async()=>{
   if(!component||!draft||inFlight.current)return;
   if(draftSource.current.ir!==ir||draftSource.current.id!==component.id){setError('초안의 원본/선택이 바뀌었습니다. 현재 부품을 다시 확인하세요.');return;}
-  inFlight.current=true;const source=ir,initial=draftFor(component);setBusy(true);setError('');
+  inFlight.current=true;const intent=intentGate.begin(),source=ir,initial=draftFor(component);
+  const ownsResult=()=>alive.current&&intentGate.isCurrent(intent)&&latest.current===source&&selected.current===component.id;setBusy(true);setError('');
   try{
    const number=(value:string,min:number,max:number)=>{const n=Number(value);if(!value.trim()||!Number.isFinite(n)||n<min||n>max)throw new Error(`숫자는 ${min}..${max} 범위여야 합니다.`);return n;};
    const position=draft.position.map(n=>number(n,-100000,100000)) as [number,number,number],scale=draft.scale.map(n=>number(n,.01,100)) as [number,number,number];
@@ -46,9 +50,9 @@ export default function AssemblyComponentEditor({ir,selectedId,onCommit}:{ir:Ass
     next={...next,components:next.components.map(c=>c.id===component.id?{...c,material:{...c.material,referenceProjection:declared}}:c)};
    }
    validateAssemblyIR(next);
-   if(!alive.current)return;if(latest.current!==source||selected.current!==component.id)throw new Error('다른 파일/수정본이 로드되었습니다. 오래된 적용 결과를 버렸습니다.');
+   if(!ownsResult())return;
    if(next!==source)commit(next);
-  }catch(e){if(alive.current)setError(e instanceof Error?e.message:'Component edit failed');}finally{inFlight.current=false;if(alive.current)setBusy(false);}
+  }catch(e){if(ownsResult())setError(e instanceof Error?e.message:'Component edit failed');}finally{inFlight.current=false;if(alive.current)setBusy(false);}
  };
  const dirty=component&&draft&&JSON.stringify(draft)!==JSON.stringify(draftFor(component));
  return <section className="selected-part-card" aria-label="Assembly component editor"><span className="eyebrow">COMPONENT EDIT · MM</span>

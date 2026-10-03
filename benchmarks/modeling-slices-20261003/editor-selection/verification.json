@@ -1,0 +1,141 @@
+{
+  "schema": "morphloom.editor-selection-verification/0.1",
+  "baselineCommit": "644c9ec5ff40cbac7f96ae0215bed63008c7019f",
+  "compilerRevision": "0.35.0",
+  "releaseAllowed": false,
+  "before": {
+    "pass": false,
+    "expectedA": [
+      -65,
+      0,
+      0
+    ],
+    "actualA": [
+      -63,
+      0,
+      0
+    ],
+    "nonTargetBPreserved": true,
+    "method": "actual canvas A/B/A selection, native edit/save; only real SHA-256 completion held"
+  },
+  "browser": {
+    "schema": "morphloom.editor-selection-browser/0.1",
+    "pass": true,
+    "rows": [
+      {
+        "case": "selection-a-b-a-cancels-old-commit",
+        "pass": true
+      },
+      {
+        "case": "selection-a-b-suppresses-old-error",
+        "pass": true
+      },
+      {
+        "case": "subsequent-valid-edit-and-non-target-preservation",
+        "pass": true
+      },
+      {
+        "case": "undo-redo",
+        "pass": true
+      },
+      {
+        "case": "current-error-visible-and-no-commit",
+        "pass": true
+      },
+      {
+        "case": "saved-edited-ir-reopen",
+        "pass": true
+      }
+    ],
+    "method": "native canvas/inputs/Undo/Redo/upload/save; one real SHA-256 completion controlled",
+    "files": {
+      "before-edit.assembly.json": "c8df55fa4e90f6e45716e1ef46815c33266852a556628deedec428536aa99cdf",
+      "after-aba.assembly.json": "c8df55fa4e90f6e45716e1ef46815c33266852a556628deedec428536aa99cdf",
+      "after-one-way.assembly.json": "c8df55fa4e90f6e45716e1ef46815c33266852a556628deedec428536aa99cdf",
+      "after-current-invalid.assembly.json": "6cdcea6bb2dbd7e44b170fca27bf37812179c672e6accf81fa03eca5b7fb2e1d",
+      "after-redo.assembly.json": "6cdcea6bb2dbd7e44b170fca27bf37812179c672e6accf81fa03eca5b7fb2e1d",
+      "after-undo.assembly.json": "c8df55fa4e90f6e45716e1ef46815c33266852a556628deedec428536aa99cdf",
+      "before-reopen-undo.assembly.json": "c8df55fa4e90f6e45716e1ef46815c33266852a556628deedec428536aa99cdf",
+      "editor-race.assembly.json": "a5be49d76bb142688d2caac61307d04f0948e5e6cd62551753cd3a5a3fd5176a",
+      "before-aba-obsolete-commit.assembly.json": "6cdcea6bb2dbd7e44b170fca27bf37812179c672e6accf81fa03eca5b7fb2e1d",
+      "after-reopen.assembly.json": "6cdcea6bb2dbd7e44b170fca27bf37812179c672e6accf81fa03eca5b7fb2e1d",
+      "after-normal-edit.assembly.json": "6cdcea6bb2dbd7e44b170fca27bf37812179c672e6accf81fa03eca5b7fb2e1d"
+    }
+  },
+  "checks": [
+    {
+      "label": "published-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "seconds": 56.28
+    },
+    {
+      "label": "source-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "seconds": 56.84
+    },
+    {
+      "label": "check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 2.4
+    },
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 3.98
+    },
+    {
+      "label": "benchmark",
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0,
+      "seconds": 4.41
+    }
+  ],
+  "sourceCodeSha256": {
+    "src/AssemblyComponentEditor.tsx": "fe920089e0f388aebebf718ec459456e375b0cc29759538ddc4c1d4ecb55ca1b",
+    "docs/EDITOR_SELECTION_CONTRACT.ko.md": "84658d2dc8019bc937b22ba8c3fa7d6c5a419353c6a17ad7400142b75aed9ce9",
+    "scripts/editor-selection-browser-harness.js": "f52d1364ed949834b1e129ed6c51690869798841225ec6b53ae443251a29c41d",
+    "scripts/editor-selection-browser-regression.py": "b05bc041838f5b2aa75b1ca81f3600c886f6344228e02b6bbbe6db05840a4b5b",
+    "docs/EDITOR_SELECTION_STATUS.ko.md": "48498fd00cfd30aa6163b83ffb6cc17b3a9b2c06d232622bafe766567b1d7cb1"
+  },
+  "assetsZipSha256": "abdbec37088d5700af8cb59912b81a82fc2ae8cd37cf3af8149e5c17ee56f398",
+  "uniai": {
+    "model": "gpt-6-astra",
+    "calls": 2,
+    "tokens": 8010,
+    "fallback": "not-run; no observed credit exhaustion"
+  },
+  "notRun": [
+    "Actual React unmount while apply pending",
+    "External IR replacement while apply pending",
+    "Fault-injected crypto rejection",
+    "Fresh DCC for UI-only step",
+    "Fresh global quality gate for UI-only step; previous failure retained",
+    "Independent expert evaluation"
+  ]
+}

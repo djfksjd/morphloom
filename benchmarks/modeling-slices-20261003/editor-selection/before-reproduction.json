@@ -1,0 +1,15 @@
+{
+  "pass": false,
+  "expectedA": [
+    -65,
+    0,
+    0
+  ],
+  "actualA": [
+    -63,
+    0,
+    0
+  ],
+  "nonTargetBPreserved": true,
+  "method": "actual canvas A/B/A selection, native edit/save; only real SHA-256 completion held"
+}
