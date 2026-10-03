@@ -1,3 +1,4 @@
+import {validateReferenceProjectionOrientation} from './reference-projection-orientation';
 import {validateSpurGear,gearExtrude,type SpurGearGeometry} from './spur-gear';
 import * as THREE from 'three';
 import { stableExtrudeUV } from './extrude-uv';
@@ -68,6 +69,7 @@ export function isSafeReferenceProjectionUri(uri: string): boolean {
 }
 
 function validateReferenceProjection(projection: ReferenceProjectionIR, componentId: string): void {
+  validateReferenceProjectionOrientation(projection.orientation);
   if (!isSafeReferenceProjectionUri(projection.uri)) {
     throw new Error(`Reference projection URI must be local or blob-backed in ${componentId}.`);
   }
@@ -838,7 +840,7 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
     mesh.geometry = geometry;
   }
   const rejectProjection = (message: string): never => {
-    if (geometry !== source) geometry.dispose();
+    if (geometry !== source) { mesh.geometry = source; geometry.dispose(); }
     throw new Error(message);
   };
   const position = geometry.getAttribute('position')
@@ -884,7 +886,8 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
     // Projecting it onto the hidden rear would duplicate evidence and mirror
     // visible detail onto geometry the source never observed.
     const signedFacing = normal[projectionAxis] / normalLength;
-    const materialIndex = signedFacing >= minimumFacing ? 0 : 1;
+    const facingSign = projection.orientation?.direction === 'negative' ? -1 : 1;
+    const materialIndex = signedFacing * facingSign >= minimumFacing ? 0 : 1;
     if (materialIndex === 0) {
       projectedTriangles += 1;
     } else {
@@ -899,7 +902,8 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
     if (materialIndex === 0 || Math.abs(signedFacing) >= minimumFacing) {
       for (let corner = 0; corner < 3; corner += 1) {
         const point = points[corner];
-        uv[(triangle + corner) * 2] = (point.x - minX) / width;
+        const u = (point.x - minX) / width;
+        uv[(triangle + corner) * 2] = materialIndex === 0 && projection.orientation?.flipU ? 1 - u : u;
         const secondary = projection.mapping === 'assembly-xz' ? point.z : point.y;
         uv[(triangle + corner) * 2 + 1] = (secondary - minSecondary) / height;
       }
@@ -915,7 +919,8 @@ function partitionReferenceProjectionFaces(mesh: THREE.Mesh, projection: Referen
   if (projectedTriangles === 0) rejectProjection(`Reference projection has no source-facing triangles in ${mesh.name}.`);
   geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   geometry.userData.morphloomReferenceProjectionPartition = {
-    method: 'source-facing-triangle-partition-v1',
+    method: projection.orientation ? 'source-facing-triangle-partition-v2' : 'source-facing-triangle-partition-v1',
+    ...(projection.orientation ? {orientation: {...projection.orientation}} : {}),
     projectionAxis,
     minimumFacing,
     projectedTriangles,
@@ -987,11 +992,11 @@ function applyReferenceProjectionAppearance(
     ...material.userData.morphloomSurface,
     referenceProjectionState: 'loaded',
     referenceRelief: Boolean(record.normalTexture && record.roughnessTexture),
-    referenceIrregularity: record.metrics?.irregularity,
-    referenceAlphaFillPixels: record.alphaFillPixels,
+    ...(record.metrics ? { referenceIrregularity: record.metrics.irregularity } : {}),
+    ...(record.alphaFillPixels !== undefined ? { referenceAlphaFillPixels: record.alphaFillPixels } : {}),
     referenceAuthoredLinearLuma: authoredLinearLuma,
     referenceDiffuseEnergyGain: colorGain,
-    referenceDelight: record.delightMetrics,
+    ...(record.delightMetrics ? { referenceDelight: record.delightMetrics } : {}),
   };
   material.needsUpdate = true;
 }

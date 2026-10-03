@@ -1,0 +1,86 @@
+{
+  "license": {
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": [
+      "Data, images, and 3D model: Amazon.com",
+      "Dataset builders: Matthieu Guillaumin, Thomas Dideriksen, Kenan Deng, Himanshu Arora, Jasmine Collins, and Jitendra Malik"
+    ]
+  },
+  "images": [
+    {
+      "id": "primary",
+      "kind": "input-image",
+      "relativePath": "fan/main.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/images/original/fa/fafe4f4a.jpg",
+      "sha256": "39cd73c6179abf618bf801cf83b739caff050d2b0ef3a70f54758a457576265e",
+      "bytes": 795729,
+      "mimeType": "image/jpeg",
+      "role": "primary",
+      "width": 2560,
+      "height": 2560,
+      "verified": true
+    },
+    {
+      "id": "front",
+      "kind": "input-image",
+      "relativePath": "fan/view-000.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_00.jpg",
+      "sha256": "c4c0a46bb4a9ebb2b93efad7abdbf5bf0e9742525101f846e722c3d68d222a11",
+      "bytes": 94716,
+      "mimeType": "image/jpeg",
+      "role": "front",
+      "sequenceIndex": 0,
+      "relativeAzimuthDegrees": 0,
+      "width": 834,
+      "height": 690,
+      "verified": true
+    },
+    {
+      "id": "right",
+      "kind": "input-image",
+      "relativePath": "fan/view-090.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_18.jpg",
+      "sha256": "f42c188728b04e065fcfbfe56d5a48a201b235fc17392d333bd37593938b7643",
+      "bytes": 68373,
+      "mimeType": "image/jpeg",
+      "role": "right",
+      "sequenceIndex": 18,
+      "relativeAzimuthDegrees": 90,
+      "width": 834,
+      "height": 690,
+      "verified": true
+    },
+    {
+      "id": "rear",
+      "kind": "input-image",
+      "relativePath": "fan/view-180.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_36.jpg",
+      "sha256": "786a94faaba068bc80575387fe6e867e8d0894cdc086ea26939dc714cbcb88e3",
+      "bytes": 92739,
+      "mimeType": "image/jpeg",
+      "role": "rear",
+      "sequenceIndex": 36,
+      "relativeAzimuthDegrees": 180,
+      "width": 834,
+      "height": 690,
+      "verified": true
+    },
+    {
+      "id": "left",
+      "kind": "input-image",
+      "relativePath": "fan/view-270.jpg",
+      "sourceUrl": "https://amazon-berkeley-objects.s3.amazonaws.com/spins/original/28/281a313b/281a313b_54.jpg",
+      "sha256": "ce43066e66664f2bc91372cfadf83626a717fffedaa54592748e7fff6267704b",
+      "bytes": 66318,
+      "mimeType": "image/jpeg",
+      "role": "left",
+      "sequenceIndex": 54,
+      "relativeAzimuthDegrees": 270,
+      "width": 834,
+      "height": 690,
+      "verified": true
+    }
+  ],
+  "groundTruth3dComparison": "not-run"
+}

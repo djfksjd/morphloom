@@ -1,0 +1,13 @@
+{
+  "cancel": true,
+  "undo": true,
+  "redo": true,
+  "nativeReopen": true,
+  "nonTargetComponents": 100,
+  "positionXmm": 1,
+  "scaleX": 1.01,
+  "roughness": 0.32,
+  "projectionDirection": "negative",
+  "flipU": true,
+  "rawDownloadsReplacedAfterHigherResolutionSource": true
+}

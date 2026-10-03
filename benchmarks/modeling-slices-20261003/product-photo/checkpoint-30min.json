@@ -1,0 +1,21 @@
+{
+  "status": "active",
+  "completed": [
+    "current source 660 tests",
+    "typecheck/build",
+    "five actual browser GLBs source/reopened semantic pass",
+    "UI cancel/undo/redo/native reopen/non-target preservation",
+    "first Blender 1mm edit/two reopens"
+  ],
+  "remaining": [
+    "current high-resolution five GLB Blender reopens",
+    "neutral/clay/wire/isolated closeup",
+    "legacy parity rerun",
+    "scoped clean-clone checks/push"
+  ],
+  "unchangedBlockers": [
+    "estimated 101 part dimensions/uncalibrated photo; full fan quality 59/100 blocked",
+    "production independent comparison evidence absent",
+    "source git index inaccessible; separate publishing clone"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "reviewCall": 1,
+  "model": "gpt-6-sol",
+  "returnedModel": "gpt-6-sol",
+  "status": "HTTP200",
+  "finishReason": "stop",
+  "usage": {
+    "completion_tokens": 453,
+    "prompt_tokens": 1330,
+    "total_tokens": 1783,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 173,
+      "rejected_prediction_tokens": 0,
+      "text_tokens": null
+    },
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cache_write_tokens": 1327,
+      "cached_tokens": 0,
+      "image_tokens": null,
+      "text_tokens": null
+    }
+  },
+  "sourceImagesUploaded": false,
+  "publicContext": "existing partitionReferenceProjectionFaces and proposed algorithm"
+}

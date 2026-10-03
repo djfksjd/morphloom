@@ -1,0 +1,180 @@
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "rear",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "negative.glb",
+  "sourceBytes": 3609272,
+  "sourceSha256": "70a49ae89c17eede642ce9edcda9bf9b60110826a3187b781e172eec0147b1a2",
+  "render": "negative-closeup-grazing.png",
+  "renderBytes": 431591,
+  "renderSha256": "64152c59a5ad9758eeac814ea19cdffbd209c4f6ca904f34852cec9640a6456e",
+  "meshes": 1,
+  "materials": 103,
+  "normalization": {
+    "method": "fixed-metre-datum",
+    "targetExtent": null,
+    "sourceBounds": {
+      "min": [
+        -0.0430000014603138,
+        0.043885983526706696,
+        -0.003289914922788739
+      ],
+      "max": [
+        0.0430000014603138,
+        0.06584606319665909,
+        0.083616703748703
+      ],
+      "size": [
+        0.0860000029206276,
+        0.021960079669952393,
+        0.08690661936998367
+      ]
+    },
+    "scale": 20,
+    "fixedSpaceSha256": "456179fe3cb283d3564bff3917d9191db755f939c9f5206a46ef359c73b13f5b",
+    "translationMeters": [
+      0,
+      -0.05486602276429033,
+      -0.04016339394407311
+    ],
+    "normalizedBounds": {
+      "min": [
+        -0.8600000143051147,
+        -0.21960081160068512,
+        -0.8690661787986755
+      ],
+      "max": [
+        0.8600000143051147,
+        0.21960081160068512,
+        0.8690661787986755
+      ],
+      "size": [
+        1.7200000286102295,
+        0.43920162320137024,
+        1.738132357597351
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      0,
+      4.0,
+      0
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.35
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        136,
+        132
+      ],
+      "max": [
+        887,
+        881
+      ]
+    },
+    "minimumMarginPixels": 132,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "isolated-component",
+    "componentId": "front-hub-cap"
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "grazing",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        3.0,
+        -0.5,
+        0.30000001192092896
+      ],
+      "energy": 900.0,
+      "size": 1.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 70.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}

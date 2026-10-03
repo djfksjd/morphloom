@@ -112,6 +112,7 @@ meshes = delivery_meshes()
 if len(meshes) > 100_000:
     raise RuntimeError("Neutral renderer mesh-object budget exceeded")
 normalization_method = "broadside-xz-max-extent"
+inspection_component = None
 if len(args) == 6:
     space_path = Path(args[5]).resolve()
     if not space_path.is_file() or space_path.stat().st_size > 4096:
@@ -124,6 +125,16 @@ if len(args) == 6:
         or not isinstance(translation, list) or len(translation) != 3
         or any(not isinstance(n, (int, float)) or not math.isfinite(n) or abs(n) > 10000 for n in translation)):
         raise RuntimeError("Fixed neutral space transform is invalid")
+    inspection_component = space.get("inspectionComponent")
+    if inspection_component is not None:
+        if not isinstance(inspection_component, str) or not inspection_component or len(inspection_component) > 256:
+            raise RuntimeError("Inspection component must be a bounded stable ID")
+        selected = [obj for obj in meshes if obj.get("morphloomStableNodeId", obj.name) == inspection_component]
+        if not selected:
+            raise RuntimeError("Requested inspection component is absent from actual GLB")
+        for obj in meshes:
+            obj.hide_render = obj not in selected
+        meshes = selected
     minimum, maximum = world_bounds(meshes)
     transform = Matrix.Scale(scale, 4) @ Matrix.Translation(Vector(translation))
     for obj in [obj for obj in bpy.context.scene.objects if obj.parent is None]:
@@ -255,6 +266,7 @@ report = {
         "orthographicHeight": camera_preset["orthographicHeight"],
     },
     "framing": framing,
+    "inspectionScope": {"kind": "isolated-component" if inspection_component else "whole-asset", "componentId": inspection_component},
     "renderSettings": {"engine": "BLENDER_EEVEE", "width": 1024, "height": 1024, "transparent": True, "viewTransform": "AgX", "look": "AgX - Medium High Contrast"},
     "studio": {
         "world": {"color": [0.12, 0.12, 0.12, 1], "strength": 0.28},

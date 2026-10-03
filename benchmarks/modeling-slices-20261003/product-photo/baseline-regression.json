@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "bf8b594805bff8e845cb0f82b7d3757c0c2479c0",
+  "baselineCompiler": "morphloom-compiler/0.31.0",
+  "currentCompiler": "morphloom-compiler/0.32.0",
+  "freshBothRuns": true,
+  "rows": [
+    {
+      "id": "laurel-homes-architecture",
+      "baselineSha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68",
+      "currentSha256": "f642db04e894db9733061ebfd1d08375f28115874a410460ead94bf5bb5e3f68",
+      "wholeGlbBytesEqual": true,
+      "baselineInfos": 0,
+      "currentInfos": 0,
+      "baselineCodes": [],
+      "currentCodes": []
+    },
+    {
+      "id": "ornate-knife-product",
+      "baselineSha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6",
+      "currentSha256": "c1fa5c7355417f24733c760523963d545d22fd6781f0dc91cbaa146ac161d3e6",
+      "wholeGlbBytesEqual": true,
+      "baselineInfos": 0,
+      "currentInfos": 0,
+      "baselineCodes": [],
+      "currentCodes": []
+    },
+    {
+      "id": "cooling-electronics-assembly",
+      "baselineSha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a",
+      "currentSha256": "64940f721ce7c23bfdd000492d564a1f329033702f078c04baa6a829360b747a",
+      "wholeGlbBytesEqual": true,
+      "baselineInfos": 23,
+      "currentInfos": 23,
+      "baselineCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "currentCodes": [
+        "UNUSED_OBJECT"
+      ]
+    },
+    {
+      "id": "field-human-runtime",
+      "baselineSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+      "currentSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+      "wholeGlbBytesEqual": true,
+      "baselineInfos": 0,
+      "currentInfos": 0,
+      "baselineCodes": [],
+      "currentCodes": []
+    },
+    {
+      "id": "asphalt-print-surface",
+      "baselineSha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818",
+      "currentSha256": "92e18fb6a03ac576eda714ae82fa3790e2d030022cdd58f12849a0a578269818",
+      "wholeGlbBytesEqual": true,
+      "baselineInfos": 0,
+      "currentInfos": 0,
+      "baselineCodes": [],
+      "currentCodes": []
+    }
+  ]
+}

@@ -75,6 +75,13 @@ export interface AssemblyMaterialIR {
   referenceProjection?: {
     uri: string;
     mapping: 'assembly-xy' | 'assembly-xz';
+    /** Explicit opt-in. Absent preserves the legacy positive-facing partition and UVs. */
+    orientation?: {
+      schema: 'morphloom.reference-projection-orientation/0.1';
+      direction: 'positive' | 'negative';
+      /** Reflect U only when the source correspondence explicitly requires it. */
+      flipU?: boolean;
+    };
     /** Source-image crop as normalized [x, y, width, height], y measured from the top. */
     crop: [number, number, number, number];
     /** Assembly-plane bounds [minA, minB, maxA, maxB] in millimetres. */

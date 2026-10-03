@@ -1,0 +1,154 @@
+
+> morphloom@0.4.0 gltf:validate
+> vite-node scripts/validate-glb.ts outputs/product-photo-20261003/positive.glb outputs/product-photo-20261003/negative.glb outputs/product-photo-20261003/edited.glb outputs/product-photo-20261003/half-positive.glb outputs/product-photo-20261003/half-negative.glb outputs/product-photo-20261003/ui-edited.glb
+
+{
+  "schema": "morphloom.khronos-gltf-validation/0.1",
+  "pass": true,
+  "reports": [
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/positive.glb",
+      "bytes": 3609292,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/negative.glb",
+      "bytes": 3609272,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/edited.glb",
+      "bytes": 3609312,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/half-positive.glb",
+      "bytes": 3614868,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/half-negative.glb",
+      "bytes": 3614848,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/product-photo-20261003/ui-edited.glb",
+      "bytes": 3609312,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IMAGE_NPOT_DIMENSIONS"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 102,
+        "meshes": 101,
+        "materials": 102,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  ]
+}

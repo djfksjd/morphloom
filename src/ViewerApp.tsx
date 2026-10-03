@@ -1,3 +1,4 @@
+import AssemblyComponentEditor from './AssemblyComponentEditor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterBuild } from './engine/character';
 import type { ProductBuild } from './engine/product';
@@ -814,6 +815,8 @@ export function ViewerApp() {
               )}
             </div>
           )}
+
+          {assetKind === 'product' && assemblyIR && <AssemblyComponentEditor ir={assemblyIR} selectedId={selectedPart?.id} onCommit={next=>{setAssemblyIR(next);setDeliveryAudit(undefined);setDeliveryVerifying(true);setViewerNote('선택 부품 수정 · 기존 납품 검사 재실행');}}/>}
 
           {assetKind === 'product' && productMetrics && (
             <div className="surface-audit" aria-label="PBR 표면 검사 결과">

@@ -71,6 +71,15 @@
           "properties": {
             "uri": { "type": "string", "minLength": 1, "maxLength": 512 },
             "mapping": { "enum": ["assembly-xy", "assembly-xz"] },
+            "orientation": {
+              "type": "object", "additionalProperties": false,
+              "required": ["schema", "direction"],
+              "properties": {
+                "schema": { "const": "morphloom.reference-projection-orientation/0.1" },
+                "direction": { "enum": ["positive", "negative"] },
+                "flipU": { "type": "boolean" }
+              }
+            },
             "crop": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }, { "type": "number" }], "minItems": 4, "maxItems": 4 },
             "boundsMm": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }, { "type": "number" }], "minItems": 4, "maxItems": 4 },
             "fingerprint": { "type": "string", "pattern": "^[a-fA-F0-9]{8,128}$" },

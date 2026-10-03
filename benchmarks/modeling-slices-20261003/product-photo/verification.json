@@ -1,0 +1,359 @@
+{
+  "schema": "morphloom.product-photo-verification/0.1",
+  "generatedAt": "2026-10-03T01:00:22.950277+00:00",
+  "baselineCommit": "bf8b594805bff8e845cb0f82b7d3757c0c2479c0",
+  "engineVersion": "morphloom-compiler/0.32.0",
+  "scope": "observed photographic color facing + local parametric edits + actual mesh/PBR exchange; product shape accuracy remains blocked",
+  "status": "slice-verified; global-quality-gate-blocked",
+  "releaseAllowed": false,
+  "environment": {
+    "platform": "macOS-26.4.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "cpu": "Apple M5",
+    "node": "v24.13.1",
+    "blender": "5.2.1 LTS"
+  },
+  "sourceFiles": {
+    "src/AssemblyComponentEditor.tsx": "fea572e8058a04de74312ebb10657b1e3da6a989455fcfbc092fc382e0a3f3e5",
+    "src/ViewerApp.tsx": "70196d624e2e2db4cd94f948cf80d33401cb7af3d580ac85c41b26253e724420",
+    "src/engine/assembly-ir.ts": "fb12f951c4c88562331068834b8f1261bded11ae6b2785aff41d0a249635602b",
+    "src/engine/assembly-compiler.ts": "70c6525cda96de9530957e09f9d2fd4e3d8461927fa424a6ac01fe34dcc92b7c",
+    "src/engine/reference-projection-orientation.ts": "d31540668f494699ded324546dbd119e254460b3245cbb721f76a7eea39bee35",
+    "src/engine/delivery-validation.ts": "3859e10db82642cc3a0a30a017918604e79f1b57ad2fb917aaa0dee8c308dbb9",
+    "schemas/assembly-ir.schema.json": "707cad94dd45ba422aba054405b6e214ff3e4dfc58aa7d66374eed3e00765d6c",
+    "tests/reference-projection-orientation.test.ts": "3c3819a163861e4604d804ec2e7f6476cd1b0e0d9477a6fa9400c7210bc25d4c",
+    "tests/browser-proof-recorder.test.ts": "eba867f6dd983a8994ee01d956da179c27f0e87d4238069a8afaee0e35c9172f",
+    "scripts/blender-neutral-render.py": "fcc981ad90d52a1689fe273354df0a23da00fc95aa31e5b3b0770a62b36c1b60",
+    "scripts/product-photo-browser-evidence.js": "0057843830b068454c60d8b962bf34e5fc029dfc136d37f85d10e45b81b0877f",
+    "scripts/product-photo-file-audit.js": "ea00821acd2b57e0b9f3eeb0583d9d03061d9f22c174a3b3c3dd5c30bfb2719b",
+    "scripts/product-photo-dcc-evidence.py": "4d0add15f35fbd2935ee6ef5fde6ad54a7b0de6438129b60f5fab5cff156220a",
+    "scripts/product-photo-legacy-parity.ts": "801b31998c8d501ec2e59e8d608da0fca6c7fc175b5e832351a8708e53ac3bf3",
+    "docs/PRODUCT_PHOTO_CONTRACT.ko.md": "6d136a97ab09d7caeed95dd033d0892fffc3a353e82b5c148afb90615bf40913",
+    "docs/PRODUCT_PHOTO_STATUS.ko.md": "039e89fcc7b8435576cd4c554c921604422edb8c2d13ec2ec6d247f93c1b654b",
+    "public/local-references/product-photo-fan-main.jpg": "39cd73c6179abf618bf801cf83b739caff050d2b0ef3a70f54758a457576265e",
+    "public/local-references/product-photo-fan-attribution.md": "d456789fd7a2b454aa77ca2bd582bcc1e5c2184f7828151a585705a6e7acb20e",
+    "docs/MORPHLOOM_WORK_STATE.ko.md": "a55c73b5c1e4509fabc0c08c59354c7c56b47ee5e7874f724ecc2ca162945249",
+    "scripts/product-photo-browser-regression.py": "0c64b81006e76a4eef95657aec2267a62e2c2faebdb2a185e44809280b640ea2",
+    "benchmarks/browser-roundtrip-latest.json": "1583acceb9c22ca274919074a999024edbc0abfad9451200aa883b4b2a18c785",
+    "benchmarks/blender-cross-domain-latest.json": "9b6f90490acf1314dc15805c8154881177ce11e3e337176bc561ffa1a8eb47ee",
+    "benchmarks/blender-cross-domain-edit-latest.json": "3ee379df988c9a5bc4409633925a2f1e31e04b40bf087d654795688316547a43",
+    "benchmarks/godot-cross-domain-latest.json": "6a6323321ba762c158a61d024acf9b3b9469105f224080a66454a86f0ac4111c",
+    "benchmarks/prusaslicer-latest.json": "d0ff15bef317d6e6666ea73cd4ff42cb848e45d057189a1dc115f8ac4f3f63ca",
+    "benchmarks/static-delivery-latest.json": "eb9e68eed35a5079b6d4bf9cd06b0e531a4e2a057fc6d27066bb9f4352bfb7ea",
+    "benchmarks/quality-latest.json": "7a654d985a3a27b521519ab3cd3aedc7fd850ac072f607d978ec651854bda9ae",
+    "benchmarks/competitive-latest.json": "937ca2369f591354cbd33b59befb8769efb8e8fc0932face9e970a4914562bd9",
+    "benchmarks/production-dominance-latest.json": "a79a8da96fcaa7095b9e9689b9220042cd7ce187b2f0c815afa62152d023e9ff"
+  },
+  "checks": {
+    "sourceTests": {
+      "files": 94,
+      "tests": 662,
+      "pass": true
+    },
+    "publishTests": {
+      "files": 91,
+      "tests": 643,
+      "pass": true
+    },
+    "check": true,
+    "build": true,
+    "benchmark": true,
+    "browserRegression": {
+      "assets": 7,
+      "pass": true,
+      "consoleErrors": 0,
+      "consoleWarnings": 0
+    },
+    "fanBrowserGlb": 5,
+    "fanBlenderReopens": 5,
+    "fanBlender1mmEditTwoReopens": true,
+    "ui": {
+      "cancel": true,
+      "undo": true,
+      "redo": true,
+      "nativeReopen": true,
+      "nonTargetComponents": 100,
+      "positionXmm": 1,
+      "scaleX": 1.01,
+      "roughness": 0.32,
+      "projectionDirection": "negative",
+      "flipU": true,
+      "rawDownloadsReplacedAfterHigherResolutionSource": true
+    },
+    "legacyCompilerSnapshotParity": true,
+    "existingFiveFixturesWholeGlbBytesEqualToFreshBf8": true,
+    "qualityGate": {
+      "pass": false,
+      "reason": "Existing cooling asset retains 23 editable UV attributes unused by current material. Fresh bf8 and current bytes match; strict competitive infos=0 gate retained."
+    },
+    "productionDominance": {
+      "pass": false,
+      "reason": "7 domains lack independent same-input comparison cases"
+    },
+    "regressionApps": {
+      "Blender5CrossDomain": true,
+      "Blender5CrossDomainEdits": true,
+      "Godot5CrossDomain": true,
+      "PrusaSlicerAsphalt": true,
+      "BlenderObjStlPly": true,
+      "usdcheckerUsdz": true,
+      "Unity": "not-run"
+    }
+  },
+  "budget": {
+    "maxCompileMs": 2000,
+    "maxTriangles": 120000,
+    "maxTextureBytes": 16777216,
+    "maxGlbBytes": 20971520,
+    "historyUndoSteps": 32
+  },
+  "cases": [
+    {
+      "name": "positive",
+      "inputSha256": "e8dc4301ca8fca9fac11808d7557431d617fab9068ce1c95ad9a86e77d1c02e3",
+      "outputSha256": "460f0daa566e3e3b1eca0187b344c15e2c150cc397201b21f65333a8cadd01f6",
+      "compileMs": 128.89999997615814,
+      "glbBytes": 3609292,
+      "triangles": 59152,
+      "textureBytes": 592152
+    },
+    {
+      "name": "negative",
+      "inputSha256": "057b11cae7f63dbdec32b4bfe8b523e837a7bf76dfcc9ff765d82137ff4d573e",
+      "outputSha256": "70a49ae89c17eede642ce9edcda9bf9b60110826a3187b781e172eec0147b1a2",
+      "compileMs": 53.60000002384186,
+      "glbBytes": 3609272,
+      "triangles": 59152,
+      "textureBytes": 592152
+    },
+    {
+      "name": "edited",
+      "inputSha256": "076897d5b6ce4a441bbf262df9adb1fa6924cf893f7c7a26c54b21ebc746d667",
+      "outputSha256": "2e5364ef0f8a1de7a2337417dbf08d6f29d3f87c5b885515cddf9c7cacdf3698",
+      "compileMs": 56.89999997615814,
+      "glbBytes": 3609312,
+      "triangles": 59152,
+      "textureBytes": 592152
+    },
+    {
+      "name": "half-positive",
+      "inputSha256": "402d6c964770d2aa26377811d62442f9be80cd81aea44a71de8b36510c6bca2f",
+      "outputSha256": "e1df02233a710d434267bb537abf8d904b993b53a0dcfc25f49c59b7e592616a",
+      "compileMs": 54.10000002384186,
+      "glbBytes": 3614868,
+      "triangles": 59152,
+      "textureBytes": 592152
+    },
+    {
+      "name": "half-negative",
+      "inputSha256": "33ce494046d5d46175a80716d8f0a879f55787322d22a4467328d44d8070245f",
+      "outputSha256": "68771cb280c8921ee03e9f104cbbefc916e937396c9928b09626f400be6ce312",
+      "compileMs": 52,
+      "glbBytes": 3614848,
+      "triangles": 59152,
+      "textureBytes": 592152
+    }
+  ],
+  "uniAi": {
+    "model": "gpt-6-sol",
+    "publicCodeReviewCalls": 2,
+    "totalTokens": 4524,
+    "imagesSent": false,
+    "executedApiSuggestionsAutomatically": false
+  },
+  "notVerified": [
+    "full fan geometry fidelity; estimated dimensions and manual camera/ROI",
+    "packed UV atlas/padding/mip bleed; native tiling intentional",
+    "real BRDF and normal/roughness measurements",
+    "fan GLB in applications other than Blender",
+    "CAD/BREP/manufacturing/independent expert approval"
+  ],
+  "archive": {
+    "file": "assets.zip",
+    "sha256": "2af6e43a8d8b7cd25f20320d98b7ce3e7b8cce049900140d46a503637a91aac7"
+  },
+  "artifacts": {
+    "negative-closeup-material.json": "23b2ef3863083a4ff97885343ccc2818760050507e2b57a71ddd0fa0ff557290",
+    "regression-browser-roundtrip-latest.json": "1583acceb9c22ca274919074a999024edbc0abfad9451200aa883b4b2a18c785",
+    "ui-evidence.json": "f14057bdf8d250e0e98c67f7491fd2d271271ff185aaaaab29ce36ef19144c77",
+    "orientation-before.log.gz": "8f9e2b12ad39e83f5d64452f213d6f0e6ef060d335a8416d81d8fea7be94dd4b",
+    "assets.zip": "2af6e43a8d8b7cd25f20320d98b7ce3e7b8cce049900140d46a503637a91aac7",
+    "regression-godot-cross-domain-latest.json": "6a6323321ba762c158a61d024acf9b3b9469105f224080a66454a86f0ac4111c",
+    "publish-build.log.gz": "8d372a21a87958763765a41616208ba4c5874489ebe94639183a98e8c1fa9398",
+    "negative-neutral-wire.png": "618458b943e5deb4e15f5847334714252ae7c48ac2a8d2e57c58e8b8de7e9b14",
+    "production-dominance-current.log.gz": "a0b2de24dbf2b9ef6fff25196503bfd60c702799bcadfc91ab12b9326fc3fe93",
+    "cross-domain-prusaslicer.log.gz": "65afc3ecb480de0377a3e3fb0b660ac534c6d01ad56c8ca6c6ebc7213b5007a1",
+    "positive-neutral-material.json": "d1ee0a71fe609575a6a505b074bb63a709e5c8a90ff7fde1168166b01e50a4a1",
+    "publish-check.log.gz": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192",
+    "uniai-review-2.md.usage.json": "5401d08c08f68ce60beff6d16c69a93fd5267404418e2717e0259756e6e6c4f0",
+    "positive-blender.json": "2f53fc234bb0f68e8961ec03f16b9bd583ae11214a6b081e0ceea65af84f0153",
+    "negative-closeup-grazing.png": "64152c59a5ad9758eeac814ea19cdffbd209c4f6ca904f34852cec9640a6456e",
+    "source-photos.json": "f6b2777160a7e23fdcececa8ce9942c17f118fe95ad3e50917de384c26d0e847",
+    "publish-benchmark.log.gz": "e8df89bd09405d3183859cd6a169a5a580d33bb6379f70a69e883d2adaecab27",
+    "browser-evidence.json.gz": "cc65cbd680729abd9a14e013adc71460313e268448ff5565780a675ead12a1d5",
+    "regression-production-dominance-latest.json": "a79a8da96fcaa7095b9e9689b9220042cd7ce187b2f0c815afa62152d023e9ff",
+    "uniai-status-1.json": "074fc9e4405ef0af743989147248bc27b1c677fba1bb7dae117c797ec5ebb3d2",
+    "negative-neutral-wire.json": "41e3f23aa5b4e32e5ffc17f4464a491fda0db8766b81873403f5814577d8590d",
+    "baseline-regression.json": "35e1bd31c11a1be4fcf26ebfafd41a6ba2cfc101eb2d3c4bbee23ba04e88bf25",
+    "positive-closeup-material.json": "c0c9dc34c47d090ef78e3563545dea15daae07e1a0a37687d73dbe4f06faeb70",
+    "publish-tests.log.gz": "59eac4c6cfe5d6bd3af85d5930aad4ab24b08d6b502a7699ccf3673c41d96b5a",
+    "blender-edit.json": "78a49dd7ccc727af8382cc97cbb7f308ee994ec6a50d031db47777360ee1f947",
+    "cross-domain-edit-final.log.gz": "1ae61a142976f85fd1f0e374d32001e466704140f88ae566ed25b0d1ee2f7ced",
+    "positive-neutral-material.png": "8561b420e76645eb9e8e1d01cef80ace42a978fcd818dcaceef7a774642398e3",
+    "ui-highres-before.png": "188d556f6b9e9072e6cfd32f2b40edc0825d75bdf437f6d93c4434d68209d054",
+    "regression-quality-latest.json": "7a654d985a3a27b521519ab3cd3aedc7fd850ac072f607d978ec651854bda9ae",
+    "uniai-review-1.md": "90c43ff34af8bc1a9f4c8d40903f1bb0749d81bbc3b805917afecbacdd56c1ee",
+    "file-audit-summary.json.gz": "cf0234ba86bc5c5d1ac6bad7cdb035b798b9d5a06ac3e1439c98d03e88ed8a68",
+    "regression-competitive-latest.json": "937ca2369f591354cbd33b59befb8769efb8e8fc0932face9e970a4914562bd9",
+    "negative-neutral-material.json": "ded9c57f1d2f6ec93e90a256e2fa7f0016c258c907198307b6970bc75ff2d54e",
+    "checkpoint-30min.json": "da2dd8300186a5534fdaaf8ec9181ec3827628a501a2251f400a04fdfe7e24d2",
+    "positive-closeup-material.png": "ee2aca29eea65a4111f893378b50b0894b35313f2116149e279247983c12fe57",
+    "regression-blender-cross-domain-edit-latest.json": "3ee379df988c9a5bc4409633925a2f1e31e04b40bf087d654795688316547a43",
+    "half-negative-blender.json": "cac3e21f94c73e54794b845e7aec987723130ec298d84e50db95b1370403a02b",
+    "bf8-baseline-manifest.json": "371f6834e63853b1dfa0badbcdf18192b96300b826b47c8947e0cd75c6abca4b",
+    "historical-asset.json": "edf40a36aa13de6955e10046946a3818dc5386d530426ab55f7bb3b7a4f99c2e",
+    "quality-production-final3.log.gz": "4bbe2b814340214f4e37894a27c4eea28ddc83ce732991290f72b625c23f3213",
+    "negative-blender.json": "13be59f23d92dd23059f2ac9c49e03e42c396bf6f3fd1dd03d8a6585a740989d",
+    "tests-final3.log.gz": "dc6e995539389e28255ddc7b80a25b199139ccdb375f8de4e398a403177f483b",
+    "low-resolution-closeup-baseline.png": "a7d838a1e945d86f27a3d077562bd134ec594c5996e2f090678740f727b5c556",
+    "cross-domain-blender.log.gz": "c304dd21f7f42008176ff28bcd8caa899a7846b1ac8f78d57c9b6937c6e3cf7a",
+    "publish-production-final3.log.gz": "33550f07c78d1442fd40ed4da473a9e95b5b3abd417cbb6c5d755bacefde9568",
+    "regression-blender-cross-domain-latest.json": "9b6f90490acf1314dc15805c8154881177ce11e3e337176bc561ffa1a8eb47ee",
+    "main-hub-source-crop.png": "a7e7b79d04339d7f9fda6f5e97162a12f639224025d869d8cc065bafb3527738",
+    "dcc-evidence.log.gz": "500d62403af7fd7869755d7ade945a47bca517673da19d6b39814310bae40501",
+    "ui-highres-after.png": "d5fa0ae2834afafdedef872e24721ca70866081044b428e9f20b6bb9bc68c185",
+    "regression-prusaslicer-latest.json": "d0ff15bef317d6e6666ea73cd4ff42cb848e45d057189a1dc115f8ac4f3f63ca",
+    "targeted-final.log.gz": "afc3ae651b1b6cf091fe18bad8bbf625331145ad63a2731a22ef86a8dbc53154",
+    "cross-domain-manifest.json": "878b24c020e16a4d05f055f52c9fc524338d71080c478ec9d94c3ada64dd28e0",
+    "khronos.json": "0d90e21cf4917322de2f17561d8ff381f9a257c168650a1cec37545733608ea5",
+    "uniai-review-2.md": "3ba624f515674d27b801e6320fc8e9b21dc94c934247aca92693932e728a0856",
+    "regression-static-delivery-latest.json": "eb9e68eed35a5079b6d4bf9cd06b0e531a4e2a057fc6d27066bb9f4352bfb7ea",
+    "negative-closeup-grazing.json": "f0ed433856bfa18f6443d77bb172b3fbd09cf381884b3759dab8e9965f0848b3",
+    "negative-closeup-material.png": "050a68233015d9c481e5c14b40d48b205f4b31079c227c849e461febec8c076b",
+    "cross-domain-godot.log.gz": "b53482a7503a47ca2242cb74f07448c70c700a01ecaa1195af7dfaf5e37d7cb6",
+    "half-positive-blender.json": "d8b9ee164dc08070d7082d2c5216d0c692dec86527356b6c56305fe77c06bdf4",
+    "edited-blender.json": "e322b58699146056795de164a8b573e9d2c7b05c6908f397c9a57ed480259ea1",
+    "static-regression.log.gz": "c4be9994fc3b0dc29ee8599e4c781609d4d90a8588e5ad0b7160b0f153c77450",
+    "browser-roundtrip.json": "1583acceb9c22ca274919074a999024edbc0abfad9451200aa883b4b2a18c785",
+    "negative-neutral-clay.png": "aab664d2ce7bea8c091c4ade57d9e3c4b5ed6607dc7b00f303dd7bf493e859d8",
+    "legacy-parity.json.gz": "f614adbc5aceff11bd8489e6be9caa8c3645aa9ea5a3f70bef340872553a57f5",
+    "negative-neutral-material.png": "b85517e78ef3fca1fb43c138677893cfa2d930cc503e8ed26e0cabfc1ca0eb42",
+    "negative-neutral-clay.json": "500951b61253091b8f62281e7e2299e30f79da3c1af8434a42617b9d2245113a"
+  },
+  "compressedEvidence": [
+    {
+      "file": "quality-production-final3.log.gz",
+      "originalName": "quality-production-final3.log",
+      "originalSha256": "c36a52b50409f08a6e8acdbb2748b26c35be6e5bba05973d41f8a8153b00e6fe",
+      "compressedSha256": "4bbe2b814340214f4e37894a27c4eea28ddc83ce732991290f72b625c23f3213"
+    },
+    {
+      "file": "production-dominance-current.log.gz",
+      "originalName": "production-dominance-current.log",
+      "originalSha256": "4d9d616a7d752393c8f740a762eb8b9afc079452bbba938d279ee0523284e697",
+      "compressedSha256": "a0b2de24dbf2b9ef6fff25196503bfd60c702799bcadfc91ab12b9326fc3fe93"
+    },
+    {
+      "file": "dcc-evidence.log.gz",
+      "originalName": "dcc-evidence.log",
+      "originalSha256": "bf986f4a513702f6170398fe6f08cac61316f853d5608dcf80b49008b858953d",
+      "compressedSha256": "500d62403af7fd7869755d7ade945a47bca517673da19d6b39814310bae40501"
+    },
+    {
+      "file": "targeted-final.log.gz",
+      "originalName": "targeted-final.log",
+      "originalSha256": "33f9a06eaec7fe95ed949f42a74933a95f737763fd2a126fcc870cd54f3c6f01",
+      "compressedSha256": "afc3ae651b1b6cf091fe18bad8bbf625331145ad63a2731a22ef86a8dbc53154"
+    },
+    {
+      "file": "cross-domain-edit-final.log.gz",
+      "originalName": "cross-domain-edit-final.log",
+      "originalSha256": "8791d3efc11791cda1df8abbb815a6b19ba7b9883a754051cd9b796def87a28f",
+      "compressedSha256": "1ae61a142976f85fd1f0e374d32001e466704140f88ae566ed25b0d1ee2f7ced"
+    },
+    {
+      "file": "publish-build.log.gz",
+      "originalName": "publish-build.log",
+      "originalSha256": "11ba1eaefa0ab6032841f55a3b6059aab1a15b196bb70d54410878513c08a851",
+      "compressedSha256": "8d372a21a87958763765a41616208ba4c5874489ebe94639183a98e8c1fa9398"
+    },
+    {
+      "file": "legacy-parity.json.gz",
+      "originalName": "legacy-parity.json",
+      "originalSha256": "89ad083d471e730688f9f67df284e94f78d8d0b1268107464ff13763f142c697",
+      "compressedSha256": "f614adbc5aceff11bd8489e6be9caa8c3645aa9ea5a3f70bef340872553a57f5"
+    },
+    {
+      "file": "file-audit-summary.json.gz",
+      "originalName": "file-audit-summary.json",
+      "originalSha256": "0c20c4ab685fd288c8eecb5ab80d0e77b57d660f05661b5299110bb956b09c3d",
+      "compressedSha256": "cf0234ba86bc5c5d1ac6bad7cdb035b798b9d5a06ac3e1439c98d03e88ed8a68"
+    },
+    {
+      "file": "publish-benchmark.log.gz",
+      "originalName": "publish-benchmark.log",
+      "originalSha256": "5495ed5cb475bb023c9d85ae384d08ec5afdef97573c17e668661e4a62f15f8b",
+      "compressedSha256": "e8df89bd09405d3183859cd6a169a5a580d33bb6379f70a69e883d2adaecab27"
+    },
+    {
+      "file": "cross-domain-prusaslicer.log.gz",
+      "originalName": "cross-domain-prusaslicer.log",
+      "originalSha256": "b186b7db420ea5cec904898b43b537e3e6302aeaa1c49ac139bf9811e9bfbd06",
+      "compressedSha256": "65afc3ecb480de0377a3e3fb0b660ac534c6d01ad56c8ca6c6ebc7213b5007a1"
+    },
+    {
+      "file": "browser-evidence.json.gz",
+      "originalName": "browser-evidence.json",
+      "originalSha256": "6a97a138885ad4a61c855e24ef7e773afff73dc89e08156fc9d788fb02ed7728",
+      "compressedSha256": "cc65cbd680729abd9a14e013adc71460313e268448ff5565780a675ead12a1d5"
+    },
+    {
+      "file": "tests-final3.log.gz",
+      "originalName": "tests-final3.log",
+      "originalSha256": "fb71b8171d12183746a6194fd3d80781c45cfbb7a8ba91347b0349d761ae90be",
+      "compressedSha256": "dc6e995539389e28255ddc7b80a25b199139ccdb375f8de4e398a403177f483b"
+    },
+    {
+      "file": "publish-check.log.gz",
+      "originalName": "publish-check.log",
+      "originalSha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "compressedSha256": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192"
+    },
+    {
+      "file": "cross-domain-blender.log.gz",
+      "originalName": "cross-domain-blender.log",
+      "originalSha256": "38f3c50283a6a4e733681dcba6edb3728fbd55fc7daaef7309c8376924618213",
+      "compressedSha256": "c304dd21f7f42008176ff28bcd8caa899a7846b1ac8f78d57c9b6937c6e3cf7a"
+    },
+    {
+      "file": "publish-tests.log.gz",
+      "originalName": "publish-tests.log",
+      "originalSha256": "922fa344b6361d3a5b0294ba158faa9753ce5bc7a20ad0e1d99644c393f1bdd7",
+      "compressedSha256": "59eac4c6cfe5d6bd3af85d5930aad4ab24b08d6b502a7699ccf3673c41d96b5a"
+    },
+    {
+      "file": "orientation-before.log.gz",
+      "originalName": "orientation-before.log",
+      "originalSha256": "be6bcac64063d97c04dbfc765b25b58252a55f88025bf7b8ba6b490f274e2a96",
+      "compressedSha256": "8f9e2b12ad39e83f5d64452f213d6f0e6ef060d335a8416d81d8fea7be94dd4b"
+    },
+    {
+      "file": "cross-domain-godot.log.gz",
+      "originalName": "cross-domain-godot.log",
+      "originalSha256": "a2eaa0f1d65f0ae50d02463c648a6383746c898ef9624178e9af41b1b10ff7ba",
+      "compressedSha256": "b53482a7503a47ca2242cb74f07448c70c700a01ecaa1195af7dfaf5e37d7cb6"
+    },
+    {
+      "file": "publish-production-final3.log.gz",
+      "originalName": "publish-production-final3.log",
+      "originalSha256": "06dba7a3576b1391b8409a01feb6a740a1689dd2ef2fe56ef5cb0b9b7e61df9c",
+      "compressedSha256": "33550f07c78d1442fd40ed4da473a9e95b5b3abd417cbb6c5d755bacefde9568"
+    },
+    {
+      "file": "static-regression.log.gz",
+      "originalName": "static-regression.log",
+      "originalSha256": "cdf8c2b8de73fdea9bfc6eb0becbaf20eeab459c9d3c705cb15c80f403dbc145",
+      "compressedSha256": "c4be9994fc3b0dc29ee8599e4c781609d4d90a8588e5ad0b7160b0f153c77450"
+    }
+  ]
+}
