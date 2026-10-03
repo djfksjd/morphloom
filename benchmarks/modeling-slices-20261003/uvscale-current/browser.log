@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/current-uvscale-ui.py", line 12, in <module>
+    call('check','label:has-text("Synthetic UV checker preview") input');call('screenshot',str(out/'before-checker.png'));click('Enable UV editing (schema 0.4)');migrated=save('migrated.elements.json');assert migrated['schema']=='morphloom.elements/0.4' and migrated['parts']==before['parts'];call('fill','[aria-label="UV scalar (dimensionless)"]','100');click('Apply part edit');status('PASS');after=save('after.elements.json');assert after['parts'][0]['uvScale']==100;copy=json.loads(json.dumps(after['parts'][0]));del copy['uvScale'];assert copy==before['parts'][0];call('screenshot',str(out/'after-checker.png'))
+  File "/tmp/current-uvscale-ui.py", line 4, in call
+    def call(*a):return subprocess.run(['agent-browser','--session',session,*a],capture_output=True,text=True,check=True,timeout=70).stdout
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['agent-browser', '--session', 'morphloom-uvscale-current', 'check', 'label:has-text("Synthetic UV checker preview") input']' returned non-zero exit status 1.

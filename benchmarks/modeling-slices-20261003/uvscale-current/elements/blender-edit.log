@@ -1,0 +1,70 @@
+18:09:58 | INFO: Data are loaded, start creating Blender stuff
+18:09:58 | INFO: Blender create Mesh node 0
+18:09:58 | INFO: glTF import finished in 0.03s
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+18:09:59 | INFO: Starting glTF 2.0 export
+18:09:59 | INFO: Extracting primitive: Mesh_0
+18:09:59 | INFO: Primitives created: 1
+18:09:59 | INFO: Finished glTF 2.0 export in 0.011095046997070312 s
+
+18:09:59 | INFO: Data are loaded, start creating Blender stuff
+18:09:59 | INFO: Blender create Mesh node Mesh_0
+18:09:59 | INFO: glTF import finished in 0.02s
+18:09:59 | INFO: Starting glTF 2.0 export
+18:09:59 | INFO: Extracting primitive: Mesh_0
+18:09:59 | INFO: Primitives created: 1
+18:09:59 | INFO: Finished glTF 2.0 export in 0.005466938018798828 s
+
+18:09:59 | INFO: Data are loaded, start creating Blender stuff
+18:09:59 | INFO: Blender create Mesh node Mesh_0
+18:09:59 | INFO: glTF import finished in 0.02s
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/uvscale-current-20261003/elements/morphloom-selection.glb",
+    "bytes": 809148,
+    "sha256": "de2ad4577274b75ffbb61543b8b358900cbb73b1d39ef8d7a7ac0c4a5cd12443"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/uvscale-current-20261003/elements/edited.glb",
+    "bytes": 859516,
+    "sha256": "dd7e944addc7d855113f1e4bb227f255bde96f57b65c466ed8113d2cdd7d2f56"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/uvscale-current-20261003/elements/edited-stability.glb",
+    "bytes": 859516,
+    "sha256": "bea24daf0bee035a5a4206ed7e9ad1efeaf9ae36bf4f00d2876f3cdff7763e56"
+  },
+  "edit": {
+    "component": "spur_gear",
+    "kind": "translation",
+    "translationMm": [
+      2.0,
+      0.0,
+      0.0
+    ]
+  },
+  "meshCount": 1,
+  "unchangedMeshes": 0,
+  "maximumUnchangedCenterDriftMm": 0.0,
+  "maximumUnchangedSizeDriftMm": 0.0,
+  "topologyChanges": [],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 0,
+    "actions": 0,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

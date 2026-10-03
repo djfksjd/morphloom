@@ -1,0 +1,22 @@
+{
+  "pass": true,
+  "scope": "reuse existing UV0.4 opt-in, no new implementation or automatic migration",
+  "cases": [
+    "original0.3 UV FAIL preserved",
+    "explicit0.4 migration keeps all parts",
+    "UV100\u2192actual PASS",
+    "all geometry/material/transform/source fields unchanged except explicit UV scalar/schema",
+    "Undo restores FAIL",
+    "Redo PASS",
+    "saved source reopen exact"
+  ],
+  "method": "native UI/save/upload/checker, no state injection",
+  "hashes": {
+    "redo.elements.json": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+    "undo.elements.json": "0c0a49e5c5a5641d80506906aec3fce954a9d82b6279e9fff0ff80161f7897c8",
+    "reopened.elements.json": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+    "before.elements.json": "22cfe3856c818c51ec5d54cfec93eb1520cc899e83967e21ae185eea1e6a5dd0",
+    "migrated.elements.json": "0c0a49e5c5a5641d80506906aec3fce954a9d82b6279e9fff0ff80161f7897c8",
+    "after.elements.json": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913"
+  }
+}

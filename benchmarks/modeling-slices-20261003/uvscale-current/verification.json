@@ -1,0 +1,299 @@
+{
+  "schema": "morphloom.current-uvscale-verification/0.1",
+  "pass": true,
+  "implementation": "existing elements0.4 modifier reused; no runtime change in this checkpoint",
+  "baseCommit": "86770ddf8e8119f93000ffdb493509a273e148ab",
+  "renderer": "morphloom.element-renderer/0.10",
+  "platform": "macOS-26.4.1-arm64-arm-64bit",
+  "tests": {
+    "publish": 711,
+    "check": "pass",
+    "build": "pass",
+    "fullQualityGate": "not-run this evidence-only checkpoint; prior failure unresolved",
+    "production": "not-run this checkpoint; prior gate failure and dominance0/3 unresolved"
+  },
+  "browserCases": 7,
+  "conformanceCases": 3,
+  "nativeGlbSha256": "de2ad4577274b75ffbb61543b8b358900cbb73b1d39ef8d7a7ac0c4a5cd12443",
+  "sourceSha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+  "visual": {
+    "accepted": [
+      "before-checker-full.png",
+      "after-checker-full.png"
+    ],
+    "rejected": [
+      "before-checker.png",
+      "after-checker.png",
+      "before-checker-canvas.png",
+      "after-checker-canvas.png"
+    ],
+    "reason": "Viewport/canvas clipped native captures rejected. Full-page captures inspected; small-object fit is a real next usability defect, not claimed improved by UV code."
+  },
+  "limits": [
+    "No atlas/padding/mip approval",
+    "Real texture density not-run: no metallic-roughness texture",
+    "Khronos infos1 UNUSED_OBJECT retained; ordinary editable-mesh pass is not strict production acceptance",
+    "No manufacturing/CAD/expert approval",
+    "External review blocked: UNI_AI credit shortage, Claude weekly limit"
+  ],
+  "files": [
+    {
+      "path": "after-checker-canvas.png",
+      "sha256": "11201c74b902b227526f15168cc9e5ac71719eae527665108293f0d3fe920e8b",
+      "bytes": 26131
+    },
+    {
+      "path": "after-checker-full.png",
+      "sha256": "719a0b967868c2f9410f18f5cfa3b9ee7b1cdea8713b18c6ec60a5e2b287b6ac",
+      "bytes": 133243
+    },
+    {
+      "path": "after-checker.png",
+      "sha256": "f1decd5aa630ff6eb969267b43d42a900c80a71d9290b174d48ceecf2c2ba6a5",
+      "bytes": 125765
+    },
+    {
+      "path": "after.elements.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "before-checker-canvas.png",
+      "sha256": "3337e702d08152623a017cafa5066ce3e2e73858ceb750a9bc0b00d6b51c42b0",
+      "bytes": 26915
+    },
+    {
+      "path": "before-checker-full.png",
+      "sha256": "52a4e4abc44f64bd5ddfd9552d2359e66295333c198a568691c710f0e71b559e",
+      "bytes": 132806
+    },
+    {
+      "path": "before-checker.png",
+      "sha256": "0b56dcc50e4f04487e41339b003fbef5ef4394a46ea182e3af6f3e7b7d4ac127",
+      "bytes": 116844
+    },
+    {
+      "path": "before.elements.json",
+      "sha256": "22cfe3856c818c51ec5d54cfec93eb1520cc899e83967e21ae185eea1e6a5dd0",
+      "bytes": 739
+    },
+    {
+      "path": "browser-evidence.json",
+      "sha256": "8ea22fb41cd3728399cc866b86d417affe8d1618a5fb91922e90d67b8c2bd9b1",
+      "bytes": 1065
+    },
+    {
+      "path": "browser-final.log",
+      "sha256": "2d5fa9755ba024998700f1a1349b6d06df865f2063121475fd86a85a4d807819",
+      "bytes": 994
+    },
+    {
+      "path": "browser.log",
+      "sha256": "6db47da44e049fb7c698f53a8c25e249a1f70889527c548081bb521b439091fb",
+      "bytes": 1302
+    },
+    {
+      "path": "build.log",
+      "sha256": "a4acd6e029088c04bd2f77fd3cea5da1b9de5f761a54d75fb62d90ceaa31f4af",
+      "bytes": 1478
+    },
+    {
+      "path": "checker-capture-final.log",
+      "sha256": "1fc3558a6d03126ae312e002b65fe43410adc056c8d2219b5a33a2ebf0f0c880",
+      "bytes": 1342
+    },
+    {
+      "path": "checker-capture-full.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checker-capture-visible.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checker-capture.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "conformance/native-default.elements.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "conformance/native-default.glb",
+      "sha256": "18b94be33ade915d0bde1e85d06401157c46f09aca94b8d2ee033dc8f9d6a021",
+      "bytes": 809172
+    },
+    {
+      "path": "conformance/native-default.uv.json",
+      "sha256": "563899f2493eceb0fd2c7e70905339e79117ee07c0c9d33f4909b788761a77c0",
+      "bytes": 3032525
+    },
+    {
+      "path": "conformance/small.elements.json",
+      "sha256": "3f44372eeede51b89e18bb2df4a4f3fcddaee0f7ea24ce6c1db412dc4d1a5c50",
+      "bytes": 729
+    },
+    {
+      "path": "conformance/small.glb",
+      "sha256": "2cc0e8e0cef5e1cc1d6fc8c5a49021130bca25c17995995f2270b61864206aad",
+      "bytes": 619712
+    },
+    {
+      "path": "conformance/small.uv.json",
+      "sha256": "940255f29a8729dcb869ef448082367089f558a36eeb20adfee2170bf5c3d250",
+      "bytes": 2322057
+    },
+    {
+      "path": "conformance-final/conformance.json",
+      "sha256": "e172b2efebeffb4145f819234c6af7328494fda122bcce0a0eb15cc55ef42919",
+      "bytes": 2175
+    },
+    {
+      "path": "conformance-final/large.elements.json",
+      "sha256": "7bb70b92853262ff4e47f7c95f4a0a942646941dc581b4c0022a8de18f22d203",
+      "bytes": 731
+    },
+    {
+      "path": "conformance-final/large.glb",
+      "sha256": "a5f39698abaf332e972b5b919faf6d7598e09983e220a465f8e23621bbd3c1be",
+      "bytes": 1541964
+    },
+    {
+      "path": "conformance-final/large.uv.json",
+      "sha256": "475473adc221ee5b0f6b465c79e818782e171a2f781c02914dbace3c96b4b820",
+      "bytes": 5802428
+    },
+    {
+      "path": "conformance-final/native-default.elements.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "conformance-final/native-default.glb",
+      "sha256": "18b94be33ade915d0bde1e85d06401157c46f09aca94b8d2ee033dc8f9d6a021",
+      "bytes": 809172
+    },
+    {
+      "path": "conformance-final/native-default.uv.json",
+      "sha256": "c722904aa3c0728a27a8f00833192d9ccb06848ad19e29bc2ad8a378b4397cbe",
+      "bytes": 3032535
+    },
+    {
+      "path": "conformance-final/small.elements.json",
+      "sha256": "3f44372eeede51b89e18bb2df4a4f3fcddaee0f7ea24ce6c1db412dc4d1a5c50",
+      "bytes": 729
+    },
+    {
+      "path": "conformance-final/small.glb",
+      "sha256": "2cc0e8e0cef5e1cc1d6fc8c5a49021130bca25c17995995f2270b61864206aad",
+      "bytes": 619712
+    },
+    {
+      "path": "conformance-final/small.uv.json",
+      "sha256": "8d34fa5c6c59ce79ff0391fa4df744406604083719b463559565a4777f528f9a",
+      "bytes": 2322056
+    },
+    {
+      "path": "conformance-final.log",
+      "sha256": "33ef3c40b17d186f23476c7a1cedcd8f93d9d37db4cd2e83225de1bf0d75737a",
+      "bytes": 1412
+    },
+    {
+      "path": "conformance-first-failure.json",
+      "sha256": "f2140f3c78342330bbbf34bc6eeb2a8b3ea78bc89009501c931c85e830af8db1",
+      "bytes": 217
+    },
+    {
+      "path": "current-delivery.json",
+      "sha256": "7432caca01d0086b6f9e7f76dc9c30b77546e21f50b733d72bdf265fa44dcbc7",
+      "bytes": 603
+    },
+    {
+      "path": "elements/blender-edit.json",
+      "sha256": "711e2498ef535294b43218f07ca652c7ca6a41cf178b913af4d0dc4a906c8438",
+      "bytes": 2015
+    },
+    {
+      "path": "elements/blender-edit.log",
+      "sha256": "cc32a82cfcafc38d11df269a67ec17c738f7cb10e68f7a0c9b0292644a4a0127",
+      "bytes": 3279
+    },
+    {
+      "path": "elements/blender-roundtrip.json",
+      "sha256": "25aa82efc805eb839b8593cd24eb936d135a4164241e31324396516b148d97c3",
+      "bytes": 2651
+    },
+    {
+      "path": "elements/blender-roundtrip.log",
+      "sha256": "9b291db8f8266ebfbc62fde245df7a0348d32a301b47c86d95e87b0c6ce4b9ce",
+      "bytes": 3560
+    },
+    {
+      "path": "elements/edited-stability.glb",
+      "sha256": "bea24daf0bee035a5a4206ed7e9ad1efeaf9ae36bf4f00d2876f3cdff7763e56",
+      "bytes": 859516
+    },
+    {
+      "path": "elements/edited.glb",
+      "sha256": "dd7e944addc7d855113f1e4bb227f255bde96f57b65c466ed8113d2cdd7d2f56",
+      "bytes": 859516
+    },
+    {
+      "path": "elements/khronos.log",
+      "sha256": "af1a54d6b617c55075051c19bb3d4958cf31833a818dc6ddab6ac6380972aa58",
+      "bytes": 894
+    },
+    {
+      "path": "elements/morphloom-selection.glb",
+      "sha256": "de2ad4577274b75ffbb61543b8b358900cbb73b1d39ef8d7a7ac0c4a5cd12443",
+      "bytes": 809148
+    },
+    {
+      "path": "elements/morphloom-source.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "elements/morphloom-uv-quality.json",
+      "sha256": "433cd79764b02497bd0ae857f4c5e554815fc889b7a305a9699b8390d1c841f7",
+      "bytes": 1843136
+    },
+    {
+      "path": "elements/roundtrip.glb",
+      "sha256": "1f556e5b392eb62ef2d46958e253bff0836d199f30dbd8e17326e2ab91d01cb0",
+      "bytes": 856500
+    },
+    {
+      "path": "migrated.elements.json",
+      "sha256": "0c0a49e5c5a5641d80506906aec3fce954a9d82b6279e9fff0ff80161f7897c8",
+      "bytes": 739
+    },
+    {
+      "path": "redo.elements.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "reopened.elements.json",
+      "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+      "bytes": 753
+    },
+    {
+      "path": "tests.log",
+      "sha256": "0e7e6fcef62df51f099f08a80fc7c124392e647ec69ebc0d827975d6bc6fd12f",
+      "bytes": 11448
+    },
+    {
+      "path": "undo.elements.json",
+      "sha256": "0c0a49e5c5a5641d80506906aec3fce954a9d82b6279e9fff0ff80161f7897c8",
+      "bytes": 739
+    }
+  ],
+  "codeSha256": {
+    "scripts/uv-scale-current-conformance.ts": "75f06bddf9918ca769d6e065091c2ecec527be266369c5c0f71ebddee0a22289"
+  }
+}

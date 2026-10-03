@@ -1,0 +1,1 @@
+{"pass":false,"classification":"harness assumption, not engine regression","reason":"All legacy sizes were incorrectly required to fail; large case already meets existing 5 percent contract","thresholdChanged":false}

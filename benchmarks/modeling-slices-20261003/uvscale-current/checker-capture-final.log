@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/tmp/uvscale-checker-capture.py", line 7, in <module>
+    c('upload','input[type=file]',str(out/(name+'.elements.json')));c('wait','--fn','document.querySelector("[aria-label=\"UV quality\"] summary").textContent.includes('+json.dumps('integrity '+('FAIL' if name=='before' else 'PASS'))+')');snapshot=c('snapshot','-i');m=re.search('checkbox "Synthetic UV checker preview"[^\n]*?ref=(e\d+)',snapshot);assert m;c('check','@'+m[1]);snapshot=c('snapshot','-i');m=re.search('button "Fit view" \[ref=(e\d+)\]',snapshot);assert m;c('click','@'+m[1]);c('scrollintoview','canvas');c('wait','500');c('screenshot','canvas',str(out/(name+'-checker-canvas.png')))
+  File "/tmp/uvscale-checker-capture.py", line 4, in c
+    def c(*a):return subprocess.run(['agent-browser','--session',s,*a],capture_output=True,text=True,check=True,timeout=70).stdout
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 528, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['agent-browser', '--session', 'morphloom-uvscale-checker-visible', 'wait', '--fn', 'document.querySelector("[aria-label="UV quality"] summary").textContent.includes("integrity FAIL")']' returned non-zero exit status 1.

@@ -1,0 +1,23 @@
+{
+  "pass": true,
+  "cases": [
+    {
+      "mode": "elements",
+      "pass": true,
+      "files": {
+        "morphloom-selection.glb": {
+          "sha256": "de2ad4577274b75ffbb61543b8b358900cbb73b1d39ef8d7a7ac0c4a5cd12443",
+          "bytes": 809148
+        },
+        "morphloom-source.json": {
+          "sha256": "ee2f2f28e2c12af6776e01b6cc4fd27c9655eab1878eb015187f073b71876913",
+          "bytes": 753
+        },
+        "morphloom-uv-quality.json": {
+          "sha256": "433cd79764b02497bd0ae857f4c5e554815fc889b7a305a9699b8390d1c841f7",
+          "bytes": 1843136
+        }
+      }
+    }
+  ]
+}

@@ -93,3 +93,8 @@ Correction: internal quality metrics100% did not mean the full npm quality:gate 
 ## 2026-10-03 Export result/error ownership
 
 Current-source and mounted guards now cover selected/whole/diagnostic tooth and mixed-workspace exports. Native14 cases pass; stale/unmounted completions produce0 actual downloaded files while current errors and ordinary gear UV failures remain visible. Fresh selected/mixed3-file downloads, Blender edit/two reopen cycles/Khronos and publish711/source730/check/build/benchmark pass. Quality gate/production and independent dominance still FAIL; no threshold changes. Parent workspace unmount is not-run. API review blocked by previously confirmed quotas. See [status](EXPORT_RESULT_INTENT_STATUS.ko.md). Next reuse and revalidate existing opt-in UV0.4 workflow; legacy gear0.3 failure is already documented. Goal remains active.
+
+
+## 2026-10-03 Existing UV0.4 current verification
+
+Native7 cases and three generated sizes pass explicit UV-only modification/preservation; actual ordinary GLB passes UV/Khronos(errors0,infos1)/Blender named2mm edit and two reopen cycles. Publish711/check/build pass; no runtime change or production claim. Old quality gate blockers remain. Failed capture/harness assumptions retained. Next fix actual element Fit view0.1m floor using existing camera-framing helper. See [current status](UV_SCALE_CURRENT_STATUS.ko.md). Goal remains active.
