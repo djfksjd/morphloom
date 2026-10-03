@@ -23,8 +23,8 @@ export default function WorkspaceEditor():React.JSX.Element{
   const [position,setPosition]=useState<Vec3>([100,0,0]),[rotation,setRotation]=useState<Vec3>([0,0,0]);
   const [error,setError]=useState(''),[busy,setBusy]=useState(false);
   const current=useRef(workspace);current.current=workspace;
-  const exportBusy=useRef(false),loadTicket=useRef(0);
-  useEffect(() => () => { loadTicket.current++; }, []);
+  const exportBusy=useRef(false),loadTicket=useRef(0),mounted=useRef(true);
+  useEffect(() => { mounted.current=true; return () => { mounted.current=false;loadTicket.current++; }; }, []);
   const pickAsset=useCallback((id:string):void=>{loadTicket.current++;setActiveId(id);},[]);
   const meta=registry.list().find(p=>p.id===pack)!,active=workspace.assets.find(a=>a.id===activeId);
   const receive=useCallback((source:ElementProject):void=>{
@@ -51,11 +51,11 @@ export default function WorkspaceEditor():React.JSX.Element{
       const sourceJson=serializeWorkspace(captured);
       const data=await new GLTFExporter().parseAsync(built.root,{binary:true,onlyVisible:false});
       const uvReceipt=await inspectMeshExport(data as ArrayBuffer,sourceJson,diagnostic?'diagnostic':'editable-mesh');const uvJson=JSON.stringify(uvReceipt);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
-      if(current.current!==captured)return;
+      if(!mounted.current||current.current!==captured)return;
       download(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}),diagnostic?'morphloom-workspace-uv-diagnostic.glb':'morphloom-workspace.glb');
       download(new Blob([sourceJson],{type:'application/json'}),'morphloom-workspace.json');
       download(new Blob([uvJson],{type:'application/json'}),'morphloom-workspace-uv-quality.json');setError('');
-    }catch(e){setError(String(e));}finally{built?.dispose();exportBusy.current=false;setBusy(false);}
+    }catch(e){if(mounted.current&&current.current===captured)setError(String(e));}finally{built?.dispose();exportBusy.current=false;if(mounted.current)setBusy(false);}
   };
   const vector=(label:string,value:Vec3,change:(v:Vec3)=>void):React.JSX.Element=><fieldset><legend>{label}</legend>{value.map((v,i)=><label key={i}>{['X','Y','Z'][i]}<input aria-label={`${label} ${['X','Y','Z'][i]}`} type="number" step="0.1" value={v} onChange={e=>{const next=[...value] as Vec3;next[i]=e.currentTarget.valueAsNumber;change(next);}}/></label>)}</fieldset>;
   return <div onClickCapture={e => { if (e.target instanceof Element && e.target.closest('button')) loadTicket.current++; }} onChangeCapture={e => { if (!(e.target instanceof HTMLInputElement && e.target.type === 'file')) loadTicket.current++; }}><section style={{padding:16,font:'14px system-ui'}} aria-label="Workspace actions">

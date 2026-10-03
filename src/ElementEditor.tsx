@@ -52,7 +52,8 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
   const host = useRef<HTMLDivElement>(null);
   const pose = useRef<{ position: THREE.Vector3; target: THREE.Vector3 } | null>(null);
   const loadTicket = useRef(0);
-  useEffect(() => () => { loadTicket.current++; }, []);
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; loadTicket.current++; }; }, []);
   const resetPose = useRef(false);
   const [receiptNote, setReceiptNote] = useState('');
   const [cameraRevision, setCameraRevision] = useState(0);
@@ -195,13 +196,13 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       const data = await new GLTFExporter().parseAsync(built.root, { binary: true });
       const uvDelivery=await inspectMeshExport(data as ArrayBuffer,sourceJson,diagnosticChecker||diagnosticUv?'diagnostic':'editable-mesh');
       const uvJson=JSON.stringify({...uvDelivery,topologyInspection:legacyDiagnostic?{status:'not-run',reason:'Legacy 0.1 diagnostic retains prior export compatibility; not certified closed topology'}:{status:'pass',scope:'Current native volumetric generators only; intentional open representations unsupported'}});if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
-      if (currentProject.current !== project) return; // discard an export from a superseded project
+      if (!mounted.current || currentProject.current !== project) return; // discard an export from a superseded project
       const blob = new Blob([data as ArrayBuffer], { type: 'model/gltf-binary' });
       download(blob, diagnosticChecker ? 'morphloom-checker-diagnostic.glb' : diagnosticUv ? 'morphloom-uv-diagnostic.glb' : wholeProject ? 'morphloom-project.glb' : 'morphloom-selection.glb'); setGlbBytes(blob.size);
       download(new Blob([sourceJson], { type: 'application/json' }), 'morphloom-source.json');
       download(new Blob([uvJson],{type:'application/json'}),'morphloom-uv-quality.json');
       setError('');
-    } catch (e) { setError(String(e)); } finally { restoreChecker?.(); built?.dispose(); exportBusy.current = false; }
+    } catch (e) { if (mounted.current && currentProject.current === project) setError(String(e)); } finally { restoreChecker?.(); built?.dispose(); exportBusy.current = false; }
   };
   const exportTooth=async(id:string):Promise<void>=>{
     if(exportBusy.current)return;exportBusy.current=true;let built:ReturnType<typeof exportSelectedScene>|undefined;
@@ -217,11 +218,11 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       const sourceJson=serializeProject(project);
       const data=await new GLTFExporter().parseAsync(built.root,{binary:true});
       const uvDelivery=await inspectMeshExport(data as ArrayBuffer,sourceJson,'diagnostic');const uvJson=JSON.stringify(uvDelivery);if(new Blob([uvJson]).size>20_000_000)throw new Error('UV report exceeds 20 MB budget');
-      if(currentProject.current!==project)return;
+      if(!mounted.current||currentProject.current!==project)return;
       download(new Blob([data as ArrayBuffer],{type:'model/gltf-binary'}),`${part.id}-${id}-diagnostic.glb`);
       download(new Blob([sourceJson],{type:'application/json'}),'morphloom-gear-source.json');
       download(new Blob([uvJson],{type:'application/json'}),'morphloom-tooth-uv-quality.json');setError('');
-    }catch(e){setError(String(e));}finally{built?.dispose();exportBusy.current=false;}
+    }catch(e){if(mounted.current&&currentProject.current===project)setError(String(e));}finally{built?.dispose();exportBusy.current=false;}
   };
   const button = (text: string, action: () => void): React.JSX.Element => <button type="button" onClick={action}>{text}</button>;
   return <main className="element-editor" onClickCapture={e => { if (e.target instanceof Element && e.target.closest('button')) loadTicket.current++; }} onChangeCapture={e => { if (!(e.target instanceof HTMLInputElement && e.target.type === 'file')) loadTicket.current++; }} style={{ font: '14px system-ui', color: '#eee', background: '#292d33', minHeight: '100vh', padding: 12 }}>

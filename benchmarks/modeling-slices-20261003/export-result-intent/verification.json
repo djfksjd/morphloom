@@ -1,0 +1,219 @@
+{
+  "schema": "morphloom.export-result-intent/0.1",
+  "baseCommit": "2b6d63272892c76c8cd30a8d3d1dab7796c1ab88",
+  "compilerRevision": "morphloom-compiler/0.39.0",
+  "elementRendererRevision": "morphloom.element-renderer/0.10",
+  "sourceHashes": {
+    "src/ElementEditor.tsx": "49bc54ff8ad2b5dd156b37bd184df41bc2fb321f327a834fc56b1163e5a04746",
+    "src/WorkspaceEditor.tsx": "ed8e6e3c18360d68f53004b07cdc7a4d96f8193a5bf30096b2d4d8155b3b2a69",
+    "scripts/export-validation-browser-harness.js": "2ee08883a18f5ec96ef76a48de44028a253cf901a28483b84595b49ebc0a2ec7",
+    "scripts/export-result-intent-browser-regression.py": "8f54717e0881a7d4b465e04ffacb20f70a2eebc07b24984ca6bf40453f276f8f",
+    "docs/EXPORT_RESULT_INTENT_CONTRACT.ko.md": "ec3abdcdddba28cdef803cf81e871e0b5b739f00aab32ee277e76bc9364b2099",
+    "docs/EXPORT_RESULT_INTENT_STATUS.ko.md": "f0510af95a343e95fe9e6d18d74c7e7508118c6c8ca8d7e45881dc2118c9ecef",
+    "docs/MORPHLOOM_WORK_STATE.ko.md": "fbc9db27a0ab6c40ca92bc322481f818ad976450eb7ef8c4e1195d5121ff753e"
+  },
+  "files": {
+    "base.elements.json.gz": {
+      "sha256": "f3534f02a29e885a9b0b93548ff62aa83d04168fbf013482c202776287068872",
+      "bytes": 4897
+    },
+    "base.workspace.json.gz": {
+      "sha256": "c8f676105341bc3905e54b4fff7f8dad926aab3c47bf7954b35428d71c21b8fd",
+      "bytes": 6606
+    },
+    "benchmark.log.gz": {
+      "sha256": "427256cd99783691ec1a40e7aba6bb4ae3c793bf503afa1a47461bd717a5f5eb",
+      "bytes": 2525
+    },
+    "browser-evidence.json.gz": {
+      "sha256": "1ea8de7f97be9fa526fdc0727291444daeca8cf2d5772d2af7ffe4d54c4c9b89",
+      "bytes": 681
+    },
+    "browser-green.log.gz": {
+      "sha256": "1d5e926cefee047ed2676eff80842af18084b5b388f2f8b3c91cd8a9fed1b145",
+      "bytes": 562
+    },
+    "browser-green2.log.gz": {
+      "sha256": "4dd2e7367f318a3e10c70fe3ccacaeb2746b1ff9c1eff9014ed1a2984235936e",
+      "bytes": 594
+    },
+    "browser-green3.log.gz": {
+      "sha256": "b367d73c301a5f57d1dccff6ae7f7fe98f88ebe71a9bbb910af1c45500566ffa",
+      "bytes": 586
+    },
+    "browser-green4.log.gz": {
+      "sha256": "15cc60b320129b8dd134edd976198bcaec26ac35744ca558e4e3f2e680b2c8b0",
+      "bytes": 634
+    },
+    "browser-green5.log.gz": {
+      "sha256": "709e624c31af938983f4cfd5478aed629988f6d5922d0415e2a0421a57f9717e",
+      "bytes": 716
+    },
+    "browser-green6.log.gz": {
+      "sha256": "fad206883c43dc2fd7b1de2675f27f641f218056c8a5bb8eb6aec2970c3fcf73",
+      "bytes": 987
+    },
+    "browser-green7.log.gz": {
+      "sha256": "115dd157630f872654e5184740b6c104ebc2552ff2f46e196941007969778362",
+      "bytes": 988
+    },
+    "browser-green8.log.gz": {
+      "sha256": "3e541907026af3aa124e878170ccc29bf9d937ec3d6997c6605b05e08486fc36",
+      "bytes": 664
+    },
+    "check.log.gz": {
+      "sha256": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192",
+      "bytes": 70
+    },
+    "commands.json.gz": {
+      "sha256": "64703df3fcf680f00a4a80bfe9ad5c6c5bed48fcd40a2164393a6996b10da90e",
+      "bytes": 245
+    },
+    "current-delivery.json.gz": {
+      "sha256": "327a76cb267107ab1491f06f3f4c0a6e8108626a76e949eeeb6b3c26f49e9682",
+      "bytes": 485
+    },
+    "current-download.log.gz": {
+      "sha256": "ab58ac85a078da7121c6543bec387c9923bbda84016c73517fb2d88c61f77707",
+      "bytes": 58
+    },
+    "dominance.log.gz": {
+      "sha256": "a0b2de24dbf2b9ef6fff25196503bfd60c702799bcadfc91ab12b9326fc3fe93",
+      "bytes": 272
+    },
+    "element.png": {
+      "sha256": "14deeae496c01861d5f88837918bd4fa83a2772a0e02df5ee901bde70d7f2820",
+      "bytes": 104943
+    },
+    "elements/morphloom-source.json.gz": {
+      "sha256": "f3534f02a29e885a9b0b93548ff62aa83d04168fbf013482c202776287068872",
+      "bytes": 4897
+    },
+    "elements/morphloom-uv-quality.json.gz": {
+      "sha256": "3ae8e08f1c185a15fd4591fbfa77767db4ad2b06dc0e302834f0a9d3bb97df9c",
+      "bytes": 59897
+    },
+    "elements-blender.json.gz": {
+      "sha256": "2de7dfe6ae38205f56fb57dd6358b50f7037e15319c70177d5bc1e17918bc5aa",
+      "bytes": 971
+    },
+    "elements-blender.log.gz": {
+      "sha256": "3614e61bdbb4bd066d2b529607095685c0f3328c8ce5d31128e25936fa479db3",
+      "bytes": 1316
+    },
+    "gltf-validation.log.gz": {
+      "sha256": "a63ff38afd9df3b8c6ae3b302cdef3048340c59b0b6fa2c3489f9e5f1bd398ad",
+      "bytes": 562
+    },
+    "native-commands.json.gz": {
+      "sha256": "6035ebd1f6b1593541f0654ca788a4096801974223d2696bf541cb70b0b03606",
+      "bytes": 91
+    },
+    "publish-build.log.gz": {
+      "sha256": "b5520cd33e4b11d09027b4fc4c6aa48dfaf0d3cc06cf646b710828c699ecb7df",
+      "bytes": 599
+    },
+    "publish-check.log.gz": {
+      "sha256": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192",
+      "bytes": 70
+    },
+    "publish-tests.log.gz": {
+      "sha256": "d253e447a3e0afbc5d7053657b1ce4852b65791cac2d7105b3d9bb76e873c716",
+      "bytes": 3980
+    },
+    "quality-gate.log.gz": {
+      "sha256": "da015988142b684e45305fca1ebd853a537a6fa06fac899fab443b0954a12524",
+      "bytes": 25152
+    },
+    "quality-production.log.gz": {
+      "sha256": "57a0e92b5e0b9d0b5e8a2110d871cb6541df0843912e9bb53d62b620b91e35c0",
+      "bytes": 25194
+    },
+    "red-before.json.gz": {
+      "sha256": "99ca6a57d3e26d0680cc63b5454c91e3e12abddae99af67d01efe5da34a3a30d",
+      "bytes": 187
+    },
+    "red.json.gz": {
+      "sha256": "99ca6a57d3e26d0680cc63b5454c91e3e12abddae99af67d01efe5da34a3a30d",
+      "bytes": 187
+    },
+    "source-build.log.gz": {
+      "sha256": "7ac353e8317d7c2ce0ae52cfe1b899f5ad3f8795d499727775f77dcee7baf9a1",
+      "bytes": 761
+    },
+    "source-check.log.gz": {
+      "sha256": "358ce53cd35a5ea32f98999d7af2ad166acc82777a900c0449d8d51c5ba19192",
+      "bytes": 70
+    },
+    "source-tests.log.gz": {
+      "sha256": "5774dd5043eb70c139b8e45769fdecc0f6282c13f16899a0c6cb949d98ad929b",
+      "bytes": 4012
+    },
+    "workspace/morphloom-workspace-uv-quality.json.gz": {
+      "sha256": "b326f734a05030f34e4d4c2e82090d0b51d511002e7c1db467cda681a6cbc5a1",
+      "bytes": 1698802
+    },
+    "workspace/morphloom-workspace.json.gz": {
+      "sha256": "c8f676105341bc3905e54b4fff7f8dad926aab3c47bf7954b35428d71c21b8fd",
+      "bytes": 6606
+    },
+    "workspace-blender.json.gz": {
+      "sha256": "ee06e9afe3b776f92eee397219065db5cdf57426523fd6e8e04e5910ba0e6acc",
+      "bytes": 1013
+    },
+    "workspace-blender.log.gz": {
+      "sha256": "ae8351c2c4c811026194b8bf92d3115e127cf4f9e94a6404f21c1e45e42c4dba",
+      "bytes": 2372
+    },
+    "workspace.png": {
+      "sha256": "73ab521c89ae5b32e36f612e52fb219db463c282a8ca4723c910e6a2be3209a5",
+      "bytes": 121305
+    }
+  },
+  "nativeGlbArtifacts": {
+    "elements/morphloom-selection.glb": {
+      "sha256": "41565828b15f1504f1aa4aace8873dea31cbd8545067221365e5a6bd6471524d",
+      "bytes": 99736
+    },
+    "elements-edited-stability.glb": {
+      "sha256": "38da5c5b94d35c72c142f3f86df00ac9ec9a1c46c65a904a5dbc48191f5509fd",
+      "bytes": 99704
+    },
+    "elements-edited.glb": {
+      "sha256": "7772efb257e972bf985ed377887f739d528c4d6314f4599f3a13cbc288c45224",
+      "bytes": 99704
+    },
+    "workspace/morphloom-workspace.glb": {
+      "sha256": "5e49d2086635dbf1b49e8d07e817d056af557292f118b469ca77a8ab7b251724",
+      "bytes": 3256924
+    },
+    "workspace-edited-stability.glb": {
+      "sha256": "8407e315610ee274aacdc9ce954b14222988244e13348485a0d6a0a5e5881a21",
+      "bytes": 3026744
+    },
+    "workspace-edited.glb": {
+      "sha256": "4a287ab56d25de51c9fe609dbcf8fc2006317966a61b14464c6e70944c8ff198",
+      "bytes": 3026740
+    }
+  },
+  "results": {
+    "nativeCases": 14,
+    "discardedDownloadedFiles": 0,
+    "publishTests": 711,
+    "sourceTests": 730,
+    "checkBuildBenchmark": "PASS",
+    "actualNormal3FileExportsAndBlenderTwoReopenKhronos": "PASS",
+    "qualityGateProduction": "FAIL: existing cooling unused UV infos23",
+    "independentDominance": "FAIL: same-input comparison evidence0/3",
+    "parentWorkspaceUnmount": "not-run",
+    "geometrySchemaCompilerChanged": false
+  },
+  "scope": "native SHA completion/fault ownership; injected validation failure is not a geometry rejection; current errors remain visible; diagnostic tooth does not approve existing gear UV FAIL",
+  "budget": {
+    "checkpointMinutes": 40,
+    "additionalPaidCalls": 0,
+    "newDependencies": 0
+  },
+  "externalReview": "blocked: previously confirmed UNI_AI credit shortage / Claude weekly limit; local hooks/resources review performed",
+  "next": "revalidate existing UV0.4 opt-in editing and actual delivery; no duplicate implementation"
+}

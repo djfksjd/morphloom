@@ -1,0 +1,7 @@
+# Export completion ownership
+
+2026-10-03, baseline2b6d632 / compiler0.39 / element-renderer0.10. Actual selected GLB export runs real native SHA. Holding that completion, applying a2.6mm ball edit, then injecting a validator-completion rejection reproduces an old error replacing current status. This is a controlled infrastructure fault test, not a claim that valid geometry failed. Red receipt preserved before implementation.
+
+Success: project/export snapshot is captured at click. Superseded source or unmounted editor cannot publish old output/status/error; current failures still appear, and busy/resources release. A selection change alone may retain the explicitly clicked source snapshot if geometry/source is unchanged. Selected/whole/tooth/workspace paths retain existing GLB/UV/topology/standard gates and companion semantics. No geometry, schema, compiler, dependency or threshold changes.
+
+Actual native UI controlled SHA completion: current error, stale error after Apply/Undo/new import, stale success emits no files, workspace child edits invalidate parent export, normal current selected/mixed3 downloads remain valid. Reopen actual GLB in Blender/Khronos; retain non-target source hashes. Unmount completion is only claimed if directly tested. Existing full tests/check/build/gate run with explicit failures retained.40minute checkpoint; extra UNI_AI/Claude calls blocked by confirmed current credit/weekly limits, local review continues.
