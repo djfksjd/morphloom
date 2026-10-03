@@ -11,6 +11,8 @@ export interface MeshTopologyReport {
   meshes: number;
   watertightMeshes: number;
   boundaryEdges: number;
+  inconsistentWindingEdges?: number;
+  orientationConsistent?: boolean;
   nonManifoldEdges: number;
   degenerateTriangles: number;
   selfIntersections: number;
@@ -34,6 +36,8 @@ export interface MeshTopologyReport {
   details: Array<{
     name: string;
     boundaryEdges: number;
+    inconsistentWindingEdges?: number;
+    orientationConsistent?: boolean;
     nonManifoldEdges: number;
     degenerateTriangles: number;
     selfIntersections: number;
@@ -55,6 +59,7 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
   let meshes = 0;
   let watertightMeshes = 0;
   let boundaryEdges = 0;
+  let inconsistentWindingEdges = 0;
   let nonManifoldEdges = 0;
   let degenerateTriangles = 0;
   let selfIntersections = 0;
@@ -141,7 +146,7 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
       geometry.dispose();
       return;
     }
-    const edges = new Map<string, number>();
+    const edges = new Map<string, { count: number; directionBalance: number }>();
     let meshDegenerate = 0;
     const a = new THREE.Vector3();
     const b = new THREE.Vector3();
@@ -168,11 +173,19 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
       }
       for (const [from, to] of [[ia, ib], [ib, ic], [ic, ia]]) {
         const key = edgeKey(from, to);
-        edges.set(key, (edges.get(key) ?? 0) + 1);
+        const edge = edges.get(key) ?? { count: 0, directionBalance: 0 };
+        edge.count += 1;
+        edge.directionBalance += from < to ? 1 : from > to ? -1 : 0;
+        edges.set(key, edge);
       }
     }
-    const meshBoundary = [...edges.values()].filter((count) => count === 1).length;
-    const meshNonManifold = [...edges.values()].filter((count) => count > 2).length;
+    let meshBoundary = 0, meshNonManifold = 0, meshInconsistentWinding = 0;
+    for (const edge of edges.values()) {
+      if (edge.count === 1) meshBoundary += 1;
+      else if (edge.count > 2) meshNonManifold += 1;
+      else if (edge.directionBalance !== 0) meshInconsistentWinding += 1;
+    }
+    inconsistentWindingEdges += meshInconsistentWinding;
     const selfIntersection = analyzeSelfIntersections(object.geometry);
     selfIntersections += selfIntersection.intersections;
     selfIntersectionCandidatePairs += selfIntersection.candidatePairs;
@@ -181,6 +194,8 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     boundaryEdges += meshBoundary;
     nonManifoldEdges += meshNonManifold;
     degenerateTriangles += meshDegenerate;
+    // Historical pass/watertight describe unsigned closure. Orientation is an
+    // independent diagnostic; globally reversing a mesh stays consistent.
     const watertight = meshBoundary === 0
       && meshNonManifold === 0
       && meshDegenerate === 0
@@ -190,6 +205,8 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     details.push({
       name: object.name,
       boundaryEdges: meshBoundary,
+      inconsistentWindingEdges: meshInconsistentWinding,
+      orientationConsistent: meshInconsistentWinding === 0,
       nonManifoldEdges: meshNonManifold,
       degenerateTriangles: meshDegenerate,
       selfIntersections: selfIntersection.intersections,
@@ -205,6 +222,8 @@ export function analyzeTopology(root: THREE.Object3D, options: TopologyAnalysisO
     meshes,
     watertightMeshes,
     boundaryEdges,
+    inconsistentWindingEdges,
+    orientationConsistent: inconsistentWindingEdges === 0,
     nonManifoldEdges,
     degenerateTriangles,
     selfIntersections,

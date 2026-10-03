@@ -1,0 +1,73 @@
+{
+  "schema": "morphloom.orientation-timing/0.1",
+  "baselineCompiler": "0.35.0",
+  "currentCompiler": "0.36.0",
+  "method": "same16448triangle tube, warmup once;5paired alternating samples; timing observations only; other user processes unchanged",
+  "samples": [
+    {
+      "legacy": {
+        "ms": 26.229332999999997,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "current": {
+        "ms": 18.27858399999991,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "order": "legacy-first"
+    },
+    {
+      "legacy": {
+        "ms": 15.000916999999959,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "current": {
+        "ms": 14.43337500000007,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "order": "current-first"
+    },
+    {
+      "legacy": {
+        "ms": 15.346208000000047,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "current": {
+        "ms": 16.234042000000045,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "order": "legacy-first"
+    },
+    {
+      "legacy": {
+        "ms": 14.070875000000001,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "current": {
+        "ms": 12.853791000000001,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "order": "current-first"
+    },
+    {
+      "legacy": {
+        "ms": 14.788958000000093,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "current": {
+        "ms": 13.115875000000074,
+        "closurePass": true,
+        "triangles": 16448
+      },
+      "order": "legacy-first"
+    }
+  ]
+}

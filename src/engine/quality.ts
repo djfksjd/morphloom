@@ -136,6 +136,10 @@ export function evaluateProductQuality(
   const engineering = metrics?.engineering;
   const surfaces = metrics?.surfaces;
   const topology = metrics?.topology;
+  const windingCount = topology?.inconsistentWindingEdges;
+  const validWindingCount = typeof windingCount === 'number' && Number.isSafeInteger(windingCount) && windingCount >= 0;
+  const windingFailure = (validWindingCount && windingCount > 0) || topology?.orientationConsistent === false;
+  const windingPass = validWindingCount && windingCount === 0 && topology?.orientationConsistent === true;
   const detailAudit = assemblyIR ? auditAssemblyDetail(assemblyIR) : undefined;
   const planFootprint = metrics?.planFootprint;
   const ratio = spec.heightMm / spec.widthMm;
@@ -216,6 +220,15 @@ export function evaluateProductQuality(
       detail: topology
         ? `${topology.watertightMeshes}/${topology.meshes} 폐쇄형 · 경계 ${topology.boundaryEdges} · 비매니폴드 ${topology.nonManifoldEdges} · 퇴화 ${topology.degenerateTriangles} · 자기교차 ${topology.selfIntersections} · 교차검사 ${topology.selfIntersectionComplete ? '완료' : '예산초과'}${topology.edgeTaperMeshes ? ` · 실제 절삭날 ${topology.edgeTaperMeshes}개 · ${topology.verifiedEdgeTaperSegments ?? 0}구간 검증 · 최대 날끝 ${topology.maximumMeasuredEdgeThicknessMm?.toFixed(2)} mm` : ''}${topology.surfaceReliefMeshes ? ` · 실변위 ${topology.surfaceReliefMeshes}개 · 골재 ${topology.surfaceAggregateFeatures ?? 0}개 · RMS ${topology.maximumSurfaceRmsRoughnessMm?.toFixed(2)} mm · P-V ${topology.maximumSurfacePeakToValleyMm?.toFixed(2)} mm${topology.referenceReliefMeshes ? ` · 사진 높이장 ${topology.referenceReliefSamples ?? 0}점` : ''}` : ''}`
         : '전체 메시 토폴로지를 검사한 뒤 납품 가능 여부를 판정합니다.',
+    },
+    {
+      id: 'orientation',
+      label: '공유 모서리 면 방향',
+      score: windingPass ? 100 : 0,
+      status: windingFailure ? 'blocked' : windingPass ? 'pass' : 'warn',
+      detail: !windingPass && !windingFailure
+        ? '면 방향 검사 not-run · 이전 보고서는 새 검사가 필요합니다.'
+        : `방향 충돌 ${validWindingCount ? windingCount : '수 미기록'}개 · 위치 weld 1e-6 · 국부 일관성만 검사하며 전체 바깥 방향/체적은 보장하지 않습니다.`,
     },
     {
       id: 'silhouette',

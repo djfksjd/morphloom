@@ -1,0 +1,33 @@
+[
+  {
+    "label": "published-tests-isolated",
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 56.83
+  },
+  {
+    "label": "check-fixed",
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.42
+  },
+  {
+    "label": "build-fixed",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.98
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "label": "source-check-fixed",
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "source-build-fixed",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0
+  }
+]

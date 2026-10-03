@@ -1,0 +1,9 @@
+# Shared-edge orientation contract
+
+Before implementation: show an actually reversed box face passes historical undirected closure while local winding is inconsistent. Retain historical unsigned topology closure/pass semantics; add distinct optional fields and independent quality check blocking Asset Pack when any two-incident welded edge runs the same way. Existing overall blocked cap59 remains, no thresholds relaxed. Generated vertex/index/material/UV buffers remain unchanged.
+
+Report counts per mesh and aggregate; optional additive fields for old report producers. Missing fields are not-run (warn), not zero/pass. Consistency proves local shared-edge orientation only, not global outward normals/positive volume, non-intersection, CAD or all-surface validity. Single boundaries/intentional open surfaces are not counted as inconsistent, non-manifold edges stay separate. Keep existing weld tolerance1e-6 and disclose it.
+
+Tests: healthy/reversed-one-face cube, globally reversed coherent cube, nonindexed attribute seams, intended open plane, non-manifold incidence, actual legacy tube and flat migrated tube. Freeze zero tolerance for direction conflicts, keep independent closed/selfintersection gates. UI quality row must show conflict and block Asset Pack even with excellent average. Actual native IR edit flat cap/Undo/save and actual GLB orientation reopen verify scope; no historical receipts relabeled. <=3 UNI_AI calls,45minute checkpoint; single QA browser only, serial full tests.
+
+Compiler/delivery revision0.36.0: additive compiled topology metadata changes actual file bytes; historical0.35 native receipts are not current evidence. Fresh Blender/browser file checks are required; other apps explicitly not-run at0.36 until actually executed. No declaration of geometry buffer changes.

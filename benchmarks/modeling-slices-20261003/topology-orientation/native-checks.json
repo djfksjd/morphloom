@@ -1,0 +1,22 @@
+[
+  {
+    "case": "ui-legacy",
+    "tool": "khronos",
+    "exitCode": 0
+  },
+  {
+    "case": "ui-legacy",
+    "tool": "blender",
+    "exitCode": 0
+  },
+  {
+    "case": "ui-flat",
+    "tool": "khronos",
+    "exitCode": 0
+  },
+  {
+    "case": "ui-flat",
+    "tool": "blender",
+    "exitCode": 0
+  }
+]

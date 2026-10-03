@@ -1,0 +1,10 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {compileAssemblyGeometry} from '../src/engine/assembly-compiler';
+import type {AssemblyGeometryIR,AssemblyIR} from '../src/engine/assembly-ir';
+const baseline=readFileSync('/tmp/morphloom-orientation-baseline-path','utf8').trim(),old=await import(baseline+'/src/engine/assembly-compiler.ts');
+const hash=(g:ReturnType<typeof compileAssemblyGeometry>)=>{const h=createHash('sha256');for(const [name,a] of Object.entries(g.attributes)){h.update(name+':'+a.array.constructor.name);h.update(new Uint8Array(a.array.buffer,a.array.byteOffset,a.array.byteLength));}if(g.index){h.update(g.index.array.constructor.name);h.update(new Uint8Array(g.index.array.buffer,g.index.array.byteOffset,g.index.array.byteLength));}return h.digest('hex');};
+const fan=JSON.parse(readFileSync('outputs/tube-caps-20261003/fan-after.assembly.json','utf8')) as AssemblyIR;
+const straight:AssemblyGeometryIR={op:'tube',points:[[0,0,0],[180,60,80]],radius:2,tubularSegments:32,radialSegments:12};
+const rows=[{id:'flat-cap',geometry:{...straight,capFinish:'flat-outward' as const}},...fan.components.map(c=>({id:c.id,geometry:c.geometry})),{id:'legacy-straight',geometry:straight},{id:'explicit-winding',geometry:{...straight,capWinding:'outward' as const}},{id:'legacy-multipoint',geometry:{...straight,points:[[0,0,0],[80,20,20],[180,60,80]] as [number,number,number][]}},{id:'closed-path',geometry:{...straight,points:[[0,0,0],[80,0,0],[80,80,0],[0,80,0]] as [number,number,number][],closed:true}}].map(({id,geometry})=>{const a=old.compileAssemblyGeometry(geometry),b=compileAssemblyGeometry(geometry);try{const oldHash=hash(a),newHash=hash(b);if(oldHash!==newHash)throw Error('Absent finish changes bytes '+id);return {id,sha256:newHash,pass:true};}finally{a.dispose();b.dispose();}});
+writeFileSync(process.argv[2]!,JSON.stringify({schema:'morphloom.orientation-geometry-parity/0.1',baselineCompiler:'0.35.0',currentCompiler:'0.36.0',pass:true,rows},null,2)+'\n');console.log(rows.length+' pre-orientation-audit geometry buffer hashes exactly preserved');

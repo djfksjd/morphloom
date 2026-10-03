@@ -87,7 +87,7 @@ export interface ReferenceEvidence {
 export type QualityStatus = 'pass' | 'warn' | 'blocked';
 
 export interface QualityCheck {
-  id: 'geometry' | 'silhouette' | 'materials' | 'rig' | 'lod-quality' | 'export';
+  id: 'geometry' | 'silhouette' | 'materials' | 'rig' | 'lod-quality' | 'orientation' | 'export';
   label: string;
   score: number;
   status: QualityStatus;

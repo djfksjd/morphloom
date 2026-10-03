@@ -1,0 +1,191 @@
+{
+  "schema": "morphloom.orientation-verification/0.1",
+  "baselineCommit": "cbe27c77c043d448dc1ebf9e776ce208933235d6",
+  "compilerRevision": "0.36.0",
+  "releaseAllowed": false,
+  "checksFirst": [
+    {
+      "label": "published-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 1,
+      "seconds": 94.3
+    },
+    {
+      "label": "source-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "seconds": 56.59
+    },
+    {
+      "label": "check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 2,
+      "seconds": 2.45
+    },
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 2,
+      "seconds": 2.14
+    },
+    {
+      "label": "benchmark",
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0,
+      "seconds": 4.31
+    },
+    {
+      "label": "quality-production",
+      "command": [
+        "npm",
+        "run",
+        "quality:production"
+      ],
+      "exitCode": 1,
+      "seconds": 10.6
+    }
+  ],
+  "checksCorrected": [
+    {
+      "label": "published-tests-isolated",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0,
+      "seconds": 56.83
+    },
+    {
+      "label": "check-fixed",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 2.42
+    },
+    {
+      "label": "build-fixed",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 3.98
+    }
+  ],
+  "sourceTypesBuildCorrected": [
+    {
+      "label": "source-check-fixed",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "source-build-fixed",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "native": [
+    {
+      "case": "ui-legacy",
+      "tool": "khronos",
+      "exitCode": 0
+    },
+    {
+      "case": "ui-legacy",
+      "tool": "blender",
+      "exitCode": 0
+    },
+    {
+      "case": "ui-flat",
+      "tool": "khronos",
+      "exitCode": 0
+    },
+    {
+      "case": "ui-flat",
+      "tool": "blender",
+      "exitCode": 0
+    }
+  ],
+  "browser": {
+    "schema": "morphloom.orientation-browser/0.1",
+    "pass": true,
+    "legacyConflicts": 16,
+    "flatConflicts": 0,
+    "undoRestoredLegacy": true,
+    "method": "actual native IR/upload/selection/flat migration/save/GLB/Undo; no state injection",
+    "files": {
+      "legacy.assembly.json": "d150ad4328cede3768022e03f5e139c9c8b8a488b0c0740f90e7325616bc327d",
+      "ui-legacy.png": "19d660e04f6d3bea214efb42bd06defaa181a95d80fd1090198312c4d64beb74",
+      "ui-flat.png": "df132a464e9ddba0dc362fc465f81bec7d84448eabc899eed61379dc851233a4",
+      "ui-flat.assembly.json": "902c9fe5b45ccacb28fe57dc0e448ee3f097d71494d6d6b86b5da887ce5959e0",
+      "ui-undo.assembly.json": "24cbe325c6cdaeca1d0c882e451d7421ef69ac7227fdd25f384b004662211ee1",
+      "ui-legacy.glb": "1ebfc7db4a105c8a02b31dd131045406c8af50e07bbf0aa32a77714f0115b338",
+      "ui-flat.glb": "9c11c0e9de8e59e5a7783cc73803e0697d06b9dd5132327bc2c90cb8e6ab3c99",
+      "ui-legacy.assembly.json": "24cbe325c6cdaeca1d0c882e451d7421ef69ac7227fdd25f384b004662211ee1"
+    }
+  },
+  "geometry106BufferParity": true,
+  "sourceCodeSha256": {
+    "src/engine/topology.ts": "4d93ef2af195518c45ba91a496aedb3753a00b01943c2962a3fa2118042875d1",
+    "src/engine/quality.ts": "95c857f6fe69647703840665fb23a59e3a3006af9f0fd38b80aa450ba3df7d2a",
+    "src/engine/delivery-validation.ts": "448757e8ff9f505ca792322186bd19666838b49743886538b4e44717dc40262f",
+    "tests/browser-proof-recorder.test.ts": "0725a0e42f959ed984908c9178d0f70d889a92db55313c630dbcff1e7cd034b3",
+    "tests/topology-orientation.test.ts": "ae1b3f85e8c75e772bd4e033c31688df2fdcb651cbb1e82418b9165f441a6d92",
+    "docs/TOPOLOGY_ORIENTATION_CONTRACT.ko.md": "a79b99b25f6ff0e713152759672cf30f7e97e95d071f5d3fdd7a5de38241432c",
+    "scripts/topology-orientation-browser-regression.py": "b1c23871dee03f07be57f712bcae88a790f37d4e0e3038a8405d068e8fae05bd",
+    "src/types.ts": "071c41d078f17847e3cd44cb6782892bccb52bf0d0c806f7db04af4d9cb12814",
+    "scripts/topology-orientation-geometry-parity.ts": "911aed8e7d415936fd448720160d7b80403b3dff1c81b59a06ebfc5bbbe70dea",
+    "scripts/topology-orientation-performance.ts": "f342120796d77674e7f84cb85b05a74fbc00828539271ec2b3ea41b562e147f3",
+    "docs/TOPOLOGY_ORIENTATION_STATUS.ko.md": "174c8ed8ad10c83f010e35ab85db1fd1a577db3f68a9d05c5fc041a3bcae2c44"
+  },
+  "assetsZipSha256": "2cb42c53e692d1b2cee3479bb3b37afdffcdeb5b39aeeb6e12de0e374ef971c4",
+  "uniai": {
+    "model": "gpt-6-astra",
+    "calls": 2,
+    "tokens": 14246,
+    "quotaExhaustionObserved": false,
+    "ClaudeFallback": "not-run"
+  },
+  "notRun": [
+    "Global outward/positive-volume shell audit",
+    "Cross-domain0.36 five-app fixture revalidation (next step)",
+    "Independent expert evaluation"
+  ],
+  "scope": "local two-incident shared-edge coherence; old unsigned closure unchanged; actual GLB orientation checked by Blender"
+}

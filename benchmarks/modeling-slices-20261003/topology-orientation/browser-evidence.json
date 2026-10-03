@@ -1,0 +1,18 @@
+{
+  "schema": "morphloom.orientation-browser/0.1",
+  "pass": true,
+  "legacyConflicts": 16,
+  "flatConflicts": 0,
+  "undoRestoredLegacy": true,
+  "method": "actual native IR/upload/selection/flat migration/save/GLB/Undo; no state injection",
+  "files": {
+    "legacy.assembly.json": "d150ad4328cede3768022e03f5e139c9c8b8a488b0c0740f90e7325616bc327d",
+    "ui-legacy.png": "19d660e04f6d3bea214efb42bd06defaa181a95d80fd1090198312c4d64beb74",
+    "ui-flat.png": "df132a464e9ddba0dc362fc465f81bec7d84448eabc899eed61379dc851233a4",
+    "ui-flat.assembly.json": "902c9fe5b45ccacb28fe57dc0e448ee3f097d71494d6d6b86b5da887ce5959e0",
+    "ui-undo.assembly.json": "24cbe325c6cdaeca1d0c882e451d7421ef69ac7227fdd25f384b004662211ee1",
+    "ui-legacy.glb": "1ebfc7db4a105c8a02b31dd131045406c8af50e07bbf0aa32a77714f0115b338",
+    "ui-flat.glb": "9c11c0e9de8e59e5a7783cc73803e0697d06b9dd5132327bc2c90cb8e6ab3c99",
+    "ui-legacy.assembly.json": "24cbe325c6cdaeca1d0c882e451d7421ef69ac7227fdd25f384b004662211ee1"
+  }
+}
