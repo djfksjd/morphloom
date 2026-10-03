@@ -10,6 +10,7 @@ import { pickGearTooth } from './engine/gear-picking';
 import { analyzeTopology } from './engine/topology';
 import {LatestUvInspection,type UvInspectionReceipt} from './engine/uv-quality';
 import {inspectMeshExport} from './engine/mesh-export-policy';
+import { fitPerspectiveCameraToBounds } from './engine/camera-framing';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -111,13 +112,25 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       el.appendChild(renderer.domElement);
       controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true;
       const box = new THREE.Box3().setFromObject(built.root);
-      const center = box.isEmpty() ? new THREE.Vector3() : box.getCenter(new THREE.Vector3());
-      const radius = box.isEmpty() ? 0.3 : Math.max(box.getSize(new THREE.Vector3()).length(), 0.1);
-      camera.position.copy(center).add(new THREE.Vector3(radius, radius * 0.55, radius));
-      controls.target.copy(center);
+      const bounds = box.isEmpty() ? new THREE.Box3(new THREE.Vector3(-0.15, -0.15, -0.15), new THREE.Vector3(0.15, 0.15, 0.15)) : box;
+      const center = bounds.getCenter(new THREE.Vector3());
+      const radius = Math.max(bounds.getSize(new THREE.Vector3()).length() * 0.5, 0.001);
+      let needsInitialFit = !pose.current;
       if (pose.current) { camera.position.copy(pose.current.position); controls.target.copy(pose.current.target); }
-      camera.near = 0.001; camera.far = Math.max(10, radius * 20); camera.updateProjectionMatrix();
-      const resize = (): void => { if (!renderer) return; const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight); renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+      camera.near = Math.max(0.000001, radius / 1000);
+      camera.far = Math.max(10, radius * 20, camera.position.distanceTo(center) + radius * 8);
+      const resize = (): void => {
+        if (!renderer || !controls) return;
+        const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight);
+        renderer.setSize(w, h); camera.aspect = w / h;
+        if (needsInitialFit) {
+          const fit = fitPerspectiveCameraToBounds({ bounds, direction: new THREE.Vector3(1, 0.55, 1), up: camera.up, verticalFovDegrees: camera.fov, aspect: camera.aspect, padding: 1.22 });
+          camera.position.copy(fit.center).addScaledVector(fit.direction, fit.distance);
+          controls.target.copy(fit.center);
+          needsInitialFit = false;
+        }
+        camera.updateProjectionMatrix();
+      };
       observer = new ResizeObserver(resize); observer.observe(el); resize();
       renderer.domElement.addEventListener('pointerdown', pointerDown);
       renderer.domElement.addEventListener('pointerup', pointer);

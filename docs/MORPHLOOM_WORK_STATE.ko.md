@@ -98,3 +98,8 @@ Current-source and mounted guards now cover selected/whole/diagnostic tooth and 
 ## 2026-10-03 Existing UV0.4 current verification
 
 Native7 cases and three generated sizes pass explicit UV-only modification/preservation; actual ordinary GLB passes UV/Khronos(errors0,infos1)/Blender named2mm edit and two reopen cycles. Publish711/check/build pass; no runtime change or production claim. Old quality gate blockers remain. Failed capture/harness assumptions retained. Next fix actual element Fit view0.1m floor using existing camera-framing helper. See [current status](UV_SCALE_CURRENT_STATUS.ko.md). Goal remains active.
+
+
+## 2026-10-03 Element/Workspace Fit view
+
+Reuse existing corner framing helper in the editor; remove0.1m scale floor, use actual host aspect and preserve orbit pose. Actual paired default gear21.79%→60.68%; native8 cases incl empty/edit-undo pass, frustum4tests/8cases pass. Current publish715/source734/check/build pass. Fresh full quality:gate FAIL; production blocked, no threshold changes. Actual UI GLB byte-exact pre-camera version. See [status](ELEMENT_FRAMING_STATUS.ko.md). Next audit direct bearing generator input contract versus registry; goal remains active.
