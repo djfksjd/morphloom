@@ -1,0 +1,143 @@
+{
+  "schema": "morphloom.production-dominance/0.4",
+  "pass": false,
+  "claimAllowed": false,
+  "domains": [
+    {
+      "domain": "architecture",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "industrial-design",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "electronics-assembly",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "animation",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "game",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "3d-print",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    },
+    {
+      "domain": "surface",
+      "pass": false,
+      "cases": 0,
+      "independentInputs": 0,
+      "independentReferences": 0,
+      "morphloomReleaseRate": 0,
+      "competitorReleaseRate": 0,
+      "visualWinRate": 0,
+      "meanDeliveryAdvantage": 0,
+      "blockers": [
+        "0/3 required same-input cases",
+        "0/3 independent references",
+        "0/3 independent locked inputs"
+      ]
+    }
+  ],
+  "blockers": [
+    "architecture: 0/3 required same-input cases",
+    "architecture: 0/3 independent references",
+    "architecture: 0/3 independent locked inputs",
+    "industrial-design: 0/3 required same-input cases",
+    "industrial-design: 0/3 independent references",
+    "industrial-design: 0/3 independent locked inputs",
+    "electronics-assembly: 0/3 required same-input cases",
+    "electronics-assembly: 0/3 independent references",
+    "electronics-assembly: 0/3 independent locked inputs",
+    "animation: 0/3 required same-input cases",
+    "animation: 0/3 independent references",
+    "animation: 0/3 independent locked inputs",
+    "game: 0/3 required same-input cases",
+    "game: 0/3 independent references",
+    "game: 0/3 independent locked inputs",
+    "3d-print: 0/3 required same-input cases",
+    "3d-print: 0/3 independent references",
+    "3d-print: 0/3 independent locked inputs",
+    "surface: 0/3 required same-input cases",
+    "surface: 0/3 independent references",
+    "surface: 0/3 independent locked inputs"
+  ],
+  "limitation": "All-domain superiority remains unproven until every blocker is resolved; technical readiness or one winning reference cannot substitute for missing same-input blind evidence."
+}

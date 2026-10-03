@@ -1,3 +1,4 @@
+import type {ArchitecturalProgramAudit} from './architectural-program';
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { ProductSpec, ViewMode } from '../types';
@@ -32,6 +33,7 @@ export interface ProductMetrics {
   topology: MeshTopologyReport;
   engineering?: EngineeringAuditReport;
   planFootprint?: PlanFootprintAudit;
+  architecturalProgram?: ArchitecturalProgramAudit;
   dimensionAudit?: DimensionAudit;
 }
 

@@ -1,0 +1,18 @@
+[
+  {
+    "case": "obj",
+    "exitCode": 0
+  },
+  {
+    "case": "stl",
+    "exitCode": 0
+  },
+  {
+    "case": "ply",
+    "exitCode": 0
+  },
+  {
+    "case": "static-delivery",
+    "exitCode": 0
+  }
+]

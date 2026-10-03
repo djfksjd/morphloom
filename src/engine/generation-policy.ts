@@ -292,7 +292,7 @@ export function auditAssemblyDetail(ir: AssemblyIR): AssemblyDetailAudit {
     if (entranceProjection > 0 && !ir.components.some((component) => component.id.startsWith('entrance_'))) {
       blockers.push('projecting entrance has no named geometry');
     }
-    if (ir.metadata?.programCompleteness !== undefined) {
+    if (ir.metadata?.programCompleteness !== undefined && !ir.architecturalProgram) {
       const requiredPrograms = String(ir.metadata?.requiredPrograms ?? '')
         .split(',').map((item) => item.trim()).filter(Boolean);
       const searchable = ir.components.map((component) => `${component.id} ${component.name}`.toLowerCase()).join(' ');

@@ -1,3 +1,4 @@
+import type {ArchitecturalProgramDescriptor} from './architectural-program';
 import type {
   AssemblyComponentIR,
   AssemblyIR,
@@ -376,6 +377,16 @@ for (const balcony of balconies) {
     'Painted steel guard', steel, scaledPlan, 'Independent metal guard aligned to a plan-documented balcony.', 12);
 }
 
+const programRequirements:ArchitecturalProgramDescriptor['requirements']=components
+ .filter(c=>/^unit_[0-9]+_(living|bedroom|kitchen|bath|passage)_floor$/.test(c.id)||/^stair_[0-9]+_landing$/.test(c.id))
+ .map(c=>{
+  if(c.geometry.op!=='roundedBox'||!c.position)throw Error('Program fixture requires positioned floor boxes.');
+  const [width,,depth]=c.geometry.size,[x,,z]=c.position,angle=c.rotation?.[1]??0;
+  const polygonMm:Array<[number,number]>=[[-width/2,-depth/2],[width/2,-depth/2],[width/2,depth/2],[-width/2,depth/2]].map(([a,b])=>[x+a!*Math.cos(angle)+b!*Math.sin(angle),z-a!*Math.sin(angle)+b!*Math.cos(angle)]);
+  return {id:c.id,kind:c.id.startsWith('stair_')?'stair-landing':'room-floor',footprint:{schema:'morphloom.plan-footprint/0.1',componentIds:[c.id],targetRegions:[{id:c.id,polygonMm}],resolution:64,minimumIoU:.97,maximumFalsePositiveFraction:.02,maximumFalseNegativeFraction:.02,maximumVoidOccupancy:.01,evidence:{status:'authored',source:SOURCE_PDF,note:'Frozen authored model footprint; HABS is the reference, not an independently measured room target. Source exactness and full room enclosure are separate.'}}};
+ });
+const architecturalProgram:ArchitecturalProgramDescriptor={schema:'morphloom.architectural-program/0.1',scope:'floor-cutaway',inventoryIds:programRequirements.map(r=>r.id),requirements:programRequirements};
+
 export const LAUREL_HOMES_BUILDING_B_IR: AssemblyIR = {
   schema: 'morphloom.assembly/0.1',
   name: 'Laurel Homes Building B · HABS OH-2468-A',
@@ -421,6 +432,7 @@ export const LAUREL_HOMES_BUILDING_B_IR: AssemblyIR = {
       note: 'HABS first-floor plan union: south connector, two north returns, and the 27 ft center wing projecting from the opposite south facade.',
     },
   },
+  architecturalProgram,
   metadata: {
     assetKind: 'building',
     buildingType: 'multifamily-apartment',

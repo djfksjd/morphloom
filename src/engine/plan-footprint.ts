@@ -23,7 +23,7 @@ export interface PlanFootprintDescriptor {
   maximumFalseNegativeFraction?: number;
   maximumVoidOccupancy?: number;
   evidence: {
-    status: 'measured' | 'datasheet';
+    status: 'measured' | 'datasheet' | 'authored';
     source: string;
     note: string;
   };
@@ -152,7 +152,7 @@ function regionsOverlap(a: PlanFootprintRegion, b: PlanFootprintRegion): boolean
   return false;
 }
 
-export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescriptor): void {
+export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescriptor,allowAuthoredBaseline=false): void {
   if (!descriptor || descriptor.schema !== 'morphloom.plan-footprint/0.1') {
     throw new Error('Unsupported plan-footprint schema.');
   }
@@ -191,7 +191,7 @@ export function validatePlanFootprintDescriptor(descriptor: PlanFootprintDescrip
   ] as const) {
     if (!Number.isFinite(value) || value < 0 || value > 1) throw new Error(`Plan-footprint ${label} is invalid.`);
   }
-  if (!descriptor.evidence || !['measured', 'datasheet'].includes(descriptor.evidence.status)
+  if (!descriptor.evidence || !(allowAuthoredBaseline?['measured','datasheet','authored']:['measured','datasheet']).includes(descriptor.evidence.status)
     || typeof descriptor.evidence.source !== 'string' || descriptor.evidence.source.length < 1
     || descriptor.evidence.source.length > 500 || typeof descriptor.evidence.note !== 'string'
     || descriptor.evidence.note.length < 1 || descriptor.evidence.note.length > 1_000) {
@@ -207,8 +207,39 @@ function contains(region: PlanFootprintRegion, xMm: number, zMm: number): boolea
   return pointInPolygon(regionPolygon(region), xMm, zMm);
 }
 
-export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootprintDescriptor): PlanFootprintAudit {
-  validatePlanFootprintDescriptor(descriptor);
+/** Opt-in actual projected-triangle occupancy. Legacy raycast callers remain unchanged. */
+function rasterTriangleOccupancy(objects:THREE.Object3D[],grid:{minX:number;minZ:number;stepX:number;stepZ:number;cellsX:number;cellsZ:number},budget={triangles:0,work:0}):Uint8Array {
+ const {minX,minZ,stepX,stepZ,cellsX,cellsZ}=grid,mask=new Uint8Array(cellsX*cellsZ);
+ const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3();
+ const edge=(p:THREE.Vector3,q:THREE.Vector3,x:number,z:number)=>(q.x-p.x)*(z-p.z)-(q.z-p.z)*(x-p.x);
+ for(const object of objects)object.traverse(node=>{
+  if(!(node instanceof THREE.Mesh))return;
+  if(node instanceof THREE.SkinnedMesh||node instanceof THREE.InstancedMesh)throw Error('Floor projection requires a static non-instanced polygon mesh.');
+  const geometry=node.geometry,position=geometry.getAttribute('position'),index=geometry.index;if(!position)return;
+  const count=index?.count??position.count;
+  if(geometry.drawRange.start!==0||(Number.isFinite(geometry.drawRange.count)&&geometry.drawRange.count<count))throw Error('Partial draw ranges require a separate floor contract.');
+  for(let i=0;i+2<count;i+=3){
+   if(++budget.triangles>200000)throw Error('Floor projection triangle budget exceeded.');
+   a.fromBufferAttribute(position,index?index.getX(i):i).applyMatrix4(node.matrixWorld).multiplyScalar(1000);
+   b.fromBufferAttribute(position,index?index.getX(i+1):i+1).applyMatrix4(node.matrixWorld).multiplyScalar(1000);
+   c.fromBufferAttribute(position,index?index.getX(i+2):i+2).applyMatrix4(node.matrixWorld).multiplyScalar(1000);
+   if(![a.x,a.z,b.x,b.z,c.x,c.z].every(Number.isFinite))throw Error('Floor projection has non-finite vertices.');
+   const area=edge(a,b,c.x,c.z);if(Math.abs(area)<=1e-12)continue;
+   const sign=Math.sign(area),epsilon=Math.abs(area)*1e-12;
+   const lowX=Math.max(0,Math.ceil((Math.min(a.x,b.x,c.x)-minX)/stepX-.5)),highX=Math.min(cellsX-1,Math.floor((Math.max(a.x,b.x,c.x)-minX)/stepX-.5));
+   const lowZ=Math.max(0,Math.ceil((Math.min(a.z,b.z,c.z)-minZ)/stepZ-.5)),highZ=Math.min(cellsZ-1,Math.floor((Math.max(a.z,b.z,c.z)-minZ)/stepZ-.5));
+   for(let z=lowZ;z<=highZ;z++)for(let x=lowX;x<=highX;x++){
+    if(++budget.work>16000000)throw Error('Floor projection work budget exceeded.');
+    const offset=z*cellsX+x;if(mask[offset])continue;
+    const px=minX+(x+.5)*stepX,pz=minZ+(z+.5)*stepZ;
+    if(sign*edge(a,b,px,pz)>=-epsilon&&sign*edge(b,c,px,pz)>=-epsilon&&sign*edge(c,a,px,pz)>=-epsilon)mask[offset]=1;
+   }
+  }
+ });
+ return mask;
+}
+export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootprintDescriptor,execution?:{projection:'triangle-raster';budget?:{triangles:number;work:number};allowAuthoredBaseline?:boolean}): PlanFootprintAudit {
+  validatePlanFootprintDescriptor(descriptor,execution?.allowAuthoredBaseline===true);
   root.updateMatrixWorld(true);
   const missingComponentIds = descriptor.componentIds.filter((id) => !root.getObjectByName(id));
   const footprintObjects = descriptor.componentIds
@@ -236,6 +267,8 @@ export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootpri
   const cellsZ = Math.max(32, Math.round(longestResolution * depthMm / Math.max(widthMm, depthMm)));
   const stepX = widthMm / cellsX;
   const stepZ = depthMm / cellsZ;
+  if(execution && execution.projection!=='triangle-raster')throw Error('Unsupported footprint execution method.');
+  const projected=execution?rasterTriangleOccupancy(footprintObjects,{minX:targetEnvelope.minX,minZ:targetEnvelope.minZ,stepX,stepZ,cellsX,cellsZ},execution.budget):undefined;
   const rayHeight = Number.isFinite(objectBounds.max.y) ? objectBounds.max.y + Math.max(1, objectBounds.max.y - objectBounds.min.y + 1) : 1;
   const raycaster = new THREE.Raycaster();
   const down = new THREE.Vector3(0, -1, 0);
@@ -251,8 +284,9 @@ export function auditPlanFootprint(root: THREE.Object3D, descriptor: PlanFootpri
     for (let xIndex = 0; xIndex < cellsX; xIndex += 1) {
       const xMm = targetEnvelope.minX + (xIndex + 0.5) * stepX;
       const target = descriptor.targetRegions.some((region) => contains(region, xMm, zMm));
-      raycaster.set(new THREE.Vector3(xMm / 1000, rayHeight, zMm / 1000), down);
-      const actual = footprintObjects.length > 0 && raycaster.intersectObjects(footprintObjects, true).length > 0;
+      let actual:boolean;
+      if(projected)actual=projected[zIndex*cellsX+xIndex]===1;
+      else {raycaster.set(new THREE.Vector3(xMm / 1000, rayHeight, zMm / 1000), down);actual=footprintObjects.length>0&&raycaster.intersectObjects(footprintObjects,true).length>0;}
       if (target) targetCells += 1;
       if (actual) actualCells += 1;
       if (target && actual) intersectionCells += 1;

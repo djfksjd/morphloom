@@ -1,0 +1,42 @@
+[
+  {
+    "scope": "blender-cross-domain",
+    "command": [
+      "node_modules/.bin/vite-node",
+      "scripts/blender-cross-domain-benchmark.ts",
+      "outputs/native-039-authored-20261003/fixtures",
+      "benchmarks/blender-cross-domain-latest.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "scope": "blender-cross-domain-edit",
+    "command": [
+      "node_modules/.bin/vite-node",
+      "scripts/blender-cross-domain-edit-benchmark.ts",
+      "outputs/native-039-authored-20261003/fixtures",
+      "benchmarks/blender-cross-domain-edit-latest.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "scope": "godot-cross-domain",
+    "command": [
+      "node_modules/.bin/vite-node",
+      "scripts/godot-cross-domain-benchmark.ts",
+      "outputs/native-039-authored-20261003/fixtures",
+      "benchmarks/godot-cross-domain-latest.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "scope": "prusaslicer",
+    "command": [
+      "node_modules/.bin/vite-node",
+      "scripts/prusaslicer-print-benchmark.ts",
+      "outputs/native-039-authored-20261003/fixtures",
+      "benchmarks/prusaslicer-latest.json"
+    ],
+    "exitCode": 0
+  }
+]

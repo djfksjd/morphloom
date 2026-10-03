@@ -1,0 +1,23 @@
+{
+  "sameCameraAndLights": true,
+  "alphaIdentical": true,
+  "rgbaMeanAbsoluteDifference": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "rgbaMaximumDifference": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "currentPixel450x500": [
+    222,
+    222,
+    222,
+    255
+  ],
+  "scope": "neutral artifact pixel diagnostics; geometric preservation is separately verified from buffers"
+}

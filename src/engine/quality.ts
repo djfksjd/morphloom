@@ -1,3 +1,4 @@
+import {fingerprintJson} from './delivery-validation';
 import type { CharacterSpec, HumanPack, ProductSpec, QualityCheck, QualityReport, ReferenceEvidence } from '../types';
 import { deriveBodyTopology, type CharacterMetrics } from './character';
 import type { ProductMetrics } from './product';
@@ -160,11 +161,17 @@ export function evaluateProductQuality(
   const baseReferenceFidelityScore = evidence
     ? Math.min(envelopeScore, evidence.portraitSuitability)
     : missingReconstructionEvidence ? 45 : envelopeScore;
-  const programCompleteness = Number(assemblyIR?.metadata?.programCompleteness ?? 0);
+  const compiledProgram = metrics?.architecturalProgram;
+  const programContract = assemblyIR?.architecturalProgram;
+  const programVerified = Boolean(programContract && compiledProgram?.schema==='morphloom.architectural-program-audit/0.1'
+    && compiledProgram.scope===programContract.scope && compiledProgram.contractFingerprint===fingerprintJson(programContract)
+    && compiledProgram.pass && compiledProgram.required===programContract.inventoryIds.length
+    && compiledProgram.passed===compiledProgram.required && compiledProgram.completeness===100);
+  const programCompleteness = programContract ? programVerified ? 100 : compiledProgram?.completeness ?? 0 : Number(assemblyIR?.metadata?.programCompleteness ?? 0);
   const referenceFidelityScore = isSurfaceBenchmark
     ? 100
     : isArchitectural
-      ? detailAudit?.modelPass && planFootprint?.pass && programCompleteness >= 100
+      ? detailAudit?.modelPass && planFootprint?.pass && programCompleteness >= 100 && (!programContract || programVerified)
         ? 100
         : Math.min(59, programCompleteness || baseReferenceFidelityScore)
       : baseReferenceFidelityScore;
@@ -197,7 +204,7 @@ export function evaluateProductQuality(
       + connectivity.documentedVerificationWires / connectivity.wires) / 3
     : 0;
   const connectivityScore = isArchitectural
-    ? detailAudit?.modelPass && planFootprint?.pass ? 100 : 50
+    ? detailAudit?.modelPass && planFootprint?.pass && (!programContract || programVerified) ? 100 : 50
     : isSurfaceBenchmark
       ? 100
       : isKnife || isExteriorOnly
@@ -232,7 +239,7 @@ export function evaluateProductQuality(
     },
     {
       id: 'silhouette',
-      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? '공간·가구 배치 완성도' : isSurfaceBenchmark ? '표면 벤치마크 완성도' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
+      label: evidence ? '참조 증거 완성도' : isKnife ? '실물 단위 포락' : isArchitectural ? programContract ? '선언된 층별 공간 영역' : '공간·가구 배치 완성도' : isSurfaceBenchmark ? '표면 벤치마크 완성도' : isImportedAssembly || missingReconstructionEvidence ? '부품 근거 완성도' : '기구 치수 일관성',
       score: referenceFidelityScore,
       status: status(referenceFidelityScore),
       detail: evidence
@@ -240,7 +247,7 @@ export function evaluateProductQuality(
         : isSurfaceBenchmark
           ? '각진 굵은 골재·미세 골재·역청 홈·실변위·PBR 맵 회귀 조건 충족'
         : isArchitectural && detailAudit
-          ? `필수 공간 ${programCompleteness}% · 실제 평면 IoU ${planFootprint?.iou.toFixed(3) ?? '미검증'} · 과잉 ${planFootprint ? `${(planFootprint.falsePositiveFraction * 100).toFixed(1)}%` : '미검증'} · 누락 ${planFootprint ? `${(planFootprint.falseNegativeFraction * 100).toFixed(1)}%` : '미검증'} · ${detailAudit.modelBlockers.length || planFootprint?.blockers.length ? [...detailAudit.modelBlockers, ...(planFootprint?.blockers ?? [])].join(' · ') : '모델 프로그램·도면 재투영 통과'}`
+          ? `${programContract ? '선언 영역' : '필수 공간'} ${Math.round(programCompleteness*10)/10}%${programContract ? ` · 실제 영역 ${compiledProgram?.passed ?? 0}/${programContract.inventoryIds.length} · 방의 벽체·가구·안전은 미검증` : ''} · 실제 평면 IoU ${planFootprint?.iou.toFixed(3) ?? '미검증'} · 과잉 ${planFootprint ? `${(planFootprint.falsePositiveFraction * 100).toFixed(1)}%` : '미검증'} · 누락 ${planFootprint ? `${(planFootprint.falseNegativeFraction * 100).toFixed(1)}%` : '미검증'} · ${detailAudit.modelBlockers.length || planFootprint?.blockers.length || compiledProgram?.blockers.length ? [...detailAudit.modelBlockers, ...(planFootprint?.blockers ?? []), ...(compiledProgram?.blockers ?? [])].join(' · ') : '모델 프로그램·도면 재투영 통과'}`
         : isImportedAssembly && engineering
           ? `근거 기록 ${Math.round(engineering.componentEvidenceCoverage * 100)}% · measured/datasheet ${engineering.componentEvidence.measured + engineering.componentEvidence.datasheet} · estimated ${engineering.componentEvidence.estimated} · inferred ${engineering.componentEvidence.inferred}`
         : isImportedAssembly ? envelopeLabel
@@ -264,14 +271,14 @@ export function evaluateProductQuality(
       label: isKnife ? '실무 토폴로지' : isArchitectural ? '건축 셸 범위 검수' : isSurfaceBenchmark ? '다중 스케일 표면 검수' : isExteriorOnly ? '외관 범위 검수' : '전기 연결·실물 검수',
       score: connectivityScore,
       status: isArchitectural
-        ? detailAudit?.modelPass ? 'pass' : 'blocked'
+        ? detailAudit?.modelPass && (!programContract || programVerified) ? 'pass' : 'blocked'
         : isKnife || isExteriorOnly || isSurfaceBenchmark ? 'pass' : connectivity?.errors.length ? 'blocked' : connectivity?.productionReady ? 'pass' : 'warn',
       detail: isKnife
         ? '전체 부품 폐쇄·매니폴드·퇴화 삼각형 0 자동 검사'
         : isArchitectural
-          ? detailAudit?.modelPass
-            ? '외곽·개구부·연속 지붕·실내 프로그램·배치 편집·조명 프리뷰 검증 통과'
-            : `모델 범위 검증 BLOCKED · ${detailAudit?.modelBlockers.join(' · ') ?? '감사 정보 없음'}`
+          ? detailAudit?.modelPass && (!programContract || programVerified)
+            ? programContract ? '선언된 층별 평면 영역과 메시 검수 · 지붕·가구·구조·안전 승인 제외' : '외곽·개구부·연속 지붕·실내 프로그램·배치 편집·조명 프리뷰 검증 통과'
+            : `모델 범위 검증 BLOCKED · ${[...(detailAudit?.modelBlockers ?? []), ...(compiledProgram?.blockers ?? [])].join(' · ') || '감사 정보 없음'}`
         : isSurfaceBenchmark
           ? `실제 지오메트리 RMS ${topology?.maximumSurfaceRmsRoughnessMm?.toFixed(2) ?? '—'} mm · 최고–최저 ${topology?.maximumSurfacePeakToValleyMm?.toFixed(2) ?? '—'} mm · ${topology?.referenceReliefMeshes ? `사진 높이장 ${topology.referenceReliefSamples}점 · 불규칙성 ${topology.maximumReferenceIrregularity?.toFixed(2)}` : '절차 골재'} · micro-normal·roughness-map 동시 검증`
         : isExteriorOnly

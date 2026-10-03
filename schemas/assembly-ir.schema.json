@@ -15,6 +15,7 @@
     "partDecomposition": { "type": "object" },
     "visualPlan": { "type": "object" },
     "planFootprint": { "type": "object" },
+    "architecturalProgram": { "$ref": "#/$defs/architecturalProgram" },
     "dimensionContracts": { "type": "array", "minItems": 1, "maxItems": 256, "items": { "$ref": "#/$defs/dimensionContract" } },
     "components": {
       "type": "array",
@@ -23,7 +24,9 @@
       "items": { "$ref": "#/$defs/component" }
     }
   },
+  "allOf": [{"if": {"required": ["architecturalProgram"]}, "then": {"required": ["metadata"], "properties": {"metadata": {"required": ["assetKind", "scope", "ceilingAndRoofIncluded"], "properties": {"assetKind": {"const": "building"}, "scope": {"const": "architectural-shell-only"}, "ceilingAndRoofIncluded": {"const": false}}}}}}],
   "$defs": {
+    "architecturalProgram": {"type": "object", "additionalProperties": false, "required": ["schema", "scope", "inventoryIds", "requirements"], "properties": {"schema": {"const": "morphloom.architectural-program/0.1"}, "scope": {"const": "floor-cutaway"}, "inventoryIds": {"type": "array", "minItems": 1, "maxItems": 128, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$"}}, "requirements": {"type": "array", "minItems": 1, "maxItems": 128, "items": {"type": "object", "additionalProperties": false, "required": ["id", "kind", "footprint"], "properties": {"id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$"}, "kind": {"enum": ["room-floor", "stair-landing"]}, "footprint": {"type": "object", "required": ["schema", "componentIds", "targetRegions", "evidence"], "properties": {"schema": {"const": "morphloom.plan-footprint/0.1"}, "evidence": {"type": "object", "required": ["status", "source", "note"], "properties": {"status": {"const": "authored"}, "source": {"type": "string", "minLength": 1}, "note": {"type": "string", "minLength": 1}}}}}}}}}},
     "vec3": {
       "type": "array",
       "prefixItems": [{ "type": "number" }, { "type": "number" }, { "type": "number" }],

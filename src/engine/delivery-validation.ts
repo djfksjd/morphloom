@@ -3,7 +3,7 @@ import type { AssemblyIR } from './assembly-ir';
 import type { AssetKind, CharacterSpec, HumanPack, ProductSpec } from '../types';
 import type { GltfStandardValidation } from './gltf-standard-validation';
 
-export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.38.0';
+export const DELIVERY_PIPELINE_REVISION = 'morphloom-compiler/0.39.0';
 export const SCENE_FINGERPRINT_REVISION = 'morphloom-scene-fingerprint/0.6.0';
 
 export type DeliveryAuditStatus = 'running' | 'pass' | 'warn' | 'blocked';
@@ -44,6 +44,8 @@ export interface SceneSnapshot {
   gameLods: number;
   collisionPrimitives: number;
   collisionManifestFingerprint: string;
+  architecturalProgramAudits: number;
+  architecturalProgramAuditFingerprint: string;
   planFootprintAudits: number;
   planFootprintAuditFingerprint: string;
   dimensionAudits: number;
@@ -448,6 +450,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
   let gameLods = 0;
   let collisionPrimitives = 0;
   let collisionManifestFingerprint = 'none';
+  let architecturalProgramAudits=0;
+  let architecturalProgramAuditFingerprint='none';
   let planFootprintAudits = 0;
   let planFootprintAuditFingerprint = 'none';
   let dimensionAudits = 0;
@@ -488,6 +492,10 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
         animationManifestFingerprint = fingerprintJson(gameDelivery.animationSet);
         hasher.text(animationManifestFingerprint);
       }
+    }
+    const architecturalProgramAudit=object.userData.architecturalProgramAudit as {schema?:string}|undefined;
+    if(architecturalProgramAudit?.schema==='morphloom.architectural-program-audit/0.1'){
+      architecturalProgramAudits+=1;architecturalProgramAuditFingerprint=fingerprintJson(architecturalProgramAudit);hasher.text(architecturalProgramAuditFingerprint);
     }
     const planFootprintAudit = object.userData.planFootprintAudit as { schema?: string } | undefined;
     if (planFootprintAudit?.schema === 'morphloom.plan-footprint-audit/0.1') {
@@ -709,6 +717,8 @@ export function snapshotScene(root: THREE.Object3D): SceneSnapshot {
     gameLods,
     collisionPrimitives,
     collisionManifestFingerprint,
+    architecturalProgramAudits,
+    architecturalProgramAuditFingerprint,
     planFootprintAudits,
     planFootprintAuditFingerprint,
     dimensionAudits,
@@ -914,6 +924,7 @@ export function compareGlbRoundTrip(
   if (source.collisionManifestFingerprint !== reopened.collisionManifestFingerprint) {
     blockers.push('collision primitive semantics changed during GLB round-trip');
   }
+  if(source.architecturalProgramAudits!==reopened.architecturalProgramAudits||source.architecturalProgramAuditFingerprint!==reopened.architecturalProgramAuditFingerprint)blockers.push('architectural-program audit metadata changed during GLB round-trip');
   if (source.planFootprintAudits !== reopened.planFootprintAudits
     || source.planFootprintAuditFingerprint !== reopened.planFootprintAuditFingerprint) {
     blockers.push('plan-footprint audit metadata changed during GLB round-trip');
@@ -949,6 +960,8 @@ export function compareGlbRoundTrip(
     && materialPayloadParity
     && source.gameLods === reopened.gameLods && source.collisionPrimitives === reopened.collisionPrimitives
     && source.collisionManifestFingerprint === reopened.collisionManifestFingerprint
+    && source.architecturalProgramAudits === reopened.architecturalProgramAudits
+    && source.architecturalProgramAuditFingerprint === reopened.architecturalProgramAuditFingerprint
     && source.planFootprintAudits === reopened.planFootprintAudits
     && source.planFootprintAuditFingerprint === reopened.planFootprintAuditFingerprint
     && source.dimensionAudits === reopened.dimensionAudits

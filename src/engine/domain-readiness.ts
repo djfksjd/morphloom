@@ -1,3 +1,4 @@
+import {auditArchitecturalProgram} from './architectural-program';
 import * as THREE from 'three';
 import { inspectUvAttribute, signedUvDoubleArea, UV_DOUBLE_AREA_EPSILON, WORLD_DOUBLE_AREA_EPSILON } from './uv-quality';
 import type { AssemblyGeometryIR, AssemblyIR } from './assembly-ir';
@@ -14,7 +15,7 @@ import type { ConnectivityReport } from './connectivity';
 import type { EngineeringAuditReport } from './engineering-audit';
 import { auditAssemblyDetail } from './generation-policy';
 
-export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.14.0';
+export const DOMAIN_READINESS_REVISION = 'morphloom-domain-readiness/0.15.0';
 
 const CRITICAL_DEFORMATION_JOINTS = [
   'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R',
@@ -1216,6 +1217,15 @@ export function auditDomainReadiness(input: DomainReadinessInput): DomainReadine
   }
 
   if (input.domain === 'architecture') {
+    if(assemblyIR?.architecturalProgram){
+      try {
+        const program=auditArchitecturalProgram(input.root,assemblyIR.architecturalProgram);
+        add('architecture-program','선언된 층별 실제 영역',program.pass,program.pass?100:0,`${program.passed}/${program.required} · ${program.blockers.join(' · ')} · 벽체/가구/안전 승인 제외`);
+      } catch(error) {
+        add('architecture-program','선언된 층별 실제 영역',false,0,error instanceof Error?error.message:'Invalid architectural program');
+      }
+    }
+
     const footprint = input.root.userData.planFootprintAudit as PlanFootprintAudit | undefined;
     add('architecture-topology', '건축 셸 토폴로지', topology.pass, topology.pass ? 100 : 0, `${topology.watertightMeshes}/${topology.meshes} 폐쇄형`);
     add('architecture-plan', '실제 도면 외곽 재투영', footprint?.pass === true,

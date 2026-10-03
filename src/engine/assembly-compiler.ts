@@ -1,3 +1,4 @@
+import {auditArchitecturalProgram,validateArchitecturalProgram} from './architectural-program';
 import {bladeLoftData,validateBladeSideWinding} from './blade-side-winding';
 import { createTubePath, validateTubeQuadraticCurve } from './tube-quadratic-curve';
 import {validateReferenceProjectionOrientation} from './reference-projection-orientation';
@@ -204,6 +205,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
   inspect(candidate.partDecomposition, 'partDecomposition');
   inspect(candidate.visualPlan, 'visualPlan');
   inspect(candidate.planFootprint, 'planFootprint');
+  inspect(candidate.architecturalProgram, 'architecturalProgram');
   inspect(candidate.dimensionContracts, 'dimensionContracts');
   for (const component of candidate.components as AssemblyComponentIR[]) {
     if (!component || typeof component !== 'object') throw new Error('AssemblyIR component is invalid.');
@@ -373,6 +375,10 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
     }
   }
   if (candidate.electrical) validateElectricalHarness(candidate.electrical, ids);
+  if(candidate.architecturalProgram){
+    validateArchitecturalProgram(candidate.architecturalProgram);
+    if(candidate.metadata?.assetKind!=='building'||candidate.metadata?.scope!=='architectural-shell-only'||candidate.metadata?.ceilingAndRoofIncluded!==false)throw Error('Floor-cutaway program requires explicit architectural-shell-only/no-roof scope; a full-building task cannot silently substitute it.');
+  }
   if (candidate.planFootprint) {
     validatePlanFootprintDescriptor(candidate.planFootprint);
     const missingFootprintIds = candidate.planFootprint.componentIds.filter((id) => !ids.has(id));
@@ -1445,6 +1451,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const topology = analyzeTopology(root);
   const engineering = inspectEngineeringEvidence(ir, connectivity);
   const planFootprint = ir.planFootprint ? auditPlanFootprint(root, ir.planFootprint) : undefined;
+  const architecturalProgram = ir.architecturalProgram ? auditArchitecturalProgram(root,ir.architecturalProgram) : undefined;
   const dimensionAudit = ir.dimensionContracts
     ? auditDimensionContracts(root, ir.dimensionContracts)
     : undefined;
@@ -1452,6 +1459,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   root.userData.topology = structuredClone(topology);
   root.userData.engineeringAudit = structuredClone(engineering);
   if (planFootprint) root.userData.planFootprintAudit = structuredClone(planFootprint);
+  if(architecturalProgram) root.userData.architecturalProgramAudit=structuredClone(architecturalProgram);
   if (dimensionAudit) root.userData.dimensionAudit = structuredClone(dimensionAudit);
   if (ir.fidelity) root.userData.fidelityContract = structuredClone(ir.fidelity);
   return {
@@ -1469,6 +1477,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
       topology,
       engineering,
       planFootprint,
+      architecturalProgram,
       dimensionAudit,
     },
   };

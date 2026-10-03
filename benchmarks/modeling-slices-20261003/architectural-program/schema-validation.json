@@ -1,0 +1,6 @@
+{
+  "pass": true,
+  "actualCurrentIr": true,
+  "authoredTargets": 48,
+  "measuredDefaultRejectsAuthored": "runtime regression test"
+}

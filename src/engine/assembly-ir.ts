@@ -1,3 +1,4 @@
+import type {ArchitecturalProgramDescriptor} from './architectural-program';
 import type {WireCapFinishIR} from './wire-cap-finish';
 import type {BladeSideWindingIR} from './blade-side-winding';
 import type { TubeQuadraticCurveIR } from './tube-quadratic-curve';
@@ -273,6 +274,8 @@ export interface AssemblyIR {
   visualPlan?: VisualPlanningContract;
   /** Source-derived plan regions checked against the compiled top-down mesh projection. */
   planFootprint?: PlanFootprintDescriptor;
+  /** Frozen declared floor/landing inventory checked against actual compiled triangles. */
+  architecturalProgram?: ArchitecturalProgramDescriptor;
   /** Evidence-bound dimensions re-measured from compiled world-space geometry. */
   dimensionContracts?: DimensionContract[];
   metadata?: Record<string, string | number | boolean>;
