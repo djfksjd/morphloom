@@ -1,0 +1,9 @@
+{
+  "pass": false,
+  "asset": "laurel-homes",
+  "actualQualityPanelBlocked": true,
+  "proofQualityReleaseReady": true,
+  "observedBlockedCheck": "spatial program 0%,score59",
+  "formatRoundtripStatus": "pass",
+  "method": "actual quality panel and native SAVE PROOF, no state injection"
+}

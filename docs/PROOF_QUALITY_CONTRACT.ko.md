@@ -1,0 +1,5 @@
+# Observed proof quality contract
+
+Reproduced after fresh native0.36 tests: actual Laurel quality is BLOCKED (spatial program score59) but native SAVE PROOF declares qualityReleaseReady:true from static asset definition. Format portability PASS is not quality release readiness.
+
+Fix only observed receipt publication: retain conservative static allow-list and additionally require the current quality panel not blocked. React dependencies and dedup must include that observed result so same source fingerprint cannot retain stale readiness. Existing bool/schema/IR/compiler/native file bytes and strict expected benchmark values stay unchanged; current false must fail prior expectation true until underlying quality is actually solved, never change expectation to pass. No schema shape change. <=3 public-code UNI_AI calls/small context;45minute checkpoint. Actual SAVE PROOF before/after + source/asset transition check, existing tests/check/build. Do not claim spatial program is fixed. Continue static/current browser native revalidation after correction.

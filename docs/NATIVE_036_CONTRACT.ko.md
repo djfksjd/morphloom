@@ -1,0 +1,5 @@
+# Native0.36 revalidation contract
+
+After orientation audit9385474, generate current-revision five-domain fixtures twice and record actual input/output SHA. No relabeling old native receipts. Fresh Blender import and component edit/reopen, installed Godot and Prusa checks; absent Unity is not-run. Export portability is independent of new local orientation failures or source-fidelity. Keep current error/warning/info/geometry/material/texture/hierarchy/rig/size thresholds. Existing cooling UV info23/global production blocker stays unless a reproduced legitimate fix is implemented (no UV deletion/dummy maps/threshold relaxation).
+
+Budget45minute checkpoint; existing polygon/texture budgets; one process at a time, no active QA browsers during CPU checks, no other user processes stopped. <=3 UNI_AI calls/public-code fragments only. Save failures and fresh revision-bound logs; if a new regression appears, diagnose once then minimally fix and retest. Actual program reopen proves only recorded adapter/domain tasks, not clinical/manufacturing/expert approval. Continue next demonstrated defect after current evidence.

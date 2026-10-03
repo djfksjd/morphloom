@@ -1,0 +1,64 @@
+[
+  {
+    "case": "fixtures",
+    "command": [
+      "npm",
+      "run",
+      "benchmark:fixtures",
+      "--",
+      "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-036-20261003/fixtures"
+    ],
+    "exitCode": 0,
+    "seconds": 7.39
+  },
+  {
+    "case": "blender-import",
+    "command": [
+      "npm",
+      "run",
+      "benchmark:blender-cross-domain",
+      "--",
+      "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-036-20261003/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/native-036-20261003/blender-import.json"
+    ],
+    "exitCode": 0,
+    "seconds": 21.06
+  },
+  {
+    "case": "blender-edit",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/blender-cross-domain-edit-benchmark.ts",
+      "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-036-20261003/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/native-036-20261003/blender-edit.json"
+    ],
+    "exitCode": 0,
+    "seconds": 46.06
+  },
+  {
+    "case": "godot",
+    "command": [
+      "npm",
+      "run",
+      "benchmark:godot-cross-domain",
+      "--",
+      "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-036-20261003/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/native-036-20261003/godot.json"
+    ],
+    "exitCode": 0,
+    "seconds": 8.2
+  },
+  {
+    "case": "prusa",
+    "command": [
+      "npm",
+      "run",
+      "benchmark:prusaslicer",
+      "--",
+      "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-036-20261003/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/native-036-20261003/prusa.json"
+    ],
+    "exitCode": 0,
+    "seconds": 13.16
+  }
+]

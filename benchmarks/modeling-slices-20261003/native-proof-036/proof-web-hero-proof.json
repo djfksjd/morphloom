@@ -2,7 +2,7 @@
   "schema": "morphloom.browser-roundtrip/0.4",
   "compilerRevision": "morphloom-compiler/0.36.0",
   "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
-  "generatedAt": "2026-10-03T04:18:20.497Z",
+  "generatedAt": "2026-10-03T04:18:09.798Z",
   "console": {
     "errors": 0,
     "warnings": 0,
@@ -41,24 +41,6 @@
       "texturePayloadParity": true,
       "materialPayloadParity": true,
       "qualityReleaseReady": false,
-      "validatorErrors": 0,
-      "validatorWarnings": 0,
-      "blockers": []
-    },
-    {
-      "id": "field-human-runtime-base",
-      "scope": "animation-game-runtime",
-      "status": "pass",
-      "inputFingerprint": "ea9be26f73b81358",
-      "buildFingerprint": "b2f078bc0e9cd087",
-      "sceneFingerprint": "9ac4dab658b20d9f",
-      "glbBytes": 5069580,
-      "boundsErrorMm": 0,
-      "namedNodeCoverage": 1,
-      "morphTargetPayloadParity": true,
-      "texturePayloadParity": true,
-      "materialPayloadParity": true,
-      "qualityReleaseReady": true,
       "validatorErrors": 0,
       "validatorWarnings": 0,
       "blockers": []

@@ -291,6 +291,7 @@ export function ViewerApp() {
       : evaluateProductQuality(productSpec, undefined, productMetrics, assemblyIR, deliveryAudit);
   }, [assemblyIR, assetKind, characterMetrics, deliveryAudit, pack, productMetrics, productSpec, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
+  const observedQualityReleaseReady = Boolean(quality && buildMetrics) && !qualityBlocked;
   const fidelityAudit = useMemo(() => assemblyIR?.fidelity
     ? auditFidelityContract(assemblyIR.fidelity, assemblyIR)
     : undefined, [assemblyIR]);
@@ -332,16 +333,19 @@ export function ViewerApp() {
   useEffect(() => {
     const definition = BROWSER_PROOF_ASSETS[activeAssetId];
     if (!definition || !deliveryAudit || deliveryAudit.status === 'running') return;
-    const receipt = createBrowserRoundTripAssetReceipt(definition, deliveryAudit);
+    const receipt = createBrowserRoundTripAssetReceipt({
+      ...definition, qualityReleaseReady: definition.qualityReleaseReady && observedQualityReleaseReady,
+    }, deliveryAudit);
     setBrowserProofReceipts((current) => {
       const previous = current[definition.id];
       if (previous
         && previous.sceneFingerprint === receipt.sceneFingerprint
         && previous.status === receipt.status
-        && previous.glbBytes === receipt.glbBytes) return current;
+        && previous.glbBytes === receipt.glbBytes
+        && previous.qualityReleaseReady === receipt.qualityReleaseReady) return current;
       return { ...current, [definition.id]: receipt };
     });
-  }, [activeAssetId, deliveryAudit]);
+  }, [activeAssetId, deliveryAudit, observedQualityReleaseReady]);
 
   const clearMeasurement = useCallback(() => {
     viewportRef.current?.clearMeasurement();
@@ -916,7 +920,9 @@ export function ViewerApp() {
                 disabled={Object.keys(browserProofReceipts).length === 0}
                 onClick={() => {
                   const report = createBrowserRoundTripReport(
-                    Object.values(browserProofReceipts),
+                    Object.values(browserProofReceipts).map(receipt =>
+                      receipt.id === BROWSER_PROOF_ASSETS[activeAssetId]?.id && !observedQualityReleaseReady
+                        ? { ...receipt, qualityReleaseReady: false } : receipt),
                     getBrowserConsoleEvidence(),
                   );
                   downloadJson(report, 'morphloom-browser-roundtrip.json');

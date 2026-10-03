@@ -1,0 +1,64 @@
+[
+  {
+    "case": "published-tests",
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 54.92
+  },
+  {
+    "case": "source-tests",
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 55.35
+  },
+  {
+    "case": "check",
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.08
+  },
+  {
+    "case": "build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.41
+  },
+  {
+    "case": "benchmark",
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "exitCode": 0,
+    "seconds": 3.9
+  },
+  {
+    "case": "quality-production",
+    "command": [
+      "npm",
+      "run",
+      "quality:production"
+    ],
+    "exitCode": 1,
+    "seconds": 9.57
+  }
+]

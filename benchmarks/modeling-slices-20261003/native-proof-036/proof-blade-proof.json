@@ -1,0 +1,49 @@
+{
+  "schema": "morphloom.browser-roundtrip/0.4",
+  "compilerRevision": "morphloom-compiler/0.36.0",
+  "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
+  "generatedAt": "2026-10-03T04:17:22.647Z",
+  "console": {
+    "errors": 0,
+    "warnings": 0,
+    "samples": []
+  },
+  "assets": [
+    {
+      "id": "laurel-homes-architectural-review",
+      "scope": "measured-architecture",
+      "status": "pass",
+      "inputFingerprint": "dcc5115f789fa45c",
+      "buildFingerprint": "b61c2f9175fe7ae4",
+      "sceneFingerprint": "75e95c2b8eb1e525",
+      "glbBytes": 29601576,
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "morphTargetPayloadParity": true,
+      "texturePayloadParity": true,
+      "materialPayloadParity": true,
+      "qualityReleaseReady": false,
+      "validatorErrors": 0,
+      "validatorWarnings": 0,
+      "blockers": []
+    },
+    {
+      "id": "ornate-knife-product-visualization",
+      "scope": "industrial-design",
+      "status": "pass",
+      "inputFingerprint": "7674a2d7f407c667",
+      "buildFingerprint": "8defd19c3bbac42f",
+      "sceneFingerprint": "d70d1ebe673fd2d3",
+      "glbBytes": 1161332,
+      "boundsErrorMm": 6.938893903907228e-15,
+      "namedNodeCoverage": 1,
+      "morphTargetPayloadParity": true,
+      "texturePayloadParity": true,
+      "materialPayloadParity": true,
+      "qualityReleaseReady": false,
+      "validatorErrors": 0,
+      "validatorWarnings": 0,
+      "blockers": []
+    }
+  ]
+}
