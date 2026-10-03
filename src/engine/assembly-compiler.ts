@@ -1,3 +1,4 @@
+import {bladeLoftData,validateBladeSideWinding} from './blade-side-winding';
 import { createTubePath, validateTubeQuadraticCurve } from './tube-quadratic-curve';
 import {validateReferenceProjectionOrientation} from './reference-projection-orientation';
 import {validateSpurGear,gearExtrude,type SpurGearGeometry} from './spur-gear';
@@ -215,6 +216,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       throw new Error(`Invalid component text metadata in ${component.id}.`);
     }
     if (component.geometry.op !== 'tube' && ('capWinding' in component.geometry || 'capFinish' in component.geometry)) throw new Error('Cap winding declaration requires a tube.');
+    if (component.geometry.op !== 'bladeLoft' && 'sideWinding' in component.geometry) throw new Error('Blade winding requires bladeLoft.');
     inspect(component.geometry, `${component.id}.geometry`);
     switch (component.geometry.op) {
       case 'roundedBox': {
@@ -295,6 +297,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         }
         break;
       case 'bladeLoft':
+        validateBladeSideWinding(component.geometry);
         if (component.geometry.sections.length < 2 || component.geometry.thickness <= 0 || component.geometry.apexThickness < 0) {
           throw new Error(`Blade loft is invalid in ${component.id}.`);
         }
@@ -706,63 +709,7 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       return result;
     }
     case 'bladeLoft': {
-      const across = geometry.grindCurve ?? [0.04, 0.62, 1, 0.62, 0.04];
-      const acrossX = [-1, -0.5, 0, 0.5, 1];
-      const positions: number[] = [];
-      const indices: number[] = [];
-      const halfStock = mm(geometry.thickness) * 0.5;
-      const halfApex = mm(geometry.apexThickness) * 0.5;
-      for (const [y, halfWidth] of geometry.sections) {
-        for (const side of [1, -1]) {
-          for (let column = 0; column < acrossX.length; column += 1) {
-            const profile = across[column];
-            positions.push(
-              mm(halfWidth * acrossX[column]),
-              mm(y),
-              side * (halfApex + (halfStock - halfApex) * profile),
-            );
-          }
-        }
-      }
-      const columns = acrossX.length;
-      const rowStride = columns * 2;
-      for (let row = 0; row < geometry.sections.length - 1; row += 1) {
-        const base = row * rowStride;
-        const next = (row + 1) * rowStride;
-        for (let column = 0; column < columns - 1; column += 1) {
-          const fa = base + column;
-          const fb = base + column + 1;
-          const fc = next + column + 1;
-          const fd = next + column;
-          indices.push(fa, fb, fc, fa, fc, fd);
-          const ba = base + columns + column;
-          const bb = next + columns + column;
-          const bc = next + columns + column + 1;
-          const bd = base + columns + column + 1;
-          indices.push(ba, bb, bc, ba, bc, bd);
-        }
-        for (const column of [0, columns - 1]) {
-          const frontA = base + column;
-          const frontB = next + column;
-          const backB = next + columns + column;
-          const backA = base + columns + column;
-          if (column === 0) indices.push(frontA, backB, frontB, frontA, backA, backB);
-          else indices.push(frontA, frontB, backB, frontA, backB, backA);
-        }
-      }
-      const cap = (row: number, reverse: boolean) => {
-        const base = row * rowStride;
-        for (let column = 0; column < columns - 1; column += 1) {
-          const a = base + column;
-          const b = base + column + 1;
-          const c = base + columns + column + 1;
-          const d = base + columns + column;
-          if (reverse) indices.push(a, c, b, a, d, c);
-          else indices.push(a, b, c, a, c, d);
-        }
-      };
-      cap(0, true);
-      cap(geometry.sections.length - 1, false);
+      const {positions,indices}=bladeLoftData(geometry);
       const result = new THREE.BufferGeometry();
       result.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
       result.setIndex(indices);

@@ -1,0 +1,402 @@
+{
+  "blade_core": {
+    "attributes": {
+      "position": "6578be6525654cea5ed16ad3e4fa5c1b6f1375482e412b64b2d1d3cdf2f2fc41",
+      "normal": "774c30bdb693d6847f7e865b214e4d88a05279ef81520d501cf9ca06f4376186",
+      "uv": "ed16c4fcadd8404d23b3ec0524f5578d0b260fccb1cb63dc093d183e297df314"
+    },
+    "index": null,
+    "material": "{\"color\":\"#aeb5bd\",\"roughness\":0.16,\"metalness\":0.88,\"surface\":\"polished-metal\",\"anisotropy\":0.58,\"microNormalStrength\":0.12}",
+    "position": [
+      0,
+      0.018,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fuller_front": {
+    "attributes": {
+      "position": "ae3834c84b78e45cc53c2153882c72c92750e6d785044bfc310d69838d8d55b4",
+      "uv": "6bf0c85771d9bc6278b5aaabb64ec37a3d7aac7d9cbfdf49c52da9f843328a61",
+      "normal": "10e0147b9f0bc785c5d14565f5025cc9bcd4525e6fdfcd01bfd5079fc8dc5f90"
+    },
+    "index": null,
+    "material": "{\"color\":\"#25344d\",\"roughness\":0.32,\"metalness\":0.88,\"surface\":\"anodized-metal\"}",
+    "position": [
+      0,
+      0.018,
+      0.00315
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fuller_back": {
+    "attributes": {
+      "position": "ae3834c84b78e45cc53c2153882c72c92750e6d785044bfc310d69838d8d55b4",
+      "uv": "6bf0c85771d9bc6278b5aaabb64ec37a3d7aac7d9cbfdf49c52da9f843328a61",
+      "normal": "10e0147b9f0bc785c5d14565f5025cc9bcd4525e6fdfcd01bfd5079fc8dc5f90"
+    },
+    "index": null,
+    "material": "{\"color\":\"#25344d\",\"roughness\":0.32,\"metalness\":0.88,\"surface\":\"anodized-metal\"}",
+    "position": [
+      0,
+      0.018,
+      -0.00315
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "cross_guard": {
+    "attributes": {
+      "position": "5dad36f5a8ef96d93983a4940ad4b16a391a1e36a500f036f7de95b38b66da34",
+      "normal": "353a4bde3a2677e511447ce7bb5289f796f71dcffd968b7bfff3504db7894300",
+      "uv": "8e41a51679b1523733ed4ab8fe257c7525958ce7b223a991b5e19e118aab5716"
+    },
+    "index": null,
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.3,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      0.01,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "guard_scroll_left": {
+    "attributes": {
+      "position": "d01077db24cb898e9a8e10bdfb6525031416bbaa20909638117fcde176df93d9",
+      "normal": "b63a2ab684d517ef30fd7347dcf55a207e23c9ccb3211f65eca0c9e16652f04f",
+      "uv": "c18ba25095a0b9e6e608d260f59f7819b5919fb74d4eacc5025221d5c07e1816"
+    },
+    "index": "0eae4c53fa11c7fa83882f967f7bedf744ef2444872b7cb315e43afea68be0da",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "guard_scroll_right": {
+    "attributes": {
+      "position": "0943a5cd695980021c1b8ca8df9233ee239b629fdded006009f29e1b50d0ecb4",
+      "normal": "b781c688637bfd78bc01a4a4ccbab0b4a73b3f31b653541eb1f66b881f006b02",
+      "uv": "c18ba25095a0b9e6e608d260f59f7819b5919fb74d4eacc5025221d5c07e1816"
+    },
+    "index": "0eae4c53fa11c7fa83882f967f7bedf744ef2444872b7cb315e43afea68be0da",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_core": {
+    "attributes": {
+      "position": "752f7834531dd06148aa8a181dd3ee4134e27601656d9830609ff68692e58b97",
+      "normal": "86437f5398f8d2aba0a98b0d9c9c4ec0c5a8f733824226d1c1b5494f2aa047b5",
+      "uv": "9771b29820cfacbb669e702e567beb1e122ab75670bf532cf5988e294e53c17c"
+    },
+    "index": null,
+    "material": "{\"color\":\"#5c241b\",\"surface\":\"wood\",\"roughness\":0.72,\"metalness\":0.03,\"textureScale\":[6,24]}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_ring_1": {
+    "attributes": {
+      "position": "8943451bf04f9cdcdd497f96fe615333b616ac27c4f0981080f46056d653b425",
+      "normal": "0920d93b547456b9c5d133b827258e0bcaa4743b91b9ef2e33c0af3a21a29674",
+      "uv": "5e8e9ce208fd0e1e55185b823b388ab3299e37a7c6447d04ba4dbb94505b58f2"
+    },
+    "index": "23f97e6fd6ad303b94b77b4a5bcff943be3f7467ddbe2e5bdabec3c5979ec03a",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      -0.005,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_ring_2": {
+    "attributes": {
+      "position": "148b9c0208f2b19e9172c864ea0cb4a2ce5dd66cf4dd995b49f027cd298c89dd",
+      "normal": "0920d93b547456b9c5d133b827258e0bcaa4743b91b9ef2e33c0af3a21a29674",
+      "uv": "5e8e9ce208fd0e1e55185b823b388ab3299e37a7c6447d04ba4dbb94505b58f2"
+    },
+    "index": "23f97e6fd6ad303b94b77b4a5bcff943be3f7467ddbe2e5bdabec3c5979ec03a",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      -0.028,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_ring_3": {
+    "attributes": {
+      "position": "148b9c0208f2b19e9172c864ea0cb4a2ce5dd66cf4dd995b49f027cd298c89dd",
+      "normal": "0920d93b547456b9c5d133b827258e0bcaa4743b91b9ef2e33c0af3a21a29674",
+      "uv": "5e8e9ce208fd0e1e55185b823b388ab3299e37a7c6447d04ba4dbb94505b58f2"
+    },
+    "index": "23f97e6fd6ad303b94b77b4a5bcff943be3f7467ddbe2e5bdabec3c5979ec03a",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      -0.052,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_ring_4": {
+    "attributes": {
+      "position": "148b9c0208f2b19e9172c864ea0cb4a2ce5dd66cf4dd995b49f027cd298c89dd",
+      "normal": "0920d93b547456b9c5d133b827258e0bcaa4743b91b9ef2e33c0af3a21a29674",
+      "uv": "5e8e9ce208fd0e1e55185b823b388ab3299e37a7c6447d04ba4dbb94505b58f2"
+    },
+    "index": "23f97e6fd6ad303b94b77b4a5bcff943be3f7467ddbe2e5bdabec3c5979ec03a",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      -0.076,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_ring_5": {
+    "attributes": {
+      "position": "148b9c0208f2b19e9172c864ea0cb4a2ce5dd66cf4dd995b49f027cd298c89dd",
+      "normal": "0920d93b547456b9c5d133b827258e0bcaa4743b91b9ef2e33c0af3a21a29674",
+      "uv": "5e8e9ce208fd0e1e55185b823b388ab3299e37a7c6447d04ba4dbb94505b58f2"
+    },
+    "index": "23f97e6fd6ad303b94b77b4a5bcff943be3f7467ddbe2e5bdabec3c5979ec03a",
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.28,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      -0.092,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "grip_wrap": {
+    "attributes": {
+      "position": "1005b9f7c18752e922f71d1520a82624b2f52aef6bafa18be25b2559458e9d6e",
+      "normal": "cc11574fe86b32794ffaf0f1b1b7bd5056b30ee712f7708591f6bb2d0958df16",
+      "uv": "e2b1e3754c34658b24865c7d00cc59893d37331e51fdecb589d2807dea5c5cde"
+    },
+    "index": "28c7c2eaa4bed00fd896863eb9ad726ad2c4ea587cf712f6dfcfa39bd4db9aa2",
+    "material": "{\"color\":\"#2b1712\",\"surface\":\"leather\",\"roughness\":0.86,\"metalness\":0,\"textureScale\":[9,20]}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "pommel": {
+    "attributes": {
+      "position": "46538aa80fda9ec5c05dec5d862197d7c74030d3f597987366e42ebc32cd4565",
+      "normal": "76345dea19063edf728c8611b54c05855e2462346c3b49f2144d2e3e433a87d2",
+      "uv": "af110410b2860e362c863e2eb07a8e4c4b18a317067223e85c95d4ed831f43f7"
+    },
+    "index": null,
+    "material": "{\"color\":\"#b79343\",\"roughness\":0.24,\"metalness\":0.88,\"surface\":\"brushed-metal\"}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "pommel_gem": {
+    "attributes": {
+      "position": "5d8f26b8b11c920a9f7de162054672ab2351aafe59646c8b94e88c4245deb32d",
+      "normal": "917bcf6005ec37397ab69e0920d907ae5c8945252bcde0ccf42e80ae2b583605",
+      "uv": "4c3dc927ba20abce412b8c23019ff13c1f54538e75b4a843374a35546bf13647"
+    },
+    "index": "94d36496bf4f4f648e636c72c679fc80d92768f13108d7280f657c620b4cda5f",
+    "material": "{\"color\":\"#20437b\",\"surface\":\"sapphire\",\"roughness\":0.025,\"metalness\":0,\"transmission\":0.58,\"ior\":1.76}",
+    "position": [
+      0,
+      -0.112,
+      0.015
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1.25,
+      0.42
+    ]
+  },
+  "blade_engraving": {
+    "attributes": {
+      "position": "5dde97b785af1591f6cf532bd4c0e79b6b40ab1ac715699f2cfaf873e56aa73f",
+      "normal": "f2c0b0196a380c4f141819e61f2666d4fce8686c877b41a725a9591cf4d17a37",
+      "uv": "a8cf348d97e712b36a5d462b3dc2e649da35571c0a93543dd7db309d0411f60b"
+    },
+    "index": "68ef74c468bb0d33690d73a56adc67935ab22588a42667b2465c3d6de6e5e41c",
+    "material": "{\"color\":\"#d3ad52\",\"roughness\":0.14,\"metalness\":0.88,\"surface\":\"polished-metal\"}",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  }
+}

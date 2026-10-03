@@ -1,0 +1,81 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "name": "BLADE WINDING EDIT",
+  "units": "mm",
+  "components": [
+    {
+      "id": "blade_core",
+      "name": "양날 검신",
+      "category": "mechanical",
+      "materialName": "고탄소 공구강",
+      "detail": "중심 능선과 대칭 팁을 가진 닫힌 베벨 압출 메시",
+      "geometry": {
+        "op": "bladeLoft",
+        "sections": [
+          [
+            0,
+            18
+          ],
+          [
+            54,
+            20
+          ],
+          [
+            108,
+            23
+          ],
+          [
+            158,
+            25
+          ],
+          [
+            205,
+            23
+          ],
+          [
+            246,
+            19
+          ],
+          [
+            279,
+            13
+          ],
+          [
+            304,
+            7
+          ],
+          [
+            320,
+            2.6
+          ],
+          [
+            326,
+            0.28
+          ]
+        ],
+        "thickness": 5.4,
+        "apexThickness": 0.16,
+        "grindCurve": [
+          0.025,
+          0.58,
+          1,
+          0.58,
+          0.025
+        ]
+      },
+      "position": [
+        0,
+        18,
+        0
+      ],
+      "material": {
+        "color": "#aeb5bd",
+        "roughness": 0.16,
+        "metalness": 0.88,
+        "surface": "polished-metal",
+        "anisotropy": 0.58,
+        "microNormalStrength": 0.12
+      }
+    }
+  ]
+}

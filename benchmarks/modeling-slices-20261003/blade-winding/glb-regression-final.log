@@ -1,0 +1,485 @@
+{
+  "compiler": "morphloom-compiler/0.37.0",
+  "rows": [
+    {
+      "id": "legacy",
+      "sha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+      "bytes": 1149888,
+      "topology": {
+        "meshes": 16,
+        "watertightMeshes": 16,
+        "boundaryEdges": 0,
+        "inconsistentWindingEdges": 122,
+        "orientationConsistent": false,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "selfIntersections": 0,
+        "selfIntersectionMeshes": 0,
+        "selfIntersectionCandidatePairs": 15275,
+        "selfIntersectionComplete": true,
+        "triangles": 18930,
+        "edgeTaperMeshes": 0,
+        "verifiedEdgeTaperSegments": 0,
+        "surfaceReliefMeshes": 0,
+        "surfaceReliefSamples": 0,
+        "surfaceAggregateFeatures": 0,
+        "referenceReliefMeshes": 0,
+        "referenceReliefSamples": 0,
+        "maximumReferenceIrregularity": 0,
+        "pass": true,
+        "details": [
+          {
+            "name": "blade_core",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 40,
+            "orientationConsistent": false,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "fuller_front",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "fuller_back",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "cross_guard",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "guard_scroll_left",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 24,
+            "orientationConsistent": false,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "guard_scroll_right",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 24,
+            "orientationConsistent": false,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_core",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_1",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_2",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_3",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_4",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_5",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_wrap",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 18,
+            "orientationConsistent": false,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "pommel",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "pommel_gem",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "blade_engraving",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 16,
+            "orientationConsistent": false,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 17,
+          "meshes": 16,
+          "materials": 16,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "bounds": {
+        "min": [
+          -0.06039266288280487,
+          -0.1289999932050705,
+          -0.017999999225139618
+        ],
+        "max": [
+          0.06039266288280487,
+          0.3440000050067902,
+          0.018149999929592014
+        ]
+      },
+      "triangles": 18930,
+      "repeatSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63"
+    },
+    {
+      "id": "corrected",
+      "sha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+      "bytes": 1154448,
+      "topology": {
+        "meshes": 16,
+        "watertightMeshes": 16,
+        "boundaryEdges": 0,
+        "inconsistentWindingEdges": 0,
+        "orientationConsistent": true,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "selfIntersections": 0,
+        "selfIntersectionMeshes": 0,
+        "selfIntersectionCandidatePairs": 15275,
+        "selfIntersectionComplete": true,
+        "triangles": 18930,
+        "edgeTaperMeshes": 0,
+        "verifiedEdgeTaperSegments": 0,
+        "surfaceReliefMeshes": 0,
+        "surfaceReliefSamples": 0,
+        "surfaceAggregateFeatures": 0,
+        "referenceReliefMeshes": 0,
+        "referenceReliefSamples": 0,
+        "maximumReferenceIrregularity": 0,
+        "pass": true,
+        "details": [
+          {
+            "name": "blade_core",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "fuller_front",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "fuller_back",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "cross_guard",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "guard_scroll_left",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "guard_scroll_right",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_core",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_1",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_2",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_3",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_4",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_ring_5",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "grip_wrap",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "pommel",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "pommel_gem",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          },
+          {
+            "name": "blade_engraving",
+            "boundaryEdges": 0,
+            "inconsistentWindingEdges": 0,
+            "orientationConsistent": true,
+            "nonManifoldEdges": 0,
+            "degenerateTriangles": 0,
+            "selfIntersections": 0,
+            "selfIntersectionComplete": true,
+            "watertight": true
+          }
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 17,
+          "meshes": 16,
+          "materials": 16,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "bounds": {
+        "min": [
+          -0.06039266288280487,
+          -0.1289999932050705,
+          -0.017999999225139618
+        ],
+        "max": [
+          0.06039266288280487,
+          0.3440000050067902,
+          0.018149999929592014
+        ]
+      },
+      "triangles": 18930,
+      "repeatSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8"
+    }
+  ]
+}

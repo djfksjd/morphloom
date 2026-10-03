@@ -1,0 +1,81 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "name": "BLADE WINDING EDIT",
+  "units": "mm",
+  "components": [
+    {
+      "id": "blade_core",
+      "name": "\uc591\ub0a0 \uac80\uc2e0",
+      "category": "mechanical",
+      "materialName": "\uace0\ud0c4\uc18c \uacf5\uad6c\uac15",
+      "detail": "\uc911\uc2ec \ub2a5\uc120\uacfc \ub300\uce6d \ud301\uc744 \uac00\uc9c4 \ub2eb\ud78c \ubca0\ubca8 \uc555\ucd9c \uba54\uc2dc",
+      "geometry": {
+        "op": "bladeLoft",
+        "sections": [
+          [
+            0,
+            18
+          ],
+          [
+            54,
+            20
+          ],
+          [
+            108,
+            23
+          ],
+          [
+            158,
+            25
+          ],
+          [
+            205,
+            23
+          ],
+          [
+            246,
+            19
+          ],
+          [
+            279,
+            13
+          ],
+          [
+            304,
+            7
+          ],
+          [
+            320,
+            2.6
+          ],
+          [
+            326,
+            0.28
+          ]
+        ],
+        "thickness": 5.4,
+        "apexThickness": 0.16,
+        "grindCurve": [
+          0.025,
+          0.58,
+          1,
+          0.58,
+          0.025
+        ]
+      },
+      "position": [
+        0,
+        18,
+        0
+      ],
+      "material": {
+        "color": "#aeb5bd",
+        "roughness": 0.16,
+        "metalness": 0.88,
+        "surface": "polished-metal",
+        "anisotropy": 0.58,
+        "microNormalStrength": 0.12
+      }
+    }
+  ]
+}

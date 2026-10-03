@@ -1,0 +1,13 @@
+{
+  "validator": "local python jsonschema Draft202012Validator",
+  "rows": [
+    {
+      "enabled": false,
+      "pass": true
+    },
+    {
+      "enabled": true,
+      "pass": true
+    }
+  ]
+}

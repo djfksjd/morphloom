@@ -1,0 +1,73 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected.glb",
+    "bytes": 1154448,
+    "sha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected-edited.glb",
+    "bytes": 1112380,
+    "sha256": "99535fadde0587065084384118c0742c0f0dac3d259f07900fd8ca5ba571af7f"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected-edited-stability.glb",
+    "bytes": 1112080,
+    "sha256": "95756225384049e8cb22682b425757cad404a908cd21e9224098a3807b9b146b"
+  },
+  "edit": {
+    "component": "blade_core",
+    "kind": "translation",
+    "translationMm": [
+      0.0,
+      12.0,
+      0.0
+    ]
+  },
+  "meshCount": 16,
+  "unchangedMeshes": 15,
+  "maximumUnchangedCenterDriftMm": 1.1641532182693481e-07,
+  "maximumUnchangedSizeDriftMm": 1.4901161193847656e-05,
+  "topologyChanges": [
+    {
+      "component": "blade_engraving",
+      "before": {
+        "vertices": 677,
+        "edges": 1842,
+        "polygons": 1168
+      },
+      "after": {
+        "vertices": 679,
+        "edges": 1843,
+        "polygons": 1168
+      }
+    },
+    {
+      "component": "grip_wrap",
+      "before": {
+        "vertices": 1792,
+        "edges": 4975,
+        "polygons": 3186
+      },
+      "after": {
+        "vertices": 1795,
+        "edges": 4977,
+        "polygons": 3186
+      }
+    }
+  ],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 0,
+    "actions": 0,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}

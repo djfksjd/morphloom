@@ -13,6 +13,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
     detail: '중심 능선과 대칭 팁을 가진 닫힌 베벨 압출 메시',
     geometry: {
       op: 'bladeLoft',
+      sideWinding: { schema: 'morphloom.blade-side-winding/0.1', direction: 'outward' },
       sections: [[0, 18], [54, 20], [108, 23], [158, 25], [205, 23], [246, 19], [279, 13], [304, 7], [320, 2.6], [326, 0.28]],
       thickness: 5.4,
       apexThickness: 0.16,
@@ -41,13 +42,13 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
   components.push({
     id: 'guard_scroll_left', name: '좌측 가드 스크롤', category: 'mechanical', materialName: '청동 합금',
     detail: '곡선 스윕으로 만든 좌측 장식 퀼론',
-    geometry: { op: 'tube', radius: 2.4, radialSegments: 12, points: [[-34, 10, 0], [-51, 8, 0], [-58, 1, 0], [-52, -7, 0], [-44, -3, 0]] },
+    geometry: { op: 'tube', capFinish: 'flat-outward', radius: 2.4, radialSegments: 12, points: [[-34, 10, 0], [-51, 8, 0], [-58, 1, 0], [-52, -7, 0], [-44, -3, 0]] },
     material: metal(spec.batteryColor, 0.28),
   });
   components.push({
     id: 'guard_scroll_right', name: '우측 가드 스크롤', category: 'mechanical', materialName: '청동 합금',
     detail: '곡선 스윕으로 만든 우측 장식 퀼론',
-    geometry: { op: 'tube', radius: 2.4, radialSegments: 12, points: [[34, 10, 0], [51, 8, 0], [58, 1, 0], [52, -7, 0], [44, -3, 0]] },
+    geometry: { op: 'tube', capFinish: 'flat-outward', radius: 2.4, radialSegments: 12, points: [[34, 10, 0], [51, 8, 0], [58, 1, 0], [52, -7, 0], [44, -3, 0]] },
     material: metal(spec.batteryColor, 0.28),
   });
   components.push({
@@ -74,7 +75,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
   components.push({
     id: 'grip_wrap', name: '나선형 가죽 래핑', category: 'mechanical', materialName: '천연 가죽',
     detail: '연속 곡선 스윕으로 구성된 실제 입체 손잡이 감기',
-    geometry: { op: 'tube', points: helixPoints, radius: 1.25, tubularSegments: 176, radialSegments: 9 },
+    geometry: { op: 'tube', capFinish: 'flat-outward', points: helixPoints, radius: 1.25, tubularSegments: 176, radialSegments: 9 },
     material: { color: '#2b1712', surface: 'leather', roughness: 0.86, metalness: 0, textureScale: [9, 20] },
   });
   components.push({
@@ -95,7 +96,7 @@ export function createOrnateKnifeIR(spec: ProductSpec): AssemblyIR {
   components.push({
     id: 'blade_engraving', name: '검신 룬 각인', category: 'mechanical', materialName: '금 상감',
     detail: '칼날 표면을 따라 흐르는 곡선 스윕 금속 상감 장식',
-    geometry: { op: 'tube', points: engravingPoints, radius: 0.72, tubularSegments: 72, radialSegments: 8 },
+    geometry: { op: 'tube', capFinish: 'flat-outward', points: engravingPoints, radius: 0.72, tubularSegments: 72, radialSegments: 8 },
     material: metal('#d3ad52', 0.14, 'polished-metal'),
   });
   return {

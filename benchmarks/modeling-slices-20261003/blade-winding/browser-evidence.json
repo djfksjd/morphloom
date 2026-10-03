@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "cases": [
+    "actual Cancel preserves source",
+    "Apply current0 from40",
+    "Undo40",
+    "Redo0",
+    "Save IR/reopen exact",
+    "regular GLB export"
+  ],
+  "method": "native canvas/inputs/save/upload; no state injection",
+  "glbSha256": "292025e1d7ff2c96c77b0ce4b9324fc827fb040af27a238ad241c4aa2cfcacf9"
+}

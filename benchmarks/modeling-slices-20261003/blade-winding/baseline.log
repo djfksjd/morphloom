@@ -1,0 +1,127 @@
+{
+  "compiler": "0.36.0",
+  "total": 122,
+  "details": [
+    {
+      "name": "blade_core",
+      "boundaryEdges": 0,
+      "inconsistentWindingEdges": 40,
+      "orientationConsistent": false,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "selfIntersections": 0,
+      "selfIntersectionComplete": true,
+      "watertight": true
+    },
+    {
+      "name": "guard_scroll_left",
+      "boundaryEdges": 0,
+      "inconsistentWindingEdges": 24,
+      "orientationConsistent": false,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "selfIntersections": 0,
+      "selfIntersectionComplete": true,
+      "watertight": true
+    },
+    {
+      "name": "guard_scroll_right",
+      "boundaryEdges": 0,
+      "inconsistentWindingEdges": 24,
+      "orientationConsistent": false,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "selfIntersections": 0,
+      "selfIntersectionComplete": true,
+      "watertight": true
+    },
+    {
+      "name": "grip_wrap",
+      "boundaryEdges": 0,
+      "inconsistentWindingEdges": 18,
+      "orientationConsistent": false,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "selfIntersections": 0,
+      "selfIntersectionComplete": true,
+      "watertight": true
+    },
+    {
+      "name": "blade_engraving",
+      "boundaryEdges": 0,
+      "inconsistentWindingEdges": 16,
+      "orientationConsistent": false,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "selfIntersections": 0,
+      "selfIntersectionComplete": true,
+      "watertight": true
+    }
+  ],
+  "geometry": [
+    {
+      "id": "blade_core",
+      "op": "bladeLoft"
+    },
+    {
+      "id": "fuller_front",
+      "op": "extrude"
+    },
+    {
+      "id": "fuller_back",
+      "op": "extrude"
+    },
+    {
+      "id": "cross_guard",
+      "op": "roundedBox"
+    },
+    {
+      "id": "guard_scroll_left",
+      "op": "tube"
+    },
+    {
+      "id": "guard_scroll_right",
+      "op": "tube"
+    },
+    {
+      "id": "grip_core",
+      "op": "lathe"
+    },
+    {
+      "id": "grip_ring_1",
+      "op": "torus"
+    },
+    {
+      "id": "grip_ring_2",
+      "op": "torus"
+    },
+    {
+      "id": "grip_ring_3",
+      "op": "torus"
+    },
+    {
+      "id": "grip_ring_4",
+      "op": "torus"
+    },
+    {
+      "id": "grip_ring_5",
+      "op": "torus"
+    },
+    {
+      "id": "grip_wrap",
+      "op": "tube"
+    },
+    {
+      "id": "pommel",
+      "op": "lathe"
+    },
+    {
+      "id": "pommel_gem",
+      "op": "sphere"
+    },
+    {
+      "id": "blade_engraving",
+      "op": "tube"
+    }
+  ]
+}

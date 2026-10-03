@@ -1,0 +1,1410 @@
+{
+  "schema": "morphloom.blade-winding-verification/0.1",
+  "baseCommit": "cc94fa1745c7d047e905fbd3909ca0a4e7d9a391",
+  "compiler": "morphloom-compiler/0.37.0",
+  "glb": {
+    "compiler": "morphloom-compiler/0.37.0",
+    "rows": [
+      {
+        "id": "legacy",
+        "sha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "bytes": 1149888,
+        "topology": {
+          "meshes": 16,
+          "watertightMeshes": 16,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 122,
+          "orientationConsistent": false,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 15275,
+          "selfIntersectionComplete": true,
+          "triangles": 18930,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "blade_core",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 40,
+              "orientationConsistent": false,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "fuller_front",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "fuller_back",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "cross_guard",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "guard_scroll_left",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 24,
+              "orientationConsistent": false,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "guard_scroll_right",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 24,
+              "orientationConsistent": false,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_core",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_1",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_2",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_3",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_4",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_5",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_wrap",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 18,
+              "orientationConsistent": false,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "pommel",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "pommel_gem",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "blade_engraving",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 16,
+              "orientationConsistent": false,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        },
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "bounds": {
+          "min": [
+            -0.06039266288280487,
+            -0.1289999932050705,
+            -0.017999999225139618
+          ],
+          "max": [
+            0.06039266288280487,
+            0.3440000050067902,
+            0.018149999929592014
+          ]
+        },
+        "triangles": 18930,
+        "repeatSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63"
+      },
+      {
+        "id": "corrected",
+        "sha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "bytes": 1154448,
+        "topology": {
+          "meshes": 16,
+          "watertightMeshes": 16,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 0,
+          "orientationConsistent": true,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 15275,
+          "selfIntersectionComplete": true,
+          "triangles": 18930,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "blade_core",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "fuller_front",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "fuller_back",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "cross_guard",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "guard_scroll_left",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "guard_scroll_right",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_core",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_1",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_2",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_3",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_4",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_ring_5",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "grip_wrap",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "pommel",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "pommel_gem",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "blade_engraving",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        },
+        "validation": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        },
+        "bounds": {
+          "min": [
+            -0.06039266288280487,
+            -0.1289999932050705,
+            -0.017999999225139618
+          ],
+          "max": [
+            0.06039266288280487,
+            0.3440000050067902,
+            0.018149999929592014
+          ]
+        },
+        "triangles": 18930,
+        "repeatSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8"
+      }
+    ]
+  },
+  "blenderDirected": {
+    "pass": true,
+    "rows": [
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "target": "blade_core",
+        "triangles": 196,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 40,
+        "orientationPass": false,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "target": "guard_scroll_left",
+        "triangles": 1176,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 24,
+        "orientationPass": false,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "target": "guard_scroll_right",
+        "triangles": 1176,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 24,
+        "orientationPass": false,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "target": "grip_wrap",
+        "triangles": 3186,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 18,
+        "orientationPass": false,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+        "target": "blade_engraving",
+        "triangles": 1168,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 16,
+        "orientationPass": false,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "target": "blade_core",
+        "triangles": 196,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 0,
+        "orientationPass": true,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "target": "guard_scroll_left",
+        "triangles": 1176,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 0,
+        "orientationPass": true,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "target": "guard_scroll_right",
+        "triangles": 1176,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 0,
+        "orientationPass": true,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "target": "grip_wrap",
+        "triangles": 3186,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 0,
+        "orientationPass": true,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      },
+      {
+        "schema": "morphloom.blender-cap-orientation/0.1",
+        "blenderVersion": "5.2.1 LTS",
+        "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+        "target": "blade_engraving",
+        "triangles": 1168,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "degenerateTriangles": 0,
+        "inconsistentDirectedEdges": 0,
+        "orientationPass": true,
+        "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+      }
+    ]
+  },
+  "blenderEdit": {
+    "schema": "morphloom.blender-component-edit-audit/0.2",
+    "application": "Blender",
+    "version": "5.2.1 LTS",
+    "input": {
+      "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected.glb",
+      "bytes": 1154448,
+      "sha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8"
+    },
+    "output": {
+      "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected-edited.glb",
+      "bytes": 1112380,
+      "sha256": "99535fadde0587065084384118c0742c0f0dac3d259f07900fd8ca5ba571af7f"
+    },
+    "stabilityOutput": {
+      "path": "/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/corrected-edited-stability.glb",
+      "bytes": 1112080,
+      "sha256": "95756225384049e8cb22682b425757cad404a908cd21e9224098a3807b9b146b"
+    },
+    "edit": {
+      "component": "blade_core",
+      "kind": "translation",
+      "translationMm": [
+        0.0,
+        12.0,
+        0.0
+      ]
+    },
+    "meshCount": 16,
+    "unchangedMeshes": 15,
+    "maximumUnchangedCenterDriftMm": 1.1641532182693481e-07,
+    "maximumUnchangedSizeDriftMm": 1.4901161193847656e-05,
+    "topologyChanges": [
+      {
+        "component": "blade_engraving",
+        "before": {
+          "vertices": 677,
+          "edges": 1842,
+          "polygons": 1168
+        },
+        "after": {
+          "vertices": 679,
+          "edges": 1843,
+          "polygons": 1168
+        }
+      },
+      {
+        "component": "grip_wrap",
+        "before": {
+          "vertices": 1792,
+          "edges": 4975,
+          "polygons": 3186
+        },
+        "after": {
+          "vertices": 1795,
+          "edges": 4977,
+          "polygons": 3186
+        }
+      }
+    ],
+    "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+    "runtime": {
+      "armatures": 0,
+      "actions": 0,
+      "preserved": true
+    },
+    "skinnedSemanticDeferrals": [],
+    "stabilityChanges": [],
+    "warnings": [],
+    "pass": true,
+    "blockers": [],
+    "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+  },
+  "browser": {
+    "pass": true,
+    "cases": [
+      "actual Cancel preserves source",
+      "Apply current0 from40",
+      "Undo40",
+      "Redo0",
+      "Save IR/reopen exact",
+      "regular GLB export"
+    ],
+    "method": "native canvas/inputs/save/upload; no state injection",
+    "glbSha256": "292025e1d7ff2c96c77b0ce4b9324fc827fb040af27a238ad241c4aa2cfcacf9"
+  },
+  "commands": [
+    {
+      "scope": "publish-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "publish-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "publish-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "publish-benchmark",
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "source-tests",
+      "command": [
+        "npm",
+        "test",
+        "--",
+        "--maxWorkers=1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "source-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "source-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "source-benchmark",
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0
+    },
+    {
+      "scope": "quality-production",
+      "command": [
+        "npm",
+        "run",
+        "quality:production"
+      ],
+      "exitCode": 1
+    }
+  ],
+  "tests": {
+    "published": 694,
+    "originalWithUserTests": 713,
+    "firstFailureRetained": "outdated compiler version assertion; indexed-delivery test assumption diagnostic"
+  },
+  "schemaValidation": {
+    "validator": "local python jsonschema Draft202012Validator",
+    "rows": [
+      {
+        "enabled": false,
+        "pass": true
+      },
+      {
+        "enabled": true,
+        "pass": true
+      }
+    ]
+  },
+  "uniai": {
+    "model": "gpt-6-astra",
+    "calls": 3,
+    "tokens": 12107,
+    "claude": "not-run; no confirmed exhaustion",
+    "reviewScope": "public-code static review; final canonical preflight extraction locally tested"
+  },
+  "notRun": [
+    "source-geometry fidelity",
+    "manufacturing/CAD/BREP",
+    "independent human expert review",
+    "other-domain Blender/Godot/Prusa revalidation at0.37"
+  ],
+  "sourceHashes": {
+    "src/engine/assembly-ir.ts": "d7ae2683af059bba35d4eac2cbdfc21d4c9ef1913ef6289afb94aa035601950e",
+    "src/engine/assembly-compiler.ts": "0ae65d57353c0f3518e79160c69033a60dde7be2fd8772fd025e315b21910f16",
+    "src/engine/assembly-edit.ts": "c2f59d8ae24f13a083328af257bce3700e548bd167b7d5bfa1c70474a48ad785",
+    "src/AssemblyComponentEditor.tsx": "2152d812b2b271634c840b1f1e88321e19f653aab3083e93c1729201ad04583c",
+    "src/engine/knife.ts": "942b99b737e72901773993d3eed62d7e5e90da46ec545f7892bf10fcb2595f36",
+    "src/engine/delivery-validation.ts": "cfe20dbe63cadc1288c44d3ce74afc1342b9c61c9bed7804d9f77a82db82b1ea",
+    "schemas/assembly-ir.schema.json": "6f6c88ba200927c188822aee2cb5b8f266e5b8cc2feedfc4a646cb99179d85ac",
+    "src/engine/blade-side-winding.ts": "bc8473f54403de0b640d0dfda530142e9b7f9c1127ab41e56102fcdf5a995d43",
+    "tests/blade-winding.test.ts": "b9e67b7362de5b0ae5f1dac75869685b715a09201049daf2de0445052d2aa727",
+    "scripts/blade-winding-regression.ts": "edef67b620201c90435cde3e14527f24b6511aeb50e5fe6ecba472f0e5384e0d",
+    "scripts/blade-winding-browser-regression.py": "9b3f4c88357c4bb9b678f48e736d6a37c71e116d71ed6cf0ffd7a0616ebd2bbd",
+    "docs/BLADE_WINDING_CONTRACT.ko.md": "a9de75c519ef1c3396bd591bc7af34992436b5a47eed6380662bb361f7fbf7e3",
+    "tests/browser-proof-recorder.test.ts": "61bee0f01e5cc3c5656322177de76cb649dc8cac0d16bb28f971374354d31367",
+    "scripts/current-browser-proof-regression.py": "1ab95270089b3406b1426e6f343d102405e4cd3e4350c7519fdf3767ede091f7",
+    "docs/BLADE_WINDING_STATUS.ko.md": "6666465fa7876e94b2c158317150bdbdfed5e7d58db4789affc7f32299962e35"
+  },
+  "files": [
+    {
+      "file": "asphalt-surface-proof.json",
+      "sourceSha256": "8b1a31c13ba293d01eb49b71c55c7a30307714215890bd7dd00d1a2038dd51bc",
+      "archivedSha256": "8b1a31c13ba293d01eb49b71c55c7a30307714215890bd7dd00d1a2038dd51bc",
+      "bytes": 2033
+    },
+    {
+      "file": "baseline.log",
+      "sourceSha256": "a00c3e3bca744120d91a5861ccab44916450d5be1602bb9beb9d352d1fc97c4a",
+      "archivedSha256": "a00c3e3bca744120d91a5861ccab44916450d5be1602bb9beb9d352d1fc97c4a",
+      "bytes": 2573
+    },
+    {
+      "file": "before-buffers.json",
+      "sourceSha256": "2376ccc2349e084cd046b73d2f631341aef1a088687724a9ef09624e3d5543fe",
+      "archivedSha256": "2376ccc2349e084cd046b73d2f631341aef1a088687724a9ef09624e3d5543fe",
+      "bytes": 10417
+    },
+    {
+      "file": "before-triage.json",
+      "sourceSha256": "91f667ae4caea590ba98e41858b1f3af862b7f9b19f6a2f7bd95a760338af049",
+      "archivedSha256": "91f667ae4caea590ba98e41858b1f3af862b7f9b19f6a2f7bd95a760338af049",
+      "bytes": 2572
+    },
+    {
+      "file": "before.assembly.json",
+      "sourceSha256": "9fee9ac8e3bf7e4cdc1191ee948b6105ba5da198ef61930ba47c712170affd67",
+      "archivedSha256": "9fee9ac8e3bf7e4cdc1191ee948b6105ba5da198ef61930ba47c712170affd67",
+      "bytes": 18711
+    },
+    {
+      "file": "blade-close-space.json",
+      "sourceSha256": "ef5c8caac42823ed3c7c2413998be380ef019c8dfcea57ba7fe010e47ea016ba",
+      "archivedSha256": "ef5c8caac42823ed3c7c2413998be380ef019c8dfcea57ba7fe010e47ea016ba",
+      "bytes": 133
+    },
+    {
+      "file": "blade-proof.json",
+      "sourceSha256": "9957cdefff034b0a1c71c3113f47779d4b4b14e1f555de72dab9987fd87404d6",
+      "archivedSha256": "9957cdefff034b0a1c71c3113f47779d4b4b14e1f555de72dab9987fd87404d6",
+      "bytes": 1466
+    },
+    {
+      "file": "blender-directed-evidence.json",
+      "sourceSha256": "fbc191ff40b7e64fdb574f25646b57048d358382e34cdeecc967abb4f43262f5",
+      "archivedSha256": "fbc191ff40b7e64fdb574f25646b57048d358382e34cdeecc967abb4f43262f5",
+      "bytes": 5361
+    },
+    {
+      "file": "blender-edit.json",
+      "sourceSha256": "e9e0b14a9bd7d4756c72cc1757008b7b996c9de99eed71b3b714142b46116b06",
+      "archivedSha256": "e9e0b14a9bd7d4756c72cc1757008b7b996c9de99eed71b3b714142b46116b06",
+      "bytes": 2533
+    },
+    {
+      "file": "blender-edit.log",
+      "sourceSha256": "d70406990983987bb85f6c0776611602d8936638f7699464e48db1127e0e9c9b",
+      "archivedSha256": "d70406990983987bb85f6c0776611602d8936638f7699464e48db1127e0e9c9b",
+      "bytes": 13401
+    },
+    {
+      "file": "browser-evidence.json",
+      "sourceSha256": "052485d38954d4110d486e514789dbc227324e7afc7537c9cc4e1e758e434f1a",
+      "archivedSha256": "052485d38954d4110d486e514789dbc227324e7afc7537c9cc4e1e758e434f1a",
+      "bytes": 335
+    },
+    {
+      "file": "browser-observed-quality.json",
+      "sourceSha256": "fa26d44b3100eeebff9f6fa42670746063a3abb1182e4ca460197ddb2fb7a496",
+      "archivedSha256": "fa26d44b3100eeebff9f6fa42670746063a3abb1182e4ca460197ddb2fb7a496",
+      "bytes": 14308
+    },
+    {
+      "file": "browser.log",
+      "sourceSha256": "2e107cf46be1aae04cf32e959d09e3b051473ab0fde217204fbde203387a812c",
+      "archivedSha256": "2e107cf46be1aae04cf32e959d09e3b051473ab0fde217204fbde203387a812c",
+      "bytes": 297
+    },
+    {
+      "file": "commands.json",
+      "sourceSha256": "8acbc9b8ce8264ef84bd99b710b185d48a64df885a272c120912db2da9a5f529",
+      "archivedSha256": "8acbc9b8ce8264ef84bd99b710b185d48a64df885a272c120912db2da9a5f529",
+      "bytes": 1166
+    },
+    {
+      "file": "cooler-proof.json",
+      "sourceSha256": "e4620d025d1919804454aafa90bb17d143cc9574bd8ec3021a6deeb85af8ea2f",
+      "archivedSha256": "e4620d025d1919804454aafa90bb17d143cc9574bd8ec3021a6deeb85af8ea2f",
+      "bytes": 3190
+    },
+    {
+      "file": "corrected-blade_core.json",
+      "sourceSha256": "0f1dd6605f43e5897ea3716921f3a6d2043e1354359eb23e281f66801611a50c",
+      "archivedSha256": "0f1dd6605f43e5897ea3716921f3a6d2043e1354359eb23e281f66801611a50c",
+      "bytes": 474
+    },
+    {
+      "file": "corrected-blade_core.log",
+      "sourceSha256": "de1f506e2c463f54499ccbf6efd1f6b943e97bfd2beb6b29ca408b661ca89305",
+      "archivedSha256": "de1f506e2c463f54499ccbf6efd1f6b943e97bfd2beb6b29ca408b661ca89305",
+      "bytes": 1348
+    },
+    {
+      "file": "corrected-blade_engraving.json",
+      "sourceSha256": "c48718fe96d71b73f05ef14358141b43fd1552f355be9ec1ae707344785a395f",
+      "archivedSha256": "c48718fe96d71b73f05ef14358141b43fd1552f355be9ec1ae707344785a395f",
+      "bytes": 480
+    },
+    {
+      "file": "corrected-blade_engraving.log",
+      "sourceSha256": "445d6939c3deacc703d793570bfcd80f6782eb98478a8db5092f4de09957b209",
+      "archivedSha256": "445d6939c3deacc703d793570bfcd80f6782eb98478a8db5092f4de09957b209",
+      "bytes": 1354
+    },
+    {
+      "file": "corrected-clay.json",
+      "sourceSha256": "b761533a481305798408edb5e3fbbf3ba9034d1c3121927218d49888f0d2fb20",
+      "archivedSha256": "b761533a481305798408edb5e3fbbf3ba9034d1c3121927218d49888f0d2fb20",
+      "bytes": 3193
+    },
+    {
+      "file": "corrected-clay.log",
+      "sourceSha256": "e9612256f10191ad08c3d43edd0d69be121f9f5dfe46148f7fc25c2731732f25",
+      "archivedSha256": "e9612256f10191ad08c3d43edd0d69be121f9f5dfe46148f7fc25c2731732f25",
+      "bytes": 4663
+    },
+    {
+      "file": "corrected-clay.png",
+      "sourceSha256": "cf4b1d3edb96109c6b608e5acaacf0b0a09241ea70d28643b3f515b6cff46e44",
+      "archivedSha256": "cf4b1d3edb96109c6b608e5acaacf0b0a09241ea70d28643b3f515b6cff46e44",
+      "bytes": 319675
+    },
+    {
+      "file": "corrected-close.json",
+      "sourceSha256": "ffb2f337aabd6f35f15777d8511bc0a381331dab1363e3b3190629ba0fe368f9",
+      "archivedSha256": "ffb2f337aabd6f35f15777d8511bc0a381331dab1363e3b3190629ba0fe368f9",
+      "bytes": 3396
+    },
+    {
+      "file": "corrected-close.log",
+      "sourceSha256": "a39c78d8ea1d2078b3b97ebd94297c474be667d91dd166949877d75cfe93befb",
+      "archivedSha256": "a39c78d8ea1d2078b3b97ebd94297c474be667d91dd166949877d75cfe93befb",
+      "bytes": 4867
+    },
+    {
+      "file": "corrected-close.png",
+      "sourceSha256": "1f6977d07fcde32577e1b8d10d3cb7a436e86916e5f7f6834231aab7cfc07252",
+      "archivedSha256": "1f6977d07fcde32577e1b8d10d3cb7a436e86916e5f7f6834231aab7cfc07252",
+      "bytes": 349940
+    },
+    {
+      "file": "corrected-edited-stability.glb",
+      "sourceSha256": "95756225384049e8cb22682b425757cad404a908cd21e9224098a3807b9b146b",
+      "archivedSha256": "95756225384049e8cb22682b425757cad404a908cd21e9224098a3807b9b146b",
+      "bytes": 1112080
+    },
+    {
+      "file": "corrected-edited.glb",
+      "sourceSha256": "99535fadde0587065084384118c0742c0f0dac3d259f07900fd8ca5ba571af7f",
+      "archivedSha256": "99535fadde0587065084384118c0742c0f0dac3d259f07900fd8ca5ba571af7f",
+      "bytes": 1112380
+    },
+    {
+      "file": "corrected-grip_wrap.json",
+      "sourceSha256": "8b3db9ff724559019b0d909a967ab98c32ac5691aa1ba1e70c813e9686fff075",
+      "archivedSha256": "8b3db9ff724559019b0d909a967ab98c32ac5691aa1ba1e70c813e9686fff075",
+      "bytes": 474
+    },
+    {
+      "file": "corrected-grip_wrap.log",
+      "sourceSha256": "a6c07b146b2a5a2a5ace9f3d7706a7554a3e4e9ec777daf1b8c387dff35dd558",
+      "archivedSha256": "a6c07b146b2a5a2a5ace9f3d7706a7554a3e4e9ec777daf1b8c387dff35dd558",
+      "bytes": 1348
+    },
+    {
+      "file": "corrected-guard_scroll_left.json",
+      "sourceSha256": "1b971e7e0cde0e5830536c9d9ce74449c0a2f0c16248794f7e77a84366bb9af1",
+      "archivedSha256": "1b971e7e0cde0e5830536c9d9ce74449c0a2f0c16248794f7e77a84366bb9af1",
+      "bytes": 482
+    },
+    {
+      "file": "corrected-guard_scroll_left.log",
+      "sourceSha256": "0af95532d8a65bece2e83222f4a03dad8b1049926ec5aedaa035b4cacafd7e2b",
+      "archivedSha256": "0af95532d8a65bece2e83222f4a03dad8b1049926ec5aedaa035b4cacafd7e2b",
+      "bytes": 1356
+    },
+    {
+      "file": "corrected-guard_scroll_right.json",
+      "sourceSha256": "42626f4307c881cb65789005b3d42ecc485c066e0a1eac63fe49d6e7770a4ebf",
+      "archivedSha256": "42626f4307c881cb65789005b3d42ecc485c066e0a1eac63fe49d6e7770a4ebf",
+      "bytes": 483
+    },
+    {
+      "file": "corrected-guard_scroll_right.log",
+      "sourceSha256": "1dd549870c81ec7bf2e658cf5d267da6415c6113890051572078847f11e7aa2b",
+      "archivedSha256": "1dd549870c81ec7bf2e658cf5d267da6415c6113890051572078847f11e7aa2b",
+      "bytes": 1357
+    },
+    {
+      "file": "corrected.assembly.json",
+      "sourceSha256": "43f53c27bbe2c45f510d41e0a28b2a6c794f1c8bf75e9a0797f0d8e9fe1707a3",
+      "archivedSha256": "43f53c27bbe2c45f510d41e0a28b2a6c794f1c8bf75e9a0797f0d8e9fe1707a3",
+      "bytes": 18984
+    },
+    {
+      "file": "corrected.glb",
+      "sourceSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+      "archivedSha256": "6cddda5f82a239b35fd6609a55656ff5141e8efc049529b0f38c7dced07733c8",
+      "bytes": 1154448
+    },
+    {
+      "file": "field-human-proof.json",
+      "sourceSha256": "354db4d888bc02f1f4a90fd23718177f105b967b93a813b3a86a65132059dcdb",
+      "archivedSha256": "354db4d888bc02f1f4a90fd23718177f105b967b93a813b3a86a65132059dcdb",
+      "bytes": 4333
+    },
+    {
+      "file": "geometry-and-glb.json",
+      "sourceSha256": "f5715c766c2e677e39191d85fa3e46503ee4e29366caead74301d23ad24b1f44",
+      "archivedSha256": "f5715c766c2e677e39191d85fa3e46503ee4e29366caead74301d23ad24b1f44",
+      "bytes": 15411
+    },
+    {
+      "file": "glb-regression-final.log",
+      "sourceSha256": "5ba527c3815ae44e1caa1bb92103bf3fe2d1e21340d318eb9b9fa71befd41fa1",
+      "archivedSha256": "5ba527c3815ae44e1caa1bb92103bf3fe2d1e21340d318eb9b9fa71befd41fa1",
+      "bytes": 15412
+    },
+    {
+      "file": "glb-regression.log",
+      "sourceSha256": "5ba527c3815ae44e1caa1bb92103bf3fe2d1e21340d318eb9b9fa71befd41fa1",
+      "archivedSha256": "5ba527c3815ae44e1caa1bb92103bf3fe2d1e21340d318eb9b9fa71befd41fa1",
+      "bytes": 15412
+    },
+    {
+      "file": "laurel-homes-proof.json",
+      "sourceSha256": "6d3d825acd8730a543320f77d7333bc88dc45e27cc07ff6415a4b144c6727ffc",
+      "archivedSha256": "6d3d825acd8730a543320f77d7333bc88dc45e27cc07ff6415a4b144c6727ffc",
+      "bytes": 875
+    },
+    {
+      "file": "legacy-blade_core.json",
+      "sourceSha256": "8f195e04d65d1437c61507121f459455735979208dda782a8311d6229064da45",
+      "archivedSha256": "8f195e04d65d1437c61507121f459455735979208dda782a8311d6229064da45",
+      "bytes": 476
+    },
+    {
+      "file": "legacy-blade_core.log",
+      "sourceSha256": "3204a9cf9b80780d2565c1e5126de3ec8b8635e2b76138ce1dc74966e499671f",
+      "archivedSha256": "3204a9cf9b80780d2565c1e5126de3ec8b8635e2b76138ce1dc74966e499671f",
+      "bytes": 1350
+    },
+    {
+      "file": "legacy-blade_engraving.json",
+      "sourceSha256": "bd9cbb05c1b69f4d966118ba0ecaf9dcebdbb73a930732c676d69da2466e41d9",
+      "archivedSha256": "bd9cbb05c1b69f4d966118ba0ecaf9dcebdbb73a930732c676d69da2466e41d9",
+      "bytes": 482
+    },
+    {
+      "file": "legacy-blade_engraving.log",
+      "sourceSha256": "0fc567a64566cef8044d25645a1a3263a6eb06e4ac5fb2fd9310444fd5d558f1",
+      "archivedSha256": "0fc567a64566cef8044d25645a1a3263a6eb06e4ac5fb2fd9310444fd5d558f1",
+      "bytes": 1356
+    },
+    {
+      "file": "legacy-clay.json",
+      "sourceSha256": "bf67aa6dd6ffd0be3881a9f28dab761c12c9c228a53e94a3598f95a49676948e",
+      "archivedSha256": "bf67aa6dd6ffd0be3881a9f28dab761c12c9c228a53e94a3598f95a49676948e",
+      "bytes": 3187
+    },
+    {
+      "file": "legacy-clay.log",
+      "sourceSha256": "69dc219ac07b78d78fb524e52dfad02f5ba6a4e15498bc12920ea34cbbc094b7",
+      "archivedSha256": "69dc219ac07b78d78fb524e52dfad02f5ba6a4e15498bc12920ea34cbbc094b7",
+      "bytes": 4654
+    },
+    {
+      "file": "legacy-clay.png",
+      "sourceSha256": "6e449cc657bdb6c6ca8384af255e19a5ad2678f9d8de59e4bd183b5a25ecd739",
+      "archivedSha256": "6e449cc657bdb6c6ca8384af255e19a5ad2678f9d8de59e4bd183b5a25ecd739",
+      "bytes": 320046
+    },
+    {
+      "file": "legacy-close.json",
+      "sourceSha256": "2ae8ec7c5b96fece14cf1fd9cc25dd7be526234f5397655da008ccf583595bd5",
+      "archivedSha256": "2ae8ec7c5b96fece14cf1fd9cc25dd7be526234f5397655da008ccf583595bd5",
+      "bytes": 3390
+    },
+    {
+      "file": "legacy-close.log",
+      "sourceSha256": "0a3e634b986030d4eafd59d11d3d19996a8d669eccb28860ce0ed1fbdbb95c71",
+      "archivedSha256": "0a3e634b986030d4eafd59d11d3d19996a8d669eccb28860ce0ed1fbdbb95c71",
+      "bytes": 4858
+    },
+    {
+      "file": "legacy-close.png",
+      "sourceSha256": "f79f85e6b674dbb88a97e43b0e7109159facad13f003d3836698c8ab83382534",
+      "archivedSha256": "f79f85e6b674dbb88a97e43b0e7109159facad13f003d3836698c8ab83382534",
+      "bytes": 349896
+    },
+    {
+      "file": "legacy-grip_wrap.json",
+      "sourceSha256": "ae7bb51f6eda39590e5388636f0f112cb43ae0b88a6f132a47fcdc7c2ee38cca",
+      "archivedSha256": "ae7bb51f6eda39590e5388636f0f112cb43ae0b88a6f132a47fcdc7c2ee38cca",
+      "bytes": 476
+    },
+    {
+      "file": "legacy-grip_wrap.log",
+      "sourceSha256": "4eb3eb1a2763c4018324bb75379b891f2a291b2288a6bdd2e66d497b6dff9baa",
+      "archivedSha256": "4eb3eb1a2763c4018324bb75379b891f2a291b2288a6bdd2e66d497b6dff9baa",
+      "bytes": 1350
+    },
+    {
+      "file": "legacy-guard_scroll_left.json",
+      "sourceSha256": "9fd264c728f6ba8908c61d9160f7d56098cd5fbe66d6ee4f0e054ee807fc10b9",
+      "archivedSha256": "9fd264c728f6ba8908c61d9160f7d56098cd5fbe66d6ee4f0e054ee807fc10b9",
+      "bytes": 484
+    },
+    {
+      "file": "legacy-guard_scroll_left.log",
+      "sourceSha256": "28f2226f20caa21d0d128e6e0d9a9d750741663f98c6bac88f254caabaebf20f",
+      "archivedSha256": "28f2226f20caa21d0d128e6e0d9a9d750741663f98c6bac88f254caabaebf20f",
+      "bytes": 1358
+    },
+    {
+      "file": "legacy-guard_scroll_right.json",
+      "sourceSha256": "6344e26ba258f1c2dffe8a3634a0f1f1456194e4b25c7778358d17c1f138dcb0",
+      "archivedSha256": "6344e26ba258f1c2dffe8a3634a0f1f1456194e4b25c7778358d17c1f138dcb0",
+      "bytes": 485
+    },
+    {
+      "file": "legacy-guard_scroll_right.log",
+      "sourceSha256": "7cf653aa1b539cde3e30b2c13d48e7bb12e9510738aecfaf271f4469545cb8b6",
+      "archivedSha256": "7cf653aa1b539cde3e30b2c13d48e7bb12e9510738aecfaf271f4469545cb8b6",
+      "bytes": 1359
+    },
+    {
+      "file": "legacy.assembly.json",
+      "sourceSha256": "9fee9ac8e3bf7e4cdc1191ee948b6105ba5da198ef61930ba47c712170affd67",
+      "archivedSha256": "9fee9ac8e3bf7e4cdc1191ee948b6105ba5da198ef61930ba47c712170affd67",
+      "bytes": 18711
+    },
+    {
+      "file": "legacy.glb",
+      "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+      "archivedSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+      "bytes": 1149888
+    },
+    {
+      "file": "moderncat-concept-proof.json",
+      "sourceSha256": "58e78db71a2e60f83196e06907dda31bbca374ae68fc433d405f2c93cfa50b70",
+      "archivedSha256": "58e78db71a2e60f83196e06907dda31bbca374ae68fc433d405f2c93cfa50b70",
+      "bytes": 2613
+    },
+    {
+      "file": "original-git-diff.log",
+      "sourceSha256": "6f155645da05f7f0f63babec016d278b828a96ca9150356ddfbe6ac505dfc958",
+      "archivedSha256": "6f155645da05f7f0f63babec016d278b828a96ca9150356ddfbe6ac505dfc958",
+      "bytes": 78
+    },
+    {
+      "file": "original-git-status.log",
+      "sourceSha256": "6f155645da05f7f0f63babec016d278b828a96ca9150356ddfbe6ac505dfc958",
+      "archivedSha256": "6f155645da05f7f0f63babec016d278b828a96ca9150356ddfbe6ac505dfc958",
+      "bytes": 78
+    },
+    {
+      "file": "proof-browser.log",
+      "sourceSha256": "207b41f34ae66814999a39464dc370dd2aafb3a3edca745934a4ecbb84ea2717",
+      "archivedSha256": "207b41f34ae66814999a39464dc370dd2aafb3a3edca745934a4ecbb84ea2717",
+      "bytes": 67
+    },
+    {
+      "file": "publish-benchmark.log",
+      "sourceSha256": "00d9f6cb8642686cf6b85f41f06db44510c04b9f28965064037dbb3513f04559",
+      "archivedSha256": "00d9f6cb8642686cf6b85f41f06db44510c04b9f28965064037dbb3513f04559",
+      "bytes": 11763
+    },
+    {
+      "file": "publish-build.log",
+      "sourceSha256": "5e1fd197df97a49184808dd6c3e573b38cf0c2092d1f892bbf8c6bd81d545f7b",
+      "archivedSha256": "5e1fd197df97a49184808dd6c3e573b38cf0c2092d1f892bbf8c6bd81d545f7b",
+      "bytes": 1478
+    },
+    {
+      "file": "publish-check.log",
+      "sourceSha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "archivedSha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "bytes": 50
+    },
+    {
+      "file": "publish-tests.first-version-failure.log",
+      "sourceSha256": "f2a07f13d9f745c247edf0ec6f1350d4662fd38794165945da49e874f5e5ca3f",
+      "archivedSha256": "f2a07f13d9f745c247edf0ec6f1350d4662fd38794165945da49e874f5e5ca3f",
+      "bytes": 12573
+    },
+    {
+      "file": "publish-tests.log",
+      "sourceSha256": "1fdead5884ac4c2e6251c189476ae65c7735f2e56ba3d272f1e02e336b72ddee",
+      "archivedSha256": "1fdead5884ac4c2e6251c189476ae65c7735f2e56ba3d272f1e02e336b72ddee",
+      "bytes": 10981
+    },
+    {
+      "file": "publish-tests.pre-preflight.log",
+      "sourceSha256": "f562696303879fa2963985f6d9a8928bd03b190268e5fad239edee370a1f21e6",
+      "archivedSha256": "f562696303879fa2963985f6d9a8928bd03b190268e5fad239edee370a1f21e6",
+      "bytes": 11135
+    },
+    {
+      "file": "quality-production.log",
+      "sourceSha256": "d572e45801e9a58d0a0062c043c94bb2ffc70d89fba94747883f2a7e8065d030",
+      "archivedSha256": "d572e45801e9a58d0a0062c043c94bb2ffc70d89fba94747883f2a7e8065d030",
+      "bytes": 74731
+    },
+    {
+      "file": "schema-validation.json",
+      "sourceSha256": "86f56b998946e5629e20a261525a0ca5fe3d288694e72dcd477ce932fef68dd7",
+      "archivedSha256": "86f56b998946e5629e20a261525a0ca5fe3d288694e72dcd477ce932fef68dd7",
+      "bytes": 192
+    },
+    {
+      "file": "source-benchmark.log",
+      "sourceSha256": "b7948dabdf0edb69d1f10a36cedb9b803d9b335763aad09a6322a280789f1848",
+      "archivedSha256": "b7948dabdf0edb69d1f10a36cedb9b803d9b335763aad09a6322a280789f1848",
+      "bytes": 11763
+    },
+    {
+      "file": "source-build.log",
+      "sourceSha256": "616b8b103d49442f2a22cce6e9d7ad970cb430f12314ff1952c91f5fc47e9b25",
+      "archivedSha256": "616b8b103d49442f2a22cce6e9d7ad970cb430f12314ff1952c91f5fc47e9b25",
+      "bytes": 2198
+    },
+    {
+      "file": "source-check.log",
+      "sourceSha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "archivedSha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "bytes": 50
+    },
+    {
+      "file": "source-tests.log",
+      "sourceSha256": "19d2962f90b7fe0e2652cf81e62fc7443ac4388feea96301f07640c59ddb628b",
+      "archivedSha256": "19d2962f90b7fe0e2652cf81e62fc7443ac4388feea96301f07640c59ddb628b",
+      "bytes": 11540
+    },
+    {
+      "file": "test-after.log",
+      "sourceSha256": "496d9645b662412c89affd4cfba5873b5545bb828e007a7302aa583ea85ba0e1",
+      "archivedSha256": "496d9645b662412c89affd4cfba5873b5545bb828e007a7302aa583ea85ba0e1",
+      "bytes": 336
+    },
+    {
+      "file": "test-before.log",
+      "sourceSha256": "9c192c83de674c1ce68b4586d91ff49c33da4eb01ec50f7adbd26935fc45cb93",
+      "archivedSha256": "9c192c83de674c1ce68b4586d91ff49c33da4eb01ec50f7adbd26935fc45cb93",
+      "bytes": 855
+    },
+    {
+      "file": "test-first-candidate-failure.log",
+      "sourceSha256": "389a661896bdcb8b9a14ecac585fed9c30cc6e9851f3710323ff5471f11bf675",
+      "archivedSha256": "389a661896bdcb8b9a14ecac585fed9c30cc6e9851f3710323ff5471f11bf675",
+      "bytes": 3478
+    },
+    {
+      "file": "ui-after-cancel.assembly.json",
+      "sourceSha256": "0324e2c020ffbb931032fefdaa705a2088d407c9fd9abc34d92aca106790dbed",
+      "archivedSha256": "0324e2c020ffbb931032fefdaa705a2088d407c9fd9abc34d92aca106790dbed",
+      "bytes": 1442
+    },
+    {
+      "file": "ui-after-edit.assembly.json",
+      "sourceSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "archivedSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "bytes": 1567
+    },
+    {
+      "file": "ui-after-edit.glb",
+      "sourceSha256": "292025e1d7ff2c96c77b0ce4b9324fc827fb040af27a238ad241c4aa2cfcacf9",
+      "archivedSha256": "292025e1d7ff2c96c77b0ce4b9324fc827fb040af27a238ad241c4aa2cfcacf9",
+      "bytes": 51324
+    },
+    {
+      "file": "ui-after-edit.png",
+      "sourceSha256": "2c4f8fa1636febf45199258a5002eda95797300c818ebb129b22826453439856",
+      "archivedSha256": "2c4f8fa1636febf45199258a5002eda95797300c818ebb129b22826453439856",
+      "bytes": 86226
+    },
+    {
+      "file": "ui-after-redo.assembly.json",
+      "sourceSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "archivedSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "bytes": 1567
+    },
+    {
+      "file": "ui-after-reopen.assembly.json",
+      "sourceSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "archivedSha256": "ea532521a5d043731699fb482179f9c653f700c8b54e40f3bc0c4ec746bb21f3",
+      "bytes": 1567
+    },
+    {
+      "file": "ui-after-undo.assembly.json",
+      "sourceSha256": "0324e2c020ffbb931032fefdaa705a2088d407c9fd9abc34d92aca106790dbed",
+      "archivedSha256": "0324e2c020ffbb931032fefdaa705a2088d407c9fd9abc34d92aca106790dbed",
+      "bytes": 1442
+    },
+    {
+      "file": "ui-current-blender.json",
+      "sourceSha256": "2cce7032a5d4bf5f8dc7dde8c08dd612362b7e0ae584c323e991992ded66fbff",
+      "archivedSha256": "2cce7032a5d4bf5f8dc7dde8c08dd612362b7e0ae584c323e991992ded66fbff",
+      "bytes": 474
+    },
+    {
+      "file": "ui-current-blender.log",
+      "sourceSha256": "875f854e433bd02603fdb89a4ea3ee1b2f9e335f0d8f4c414e04d74460152d45",
+      "archivedSha256": "875f854e433bd02603fdb89a4ea3ee1b2f9e335f0d8f4c414e04d74460152d45",
+      "bytes": 682
+    },
+    {
+      "file": "ui-input.assembly.json",
+      "sourceSha256": "f78407af2d5ee1a0379346e695219a292103f7c466f843fc29ef0b7430d62089",
+      "archivedSha256": "f78407af2d5ee1a0379346e695219a292103f7c466f843fc29ef0b7430d62089",
+      "bytes": 1529
+    },
+    {
+      "file": "uniai-final.md",
+      "sourceSha256": "154de860a058a9cc28df78710a4b0bc0e0ed18aa99ac0d7932df7e3286cccbae",
+      "archivedSha256": "154de860a058a9cc28df78710a4b0bc0e0ed18aa99ac0d7932df7e3286cccbae",
+      "bytes": 773
+    },
+    {
+      "file": "uniai-final.md.usage.json",
+      "sourceSha256": "58fdf79539d958211615b9251dea552219bedc01f3d1751c2afb013d334cb29c",
+      "archivedSha256": "58fdf79539d958211615b9251dea552219bedc01f3d1751c2afb013d334cb29c",
+      "bytes": 582
+    },
+    {
+      "file": "uniai-plan.md",
+      "sourceSha256": "d8811c38d4f430e2f8c58a7e7a3c312302f958dc9a72f70f5fbcf9238241e9e6",
+      "archivedSha256": "d8811c38d4f430e2f8c58a7e7a3c312302f958dc9a72f70f5fbcf9238241e9e6",
+      "bytes": 3609
+    },
+    {
+      "file": "uniai-plan.md.usage.json",
+      "sourceSha256": "b9816f579e97184e0389229f0cb3a301742bd3471c066b654c05d4b25cea51b0",
+      "archivedSha256": "b9816f579e97184e0389229f0cb3a301742bd3471c066b654c05d4b25cea51b0",
+      "bytes": 585
+    },
+    {
+      "file": "uniai-review.md",
+      "sourceSha256": "1d96c5240e58003fd0583cf3552dc1df922c5d90e5074e72f444ba44b2848708",
+      "archivedSha256": "1d96c5240e58003fd0583cf3552dc1df922c5d90e5074e72f444ba44b2848708",
+      "bytes": 1527
+    },
+    {
+      "file": "uniai-review.md.usage.json",
+      "sourceSha256": "a2b54a60d53c42d60ebe0844c32887ce26dc2a1cbf8fdadc846085764e59a488",
+      "archivedSha256": "a2b54a60d53c42d60ebe0844c32887ce26dc2a1cbf8fdadc846085764e59a488",
+      "bytes": 588
+    },
+    {
+      "file": "web-hero-proof.json",
+      "sourceSha256": "fa1c9da68d1394036e102c4b67b0ec1a237f86519acbbd12265359038ea76133",
+      "archivedSha256": "fa1c9da68d1394036e102c4b67b0ec1a237f86519acbbd12265359038ea76133",
+      "bytes": 3767
+    }
+  ]
+}

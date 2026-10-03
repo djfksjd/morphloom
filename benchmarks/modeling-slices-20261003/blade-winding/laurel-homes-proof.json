@@ -1,0 +1,31 @@
+{
+  "schema": "morphloom.browser-roundtrip/0.4",
+  "compilerRevision": "morphloom-compiler/0.37.0",
+  "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
+  "generatedAt": "2026-10-03T05:08:43.607Z",
+  "console": {
+    "errors": 0,
+    "warnings": 0,
+    "samples": []
+  },
+  "assets": [
+    {
+      "id": "laurel-homes-architectural-review",
+      "scope": "measured-architecture",
+      "status": "pass",
+      "inputFingerprint": "75e8ac785bce2c49",
+      "buildFingerprint": "b61c2f9175fe7ae4",
+      "sceneFingerprint": "75e95c2b8eb1e525",
+      "glbBytes": 29601576,
+      "boundsErrorMm": 0,
+      "namedNodeCoverage": 1,
+      "morphTargetPayloadParity": true,
+      "texturePayloadParity": true,
+      "materialPayloadParity": true,
+      "qualityReleaseReady": false,
+      "validatorErrors": 0,
+      "validatorWarnings": 0,
+      "blockers": []
+    }
+  ]
+}

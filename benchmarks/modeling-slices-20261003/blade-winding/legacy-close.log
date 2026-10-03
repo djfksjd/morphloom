@@ -1,0 +1,206 @@
+14:02:39 | INFO: Data are loaded, start creating Blender stuff
+14:02:39 | INFO: Blender create Mesh node 0
+14:02:39 | INFO: Blender create Mesh node 1
+14:02:39 | INFO: Blender create Mesh node 2
+14:02:39 | INFO: Blender create Mesh node 3
+14:02:39 | INFO: Blender create Mesh node 4
+14:02:39 | INFO: Blender create Mesh node 5
+14:02:39 | INFO: Blender create Mesh node 6
+14:02:39 | INFO: Blender create Mesh node 7
+14:02:39 | INFO: Blender create Mesh node 8
+14:02:39 | INFO: Blender create Mesh node 9
+14:02:39 | INFO: Blender create Mesh node 10
+14:02:39 | INFO: Blender create Mesh node 11
+14:02:39 | INFO: Blender create Mesh node 12
+14:02:39 | INFO: Blender create Mesh node 13
+14:02:39 | INFO: Blender create Mesh node 14
+14:02:39 | INFO: Blender create Mesh node 15
+14:02:39 | INFO: glTF import finished in 0.04s
+/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-neutral-render.py:174: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world.use_nodes = True
+/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-neutral-render.py:191: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  clay.use_nodes = True
+00:01.327  render           | Saved: '/Users/danny/Documents/morphloom/outputs/knife-winding-20261003/legacy-close.png'
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "legacy.glb",
+  "sourceBytes": 1149888,
+  "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+  "render": "legacy-close.png",
+  "renderBytes": 349896,
+  "renderSha256": "f79f85e6b674dbb88a97e43b0e7109159facad13f003d3836698c8ab83382534",
+  "meshes": 1,
+  "materials": 17,
+  "normalization": {
+    "method": "fixed-metre-datum",
+    "targetExtent": null,
+    "sourceBounds": {
+      "min": [
+        -0.02500000037252903,
+        -0.0027000000700354576,
+        0.017999999225139618
+      ],
+      "max": [
+        0.02500000037252903,
+        0.0027000000700354576,
+        0.3440000116825104
+      ],
+      "size": [
+        0.05000000074505806,
+        0.005400000140070915,
+        0.32600000500679016
+      ]
+    },
+    "scale": 6,
+    "fixedSpaceSha256": "ef5c8caac42823ed3c7c2413998be380ef019c8dfcea57ba7fe010e47ea016ba",
+    "translationMeters": [
+      0,
+      0,
+      -0.181
+    ],
+    "normalizedBounds": {
+      "min": [
+        -0.15000000596046448,
+        -0.016200000420212746,
+        -0.9779999852180481
+      ],
+      "max": [
+        0.15000000596046448,
+        0.016200000420212746,
+        0.9780001044273376
+      ],
+      "size": [
+        0.30000001192092896,
+        0.03240000084042549,
+        1.9560000896453857
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      -3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.55
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        464,
+        137
+      ],
+      "max": [
+        559,
+        877
+      ]
+    },
+    "minimumMarginPixels": 137,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "isolated-component",
+    "componentId": "blade_core"
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "grazing",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        3.0,
+        -0.5,
+        0.30000001192092896
+      ],
+      "energy": 900.0,
+      "size": 1.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 70.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

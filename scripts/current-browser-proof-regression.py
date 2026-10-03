@@ -8,7 +8,7 @@ for id in ['laurel-homes','blade','asphalt-surface','moderncat-concept','cooler'
  call('select','select[aria-label="검수할 결과 선택"]',id)
  call('wait','--fn',"document.querySelector('[aria-label=\"내보내기 및 비용 검증\"]').textContent.includes('PASS')&&!document.querySelector('select').disabled")
  state=json.loads(call('eval',"(async()=>{await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);return {active:document.querySelector('select').value,blocked:!!document.querySelector('.quality-total em'),checks:Array.from(document.querySelectorAll('.quality-row')).map(x=>({text:x.textContent,status:x.querySelector('[aria-label]').getAttribute('aria-label')}))};})()"));assert state['active']==id
- s=call('snapshot','-i');ref=re.search(r'button "SAVE PROOF" \[ref=(e\d+)\]',s);assert ref;f=out/(id+'-proof.json');call('download','@'+ref[1],str(f));proof=json.loads(f.read_text());assert proof['compilerRevision']=='morphloom-compiler/0.36.0'
+ s=call('snapshot','-i');ref=re.search(r'button "SAVE PROOF" \[ref=(e\d+)\]',s);assert ref;f=out/(id+'-proof.json');call('download','@'+ref[1],str(f));proof=json.loads(f.read_text());assert proof['compilerRevision']=='morphloom-compiler/0.37.0'
  state['savedFile']=f.name;rows.append(state)
  if state['blocked']:
   # Actual current selected proof must never claim release while the panel blocks.

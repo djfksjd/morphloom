@@ -1,0 +1,13 @@
+{
+  "schema": "morphloom.blender-cap-orientation/0.1",
+  "blenderVersion": "5.2.1 LTS",
+  "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+  "target": "guard_scroll_left",
+  "triangles": 1176,
+  "boundaryEdges": 0,
+  "nonManifoldEdges": 0,
+  "degenerateTriangles": 0,
+  "inconsistentDirectedEdges": 24,
+  "orientationPass": false,
+  "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+}

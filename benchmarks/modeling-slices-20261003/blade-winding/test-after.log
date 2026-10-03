@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ✓ tests/blade-winding.test.ts (8 tests) 143ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  14:11:00
+   Duration  367ms (transform 117ms, setup 0ms, collect 148ms, tests 143ms, environment 0ms, prepare 26ms)
+

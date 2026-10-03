@@ -1,0 +1,22 @@
+14:01:43 | INFO: Data are loaded, start creating Blender stuff
+14:01:43 | INFO: Blender create Mesh node 0
+14:01:43 | INFO: Blender create Mesh node 1
+14:01:43 | INFO: Blender create Mesh node 2
+14:01:43 | INFO: Blender create Mesh node 3
+14:01:43 | INFO: Blender create Mesh node 4
+14:01:43 | INFO: Blender create Mesh node 5
+14:01:43 | INFO: Blender create Mesh node 6
+14:01:43 | INFO: Blender create Mesh node 7
+14:01:43 | INFO: Blender create Mesh node 8
+14:01:43 | INFO: Blender create Mesh node 9
+14:01:43 | INFO: Blender create Mesh node 10
+14:01:43 | INFO: Blender create Mesh node 11
+14:01:43 | INFO: Blender create Mesh node 12
+14:01:43 | INFO: Blender create Mesh node 13
+14:01:43 | INFO: Blender create Mesh node 14
+14:01:43 | INFO: Blender create Mesh node 15
+14:01:43 | INFO: glTF import finished in 0.03s
+{"schema": "morphloom.blender-cap-orientation/0.1", "blenderVersion": "5.2.1 LTS", "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63", "target": "guard_scroll_right", "triangles": 1176, "boundaryEdges": 0, "nonManifoldEdges": 0, "degenerateTriangles": 0, "inconsistentDirectedEdges": 24, "orientationPass": false, "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

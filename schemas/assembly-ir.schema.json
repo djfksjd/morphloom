@@ -312,10 +312,8 @@
         "ridgeLength": { "type": "number", "minimum": 0 }
       }
     },
-    "bladeLoft": {
-      "type": "object", "required": ["op", "sections", "thickness", "apexThickness"], "additionalProperties": false,
-      "properties": { "op": { "const": "bladeLoft" }, "sections": { "type": "array", "minItems": 3, "maxItems": 512, "items": { "$ref": "#/$defs/vec2" } }, "thickness": { "type": "number", "exclusiveMinimum": 0 }, "apexThickness": { "type": "number", "exclusiveMinimum": 0 }, "grindCurve": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "number", "minimum": 0, "maximum": 1 } } }
-    },
+    "bladeLoft": {"type": "object", "required": ["op", "sections", "thickness", "apexThickness"], "additionalProperties": false, "properties": {"op": {"const": "bladeLoft"}, "sections": {"type": "array", "minItems": 2, "maxItems": 512, "items": {"$ref": "#/$defs/vec2"}}, "thickness": {"type": "number", "exclusiveMinimum": 0}, "apexThickness": {"type": "number", "exclusiveMinimum": 0}, "grindCurve": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"type": "number", "minimum": 0, "maximum": 1}}, "sideWinding": {"type": "object", "additionalProperties": false, "required": ["schema", "direction"], "properties": {"schema": {"const": "morphloom.blade-side-winding/0.1"}, "direction": {"const": "outward"}}}}, "allOf": [{"if": {"required": ["sideWinding"]}, "then": {"properties": {"sections": {"items": {"type": "array", "prefixItems": [{"type": "number", "minimum": -100000, "maximum": 100000}, {"type": "number", "exclusiveMinimum": 0, "maximum": 100000}], "minItems": 2, "maxItems": 2}}, "thickness": {"maximum": 100000}, "apexThickness": {"maximum": 100000}}}}]},
+
     "visualHull": {
       "type": "object",
       "required": ["op", "descriptor"],

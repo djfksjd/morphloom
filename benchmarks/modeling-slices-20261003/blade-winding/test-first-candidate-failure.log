@@ -1,0 +1,64 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ❯ tests/blade-winding.test.ts (7 tests | 4 failed) 131ms
+   × preserves positions/count/UV while making side triangle normals outward at scale 0.1 8ms
+     → expected '986aaadc9c6f14e7839ba682c8ebc38e7fb8a…' to be '381990f14f615a9e4d210abed253939e6a0f4…' // Object.is equality
+   × preserves positions/count/UV while making side triangle normals outward at scale 1 2ms
+     → expected 'ae630474434b584898b9f366b53a16d93aef2…' to be '5e28e0f8c213f9703f896f746e1253eb0c29a…' // Object.is equality
+   × preserves positions/count/UV while making side triangle normals outward at scale 10 1ms
+     → expected '43664217bf4fb44e82564924961c28c9e3e73…' to be 'ddbd5bd37388679d370e7e8b482796085ff37…' // Object.is equality
+   × supports two and512 rows but rejects collapsed generated Float32 faces 0ms
+     → Cannot read properties of null (reading 'count')
+   ✓ rejects unsupported version, direction, op, unsafe bounds and malformed profiles only in opted-in path 2ms
+   ✓ deep-copy migration and atomic set/clear preserve source and non-targets; stale/action/schema reject 2ms
+   ✓ preserves actual historical no-option buffers and fixes new preset without non-target changes 116ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/blade-winding.test.ts > preserves positions/count/UV while making side triangle normals outward at scale 0.1
+AssertionError: expected '986aaadc9c6f14e7839ba682c8ebc38e7fb8a…' to be '381990f14f615a9e4d210abed253939e6a0f4…' // Object.is equality
+
+Expected: "381990f14f615a9e4d210abed253939e6a0f47e9d94bdff6c5bbb4e9b924f2e1"
+Received: "986aaadc9c6f14e7839ba682c8ebc38e7fb8af308290e57af38f4bb70cee9511"
+
+ ❯ tests/blade-winding.test.ts:19:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/blade-winding.test.ts > preserves positions/count/UV while making side triangle normals outward at scale 1
+AssertionError: expected 'ae630474434b584898b9f366b53a16d93aef2…' to be '5e28e0f8c213f9703f896f746e1253eb0c29a…' // Object.is equality
+
+Expected: "5e28e0f8c213f9703f896f746e1253eb0c29a7b33298568b8009d68e7ea79e8f"
+Received: "ae630474434b584898b9f366b53a16d93aef2ed9380152315c6cb1ba72753f4a"
+
+ ❯ tests/blade-winding.test.ts:19:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/blade-winding.test.ts > preserves positions/count/UV while making side triangle normals outward at scale 10
+AssertionError: expected '43664217bf4fb44e82564924961c28c9e3e73…' to be 'ddbd5bd37388679d370e7e8b482796085ff37…' // Object.is equality
+
+Expected: "ddbd5bd37388679d370e7e8b482796085ff373eeae78e9ee9ad01b5326202924"
+Received: "43664217bf4fb44e82564924961c28c9e3e7312a373879be091cddf096c7a9f3"
+
+ ❯ tests/blade-winding.test.ts:19:78
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/blade-winding.test.ts > supports two and512 rows but rejects collapsed generated Float32 faces
+TypeError: Cannot read properties of null (reading 'count')
+ ❯ tests/blade-winding.test.ts:29:183
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 3 passed (7)
+   Start at  13:58:55
+   Duration  352ms (transform 115ms, setup 0ms, collect 145ms, tests 131ms, environment 0ms, prepare 26ms)
+

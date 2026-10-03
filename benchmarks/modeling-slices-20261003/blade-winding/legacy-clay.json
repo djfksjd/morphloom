@@ -1,0 +1,174 @@
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "front-iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "legacy.glb",
+  "sourceBytes": 1149888,
+  "sourceSha256": "48c60a68fcf956f571a8ffe04193259eb991c0a8a954f3173f911a5de8a0fa63",
+  "render": "legacy-clay.png",
+  "renderBytes": 320046,
+  "renderSha256": "6e449cc657bdb6c6ca8384af255e19a5ad2678f9d8de59e4bd183b5a25ecd739",
+  "meshes": 16,
+  "materials": 17,
+  "normalization": {
+    "method": "broadside-xz-max-extent",
+    "targetExtent": 2.0,
+    "sourceBounds": {
+      "min": [
+        -0.06039266288280487,
+        -0.018149999901652336,
+        -0.1289999932050705
+      ],
+      "max": [
+        0.06039266288280487,
+        0.017999999225139618,
+        0.3440000116825104
+      ],
+      "size": [
+        0.12078532576560974,
+        0.0361500009894371,
+        0.4729999899864197
+      ]
+    },
+    "scale": 4.228329899240425,
+    "normalizedBounds": {
+      "min": [
+        -0.25536012649536133,
+        -0.07642706483602524,
+        -1.0000001192092896
+      ],
+      "max": [
+        0.25536012649536133,
+        0.07642706483602524,
+        1.0
+      ],
+      "size": [
+        0.5107202529907227,
+        0.15285412967205048,
+        2.0
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 3.2
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        447,
+        213
+      ],
+      "max": [
+        576,
+        809
+      ]
+    },
+    "minimumMarginPixels": 213,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "whole-asset",
+    "componentId": null
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "clay",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        -2.5,
+        -3.0,
+        3.5
+      ],
+      "energy": 900.0,
+      "size": 4.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 500.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}

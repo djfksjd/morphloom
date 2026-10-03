@@ -1,0 +1,2 @@
+exitCode=128
+fatal: .git/index: unable to map index file: Operation timed out

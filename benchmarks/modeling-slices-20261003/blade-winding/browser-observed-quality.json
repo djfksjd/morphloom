@@ -1,0 +1,222 @@
+{
+  "pass": true,
+  "rows": [
+    {
+      "active": "laurel-homes",
+      "blocked": true,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uac74\ucd95 \ubd80\uc7ac \uad6c\uc870321/321 \ud3d0\uc1c4\ud615 \u00b7 \uacbd\uacc4 0 \u00b7 \ube44\ub9e4\ub2c8\ud3f4\ub4dc 0 \u00b7 \ud1f4\ud654 0 \u00b7 \uc790\uae30\uad50\ucc28 0 \u00b7 \uad50\ucc28\uac80\uc0ac \uc644\ub8cc100"
+        },
+        {
+          "status": "pass",
+          "text": "\uacf5\uc720 \ubaa8\uc11c\ub9ac \uba74 \ubc29\ud5a5\ubc29\ud5a5 \ucda9\ub3cc 0\uac1c \u00b7 \uc704\uce58 weld 1e-6 \u00b7 \uad6d\ubd80 \uc77c\uad00\uc131\ub9cc \uac80\uc0ac\ud558\uba70 \uc804\uccb4 \ubc14\uae65 \ubc29\ud5a5/\uccb4\uc801\uc740 \ubcf4\uc7a5\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.100"
+        },
+        {
+          "status": "blocked",
+          "text": "\uacf5\uac04\u00b7\uac00\uad6c \ubc30\uce58 \uc644\uc131\ub3c4\ud544\uc218 \uacf5\uac04 0% \u00b7 \uc2e4\uc81c \ud3c9\uba74 IoU 1.000 \u00b7 \uacfc\uc789 0.0% \u00b7 \ub204\ub77d 0.0% \u00b7 \ubaa8\ub378 \ud504\ub85c\uadf8\ub7a8\u00b7\ub3c4\uba74 \uc7ac\ud22c\uc601 \ud1b5\uacfc59"
+        },
+        {
+          "status": "pass",
+          "text": "PBR \ubbf8\uc138 \ud45c\uba745\uc885 finish \u00b7 micro-normal 321/321 \u00b7 roughness-map 321/321 \u00b7 \ucc38\uc870 \ud22c\uc601 0\uac1c \u00b7 \uc120\ud615 de-light 0/0 \u00b7 \uc0ac\uc9c4 \ud30c\uc0dd normal+roughness 0\uac1c \u00b7 \uc228\uc740\uba74 \uc7ac\uc9c8\ud569\uc131 0\uac1c \u00b7 \uc774\ubc29\uc131 65 \u00b7 IR \ud45c\uba74 100%91"
+        },
+        {
+          "status": "pass",
+          "text": "\uac74\ucd95 \uc178 \ubc94\uc704 \uac80\uc218\uc678\uacfd\u00b7\uac1c\uad6c\ubd80\u00b7\uc5f0\uc18d \uc9c0\ubd95\u00b7\uc2e4\ub0b4 \ud504\ub85c\uadf8\ub7a8\u00b7\ubc30\uce58 \ud3b8\uc9d1\u00b7\uc870\uba85 \ud504\ub9ac\ubdf0 \uac80\uc99d \ud1b5\uacfc100"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 321\uac1c \uba54\uc2dc \u00b7 188,748 tris \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm \u00b7 100% \uba85\uba85 \ub178\ub4dc100"
+        }
+      ],
+      "savedFile": "laurel-homes-proof.json"
+    },
+    {
+      "active": "blade",
+      "blocked": false,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uac00\ubcc0 \ub450\uaed8 \uac80\uc2e016/16 \ud3d0\uc1c4\ud615 \u00b7 \uacbd\uacc4 0 \u00b7 \ube44\ub9e4\ub2c8\ud3f4\ub4dc 0 \u00b7 \ud1f4\ud654 0 \u00b7 \uc790\uae30\uad50\ucc28 0 \u00b7 \uad50\ucc28\uac80\uc0ac \uc644\ub8cc100"
+        },
+        {
+          "status": "pass",
+          "text": "\uacf5\uc720 \ubaa8\uc11c\ub9ac \uba74 \ubc29\ud5a5\ubc29\ud5a5 \ucda9\ub3cc 0\uac1c \u00b7 \uc704\uce58 weld 1e-6 \u00b7 \uad6d\ubd80 \uc77c\uad00\uc131\ub9cc \uac80\uc0ac\ud558\uba70 \uc804\uccb4 \ubc14\uae65 \ubc29\ud5a5/\uccb4\uc801\uc740 \ubcf4\uc7a5\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.100"
+        },
+        {
+          "status": "pass",
+          "text": "\uc2e4\ubb3c \ub2e8\uc704 \ud3ec\ub77d96 \u00d7 438 \u00d7 22 mm \ub514\uc790\uc778 \uc758\ub3c4 \ud3ec\ub77d \uac80\uc0ac98"
+        },
+        {
+          "status": "pass",
+          "text": "\uac15\ucca0\u00b7\uccad\ub3d9\u00b7\uac00\uc8fd\u00b7\ubcf4\uc11d \ud45c\uba746\uc885 finish \u00b7 micro-normal 16/16 \u00b7 roughness-map 16/16 \u00b7 \ucc38\uc870 \ud22c\uc601 0\uac1c \u00b7 \uc120\ud615 de-light 0/0 \u00b7 \uc0ac\uc9c4 \ud30c\uc0dd normal+roughness 0\uac1c \u00b7 \uc228\uc740\uba74 \uc7ac\uc9c8\ud569\uc131 0\uac1c \u00b7 \uc774\ubc29\uc131 13100"
+        },
+        {
+          "status": "pass",
+          "text": "\uc2e4\ubb34 \ud1a0\ud3f4\ub85c\uc9c0\uc804\uccb4 \ubd80\ud488 \ud3d0\uc1c4\u00b7\ub9e4\ub2c8\ud3f4\ub4dc\u00b7\ud1f4\ud654 \uc0bc\uac01\ud615 0 \uc790\ub3d9 \uac80\uc0ac97"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 16\uac1c \uba54\uc2dc \u00b7 18,930 tris \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm \u00b7 100% \uba85\uba85 \ub178\ub4dc100"
+        }
+      ],
+      "savedFile": "blade-proof.json"
+    },
+    {
+      "active": "asphalt-surface",
+      "blocked": false,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uc2e4\ubcc0\uc704 \ud45c\uba74 \uad6c\uc8701/1 \ud3d0\uc1c4\ud615 \u00b7 \uacbd\uacc4 0 \u00b7 \ube44\ub9e4\ub2c8\ud3f4\ub4dc 0 \u00b7 \ud1f4\ud654 0 \u00b7 \uc790\uae30\uad50\ucc28 0 \u00b7 \uad50\ucc28\uac80\uc0ac \uc644\ub8cc \u00b7 \uc2e4\ubcc0\uc704 1\uac1c \u00b7 \uace8\uc7ac 6959\uac1c \u00b7 RMS 0.98 mm \u00b7 P-V 6.20 mm100"
+        },
+        {
+          "status": "pass",
+          "text": "\uacf5\uc720 \ubaa8\uc11c\ub9ac \uba74 \ubc29\ud5a5\ubc29\ud5a5 \ucda9\ub3cc 0\uac1c \u00b7 \uc704\uce58 weld 1e-6 \u00b7 \uad6d\ubd80 \uc77c\uad00\uc131\ub9cc \uac80\uc0ac\ud558\uba70 \uc804\uccb4 \ubc14\uae65 \ubc29\ud5a5/\uccb4\uc801\uc740 \ubcf4\uc7a5\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.100"
+        },
+        {
+          "status": "pass",
+          "text": "\ud45c\uba74 \ubca4\uce58\ub9c8\ud06c \uc644\uc131\ub3c4\uac01\uc9c4 \uad75\uc740 \uace8\uc7ac\u00b7\ubbf8\uc138 \uace8\uc7ac\u00b7\uc5ed\uccad \ud648\u00b7\uc2e4\ubcc0\uc704\u00b7PBR \ub9f5 \ud68c\uadc0 \uc870\uac74 \ucda9\uc871100"
+        },
+        {
+          "status": "pass",
+          "text": "PBR \ubbf8\uc138 \ud45c\uba741\uc885 finish \u00b7 micro-normal 1/1 \u00b7 roughness-map 1/1 \u00b7 \ucc38\uc870 \ud22c\uc601 0\uac1c \u00b7 \uc120\ud615 de-light 0/0 \u00b7 \uc0ac\uc9c4 \ud30c\uc0dd normal+roughness 0\uac1c \u00b7 \uc228\uc740\uba74 \uc7ac\uc9c8\ud569\uc131 0\uac1c \u00b7 \uc774\ubc29\uc131 0 \u00b7 IR \ud45c\uba74 100%100"
+        },
+        {
+          "status": "pass",
+          "text": "\ub2e4\uc911 \uc2a4\ucf00\uc77c \ud45c\uba74 \uac80\uc218\uc2e4\uc81c \uc9c0\uc624\uba54\ud2b8\ub9ac RMS 0.98 mm \u00b7 \ucd5c\uace0\u2013\ucd5c\uc800 6.20 mm \u00b7 \uc808\ucc28 \uace8\uc7ac \u00b7 micro-normal\u00b7roughness-map \ub3d9\uc2dc \uac80\uc99d100"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 1\uac1c \uba54\uc2dc \u00b7 111,936 tris \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm \u00b7 100% \uba85\uba85 \ub178\ub4dc100"
+        }
+      ],
+      "savedFile": "asphalt-surface-proof.json"
+    },
+    {
+      "active": "moderncat-concept",
+      "blocked": true,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uac74\ucd95 \ubd80\uc7ac \uad6c\uc870147/147 \ud3d0\uc1c4\ud615 \u00b7 \uacbd\uacc4 0 \u00b7 \ube44\ub9e4\ub2c8\ud3f4\ub4dc 0 \u00b7 \ud1f4\ud654 0 \u00b7 \uc790\uae30\uad50\ucc28 0 \u00b7 \uad50\ucc28\uac80\uc0ac \uc644\ub8cc100"
+        },
+        {
+          "status": "pass",
+          "text": "\uacf5\uc720 \ubaa8\uc11c\ub9ac \uba74 \ubc29\ud5a5\ubc29\ud5a5 \ucda9\ub3cc 0\uac1c \u00b7 \uc704\uce58 weld 1e-6 \u00b7 \uad6d\ubd80 \uc77c\uad00\uc131\ub9cc \uac80\uc0ac\ud558\uba70 \uc804\uccb4 \ubc14\uae65 \ubc29\ud5a5/\uccb4\uc801\uc740 \ubcf4\uc7a5\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.100"
+        },
+        {
+          "status": "blocked",
+          "text": "\uacf5\uac04\u00b7\uac00\uad6c \ubc30\uce58 \uc644\uc131\ub3c4\ud544\uc218 \uacf5\uac04 100% \u00b7 \uc2e4\uc81c \ud3c9\uba74 IoU 1.000 \u00b7 \uacfc\uc789 0.0% \u00b7 \ub204\ub77d 0.0% \u00b7 locked fidelity contract is required \u00b7 evidence-first part decomposition contract is required59"
+        },
+        {
+          "status": "pass",
+          "text": "PBR \ubbf8\uc138 \ud45c\uba748\uc885 finish \u00b7 micro-normal 147/147 \u00b7 roughness-map 147/147 \u00b7 \ucc38\uc870 \ud22c\uc601 0\uac1c \u00b7 \uc120\ud615 de-light 0/0 \u00b7 \uc0ac\uc9c4 \ud30c\uc0dd normal+roughness 0\uac1c \u00b7 \uc228\uc740\uba74 \uc7ac\uc9c8\ud569\uc131 0\uac1c \u00b7 \uc774\ubc29\uc131 95 \u00b7 IR \ud45c\uba74 100%100"
+        },
+        {
+          "status": "blocked",
+          "text": "\uac74\ucd95 \uc178 \ubc94\uc704 \uac80\uc218\ubaa8\ub378 \ubc94\uc704 \uac80\uc99d BLOCKED \u00b7 locked fidelity contract is required \u00b7 evidence-first part decomposition contract is required50"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 147\uac1c \uba54\uc2dc \u00b7 81,768 tris \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm \u00b7 100% \uba85\uba85 \ub178\ub4dc100"
+        }
+      ],
+      "savedFile": "moderncat-concept-proof.json"
+    },
+    {
+      "active": "cooler",
+      "blocked": true,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uc774\ubbf8\uc9c0 \ud30c\uc0dd \ubd80\ud488 \uad6c\uc870322/322 \ud3d0\uc1c4\ud615 \u00b7 \uacbd\uacc4 0 \u00b7 \ube44\ub9e4\ub2c8\ud3f4\ub4dc 0 \u00b7 \ud1f4\ud654 0 \u00b7 \uc790\uae30\uad50\ucc28 0 \u00b7 \uad50\ucc28\uac80\uc0ac \uc644\ub8cc100"
+        },
+        {
+          "status": "blocked",
+          "text": "\uacf5\uc720 \ubaa8\uc11c\ub9ac \uba74 \ubc29\ud5a5\ubc29\ud5a5 \ucda9\ub3cc 1596\uac1c \u00b7 \uc704\uce58 weld 1e-6 \u00b7 \uad6d\ubd80 \uc77c\uad00\uc131\ub9cc \uac80\uc0ac\ud558\uba70 \uc804\uccb4 \ubc14\uae65 \ubc29\ud5a5/\uccb4\uc801\uc740 \ubcf4\uc7a5\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.0"
+        },
+        {
+          "status": "blocked",
+          "text": "\ubd80\ud488 \uadfc\uac70 \uc644\uc131\ub3c4\uadfc\uac70 \uae30\ub85d 100% \u00b7 measured/datasheet 13 \u00b7 estimated 48 \u00b7 inferred 3652"
+        },
+        {
+          "status": "pass",
+          "text": "PBR \ubbf8\uc138 \ud45c\uba748\uc885 finish \u00b7 micro-normal 299/322 \u00b7 roughness-map 299/322 \u00b7 \ucc38\uc870 \ud22c\uc601 0\uac1c \u00b7 \uc120\ud615 de-light 0/0 \u00b7 \uc0ac\uc9c4 \ud30c\uc0dd normal+roughness 0\uac1c \u00b7 \uc228\uc740\uba74 \uc7ac\uc9c8\ud569\uc131 0\uac1c \u00b7 \uc774\ubc29\uc131 181 \u00b7 IR \ud45c\uba74 100%95"
+        },
+        {
+          "status": "warn",
+          "text": "\uc804\uae30 \uc5f0\uacb0\u00b7\uc2e4\ubb3c \uac80\uc21875/75 \ub3c4\uccb4 \u00b7 \ubb3c\ub9ac \ud540 150/150 \u00b7 AWG 75/75 \u00b7 \ubca4\uce58 \ub300\uae30 589"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 322\uac1c \uba54\uc2dc \u00b7 272,560 tris \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm \u00b7 100% \uba85\uba85 \ub178\ub4dc100"
+        }
+      ],
+      "savedFile": "cooler-proof.json"
+    },
+    {
+      "active": "web-hero",
+      "blocked": true,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uc778\uccb4 \ud1a0\ud3f4\ub85c\uc9c014,517\uac1c \uc2a4\ud0a8 \uc815\uc810 \u00b7 \uc774\ub984 \uc788\ub294 \uc288\ud2b8 \uc0c1\uc138 139\uac1c93"
+        },
+        {
+          "status": "blocked",
+          "text": "\ub3d9\uc77c \uc2dc\uc810 \ucc38\uc870 \ucda9\uc2e4\ub3c4LLM \uccb4\ud615\u00b7\uc790\uc138 \ud574\uc11d \uc801\uc6a9 \u00b7 \ub2e8\uc77c \uc0ac\uc9c4\uc774\ub77c \ud6c4\uba74\u00b7\uc190 \uae4a\uc774\uc758 \ub3d9\uc77c \uc2dc\uc810 \ube44\uad50\ub294 \uc544\uc9c1 BLOCKED35"
+        },
+        {
+          "status": "pass",
+          "text": "\uc6f9 \uc288\ud2b8 \uc7ac\uc9c8\u00b7\ubd80\ud488hex-knit\u00b7optical glass\u00b7polymer 4\uc885 \u00b7 \uc8fc\ub984 1675 verts / max 2.50 mm \u00b7 inferred 396"
+        },
+        {
+          "status": "pass",
+          "text": "\ub79c\ub4dc\ub9c8\ud06c \ud3ec\uc988 \uc624\ucc2817\uac1c \uad00\uc808 \ubaa9\ud45c RMS 8.7 mm \u00b7 \uc624\ub978\uc190=\ud654\uba74 \uc67c\ucabd \u00b7 \uc228\uc740 \uae4a\uc774\ub294 inferred86"
+        },
+        {
+          "status": "pass",
+          "text": "\uac8c\uc784 LOD \ud615\uc0c1\u00b7\ubcc0\ud6151\uac1c LOD \u00b7 LOD1 tris 75.0% \u00b7 \ub2e8\uacc4 \uac10\uc18c \ud1b5\uacfc \u00b7 \uc911\ub9bd \uc2e4\ub8e8\uc5e3 0.00% \u00b7 \uad00\uc808 \ud3ec\uc988 \uc2e4\ub8e8\uc5e3 0.00% \u00b7 \uc2a4\ud0a8 100%100"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 141\uac1c \uba54\uc2dc \uc7ac\uc5f4\uae30 \u00b7 \uc774\ub984 100% \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm100"
+        }
+      ],
+      "savedFile": "web-hero-proof.json"
+    },
+    {
+      "active": "field-human",
+      "blocked": false,
+      "checks": [
+        {
+          "status": "pass",
+          "text": "\uc778\uccb4 \ud1a0\ud3f4\ub85c\uc9c014,517\uac1c \uc815\uc810\uc758 \uc5f0\uc18d\ud615 \uc778\uccb4 \uae30\ubcf8 \uba54\uc2dc93"
+        },
+        {
+          "status": "pass",
+          "text": "\uc2e4\ub8e8\uc5e3 \uc548\uc815\uc131\ubaa8\ud504 \ubc94\uc704\uc640 \uc2e0\uccb4 \ube44\uc728\uc758 \uc548\uc804 \uad6c\uac04 \uac80\uc0ac93"
+        },
+        {
+          "status": "pass",
+          "text": "\uc7ac\uc9c8 \ubd84\ub9ac\ud53c\ubd80\u00b7\uc288\ud2b8\u00b7\ud5e4\uc5b4\uc758 \ubb3c\ub9ac \uae30\ubc18 \uc7ac\uc9c8 \ubd84\ub9ac90"
+        },
+        {
+          "status": "pass",
+          "text": "\uac8c\uc784 \ub9ac\uadf849\ubcf8 \u00b7 30\uac1c \uc190\uac00\ub77d \ubcf8 \uc2e4\uc81c \uc6e8\uc774\ud2b8 \u00b7 22\ud074\ub9bd/185\ud2b8\ub799 \u00b7 10\uac1c \uc5bc\uad74 \ubaa8\ud504 GLB \ubcf4\uc874100"
+        },
+        {
+          "status": "pass",
+          "text": "\uac8c\uc784 LOD \ud615\uc0c1\u00b7\ubcc0\ud6151\uac1c LOD \u00b7 LOD1 tris 75.0% \u00b7 \ub2e8\uacc4 \uac10\uc18c \ud1b5\uacfc \u00b7 \uc911\ub9bd \uc2e4\ub8e8\uc5e3 0.00% \u00b7 \uad00\uc808 \ud3ec\uc988 \uc2e4\ub8e8\uc5e3 0.00% \u00b7 \uc2a4\ud0a8 100%100"
+        },
+        {
+          "status": "pass",
+          "text": "GLB \ud45c\uc900\u00b7\uc655\ubcf5 \uac80\uc99dKhronos \uc624\ub958 0 / \uacbd\uace0 0 \u00b7 \ub3c5\ub9bd \ud30c\uc11c \ud1b5\uacfc \u00b7 3\uac1c \uba54\uc2dc \uc7ac\uc5f4\uae30 \u00b7 \uc774\ub984 100% \u00b7 \ud3ec\ub77d \uc624\ucc28 0.000 mm100"
+        }
+      ],
+      "savedFile": "field-human-proof.json"
+    }
+  ]
+}

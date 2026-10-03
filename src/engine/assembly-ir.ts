@@ -1,3 +1,4 @@
+import type {BladeSideWindingIR} from './blade-side-winding';
 import type { TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { FidelityContract } from './fidelity-pipeline';
 import type { VisualHullDescriptor } from './visual-hull';
@@ -48,7 +49,7 @@ export type AssemblyGeometryIR =
     referenceRelief?: QuantizedReferenceHeightField;
   }
   | { op: 'hipRoof'; width: number; depth: number; rise: number; thickness: number; ridgeLength: number }
-  | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[] }
+  | { op: 'bladeLoft'; sections: Array<[number, number]>; thickness: number; apexThickness: number; grindCurve?: number[]; sideWinding?: BladeSideWindingIR }
   | { op: 'visualHull'; descriptor: VisualHullDescriptor }
   | { op: 'implicitSurface'; descriptor: ImplicitSurfaceDescriptor };
 
