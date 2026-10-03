@@ -18,16 +18,19 @@ Morphloom은 사진·도면·실측값·자연어 요구를 선언형 IR로 정�
 
 ## 현재 상태
 
-아래는 **2026-10-03 체크포인트**의 실행 증거입니다. 이 README 수정에서 모델 생성·테스트·DCC 검증을 다시 실행한 것은 아닙니다.
+아래는 **2026-10-04 단일 native source 평행이동 작업**의 현재 실행 결과입니다.
 
 | 범위 | 확인된 결과 | 제한 |
 |---|---|---|
-| 게시본 테스트·타입 검사·빌드 | 106개 테스트 파일 / 770개 테스트 PASS, `check`·`build` PASS | 제품 전체 또는 임의 입력의 품질 인증이 아님 |
-| 원본/수정 GLB 결합 UV 검사 | 실제 파일 8쌍 PASS, 기어 24개 톱니 검사 유지 | 정확한 원본과 지원되는 선언형 이동 파일이 필요 |
-| 중요 특징의 실패 차단 | 톱니 24/294면 UV 손상을 FAIL로 검출 | 전체 메시 손상률 0.286%가 평균 검사에 가려지지 않음 |
-| 로컬 파일 검사 UI | 정상·손상·잘못된 원본·저장 등 8사례, 지연 파일 읽기 3사례 PASS | UI unmount의 실제 브라우저 검증은 not-run |
-| 전체 납품·production | **미충족** | 이전 전역 게이트 FAIL 미해결, 위 단계의 전체 게이트는 not-run |
-| 이동 결과의 editable IR 재생성 | **미완료·격리** | 실험 테스트 3개 FAIL; 활성 소스/테스트 경로에 포함하지 않음 |
+| 게시본 테스트·타입 검사·벤치마크·빌드 | 108개 파일 / 779개 테스트 PASS, `check`·`benchmark`·`build` PASS | 임의 입력의 품질 인증이 아님 |
+| 이동 결과의 별도 editable sourceJSON | 작은·기본·큰 베어링과 기어 4사례 PASS | 단일 embedded native source, identity 부모, 선언된 평행이동만 |
+| 실제 브라우저 편집 흐름 | 저장·새 세션 재열기·GLB 반복 생성·추가 편집·Undo/Redo PASS4 | 현재 이동 GLB의 원본 참고 metadata는 수정하지 않음 |
+| 원본 결합 UV·중요 특징 검사 | 기존 24개 톱니 검사와 한 톱니 손상 FAIL 유지 | 5% 임계값 유지; 전체 평균으로 대체하지 않음 |
+| 파일 교체·지연·읽기 실패·unmount | 수정 source 생성 6사례, 기존 검사 지연 3사례 PASS | 이전 결과·다운로드를 새 선택에 재사용하지 않음 |
+| 실제 파일 | 원본·이동본·재생성본 12 GLB 엄격 검사 PASS, Blender 첫 import 대응 PASS4 | Blender raw normal 충실도는 별도 FAIL |
+| 전체 납품·production | **미충족** | 현재 `quality:gate`·`quality:production` exit 1, 기존 전역 영수증 수락 실패 유지 |
+
+[구현 범위·현재 해시·실행 증거](./docs/TRANSLATED_SOURCE_STATUS.ko.md)를 확인하세요. renderer 0.12는 corner-angle normal의 실행 환경 차이를 제거했으며, 검증하지 않은 이전 버전 결과를 성공으로 승격하지 않습니다.
 
 Blender 첫 import의 normal 오차와 회전·스케일 부모의 변환 대응 문제도 남아 있습니다. 기존 `releaseAllowed` 기준과 검사 임계값을 완화하지 않았습니다.
 
@@ -98,6 +101,8 @@ npm run dev
 편집기의 **Original/current GLB UV inspection**을 펼치고 원본·수정 GLB를 선택합니다. `Inspect bound reference UV`로 검사하고 보고서를 저장합니다. 파일은 로컬에서 읽으며 뷰포트 프로젝트를 수정하지 않습니다.
 
 이 검사는 [선언형 source-preserving translation 어댑터](./docs/SOURCE_SPEC_REFERENCE_STATUS.ko.md)의 결과를 대상으로 합니다. 임의 DCC 수정 파일, 잘못된 원본, 지원하지 않는 표현은 거부합니다. 통과하더라도 현재 GLB의 IR은 **before-edit reference**이며 `currentEditableIRAvailable: false`입니다. UV 합격은 전체 납품 합격이 아닙니다.
+
+검사가 통과하면 **Generate modified native source JSON** → **Save modified source JSON**을 사용합니다. 새 세션의 **Load JSON**으로 이 파일을 다시 열어 편집·Undo/Redo·GLB 내보내기를 계속할 수 있습니다. 원본과 이동 GLB는 보존되며, 편집 가능한 것은 별도로 검증한 새 sourceJSON입니다. 지원하지 않는 입력은 저장을 차단합니다.
 
 CLI에서도 동일한 검사를 실행할 수 있습니다. 보고서 경로는 새 파일이어야 합니다.
 

@@ -18,16 +18,19 @@ Morphloom is an open-source local tool that turns photographs, drawings, measure
 
 ## Current status
 
-These results belong to the **2026-10-03 checkpoint**. This README update did not rerun model generation, tests, or DCC validation.
+Current evidence is from the **2026-10-04 single native source translation task**.
 
 | Scope | Evidence | Limits |
 |---|---|---|
-| Published checkout tests, typecheck, build | 106 test files / 770 tests PASS; `check` and `build` PASS | Not certification of the product or arbitrary inputs |
-| Bound original/current GLB UV inspection | 8 actual file pairs PASS; 24 gear tooth checks retained | Requires the exact original and a supported declared translation |
-| Critical-feature rejection | Damaged UVs on 24/294 triangles of one tooth FAIL | Overall damage of 0.286% cannot hide the feature failure |
-| Local file inspection UI | 8 native cases and 3 controlled delayed-read cases PASS | Actual browser unmount verification not-run |
-| Overall delivery / production | **Not achieved** | Earlier global gate failures remain; whole gates not-run for these steps |
-| Editable IR regeneration after translation | **Incomplete, quarantined** | 3 experimental tests FAIL; excluded from active source/tests |
+| Tests/typecheck/benchmark/build | 108 files / 779 tests PASS; check, benchmark, build PASS | No arbitrary-input quality certification |
+| Separate editable translated source | Small/default/large bearing and gear: 4 PASS | One embedded native source, identity parents, declared translation only |
+| Actual native browser workflow | Download, fresh-session reload, repeat GLB, additional edit, Undo/Redo PASS4 | Input GLB before-edit reference metadata stays unchanged |
+| Bound UV and critical features | Existing 24-tooth check and damaged-tooth FAIL retained | Unchanged 5% threshold; no aggregate substitution |
+| Async invalidation | Reconstruction replacement/fault/unmount PASS6; existing delayed inspection PASS3 | Old results/downloads cannot survive a changed selection |
+| Actual files | Strict validation PASS12; Blender first-import correspondence PASS4 | Raw Blender normal fidelity remains a separate FAIL |
+| Overall production delivery | **Not achieved** | Current quality:gate and quality:production exit 1 at existing global receipt acceptance failures |
+
+See [current evidence and hashes](./docs/TRANSLATED_SOURCE_STATUS.ko.md). Renderer 0.12 removes the runtime difference in corner-angle weighting; unverified older artifacts are not promoted.
 
 Blender first-import normal drift and transform correspondence with rotated/scaled parents remain unresolved. Existing `releaseAllowed` rules and thresholds were not weakened.
 

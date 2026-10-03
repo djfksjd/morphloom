@@ -1,3 +1,4 @@
+import {deterministicCornerAngle} from './deterministic-corner-angle';
 import { BufferAttribute, BufferGeometry, Vector3 } from 'three';
 import type { AssemblyGeometryIR } from './assembly-ir';
 import { validateAssemblyIR } from './assembly-compiler';
@@ -84,7 +85,7 @@ export function creasePartNormals(source: BufferGeometry, angle: number, weighti
       a.fromBufferAttribute(p,i);b.fromBufferAttribute(p,i+1);c.fromBufferAttribute(p,i+2);
       const n=b.sub(a).cross(c.sub(a)).normalize(); normals.push(n.clone());
       for(let j=0;j<3;j++) { const k=key(i+j); let faces=shared.get(k); if(!faces) {faces=[];shared.set(k,faces);} faces.push(i+j);
-        if(weights){const center=new Vector3().fromBufferAttribute(p,i+j),u=new Vector3().fromBufferAttribute(p,i+(j+1)%3).sub(center),v=new Vector3().fromBufferAttribute(p,i+(j+2)%3).sub(center);if(u.lengthSq()===0||v.lengthSq()===0||n.lengthSq()===0)throw new Error('Degenerate corner-angle triangle');u.normalize();v.normalize();weights[i+j]=Math.atan2(new Vector3().crossVectors(u,v).length(),u.dot(v));} }
+        if(weights){const center=new Vector3().fromBufferAttribute(p,i+j),u=new Vector3().fromBufferAttribute(p,i+(j+1)%3).sub(center),v=new Vector3().fromBufferAttribute(p,i+(j+2)%3).sub(center);if(u.lengthSq()===0||v.lengthSq()===0||n.lengthSq()===0)throw new Error('Degenerate corner-angle triangle');u.normalize();v.normalize();weights[i+j]=deterministicCornerAngle(new Vector3().crossVectors(u,v).length(),u.dot(v));} }
     }
     const data=new Float32Array(p.count*3),sum=new Vector3(),threshold=Math.cos(angle)-1e-7;
     for(let i=0;i<p.count;i++) {

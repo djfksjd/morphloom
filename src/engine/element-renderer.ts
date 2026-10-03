@@ -9,7 +9,7 @@ import { resolveElements, validateProject, type ElementProject, type ResolvedEle
 import { compileAssemblyGeometry,compileDerivedGearGeometry } from './assembly-compiler';
 import { creasePartNormals } from './part-geometry';
 import { toothIds } from './spur-gear';
-export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.11';
+export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.12';
 
 const MAX_TRIANGLES = 2_000_000;
 const MAX_BATCHES = 128;

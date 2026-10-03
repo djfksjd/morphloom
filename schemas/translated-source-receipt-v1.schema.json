@@ -1,0 +1,20 @@
+{
+ "$schema":"https://json-schema.org/draft/2020-12/schema",
+ "$id":"https://morphloom.local/schemas/translated-source-receipt-v1.schema.json",
+ "title":"Separate translated native source verification receipt",
+ "type":"object","additionalProperties":false,
+ "required":["schema","engineRevision","originalFingerprint","currentFingerprint","sourceFingerprint","target","translationMm","verification","currentEditableSourceAvailable","inputGlbEditableIrAvailable","scope"],
+ "properties":{
+  "schema":{"const":"morphloom.translated-source-receipt/0.1"},
+  "engineRevision":{"type":"string","minLength":1},
+  "originalFingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+  "currentFingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+  "sourceFingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+  "target":{"type":"string","minLength":1},
+  "translationMm":{"type":"array","minItems":3,"maxItems":3,"items":{"type":"number","minimum":-1000,"maximum":1000}},
+  "verification":{"const":"Regenerated BIN/non-transform scene semantics exact; local translation <=1e-6m and linear terms <=1e-10"},
+  "currentEditableSourceAvailable":{"const":true},
+  "inputGlbEditableIrAvailable":{"const":false},
+  "scope":{"const":"Separate native source for declared translation; not arbitrary DCC edits, manufacturing or production approval"}
+ }
+}
