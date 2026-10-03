@@ -1,3 +1,11 @@
+
+> morphloom@0.4.0 quality:production
+> npm run quality:gate && npm run benchmark:dominance -- --require-claim
+
+
+> morphloom@0.4.0 quality:gate
+> vite-node scripts/quality-gate.ts && vite-node scripts/competitive-benchmark.ts
+
 {
   "schema": "morphloom.quality-benchmark/0.2",
   "readinessRevision": "morphloom-domain-readiness/0.14.0",
@@ -2156,3 +2164,4 @@
     }
   ]
 }
+Quality gate failed: overall 78%/100% · technical 78%/100% · decision 78%/100% · deliveryRelease 67%/100% · release browser proof 2/4

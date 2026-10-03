@@ -1,0 +1,7 @@
+13:48:49 | INFO: Data are loaded, start creating Blender stuff
+13:48:49 | INFO: Blender create Mesh node 0
+13:48:49 | INFO: glTF import finished in 0.01s
+{"schema": "morphloom.blender-cap-orientation/0.1", "blenderVersion": "5.2.1 LTS", "sourceSha256": "9c11c0e9de8e59e5a7783cc73803e0697d06b9dd5132327bc2c90cb8e6ab3c99", "target": "tube", "triangles": 144, "boundaryEdges": 0, "nonManifoldEdges": 0, "degenerateTriangles": 0, "inconsistentDirectedEdges": 0, "orientationPass": true, "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { strToU8, zipSync } from 'fflate';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -111,6 +111,7 @@ interface ResultViewportProps {
   measurementUnit?: MeasurementUnit;
   dimensionOverviewEnabled?: boolean;
   onBuilt?: (build: CharacterBuild | ProductBuild) => void;
+  onQualityMetrics?: (metrics: CharacterBuild['metrics'] | ProductBuild['metrics']) => void;
   onPartSelected?: (part?: InspectablePart) => void;
   onMeasurementChange?: (result: MeasurementResult | undefined, points: 0 | 1 | 2) => void;
   onMeasurementMiss?: () => void;
@@ -709,6 +710,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     measurementUnit = 'mm',
     dimensionOverviewEnabled = false,
     onBuilt,
+    onQualityMetrics,
     onPartSelected,
     onMeasurementChange,
     onMeasurementMiss,
@@ -726,8 +728,13 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
     const markerRadiusRef = useRef(0.01);
     const assetIdentityRef = useRef<{ assetKind: AssetKind; assemblyIR?: AssemblyIR; productSpec: ProductSpec; spec: CharacterSpec } | undefined>(undefined);
     const validationSequenceRef = useRef(0);
+    // Invalidate at commit, before passive cleanup or old async publication.
+    useLayoutEffect(() => {
+      validationSequenceRef.current += 1;
+      return () => { validationSequenceRef.current += 1; };
+    }, [assemblyIR, assetKind, onDeliveryAudit, onQualityMetrics, onTelemetry, pack, productSpec, spec]);
     const exportSequenceRef = useRef(0);
-    const validatedGlbRef = useRef<{ sourceKey: string; bytes: ArrayBuffer; audit: DeliveryAudit } | undefined>(undefined);
+    const validatedGlbRef = useRef<{ sourceKey: string; bytes: ArrayBuffer; audit: DeliveryAudit; metrics: CharacterBuild['metrics'] | ProductBuild['metrics'] } | undefined>(undefined);
     const glbQueueRef = useRef<SerializedTaskQueue | undefined>(undefined);
     const glbQueue = glbQueueRef.current ??= new SerializedTaskQueue(4);
     const telemetryRef = useRef<LocalBuildTelemetry | undefined>(undefined);
@@ -743,11 +750,12 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       ? buildCharacter(pack, spec, 'beauty')
       : assemblyIR ? compileAssemblyIR(assemblyIR, 'beauty') : buildProduct(productSpec, 'beauty');
 
-    const ensureValidatedGlb = async (): Promise<{ bytes: ArrayBuffer; audit: DeliveryAudit }> => {
+    const ensureValidatedGlb = async (): Promise<{ bytes: ArrayBuffer; audit: DeliveryAudit; metrics: CharacterBuild['metrics'] | ProductBuild['metrics'] }> => {
       const sourceKey = deliveryInputFingerprint({ assetKind, assemblyIR, productSpec, spec, pack });
+      const sequence = validationSequenceRef.current;
       const cached = validatedGlbRef.current;
       if (cached?.sourceKey === sourceKey && cached.audit.status !== 'blocked') {
-        return { bytes: cached.bytes, audit: cached.audit };
+        return { bytes: cached.bytes, audit: cached.audit, metrics: cached.metrics };
       }
       return glbQueue.run(sourceKey, async () => {
         const deliveryBuild = createBeautyBuild();
@@ -756,8 +764,16 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
           const bytes = await generateGlb(deliveryBuild.root);
           const audit = await verifyGlbRoundTrip(deliveryBuild.root, bytes, sourceKey, buildFingerprint);
           if (audit.status === 'blocked') throw new Error(audit.blockers.join(' · '));
-          validatedGlbRef.current = { sourceKey, bytes, audit };
-          return { bytes, audit };
+          // These metrics are audit data, not the disposable render root.
+          deliveryBuild.metrics.surfaces = inspectSurfaceSystem(deliveryBuild.root);
+          const metrics = structuredClone(deliveryBuild.metrics);
+          metrics.bounds = deliveryBuild.metrics.bounds.clone();
+          if ('headCenter' in metrics && 'headCenter' in deliveryBuild.metrics) {
+            metrics.headCenter = deliveryBuild.metrics.headCenter.clone();
+            metrics.headSize = deliveryBuild.metrics.headSize.clone();
+          }
+          if (sequence === validationSequenceRef.current) validatedGlbRef.current = { sourceKey, bytes, audit, metrics };
+          return { bytes, audit, metrics };
         } finally {
           disposeObject(deliveryBuild.root);
         }
@@ -1094,7 +1110,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
       onDeliveryAudit?.(undefined);
       const timer = window.setTimeout(() => {
         void ensureValidatedGlb()
-          .then(({ audit }) => {
+          .then(({ audit, metrics }) => {
             if (sequence !== validationSequenceRef.current) return;
             const diagnostic = window as Window & { __MORPHLOOM__?: Record<string, unknown> };
             if (diagnostic.__MORPHLOOM__) {
@@ -1134,6 +1150,8 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
               diagnostic.__MORPHLOOM__.reopenedGameLods = audit.reopened?.gameLods;
               diagnostic.__MORPHLOOM__.reopenedCollisionPrimitives = audit.reopened?.collisionPrimitives;
             }
+            onQualityMetrics?.(metrics);
+            if (sequence !== validationSequenceRef.current) return;
             onDeliveryAudit?.(audit);
             const telemetry = telemetryRef.current;
             if (telemetry) {
@@ -1154,7 +1172,7 @@ export const ResultViewport = forwardRef<ViewportHandle, ResultViewportProps>(
         window.clearTimeout(timer);
         validationSequenceRef.current += 1;
       };
-    }, [assemblyIR, assetKind, onDeliveryAudit, onTelemetry, pack, productSpec, spec]);
+    }, [assemblyIR, assetKind, onDeliveryAudit, onQualityMetrics, onTelemetry, pack, productSpec, spec]);
 
     useEffect(() => {
       const runtime = runtimeRef.current;

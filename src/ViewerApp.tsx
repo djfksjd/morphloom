@@ -291,7 +291,8 @@ export function ViewerApp() {
       : evaluateProductQuality(productSpec, undefined, productMetrics, assemblyIR, deliveryAudit);
   }, [assemblyIR, assetKind, characterMetrics, deliveryAudit, pack, productMetrics, productSpec, spec]);
   const qualityBlocked = quality?.checks.some((check) => check.status === 'blocked') ?? false;
-  const observedQualityReleaseReady = Boolean(quality && buildMetrics) && !qualityBlocked;
+  const observedQualityReleaseReady = Boolean(quality && buildMetrics) && !qualityBlocked
+    && deliveryAudit?.status === 'pass' && !deliveryVerifying;
   const fidelityAudit = useMemo(() => assemblyIR?.fidelity
     ? auditFidelityContract(assemblyIR.fidelity, assemblyIR)
     : undefined, [assemblyIR]);
@@ -305,6 +306,7 @@ export function ViewerApp() {
     if (!selectedPart || !assemblyIR) return;
     const next = editAssemblyLayout(assemblyIR, selectedPart.id, edit);
     importIntent.cancel();
+    setBuildMetrics(undefined);
     setAssemblyIR(next);
     setViewerNote(`${selectedPart.name} 배치를 모델 데이터에 반영했습니다. 내보내기에도 동일하게 포함됩니다.`);
   }, [assemblyIR, selectedPart, importIntent]);
@@ -325,9 +327,14 @@ export function ViewerApp() {
     setMeasurementMissed(false);
   }, []);
 
+  const handleQualityMetrics = useCallback((metrics: CharacterBuild['metrics'] | ProductBuild['metrics']) => {
+    setBuildMetrics(metrics);
+  }, []);
+
   const handleDeliveryAudit = useCallback((audit: DeliveryAudit | undefined) => {
     setDeliveryAudit(audit);
     setDeliveryVerifying(audit === undefined);
+    if (audit === undefined) setBuildMetrics(undefined);
   }, []);
 
   useEffect(() => {
@@ -687,6 +694,7 @@ export function ViewerApp() {
                 measurementUnit={measurementUnit}
                 dimensionOverviewEnabled={dimensionOverviewEnabled}
                 onBuilt={handleBuilt}
+                onQualityMetrics={handleQualityMetrics}
                 onPartSelected={setSelectedPart}
                 onMeasurementChange={handleMeasurementChange}
                 onMeasurementMiss={() => setMeasurementMissed(true)}
@@ -828,7 +836,7 @@ export function ViewerApp() {
             </div>
           )}
 
-          {assetKind === 'product' && assemblyIR && <AssemblyComponentEditor ir={assemblyIR} selectedId={selectedPart?.id} onCommit={next=>{importIntent.cancel();setAssemblyIR(next);setDeliveryAudit(undefined);setDeliveryVerifying(true);setViewerNote('선택 부품 수정 · 기존 납품 검사 재실행');}}/>}
+          {assetKind === 'product' && assemblyIR && <AssemblyComponentEditor ir={assemblyIR} selectedId={selectedPart?.id} onCommit={next=>{importIntent.cancel();setBuildMetrics(undefined);setAssemblyIR(next);setDeliveryAudit(undefined);setDeliveryVerifying(true);setViewerNote('선택 부품 수정 · 기존 납품 검사 재실행');}}/>}
 
           {assetKind === 'product' && productMetrics && (
             <div className="surface-audit" aria-label="PBR 표면 검사 결과">

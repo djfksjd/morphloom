@@ -1,0 +1,24 @@
+{
+  "pass": false,
+  "uiConflicts": 0,
+  "actualBlenderGlbConflicts": 16,
+  "input": {
+    "op": "tube",
+    "points": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        60,
+        0
+      ]
+    ],
+    "radius": 5,
+    "tubularSegments": 8,
+    "radialSegments": 8
+  },
+  "method": "Native Clay edit/Save IR/regular GLB, actual Blender reopen"
+}

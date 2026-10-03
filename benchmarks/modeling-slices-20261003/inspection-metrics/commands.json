@@ -1,0 +1,75 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "scope": "publish-check",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "scope": "publish-build",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "scope": "publish-benchmark",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "scope": "source-tests",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "scope": "source-check",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "scope": "source-build",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "scope": "source-benchmark",
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "quality:production"
+    ],
+    "scope": "quality-production",
+    "exitCode": 1
+  }
+]

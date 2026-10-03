@@ -1,0 +1,7 @@
+# Inspection-mode edit metrics contract
+
+Before implementation confirmed: native imported flat tube (coherent) selected, switch Clay, clear flat finish/Apply. Current row says0 conflicts; actual regular GLB imported in Blender has16. handleBuilt intentionally skips inspection-mode materials, but leaves old geometry metrics after IR changes.
+
+Keep inspection appearance out of quality. Deliver detached beauty/export metrics with the same sourceKey and successful validation, behind existing sequence guard; store metrics alongside validated cache. Clear old metrics immediately on committed/source-changing edits; show not-run/pending until current metrics arrive. Optional callback preserves viewport callers. No IR/schema/compiler/geometry/GLB byte change, no new dependencies or threshold relaxation. Preserve original10second automatic audit policy, no extra compile just to score. Never allow stale validation completion to publish old metrics. Existing quality-ready guard must require settled current metrics.
+
+Actual Clay/Wire/X-Ray edit→current orientation count, shape dimensions/material response from Beauty, Apply/Undo/cancel/asset transition and actual GLB/Blender byte evidence. Same inputs must retain old file bytes. Fresh tests/check/build plus <=3 UNI_AI public-code calls (small1024 output due observed long402),45minute checkpoint. Quality unknown during pending is not verified; manufacturing/outward/real-source/expert claims remain unverified. Continue actual remaining blade/cooling winding defects after this stability fix.
