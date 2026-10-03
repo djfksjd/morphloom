@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npm",
+    "test",
+    "--",
+    "--maxWorkers=1"
+  ],
+  "exitCode": 0,
+  "seconds": 55.68,
+  "testTimeoutUnchanged": true
+}

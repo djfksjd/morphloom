@@ -1,0 +1,60 @@
+[
+  {
+    "label": "published-tests",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 1,
+    "seconds": 91.21
+  },
+  {
+    "label": "source-tests",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "seconds": 56.05
+  },
+  {
+    "label": "check",
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 2.24
+  },
+  {
+    "label": "build",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.93
+  },
+  {
+    "label": "benchmark",
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "exitCode": 0,
+    "seconds": 4.17
+  },
+  {
+    "label": "quality-gate",
+    "command": [
+      "npm",
+      "run",
+      "quality:gate"
+    ],
+    "exitCode": 1,
+    "seconds": 11.24
+  }
+]

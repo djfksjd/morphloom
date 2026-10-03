@@ -1,0 +1,167 @@
+{
+  "schema": "morphloom.async-import-verification/0.1",
+  "baselineCommit": "5781b5f9eaf608879f4218870f5ded1ca8fab74a",
+  "compilerRevision": "0.35.0",
+  "releaseAllowed": false,
+  "sourceCodeSha256": {
+    "src/ViewerApp.tsx": "ab1bc483130bf8560a90ff6e154618e3ceb9b0e849c4cac94f892cafcefca942",
+    "src/engine/latest-intent.ts": "3a632ee80ef98affb805e14fed6c2cfcedb292f0751da9795fe681580a916dc6",
+    "tests/latest-intent.test.ts": "dca3bf3d92807681d1202e7e17d7b05df2854f8e7bf2b30b17beb1c84634a066",
+    "docs/ASYNC_IMPORT_CONTRACT.ko.md": "a8ec868fbe14cbb89b5aaf46f866973f6fee24ca323e1dc246177d04db2037ba",
+    "scripts/async-import-browser-harness.js": "a6eaae9b7db276cfab1cd48beb2973d2e02152009b13a4800b13b0c2fdfc3871",
+    "scripts/async-import-browser-regression.py": "0b32936eb5c2a524f939540cc4d3b7850b0138c70c69e02be8a9eda8b85d83d3",
+    "docs/ASYNC_IMPORT_STATUS.ko.md": "99849cf44324a26abfdd3f77ec1f64b877f15218ae59733ad4656d856db66c85"
+  },
+  "before": {
+    "pass": false,
+    "expectedLatest": "ASYNC IMPORT B",
+    "beforeOldResolution": "ASYNC IMPORT B",
+    "actualAfterOldResolution": "ASYNC IMPORT A",
+    "method": "Actual local IR uploads; controlled File.text completion order; actual SAVE IR download; no React state injection",
+    "latestBSha256": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+    "obsoleteASha256": "f5110c85a7064da6ce08e1e6d79bae0744f3dd8873acb8c1633a394b5ad1ea11"
+  },
+  "browser": {
+    "schema": "morphloom.async-import-browser/0.1",
+    "pass": true,
+    "method": "actual File.text bytes and native UI uploads/downloads; only completion order controlled",
+    "rows": [
+      {
+        "case": "reverse-success",
+        "pass": true
+      },
+      {
+        "case": "stale-error",
+        "pass": true
+      },
+      {
+        "case": "newer-invalid",
+        "pass": true
+      },
+      {
+        "case": "newer-oversized",
+        "pass": true
+      },
+      {
+        "case": "real-asset-switch",
+        "pass": true
+      },
+      {
+        "case": "committed-component-edit",
+        "pass": true
+      },
+      {
+        "case": "clear-imported-session",
+        "pass": true
+      },
+      {
+        "case": "native-ttl-callback-controlled-timer",
+        "pass": true
+      }
+    ],
+    "files": {
+      "final-edit-before-old.assembly.json": "a863d5a93eea114285f6d78751b9592b039d9a89d8df8b39274cbece66152648",
+      "final-expiry-after-old.assembly.json": "f05422bbebe55af4550b2f045dcacd20db76e0de22cc9d488d353c85f74dd254",
+      "final-clear-before-old.assembly.json": "b8542dd3f3a312655b8795f12978a8e425f73c2b672098d9730c3e24a001e38b",
+      "final-stale-error.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+      "final-edit-after-old.assembly.json": "a863d5a93eea114285f6d78751b9592b039d9a89d8df8b39274cbece66152648",
+      "final-reverse-order.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+      "final-expiry-before-old.assembly.json": "f05422bbebe55af4550b2f045dcacd20db76e0de22cc9d488d353c85f74dd254",
+      "final-newer-oversized.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+      "final-clear-after-old.assembly.json": "b8542dd3f3a312655b8795f12978a8e425f73c2b672098d9730c3e24a001e38b",
+      "final-switch-after-old.assembly.json": "895467bf9f6e356777eee17dae0701834f723eedfce24d6fc204bc7f344aa167",
+      "final-switch-before-old.assembly.json": "895467bf9f6e356777eee17dae0701834f723eedfce24d6fc204bc7f344aa167",
+      "final-newer-invalid.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d"
+    }
+  },
+  "checks": [
+    {
+      "label": "published-tests",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 1,
+      "seconds": 91.21
+    },
+    {
+      "label": "source-tests",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "seconds": 56.05
+    },
+    {
+      "label": "check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 2.24
+    },
+    {
+      "label": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 3.93
+    },
+    {
+      "label": "benchmark",
+      "command": [
+        "npm",
+        "run",
+        "benchmark"
+      ],
+      "exitCode": 0,
+      "seconds": 4.17
+    },
+    {
+      "label": "quality-gate",
+      "command": [
+        "npm",
+        "run",
+        "quality:gate"
+      ],
+      "exitCode": 1,
+      "seconds": 11.24
+    }
+  ],
+  "isolatedTests": {
+    "command": [
+      "npm",
+      "test",
+      "--",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0,
+    "seconds": 55.68,
+    "testTimeoutUnchanged": true
+  },
+  "geometryCompilerUnchanged": true,
+  "uniai": {
+    "model": "gpt-6-astra",
+    "calls": 2,
+    "tokens": 5368,
+    "status": "normal responses; no confirmed quota exhaustion or Claude fallback"
+  },
+  "assetsZipSha256": "774fe93ae6addc3d43887b21c0b65f50927b8c6e74be52b163a6371e206f4c07",
+  "notRun": [
+    "Actual 30 minute elapsed expiry",
+    "React unmount in actual browser",
+    "Architectural layout edit path",
+    "Fresh DCC roundtrip for this UI-only step",
+    "Independent expert evaluation"
+  ],
+  "limits": [
+    "Global quality gate failure retained",
+    "Cannot abort already-started File.text, only suppress obsolete publication"
+  ]
+}

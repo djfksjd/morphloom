@@ -1,0 +1,9 @@
+{
+  "pass": false,
+  "expectedLatest": "ASYNC IMPORT B",
+  "beforeOldResolution": "ASYNC IMPORT B",
+  "actualAfterOldResolution": "ASYNC IMPORT A",
+  "method": "Actual local IR uploads; controlled File.text completion order; actual SAVE IR download; no React state injection",
+  "latestBSha256": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+  "obsoleteASha256": "f5110c85a7064da6ce08e1e6d79bae0744f3dd8873acb8c1633a394b5ad1ea11"
+}

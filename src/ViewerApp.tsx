@@ -1,3 +1,4 @@
+import { createLatestIntentGate } from './engine/latest-intent';
 import AssemblyComponentEditor from './AssemblyComponentEditor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterBuild } from './engine/character';
@@ -206,6 +207,7 @@ export function ViewerApp() {
   const viewportRef = useRef<ViewportHandle>(null);
   const irInputRef = useRef<HTMLInputElement>(null);
   const importExpiryTimerRef = useRef<number | undefined>(undefined);
+  const [importIntent] = useState(createLatestIntentGate);
   const jobSequenceRef = useRef(0);
   const jobsRef = useRef<LocalJob[]>([]);
   const activeJobRef = useRef<LocalJob | undefined>(undefined);
@@ -226,11 +228,12 @@ export function ViewerApp() {
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
+      importIntent.cancel();
       if (importExpiryTimerRef.current !== undefined) window.clearTimeout(importExpiryTimerRef.current);
       viewportRef.current?.cancelExport();
       jobsRef.current = [];
     };
-  }, []);
+  }, [importIntent]);
 
   const syncJobs = useCallback(() => {
     if (mountedRef.current) setJobs([...jobsRef.current]);
@@ -299,9 +302,11 @@ export function ViewerApp() {
   const layoutEditable = Boolean(selectedPart && assemblyIR && isLayoutEditable(selectedPart.id));
   const editSelectedLayout = useCallback((edit: Parameters<typeof editAssemblyLayout>[2]) => {
     if (!selectedPart || !assemblyIR) return;
-    setAssemblyIR(editAssemblyLayout(assemblyIR, selectedPart.id, edit));
+    const next = editAssemblyLayout(assemblyIR, selectedPart.id, edit);
+    importIntent.cancel();
+    setAssemblyIR(next);
     setViewerNote(`${selectedPart.name} 배치를 모델 데이터에 반영했습니다. 내보내기에도 동일하게 포함됩니다.`);
-  }, [assemblyIR, selectedPart]);
+  }, [assemblyIR, selectedPart, importIntent]);
   const displayedTriangles = buildMetrics && 'renderedTriangles' in buildMetrics
     ? buildMetrics.renderedTriangles
     : buildMetrics?.triangles;
@@ -373,6 +378,7 @@ export function ViewerApp() {
     if (id === activeAssetId) return;
     const next = VIEWER_ASSETS.find((item) => item.id === id);
     if (!next) return;
+    importIntent.cancel();
     setActiveAssetId(next.id);
     setAssetKind(next.kind);
     setSelectedPart(undefined);
@@ -406,6 +412,7 @@ export function ViewerApp() {
   };
 
   const clearImportedSession = () => {
+    importIntent.cancel();
     if (importExpiryTimerRef.current !== undefined) window.clearTimeout(importExpiryTimerRef.current);
     importExpiryTimerRef.current = undefined;
     setImportedExpiresAt(undefined);
@@ -418,6 +425,7 @@ export function ViewerApp() {
     const expiresAt = Date.now() + IMPORTED_RESULT_TTL_MS;
     setImportedExpiresAt(expiresAt);
     importExpiryTimerRef.current = window.setTimeout(() => {
+      importIntent.cancel();
       importExpiryTimerRef.current = undefined;
       setImportedExpiresAt(undefined);
       const fallback = VIEWER_ASSETS[0];
@@ -816,7 +824,7 @@ export function ViewerApp() {
             </div>
           )}
 
-          {assetKind === 'product' && assemblyIR && <AssemblyComponentEditor ir={assemblyIR} selectedId={selectedPart?.id} onCommit={next=>{setAssemblyIR(next);setDeliveryAudit(undefined);setDeliveryVerifying(true);setViewerNote('선택 부품 수정 · 기존 납품 검사 재실행');}}/>}
+          {assetKind === 'product' && assemblyIR && <AssemblyComponentEditor ir={assemblyIR} selectedId={selectedPart?.id} onCommit={next=>{importIntent.cancel();setAssemblyIR(next);setDeliveryAudit(undefined);setDeliveryVerifying(true);setViewerNote('선택 부품 수정 · 기존 납품 검사 재실행');}}/>}
 
           {assetKind === 'product' && productMetrics && (
             <div className="surface-audit" aria-label="PBR 표면 검사 결과">
@@ -954,13 +962,18 @@ export function ViewerApp() {
               type="file"
               accept="application/json,.json"
               onChange={(event) => {
-                const file = event.target.files?.[0];
+                const file = event.currentTarget.files?.[0];
+                event.currentTarget.value = '';
                 if (!file) return;
+                const intent = importIntent.begin();
+                const isCurrent = () => mountedRef.current && importIntent.isCurrent(intent);
                 if (file.size > 2_000_000) { setViewerNote('AssemblyIR은 최대 2MB입니다.'); return; }
-                void file.text().then((text) => {
+                void Promise.resolve().then(() => isCurrent() ? file.text() : undefined).then((text) => {
+                  if (text === undefined || !isCurrent()) return;
                   try {
                     const value: unknown = JSON.parse(text);
                     validateAssemblyIR(value);
+                    if (!isCurrent()) return;
                     setAssemblyIR(value);
                     setAssetKind('product');
                     setActiveAssetId('imported');
@@ -973,12 +986,13 @@ export function ViewerApp() {
                     scheduleImportedExpiry();
                     setViewerNote(`AssemblyIR 결과 로드 · ${value.components.length}개 부품`);
                   } catch (error) {
+                    if (!isCurrent()) return;
                     setViewerNote(error instanceof Error ? error.message : 'AssemblyIR을 읽지 못했습니다.');
                   }
                 }).catch((error: unknown) => {
+                  if (!isCurrent()) return;
                   setViewerNote(error instanceof Error ? error.message : '로컬 파일을 읽지 못했습니다.');
                 });
-                event.target.value = '';
               }}
             />
             <button onClick={() => {

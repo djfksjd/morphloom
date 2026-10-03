@@ -1,0 +1,53 @@
+{
+  "schema": "morphloom.async-import-browser/0.1",
+  "pass": true,
+  "method": "actual File.text bytes and native UI uploads/downloads; only completion order controlled",
+  "rows": [
+    {
+      "case": "reverse-success",
+      "pass": true
+    },
+    {
+      "case": "stale-error",
+      "pass": true
+    },
+    {
+      "case": "newer-invalid",
+      "pass": true
+    },
+    {
+      "case": "newer-oversized",
+      "pass": true
+    },
+    {
+      "case": "real-asset-switch",
+      "pass": true
+    },
+    {
+      "case": "committed-component-edit",
+      "pass": true
+    },
+    {
+      "case": "clear-imported-session",
+      "pass": true
+    },
+    {
+      "case": "native-ttl-callback-controlled-timer",
+      "pass": true
+    }
+  ],
+  "files": {
+    "final-edit-before-old.assembly.json": "a863d5a93eea114285f6d78751b9592b039d9a89d8df8b39274cbece66152648",
+    "final-expiry-after-old.assembly.json": "f05422bbebe55af4550b2f045dcacd20db76e0de22cc9d488d353c85f74dd254",
+    "final-clear-before-old.assembly.json": "b8542dd3f3a312655b8795f12978a8e425f73c2b672098d9730c3e24a001e38b",
+    "final-stale-error.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+    "final-edit-after-old.assembly.json": "a863d5a93eea114285f6d78751b9592b039d9a89d8df8b39274cbece66152648",
+    "final-reverse-order.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+    "final-expiry-before-old.assembly.json": "f05422bbebe55af4550b2f045dcacd20db76e0de22cc9d488d353c85f74dd254",
+    "final-newer-oversized.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d",
+    "final-clear-after-old.assembly.json": "b8542dd3f3a312655b8795f12978a8e425f73c2b672098d9730c3e24a001e38b",
+    "final-switch-after-old.assembly.json": "895467bf9f6e356777eee17dae0701834f723eedfce24d6fc204bc7f344aa167",
+    "final-switch-before-old.assembly.json": "895467bf9f6e356777eee17dae0701834f723eedfce24d6fc204bc7f344aa167",
+    "final-newer-invalid.assembly.json": "fc211c7237c348a34bd6a75e740f60f89ef66247f77c3e735e345548648aed7d"
+  }
+}

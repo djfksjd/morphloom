@@ -1,0 +1,27 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "units": "mm",
+  "name": "ASYNC IMPORT A",
+  "components": [
+    {
+      "id": "part-a",
+      "name": "Part A",
+      "category": "mechanical",
+      "materialName": "steel",
+      "detail": "Authored race fixture",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          50,
+          70,
+          90
+        ],
+        "radius": 2,
+        "segments": 3
+      },
+      "material": {
+        "color": "#777777"
+      }
+    }
+  ]
+}
