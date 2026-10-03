@@ -83,7 +83,7 @@ export default function DepthEditor() {
   }catch(e){if(mounted.current)setError(e instanceof Error?e.message:'Diagnostic export failed');}finally{geometry.dispose();material.dispose();if(mounted.current)setBusy(false);}
  };
  return <main className="depth-editor">
-  <header><b>MORPHLOOM · DEPTH REFERENCE</b><a href="/?editor=evidence">사진 근거</a><a href="/">검수 뷰어</a></header>
+  <header><b>SCELIPH · DEPTH REFERENCE</b><a href="/?editor=evidence">사진 근거</a><a href="/">검수 뷰어</a></header>
   <p>보정한 가시 표면 · 실측 인증 없음 · 후면/내부 없음 · 일반 납품 승인 없음</p>
   <label>네이티브 깊이 JSON <input type="file" accept=".json,application/json" onChange={e=>{const f=e.target.files?.[0];if(f)void load(f);e.target.value='';}}/></label>
   {current&&<><p>{current.id} · {current.width}×{current.height} · 보정 근거: {current.calibration.basis}</p>

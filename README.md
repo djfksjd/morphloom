@@ -1,6 +1,10 @@
 <div align="center">
 
-# MORPHLOOM
+<img src="./assets/brand/sceliph-hero.png" alt="SCELIPH — Shape things into existence" width="100%" />
+
+# SCELIPH
+
+**SHAPE THINGS INTO EXISTENCE**
 
 ### 선언형 IR로 생성·편집·검수하는 로컬 3D 에셋 도구
 
@@ -12,17 +16,21 @@
 
 </div>
 
-Morphloom은 사진·도면·실측값·자연어 요구를 선언형 IR로 정리하고, 로컬 기하 엔진에서 메시와 PBR 재질을 생성하는 오픈소스 도구입니다. Codex/Claude 같은 개발 에이전트가 구조와 파라미터를 제안하고, 엔진이 형상 계산·반복 배치·검증을 수행합니다. 기본 경로에 유료 3D 생성 API가 필요하지 않습니다.
+Sceliph는 사진·도면·실측값·자연어 요구를 선언형 IR로 정리하고, 로컬 기하 엔진에서 메시와 PBR 재질을 생성하는 오픈소스 도구입니다. Codex/Claude 같은 개발 에이전트가 구조와 파라미터를 제안하고, 엔진이 형상 계산·반복 배치·검증을 수행합니다. 기본 경로에 유료 3D 생성 API가 필요하지 않습니다.
 
 **현재는 `v0.4 alpha`입니다. 임의 사진의 정확한 3D 복원, 모든 분야의 실무 납품, 제조용 CAD/BREP 정확도를 보장하지 않습니다.** 특정 검사 통과나 많은 폴리곤을 전체 품질의 증거로 취급하지 않습니다.
 
 ## 현재 상태
 
-아래는 **2026-10-04 단일 native source 평행이동 작업**의 현재 실행 결과입니다.
+**Sceliph는 Morphloom의 새 이름입니다.** 기존 `morphloom.*` 스키마·팩 ID와 `npm run morphloom` 명령은 파일 및 작업 호환성을 위해 유지합니다.
+
+상단 이미지는 제공된 **브랜드 비주얼**이며, 현재 엔진이 생성한 모델이나 품질 검증 결과가 아닙니다.
+
+아래는 **2026-10-04 체크포인트** 기준입니다. 부품 이동 작업의 증거와 이후 검증 경계 개선을 구분합니다.
 
 | 범위 | 확인된 결과 | 제한 |
 |---|---|---|
-| 게시본 테스트·타입 검사·벤치마크·빌드 | 108개 파일 / 779개 테스트 PASS, `check`·`benchmark`·`build` PASS | 임의 입력의 품질 인증이 아님 |
+| 게시본 테스트·타입 검사·벤치마크·빌드 | 110개 파일 / 799개 테스트 PASS, `check`·`benchmark`·`build` PASS | 임의 입력의 품질 인증이 아님 |
 | 이동 결과의 별도 editable sourceJSON | 작은·기본·큰 베어링과 기어 4사례 PASS | 단일 embedded native source, identity 부모, 선언된 평행이동만 |
 | 실제 브라우저 편집 흐름 | 저장·새 세션 재열기·GLB 반복 생성·추가 편집·Undo/Redo PASS4 | 현재 이동 GLB의 원본 참고 metadata는 수정하지 않음 |
 | 원본 결합 UV·중요 특징 검사 | 기존 24개 톱니 검사와 한 톱니 손상 FAIL 유지 | 5% 임계값 유지; 전체 평균으로 대체하지 않음 |
@@ -32,8 +40,10 @@ Morphloom은 사진·도면·실측값·자연어 요구를 선언형 IR로 정�
 
 [구현 범위·현재 해시·실행 증거](./docs/TRANSLATED_SOURCE_STATUS.ko.md)를 확인하세요. renderer 0.12는 corner-angle normal의 실행 환경 차이를 제거했으며, 검증하지 않은 이전 버전 결과를 성공으로 승격하지 않습니다.
 
-Blender 첫 import의 normal 오차와 회전·스케일 부모의 변환 대응 문제도 남아 있습니다. 기존 `releaseAllowed` 기준과 검사 임계값을 완화하지 않았습니다.
+Blender 기본 import의 normal 오차는 남아 있습니다. 별도의 선택형 source-normal import와 단일 스레드 벤치마크 프로필은 제한된 사례에서 검증했습니다. 회전·스케일 부모의 변환 지원은 확대하지 않았습니다. 기존 `releaseAllowed` 기준과 검사 임계값을 완화하지 않았습니다.
 
+- [최신 검증 경계 수정·799개 테스트·전체 gate 상태](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [Blender tangent 결정성 검증](./docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)
 - [체크포인트·모델링 수학과 한계](./docs/CHECKPOINT_20261003_2340.ko.md)
 - [현재 작업 상태](./docs/MORPHLOOM_WORK_STATE.ko.md)
 - [원본/현재 GLB UV 검사](./docs/BOUND_REFERENCE_UV_STATUS.ko.md) · [검사 UI](./docs/BOUND_REFERENCE_UV_UI_STATUS.ko.md)
@@ -170,3 +180,20 @@ npm run gltf:validate -- path/to/asset.glb
 Blender5.2.1에서 검증한 별도 로컬 도구로 원본 Float32 normal을 보존한 .blend와 SHA 영수증을 생성합니다. 기본 import 경로와 구분되며 texture·rig·animation·morph는 지원하지 않습니다. [사용법·제한·현재 증거](docs/BLENDER_FIRST_IMPORT_STATUS.ko.md)를 확인하세요. 전체 production 승인이나 DCC 편집의 IR 역변환을 뜻하지 않습니다.
 
 Interchange repair CLI는 원본과 기존 출력의 덮어쓰기를 거부합니다. 재실행은 새 출력 경로를 사용하세요. [원본 보존 계약·현재 파일 검증](docs/INTERCHANGE_OUTPUT_PRESERVATION_STATUS.ko.md).
+
+
+## 브랜드 자료
+
+<img src="./assets/brand/sceliph-logo-light.png" alt="SCELIPH bee symbol and wordmark" width="520" />
+
+제공된 원본 PNG를 그대로 보관합니다. 배경과 대비에 맞는 파일을 선택하세요.
+
+| 자료 | 파일 |
+|---|---|
+| 밝은 배경 전체 로고 | [Logo / light](./assets/brand/sceliph-logo-light.png) |
+| 어두운 배경 윤곽 로고 | [Outline / dark](./assets/brand/sceliph-logo-outline-dark.png) |
+| 심볼 | [Symbol / dark](./assets/brand/sceliph-symbol-dark.png) |
+| 워드마크 | [Wordmark / dark](./assets/brand/sceliph-wordmark-dark.png) |
+| 브랜드 비주얼 | [Hero](./assets/brand/sceliph-hero.png) |
+
+저장소: [djfksjd/sceliph](https://github.com/djfksjd/sceliph).

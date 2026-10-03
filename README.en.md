@@ -1,6 +1,10 @@
 <div align="center">
 
-# MORPHLOOM
+<img src="./assets/brand/sceliph-hero.png" alt="SCELIPH — Shape things into existence" width="100%" />
+
+# SCELIPH
+
+**SHAPE THINGS INTO EXISTENCE**
 
 ### Local 3D asset generation, editing, and inspection through declarative IR
 
@@ -12,17 +16,21 @@
 
 </div>
 
-Morphloom is an open-source local tool that turns photographs, drawings, measurements, and requirements into declarative IR, then generates meshes and PBR materials. A development agent such as Codex or Claude proposes structure and parameters; the engine computes geometry, patterns, and checks. The default workflow does not require a paid 3D generation API.
+Sceliph is an open-source local tool that turns photographs, drawings, measurements, and requirements into declarative IR, then generates meshes and PBR materials. A development agent such as Codex or Claude proposes structure and parameters; the engine computes geometry, patterns, and checks. The default workflow does not require a paid 3D generation API.
 
 **This is `v0.4 alpha`. It does not guarantee accurate reconstruction from arbitrary photos, production delivery across all domains, or manufacturing CAD/BREP precision.** Passing a particular check or increasing polygon counts is not proof of overall quality.
 
 ## Current status
 
-Current evidence is from the **2026-10-04 single native source translation task**.
+**Sceliph is the new name of Morphloom.** Existing `morphloom.*` schemas, pack IDs and `npm run morphloom` remain compatible.
+
+The supplied hero image is **brand artwork**, not an engine-generated asset or quality-validation result.
+
+Status below reflects the **2026-10-04 checkpoint**, distinguishing the translation workflow from subsequent validation fixes.
 
 | Scope | Evidence | Limits |
 |---|---|---|
-| Tests/typecheck/benchmark/build | 108 files / 779 tests PASS; check, benchmark, build PASS | No arbitrary-input quality certification |
+| Tests/typecheck/benchmark/build | 110 files / 799 tests PASS; check, benchmark, build PASS | No arbitrary-input quality certification |
 | Separate editable translated source | Small/default/large bearing and gear: 4 PASS | One embedded native source, identity parents, declared translation only |
 | Actual native browser workflow | Download, fresh-session reload, repeat GLB, additional edit, Undo/Redo PASS4 | Input GLB before-edit reference metadata stays unchanged |
 | Bound UV and critical features | Existing 24-tooth check and damaged-tooth FAIL retained | Unchanged 5% threshold; no aggregate substitution |
@@ -32,8 +40,10 @@ Current evidence is from the **2026-10-04 single native source translation task*
 
 See [current evidence and hashes](./docs/TRANSLATED_SOURCE_STATUS.ko.md). Renderer 0.12 removes the runtime difference in corner-angle weighting; unverified older artifacts are not promoted.
 
-Blender first-import normal drift and transform correspondence with rotated/scaled parents remain unresolved. Existing `releaseAllowed` rules and thresholds were not weakened.
+Default Blender import normal drift remains. An optional source-normal importer and a single-thread benchmark profile have been verified on scoped cases. Rotated/scaled parent support has not been expanded. Existing `releaseAllowed` rules and thresholds were not weakened.
 
+- [Latest validation fixes, 799 tests and whole-gate status](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [Blender tangent determinism](./docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)
 - [Checkpoint, modeling mathematics, and limits (Korean)](./docs/CHECKPOINT_20261003_2340.ko.md)
 - [Work state (Korean)](./docs/MORPHLOOM_WORK_STATE.ko.md)
 - [Bound UV status](./docs/BOUND_REFERENCE_UV_STATUS.ko.md) · [UI status](./docs/BOUND_REFERENCE_UV_UI_STATUS.ko.md)
@@ -168,3 +178,12 @@ Code is [Apache-2.0](./LICENSE). See [NOTICE](./NOTICE) for included data and so
 An explicit local tool tested in Blender 5.2.1 creates a source-normal-preserving `.blend` and SHA-bound receipt. It is separate from the default importer and rejects textures, rigs, animations and morphs. See [usage, limits and current evidence](docs/BLENDER_FIRST_IMPORT_STATUS.ko.md). This is not production approval or inverse reconstruction of DCC edits into IR.
 
 The interchange repair CLI rejects overwriting sources or existing outputs. Use fresh output paths when rerunning. See [preservation contract and current file checks](docs/INTERCHANGE_OUTPUT_PRESERVATION_STATUS.ko.md).
+
+
+## Brand assets
+
+<img src="./assets/brand/sceliph-logo-light.png" alt="SCELIPH bee symbol and wordmark" width="520" />
+
+Original supplied PNGs are preserved: [light logo](./assets/brand/sceliph-logo-light.png) · [dark outline](./assets/brand/sceliph-logo-outline-dark.png) · [symbol](./assets/brand/sceliph-symbol-dark.png) · [wordmark](./assets/brand/sceliph-wordmark-dark.png) · [hero](./assets/brand/sceliph-hero.png).
+
+Repository: [djfksjd/sceliph](https://github.com/djfksjd/sceliph).

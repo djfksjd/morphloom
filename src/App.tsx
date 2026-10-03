@@ -529,7 +529,7 @@ export function App({evidenceOnly = false}: {evidenceOnly?: boolean} = {}) {
 
   if (evidenceOnly) return (
     <main className="app-shell evidence-editor">
-      <header className="topbar"><b>MORPHLOOM · PHOTO EVIDENCE</b><a href="/?editor=depth">깊이 가시 표면 검수</a><a href="/">검수 뷰어로 돌아가기</a></header>
+      <header className="topbar"><b>SCELIPH · PHOTO EVIDENCE</b><a href="/?editor=depth">깊이 가시 표면 검수</a><a href="/">검수 뷰어로 돌아가기</a></header>
       <section className="evidence-editor-panel"><aside className="panel reference-panel">{referencePanel}</aside>
         <p>관측 자료와 합성 후보를 구분해 저장하세요. 실제 자료 표기는 사용자의 확인이며 실측 검증을 대신하지 않습니다.</p>
       </section>
@@ -541,13 +541,13 @@ export function App({evidenceOnly = false}: {evidenceOnly?: boolean} = {}) {
       <header className="topbar">
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
-          <span className="brand-name">MORPHLOOM</span>
+          <span className="brand-name">SCELIPH</span>
           <span className="brand-edition">Asset Foundry / α04</span>
         </div>
         <div className="topbar-status">
           <span><i className="pulse-dot" /> LOCAL MESH</span>
           <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
-          <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
+          <a href="https://github.com/djfksjd/sceliph" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
         </div>
       </header>
 

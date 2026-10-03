@@ -533,7 +533,7 @@ export function ViewerApp() {
       <header className="topbar viewer-topbar">
         <div className="brand-lockup">
           <span className="brand-mark"><AppIcon /></span>
-          <span className="brand-name">MORPHLOOM</span>
+          <span className="brand-name">SCELIPH</span>
           <span className="brand-edition">Result Viewer / α04</span>
         </div>
         <div className="result-selector">
@@ -553,7 +553,7 @@ export function ViewerApp() {
           <span><i className="pulse-dot" /> LOCAL · NO UPLOAD</span>
           <span>{assetKind === 'product' ? `${productPartCount ?? '—'} PART NODES` : pack ? `${(buildMetrics?.vertices ?? 0).toLocaleString()} SKIN VERTICES` : 'LOADING PACK'}</span>
           <a href="?editor=evidence">PHOTO EVIDENCE</a>
-          <a href="https://github.com/djfksjd/morphloom" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
+          <a href="https://github.com/djfksjd/sceliph" target="_blank" rel="noreferrer">OPEN SOURCE ↗</a>
         </div>
       </header>
 
