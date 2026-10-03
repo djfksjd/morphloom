@@ -103,3 +103,13 @@ Native7 cases and three generated sizes pass explicit UV-only modification/prese
 ## 2026-10-03 Element/Workspace Fit view
 
 Reuse existing corner framing helper in the editor; remove0.1m scale floor, use actual host aspect and preserve orbit pose. Actual paired default gear21.79%→60.68%; native8 cases incl empty/edit-undo pass, frustum4tests/8cases pass. Current publish715/source734/check/build pass. Fresh full quality:gate FAIL; production blocked, no threshold changes. Actual UI GLB byte-exact pre-camera version. See [status](ELEMENT_FRAMING_STATUS.ko.md). Next audit direct bearing generator input contract versus registry; goal remains active.
+
+
+## 2026-10-03 Bearing direct input boundary
+
+11 actual failures corrected by reusing unchanged registry validation in direct bearing generation.19 boundary cases pass; valid3 sizes retain source/generated data/actual GLB bytes exact. Publish734/source753/check/build pass. UI/DCC/global gate not rerun for this input-only step; old global blockers remain. See [status](BEARING_INPUT_STATUS.ko.md). Small push deferred until next workspace preview edit batch. Goal remains active.
+
+
+## 2026-10-03 Namespaced workspace isolate preview
+
+Reuse local isolate for active asset/part/element/group; preserve datum, source, whole delivery and namespace identity. Real Fit view helper loss also corrected. Native8cases/current actual6downloads pass;61 non-target GLB meshes exact; Blender full62/selected1 mesh named edits and two reopen cycles pass. Publish741/source760/check/build pass; old global gate blockers unresolved/not rerun. See [status](WORKSPACE_ISOLATE_STATUS.ko.md). Next audit selected asset/part persistence on source reopen. Goal remains active.

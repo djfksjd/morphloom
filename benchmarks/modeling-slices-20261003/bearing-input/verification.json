@@ -1,0 +1,158 @@
+{
+  "schema": "morphloom.bearing-input-verification/0.1",
+  "pass": true,
+  "baseCommit": "9b020fc",
+  "rendererRevision": "morphloom.element-renderer/0.10",
+  "red": "11 failure cases of19; direct generator mismatch",
+  "green": "19 boundary cases;26 including existing bearing tests",
+  "publishTests": 734,
+  "sourceTests": 753,
+  "check": "pass",
+  "build": "pass",
+  "validBeforeAfter": {
+    "pass": true,
+    "rendererRevision": "morphloom.element-renderer/0.10",
+    "baseline": "/Users/danny/Documents/morphloom/outputs/bearing-input-20261003/before/evidence.json",
+    "rows": [
+      {
+        "name": "default",
+        "meshes": 11,
+        "sourceSha256": "e010b68f52cf55823970ab3cb5a6bab3d869f467afb36bdf25c5714c4950d9f3",
+        "generatedDataSha256": "71891c22c3d176c5d7e1a164bf05f779a1e939cbfde111d1029b9b00530d545d",
+        "glbSha256": "f379e5ef22f2a81eab02e698ed941e6de2d072a9acdd700081a46725add9269d"
+      },
+      {
+        "name": "small",
+        "meshes": 10,
+        "sourceSha256": "ab2e803dedc209025ba1f526b3ab8b1292c61a9deafc886cb878d22deb5ae690",
+        "generatedDataSha256": "afd221a9dd723125d0b078aba6e4de99eed8603101461e407276bad49267b236",
+        "glbSha256": "83b5e8d7ea1f9e7f3ff3d0f70c7727605de0858d5ae7715921f7501d1932f5b5"
+      },
+      {
+        "name": "large",
+        "meshes": 15,
+        "sourceSha256": "facdc220f7acb7c350585d7446fec84a91018a91d278c96e09a3ebe0aa1423fa",
+        "generatedDataSha256": "b0ec4a4b61e4fea379ba55021b4f28511e8fda9e66c7eedfa0eafb6dbdb72385",
+        "glbSha256": "c198931a2fb3001901a05afd17a85461355c128d2a8555c847b0c1237cf85f52"
+      }
+    ]
+  },
+  "notRun": [
+    "No new UI or DCC run in this input-only slice; valid generated GLB bytes exact",
+    "Full quality gate/production/dominance not rerun; prior strict failure remains",
+    "External model review blocked by confirmed quotas"
+  ],
+  "codeSha256": {
+    "src/engine/bearing-pack.ts": "772156dfdf0d2ee897d8218532c3a00a1388d64337238133841565fe86786287",
+    "src/engine/element-domain-packs.ts": "cfb954f3313e953c5b8b26ae1c7af4fb3555ae93653f2851fe28a2c3aedd0dda",
+    "tests/bearing-input-boundary.test.ts": "2fc7d684d87f5baec4a9d520fb7a012fadc62738b6478d256f0053033ee632ed",
+    "scripts/bearing-input-evidence.ts": "f1bd5a4f7d4e7d4bca8b885f3b6cf59620c2dd0b5da2d16d7da47b0ca674ffb7"
+  },
+  "files": [
+    {
+      "path": "after/default.elements.json",
+      "sha256": "e010b68f52cf55823970ab3cb5a6bab3d869f467afb36bdf25c5714c4950d9f3",
+      "bytes": 28121
+    },
+    {
+      "path": "after/default.glb",
+      "sha256": "f379e5ef22f2a81eab02e698ed941e6de2d072a9acdd700081a46725add9269d",
+      "bytes": 2520096
+    },
+    {
+      "path": "after/evidence.json",
+      "sha256": "241130a9ebd8218e879fe99ee21c028f828b7ed1301bebfb8b870ae35b294b65",
+      "bytes": 1182
+    },
+    {
+      "path": "after/large.elements.json",
+      "sha256": "facdc220f7acb7c350585d7446fec84a91018a91d278c96e09a3ebe0aa1423fa",
+      "bytes": 37480
+    },
+    {
+      "path": "after/large.glb",
+      "sha256": "c198931a2fb3001901a05afd17a85461355c128d2a8555c847b0c1237cf85f52",
+      "bytes": 2913160
+    },
+    {
+      "path": "after/small.elements.json",
+      "sha256": "ab2e803dedc209025ba1f526b3ab8b1292c61a9deafc886cb878d22deb5ae690",
+      "bytes": 25848
+    },
+    {
+      "path": "after/small.glb",
+      "sha256": "83b5e8d7ea1f9e7f3ff3d0f70c7727605de0858d5ae7715921f7501d1932f5b5",
+      "bytes": 2422012
+    },
+    {
+      "path": "after.log",
+      "sha256": "eb59663c851255eb007f5b7734b058c86e95c191cecdc6cb45c80fa0217f1df0",
+      "bytes": 841
+    },
+    {
+      "path": "before/default.elements.json",
+      "sha256": "e010b68f52cf55823970ab3cb5a6bab3d869f467afb36bdf25c5714c4950d9f3",
+      "bytes": 28121
+    },
+    {
+      "path": "before/default.glb",
+      "sha256": "f379e5ef22f2a81eab02e698ed941e6de2d072a9acdd700081a46725add9269d",
+      "bytes": 2520096
+    },
+    {
+      "path": "before/evidence.json",
+      "sha256": "6b255823af422bbde9298b08798af090c99c3aa7250d32c76564d5cdfe67c2ee",
+      "bytes": 1100
+    },
+    {
+      "path": "before/large.elements.json",
+      "sha256": "facdc220f7acb7c350585d7446fec84a91018a91d278c96e09a3ebe0aa1423fa",
+      "bytes": 37480
+    },
+    {
+      "path": "before/large.glb",
+      "sha256": "c198931a2fb3001901a05afd17a85461355c128d2a8555c847b0c1237cf85f52",
+      "bytes": 2913160
+    },
+    {
+      "path": "before/small.elements.json",
+      "sha256": "ab2e803dedc209025ba1f526b3ab8b1292c61a9deafc886cb878d22deb5ae690",
+      "bytes": 25848
+    },
+    {
+      "path": "before/small.glb",
+      "sha256": "83b5e8d7ea1f9e7f3ff3d0f70c7727605de0858d5ae7715921f7501d1932f5b5",
+      "bytes": 2422012
+    },
+    {
+      "path": "before.log",
+      "sha256": "eb59663c851255eb007f5b7734b058c86e95c191cecdc6cb45c80fa0217f1df0",
+      "bytes": 841
+    },
+    {
+      "path": "build.log",
+      "sha256": "24cb5c19e474e94da60298377ca3ac431c6890579fde8d8d409caa873ad63bed",
+      "bytes": 1478
+    },
+    {
+      "path": "green.log",
+      "sha256": "ea03a128f0773d050412496ec74da5482e7148fb52c301875e2b222feab013df",
+      "bytes": 966
+    },
+    {
+      "path": "red.log",
+      "sha256": "e44c748be6d8ae69b2d8683766f39d6da02f9a9aa46059baea3656e44dd3aa9b",
+      "bytes": 7507
+    },
+    {
+      "path": "source-tests.log",
+      "sha256": "bb4cb78b8c68c4eb0f911f13646c03ee8a68eaf6f9a47e2d9cedee5464228dde",
+      "bytes": 12229
+    },
+    {
+      "path": "tests.log",
+      "sha256": "f4ddd4f543af14d35ce7db5c7f54afbdb48b93a94e3eeca7381fdfa67285b58a",
+      "bytes": 11999
+    }
+  ]
+}

@@ -1,19 +1,16 @@
-import { DomainPackError, type DomainPack } from './element-domain-packs';
+import { DomainPackError, validateDomainPackInput, type DomainPack } from './element-domain-packs';
 import { validateProject, type ElementProject, type Part, type Vec3 } from './element-project';
 
 export const BEARING_PACK_REVISION = 'morphloom.bearing-visual/0.1';
 const defaults = { boreDiameterMm: 20, outerDiameterMm: 40, widthMm: 12, ballDiameterMm: 6, ballCount: 8 };
-const finite = (x: unknown): x is number => typeof x==='number' && Number.isFinite(x);
 const round = (x:number):number => Number(x.toFixed(9)) || 0;
 const circle = (radius:number, center:[number,number]=[0,0], segments=128):[number,number][] =>
   Array.from({length:segments},(_,i)=>[round(center[0]+radius*Math.cos(2*Math.PI*i/segments)),round(center[1]+radius*Math.sin(2*Math.PI*i/segments))]);
 
 /** Authored open bearing visualization. Clearances are design choices, not datasheet tolerances. */
 export function generateBearingProject(input: Readonly<Record<string, unknown>>): ElementProject {
+  input = validateDomainPackInput(input, bearingPack.metadata);
   const values = Object.fromEntries(Object.entries(defaults).map(([k,v])=>[k,input[k]??v])) as typeof defaults;
-  if (Object.keys(input).some(k=>!['seed','units','coordinates',...Object.keys(defaults)].includes(k)) ||
-    (input.units!==undefined && input.units!=='mm') || (input.coordinates!==undefined && input.coordinates!=='right-handed-y-up') ||
-    !Object.values(values).every(finite) || (input.seed!==undefined && (!Number.isSafeInteger(input.seed) || (input.seed as number)<0))) throw new DomainPackError('invalid-input','mechanical.bearing.visual');
   const {boreDiameterMm,outerDiameterMm,widthMm,ballDiameterMm,ballCount}=values;
   const bore=boreDiameterMm/2, outer=outerDiameterMm/2, r=ballDiameterMm/2;
   const pitch=(bore+outer)/2, half=widthMm/2, chamfer=r*0.08, grooveRadius=r*1.15, grooveSpan=r*0.82;

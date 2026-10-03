@@ -81,7 +81,8 @@ function checkMetadata(m: DomainPackMetadata): void {
   try { copy(m); } catch { fail(); }
 }
 
-function checkInput(input: unknown, m: DomainPackMetadata): Record<string, unknown> {
+/** Reuse a registered pack's declarative input contract in direct generation paths. */
+export function validateDomainPackInput(input: unknown, m: DomainPackMetadata): Record<string, unknown> {
   function fail(): never { throw new DomainPackError('invalid-input', m.id); }
   if (!record(input) || Object.keys(input).length > 10) fail();
   const allowed = new Set(['seed', 'units', 'coordinates', ...Object.keys(m.parameters.dimensions)]);
@@ -120,7 +121,7 @@ export class ElementDomainRegistry {
     if (!Array.isArray(requiredCapabilities) ||
         requiredCapabilities.some(c => !pack.metadata.capabilities.includes(c)))
       throw new DomainPackError('unsupported', id);
-    const checked = checkInput(input, pack.metadata);
+    const checked = validateDomainPackInput(input, pack.metadata);
     let project: ElementProject;
     try { project = copy(pack.generate(copy(checked))); }
     catch (error) {

@@ -105,7 +105,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       setPickMs(performance.now() - t);
     };
     try {
-      built = workspace ? buildWorkspaceScene({...workspace,assets:workspace.assets.map(a=>a.id===activeAsset?{...a,source:project}:a)},lod) : buildElementScene(project, lod, { isolateIds: isolate && selection ? group ? elements.filter(e => e.groupId === group.id).map(e => e.id) : [selection] : undefined, explodeMm: explode ? 30 : 0 });
+      built = workspace ? buildWorkspaceScene({...workspace,assets:workspace.assets.map(a=>a.id===activeAsset?{...a,source:project}:a)},lod,false,isolate&&selection&&activeAsset?{isolate:{assetId:activeAsset,ids:[selection]}}:{}) : buildElementScene(project, lod, { isolateIds: isolate && selection ? group ? elements.filter(e => e.groupId === group.id).map(e => e.id) : [selection] : undefined, explodeMm: explode ? 30 : 0 });
       if(checker)restoreChecker=attachUvChecker(built.root);
       scene.add(built.root); sceneRef.current = built;
       renderer = new THREE.WebGLRenderer({ antialias: true }); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -158,7 +158,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       root.add(helper);
     } catch { /* Deleted selection has no highlight. */ }
     return () => { if (helper) { root.remove(helper); helper.geometry.dispose(); (helper.material as THREE.Material).dispose(); } };
-  }, [project, workspace, activeAsset, selection, lod, isolate, explode]);
+  }, [project, workspace, activeAsset, selection, lod, isolate, explode, cameraRevision, checker]);
   useEffect(()=>{
     if(featureId&&(!part||part.geometry?.op!=='spur-gear'||!toothIds(part.geometry).includes(featureId)))setFeatureId('');
   },[part,featureId]);
@@ -175,7 +175,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
     const material=new THREE.LineBasicMaterial({color:0xffd86b,depthTest:false});
     const lines=new THREE.LineSegments(geometry,material);lines.name='feature-selection-overlay';lines.raycast=()=>{};lines.renderOrder=10;mesh.add(lines);
     return()=>{mesh.remove(lines);geometry.dispose();material.dispose();};
-  },[project,workspace,activeAsset,part,featureId,selection,lod,isolate,explode,cameraRevision]);
+  },[project,workspace,activeAsset,part,featureId,selection,lod,isolate,explode,cameraRevision,checker]);
   useEffect(()=>{
     let active=true,built:ReturnType<typeof exportSelectedScene>|undefined;
     setUvState({project,status:'checking'});
@@ -247,14 +247,14 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
       {button('Export selected GLB + source JSON', () => { void exportGlb(); })}{button('Export project GLB + source JSON', () => { void exportGlb(true); })}{button('Export project UV diagnostic GLB + source JSON', () => { void exportGlb(true,false,true); })}</nav>
     <p>GLB contains independently named baked meshes in meters, not a native procedural groom. Companion JSON preserves the editable source.</p>
     {button('Fit view', () => { resetPose.current = true; setCameraRevision(n => n + 1); })}<form onSubmit={e => { e.preventDefault(); if (project.parts.some(p => p.id === targetId) || project.groups.some(g => g.id === targetId) || elements.some(x => x.id === targetId)) { select(targetId); setError(''); } else setError(`Unknown element ID: ${targetId}`); }}><label>Select by ID <input value={targetId} onChange={e => setTargetId(e.target.value)} /></label><button type="submit">Select</button></form><label>LOD <select value={lod} onChange={e => setLod(e.target.value as 'low' | 'detail')}><option value="detail">Detail</option><option value="low">Low</option></select></label>
-    <label><input type="checkbox" disabled={!!workspace} checked={isolate} onChange={e => setIsolate(e.target.checked)} /> Isolate selection</label>
+    <label><input type="checkbox" disabled={!!workspace&&!selection} title={workspace&&!selection?'Select a part, element or group to isolate':undefined} checked={isolate} onChange={e => setIsolate(e.target.checked)} /> Isolate selection</label>
     <label><input type="checkbox" checked={checker} onChange={e=>setChecker(e.target.checked)}/> Synthetic UV checker preview</label><p>64px / 8 cells per UV tile. Diagnostic appearance; normal exports retain source PBR.</p>
     {button('Export checker diagnostic GLB',()=>{void exportGlb(true,true);})}
     {project.schema!=='morphloom.elements/0.4'&&project.schema!=='morphloom.elements/0.5'&&project.schema!=='morphloom.elements/0.6' && button('Enable UV editing (schema 0.4)',()=>run(()=>migrateElementProjectToV4(project)))}
     {project.schema!=='morphloom.elements/0.5'&&project.schema!=='morphloom.elements/0.6'&&button('Enable chamfer editing (schema 0.5)',()=>run(()=>migrateElementProjectToV5(project)))}
     {project.schema!=='morphloom.elements/0.6'&&button('Enable surface editing (schema 0.6)',()=>run(()=>migrateElementProjectToV6(project)))}
     <label><input type="checkbox" disabled={!!workspace} checked={explode} onChange={e => setExplode(e.target.checked)} /> Explode preview</label>
-    {workspace&&<p>Workspace viewport uses asset datums. Isolate/explode across assets are not supported. Source JSON/GLB actions below apply to the active asset; use workspace actions for combined delivery.</p>}
+    {workspace&&<p>Isolate selection shows the active part, element or group at its assembly placement. Explode across assets is unavailable. Source JSON/GLB actions below apply to the active asset; use workspace actions for combined delivery.</p>}
     <p role="status">{error || `${metrics} · ${actualCalls} measured render calls · ${pickMs.toFixed(1)} ms last pick · ${glbBytes} bytes last GLB · ${sceneRef.current ? 'viewport ready' : 'viewport unavailable'}`}</p>
     <details aria-label="UV quality"><summary>UV quality: {uvPending?'checking':uvError?'blocked':uvReceipt?.report.integrityPass?'integrity PASS':'integrity FAIL'}</summary>
       <p>Inspection uses baked source geometry; isolate/explode preview does not alter it. {workspace&&'This panel covers the active source asset; workspace export reports the combined scene.'} An integrity pass does not verify an atlas or texel density. Exports include a UV report and may still fail production readiness.</p>

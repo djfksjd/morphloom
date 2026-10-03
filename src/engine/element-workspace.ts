@@ -5,6 +5,8 @@ import { editPart, resolveElements, validateProject, type ElementProject, type P
 import { buildElementScene, exportSelectedScene } from './element-renderer';
 
 export const WORKSPACE_REVISION='morphloom.workspace-engine/0.3';
+export const WORKSPACE_ISOLATE_REVISION='morphloom.workspace-isolate/0.1';
+export type WorkspacePreviewOptions={isolate?:{assetId:string;ids:readonly string[]}};
 export type WorkspaceAsset={id:string;packId:string;requiredCapabilities:string[];source:ElementProject;positionMm:Vec3;rotationRad:Vec3};
 export type ElementWorkspace={schema:'morphloom.workspace/0.1';units:'mm';coordinates:'right-handed-y-up';assets:WorkspaceAsset[]};
 export type WorkspaceRequest=Omit<WorkspaceAsset,'source'> & {input:unknown};
@@ -85,17 +87,34 @@ export class WorkspaceHistory{
 }
 
 /** Original IR remains separate; datum transforms belong only to the derived scene. */
-export function buildWorkspaceScene(workspace:ElementWorkspace,lod:'low'|'detail',delivery=false):ReturnType<typeof buildElementScene>{
+export function buildWorkspaceScene(workspace:ElementWorkspace,lod:'low'|'detail',delivery=false,options:WorkspacePreviewOptions={}):ReturnType<typeof buildElementScene>{
   validateWorkspace(workspace);
+  if(!plain(options)||Object.keys(options).some(k=>k!=='isolate'))fail('isolation-options');
+  let isolated:{assetId:string;ids:string[]}|undefined;
+  if(Object.hasOwn(options,'isolate')){
+    if(delivery)fail('preview-not-delivery');
+    const scope=options.isolate;
+    if(!plain(scope)||Object.keys(scope).length!==2||!Object.hasOwn(scope,'assetId')||!Object.hasOwn(scope,'ids')||
+      typeof scope.assetId!=='string'||!Array.isArray(scope.ids)||scope.ids.length===0||scope.ids.length>5512||
+      scope.ids.some(id=>typeof id!=='string')||new Set(scope.ids).size!==scope.ids.length)fail('isolation-options');
+    const asset=workspace.assets.find(a=>a.id===scope.assetId);
+    if(!asset)fail('isolation-asset');
+    const elements=resolveElements(asset.source),groups=new Set(asset.source.groups.map(g=>g.id));
+    const known=new Set([...asset.source.parts.map(p=>p.id),...elements.map(e=>e.id),...groups]);
+    if(scope.ids.some(id=>!known.has(id)))fail('isolation-id');
+    isolated={assetId:asset.id,ids:[...new Set(scope.ids.flatMap(id=>groups.has(id)?elements.filter(e=>e.groupId===id).map(e=>e.id):[id]))]};
+  }
   if(delivery&&workspace.assets.reduce((n,a)=>n+a.source.parts.length+resolveElements(a.source).length,0)>128)fail('export-object-budget');
   const start=performance.now(),root=new THREE.Group(),built:{id:string;scene:ReturnType<typeof buildElementScene>}[]=[];
   const stats={elements:0,visibleElements:0,triangles:0,drawCallsEstimate:0,geometryBytes:0,generationMs:0};
   root.name='Morphloom workspace';root.userData={representation:'source-preserving workspace',workspaceRevision:WORKSPACE_REVISION,sourceSpec:structuredClone(workspace)};
+  if(isolated)root.userData.preview={revision:WORKSPACE_ISOLATE_REVISION,assetId:isolated.assetId,ids:[...isolated.ids]};
   let disposed=false;
   const dispose=():void=>{if(disposed)return;disposed=true;for(const b of built)b.scene.dispose();root.clear();};
   try{
     for(const a of workspace.assets){
-      const scene=delivery?exportSelectedScene(a.source,[...a.source.parts.map(p=>p.id),...resolveElements(a.source).map(e=>e.id)]):buildElementScene(a.source,lod);
+      if(isolated&&a.id!==isolated.assetId)continue;
+      const scene=delivery?exportSelectedScene(a.source,[...a.source.parts.map(p=>p.id),...resolveElements(a.source).map(e=>e.id)]):buildElementScene(a.source,lod,isolated?{isolateIds:isolated.ids}:{});
       built.push({id:a.id,scene});
       scene.root.traverse(o=>{if(o!==scene.root&&o.name){o.userData={...o.userData,sourceLocalName:o.name,assetId:a.id};o.name=`${a.id}::${o.name}`;}});
       scene.root.name=a.id;scene.root.position.set(...a.positionMm.map(n=>n/1000) as Vec3);scene.root.quaternion.copy(deterministicEulerXYZ(a.rotationRad));root.add(scene.root);

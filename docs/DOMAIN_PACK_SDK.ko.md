@@ -72,3 +72,8 @@ UV quality report0.2는 지원 가능한 static UV0의 metallic-roughness 해상
 신규 Pack은 examples/domain-packs/surface-gear-pack.ts를 복사해 고유ID/domain/입력범위/capability를 선언하고 registry.register(pack)로 등록한다. core compiler/inspector를 바꿀 필요는 없다. UI 진입점 두 곳의 로컬 registry 등록은 필요하며 동적 파일 로딩·외부코드 sandbox는 지원하지 않는다. 예제는 기존 gear generator에 명시적 migrateElementProjectToV6·editPart uvScale/material.surface를 조합한다. metadata를0.4로 바꾸는 것만으로 원본 IR을 migration한 것으로 간주하지 않는다.
 
 스키마: schemas/domain-pack-v4.schema.json; 타입/실행 경계: src/engine/element-domain-packs.ts; conformance: tests/domain-pack-v4.test.ts; 생성/공통편집/혼합/실제GLB/Blender 증거와 미지원 범위: DOMAIN_PACK_V4_STATUS.ko.md. JSON Schema만으로 bounds 관계·clone 가능성·실행 출력·품질을 승인할 수 없다. 기존 source-json/full와 GLB/baked-only 의미를 유지한다.
+
+
+## 직접 generator 입력 경계 (2026-10-03)
+
+validateDomainPackInput(input, metadata)는 registry의 기존 단위/좌표/seed/유한값/치수범위/plain-record 검사를 그대로 재사용한다. 성공 반환은 input 자체이며 수정/단위추측/기본값삽입을 하지 않는다. metadata는 등록 검사를 통과한 선언 계약이어야 한다. 임의 metadata의 스키마 검증이나 provider 실행 격리를 대체하지 않는다. 실패는 DomainPackError invalid-input/packId. builtin bearing의 직접 함수도 이 경계를 사용해 null을 기본값으로 바꾸지 않는다. 누락필드만 기존 generator 기본값을 적용한다. 예전 registry 경로와 source schema/version은 그대로이며, 과거 잘못 허용한 범위 밖 직접 호출은 이제 오류다. 전체 SDK가 CAD/비메시/동적 플러그인 sandbox를 지원한다는 뜻은 아니다.

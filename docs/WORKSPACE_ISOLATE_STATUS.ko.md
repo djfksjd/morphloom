@@ -1,0 +1,19 @@
+# Workspace 국부 검수 격리 (2026-10-03)
+
+기존 disabled Workspace Isolate selection을 실제 활성화했다. 새 buildWorkspaceScene의 optional preview scope assetId+local IDs를 기존 buildElementScene.isolateIds에 연결한다. group은 기존 resolved member IDs로 확장한다. 다른 asset은 preview 생성에서 제외하되 datum/world matrix/assembly parent/pickID/position·normal·UV·index/PBR는 보존한다. source JSON은 수정하지 않는다. 기본 delivery revision0.3/schema0.1은 그대로, preview 연산만 morphloom.workspace-isolate/0.1을 기록한다. delivery=true에 preview filter를 넣으면 명시적 거부한다. unknown/duplicate/empty/options 오류도 생성 전에 거부한다.
+
+6개 기존 unsupported engine 실패→7개 isolate tests PASS(회전 datum/두 asset의 같은 ball ID/그룹 포함). 기존5workspace tests도 PASS. 실제 native8사례:ball_0000 선택→isolate→radius2.4에서2.2mm 변경→uncheck+Fit view→Undo/Redo→새 별도 세션에서 source 재열기 후 명시적 다시 선택. 실제 triangle70784→2976, draw calls14→2(볼1+기존 selection helper1)→14. 이는 이 MacM5/브라우저/해당 asset 측정이며 보편 성능 보장이 아니다. 반지름은 JSON IEEE 값2.1999999999999997로 저장돼 입력2.2mm와 동일 수치의 반올림 표현이다.
+
+실제 발견한 별도 결함:Fit view 후 선택 helper 드로콜14→13/윤곽선이 사라졌다. scene을 새로 만드는 cameraRevision/checker가 selection helper effect 의존성에 없었다. 해당 의존성을 추가하고 tooth overlay의 checker도 동일하게 보존한다. 원본 source/export에 selection helper가 섞이지 않는다. native Fit view 이후 helper 포함14/2를 확인했다. checker 이후 모든 feature overlay의 광범위 UI 검수는 이번 단계 not-run이다.
+
+실제 일반 다운로드(진단 우회 없음) 전체3파일/선택3파일 magic·동반JSON exact·UV/standard errors0 PASS. 실제GLB reopen 비교:target bearing::ball_0000만position buffer 변경, 나머지61mesh의position/normal/UV/index/PBR/world/parent exact; target의position 이외도 exact. 첫 comparator는 Three의 colon name sanitation 때문에 target 이름을 못 찾았다. 실제 glTF node name을 parser association으로 읽어 해결했고 파일 이름을 바꾸지 않았다. Blender5.2.1 두 actual files의 named part2mm edit/two roundtrip UV/PBR/이름/계층 보존 PASS. 전체62mesh/비대상61, 독립1mesh. 전체 GLB는 workspace datum, 독립 GLB는 active source assembly datum(Workspace world 위치를 보존하는 파일이라고 혼동하지 않는다).
+
+전체GLB SHA ced0c70de3b24199d71e710d9be439d1455ac7df1daa01873c78005e9d330944; 전체 source c2af756c4c27ea7eb1850e26cd813a5cf29918fb9da4de4e236d0512b55769fe. 선택 GLB ddfb7fc382c8852f386c503297746b7a3623f52f192c84a3cf8cd42a7c54a3da; source03fb8c842edba352c8c667108948117a976816924657bab567db107e38424d78. 실제 before baseline5e49d208은 기존 보존 파일로 명시하고 새 실행이라고 표기하지 않았다.
+
+현재 npm test102files/741 PASS60.68s, original 사용자19tests 보존105files/760 PASS59.65s, check/build PASS. API direct bearing guards 변경도 포함한 현재 source. 이번 global quality:gate/production/dominance는 not-run. 직전 full gate cooling infos23 FAIL/별도dominance0/3 부족은 unresolved. 기준 완화 없음. 외부 검토는 확인된 UNI_AI credit shortage/Claude weekly limit 때문에 blocked. 인간 전문가/CAD/BREP/제조/kinematics는 미검증.
+
+harness 실패는 숨기지 않았다:1call 가정(실제 볼+helper2), close camera의frustum culling을 source 누락으로 가정, 재열기 후 selection helper가 없는 상태를 이전14calls와 비교, native 같은session close/open blank 반복. 같은 blank 조건2회 후 더 반복하지 않고 독립 새 세션으로 검수했다. 실제 source/renderer 오류와 구분한다. 임계값을 낮춘 것이 아니라 helper/명시적 Fit view/명시적 reselect를 실제 workflow에 반영했다. 임시 isolate/orbit/active selection UI state는 workspace source에 저장하지 않으며 자동 복원했다고 주장하지 않는다.
+
+사용:Workspace asset bearing 선택→Select by ID ball_0000→Isolate selection→Fit view→mm radius Apply. uncheck 후 전체 Fit view, Undo/Redo 및 Save workspace JSON. combined 파일은 Workspace export, 독립 part는 child Export selected GLB+source JSON. Explode across assets는 disabled. source 재열기 후 asset/part를 다시 선택한다.
+
+변경:src/engine/element-workspace.ts, ElementEditor.tsx; tests/workspace-isolate.test.ts; scripts/workspace-isolate-browser-regression.py, workspace-isolate-delivery-compare.ts; 계약/상태/proof. 추가 의존성/IR 마이그레이션 없음. outputs/workspace-isolate-20261003에 IR·실제GLB·이미지·Blender 결과. Git 작은 proof/큰파일SHA는 benchmarks/modeling-slices-20261003/workspace-isolate. verification SHA71616325b0537bcefa3f275f9650340eccac05bd30dfb214f9f9f8e29d493929. 최초20분+후속10분 파일검수 예산을 기록했다. 다음은 저장·재열기 시 Workspace 선택 상태 보존의 실제 필요/기존 계약을 조사한다. 연속 goal은 active.
