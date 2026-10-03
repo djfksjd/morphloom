@@ -10,6 +10,13 @@ const vector = (v: unknown): v is [number, number, number] => Array.isArray(v) &
   && v.every(x => typeof x === 'number' && Number.isFinite(x) && Math.abs(x) <= 100_000);
 /** Opt-in cap correction; absence retains legacy index bytes. */
 export function validateTubeCapWinding(geometry: TubeGeometryIR): void {
+  if (geometry.capFinish !== undefined) {
+    if (geometry.capFinish !== 'flat-outward' || geometry.closed !== undefined && geometry.closed !== false
+      || !Array.isArray(geometry.points) || !geometry.points.every(vector) || geometry.points.length < 2 || geometry.points.length > 4096
+      || !Number.isFinite(geometry.radius) || geometry.radius <= 0 || geometry.radius > 100000
+      || geometry.points.some((p,i) => i > 0 && new THREE.Vector3(...p).distanceTo(new THREE.Vector3(...geometry.points[i-1]!)) < .001)
+      || [geometry.tubularSegments, geometry.radialSegments].some(n => n !== undefined && (!Number.isInteger(n) || n < 3 || n > 512))) throw new Error('Invalid flat outward cap finish or path.');
+  }
   if (geometry.capWinding === undefined) return;
   if (geometry.capWinding !== 'outward' || geometry.closed !== undefined && geometry.closed !== false) {
     throw new Error('Outward cap winding requires an open tube and a supported declaration.');
@@ -20,6 +27,13 @@ export function migrateTubeCapWinding(geometry: TubeGeometryIR, outward: boolean
   const result = structuredClone(geometry);
   if (outward) result.capWinding = 'outward'; else delete result.capWinding;
   validateTubeCapWinding(result);
+  return result;
+}
+export function migrateTubeCapFinish(geometry: TubeGeometryIR, flat: boolean): TubeGeometryIR {
+  if (typeof flat !== 'boolean' || geometry.closed) throw new Error('Flat cap migration requires an open tube and boolean choice.');
+  const result = structuredClone(geometry);
+  if (flat) result.capFinish = 'flat-outward'; else delete result.capFinish;
+  validateEditedTubePath(result);
   return result;
 }
 /** Patch results must remain valid even when the source uses the legacy path. */

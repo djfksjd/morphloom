@@ -1,0 +1,36 @@
+[
+  {
+    "name": "demo",
+    "id": "tube",
+    "receipt": {
+      "schema": "morphloom.component-edit-receipt/0.1",
+      "operationId": "demo-cap",
+      "componentId": "tube",
+      "inputFingerprint": "ff98b47579169cc2db8979924d6eae538b53b61638b3d917279d19efa14162ff",
+      "outputFingerprint": "5637d772f0c1d90bb61a59ed7e1a75fa4b73dedc8c0c7a73ba8605765bae2cf5",
+      "unaffectedInputFingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "unaffectedOutputFingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "unaffectedComponentsPreserved": true,
+      "changedFields": [
+        "geometry"
+      ]
+    }
+  },
+  {
+    "name": "fan",
+    "id": "cage-rear-spoke-1",
+    "receipt": {
+      "schema": "morphloom.component-edit-receipt/0.1",
+      "operationId": "fan-cap",
+      "componentId": "cage-rear-spoke-1",
+      "inputFingerprint": "b669916aeff7c742cecdd59559bd26be1f9b3a93f494d9ee6b8344f2f8064fba",
+      "outputFingerprint": "9db9538389f2f37086953b4d3a59b7aa2aefb65f0a600859c17f7eda19c4b9ee",
+      "unaffectedInputFingerprint": "50b939e209c41ad78c572748b6d1bdcb0ba0fd7055d95972eea847dcbb4ff3a5",
+      "unaffectedOutputFingerprint": "50b939e209c41ad78c572748b6d1bdcb0ba0fd7055d95972eea847dcbb4ff3a5",
+      "unaffectedComponentsPreserved": true,
+      "changedFields": [
+        "geometry"
+      ]
+    }
+  }
+]

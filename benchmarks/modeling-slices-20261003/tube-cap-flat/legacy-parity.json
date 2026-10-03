@@ -1,0 +1,532 @@
+{
+  "schema": "morphloom.flat-cap-legacy-parity/0.1",
+  "baselineCompiler": "0.34.0",
+  "pass": true,
+  "rows": [
+    {
+      "id": "cage-front-outer",
+      "sha256": "ac293885032622e4158799e9c16c5246b3170a3c14ac58c7006561ddb29dc4e9",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-1",
+      "sha256": "5b943d8e20a288d69aa71c00556035fa5a07b21d25e9e44eb30c5f74df8e4e1c",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-2",
+      "sha256": "ea42897c6fdafb94d1a1fae01cf649f428a6e2e43777f82df56c1cd25ac01941",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-3",
+      "sha256": "19f4d97edaa99a6a5547606696c37857c176a46fa23f728a1021fb29c9826e46",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-4",
+      "sha256": "1413502229ab046a69aeef55ae62fd4b0e85f6178dbc09acc340190f740bb3ac",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-5",
+      "sha256": "7dfa4a1c3341b760e86ae52f4144c1d9d1e58eb97a6f796ff001719a2e9f3d96",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-6",
+      "sha256": "061fe6f3235452582a3c8e48ff144253455c105dee4b812b9456edbf8a054992",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-7",
+      "sha256": "b64e131f77d526c5958f338c06c059d0393150058953a18831d3097dd757740d",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-8",
+      "sha256": "6fdf51d5a0cfd6624b6671f4f00230c3ca3ad3b1039d9d2d1f414fff00368b0f",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-9",
+      "sha256": "bdd07e802f8634850beb9a96e32b1e0d4b6f239125f5c51befee9a401bc66ffa",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-10",
+      "sha256": "5e8e0cb80a3ed259f89dbb1ac16dfa5275e33336a0c1139c7b4346cdecfd486b",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-11",
+      "sha256": "07396e1e0e8747f5be40d5ae09e47b24a7312a35091950f644c89a345e3e6421",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-12",
+      "sha256": "18dd288a83d20cc11ae017377efd473ae3c4dcc1a9a835490f9df1e2e14a8b8a",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-13",
+      "sha256": "0f5a24ce7866f541de263bc782b72c0e8327f173837639a74a6f2bf9214056fc",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-14",
+      "sha256": "7ade356d47cbeb4d41e29669ce041d230411962875a5ae26ac0defe9e15610b0",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-15",
+      "sha256": "fe58a8442494ff6e8c4d940b321b0f7e583e525f7c05d1078e2232cfb5c30d98",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-16",
+      "sha256": "0977faaed05372a2cfeb0c27a232b3190f3e7fd4aef9fc0014455d50c676b493",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-17",
+      "sha256": "083f34a464740a6b905c943651452c528d88d27e3d67e1115c96b925b896b848",
+      "pass": true
+    },
+    {
+      "id": "cage-front-ring-18",
+      "sha256": "cd98b79096ca21e93447955598039d9c0ecc92ab4ea13e21b71cdcb20cd49297",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-1",
+      "sha256": "d5b4af7df7fc986a7f6992baff69256cddb2a7c79f246e931a5fdc30ed892a5f",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-2",
+      "sha256": "082563517bcb71b31eec37177940cf310031f638e4e5ef3f25664f5db77ac725",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-3",
+      "sha256": "f7d70cc0b4bae9ab55e008550641f601156c561bb4dc5eb128cad09075fb2abb",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-4",
+      "sha256": "1dbfa86cf5f5b02e71fc72f715d23edc87422f36fe99c5615a73c65d1aed1153",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-5",
+      "sha256": "80e0cf7f2bb625b659acfc4f2e14400399028c5d326b406501641173d1b1ed09",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-6",
+      "sha256": "d4cd3b8fea69cc7c0ec2c8201805c79c64c45b376ac18f89d9be1191548b46dc",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-7",
+      "sha256": "f25685792d84efbe9c28268c6cf5ced235321ff0cec1a65bdf1319f4642018f1",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-8",
+      "sha256": "e3e86d18a57bc693e5dbacb8d1268e1494e740d76cdb1eb920ac66b898335758",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-9",
+      "sha256": "168073631b4d928a7bc73bf099e26b0713eaa597383bb2e12265a53982d96b2e",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-10",
+      "sha256": "487c810232a8964e3709d34adda5717aec01c7141b6c92216d4f0ced9ed12d07",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-11",
+      "sha256": "d67d313c97d7a61a54c0cf4aafc9874c28cacdaefff7591d8814a2fd48d21098",
+      "pass": true
+    },
+    {
+      "id": "cage-front-spoke-12",
+      "sha256": "f0a2717c899be5f4fb95e6697e3eb410e7e2c9c59031388e5b16d11d9b58d826",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-outer",
+      "sha256": "ac293885032622e4158799e9c16c5246b3170a3c14ac58c7006561ddb29dc4e9",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-1",
+      "sha256": "5b943d8e20a288d69aa71c00556035fa5a07b21d25e9e44eb30c5f74df8e4e1c",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-2",
+      "sha256": "ea42897c6fdafb94d1a1fae01cf649f428a6e2e43777f82df56c1cd25ac01941",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-3",
+      "sha256": "19f4d97edaa99a6a5547606696c37857c176a46fa23f728a1021fb29c9826e46",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-4",
+      "sha256": "1413502229ab046a69aeef55ae62fd4b0e85f6178dbc09acc340190f740bb3ac",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-5",
+      "sha256": "7dfa4a1c3341b760e86ae52f4144c1d9d1e58eb97a6f796ff001719a2e9f3d96",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-6",
+      "sha256": "061fe6f3235452582a3c8e48ff144253455c105dee4b812b9456edbf8a054992",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-7",
+      "sha256": "b64e131f77d526c5958f338c06c059d0393150058953a18831d3097dd757740d",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-8",
+      "sha256": "6fdf51d5a0cfd6624b6671f4f00230c3ca3ad3b1039d9d2d1f414fff00368b0f",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-9",
+      "sha256": "bdd07e802f8634850beb9a96e32b1e0d4b6f239125f5c51befee9a401bc66ffa",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-10",
+      "sha256": "5e8e0cb80a3ed259f89dbb1ac16dfa5275e33336a0c1139c7b4346cdecfd486b",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-11",
+      "sha256": "07396e1e0e8747f5be40d5ae09e47b24a7312a35091950f644c89a345e3e6421",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-12",
+      "sha256": "18dd288a83d20cc11ae017377efd473ae3c4dcc1a9a835490f9df1e2e14a8b8a",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-13",
+      "sha256": "0f5a24ce7866f541de263bc782b72c0e8327f173837639a74a6f2bf9214056fc",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-14",
+      "sha256": "7ade356d47cbeb4d41e29669ce041d230411962875a5ae26ac0defe9e15610b0",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-15",
+      "sha256": "fe58a8442494ff6e8c4d940b321b0f7e583e525f7c05d1078e2232cfb5c30d98",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-16",
+      "sha256": "0977faaed05372a2cfeb0c27a232b3190f3e7fd4aef9fc0014455d50c676b493",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-17",
+      "sha256": "083f34a464740a6b905c943651452c528d88d27e3d67e1115c96b925b896b848",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-ring-18",
+      "sha256": "cd98b79096ca21e93447955598039d9c0ecc92ab4ea13e21b71cdcb20cd49297",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-1",
+      "sha256": "e8c66981bab35f368f1eb653d621b2912327032b719e7f68c570a92c38a4046c",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-2",
+      "sha256": "67b4cbc44ec8f0330ccc28b13b41a3f810795e901ee00b4236089526f1218916",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-3",
+      "sha256": "75994cfa93759d3699b8b91da449d05037eee6f0a993258a17e28db212964434",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-4",
+      "sha256": "09de9e8b223a231d7b271250b54c14cb6bc27fd4f89c6dca454d045ebc679afe",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-5",
+      "sha256": "842498bdd2f24b0d308e7170d0b093ff00b52d3f98bb95858e3580beb08bcc7e",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-6",
+      "sha256": "4b4f028d796e0475f31b1a8a96e9da4ec850b32cacaef2e36870da0e166f25a3",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-7",
+      "sha256": "2c9bc80d92b5694018bcc4de71fbea3dc0d93fa7bf35d9f031234129e112b206",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-8",
+      "sha256": "18878287d6b0b68960248aebc217780d8969befdb7f670c79699f40065aff90e",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-9",
+      "sha256": "34959c370f383003484c45a3da6814aed4d3c00e8df3fa073845eb941cc188c3",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-10",
+      "sha256": "8780d959e2633cfd2447bb6453c9781f93d046c133a9a10589a4368480fef01c",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-11",
+      "sha256": "168379f4f9ce9ab6cb418e25db3948f1c0a155eacd18f89823c060938b14875f",
+      "pass": true
+    },
+    {
+      "id": "cage-rear-spoke-12",
+      "sha256": "36d224493de19bcc15edab9cf9937aca4c57abb8ee34ba898f76ae06fe4dfca3",
+      "pass": true
+    },
+    {
+      "id": "cage-depth-rim",
+      "sha256": "49e136d0d0422ee1602b10f27218450631faa0f508b6c4bcf233ed150f4e7f9c",
+      "pass": true
+    },
+    {
+      "id": "front-hub-cap",
+      "sha256": "2b6e087b21e69f37482ba126f84ffe0654b2c941cec1432952e2eaf1e16c393d",
+      "pass": true
+    },
+    {
+      "id": "blade-spider",
+      "sha256": "ce4c96756019b8398fd4737c7c4a065738c258322da2845293159adf6fc31d94",
+      "pass": true
+    },
+    {
+      "id": "blade-1",
+      "sha256": "b8cfc7782d52eccb9e2b351a28c895f3272caec48551e3169b9d95064da7eb4d",
+      "pass": true
+    },
+    {
+      "id": "blade-2",
+      "sha256": "b8cfc7782d52eccb9e2b351a28c895f3272caec48551e3169b9d95064da7eb4d",
+      "pass": true
+    },
+    {
+      "id": "blade-3",
+      "sha256": "b8cfc7782d52eccb9e2b351a28c895f3272caec48551e3169b9d95064da7eb4d",
+      "pass": true
+    },
+    {
+      "id": "motor-shell",
+      "sha256": "a464d49edb3785093acb29c1260177674823d339c6640b0eb32c201856186b02",
+      "pass": true
+    },
+    {
+      "id": "motor-rear-cap",
+      "sha256": "2891ada052fedd06a63648a3bd50a9aaded7d2b12d40a8a33b738bbe9fdcc31d",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-1",
+      "sha256": "901ea124c59dedf7aa003b096b0fbda649f48deb6969d60750537364d3542ad1",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-2",
+      "sha256": "50fe33e8ff7bd0f76b5f29e779acacde5aec95bf234dcb611cc88ad71f23e739",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-3",
+      "sha256": "f14dced3cfad4e77cfaca741b5479fe48a6c98783657b45a24a4e90c9b2f9bde",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-4",
+      "sha256": "506a371e3a93e714eed2649e216c7006ca626b5d6f43c1c097cb3eae85164b55",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-5",
+      "sha256": "9f7c51b518f74e2816d093ab316f5aeefdd020e60059902b2dcfca64e58171f1",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-6",
+      "sha256": "6e472000cb8b58c46aed424d6da67491e4c3b907a434450abdb0b0b165ee14ec",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-7",
+      "sha256": "6aa1315d034c2ee46e77880c997db740d6abc9ff753b44cd67c7da2b53ea2f6a",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-8",
+      "sha256": "0bd709a34dc2cd8c4d43d863dca0741de170d3bf622f699d0290bebf65d4195f",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-9",
+      "sha256": "bf3b25b816758ad8a47d43d343505e096caf3ac7454f4b96f45eef88c656bdc1",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-10",
+      "sha256": "6bb213a93873e5fce85950e5adad408e952daaddb8c7e8d2906d5525799b51ab",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-11",
+      "sha256": "422931e38b647980778ca590591c6751c9136b7b40a6b4981778f367d4ae1ce8",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-12",
+      "sha256": "1f4c00912b90260f9f3228234366524eb2b768aff9727696f0a87d38226ad6e0",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-13",
+      "sha256": "c06a30b58979dd4cbc08848573f20594c2c418bb1541d8b214e0adebf9e9a436",
+      "pass": true
+    },
+    {
+      "id": "motor-vent-14",
+      "sha256": "41f879f0d7e8cb0ba195ee5c1e675417f4286258d368e22403400c7a92182588",
+      "pass": true
+    },
+    {
+      "id": "switch-post",
+      "sha256": "359f01d5654dfecf0ea8f9a673c51af1edf88ccd6a5e06a8fe86f06b65c32f67",
+      "pass": true
+    },
+    {
+      "id": "switch-box",
+      "sha256": "b425a5118697f54e80c3302f6e170021061641eecab4e0d0b002597c025ac8e7",
+      "pass": true
+    },
+    {
+      "id": "speed-knob",
+      "sha256": "a791ac9491957fad36a6dcb26b8d462bc7c0c6389ceffa9e6bcfa73887a5c451",
+      "pass": true
+    },
+    {
+      "id": "pivot-left",
+      "sha256": "6ff45ad3f4ab6693978cbb19a59991e59f17cb1729a48f5a5ff51ba74a108d6e",
+      "pass": true
+    },
+    {
+      "id": "pivot-right",
+      "sha256": "6ff45ad3f4ab6693978cbb19a59991e59f17cb1729a48f5a5ff51ba74a108d6e",
+      "pass": true
+    },
+    {
+      "id": "stand-left",
+      "sha256": "0b71abde81db1351e16c427ef7c44a842fe8a98283b7c97493dc1c6beca81bd6",
+      "pass": true
+    },
+    {
+      "id": "stand-right",
+      "sha256": "991c162be3fee7c34d98e8286184d808362ca4ebc2fec9618ae5f3b5cda01f9f",
+      "pass": true
+    },
+    {
+      "id": "base-front-rail",
+      "sha256": "3148dc9fd849086c2f87d94347f6ab8ec9fb6a3d30a2ef6c12b8ffa8d44afe51",
+      "pass": true
+    },
+    {
+      "id": "base-rear-rail",
+      "sha256": "72c43d3a350d03adf38bc254263904c5e50f858af392419d929984f7da7d12ec",
+      "pass": true
+    },
+    {
+      "id": "base-left-link",
+      "sha256": "2fb3c860545f2a7178d65f12e36aae10e7bbf83d9e8a71e00808afd001080092",
+      "pass": true
+    },
+    {
+      "id": "base-right-link",
+      "sha256": "91252b7c30c455066d1bcf0d46af3355db6ed8c45130b918177193c1dc4f2712",
+      "pass": true
+    },
+    {
+      "id": "foot-left-front",
+      "sha256": "df0b1507dcc7df5e933c7dc0d1d45581430d11d89f798d22dbcfec571e4405d8",
+      "pass": true
+    },
+    {
+      "id": "foot-right-front",
+      "sha256": "df0b1507dcc7df5e933c7dc0d1d45581430d11d89f798d22dbcfec571e4405d8",
+      "pass": true
+    },
+    {
+      "id": "foot-left-rear",
+      "sha256": "df0b1507dcc7df5e933c7dc0d1d45581430d11d89f798d22dbcfec571e4405d8",
+      "pass": true
+    },
+    {
+      "id": "foot-right-rear",
+      "sha256": "df0b1507dcc7df5e933c7dc0d1d45581430d11d89f798d22dbcfec571e4405d8",
+      "pass": true
+    },
+    {
+      "id": "power-cable",
+      "sha256": "3175a3f583337a96fd8b653df3ed7d442cd00582c6a4afb40ff2b4b327accfc0",
+      "pass": true
+    },
+    {
+      "id": "power-plug",
+      "sha256": "c3db64d388c130267264c7c91ac3148045c6e26af87b77fbc552957417eac9c8",
+      "pass": true
+    },
+    {
+      "id": "legacy-straight",
+      "sha256": "8593d5558a96f3f4698559cf32eb9905cfecd05157fb1709742cfa0978af62e0",
+      "pass": true
+    },
+    {
+      "id": "explicit-winding",
+      "sha256": "d54d36cd00ff5c8f992f18f82ba9cf9e40f571f04a51a56a88eb46be5ea7e6d3",
+      "pass": true
+    },
+    {
+      "id": "legacy-multipoint",
+      "sha256": "e80d2fdeb0d91e10a284c48c3188967da0ced3f2740a0dfb39d607600f297dca",
+      "pass": true
+    },
+    {
+      "id": "closed-path",
+      "sha256": "14eb90a1cda6d20f91c57f88cb96f8dfe31ba7f6f093a0f0889ca210c840b7a0",
+      "pass": true
+    }
+  ]
+}

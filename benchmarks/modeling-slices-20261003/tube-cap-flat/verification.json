@@ -1,0 +1,166 @@
+{
+  "schema": "morphloom.flat-cap-verification/0.1",
+  "baselineCommit": "6e6702f864e6f5029267051047bd5b464bb590f1",
+  "compilerRevision": "0.35.0",
+  "status": "local flat cap normal/UV verified; full source-fidelity/global release blocked",
+  "releaseAllowed": false,
+  "sourceCodeSha256": {
+    "schemas/assembly-ir.schema.json": "54bfbb4001bfa2e7360251c27ac57101074f2648e9df7a0e3d0b4fe6ae0c366b",
+    "src/AssemblyComponentEditor.tsx": "e7f7cf82c13aaf930b11d0200f94792795f511c8fed3596bb1813eacdc655235",
+    "src/engine/assembly-compiler.ts": "ca171b101d6d2f1a9791205ce325db39c93c3d0ddf98b9437e8c1b53db8ef6bc",
+    "src/engine/assembly-edit.ts": "1dfb75934870532ef51faf9420a982ee8ec80bd7d1b8d3b5c5c84cdd9d2ed180",
+    "src/engine/assembly-ir.ts": "b203eea01481dbb616c8d1e3df6931d90ddbb7ec56f3d4e0a2da6783228f44ec",
+    "src/engine/delivery-validation.ts": "253ca806fd29fc625c577dbf897430050f2813df96dd7958631ac04e039c1e70",
+    "src/engine/tube-quadratic-curve.ts": "fb5bf708e19505dccca5ef81609074a52de96cde8ee99d5e38f018edef82df6c",
+    "tests/browser-proof-recorder.test.ts": "db9e0d3d8d653e9d451f153ab0e64779d0c5cf5c2d06fc9f151e1cfbaefe5e8d",
+    "docs/TUBE_CAP_FLAT_CONTRACT.ko.md": "95560684468a4f037a7be96c050fd7b32475668968a2bffcd72839c86bbe6c95",
+    "tests/tube-cap-flat.test.ts": "c9628141691d1e99ac87da02dac30869d64a28ae26c22425fe724b80d2c22486",
+    "scripts/tube-cap-flat-pilot.ts": "806d7d4f7647b04349e47432345e049f1c14d713cc45a1f6ad74a3ce18cc4cf0",
+    "scripts/tube-cap-flat-browser-evidence.js": "bc3cb99bb1b29c4734b2db6f2315d6343934616bc782f1360ee39b3edad9d6cd",
+    "scripts/tube-cap-flat-legacy-parity.ts": "a7855a5031dc3af6aacb88799000b405028e2bd83df383f8caff636e59211ef8",
+    "scripts/blender-flat-cap-audit.py": "13a11a0a83ab9b0ced2f4c136a5951bd23711f730129adb7d424fad33980d5e9",
+    "scripts/tube-cap-flat-dcc-evidence.py": "a0acbb5bdc5a64d836479aa48c03ccef1a9ca385df684af067237d03f52f45ce",
+    "docs/TUBE_CAP_FLAT_STATUS.ko.md": "67461bb966c8f8f84cbd3d8133a7d92d40663337c5cf5145de3776d8edd9635c"
+  },
+  "cases": [
+    {
+      "name": "demo-before",
+      "inputSha256": "b71c07d2465234fc3bca29a3eec1318f178fb95b603cc39011acf2f150c2acc9",
+      "outputSha256": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+      "compileMs": 7.900000035762787,
+      "glbBytes": 54708,
+      "triangles": 1056,
+      "textureBytes": 43680,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "1e2ae1a0657cd4d087c9917c99af1ddfab07c48be3ee288cce417c8e1de31bcf"
+    },
+    {
+      "name": "demo-after",
+      "inputSha256": "bd61604c5934f3f967f57a4d8885ecdff8346721443e52e533aa322e376e6260",
+      "outputSha256": "9419b78e2d575b949c710c15ca0d87e1588dfb5db504ac4218aaefc0e6c65d11",
+      "compileMs": 6.400000035762787,
+      "glbBytes": 56376,
+      "triangles": 1056,
+      "textureBytes": 43680,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "67a7010fb3fa15b2096b6c4f4b716508601d937d59d706506814cce741917c10"
+    },
+    {
+      "name": "fan-before",
+      "inputSha256": "e4cbaffb8d7fcd206e7c3f640837a69a142be5392118e99d9812ed5031f9a217",
+      "outputSha256": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+      "compileMs": 173.5,
+      "glbBytes": 3611108,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "f8d489fe0400b2f4c4106e2dc4471586d9569c25a99ac50420dcd4c435bd1301"
+    },
+    {
+      "name": "fan-after",
+      "inputSha256": "f3d7124d836378851903af0885db5cdad73cfcd69dc5dab0b853f84b65e99e1d",
+      "outputSha256": "7a08205f4f779da2a941d53525df2f8c03aa9fac1b7e364af9cd25efaab73176",
+      "compileMs": 69.80000001192093,
+      "glbBytes": 3611808,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "ff4c36cf7561439ed285e344a2d4f4b1d80d75fc2780b56e7f676e441c18847d"
+    }
+  ],
+  "publishedTests": {
+    "files": 94,
+    "tests": 678,
+    "pass": true
+  },
+  "userWorkspaceTests": {
+    "files": 97,
+    "tests": 697,
+    "pass": true
+  },
+  "testsSequentialExit": {
+    "published": 0,
+    "source": 0
+  },
+  "normalUvChecks": {
+    "demo-before": {
+      "schema": "morphloom.blender-flat-cap/0.1",
+      "sourceSha256": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+      "blenderVersion": "5.2.1 LTS",
+      "target": "tube",
+      "capTriangles": 32,
+      "minimumCornerNormalDotFace": -9.317631338490173e-05,
+      "uniformNormalPass": false,
+      "uvAreaToGeometryAreaRelativeSpread": 0.0,
+      "uvEdgeScaleRelativeSpread": 3.414390213538568,
+      "planarUvPass": false,
+      "scope": "target imported cap corners only; no whole asset source-fidelity or atlas/mip approval"
+    },
+    "demo-after": {
+      "schema": "morphloom.blender-flat-cap/0.1",
+      "sourceSha256": "9419b78e2d575b949c710c15ca0d87e1588dfb5db504ac4218aaefc0e6c65d11",
+      "blenderVersion": "5.2.1 LTS",
+      "target": "tube",
+      "capTriangles": 32,
+      "minimumCornerNormalDotFace": 1.0,
+      "uniformNormalPass": true,
+      "uvAreaToGeometryAreaRelativeSpread": 4.0700603709531435e-07,
+      "uvEdgeScaleRelativeSpread": 4.037501464271287e-07,
+      "planarUvPass": true,
+      "scope": "target imported cap corners only; no whole asset source-fidelity or atlas/mip approval"
+    },
+    "fan-before": {
+      "schema": "morphloom.blender-flat-cap/0.1",
+      "sourceSha256": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+      "blenderVersion": "5.2.1 LTS",
+      "target": "cage-rear-spoke-1",
+      "capTriangles": 12,
+      "minimumCornerNormalDotFace": -5.081295967102051e-05,
+      "uniformNormalPass": false,
+      "uvAreaToGeometryAreaRelativeSpread": 2.332245357283824e-06,
+      "uvEdgeScaleRelativeSpread": 3.2426472690063557,
+      "planarUvPass": false,
+      "scope": "target imported cap corners only; no whole asset source-fidelity or atlas/mip approval"
+    },
+    "fan-after": {
+      "schema": "morphloom.blender-flat-cap/0.1",
+      "sourceSha256": "7a08205f4f779da2a941d53525df2f8c03aa9fac1b7e364af9cd25efaab73176",
+      "blenderVersion": "5.2.1 LTS",
+      "target": "cage-rear-spoke-1",
+      "capTriangles": 12,
+      "minimumCornerNormalDotFace": 0.9999998807907104,
+      "uniformNormalPass": true,
+      "uvAreaToGeometryAreaRelativeSpread": 2.354725882280917e-06,
+      "uvEdgeScaleRelativeSpread": 1.8568407169627932e-06,
+      "planarUvPass": true,
+      "scope": "target imported cap corners only; no whole asset source-fidelity or atlas/mip approval"
+    }
+  },
+  "checks": {
+    "noOption105HistoricalGeometryBuffers": "PASS",
+    "noOptionWholeFanGlbMatches0_34": true,
+    "uiRegularGlbMatchesDiagnostic": true,
+    "other100FanMeshPayloads": true,
+    "khronosFiveFiles": "PASS,errors0/warnings0",
+    "blenderFourVariantsAndUiGlb": "PASS",
+    "currentSevenBrowserAndFiveBlenderImportEditGodot": "PASS",
+    "currentAsphaltPrusaObjStlPlyUsdz": "PASS",
+    "currentQualityProduction": "FAIL: original cooling UV unused info23, no threshold relaxation",
+    "currentDominance": "FAIL: seven domains,comparison cases0",
+    "checkBuildBenchmark": "PASS"
+  },
+  "uniai": {
+    "model": "gpt-6-astra",
+    "calls": 2,
+    "tokens": 11389,
+    "scope": "public code proposals; not expert/actual execution evidence"
+  },
+  "notVerified": [
+    "Entire fan source-photo fidelity or measured dimensions",
+    "Other unmigrated legacy caps",
+    "UV atlas padding/mip bleed/physical texel density",
+    "Fan apps besides Blender",
+    "CAD/manufacturing/independent expert evaluation"
+  ],
+  "assetsZipSha256": "f7e5c5688451ca0658c0f308a781ffeccb482d36bc842e0030251d1627b3ffbd"
+}

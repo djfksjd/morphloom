@@ -214,7 +214,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       || typeof component.detail !== 'string' || component.detail.length > 500) {
       throw new Error(`Invalid component text metadata in ${component.id}.`);
     }
-    if (component.geometry.op !== 'tube' && 'capWinding' in component.geometry) throw new Error('Cap winding declaration requires a tube.');
+    if (component.geometry.op !== 'tube' && ('capWinding' in component.geometry || 'capFinish' in component.geometry)) throw new Error('Cap winding declaration requires a tube.');
     inspect(component.geometry, `${component.id}.geometry`);
     switch (component.geometry.op) {
       case 'roundedBox': {
@@ -605,9 +605,11 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       const sourcePosition = tube.getAttribute('position');
       const sourceNormal = tube.getAttribute('normal');
       const sourceUv = tube.getAttribute('uv');
-      const position = new Float32Array((sourcePosition.count + 2) * 3);
-      const normal = new Float32Array((sourceNormal.count + 2) * 3);
-      const uv = new Float32Array((sourceUv.count + 2) * 2);
+      const flatCaps = geometry.capFinish === 'flat-outward';
+      const extraVertices = flatCaps ? 2 * (radialSegments + 1) : 0;
+      const position = new Float32Array((sourcePosition.count + 2 + extraVertices) * 3);
+      const normal = new Float32Array((sourceNormal.count + 2 + extraVertices) * 3);
+      const uv = new Float32Array((sourceUv.count + 2 + extraVertices) * 2);
       position.set(sourcePosition.array as Float32Array);
       normal.set(sourceNormal.array as Float32Array);
       uv.set(sourceUv.array as Float32Array);
@@ -627,11 +629,31 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       const indices = sourceIndex ? Array.from(sourceIndex.array) : [];
       const ring = radialSegments + 1;
       const endRing = tubularSegments * ring;
+      let startCapRing = 0, endCapRing = endRing;
+      if (flatCaps) {
+        startCapRing = sourcePosition.count + 2; endCapRing = startCapRing + ring;
+        for (const [from, to, center, tangent, frame] of [
+          [0, startCapRing, start, startTangent, 0],
+          [endRing, endCapRing, end, endTangent, tubularSegments],
+        ] as const) {
+          const basisNormal = tube.normals[frame]!, basisBinormal = tube.binormals[frame]!;
+          if (![...center.toArray(), ...tangent.toArray(), ...basisNormal.toArray(), ...basisBinormal.toArray()].every(Number.isFinite)
+            || [tangent, basisNormal, basisBinormal].some(v => Math.abs(v.length() - 1) > 1e-6)
+            || [tangent.dot(basisNormal), tangent.dot(basisBinormal), basisNormal.dot(basisBinormal)].some(v => Math.abs(v) > 1e-6)) { tube.dispose(); throw new Error('Flat cap endpoint frame is singular.'); }
+          for (let j = 0; j < ring; j += 1) {
+            const point = new THREE.Vector3().fromBufferAttribute(sourcePosition, from + j);
+            position.set(point.toArray(), (to + j) * 3); normal.set(tangent.toArray(), (to + j) * 3);
+            const delta = point.sub(center), diameter = 2 * mm(geometry.radius);
+            uv.set([THREE.MathUtils.clamp(.5 + delta.dot(basisNormal) / diameter, 0, 1),
+              THREE.MathUtils.clamp(.5 + delta.dot(basisBinormal) / diameter, 0, 1)], (to + j) * 2);
+          }
+        }
+      }
       for (let segment = 0; segment < radialSegments; segment += 1) {
-        if (geometry.curve || geometry.capWinding === 'outward') {
+        if (geometry.curve || geometry.capWinding === 'outward' || flatCaps) {
           // Explicit correction or quadratic path; undeclared legacy buffers stay byte-identical.
-          indices.push(startCenter, segment, segment + 1);
-          indices.push(endCenter, endRing + segment + 1, endRing + segment);
+          indices.push(startCenter, startCapRing + segment, startCapRing + segment + 1);
+          indices.push(endCenter, endCapRing + segment + 1, endCapRing + segment);
         } else {
           indices.push(startCenter, segment + 1, segment);
           indices.push(endCenter, endRing + segment, endRing + segment + 1);

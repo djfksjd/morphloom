@@ -1,0 +1,15 @@
+# Flat cap finish: verified step
+
+Compiler0.35 adds explicit open-tube `capFinish: flat-outward`. Patch0.2 `tube-cap-finish` set/clear and deep-copy `migrateTubeCapFinish` preserve separate winding/curve declarations. Clear restores their prior behavior. Unsupported finish, non-tube/closed targets, old patch version and malformed operations fail. Older engines are not a verified downgrade path. Assembly/job0.1 data without the flag retain identical buffers.
+
+Only cap rims are duplicated. Original side/center position, normal and UV prefixes and lateral indices remain exact; new cap rims use endpoint normal and component-local planar disk UV. Both cap charts intentionally overlap/tile, not an atlas. No surface or material recomputation, silhouette/bounds/triangle changes or dependency additions. Native coordinate meaning is unchanged.16-bit boundary promotion is covered.
+
+Actual Blender cap corner normal dot face: diagnostic before approximately0, after1.0; fan after0.99999988. UV all-edge scale relative spread: diagnostic3.41439 ->4.04e-7; selected fan3.24265 ->1.86e-6. Frozen normal>0.99999, UV relative spread<=1e-4 and orientation/closed-manifold criteria pass. An initial area-only UV audit could not distinguish a collapsed chart; it is retained, and the stronger all-edge check was added without relaxing a threshold.
+
+All four actual GLBs reopened in Blender; regular UI exported GLB matches the diagnostic flat file exactly. Khronos five files errors0/warnings0. Actual UI selection/apply/cancel/undo/redo/native reopen preserves the independent winding declaration. Fan cage-rear-spoke-1 migration preserves other100 actual mesh payloads.105 pre-flat geometry buffer hashes (full fan plus straight/multi-point/closed cases) match pinned0.34; absent-finish whole fan GLB matches0.34 exactly.
+
+Published94files/678tests and user97files/697tests PASS sequentially. Initial concurrent full suites timed out in two existing5s tests while seven agent-owned GPU browser sessions and other audits ran. Those failures are retained. Only agent-owned browsers were closed; original5s limits unchanged. Check/build/benchmark PASS. Current0.35 seven browser cases and five Blender import/edit/Godot cases were rerun; PrusaSlicer asphalt and actual browser OBJ/STL/PLY/USDZ were rerun. Initial static audit used the fixture id instead of UI manifest id and failed explicitly; corrected to actual asphalt-surface.
+
+Current global quality gate remains blocked by pre-existing cooling UV infos23; no deleted UV or weakened gate. Fan measured geometry/camera/material physics, other legacy cap migration, full UV atlas/mip quality, CAD and independent expert approval remain unverified. Two UNI_AI gpt-6-astra public-code proposals total11,389tokens; no private photos/keys sent.
+
+Artifacts: benchmarks/modeling-slices-20261003/tube-cap-flat/{verification.json,SHA256SUMS,assets.zip}; paired1024 renders use identical camera/light/fixed space. Source IRs and actual exported bytes are archived. Next actual defect: older native file reads can overwrite newer imports; it has been reproduced before implementation.

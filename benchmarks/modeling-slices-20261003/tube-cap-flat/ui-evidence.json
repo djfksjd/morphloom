@@ -1,0 +1,9 @@
+{
+  "selection": "actual viewport click",
+  "flatDeclaration": "flat-outward",
+  "cancel": true,
+  "undo": true,
+  "redo": true,
+  "nativeReopen": true,
+  "unchangedIndependentWinding": true
+}

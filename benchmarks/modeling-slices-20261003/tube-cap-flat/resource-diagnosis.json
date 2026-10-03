@@ -1,0 +1,12 @@
+{
+  "originalFailures": [
+    "gear-chamfer 5000ms timeout",
+    "workspace-history 5000ms timeout"
+  ],
+  "conditions": "Two full suites plus actual seven-case browser collection and cross-domain fixture export ran concurrently; seven agent-owned rendering browser sessions were still active. User VM/apps were preserved.",
+  "mitigation": "Close only seven agent-owned sessions after saved evidence; run published and source suites sequentially with original 5000ms limit. No thresholds changed.",
+  "previous0_34TestsMs": {
+    "workspace-history": 4116,
+    "gear-chamfer": 3497
+  }
+}

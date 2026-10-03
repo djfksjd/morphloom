@@ -1,0 +1,4 @@
+{
+  "pass": false,
+  "reason": "Before cap has equal UV triangle area ratios but non-planar line-shaped mapping. Area-only validator insufficient; add all-edge conformal scale check, no thresholds relaxed."
+}

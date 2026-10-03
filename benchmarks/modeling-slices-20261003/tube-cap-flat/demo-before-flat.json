@@ -1,0 +1,13 @@
+{
+  "schema": "morphloom.blender-flat-cap/0.1",
+  "sourceSha256": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+  "blenderVersion": "5.2.1 LTS",
+  "target": "tube",
+  "capTriangles": 32,
+  "minimumCornerNormalDotFace": -9.317631338490173e-05,
+  "uniformNormalPass": false,
+  "uvAreaToGeometryAreaRelativeSpread": 0.0,
+  "uvEdgeScaleRelativeSpread": 3.414390213538568,
+  "planarUvPass": false,
+  "scope": "target imported cap corners only; no whole asset source-fidelity or atlas/mip approval"
+}

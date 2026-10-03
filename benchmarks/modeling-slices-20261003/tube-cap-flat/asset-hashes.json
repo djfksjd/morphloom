@@ -1,0 +1,18 @@
+{
+  "ui-original.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "demo-after.assembly.json": "67a7010fb3fa15b2096b6c4f4b716508601d937d59d706506814cce741917c10",
+  "demo-before.assembly.json": "1e2ae1a0657cd4d087c9917c99af1ddfab07c48be3ee288cce417c8e1de31bcf",
+  "ui-reopened.assembly.json": "cf303e21f8ed3a510599d7d55df8e0b537308a79ee0365d673955b760e5e4228",
+  "ui-cancel.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "fan-before.assembly.json": "f8d489fe0400b2f4c4106e2dc4471586d9569c25a99ac50420dcd4c435bd1301",
+  "fan-after.assembly.json": "ff4c36cf7561439ed285e344a2d4f4b1d80d75fc2780b56e7f676e441c18847d",
+  "ui-edited.assembly.json": "cf303e21f8ed3a510599d7d55df8e0b537308a79ee0365d673955b760e5e4228",
+  "ui-undo.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-redo.assembly.json": "cf303e21f8ed3a510599d7d55df8e0b537308a79ee0365d673955b760e5e4228",
+  "demo-before.glb": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+  "demo-after.glb": "9419b78e2d575b949c710c15ca0d87e1588dfb5db504ac4218aaefc0e6c65d11",
+  "fan-before.glb": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+  "fan-after.glb": "7a08205f4f779da2a941d53525df2f8c03aa9fac1b7e364af9cd25efaab73176",
+  "ui-edited.glb": "9419b78e2d575b949c710c15ca0d87e1588dfb5db504ac4218aaefc0e6c65d11",
+  "SOURCE_LICENSE.md": "d456789fd7a2b454aa77ca2bd582bcc1e5c2184f7828151a585705a6e7acb20e"
+}
