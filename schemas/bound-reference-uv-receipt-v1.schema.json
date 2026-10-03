@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UV inspection bound to actual original/current GLB; not editable IR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "sourceFingerprint", "outputFingerprint", "preservedBinFingerprint", "currentEditableIRAvailable", "sourceMetadataState", "worldTranslationErrorMeters", "bindingScope", "report"],
+  "properties": {
+    "schema": { "const": "morphloom.bound-reference-uv-receipt/0.1" },
+    "sourceFingerprint": { "$ref": "#/$defs/sha" },
+    "outputFingerprint": { "$ref": "#/$defs/sha" },
+    "preservedBinFingerprint": { "$ref": "#/$defs/sha" },
+    "currentEditableIRAvailable": { "const": false },
+    "sourceMetadataState": { "const": "before-edit-reference" },
+    "worldTranslationErrorMeters": { "type": "number", "minimum": 0, "maximum": 0.000001 },
+    "bindingScope": { "const": "Exact original/current local geometry/UV/index/material semantics plus declared translation; inspection-only context" },
+    "report": { "type": "object", "required": ["revision", "geometryFingerprint", "integrityPass", "meshes"], "properties": {
+      "revision": { "const": "morphloom.uv-quality/0.3" },
+      "geometryFingerprint": { "$ref": "#/$defs/sha" },
+      "integrityPass": { "type": "boolean" },
+      "meshes": { "type": "array" }
+    } }
+  },
+  "$defs": { "sha": { "type": "string", "pattern": "^[0-9a-f]{64}$" } }
+}

@@ -1,0 +1,10 @@
+import fs from'node:fs';
+import assert from'node:assert/strict';
+import{inspectBoundReferenceUv}from'../src/engine/bound-reference-uv';
+const[original,current,output]=process.argv.slice(2);
+assert(original&&current&&output&&!fs.existsSync(output),'original.glb current.glb NEW-report.json');
+const read=(file:string)=>{const bytes=fs.readFileSync(file);assert(bytes.length<=256000000);return new Uint8Array(bytes).buffer;};
+const receipt=await inspectBoundReferenceUv(read(original),read(current));
+fs.writeFileSync(output,JSON.stringify(receipt,null,2)+'\n');
+console.log(JSON.stringify({integrityPass:receipt.report.integrityPass,meshes:receipt.report.meshes.length,features:receipt.report.meshes.reduce((n,m)=>n+m.features.length,0),currentEditableIRAvailable:receipt.currentEditableIRAvailable,sourceFingerprint:receipt.sourceFingerprint,outputFingerprint:receipt.outputFingerprint}));
+if(!receipt.report.integrityPass)process.exitCode=1;
