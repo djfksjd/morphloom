@@ -14,9 +14,12 @@ assets = ['blade', 'laurel-homes', 'cooler', 'moderncat-concept', 'web-hero', 'f
 def run(*args):
     result = subprocess.run(['agent-browser', '--session', session, *args], capture_output=True, text=True, timeout=45, check=True)
     return result.stdout
+# Wait for the initial React compile/proof to finish; selection events during it are intentionally ignored.
+run('wait', '--fn', "document.querySelector('[aria-label=\"내보내기 및 비용 검증\"]').textContent.includes('PASS') && !document.querySelector('select[aria-label=\"검수할 결과 선택\"]').disabled")
 for count, asset in enumerate(assets, 1):
     run('snapshot', '-i')
     run('select', 'select[aria-label="검수할 결과 선택"]', asset)
+    run('wait', '--fn', "document.querySelector('select[aria-label=\"검수할 결과 선택\"]').value === '" + asset + "'")
     condition = "document.querySelector('[aria-label=\"브라우저 왕복 검증 수집 현황\"]').textContent.includes('" + str(count) + "/7 ASSETS') && !document.querySelector('select[aria-label=\"검수할 결과 선택\"]').disabled"
     run('wait', '--fn', condition)
     (output / (asset + '.txt')).write_text(run('get', 'text', '[aria-label="내보내기 및 비용 검증"]'))

@@ -1,0 +1,674 @@
+{
+  "schema": "morphloom.guard-profile-pilot/0.1",
+  "inputFingerprint": "08a0758aced55fc2c31312cdca3eb5383cfd194fb0ec46b550f86b76568cc3e4",
+  "outputFingerprint": "0938871d5d8d8d1e8ee3ce92bc85d0b26bfa868dc796d0a093ee40102ce8cf10",
+  "radiusMm": 216,
+  "riseMm": 30,
+  "evidenceStatus": "estimated",
+  "sourceGeometryAccuracy": "not-verified",
+  "targets": [
+    "cage-front-ring-1",
+    "cage-front-ring-2",
+    "cage-front-ring-3",
+    "cage-front-ring-4",
+    "cage-front-ring-5",
+    "cage-front-ring-6",
+    "cage-front-ring-7",
+    "cage-front-ring-8",
+    "cage-front-ring-9",
+    "cage-front-ring-10",
+    "cage-front-ring-11",
+    "cage-front-ring-12",
+    "cage-front-ring-13",
+    "cage-front-ring-14",
+    "cage-front-ring-15",
+    "cage-front-ring-16",
+    "cage-front-ring-17",
+    "cage-front-ring-18",
+    "cage-front-spoke-1",
+    "cage-front-spoke-2",
+    "cage-front-spoke-3",
+    "cage-front-spoke-4",
+    "cage-front-spoke-5",
+    "cage-front-spoke-6",
+    "cage-front-spoke-7",
+    "cage-front-spoke-8",
+    "cage-front-spoke-9",
+    "cage-front-spoke-10",
+    "cage-front-spoke-11",
+    "cage-front-spoke-12",
+    "front-hub-cap"
+  ],
+  "unaffectedComponents": 70,
+  "maximumCenterlineErrorMm": 5.684341886080802e-14,
+  "operations": [
+    {
+      "schema": "morphloom.component-batch-edit-receipt/0.1",
+      "operationId": "front-guard-profile-endpoints",
+      "inputFingerprint": "08a0758aced55fc2c31312cdca3eb5383cfd194fb0ec46b550f86b76568cc3e4",
+      "outputFingerprint": "7067016059c6cc3be4596d34be91b4c8b0c3190a98b5f0d11ce00a3a5a148193",
+      "editedComponentIds": [
+        "cage-front-ring-1",
+        "cage-front-ring-10",
+        "cage-front-ring-11",
+        "cage-front-ring-12",
+        "cage-front-ring-13",
+        "cage-front-ring-14",
+        "cage-front-ring-15",
+        "cage-front-ring-16",
+        "cage-front-ring-17",
+        "cage-front-ring-18",
+        "cage-front-ring-2",
+        "cage-front-ring-3",
+        "cage-front-ring-4",
+        "cage-front-ring-5",
+        "cage-front-ring-6",
+        "cage-front-ring-7",
+        "cage-front-ring-8",
+        "cage-front-ring-9",
+        "cage-front-spoke-1",
+        "cage-front-spoke-10",
+        "cage-front-spoke-11",
+        "cage-front-spoke-12",
+        "cage-front-spoke-2",
+        "cage-front-spoke-3",
+        "cage-front-spoke-4",
+        "cage-front-spoke-5",
+        "cage-front-spoke-6",
+        "cage-front-spoke-7",
+        "cage-front-spoke-8",
+        "cage-front-spoke-9",
+        "front-hub-cap"
+      ],
+      "unaffectedInputFingerprint": "8228316c5d36c646f7ca5d10b9a6afbf2cfb3b1f89a625b0b5d2b6c27636248f",
+      "unaffectedOutputFingerprint": "8228316c5d36c646f7ca5d10b9a6afbf2cfb3b1f89a625b0b5d2b6c27636248f",
+      "unaffectedComponentsPreserved": true,
+      "componentReceipts": [
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:1",
+          "componentId": "cage-front-ring-1",
+          "inputFingerprint": "08a0758aced55fc2c31312cdca3eb5383cfd194fb0ec46b550f86b76568cc3e4",
+          "outputFingerprint": "a1692fad397fb14ab8c7a9ab29a3994c970b9f320578dd9fa91ba95ce470c005",
+          "unaffectedInputFingerprint": "dea17b147d50cf476e5ca5c0d3f0f3de135e48aa4ecea38b48310a72284ff2e6",
+          "unaffectedOutputFingerprint": "dea17b147d50cf476e5ca5c0d3f0f3de135e48aa4ecea38b48310a72284ff2e6",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:2",
+          "componentId": "cage-front-ring-2",
+          "inputFingerprint": "a1692fad397fb14ab8c7a9ab29a3994c970b9f320578dd9fa91ba95ce470c005",
+          "outputFingerprint": "244ad1c57ab05c3802a771ff945d10947630328ad0cb1d0b0c33439a901b3423",
+          "unaffectedInputFingerprint": "8583de0d842daeb31288f79805bc3b7b6a16864cb8cf0eb7dead5503e966c621",
+          "unaffectedOutputFingerprint": "8583de0d842daeb31288f79805bc3b7b6a16864cb8cf0eb7dead5503e966c621",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:3",
+          "componentId": "cage-front-ring-3",
+          "inputFingerprint": "244ad1c57ab05c3802a771ff945d10947630328ad0cb1d0b0c33439a901b3423",
+          "outputFingerprint": "1ea54dfe0a2370a6644457b4ae2b678aa9a4a237c0ffafd6dd2967ba82c92952",
+          "unaffectedInputFingerprint": "d7c43bedc673af52609052c023e3331a7c3237546f72a083ed32f84713f40133",
+          "unaffectedOutputFingerprint": "d7c43bedc673af52609052c023e3331a7c3237546f72a083ed32f84713f40133",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:4",
+          "componentId": "cage-front-ring-4",
+          "inputFingerprint": "1ea54dfe0a2370a6644457b4ae2b678aa9a4a237c0ffafd6dd2967ba82c92952",
+          "outputFingerprint": "ba8c0e54a91bab12e7bd338674d733f42d44b5a521678eef8eaee4cc9884e91e",
+          "unaffectedInputFingerprint": "081ff8e3b43a4b99c882af8091e61bc3a3f4ab7c60dff32dafb26b271679732d",
+          "unaffectedOutputFingerprint": "081ff8e3b43a4b99c882af8091e61bc3a3f4ab7c60dff32dafb26b271679732d",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:5",
+          "componentId": "cage-front-ring-5",
+          "inputFingerprint": "ba8c0e54a91bab12e7bd338674d733f42d44b5a521678eef8eaee4cc9884e91e",
+          "outputFingerprint": "b9a623f0d6ee7a960cee1c050942880b9f3299faf440c394f0dce8b04fe7974d",
+          "unaffectedInputFingerprint": "68dee0c1b9582e1e63cf500cbb4e3c6ed05877e10cbebdf1b939ddebcbdd007c",
+          "unaffectedOutputFingerprint": "68dee0c1b9582e1e63cf500cbb4e3c6ed05877e10cbebdf1b939ddebcbdd007c",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:6",
+          "componentId": "cage-front-ring-6",
+          "inputFingerprint": "b9a623f0d6ee7a960cee1c050942880b9f3299faf440c394f0dce8b04fe7974d",
+          "outputFingerprint": "fab6c00b6384c15057a3a61b39e898e9eb3cbf4dfe9e9a60a76a2d8d27399fd9",
+          "unaffectedInputFingerprint": "28bb4319401a8066a12b2cfaad8b788c7870f8618c3e773d5c5ac5d234924718",
+          "unaffectedOutputFingerprint": "28bb4319401a8066a12b2cfaad8b788c7870f8618c3e773d5c5ac5d234924718",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:7",
+          "componentId": "cage-front-ring-7",
+          "inputFingerprint": "fab6c00b6384c15057a3a61b39e898e9eb3cbf4dfe9e9a60a76a2d8d27399fd9",
+          "outputFingerprint": "297ec25d42bd88783ccdc5f3b30e680ec5ceea3ea8ae6e1b571348918122ddba",
+          "unaffectedInputFingerprint": "1bf280bf7a16b4252e5c279bf6ced3b18fdef05bd1be0555a6fa39bd47962614",
+          "unaffectedOutputFingerprint": "1bf280bf7a16b4252e5c279bf6ced3b18fdef05bd1be0555a6fa39bd47962614",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:8",
+          "componentId": "cage-front-ring-8",
+          "inputFingerprint": "297ec25d42bd88783ccdc5f3b30e680ec5ceea3ea8ae6e1b571348918122ddba",
+          "outputFingerprint": "6339fdf6b6a0b50d5f5a085c64da356080ef49a36edcc4d5fd25fba1da72a864",
+          "unaffectedInputFingerprint": "63c3886f2a64b4da2ff88fd7470acf04dc7aae2d9bf9ccd661216faa1ecd9304",
+          "unaffectedOutputFingerprint": "63c3886f2a64b4da2ff88fd7470acf04dc7aae2d9bf9ccd661216faa1ecd9304",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:9",
+          "componentId": "cage-front-ring-9",
+          "inputFingerprint": "6339fdf6b6a0b50d5f5a085c64da356080ef49a36edcc4d5fd25fba1da72a864",
+          "outputFingerprint": "8379257409320866b7001f934e6cb324efad21eebbe34ae653b470829dd0b6d5",
+          "unaffectedInputFingerprint": "bd0adee7562606c33529b7a3d410faf09aaf9c3fd748b70836e53ea507e94418",
+          "unaffectedOutputFingerprint": "bd0adee7562606c33529b7a3d410faf09aaf9c3fd748b70836e53ea507e94418",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:10",
+          "componentId": "cage-front-ring-10",
+          "inputFingerprint": "8379257409320866b7001f934e6cb324efad21eebbe34ae653b470829dd0b6d5",
+          "outputFingerprint": "4152c0fde2940a07e9a05ff7c92c3234cfb9376f0447ecf0a0992ceb63a8720b",
+          "unaffectedInputFingerprint": "755400961c231345cbd07affe9880a507ea64a3e435ec6837bf041df7d32cc46",
+          "unaffectedOutputFingerprint": "755400961c231345cbd07affe9880a507ea64a3e435ec6837bf041df7d32cc46",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:11",
+          "componentId": "cage-front-ring-11",
+          "inputFingerprint": "4152c0fde2940a07e9a05ff7c92c3234cfb9376f0447ecf0a0992ceb63a8720b",
+          "outputFingerprint": "a94e6cf18d661d580bb6ac5f210395299f808947ac178e948738b9acc7d1c0ca",
+          "unaffectedInputFingerprint": "0c55fe93216b55e7c2d51f1ab4d7bb854727b5040a301954eb291e2993965121",
+          "unaffectedOutputFingerprint": "0c55fe93216b55e7c2d51f1ab4d7bb854727b5040a301954eb291e2993965121",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:12",
+          "componentId": "cage-front-ring-12",
+          "inputFingerprint": "a94e6cf18d661d580bb6ac5f210395299f808947ac178e948738b9acc7d1c0ca",
+          "outputFingerprint": "8d78c9e1ed6e8ce9bd3cac0cec4c90a00de9d7d217853a0df9dad099931bf60f",
+          "unaffectedInputFingerprint": "122ed803ebe5efec7aedaac4634e5e8c6c91711e87e389a9a833f136291c0558",
+          "unaffectedOutputFingerprint": "122ed803ebe5efec7aedaac4634e5e8c6c91711e87e389a9a833f136291c0558",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:13",
+          "componentId": "cage-front-ring-13",
+          "inputFingerprint": "8d78c9e1ed6e8ce9bd3cac0cec4c90a00de9d7d217853a0df9dad099931bf60f",
+          "outputFingerprint": "7dcb1a11de55ea980303e19f470c61e9a2a20b526fe741d1c84c2554bff8665f",
+          "unaffectedInputFingerprint": "b0c1476c2582778f120725dfe9bfe4ff4812c6f4ba7a1a3d2be8e2d9edda9c2f",
+          "unaffectedOutputFingerprint": "b0c1476c2582778f120725dfe9bfe4ff4812c6f4ba7a1a3d2be8e2d9edda9c2f",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:14",
+          "componentId": "cage-front-ring-14",
+          "inputFingerprint": "7dcb1a11de55ea980303e19f470c61e9a2a20b526fe741d1c84c2554bff8665f",
+          "outputFingerprint": "4f8dbddf07a3184422dc9c616eb1de361f6d42ac11a6ecb97ff6fdbd12824ce4",
+          "unaffectedInputFingerprint": "51805e4f6ebeb9905c938a4b295feb7414764da6c1c1b2ec65768d6e49ef3569",
+          "unaffectedOutputFingerprint": "51805e4f6ebeb9905c938a4b295feb7414764da6c1c1b2ec65768d6e49ef3569",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:15",
+          "componentId": "cage-front-ring-15",
+          "inputFingerprint": "4f8dbddf07a3184422dc9c616eb1de361f6d42ac11a6ecb97ff6fdbd12824ce4",
+          "outputFingerprint": "dd3635613c552714804418e544424f496741a7161e5cb6c29cbc178c14498903",
+          "unaffectedInputFingerprint": "e15527dc20686d9601f39301ccfcd0fc191c6f79917cfbdb2d6dbde0e3ddfbb1",
+          "unaffectedOutputFingerprint": "e15527dc20686d9601f39301ccfcd0fc191c6f79917cfbdb2d6dbde0e3ddfbb1",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:16",
+          "componentId": "cage-front-ring-16",
+          "inputFingerprint": "dd3635613c552714804418e544424f496741a7161e5cb6c29cbc178c14498903",
+          "outputFingerprint": "bdc2ab87a1a16d009180d082246f7227ebb6429ffa30c262615d880b1def729b",
+          "unaffectedInputFingerprint": "3c9808b671002714b087e4fe448f4abb28599c7434489bd714e991c56d3fc65b",
+          "unaffectedOutputFingerprint": "3c9808b671002714b087e4fe448f4abb28599c7434489bd714e991c56d3fc65b",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:17",
+          "componentId": "cage-front-ring-17",
+          "inputFingerprint": "bdc2ab87a1a16d009180d082246f7227ebb6429ffa30c262615d880b1def729b",
+          "outputFingerprint": "6c5c74ec0693727d6552584cb2a8a21498f602db54196fc1971b112f0dbd5a30",
+          "unaffectedInputFingerprint": "52d3105cbb52751d113695737cc3cb24cf9a79341485c306323aebe096f4807e",
+          "unaffectedOutputFingerprint": "52d3105cbb52751d113695737cc3cb24cf9a79341485c306323aebe096f4807e",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:18",
+          "componentId": "cage-front-ring-18",
+          "inputFingerprint": "6c5c74ec0693727d6552584cb2a8a21498f602db54196fc1971b112f0dbd5a30",
+          "outputFingerprint": "7c427c279fb08125ca14ca32b76e083dff4aa508d01af40f6d36ace8bb46d7ee",
+          "unaffectedInputFingerprint": "69552b90a1d1aede3457b716ed1749193c988b5388a08107ea8f97b33a9fa8da",
+          "unaffectedOutputFingerprint": "69552b90a1d1aede3457b716ed1749193c988b5388a08107ea8f97b33a9fa8da",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:19",
+          "componentId": "cage-front-spoke-1",
+          "inputFingerprint": "7c427c279fb08125ca14ca32b76e083dff4aa508d01af40f6d36ace8bb46d7ee",
+          "outputFingerprint": "a69367f0d0eca7c8f5f735a4eb9bd30ece86419fe76114f78a7288544654c935",
+          "unaffectedInputFingerprint": "77a7e46a3a795f6bdd299de4fb0d0d37d9345c2cde3fc92fea90a1740ad143da",
+          "unaffectedOutputFingerprint": "77a7e46a3a795f6bdd299de4fb0d0d37d9345c2cde3fc92fea90a1740ad143da",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:20",
+          "componentId": "cage-front-spoke-2",
+          "inputFingerprint": "a69367f0d0eca7c8f5f735a4eb9bd30ece86419fe76114f78a7288544654c935",
+          "outputFingerprint": "c92e556ef51f59f11aa3bb23be22f8185a0312526392ea31d174314cbaee91b5",
+          "unaffectedInputFingerprint": "f19824e4ceda36bab75051c2b65418d1d2da8b11cc1cb9fde40f322474196a03",
+          "unaffectedOutputFingerprint": "f19824e4ceda36bab75051c2b65418d1d2da8b11cc1cb9fde40f322474196a03",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:21",
+          "componentId": "cage-front-spoke-3",
+          "inputFingerprint": "c92e556ef51f59f11aa3bb23be22f8185a0312526392ea31d174314cbaee91b5",
+          "outputFingerprint": "0ba841ed9724992e4f16b6de2fbdaea8afd3e1af4bc1b99aecb3d3716e6a517d",
+          "unaffectedInputFingerprint": "0d7455fdb067deb4bd3485a39b5350167739a01451455097ad727f536a4b94ba",
+          "unaffectedOutputFingerprint": "0d7455fdb067deb4bd3485a39b5350167739a01451455097ad727f536a4b94ba",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:22",
+          "componentId": "cage-front-spoke-4",
+          "inputFingerprint": "0ba841ed9724992e4f16b6de2fbdaea8afd3e1af4bc1b99aecb3d3716e6a517d",
+          "outputFingerprint": "34d82c5753130caeb19ba0066ca912f5b04ef19890911c2f2333af72fcd2d76f",
+          "unaffectedInputFingerprint": "9a24a814d0d1ee740f7525459978a30da133c42e20c503dfe70615ac7b096fda",
+          "unaffectedOutputFingerprint": "9a24a814d0d1ee740f7525459978a30da133c42e20c503dfe70615ac7b096fda",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:23",
+          "componentId": "cage-front-spoke-5",
+          "inputFingerprint": "34d82c5753130caeb19ba0066ca912f5b04ef19890911c2f2333af72fcd2d76f",
+          "outputFingerprint": "4d521c52aa974c16d9ece6b8b361190aac7f92f1bb418e7d972876e55f55679f",
+          "unaffectedInputFingerprint": "e9c5291b894d58e863a71a865ce2806960760703f484c4ca1a85d1a14c2344ee",
+          "unaffectedOutputFingerprint": "e9c5291b894d58e863a71a865ce2806960760703f484c4ca1a85d1a14c2344ee",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:24",
+          "componentId": "cage-front-spoke-6",
+          "inputFingerprint": "4d521c52aa974c16d9ece6b8b361190aac7f92f1bb418e7d972876e55f55679f",
+          "outputFingerprint": "7e30f6850250e1a8e4d0a5751d7cf495fe233a3baa29f3fb405d3d610bf53571",
+          "unaffectedInputFingerprint": "da0677b7b7724333070e8236fe5b218ed67eeb165ae865cf2172624b4261a963",
+          "unaffectedOutputFingerprint": "da0677b7b7724333070e8236fe5b218ed67eeb165ae865cf2172624b4261a963",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:25",
+          "componentId": "cage-front-spoke-7",
+          "inputFingerprint": "7e30f6850250e1a8e4d0a5751d7cf495fe233a3baa29f3fb405d3d610bf53571",
+          "outputFingerprint": "245c278d21a6b74e70d92510f4a2c97839dff5a3667687c53bdc2d8b48345366",
+          "unaffectedInputFingerprint": "27c4e33205d4d480a201ecc9599bcd4af94a874dc4dc6a70b9d0c7a046afa6d1",
+          "unaffectedOutputFingerprint": "27c4e33205d4d480a201ecc9599bcd4af94a874dc4dc6a70b9d0c7a046afa6d1",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:26",
+          "componentId": "cage-front-spoke-8",
+          "inputFingerprint": "245c278d21a6b74e70d92510f4a2c97839dff5a3667687c53bdc2d8b48345366",
+          "outputFingerprint": "0f49ac8bb2a18b47053d090ba30fc4f15c89d0f8f911b9f6c4d6b688de03318a",
+          "unaffectedInputFingerprint": "5f19d7faf27334bb24f0886e90cb0a7960f33d91e05aa1c518e7b79f451666a0",
+          "unaffectedOutputFingerprint": "5f19d7faf27334bb24f0886e90cb0a7960f33d91e05aa1c518e7b79f451666a0",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:27",
+          "componentId": "cage-front-spoke-9",
+          "inputFingerprint": "0f49ac8bb2a18b47053d090ba30fc4f15c89d0f8f911b9f6c4d6b688de03318a",
+          "outputFingerprint": "983aca0865340df498b1188e077837a6802aa65f33146897e99c691f223dd9e2",
+          "unaffectedInputFingerprint": "7453425245e6876a83d880018906a8a43b26936cd511f05cee4770e8bcf6b23f",
+          "unaffectedOutputFingerprint": "7453425245e6876a83d880018906a8a43b26936cd511f05cee4770e8bcf6b23f",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:28",
+          "componentId": "cage-front-spoke-10",
+          "inputFingerprint": "983aca0865340df498b1188e077837a6802aa65f33146897e99c691f223dd9e2",
+          "outputFingerprint": "1011a7c394877b75ad992b16e2cca4f14869bd9c5e40ca9c562eecfea0a0e0d5",
+          "unaffectedInputFingerprint": "c48a6818682134ba4d128dbe3eac7fa40277350001fd8b6dcdb491822adcfb19",
+          "unaffectedOutputFingerprint": "c48a6818682134ba4d128dbe3eac7fa40277350001fd8b6dcdb491822adcfb19",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:29",
+          "componentId": "cage-front-spoke-11",
+          "inputFingerprint": "1011a7c394877b75ad992b16e2cca4f14869bd9c5e40ca9c562eecfea0a0e0d5",
+          "outputFingerprint": "8c426b64cba1a405ba2c70ea83150abddae7f1eb19f60bdd436db98b325fdc46",
+          "unaffectedInputFingerprint": "989f32edfb554bfaefacd5cda279863896aa5dfb08d8d6161014c01dcf376bfb",
+          "unaffectedOutputFingerprint": "989f32edfb554bfaefacd5cda279863896aa5dfb08d8d6161014c01dcf376bfb",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:30",
+          "componentId": "cage-front-spoke-12",
+          "inputFingerprint": "8c426b64cba1a405ba2c70ea83150abddae7f1eb19f60bdd436db98b325fdc46",
+          "outputFingerprint": "eb20dedea1670c82862c8a35cc51b5052090ca0cb03a7cea91bf6e21021fb000",
+          "unaffectedInputFingerprint": "8998b1477b988967da079631c840676890805927fcb73d3b4b120a071e88745d",
+          "unaffectedOutputFingerprint": "8998b1477b988967da079631c840676890805927fcb73d3b4b120a071e88745d",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-endpoints:31",
+          "componentId": "front-hub-cap",
+          "inputFingerprint": "eb20dedea1670c82862c8a35cc51b5052090ca0cb03a7cea91bf6e21021fb000",
+          "outputFingerprint": "7067016059c6cc3be4596d34be91b4c8b0c3190a98b5f0d11ce00a3a5a148193",
+          "unaffectedInputFingerprint": "f4b282376bc310af588c40d436d7c9c360a10713f88ba432d9a84d3d7b4a79bd",
+          "unaffectedOutputFingerprint": "f4b282376bc310af588c40d436d7c9c360a10713f88ba432d9a84d3d7b4a79bd",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "position"
+          ]
+        }
+      ]
+    },
+    {
+      "schema": "morphloom.component-batch-edit-receipt/0.1",
+      "operationId": "front-guard-profile-curves",
+      "inputFingerprint": "7067016059c6cc3be4596d34be91b4c8b0c3190a98b5f0d11ce00a3a5a148193",
+      "outputFingerprint": "0938871d5d8d8d1e8ee3ce92bc85d0b26bfa868dc796d0a093ee40102ce8cf10",
+      "editedComponentIds": [
+        "cage-front-spoke-1",
+        "cage-front-spoke-10",
+        "cage-front-spoke-11",
+        "cage-front-spoke-12",
+        "cage-front-spoke-2",
+        "cage-front-spoke-3",
+        "cage-front-spoke-4",
+        "cage-front-spoke-5",
+        "cage-front-spoke-6",
+        "cage-front-spoke-7",
+        "cage-front-spoke-8",
+        "cage-front-spoke-9"
+      ],
+      "unaffectedInputFingerprint": "30e73a63aeee34247047757d9245cbada2a820c34dbcea7e96d01615343b9980",
+      "unaffectedOutputFingerprint": "30e73a63aeee34247047757d9245cbada2a820c34dbcea7e96d01615343b9980",
+      "unaffectedComponentsPreserved": true,
+      "componentReceipts": [
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:1",
+          "componentId": "cage-front-spoke-1",
+          "inputFingerprint": "7067016059c6cc3be4596d34be91b4c8b0c3190a98b5f0d11ce00a3a5a148193",
+          "outputFingerprint": "daf005f2980271332d68dae681846e92d27389da71ce39a799cd8d080fbc9ad1",
+          "unaffectedInputFingerprint": "c80cbcf89434a7d4283794032913e2dc5a0c20a409e19cc250a4ce76fd20e9c2",
+          "unaffectedOutputFingerprint": "c80cbcf89434a7d4283794032913e2dc5a0c20a409e19cc250a4ce76fd20e9c2",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:2",
+          "componentId": "cage-front-spoke-2",
+          "inputFingerprint": "daf005f2980271332d68dae681846e92d27389da71ce39a799cd8d080fbc9ad1",
+          "outputFingerprint": "846f7f54d7688791e4aa4badf27a101ed9f983d524d5b2851614ff8cf15cac70",
+          "unaffectedInputFingerprint": "12bf2b033155e12f87a0b15ab9ed06a33619b311bcecb065ed81787926db6547",
+          "unaffectedOutputFingerprint": "12bf2b033155e12f87a0b15ab9ed06a33619b311bcecb065ed81787926db6547",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:3",
+          "componentId": "cage-front-spoke-3",
+          "inputFingerprint": "846f7f54d7688791e4aa4badf27a101ed9f983d524d5b2851614ff8cf15cac70",
+          "outputFingerprint": "0284d8c1a957d7cca8e9b6eb6d89abec5d58aec4e659d71aefcfa34f774ce87a",
+          "unaffectedInputFingerprint": "f09a9d7859583c3d9618f4eadffa3bcb7e7ba1d0457848928a9fd6654ce0ff28",
+          "unaffectedOutputFingerprint": "f09a9d7859583c3d9618f4eadffa3bcb7e7ba1d0457848928a9fd6654ce0ff28",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:4",
+          "componentId": "cage-front-spoke-4",
+          "inputFingerprint": "0284d8c1a957d7cca8e9b6eb6d89abec5d58aec4e659d71aefcfa34f774ce87a",
+          "outputFingerprint": "aea06aaa6280770c498bddffa10f9dec322efcf94d6b4efa3327066d99d3f9f5",
+          "unaffectedInputFingerprint": "048482bc6f259ad7b6022b37f798be32a81964f631e9e770b3cfb60253a30fdf",
+          "unaffectedOutputFingerprint": "048482bc6f259ad7b6022b37f798be32a81964f631e9e770b3cfb60253a30fdf",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:5",
+          "componentId": "cage-front-spoke-5",
+          "inputFingerprint": "aea06aaa6280770c498bddffa10f9dec322efcf94d6b4efa3327066d99d3f9f5",
+          "outputFingerprint": "882929a85211b8116fb62d66b96c7407cbbde39f5c079775aa1cba830db003a8",
+          "unaffectedInputFingerprint": "b2d41168023b3f20cfbef7ad15fa2f49673426779301c80c5c7c2c6bf4e78079",
+          "unaffectedOutputFingerprint": "b2d41168023b3f20cfbef7ad15fa2f49673426779301c80c5c7c2c6bf4e78079",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:6",
+          "componentId": "cage-front-spoke-6",
+          "inputFingerprint": "882929a85211b8116fb62d66b96c7407cbbde39f5c079775aa1cba830db003a8",
+          "outputFingerprint": "f4c83e7d18c53ff6d53916be7723de66adefecf3a9486e0304aea7bb1a8ea008",
+          "unaffectedInputFingerprint": "e4cb01b3c99c93b14a656ab5cb06d6a743dad9c1f1ac746a848c079a35f73d53",
+          "unaffectedOutputFingerprint": "e4cb01b3c99c93b14a656ab5cb06d6a743dad9c1f1ac746a848c079a35f73d53",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:7",
+          "componentId": "cage-front-spoke-7",
+          "inputFingerprint": "f4c83e7d18c53ff6d53916be7723de66adefecf3a9486e0304aea7bb1a8ea008",
+          "outputFingerprint": "accc9a5a41312da1b11200cfacc9e1f90481813bdfa9711af3dc68bad111b3fa",
+          "unaffectedInputFingerprint": "67b13038378d864dd4813e5b99e2609cabcd02496a677c49e584899a3a360178",
+          "unaffectedOutputFingerprint": "67b13038378d864dd4813e5b99e2609cabcd02496a677c49e584899a3a360178",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:8",
+          "componentId": "cage-front-spoke-8",
+          "inputFingerprint": "accc9a5a41312da1b11200cfacc9e1f90481813bdfa9711af3dc68bad111b3fa",
+          "outputFingerprint": "ccb192a40e257084bc9140716c5f629c0901d529a09f97bc98133a91e63de708",
+          "unaffectedInputFingerprint": "d1536d0f9adbe26225f6dd4bf41cfde8a90a0e140e672d8219cc0b236a904c41",
+          "unaffectedOutputFingerprint": "d1536d0f9adbe26225f6dd4bf41cfde8a90a0e140e672d8219cc0b236a904c41",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:9",
+          "componentId": "cage-front-spoke-9",
+          "inputFingerprint": "ccb192a40e257084bc9140716c5f629c0901d529a09f97bc98133a91e63de708",
+          "outputFingerprint": "505a2ccfde31a945645ca715dc48648ff4e3c06de2d595ef56867bdcf0a8d46f",
+          "unaffectedInputFingerprint": "c878ed74f52b9723b4a3747be99cffa236066a67e3b4c6edf05595a4d48f7024",
+          "unaffectedOutputFingerprint": "c878ed74f52b9723b4a3747be99cffa236066a67e3b4c6edf05595a4d48f7024",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:10",
+          "componentId": "cage-front-spoke-10",
+          "inputFingerprint": "505a2ccfde31a945645ca715dc48648ff4e3c06de2d595ef56867bdcf0a8d46f",
+          "outputFingerprint": "020b4dcadc99f0c5358ccb4d0369cf38c3393d2ebd51ae7b519327a9dc951fa2",
+          "unaffectedInputFingerprint": "55052a6226aae834321728952cc61c4df619a689751f39257cd49d6a7e8ec707",
+          "unaffectedOutputFingerprint": "55052a6226aae834321728952cc61c4df619a689751f39257cd49d6a7e8ec707",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:11",
+          "componentId": "cage-front-spoke-11",
+          "inputFingerprint": "020b4dcadc99f0c5358ccb4d0369cf38c3393d2ebd51ae7b519327a9dc951fa2",
+          "outputFingerprint": "a507e0dd5b71997e8c7190c6d1608b916958a5e51e1596a91d653be749855eb9",
+          "unaffectedInputFingerprint": "71fa75b59de456827b031708a5c4d1c461211e252b808f732bd7f5eda897d7bb",
+          "unaffectedOutputFingerprint": "71fa75b59de456827b031708a5c4d1c461211e252b808f732bd7f5eda897d7bb",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        },
+        {
+          "schema": "morphloom.component-edit-receipt/0.1",
+          "operationId": "front-guard-profile-curves:12",
+          "componentId": "cage-front-spoke-12",
+          "inputFingerprint": "a507e0dd5b71997e8c7190c6d1608b916958a5e51e1596a91d653be749855eb9",
+          "outputFingerprint": "0938871d5d8d8d1e8ee3ce92bc85d0b26bfa868dc796d0a093ee40102ce8cf10",
+          "unaffectedInputFingerprint": "cd74c267272cfe373207d39f27621349b028b3e3ada9f6123170472fab6224ad",
+          "unaffectedOutputFingerprint": "cd74c267272cfe373207d39f27621349b028b3e3ada9f6123170472fab6224ad",
+          "unaffectedComponentsPreserved": true,
+          "changedFields": [
+            "geometry"
+          ]
+        }
+      ]
+    }
+  ]
+}

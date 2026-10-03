@@ -1,3 +1,4 @@
+import type { TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { FidelityContract } from './fidelity-pipeline';
 import type { VisualHullDescriptor } from './visual-hull';
 import type { QuantizedReferenceHeightField } from './reference-surface';
@@ -32,7 +33,7 @@ export type AssemblyGeometryIR =
     }>;
   }
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
-  | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean }
+  | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean; curve?: TubeQuadraticCurveIR }
   | {
     op: 'surfacePatch';
     /** Horizontal X×Z size in millimetres. */

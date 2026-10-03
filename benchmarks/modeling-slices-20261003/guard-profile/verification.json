@@ -1,0 +1,153 @@
+{
+  "schema": "morphloom.guard-profile-verification/0.1",
+  "date": "2026-10-03",
+  "compilerRevision": "0.33.0",
+  "baselineCommit": "c9fcc5bf00ae3a6189ee612508c0d7c311d6fece",
+  "status": "wire-profile-verified; source-fidelity-and-global-release-blocked",
+  "releaseAllowed": false,
+  "scope": "Product visualization and local mesh editing; estimated front-guard profile, not calibrated reconstruction",
+  "environment": {
+    "os": "macOS-26.4.1-arm64-arm-64bit",
+    "machine": "Apple M5",
+    "node": "24.13.1",
+    "blender": "5.2.1 LTS"
+  },
+  "sourceEvidence": {
+    "asset": "ABO B07XMV34PX",
+    "license": "CC-BY-4.0; SOURCE_LICENSE.md in assets.zip",
+    "riseMm": 30,
+    "riseStatus": "authored-estimated",
+    "photoCameraCalibration": "not-run",
+    "externalPhotoUpload": false
+  },
+  "cases": [
+    {
+      "name": "flat",
+      "inputSha256": "057b11cae7f63dbdec32b4bfe8b523e837a7bf76dfcc9ff765d82137ff4d573e",
+      "inputFileSha256": "a364affa841e004700b94114adf5402790034f98b3d64a806d979016d02bf9f3",
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "outputSha256": "3491bb22a585916ceb90a3982b68fc37cdbb58589a8a9169db77de58835a953c",
+      "compileMs": 81,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "glbBytes": 3609272
+    },
+    {
+      "name": "domed",
+      "inputSha256": "ae0d348630baa52dc5d14026f0ab68f287b185437e0038ea2cabe74dcc9b9cc7",
+      "inputFileSha256": "abcb03f5fb59112b27e72490fe81528429e004718b7792b8a8e8972cafcb1069",
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "outputSha256": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+      "compileMs": 65.39999997615814,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "glbBytes": 3611084
+    },
+    {
+      "name": "half-domed",
+      "inputSha256": "fe2b77fd042bbc11262d1f0d7018c2d3fa83ce665c7e3ff0e5e49421287d98a9",
+      "inputFileSha256": "641ee8ddf659f4b563dc74122824860010f3b40f0c38bbd580e8a93caec3e6dd",
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "outputSha256": "22d9a6f56cd70a9ef09e9adcbe442ed9e7af1257fc347129d36fd5c899d87280",
+      "compileMs": 67.5,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "glbBytes": 3616668
+    },
+    {
+      "name": "alternate",
+      "inputSha256": "683224447207e45ac8b2c62fa9670083d2cab2fff99fc18bb880957ce263b4f8",
+      "inputFileSha256": "77eacbb40cc4de1c1640c05c906ff36ef70d1bdb62b4fa6ae047f0734c57a6bb",
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "outputSha256": "dc14e43e2cfa11341b32e0fbf62128fad319584879a92e52762b909c2395ea55",
+      "compileMs": 0.9000000357627869,
+      "triangles": 820,
+      "textureBytes": 43680,
+      "glbBytes": 50408
+    }
+  ],
+  "preservation": {
+    "profileUnchangedComponents": 70,
+    "uiUnchangedComponents": 100,
+    "legacy101BufferParity": true,
+    "fiveLegacyGlbBytes": "identical to baseline; fresh cross-domain evidence"
+  },
+  "checks": {
+    "publishedTests": {
+      "files": 92,
+      "tests": 655,
+      "status": "pass"
+    },
+    "sourceTests": {
+      "files": 95,
+      "tests": 674,
+      "status": "pass"
+    },
+    "check": "pass",
+    "build": "pass",
+    "benchmark": "pass",
+    "khronosFiveFiles": "pass; errors=0 warnings=0",
+    "blenderFourVariantsAndUiGlb": "pass",
+    "blenderWireEditTwoReopens": "pass",
+    "uiCancelUndoRedoSaveReopen": "pass",
+    "componentOwnerTopologyAndUv": "pass; raw primitive seams retained",
+    "browserSevenCases": "pass",
+    "blenderFiveCrossDomainImportAndEdit": "pass",
+    "godotFiveCrossDomain": "pass",
+    "asphaltPrusaAndStaticFormats": "pass",
+    "qualityGate": "FAIL: retained cooling UV UNUSED_OBJECT infos=23 exceeds existing infos=0 contract",
+    "qualityProduction": "FAIL at quality gate",
+    "productionDominance": "FAIL: 7 domains, comparison cases=0",
+    "unity": "not-run"
+  },
+  "uniai": {
+    "gateway": "https://factchat-cloud.mindlogic.ai/v1/gateway",
+    "model": "gpt-6-sol",
+    "completionCalls": 3,
+    "totalTokens": 31412,
+    "scope": "public code analysis and two reviews; suggestions, not execution proof"
+  },
+  "notVerified": [
+    "Full fan source-photo fidelity",
+    "Calibrated cameras/depth and measured dimensions",
+    "Rear guard, blade and stand accuracy",
+    "Legacy tube cap winding (unchanged; known inward winding)",
+    "UV atlas distortion/padding/mip bleeding",
+    "Physical BRDF/material measurements",
+    "Fan-specific apps other than Blender",
+    "CAD/BREP/manufacturing",
+    "Independent human expert approval"
+  ],
+  "sourceCodeSha256": {
+    "benchmarks/blender-cross-domain-edit-latest.json": "fd8526864d89f320f2235e3186b7c69c74e5bf79c920c361244e1d0e1b63a93b",
+    "benchmarks/blender-cross-domain-latest.json": "074dff7707b82dec1ec9dcc98a1ae8bd5facb2d66c06f2b7f8ca14a5f00855fd",
+    "benchmarks/browser-roundtrip-latest.json": "9a4b59800e9a09dd246001934a69372d2964cfd3b7a4d5c2ba2219ae0efb02aa",
+    "benchmarks/competitive-latest.json": "5ff681a9d20258855a9c9a9140a6992a8de639b84e6d817fdd36fd7904aa45b2",
+    "benchmarks/godot-cross-domain-latest.json": "cdc5572d8b6453dd7c17a49884499eb52db7a2ff20151009a74236ee86945a78",
+    "benchmarks/prusaslicer-latest.json": "d067be5f8cfdc81d15816edbaa19504c2b041ed29e6a1dcda09855fa28a75913",
+    "benchmarks/quality-latest.json": "9e2b4829120132ea8aeb8c6d85a3210c50c316630e833be322e4abc837d1dabf",
+    "schemas/assembly-ir.schema.json": "905c75e8b238cddf9ce4c9ba183bc9de0b6f6dba7c93b89ccc2cefcb3799af00",
+    "scripts/blender-neutral-render.py": "93d5eece560f295bf5e215cbc24c6923ff0a212efd4453b3b9276efbf81876ca",
+    "scripts/product-photo-browser-regression.py": "b9f95e56df31fe7920d4e38b83fb928a7733952e76eda05a796a27a4815509f7",
+    "src/AssemblyComponentEditor.tsx": "a93feb6f9e71784930d4a05bf0f6cfb9b991b9ed7f5746669e722c76c0ef68af",
+    "src/engine/assembly-compiler.ts": "7217ecc8425069883a57162c8c1dd5506a31ba786448efb76c9f275466c9ff22",
+    "src/engine/assembly-edit.ts": "7bfddccbdb81c54b94dfcfb78f9dd09c6d6cb18cfe666fc4ffa8b132c7e46de4",
+    "src/engine/assembly-ir.ts": "29f4981ebd30d917e8e39acd174b823f80501b8b23a109071034c9032c614ee3",
+    "src/engine/delivery-validation.ts": "2220c2e1aeeee9851e9bc42e5f0b8e3d635b45e3cf2685054babac941325086f",
+    "tests/browser-proof-recorder.test.ts": "4a92a9db36258bc6fddb257e98fdf978609e398d1bd79a8765856c0a6f26287f",
+    "src/engine/tube-quadratic-curve.ts": "6a273eb7535c1bbe0798411958b1af9ea330ea2dec78db3fd296ff521dc445bc",
+    "tests/tube-quadratic-curve.test.ts": "9e0d592b515863324b2ee401255d6fb8f393135ac2b079513a00e5fe21ee561b",
+    "docs/GUARD_PROFILE_CONTRACT.ko.md": "a08dc0584ab1b19a0b58171ff328771e3f83b65b2ee05d81fbf8a7b431bf549d",
+    "docs/GUARD_PROFILE_STATUS.ko.md": "d80531fe54fa8213843a9a0b212839949c8e364632bcb44daf494853fa56f8bc",
+    "scripts/guard-profile-pilot.ts": "34454c35d23ba1f581f32ba68a4c7b906b6ae814e9588a1d063975eb1747a1b8",
+    "scripts/guard-profile-browser-evidence.js": "0cef66e704ad5647e8f2e6ec6a3ac4aa398e8348739f25a1a5bca632b6e5a492",
+    "scripts/guard-profile-file-audit.js": "a95c83e2fc4710b003ab943e7b1ee98d6b0ceb6ff223279b796224f60f8662ac",
+    "scripts/guard-profile-legacy-parity.ts": "f3f17cfa2406fc213facfdc98f57d43bd710bec4353973237ccb8ae1fb50c553",
+    "scripts/guard-profile-dcc-evidence.py": "0f1275f1e3574c8727ffe56792d9a15f930011cbe9ed00b426aefc2fa0a2cacb",
+    "docs/MORPHLOOM_WORK_STATE.ko.md": "26f342fcaf3a70fee9174b0157a3fc696b7d2a29673b744c171bc78e84e7b73d",
+    "benchmarks/static-delivery-latest.json": "1f0c2899a7648b28910081edec54bcb936767b4a0d8a26fdddece38a41252072"
+  },
+  "assetsZipSha256": "9ff08dce97b567f713300e0f65bdee672373842c03436e56873408c090fbcec6",
+  "uiCurrentGlbSha256": "fd2698aef846255697a44f4813411bb6180845c167c9704b2fa06c8a8259540a",
+  "sourceWorkspaceGit": "blocked: iCloud dataless index, not reset; publishing from isolated clone"
+}

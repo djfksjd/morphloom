@@ -1,3 +1,4 @@
+import { createTubePath, validateTubeQuadraticCurve } from './tube-quadratic-curve';
 import {validateReferenceProjectionOrientation} from './reference-projection-orientation';
 import {validateSpurGear,gearExtrude,type SpurGearGeometry} from './spur-gear';
 import * as THREE from 'three';
@@ -261,6 +262,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
         if (component.geometry.profile.length < 2 || component.geometry.profile.some(([radius]) => radius < 0)) throw new Error(`Lathe profile is invalid in ${component.id}.`);
         break;
       case 'tube':
+        validateTubeQuadraticCurve(component.geometry);
         if (component.geometry.points.length < 2 || component.geometry.radius <= 0) throw new Error(`Tube path is invalid in ${component.id}.`);
         break;
       case 'surfacePatch': {
@@ -592,11 +594,7 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       return result;
     }
     case 'tube': {
-      const curve = new THREE.CatmullRomCurve3(
-        geometry.points.map((point) => new THREE.Vector3(mm(point[0]), mm(point[1]), mm(point[2]))),
-        Boolean(geometry.closed),
-        'centripetal',
-      );
+      const curve = createTubePath(geometry);
       const tubularSegments = geometry.tubularSegments ?? Math.max(48, geometry.points.length * 8);
       const radialSegments = geometry.radialSegments ?? 10;
       const tube = new THREE.TubeGeometry(
@@ -629,8 +627,14 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       const ring = radialSegments + 1;
       const endRing = tubularSegments * ring;
       for (let segment = 0; segment < radialSegments; segment += 1) {
-        indices.push(startCenter, segment + 1, segment);
-        indices.push(endCenter, endRing + segment, endRing + segment + 1);
+        if (geometry.curve) {
+          // Quadratic paths opt into outward cap winding; legacy buffers stay byte-identical.
+          indices.push(startCenter, segment, segment + 1);
+          indices.push(endCenter, endRing + segment + 1, endRing + segment);
+        } else {
+          indices.push(startCenter, segment + 1, segment);
+          indices.push(endCenter, endRing + segment, endRing + segment + 1);
+        }
       }
       const capped = new THREE.BufferGeometry();
       capped.setAttribute('position', new THREE.BufferAttribute(position, 3));

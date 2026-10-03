@@ -1,0 +1,28 @@
+{
+  "schema": "morphloom.work-checkpoint/0.1",
+  "at": "2026-10-03T01:53:57.985693+00:00",
+  "baselineCommit": "c9fcc5b",
+  "implemented": [
+    "versioned quadratic tube curve",
+    "patch0.2/set/clear",
+    "local control point UI",
+    "estimated front guard profile31targets"
+  ],
+  "verified": [
+    "19 targeted tests",
+    "101 old geometry byte parity",
+    "UI native cancel/undo/redo/reopen and100 non-target parts"
+  ],
+  "rechecking": [
+    "fresh static-page GLB determinism after HMR cache mismatch",
+    "final outward quadratic cap indices",
+    "final Blender/render receipts matching current GLB SHA"
+  ],
+  "remaining": [
+    "full tests",
+    "fresh quality gate",
+    "publication hash audit"
+  ],
+  "releaseAllowed": false,
+  "estimatedRiseMm": 30
+}

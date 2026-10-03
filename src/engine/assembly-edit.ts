@@ -1,9 +1,10 @@
+import { validateEditedTubePath, type TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { AssemblyGeometryIR, AssemblyIR, AssemblyMaterialIR } from './assembly-ir';
 
 type Vector3 = [number, number, number];
 
 export interface AssemblyComponentPatch {
-  schema: 'morphloom.component-patch/0.1';
+  schema: 'morphloom.component-patch/0.1' | 'morphloom.component-patch/0.2';
   operationId: string;
   componentId: string;
   expectedInputFingerprint: string;
@@ -11,6 +12,8 @@ export interface AssemblyComponentPatch {
   rotateRadians?: Vector3;
   scaleMultiplier?: Vector3;
   geometry?:
+    | { operation: 'tube-quadratic-control'; action: 'set'; curve: TubeQuadraticCurveIR }
+    | { operation: 'tube-quadratic-control'; action: 'clear' }
     | { operation: 'tube-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: Vector3 }> }
     | { operation: 'extrude-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
     | { operation: 'lathe-profile-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
@@ -34,7 +37,7 @@ export interface AssemblyEditReceipt {
 }
 
 export interface AssemblyComponentBatchPatch {
-  schema: 'morphloom.component-batch-patch/0.1';
+  schema: 'morphloom.component-batch-patch/0.1' | 'morphloom.component-batch-patch/0.2';
   operationId: string;
   expectedInputFingerprint: string;
   edits: Array<Omit<AssemblyComponentPatch, 'schema' | 'operationId' | 'expectedInputFingerprint'>>;
@@ -76,14 +79,14 @@ export async function fingerprintAssemblyIR(ir: AssemblyIR): Promise<string> {
 
 function finiteVector(value: Vector3 | undefined, minimum: number, maximum: number): boolean {
   return value === undefined || (
-    value.length === 3
+    Array.isArray(value) && value.length === 3
     && value.every((item) => Number.isFinite(item) && item >= minimum && item <= maximum)
   );
 }
 
 function finiteVector2(value: [number, number] | undefined, minimum: number, maximum: number): boolean {
   return value === undefined || (
-    value.length === 2
+    Array.isArray(value) && value.length === 2
     && value.every((item) => Number.isFinite(item) && item >= minimum && item <= maximum)
   );
 }
@@ -103,12 +106,17 @@ function validMaterialPatch(material: AssemblyComponentPatch['material']): boole
 
 function validGeometryPatch(geometry: AssemblyComponentPatch['geometry']): boolean {
   if (!geometry) return true;
+  if (geometry.operation === 'tube-quadratic-control') {
+    const keys = geometry.action === 'set' ? ['operation', 'action', 'curve'] : ['operation', 'action'];
+    return Object.keys(geometry).every(k => keys.includes(k))
+      && (geometry.action === 'clear' || geometry.action === 'set' && geometry.curve !== undefined);
+  }
   if (!['tube-point-deltas', 'extrude-point-deltas', 'lathe-profile-deltas', 'blade-section-deltas']
     .includes(geometry.operation)) return false;
   return Array.isArray(geometry.deltas) && geometry.deltas.length >= 1 && geometry.deltas.length <= 16
     && new Set(geometry.deltas.map((delta) => delta?.pointIndex)).size === geometry.deltas.length
     && geometry.deltas.every((delta) => Number.isInteger(delta?.pointIndex)
-      && delta.pointIndex >= 0 && delta.pointIndex <= 4_096
+      && delta.pointIndex >= 0 && delta.pointIndex <= 4_096 && delta.deltaMm !== undefined
       && (geometry.operation === 'tube-point-deltas'
         ? finiteVector(delta.deltaMm as Vector3, -10_000, 10_000)
         : finiteVector2(delta.deltaMm as [number, number], -10_000, 10_000)));
@@ -118,18 +126,28 @@ function applyGeometryPatch(
   source: AssemblyGeometryIR,
   patch: NonNullable<AssemblyComponentPatch['geometry']>,
 ): AssemblyGeometryIR {
+  if (patch.operation === 'tube-quadratic-control') {
+    if (source.op !== 'tube' || source.points.length !== 2 || source.closed) throw new Error('Quadratic Bezier patch requires an open two-endpoint tube.');
+    const result = structuredClone(source);
+    if (patch.action === 'clear') delete result.curve;
+    else result.curve = structuredClone(patch.curve);
+    validateEditedTubePath(result);
+    return result;
+  }
   if (patch.operation === 'tube-point-deltas' && source.op === 'tube') {
     if (patch.deltas.some((delta) => delta.pointIndex >= source.points.length)) {
       throw new Error('Geometry patch references a missing tube point.');
     }
     const deltaByIndex = new Map(patch.deltas.map((delta) => [delta.pointIndex, delta.deltaMm]));
-    return {
+    const result = {
       ...source,
-      points: source.points.map((point, pointIndex) => {
+      points: source.points.map((point, pointIndex): Vector3 => {
         const delta = deltaByIndex.get(pointIndex);
         return delta ? addVector(point, delta) : [...point];
       }),
     };
+    validateEditedTubePath(result);
+    return result;
   }
   const profileOperation = patch.operation === 'extrude-point-deltas' ? 'extrude'
     : patch.operation === 'lathe-profile-deltas' ? 'lathe'
@@ -173,7 +191,8 @@ export async function applyAssemblyComponentPatch(
   ir: AssemblyIR,
   patch: AssemblyComponentPatch,
 ): Promise<{ ir: AssemblyIR; receipt: AssemblyEditReceipt }> {
-  if (patch.schema !== 'morphloom.component-patch/0.1'
+  if (patch.geometry?.operation === 'tube-quadratic-control' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Quadratic curve edit requires component-patch/0.2.');
+  if (!['morphloom.component-patch/0.1', 'morphloom.component-patch/0.2'].includes(patch.schema)
     || !SAFE_ID.test(patch.operationId) || !SAFE_ID.test(patch.componentId)
     || !SHA256.test(patch.expectedInputFingerprint)
     || !finiteVector(patch.translateMm, -100_000, 100_000)
@@ -235,7 +254,7 @@ export async function applyAssemblyComponentBatchPatch(
   ir: AssemblyIR,
   batch: AssemblyComponentBatchPatch,
 ): Promise<{ ir: AssemblyIR; receipt: AssemblyBatchEditReceipt }> {
-  if (batch?.schema !== 'morphloom.component-batch-patch/0.1'
+  if (!['morphloom.component-batch-patch/0.1', 'morphloom.component-batch-patch/0.2'].includes(batch?.schema)
     || !SAFE_ID.test(batch?.operationId ?? '')
     || !SHA256.test(batch?.expectedInputFingerprint ?? '')
     || !Array.isArray(batch?.edits) || batch.edits.length < 1 || batch.edits.length > 64) {
@@ -245,6 +264,8 @@ export async function applyAssemblyComponentBatchPatch(
   if (sourceFingerprint !== batch.expectedInputFingerprint) {
     throw new Error('Component batch patch targets a stale AssemblyIR fingerprint.');
   }
+  if (batch.edits.some(edit => !edit || typeof edit !== 'object' || Array.isArray(edit)
+    || Object.keys(edit).some(k => !['componentId', 'translateMm', 'rotateRadians', 'scaleMultiplier', 'geometry', 'material'].includes(k)))) throw new Error('Component batch edit is unsafe.');
   const editedComponentIds = batch.edits.map((edit) => edit?.componentId);
   if (editedComponentIds.some((id) => !SAFE_ID.test(id ?? ''))
     || new Set(editedComponentIds).size !== editedComponentIds.length) {
@@ -258,10 +279,10 @@ export async function applyAssemblyComponentBatchPatch(
   for (let index = 0; index < batch.edits.length; index += 1) {
     const edit = batch.edits[index]!;
     const applied = await applyAssemblyComponentPatch(result, {
-      schema: 'morphloom.component-patch/0.1',
+      ...edit,
+      schema: batch.schema === 'morphloom.component-batch-patch/0.2' ? 'morphloom.component-patch/0.2' : 'morphloom.component-patch/0.1',
       operationId: `${batch.operationId}:${index + 1}`,
       expectedInputFingerprint: currentFingerprint,
-      ...edit,
     });
     result = applied.ir;
     currentFingerprint = applied.receipt.outputFingerprint;

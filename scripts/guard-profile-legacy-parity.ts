@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { compileAssemblyGeometry } from '../src/engine/assembly-compiler';
+import type { AssemblyIR } from '../src/engine/assembly-ir';
+const oldRoot=readFileSync('/tmp/morphloom-guard-baseline-path','utf8').trim();
+const old=await import(oldRoot+'/src/engine/assembly-compiler.ts');
+const ir=JSON.parse(readFileSync(process.argv[2]!,'utf8')) as AssemblyIR;
+const hash=(g:ReturnType<typeof compileAssemblyGeometry>)=>{const h=createHash('sha256');for(const [name,a]of Object.entries(g.attributes)){h.update(name);h.update(new Uint8Array(a.array.buffer,a.array.byteOffset,a.array.byteLength));}if(g.index)h.update(new Uint8Array(g.index.array.buffer,g.index.array.byteOffset,g.index.array.byteLength));h.update(JSON.stringify(g.groups));return h.digest('hex');};
+const rows=ir.components.map(c=>{const a=old.compileAssemblyGeometry(c.geometry),b=compileAssemblyGeometry(c.geometry);try{const previous=hash(a),current=hash(b);if(previous!==current)throw new Error('Legacy geometry changed '+c.id);return {id:c.id,sha256:current,legacyParity:true};}finally{a.dispose();b.dispose();}});
+writeFileSync(resolve(process.argv[3]!),JSON.stringify({schema:'morphloom.guard-legacy-parity/0.1',baselineCommit:'c9fcc5bf00ae3a6189ee612508c0d7c311d6fece',scope:'actual geometry position/normal/UV/index/groups; no legacy curve opt-in',pass:true,rows},null,2)+'\n');console.log(rows.length+' components exact legacy geometry parity PASS');

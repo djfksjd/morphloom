@@ -79,7 +79,7 @@ def area_light(name, location, energy, size):
 
 args = sys.argv[sys.argv.index("--") + 1:]
 if len(args) not in {3, 4, 5, 6}:
-    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso|axis-y] [material|clay|wire|grazing] [fixed-space.json]")
+    raise RuntimeError("Usage: blender ... -- source.glb render.png report.json [front|rear|iso|front-iso|side|axis-y] [material|clay|wire|grazing] [fixed-space.json]")
 source = Path(args[0]).resolve()
 render_path = Path(args[1]).resolve()
 report_path = Path(args[2]).resolve()
@@ -88,6 +88,8 @@ inspection_mode = args[4] if len(args) >= 5 else "material"
 if inspection_mode not in {"material", "clay", "wire", "grazing"}:
     raise RuntimeError("Unsupported inspection mode")
 camera_presets = {
+    "side": {"position": (4.0, 0, 0), "orthographicHeight": 2.35},
+    "front-iso": {"position": (2.8, 3.4, 1.8), "orthographicHeight": 3.2},
     "axis-y": {"position": (0, 0, 4.0), "orthographicHeight": 2.35},
     "front": {"position": (0, -4.0, 0), "orthographicHeight": 2.35},
     "rear": {"position": (0, 4.0, 0), "orthographicHeight": 2.35},

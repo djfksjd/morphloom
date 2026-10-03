@@ -1,0 +1,22 @@
+{
+  "flat.assembly.json": "a364affa841e004700b94114adf5402790034f98b3d64a806d979016d02bf9f3",
+  "flat.glb": "3491bb22a585916ceb90a3982b68fc37cdbb58589a8a9169db77de58835a953c",
+  "domed.assembly.json": "abcb03f5fb59112b27e72490fe81528429e004718b7792b8a8e8972cafcb1069",
+  "domed.glb": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+  "half-domed.assembly.json": "641ee8ddf659f4b563dc74122824860010f3b40f0c38bbd580e8a93caec3e6dd",
+  "half-domed.glb": "22d9a6f56cd70a9ef09e9adcbe442ed9e7af1257fc347129d36fd5c899d87280",
+  "alternate.assembly.json": "77eacbb40cc4de1c1640c05c906ff36ef70d1bdb62b4fa6ae047f0734c57a6bb",
+  "alternate.glb": "dc14e43e2cfa11341b32e0fbf62128fad319584879a92e52762b909c2395ea55",
+  "ui-original.assembly.json": "8d773982ce1747cf5e006fc7d4f4fea260dde0352d4d1fae175445916a3d28ed",
+  "ui-cancel.assembly.json": "8d773982ce1747cf5e006fc7d4f4fea260dde0352d4d1fae175445916a3d28ed",
+  "ui-edited.assembly.json": "54d12685b159e46127effbcb65ca14e6a31ce3a4235227ae23da82e488b87625",
+  "ui-undo.assembly.json": "8d773982ce1747cf5e006fc7d4f4fea260dde0352d4d1fae175445916a3d28ed",
+  "ui-redo.assembly.json": "54d12685b159e46127effbcb65ca14e6a31ce3a4235227ae23da82e488b87625",
+  "ui-reopened.assembly.json": "54d12685b159e46127effbcb65ca14e6a31ce3a4235227ae23da82e488b87625",
+  "ui-edited-current.glb": "fd2698aef846255697a44f4813411bb6180845c167c9704b2fa06c8a8259540a",
+  "blender-wire-edited.glb": "9d2d97c415679e359e0094fb95a27bf0dcb04b57b71406ac6c38067d36abe2ca",
+  "blender-wire-edited-stability.glb": "2bfeacdbf69201c461a46bfcf5a0352bb4d234e8e8b3bbbf8c419a047382ac7c",
+  "neutral-space.json": "040ea4f9b73c3dda3e74c8a4fea66b7a51c3a70e725349121f855f28060688a4",
+  "wire-closeup-space.json": "dc67495b9fa3a9feb1120198ffdb4aa08767e972209932f45247fb9e68f6846c",
+  "SOURCE_LICENSE.md": "d456789fd7a2b454aa77ca2bd582bcc1e5c2184f7828151a585705a6e7acb20e"
+}

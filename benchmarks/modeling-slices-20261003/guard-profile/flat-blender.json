@@ -1,0 +1,235 @@
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": true,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "flat.glb",
+  "sourceBytes": 3609272,
+  "sourceSha256": "3491bb22a585916ceb90a3982b68fc37cdbb58589a8a9169db77de58835a953c",
+  "roundTrip": "flat-roundtrip.glb",
+  "roundTripBytes": 3220472,
+  "roundTripSha256": "46c9628dadb870637c2300fc42f1bf4596ef4ae2a7f4d0a8dea1441582c3a060",
+  "boundsErrorMm": 0.0,
+  "boundsToleranceMm": 0.1,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 102,
+    "excludedImporterHelpers": 0,
+    "meshes": 101,
+    "vertices": 56782,
+    "polygons": 59152,
+    "materials": 102,
+    "images": 12,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_10",
+      "Image_11",
+      "Image_2",
+      "Image_3",
+      "Image_4",
+      "Image_5",
+      "Image_6",
+      "Image_7",
+      "Image_8",
+      "Image_9"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        240,
+        275
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 177456,
+      "cornerSum": [
+        407.2962717395276,
+        -5215.932105528438,
+        1595.350369821026
+      ],
+      "cornerSumSquares": [
+        2648.1003533133476,
+        1354.5216805553239,
+        3787.8362115274062
+      ],
+      "surfaceAreaSquareMeters": 0.7816238545118829
+    },
+    "boundsMeters": {
+      "min": [
+        -0.27373161911964417,
+        -0.3409026861190796,
+        -0.2840147018432617
+      ],
+      "max": [
+        0.27373161911964417,
+        0.06584606319665909,
+        0.2682516872882843
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 102,
+    "excludedImporterHelpers": 0,
+    "meshes": 101,
+    "vertices": 57464,
+    "polygons": 59152,
+    "materials": 102,
+    "images": 12,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_10",
+      "Image_11",
+      "Image_2",
+      "Image_3",
+      "Image_4",
+      "Image_5",
+      "Image_6",
+      "Image_7",
+      "Image_8",
+      "Image_9"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        240,
+        275
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 177456,
+      "cornerSum": [
+        407.2962701600045,
+        -5215.932105344968,
+        1595.3503730098746
+      ],
+      "cornerSumSquares": [
+        2648.1003536523503,
+        1354.521680566166,
+        3787.836212515052
+      ],
+      "surfaceAreaSquareMeters": 0.7816238565814724
+    },
+    "boundsMeters": {
+      "min": [
+        -0.27373161911964417,
+        -0.3409026861190796,
+        -0.2840147018432617
+      ],
+      "max": [
+        0.27373161911964417,
+        0.06584606319665909,
+        0.2682516872882843
+      ]
+    }
+  }
+}

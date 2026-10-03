@@ -1,0 +1,180 @@
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "front-iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "domed.glb",
+  "sourceBytes": 3611084,
+  "sourceSha256": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+  "render": "domed-front-iso-clay.png",
+  "renderBytes": 611972,
+  "renderSha256": "ae07f2771987a7266c160333e4219d1d19dcbd3b019ec3e1f370eb63d59698fb",
+  "meshes": 101,
+  "materials": 103,
+  "normalization": {
+    "method": "fixed-metre-datum",
+    "targetExtent": null,
+    "sourceBounds": {
+      "min": [
+        -0.27373161911964417,
+        -0.3409026861190796,
+        -0.2840147018432617
+      ],
+      "max": [
+        0.27373161911964417,
+        0.09577298164367676,
+        0.2682516872882843
+      ],
+      "size": [
+        0.5474632382392883,
+        0.43667566776275635,
+        0.5522663593292236
+      ]
+    },
+    "scale": 3.621440933735629,
+    "fixedSpaceSha256": "040ea4f9b73c3dda3e74c8a4fea66b7a51c3a70e725349121f855f28060688a4",
+    "translationMeters": [
+      -0.0,
+      0.13752831146121025,
+      0.007881507277488708
+    ],
+    "normalizedBounds": {
+      "min": [
+        -0.9913029074668884,
+        -0.7365082502365112,
+        -1.0
+      ],
+      "max": [
+        0.9913029074668884,
+        0.8448868989944458,
+        1.0
+      ],
+      "size": [
+        1.9826058149337769,
+        1.581395149230957,
+        2.0
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 3.2
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        216,
+        100
+      ],
+      "max": [
+        865,
+        789
+      ]
+    },
+    "minimumMarginPixels": 100,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "whole-asset",
+    "componentId": null
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "clay",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        -2.5,
+        -3.0,
+        3.5
+      ],
+      "energy": 900.0,
+      "size": 4.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 500.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}
