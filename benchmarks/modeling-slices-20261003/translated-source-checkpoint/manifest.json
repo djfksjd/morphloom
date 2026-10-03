@@ -1,0 +1,60 @@
+{
+  "status": "unverified prototype; NOT installed",
+  "manifest": [
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/checkpoint-check.log",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/checkpoint-check.log.gz",
+      "sha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/focused.log",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/focused.log.gz",
+      "sha256": "969e43dc7d9155a94b5f710fbfd59aa451976ca80948e2dedd0c2db452da5802"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/gear.elements.json",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/gear.elements.json.gz",
+      "sha256": "c7e2be7ee158b404804114ab9385a3124caf3b50d6a1e5e8c4b63d8bf5afb6c8"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/gear.receipt.json",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/gear.receipt.json.gz",
+      "sha256": "09eaa458d6ee738a983aa9e500483d98ba4aaa1458ebdd9a69125e09b904579e"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/probe-accessors.json",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/probe-accessors.json.gz",
+      "sha256": "6bf5e0482ac4837d302773372229bdf6a25db6c9565be3c470c56dbd7ec8cf07"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/probe.json",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/probe.json.gz",
+      "sha256": "ebdc262ecbc0f37b83fcd17826acc6be7f874097bdd87d22ebf40b6f078dcdbe"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/prototype-checkpoint.json",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/prototype-checkpoint.json.gz",
+      "sha256": "2618fc19cd3cd4212ba959ee7fd36fa8b214835620cbcff3b6ed49c61a3112ab"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/unverified-prototype/scripts/translated-source-audit.ts",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/unverified-prototype/scripts/translated-source-audit.ts.gz",
+      "sha256": "454506a9bfdc12c3045a01a57c49af4f1a95da56aa153cbf523c63a53be675cd"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/unverified-prototype/scripts/translated-source-regeneration-probe.ts",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/unverified-prototype/scripts/translated-source-regeneration-probe.ts.gz",
+      "sha256": "efacafc17d7f4be3f708289feac09e4595707edb5e480b68df019607073fe4f5"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/unverified-prototype/src/engine/translated-source.ts",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/unverified-prototype/src/engine/translated-source.ts.gz",
+      "sha256": "b837f83e852c6f21fc134285a8f64357aa3444045d5e34a4264fda5c4f451936"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/translated-source-regeneration-20261003/unverified-prototype/tests/translated-source.test.ts",
+      "archive": "benchmarks/modeling-slices-20261003/translated-source-checkpoint/unverified-prototype/tests/translated-source.test.ts.gz",
+      "sha256": "a457746559bfac6f9000f44200ce085fa3be4363fc716f2c9d6515a8a911da5f"
+    }
+  ]
+}
