@@ -1,0 +1,24 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+stderr | tests/assembly-lathe-normals.test.ts > keeps exact legacy normal bytes and clears the opt-in without inserting defaults
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+
+stderr | tests/assembly-lathe-normals.test.ts > preserves actual expanded position/UV, dimensions and topology while changing normals
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+
+ ✓ tests/assembly-lathe-normals.test.ts (6 tests) 83ms
+ ✓ tests/corner-weighted-normals.test.ts (11 tests) 2932ms
+   ✓ explicit migration inserts no weighting and preserves every generated legacy attribute  674ms
+   ✓ changes only selected race normals for {}  723ms
+   ✓ changes only selected race normals for {"boreDiameterMm":12,"outerDiameterMm":30,"widthMm":10,"ballDiameterMm":5,"ballCount":7}  666ms
+   ✓ changes only selected race normals for {"boreDiameterMm":40,"outerDiameterMm":80,"widthMm":24,"ballDiameterMm":12,"ballCount":12}  790ms
+ ✓ tests/assembly-edit.test.ts (7 tests) 128ms
+
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+   Start at  04:10:40
+   Duration  3.64s (transform 189ms, setup 0ms, collect 291ms, tests 3.14s, environment 0ms, prepare 67ms)
+

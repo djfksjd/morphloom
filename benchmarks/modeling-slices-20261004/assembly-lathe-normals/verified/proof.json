@@ -1,0 +1,581 @@
+{
+  "compiler": "morphloom-compiler/0.40.0",
+  "cases": [
+    {
+      "id": "small",
+      "measurements": {
+        "before": {
+          "triangles": 128,
+          "capErrorDeg": 66.8468783581192,
+          "radialErrorDeg": 32.14965461601967,
+          "positionSha256": "9ef54e634cdfef65eecf69878b7591f88389190dc226be2eb2bbaf5fd07d25cf",
+          "uvSha256": "b440da28fdfe60be0998bef281ee8eb76a3e7d6df6565a56be2807bafc6b162e",
+          "normalSha256": "8a48c0a44cfeced301b0e10868c266bb49746fc66f5bb8d553e8f352e2db9b12"
+        },
+        "after": {
+          "triangles": 128,
+          "capErrorDeg": 0,
+          "radialErrorDeg": 0.0000036222548091772005,
+          "positionSha256": "9ef54e634cdfef65eecf69878b7591f88389190dc226be2eb2bbaf5fd07d25cf",
+          "uvSha256": "b440da28fdfe60be0998bef281ee8eb76a3e7d6df6565a56be2807bafc6b162e",
+          "normalSha256": "9744a43792883d0fc5b43d5b0c8548267b5025c76a181cb2ea34eb87291781b4"
+        },
+        "topology": {
+          "meshes": 2,
+          "watertightMeshes": 2,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 0,
+          "orientationConsistent": true,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 2332,
+          "selfIntersectionComplete": true,
+          "triangles": 2720,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "bushing",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "preserved",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        }
+      },
+      "receipt": {
+        "schema": "morphloom.component-edit-receipt/0.1",
+        "operationId": "crease-small",
+        "componentId": "bushing",
+        "inputFingerprint": "cfe0bdaa75fa7f57f3362a02f8206347c027f22354e92d61ff030ad924106c4b",
+        "outputFingerprint": "0c9a2ec58d923d9b7bd817d66957679b23ec4a30a7c6999c24d91d7ff2b7e6f4",
+        "unaffectedInputFingerprint": "2a0c8a94e70ccc9528518672363da2e9d3e500ffcc98da9b2978950a1e6d6fb0",
+        "unaffectedOutputFingerprint": "2a0c8a94e70ccc9528518672363da2e9d3e500ffcc98da9b2978950a1e6d6fb0",
+        "unaffectedComponentsPreserved": true,
+        "changedFields": [
+          "geometry"
+        ]
+      },
+      "glbs": [
+        {
+          "name": "before",
+          "sha256": "46325be93ef5b3f9f63fd5b9be61b95c408540444f0d751648262583b981188d",
+          "repeatSha256": "46325be93ef5b3f9f63fd5b9be61b95c408540444f0d751648262583b981188d",
+          "bytes": 79792,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "name": "after",
+          "sha256": "1b846a47123d9e0a1ff8eca057248c390947a8e7252d7e6d98e12c93915d4f1b",
+          "repeatSha256": "1b846a47123d9e0a1ff8eca057248c390947a8e7252d7e6d98e12c93915d4f1b",
+          "bytes": 79828,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ],
+      "performance": {
+        "beforeMedianMs": 3.2250420000000304,
+        "afterMedianMs": 3.7853329999999232,
+        "ratio": 1.173731380862602
+      }
+    },
+    {
+      "id": "default",
+      "measurements": {
+        "before": {
+          "triangles": 256,
+          "capErrorDeg": 66.81258395730022,
+          "radialErrorDeg": 32.04087595195638,
+          "positionSha256": "45a754f41ff69f23762dc0643fc34851d77b12915c63aaa3d38dad934826a907",
+          "uvSha256": "b590c6104a4cc13b4a67346302a8969425753b124ae1c2435be59950aa1b136b",
+          "normalSha256": "9265c867e12299e764126e0a616fce69a9fdabaf10ee5a4179775e1f73a416d5"
+        },
+        "after": {
+          "triangles": 256,
+          "capErrorDeg": 0,
+          "radialErrorDeg": 0.000006668185343934158,
+          "positionSha256": "45a754f41ff69f23762dc0643fc34851d77b12915c63aaa3d38dad934826a907",
+          "uvSha256": "b590c6104a4cc13b4a67346302a8969425753b124ae1c2435be59950aa1b136b",
+          "normalSha256": "5597f44e1bec270fc8df3ad28f91485ff3ad7bf8fc61e8e7d0e0797d98cb5b9b"
+        },
+        "topology": {
+          "meshes": 2,
+          "watertightMeshes": 2,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 0,
+          "orientationConsistent": true,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 2620,
+          "selfIntersectionComplete": true,
+          "triangles": 2848,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "bushing",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "preserved",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        }
+      },
+      "receipt": {
+        "schema": "morphloom.component-edit-receipt/0.1",
+        "operationId": "crease-default",
+        "componentId": "bushing",
+        "inputFingerprint": "aa65985ebea539445fcd41ff8a3143ae0fd72578c5f8865e07733fcf06ad7e0a",
+        "outputFingerprint": "e759069c1c86c8b0662b2435e9dd1f44f8881b86d6d24f48f684fd03304c383c",
+        "unaffectedInputFingerprint": "9d893bd9019664d74115f9654d416f57c10b68063970fa1be04cc6d93a1cad95",
+        "unaffectedOutputFingerprint": "9d893bd9019664d74115f9654d416f57c10b68063970fa1be04cc6d93a1cad95",
+        "unaffectedComponentsPreserved": true,
+        "changedFields": [
+          "geometry"
+        ]
+      },
+      "glbs": [
+        {
+          "name": "before",
+          "sha256": "05cb768dbea6f4c48e98f6189c757fcf3b4ce34812fcb74c08d6b9e2b6a980be",
+          "repeatSha256": "05cb768dbea6f4c48e98f6189c757fcf3b4ce34812fcb74c08d6b9e2b6a980be",
+          "bytes": 92088,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "name": "after",
+          "sha256": "83cb41f99512f236037fb50593da7edb255bd837c0b49d2c5a3120cb3a6eed9b",
+          "repeatSha256": "83cb41f99512f236037fb50593da7edb255bd837c0b49d2c5a3120cb3a6eed9b",
+          "bytes": 92120,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ],
+      "performance": {
+        "beforeMedianMs": 3.893707999999947,
+        "afterMedianMs": 3.875,
+        "ratio": 0.9951953253813725
+      }
+    },
+    {
+      "id": "large",
+      "measurements": {
+        "before": {
+          "triangles": 1024,
+          "capErrorDeg": 66.80211012604293,
+          "radialErrorDeg": 32.00759995563472,
+          "positionSha256": "fcb44fa553425dac523ec9146a1fc89e057359ca6af995652c5659f731be4823",
+          "uvSha256": "8021d920043f8dde9abfe20e4356ee5a87041eb33927b994eaa9fdc71f89a2b3",
+          "normalSha256": "3bce6288f544c33a41d02dab73f01822dbb5e501901b69fe0a325e8936aaf7e5"
+        },
+        "after": {
+          "triangles": 1024,
+          "capErrorDeg": 0,
+          "radialErrorDeg": 0.00004702735287073361,
+          "positionSha256": "fcb44fa553425dac523ec9146a1fc89e057359ca6af995652c5659f731be4823",
+          "uvSha256": "8021d920043f8dde9abfe20e4356ee5a87041eb33927b994eaa9fdc71f89a2b3",
+          "normalSha256": "aec1ae374e5bbd85704e04af2b13ad7c7b793aad1c0c25a4503652943a0eb7ca"
+        },
+        "topology": {
+          "meshes": 2,
+          "watertightMeshes": 2,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 0,
+          "orientationConsistent": true,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 7612,
+          "selfIntersectionComplete": true,
+          "triangles": 3616,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "bushing",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "preserved",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        }
+      },
+      "receipt": {
+        "schema": "morphloom.component-edit-receipt/0.1",
+        "operationId": "crease-large",
+        "componentId": "bushing",
+        "inputFingerprint": "cf3771da60d9bb7f9a10ee53c09b1ea3da7011cfd978fd201ad680c8cce29a3e",
+        "outputFingerprint": "b934de79850e1ca4ffbac0811805391a4c6a0d07c60a822ab4581cabd386fd6d",
+        "unaffectedInputFingerprint": "70c322f39273cf826d1d909ce0778ecfe28181a2a19b013ce5597f844b37f92e",
+        "unaffectedOutputFingerprint": "70c322f39273cf826d1d909ce0778ecfe28181a2a19b013ce5597f844b37f92e",
+        "unaffectedComponentsPreserved": true,
+        "changedFields": [
+          "geometry"
+        ]
+      },
+      "glbs": [
+        {
+          "name": "before",
+          "sha256": "065effe0fac2a3ccf4564b757e7322bf487793040e40edfa90166fa6db4badbf",
+          "repeatSha256": "065effe0fac2a3ccf4564b757e7322bf487793040e40edfa90166fa6db4badbf",
+          "bytes": 165820,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "name": "after",
+          "sha256": "bf256a46358a58a427d79e42b94b0bbd85e2631054b3d73e5defd8dd380538c7",
+          "repeatSha256": "bf256a46358a58a427d79e42b94b0bbd85e2631054b3d73e5defd8dd380538c7",
+          "bytes": 165852,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ],
+      "performance": {
+        "beforeMedianMs": 5.1416659999999865,
+        "afterMedianMs": 7.3912499999999,
+        "ratio": 1.4375204457076596
+      }
+    },
+    {
+      "id": "solid",
+      "measurements": {
+        "before": {
+          "triangles": 256,
+          "capErrorDeg": 52.12874309865565,
+          "radialErrorDeg": 37.88114150676503,
+          "positionSha256": "7e3d3d306060d43b839ef9d1d8e889c8756b5289e277ebe6c09ac8d2926a4989",
+          "uvSha256": "48b2b2f5e181a837095b29e567c9a760c802780769133c721b7ea85752e07266",
+          "normalSha256": "90e731e3e7a7f0ebbb9f97d1b2e88a6e406ec7085a52df2b0fb29b8432eeb7fe"
+        },
+        "after": {
+          "triangles": 256,
+          "capErrorDeg": 0,
+          "radialErrorDeg": 0.000017538763447639102,
+          "positionSha256": "7e3d3d306060d43b839ef9d1d8e889c8756b5289e277ebe6c09ac8d2926a4989",
+          "uvSha256": "48b2b2f5e181a837095b29e567c9a760c802780769133c721b7ea85752e07266",
+          "normalSha256": "d724b7af99f9ca6d4e11d83bf04491894c983615e67d9191e6007198b8db4c52"
+        },
+        "topology": {
+          "meshes": 2,
+          "watertightMeshes": 2,
+          "boundaryEdges": 0,
+          "inconsistentWindingEdges": 0,
+          "orientationConsistent": true,
+          "nonManifoldEdges": 0,
+          "degenerateTriangles": 0,
+          "selfIntersections": 0,
+          "selfIntersectionMeshes": 0,
+          "selfIntersectionCandidatePairs": 2351,
+          "selfIntersectionComplete": true,
+          "triangles": 2848,
+          "edgeTaperMeshes": 0,
+          "verifiedEdgeTaperSegments": 0,
+          "surfaceReliefMeshes": 0,
+          "surfaceReliefSamples": 0,
+          "surfaceAggregateFeatures": 0,
+          "referenceReliefMeshes": 0,
+          "referenceReliefSamples": 0,
+          "maximumReferenceIrregularity": 0,
+          "pass": true,
+          "details": [
+            {
+              "name": "bushing",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            },
+            {
+              "name": "preserved",
+              "boundaryEdges": 0,
+              "inconsistentWindingEdges": 0,
+              "orientationConsistent": true,
+              "nonManifoldEdges": 0,
+              "degenerateTriangles": 0,
+              "selfIntersections": 0,
+              "selfIntersectionComplete": true,
+              "watertight": true
+            }
+          ]
+        }
+      },
+      "receipt": {
+        "schema": "morphloom.component-edit-receipt/0.1",
+        "operationId": "crease-solid",
+        "componentId": "bushing",
+        "inputFingerprint": "81c7d643b6e89729ba967dbc5c292d728228c1094f7af971336c7abbb1c6bcb0",
+        "outputFingerprint": "835afec496b7465e5865845cbe91a8f180ac39130dd020d551f00b87e32641e0",
+        "unaffectedInputFingerprint": "9d893bd9019664d74115f9654d416f57c10b68063970fa1be04cc6d93a1cad95",
+        "unaffectedOutputFingerprint": "9d893bd9019664d74115f9654d416f57c10b68063970fa1be04cc6d93a1cad95",
+        "unaffectedComponentsPreserved": true,
+        "changedFields": [
+          "geometry"
+        ]
+      },
+      "glbs": [
+        {
+          "name": "before",
+          "sha256": "669182ecc794cd6381dbc936b79474d2ee02c2235b9763a62c165e7e09868f3d",
+          "repeatSha256": "669182ecc794cd6381dbc936b79474d2ee02c2235b9763a62c165e7e09868f3d",
+          "bytes": 92060,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        },
+        {
+          "name": "after",
+          "sha256": "859aa7ff2257f444d3c33c3a8c9745ea50924ef82f41830a836754f9158331f1",
+          "repeatSha256": "859aa7ff2257f444d3c33c3a8c9745ea50924ef82f41830a836754f9158331f1",
+          "bytes": 92108,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 2,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 3,
+              "meshes": 2,
+              "materials": 2,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      ],
+      "performance": {
+        "beforeMedianMs": 3.467416000000071,
+        "afterMedianMs": 4.4647919999999885,
+        "ratio": 1.2876424403647837
+      }
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+04:21:24 | INFO: Data are loaded, start creating Blender stuff
+04:21:24 | INFO: Blender create Mesh node 0
+04:21:24 | INFO: Blender create Mesh node 1
+04:21:24 | INFO: glTF import finished in 0.01s
+/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-neutral-render.py:174: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world.use_nodes = True
+/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-neutral-render.py:191: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  clay.use_nodes = True
+00:00.961  render           | Saved: '/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/whole-after.png'
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "default-after.glb",
+  "sourceBytes": 92120,
+  "sourceSha256": "83cb41f99512f236037fb50593da7edb255bd837c0b49d2c5a3120cb3a6eed9b",
+  "render": "whole-after.png",
+  "renderBytes": 339362,
+  "renderSha256": "844c0b0ccb5c1374761e1aa0f684a2f805fe9f04f7626aa70e2bf595f0dd2103",
+  "meshes": 2,
+  "materials": 3,
+  "normalization": {
+    "method": "broadside-xz-max-extent",
+    "targetExtent": 2.0,
+    "sourceBounds": {
+      "min": [
+        -0.014000000432133675,
+        -0.014000000432133675,
+        -0.006000000052154064
+      ],
+      "max": [
+        0.027000000700354576,
+        0.014000000432133675,
+        0.006000000052154064
+      ],
+      "size": [
+        0.04100000113248825,
+        0.02800000086426735,
+        0.012000000104308128
+      ]
+    },
+    "scale": 48.78048645747981,
+    "normalizedBounds": {
+      "min": [
+        -1.0,
+        -0.6829268336296082,
+        -0.2926829159259796
+      ],
+      "max": [
+        1.0,
+        0.6829268336296082,
+        0.2926829159259796
+      ],
+      "size": [
+        2.0,
+        1.3658536672592163,
+        0.5853658318519592
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      -3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.55
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        140,
+        329
+      ],
+      "max": [
+        831,
+        755
+      ]
+    },
+    "minimumMarginPixels": 140,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "whole-asset",
+    "componentId": null
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "clay",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        -2.5,
+        -3.0,
+        3.5
+      ],
+      "energy": 900.0,
+      "size": 4.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 500.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

@@ -1,0 +1,3734 @@
+{
+  "schema": "morphloom.competitive-benchmark/0.1",
+  "generatedAt": "2026-10-03T08:35:58.414Z",
+  "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
+  "visualSuperiorityPolicy": {
+    "status": "not-established",
+    "claimAllowed": false,
+    "reason": "Local same-input Talon WebGL capture hashes exist, but no redistributable matched-camera multi-view set and balanced blind panel are stored in this repository.",
+    "requiredEvidence": {
+      "identicalInputFingerprint": true,
+      "matchedCalibratedCameras": true,
+      "canonicalLockedRenderProtocol": true,
+      "sharedFullCanvasCoordinates": true,
+      "exactCanvasAndPixelRatio": true,
+      "actualBrowserWebglCaptures": true,
+      "hashBoundCaptureReceipts": true,
+      "criticalFeatureRegions": true,
+      "minimumViews": {
+        "industrial-design": 2,
+        "architecture": 3,
+        "character": 3,
+        "surface": 3
+      },
+      "uniqueBlindRaters": 5,
+      "balancedPresentationOrder": true,
+      "minimumAutomaticMargin": 0.03,
+      "minimumBlindPreferenceShare": 0.6
+    }
+  },
+  "competitor": {
+    "repository": "https://github.com/img2threejs/img2threejs",
+    "commit": "9fbd0ca5bbcc3b13bebe712745d6784d33db0b85",
+    "testedRuntime": "Python 3.12.13",
+    "observedTestResult": {
+      "tests": 1083,
+      "passed": 1045,
+      "skipped": 38,
+      "failed": 0,
+      "testFiles": 85
+    },
+    "latestShowcase": {
+      "repository": "https://github.com/img2threejs/img2threejs-showcase",
+      "commit": "db90e65a8d46f2a8d1a4eb76bd370b74ecfc467a",
+      "build": "pass",
+      "observedCharacters": [
+        {
+          "id": "leesin",
+          "bones": 42,
+          "clips": 10
+        },
+        {
+          "id": "boxing-man",
+          "bones": 41,
+          "clips": 19
+        },
+        {
+          "id": "monster",
+          "bones": 41,
+          "clips": 27
+        }
+      ],
+      "scope": "Showcase breadth evidence, not a matched GLB delivery-gate comparison."
+    }
+  },
+  "morphloom": {
+    "contractAudit": {
+      "pass": true,
+      "blockers": [],
+      "warnings": [],
+      "detailCoverage": 1,
+      "componentCoverage": 1,
+      "materialCoverage": 1,
+      "criticalFeatures": 4
+    },
+    "deliveryAudit": {
+      "pass": true,
+      "blockers": []
+    },
+    "pixelComparison": {
+      "method": "pixel-frame-v1",
+      "referenceFingerprint": "15a8fff1",
+      "renderFingerprint": "15a8fff1",
+      "silhouetteIoU": 1,
+      "interiorSimilarity": 1,
+      "score": 1,
+      "foregroundPixels": {
+        "reference": 22,
+        "render": 22,
+        "intersection": 22,
+        "union": 22
+      },
+      "regions": [],
+      "fixture": "deterministic gate-path fixture; not a perceptual knife ranking"
+    },
+    "interiorBands": {
+      "method": "foreground-normalized-bands-v1",
+      "grid": 16,
+      "bands": [
+        {
+          "id": "all",
+          "from": 0,
+          "to": 1,
+          "cellsCompared": 88,
+          "interiorDifference": 0,
+          "interiorSimilarity": 1,
+          "status": "measured"
+        }
+      ],
+      "aggregateSimilarity": 1,
+      "cellsCompared": 88
+    },
+    "materialComparison": {
+      "method": "material-region-v3",
+      "reference": {
+        "meanRgb": [
+          138,
+          22,
+          52
+        ],
+        "meanLuma": 0.19148078431372542,
+        "lumaVariance": 3.0814879110195774e-33,
+        "horizontalGradient": 0,
+        "verticalGradient": 0,
+        "anisotropyProxy": 0,
+        "fineContrast": 0,
+        "coarseContrast": 0,
+        "gradientEntropy": 0,
+        "periodicity": 0,
+        "irregularity": 0.42,
+        "gradientHistogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "foregroundCoverage": 0.34375
+      },
+      "render": {
+        "meanRgb": [
+          138,
+          22,
+          52
+        ],
+        "meanLuma": 0.19148078431372542,
+        "lumaVariance": 3.0814879110195774e-33,
+        "horizontalGradient": 0,
+        "verticalGradient": 0,
+        "anisotropyProxy": 0,
+        "fineContrast": 0,
+        "coarseContrast": 0,
+        "gradientEntropy": 0,
+        "periodicity": 0,
+        "irregularity": 0.42,
+        "gradientHistogram": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "foregroundCoverage": 0.34375
+      },
+      "deltaE76": 0,
+      "scores": {
+        "baseColor": 1,
+        "meanLuma": 1,
+        "microstructure": 1,
+        "surfaceScale": 1,
+        "irregularity": 1,
+        "directionalResponse": 1,
+        "spatialStructure": 1,
+        "overall": 1
+      },
+      "mismatches": [],
+      "passed": true,
+      "nextAction": "continue",
+      "limitation": "Image metrics constrain appearance but cannot uniquely identify physical material parameters without calibrated lighting."
+    },
+    "visualHull": {
+      "status": "carved",
+      "triangles": 768,
+      "occupiedVoxelCount": 512,
+      "minimumViewIoU": 1,
+      "confidenceWeightedIoU": 1,
+      "unconstrainedAxes": [],
+      "limitationCount": 1
+    },
+    "implicitSurface": {
+      "requestedResolution": 32,
+      "resolvedResolution": 35,
+      "refinementSteps": 3,
+      "primitives": 3,
+      "operations": 2,
+      "triangles": 5448,
+      "enclosedVolumeMm3": 1491123.6257620547,
+      "outwardFaceCoverage": 1,
+      "windingCorrected": false,
+      "topologyPass": true,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0
+    },
+    "passes": [
+      {
+        "pass": "blockout",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.99
+      },
+      {
+        "pass": "structure",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "form",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "material",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "surface",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "lighting",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.9900000000000001
+      },
+      {
+        "pass": "interaction",
+        "accepted": true,
+        "action": "advance",
+        "effectiveScore": 0.99
+      },
+      {
+        "pass": "optimization",
+        "accepted": true,
+        "action": "complete",
+        "effectiveScore": 0.99
+      }
+    ],
+    "compiledAsset": {
+      "parts": 16,
+      "triangles": 18930,
+      "topologyPass": true,
+      "fidelityContractPersisted": true
+    },
+    "crossDomainDelivery": {
+      "rates": {
+        "overall": 1,
+        "technical": 1,
+        "decision": 1,
+        "modelRelease": 1,
+        "deliveryRelease": 1,
+        "rejectionSafety": 1
+      },
+      "allRatesPass": true,
+      "domains": {
+        "industrialDesign": {
+          "domain": "industrial-design",
+          "pass": true,
+          "score": 99,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "16/16 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "49/49 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "16/16 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "design-topology",
+              "label": "제품 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "design-evidence",
+              "label": "제품 근거",
+              "pass": true,
+              "score": 90,
+              "detail": "90/80",
+              "blocking": true
+            },
+            {
+              "id": "design-uv",
+              "label": "제품 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "design-normals",
+              "label": "제품 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.09e-8",
+              "blocking": true
+            },
+            {
+              "id": "design-surface",
+              "label": "제품 PBR 미세표면",
+              "pass": true,
+              "score": 100,
+              "detail": "100% micro-normal",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 16,
+            "triangles": 18930,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.087549942966007e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 2.53915809957823,
+            "declaredMinimumFeatureMm": 0.16,
+            "enclosedVolumeMm3": 147466.842934711,
+            "surfaceAreaMm2": 63921.0682046812,
+            "volumeThicknessProxyMm": 4.614029367047135,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 4040.379606397633,
+            "unsupportedOverhangRatio": 0.06320888745882597,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "architecture": {
+          "domain": "architecture",
+          "pass": true,
+          "score": 99,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "321/321 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "1010/1010 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "321/321 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "architecture-program",
+              "label": "선언된 층별 실제 영역",
+              "pass": true,
+              "score": 100,
+              "detail": "48/48 ·  · 벽체/가구/안전 승인 제외",
+              "blocking": true
+            },
+            {
+              "id": "architecture-topology",
+              "label": "건축 셸 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "321/321 폐쇄형",
+              "blocking": true
+            },
+            {
+              "id": "architecture-plan",
+              "label": "실제 도면 외곽 재투영",
+              "pass": true,
+              "score": 100,
+              "detail": "IoU 1.000 · 과잉 0.0% · 누락 0.0% · 공백 north_courtyard 0.0%",
+              "blocking": true
+            },
+            {
+              "id": "architecture-evidence",
+              "label": "실측·도면 근거",
+              "pass": true,
+              "score": 87,
+              "detail": "87/85",
+              "blocking": true
+            },
+            {
+              "id": "architecture-surface",
+              "label": "건축 마감 표면",
+              "pass": true,
+              "score": 100,
+              "detail": "100% micro-normal (최소 80%)",
+              "blocking": true
+            },
+            {
+              "id": "architecture-uv",
+              "label": "건축 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 321,
+            "triangles": 188748,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.3657002740383746e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 17.999999225139618,
+            "declaredMinimumFeatureMm": 18,
+            "enclosedVolumeMm3": 254482354093.11646,
+            "surfaceAreaMm2": 3461635956.5943584,
+            "volumeThicknessProxyMm": 147.03010789354198,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 512845854.9532662,
+            "unsupportedOverhangRatio": 0.1481512964921408,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": true,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "electronicsAssembly": {
+          "domain": "electronics-assembly",
+          "pass": false,
+          "score": 94,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "322/322 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "245/245 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "111/111 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "electronics-topology",
+              "label": "전자 조립 메시 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-graph",
+              "label": "부품·핀·도선 연결 그래프",
+              "pass": true,
+              "score": 100,
+              "detail": "75/75 도선 · 필수 포트 150/150 · 오류 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-documentation",
+              "label": "핀·선경·검증 근거",
+              "pass": true,
+              "score": 100,
+              "detail": "핀 100% · 선경 100% · 검증 100%",
+              "blocking": true
+            },
+            {
+              "id": "electronics-anchors",
+              "label": "이동 부품 배선 앵커·종단 정합",
+              "pass": true,
+              "score": 100,
+              "detail": "live yes · 최대 종단 오차 0.0000 mm",
+              "blocking": true
+            },
+            {
+              "id": "electronics-digital-readiness",
+              "label": "디지털 조립 납품 준비",
+              "pass": true,
+              "score": 100,
+              "detail": "evidence 52 · bench 대기 5 · 추정 도선 0",
+              "blocking": true
+            },
+            {
+              "id": "electronics-production-evidence",
+              "label": "실물 제작 근거 준비",
+              "pass": false,
+              "score": 52,
+              "detail": "근거 52/90 · 추정 부품 36 · bench 대기 5 · bench 필요 도선 6",
+              "blocking": true
+            },
+            {
+              "id": "electronics-evidence",
+              "label": "전자 조립 원천 근거",
+              "pass": false,
+              "score": 52,
+              "detail": "52/90",
+              "blocking": true
+            },
+            {
+              "id": "electronics-uv",
+              "label": "전자 부품 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "electronics-normals",
+              "label": "전자 부품 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 8.00e-7",
+              "blocking": true
+            },
+            {
+              "id": "electronics-surface",
+              "label": "전자 부품 PBR 미세표면",
+              "pass": true,
+              "score": 93,
+              "detail": "93% micro-normal",
+              "blocking": true
+            }
+          ],
+          "blockers": [
+            "electronics-production-evidence: 근거 52/90 · 추정 부품 36 · bench 대기 5 · bench 필요 도선 6",
+            "electronics-evidence: 52/90"
+          ],
+          "warnings": [],
+          "metrics": {
+            "meshes": 322,
+            "triangles": 272560,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 8.000970449506539e-7,
+            "pbrSurfaceCoverage": 0.9285714285714286,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 0.486684002680704,
+            "declaredMinimumFeatureMm": 1,
+            "enclosedVolumeMm3": 1132679.2839884472,
+            "surfaceAreaMm2": 1137324.5776131183,
+            "volumeThicknessProxyMm": 1.9918311909966455,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 519261.5424423812,
+            "unsupportedOverhangRatio": 0.45656407384789455,
+            "electricalPorts": 150,
+            "electricalWires": 75,
+            "electricalRequiredPortCoverage": 1,
+            "electricalPinDocumentationCoverage": 1,
+            "electricalGaugeDocumentationCoverage": 1,
+            "electricalVerificationCoverage": 1,
+            "electricalEndpointErrorMaxMm": 0.0000068009559172592,
+            "electricalLiveAnchors": true,
+            "electricalDigitalReady": true,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "animation": {
+          "domain": "animation",
+          "pass": true,
+          "score": 100,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "9/9 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "animation-topology",
+              "label": "변형 가능한 폐쇄형 바디",
+              "pass": true,
+              "score": 100,
+              "detail": "2/2 스킨 메시 폐쇄형",
+              "blocking": true
+            },
+            {
+              "id": "animation-skeleton",
+              "label": "실제 스켈레톤",
+              "pass": true,
+              "score": 100,
+              "detail": "2 skeleton · 49 bones",
+              "blocking": true
+            },
+            {
+              "id": "animation-weights",
+              "label": "정규화 스킨 웨이트",
+              "pass": true,
+              "score": 100,
+              "detail": "오차 2.98e-8 · 최대 2 influences",
+              "blocking": true
+            },
+            {
+              "id": "animation-deformation",
+              "label": "실제 뼈 변형 검증",
+              "pass": true,
+              "score": 100,
+              "detail": "bind RMS 0.0000 mm · 이동 표본 1277 · 최대 22.8 mm",
+              "blocking": true
+            },
+            {
+              "id": "animation-joint-deformation",
+              "label": "주요 관절별 실제 변형",
+              "pass": true,
+              "score": 100,
+              "detail": "10/10 관절 변형 · 웨이트 10/10 · 최소 349 vertices · 최소 이동 12.06 mm",
+              "blocking": true
+            },
+            {
+              "id": "animation-joint-localization",
+              "label": "주요 관절 웨이트 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "10/10 관절 위치 통과 · 최소 구역 일치 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "animation-finger-rig",
+              "label": "손가락 리그·가중치",
+              "pass": true,
+              "score": 100,
+              "detail": "30 finger bones · 7524 weighted vertices · 19 animated tracks",
+              "blocking": true
+            },
+            {
+              "id": "animation-facial-morphs",
+              "label": "얼굴 표정 모프",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 6878 affected vertices · max 16.06 mm",
+              "blocking": true
+            },
+            {
+              "id": "animation-facial-morph-localization",
+              "label": "얼굴 모프 영향 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 최소 머리영역 일치 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "animation-facial-morph-semantics",
+              "label": "얼굴 모프 의미 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 최소 의미 구역 100.0% · 최소 눈깜박임 좌우 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "animation-clips",
+              "label": "납품용 기본 동작 세트",
+              "pass": true,
+              "score": 100,
+              "detail": "22 clips · 185 tracks · 필수 동작 100%",
+              "blocking": true
+            },
+            {
+              "id": "animation-clip-quality",
+              "label": "동작 바인딩·반복·루트모션 품질",
+              "pass": true,
+              "score": 100,
+              "detail": "binding 100% · motion 100% · loop 100% · in-place 100%",
+              "blocking": true
+            },
+            {
+              "id": "animation-uv",
+              "label": "캐릭터 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "animation-normals",
+              "label": "캐릭터 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.59e-8",
+              "blocking": true
+            },
+            {
+              "id": "animation-evidence",
+              "label": "캐릭터 베이스 근거",
+              "pass": true,
+              "score": 90,
+              "detail": "90/80",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 3,
+            "triangles": 51934,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.589581759084638e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 2,
+            "bones": 49,
+            "animationClips": 22,
+            "animationTracks": 185,
+            "animationSetCoverage": 1,
+            "animationBindingCoverage": 1,
+            "animationMotionCoverage": 1,
+            "animationLoopClosureCoverage": 1,
+            "animationInPlaceCoverage": 1,
+            "maximumAnimationQuaternionError": 3.5599639458538945e-8,
+            "bindPoseRmsErrorMm": 0.000019050116674877854,
+            "deformationMovedVertices": 1277,
+            "deformationMaximumMm": 22.800234181959873,
+            "deformationFinite": true,
+            "criticalDeformationJoints": 10,
+            "criticalWeightedJoints": 10,
+            "criticalMovingJoints": 10,
+            "criticalLocalizedJoints": 10,
+            "criticalJointWeightCoverage": 1,
+            "criticalJointMotionCoverage": 1,
+            "criticalJointLocalizationCoverage": 1,
+            "minimumCriticalJointWeightedVertices": 349,
+            "minimumCriticalJointMotionMm": 12.055712619846028,
+            "minimumCriticalJointLocalizationCoverage": 1,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 2,
+            "lodTriangleRatio": 0.7499626252055613,
+            "lodMonotonicTriangleReduction": true,
+            "lodSkinWeightCoverage": 1,
+            "lodSkeletonCoverage": 1,
+            "lodNeutralBoundsError": 0,
+            "lodNeutralSilhouetteEnvelopeError": 0,
+            "lodPosedBoundsError": 0,
+            "lodPosedSilhouetteEnvelopeError": 0,
+            "collisionPrimitives": 16,
+            "collisionPrimitiveValidityCoverage": 1,
+            "collisionBoneCoverage": 1,
+            "collisionBoundsOverlapCoverage": 1,
+            "collisionVerticalCoverage": 0.9694119539088362,
+            "fingerBones": 30,
+            "fingerWeightedVertices": 7524,
+            "fingerAnimationTracks": 19,
+            "facialMorphTargets": 5,
+            "facialMorphAffectedVertices": 6878,
+            "facialMorphMaximumMm": 16.062596351537813,
+            "facialMorphLocalizedTargets": 5,
+            "minimumFacialMorphLocalizationCoverage": 1,
+            "facialMorphMislocalizedTargets": [],
+            "facialMorphSemanticTargets": 5,
+            "minimumFacialMorphSemanticRegionCoverage": 1,
+            "minimumFacialMorphBlinkSideCoverage": 1,
+            "facialMorphSemanticFailures": [],
+            "maximumSkinWeightError": 2.9802322387695312e-8,
+            "maximumSkinInfluences": 2,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 136.7105718143282,
+            "enclosedVolumeMm3": 156582531.80762315,
+            "surfaceAreaMm2": 3636796.9820398763,
+            "volumeThicknessProxyMm": 86.1101307446621,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 195859.29683757343,
+            "unsupportedOverhangRatio": 0.05385488873995824,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "game": {
+          "domain": "game",
+          "pass": true,
+          "score": 100,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "9/9 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "3/3 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "game-budget",
+              "label": "실시간 삼각형 예산",
+              "pass": true,
+              "score": 100,
+              "detail": "51,934 / 100,000 tris",
+              "blocking": true
+            },
+            {
+              "id": "game-topology",
+              "label": "게임 메시 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 72 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "game-uv",
+              "label": "게임 UV 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 0.00%",
+              "blocking": true
+            },
+            {
+              "id": "game-normals",
+              "label": "게임 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 4.59e-8",
+              "blocking": true
+            },
+            {
+              "id": "game-skeleton",
+              "label": "게임용 스켈레톤",
+              "pass": true,
+              "score": 100,
+              "detail": "2 skeleton · 49 bones",
+              "blocking": true
+            },
+            {
+              "id": "game-joint-deformation",
+              "label": "게임 주요 관절 실제 변형",
+              "pass": true,
+              "score": 100,
+              "detail": "10/10 관절 변형 · 웨이트 10/10 · 최소 349 vertices",
+              "blocking": true
+            },
+            {
+              "id": "game-joint-localization",
+              "label": "게임 관절 웨이트 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "10/10 관절 위치 통과 · 최소 구역 일치 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "game-finger-rig",
+              "label": "게임 손가락 리그",
+              "pass": true,
+              "score": 100,
+              "detail": "30 finger bones · 7524 weighted vertices",
+              "blocking": true
+            },
+            {
+              "id": "game-facial-morphs",
+              "label": "게임 얼굴 표정 모프",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 6878 affected vertices",
+              "blocking": true
+            },
+            {
+              "id": "game-facial-morph-localization",
+              "label": "게임 얼굴 모프 영향 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 최소 머리영역 일치 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "game-facial-morph-semantics",
+              "label": "게임 얼굴 모프 의미 위치",
+              "pass": true,
+              "score": 100,
+              "detail": "5/5 targets · 최소 의미 구역 100.0% · 최소 눈깜박임 좌우 100.0%",
+              "blocking": true
+            },
+            {
+              "id": "game-runtime-motion",
+              "label": "게임 런타임 동작 세트",
+              "pass": true,
+              "score": 100,
+              "detail": "22 clips · 이동/점프/제스처/상호작용 100%",
+              "blocking": true
+            },
+            {
+              "id": "game-motion-quality",
+              "label": "게임 동작 품질 계약",
+              "pass": true,
+              "score": 100,
+              "detail": "binding 100% · motion 100% · loop 100% · in-place 100%",
+              "blocking": true
+            },
+            {
+              "id": "game-collision",
+              "label": "실제 충돌 프리미티브",
+              "pass": true,
+              "score": 100,
+              "detail": "16개 포즈 정렬 · 유효 100% · 본 연결 100% · 바디 교차 100% · 높이 커버 97%",
+              "blocking": true
+            },
+            {
+              "id": "game-lod-profile",
+              "label": "LOD 납품 프로필",
+              "pass": true,
+              "score": 100,
+              "detail": "2 declared LOD levels",
+              "blocking": true
+            },
+            {
+              "id": "game-additional-lods",
+              "label": "추가 LOD 메시",
+              "pass": true,
+              "score": 100,
+              "detail": "2 LOD levels",
+              "blocking": false
+            },
+            {
+              "id": "game-lod-quality",
+              "label": "LOD 형상·변형 보존",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 meshes · tris 75.0% · 감소 연속 · neutral bounds 0.00% / silhouette 0.00% · posed bounds 0.00% / silhouette 0.00% · skin 100%",
+              "blocking": true
+            },
+            {
+              "id": "game-pbr",
+              "label": "게임 PBR 표면",
+              "pass": true,
+              "score": 100,
+              "detail": "100% micro-normal",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 3,
+            "triangles": 51934,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 4.589581759084638e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 2,
+            "bones": 49,
+            "animationClips": 22,
+            "animationTracks": 185,
+            "animationSetCoverage": 1,
+            "animationBindingCoverage": 1,
+            "animationMotionCoverage": 1,
+            "animationLoopClosureCoverage": 1,
+            "animationInPlaceCoverage": 1,
+            "maximumAnimationQuaternionError": 3.5599639458538945e-8,
+            "bindPoseRmsErrorMm": 0.000019050116674877854,
+            "deformationMovedVertices": 1277,
+            "deformationMaximumMm": 22.800234181959873,
+            "deformationFinite": true,
+            "criticalDeformationJoints": 10,
+            "criticalWeightedJoints": 10,
+            "criticalMovingJoints": 10,
+            "criticalLocalizedJoints": 10,
+            "criticalJointWeightCoverage": 1,
+            "criticalJointMotionCoverage": 1,
+            "criticalJointLocalizationCoverage": 1,
+            "minimumCriticalJointWeightedVertices": 349,
+            "minimumCriticalJointMotionMm": 12.055712619846028,
+            "minimumCriticalJointLocalizationCoverage": 1,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 2,
+            "lodTriangleRatio": 0.7499626252055613,
+            "lodMonotonicTriangleReduction": true,
+            "lodSkinWeightCoverage": 1,
+            "lodSkeletonCoverage": 1,
+            "lodNeutralBoundsError": 0,
+            "lodNeutralSilhouetteEnvelopeError": 0,
+            "lodPosedBoundsError": 0,
+            "lodPosedSilhouetteEnvelopeError": 0,
+            "collisionPrimitives": 16,
+            "collisionPrimitiveValidityCoverage": 1,
+            "collisionBoneCoverage": 1,
+            "collisionBoundsOverlapCoverage": 1,
+            "collisionVerticalCoverage": 0.9694119539088362,
+            "fingerBones": 30,
+            "fingerWeightedVertices": 7524,
+            "fingerAnimationTracks": 19,
+            "facialMorphTargets": 5,
+            "facialMorphAffectedVertices": 6878,
+            "facialMorphMaximumMm": 16.062596351537813,
+            "facialMorphLocalizedTargets": 5,
+            "minimumFacialMorphLocalizationCoverage": 1,
+            "facialMorphMislocalizedTargets": [],
+            "facialMorphSemanticTargets": 5,
+            "minimumFacialMorphSemanticRegionCoverage": 1,
+            "minimumFacialMorphBlinkSideCoverage": 1,
+            "facialMorphSemanticFailures": [],
+            "maximumSkinWeightError": 2.9802322387695312e-8,
+            "maximumSkinInfluences": 2,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 136.7105718143282,
+            "enclosedVolumeMm3": 156582531.80762315,
+            "surfaceAreaMm2": 3636796.9820398763,
+            "volumeThicknessProxyMm": 86.1101307446621,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 195859.29683757343,
+            "unsupportedOverhangRatio": 0.05385488873995824,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 0,
+            "validSurfaceReliefPatches": 0,
+            "surfaceReliefSamples": 0,
+            "minimumSurfaceRmsRoughnessMm": 0,
+            "minimumSurfacePeakToValleyMm": 0,
+            "surfaceReliefGeometryRmsErrorMm": 0,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 0,
+            "surfaceAggregateFeatures": 0,
+            "surfaceCoarseAggregateFeatures": 0,
+            "surfaceFineAggregateFeatures": 0,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "print3d": {
+          "domain": "3d-print",
+          "pass": true,
+          "score": 100,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "4/4 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "print-topology",
+              "label": "출력 가능한 폐쇄형 메시",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "print-units",
+              "label": "명시적 mm 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "1 source unit = 1 mm",
+              "blocking": true
+            },
+            {
+              "id": "print-declared-feature",
+              "label": "선언된 최소 형상",
+              "pass": true,
+              "score": 100,
+              "detail": "33.500 mm / 최소 0.800 mm",
+              "blocking": true
+            },
+            {
+              "id": "print-bounds-sanity",
+              "label": "메시 축 치수 점검",
+              "pass": true,
+              "score": 100,
+              "detail": "43.453 mm",
+              "blocking": false
+            },
+            {
+              "id": "print-volume",
+              "label": "양의 폐쇄 체적",
+              "pass": true,
+              "score": 100,
+              "detail": "10762674.3 mm³",
+              "blocking": true
+            },
+            {
+              "id": "print-volume-thickness",
+              "label": "체적·표면적 두께 지표",
+              "pass": true,
+              "score": 100,
+              "detail": "33.816 mm / 최소 0.800 mm",
+              "blocking": true
+            },
+            {
+              "id": "print-local-thickness",
+              "label": "국부 벽 두께 표본",
+              "pass": true,
+              "score": 100,
+              "detail": "최소 3.499 mm · P05 17.683 mm · 연결 외피 1 · 96/96 rays · 10,745,856/24,000,000 tests",
+              "blocking": true
+            },
+            {
+              "id": "print-overhang",
+              "label": "45° 오버행 분석",
+              "pass": true,
+              "score": 100,
+              "detail": "0.0 mm² · 표면의 0.00%",
+              "blocking": false
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 1,
+            "triangles": 111936,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0.012006861063464836,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.983618057645799e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 43.45347546041012,
+            "declaredMinimumFeatureMm": 33.5,
+            "enclosedVolumeMm3": 10762674.26790627,
+            "surfaceAreaMm2": 636534.8951200972,
+            "volumeThicknessProxyMm": 33.816446986384435,
+            "sampledWallThicknessComplete": true,
+            "sampledWallThicknessMm": 3.498834088188106,
+            "sampledWallThicknessP05Mm": 17.683479418987368,
+            "sampledWallThicknessRays": 96,
+            "sampledWallThicknessHitCoverage": 1,
+            "sampledWallThicknessConnectedShells": 1,
+            "sampledWallThicknessWeldedVertices": 55970,
+            "sampledWallThicknessComponentEdges": 167904,
+            "sampledWallThicknessTriangles": 111936,
+            "sampledWallThicknessTriangleLimit": 500000,
+            "sampledWallThicknessTriangleTests": 10745856,
+            "unsupportedOverhangAreaMm2": 0,
+            "unsupportedOverhangRatio": 0,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 1,
+            "validSurfaceReliefPatches": 1,
+            "surfaceReliefSamples": 27985,
+            "minimumSurfaceRmsRoughnessMm": 0.9782976116843785,
+            "minimumSurfacePeakToValleyMm": 6.2001592866946424,
+            "surfaceReliefGeometryRmsErrorMm": 0.0005189581044615643,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 3.1812679424092494e-7,
+            "surfaceAggregateFeatures": 6959,
+            "surfaceCoarseAggregateFeatures": 1099,
+            "surfaceFineAggregateFeatures": 5860,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        },
+        "surface": {
+          "domain": "surface",
+          "pass": true,
+          "score": 99,
+          "checks": [
+            {
+              "id": "determinism",
+              "label": "동일 입력 재현성",
+              "pass": true,
+              "score": 100,
+              "detail": "구조 fingerprint 일치",
+              "blocking": true
+            },
+            {
+              "id": "finite-scene",
+              "label": "유한 장면 데이터",
+              "pass": true,
+              "score": 100,
+              "detail": "모든 변환값이 유한함",
+              "blocking": true
+            },
+            {
+              "id": "named-parts",
+              "label": "이름 있는 편집 단위",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 메시 명명",
+              "blocking": true
+            },
+            {
+              "id": "texture-payload",
+              "label": "검증 가능한 질감 픽셀",
+              "pass": true,
+              "score": 100,
+              "detail": "4/4 payloads inspectable and glTF-serializable",
+              "blocking": true
+            },
+            {
+              "id": "material-payload",
+              "label": "glTF 재질 의미 보존 가능",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 material payloads serializable",
+              "blocking": true
+            },
+            {
+              "id": "glb-roundtrip",
+              "label": "실제 GLB 재열기",
+              "pass": true,
+              "score": 100,
+              "detail": "브라우저 GLTFLoader 재열기 통과",
+              "blocking": true
+            },
+            {
+              "id": "surface-topology",
+              "label": "표면 샘플 폐쇄 토폴로지",
+              "pass": true,
+              "score": 100,
+              "detail": "경계 0 · 비매니폴드 0 · 퇴화 0 · 자기교차 0",
+              "blocking": true
+            },
+            {
+              "id": "surface-evidence",
+              "label": "표면 생성 근거",
+              "pass": true,
+              "score": 84,
+              "detail": "84/80 · 절차형 수치는 특정 현장의 실측으로 승격하지 않음",
+              "blocking": true
+            },
+            {
+              "id": "surface-uv",
+              "label": "표면 UV 무결성",
+              "pass": true,
+              "score": 99,
+              "detail": "100% 메시 · 유한값 100% · 퇴화 삼각형 1.20%",
+              "blocking": true
+            },
+            {
+              "id": "surface-normals",
+              "label": "표면 노멀 무결성",
+              "pass": true,
+              "score": 100,
+              "detail": "100% 메시 · 유효 100% · 최대 단위오차 3.98e-8",
+              "blocking": true
+            },
+            {
+              "id": "surface-multiscale-relief",
+              "label": "실제 다중 크기 요철 기하",
+              "pass": true,
+              "score": 100,
+              "detail": "1/1 패치 · 27,985 표본 · RMS 0.978 mm · P–V 6.200 mm · 기하 오차 RMS 0.001 / P–V 0.000 mm",
+              "blocking": true
+            },
+            {
+              "id": "surface-aggregate-structure",
+              "label": "굵은·미세 입자 구조",
+              "pass": true,
+              "score": 100,
+              "detail": "6,959 입자 · coarse 1,099 · fine 5,860",
+              "blocking": true
+            },
+            {
+              "id": "surface-pbr-response",
+              "label": "요철·거칠기 PBR 응답",
+              "pass": true,
+              "score": 100,
+              "detail": "1 authored · normal map 1 · roughness map 1",
+              "blocking": true
+            }
+          ],
+          "blockers": [],
+          "warnings": [],
+          "metrics": {
+            "meshes": 1,
+            "triangles": 111936,
+            "namedMeshCoverage": 1,
+            "uvMeshCoverage": 1,
+            "normalMeshCoverage": 1,
+            "uvFiniteCoverage": 1,
+            "degenerateUvTriangleFraction": 0.012006861063464836,
+            "normalValidityCoverage": 1,
+            "maximumNormalUnitError": 3.983618057645799e-8,
+            "pbrSurfaceCoverage": 1,
+            "texturePayloadCoverage": 1,
+            "materialPayloadCoverage": 1,
+            "skeletons": 0,
+            "bones": 0,
+            "animationClips": 0,
+            "animationTracks": 0,
+            "animationSetCoverage": 0,
+            "animationBindingCoverage": 0,
+            "animationMotionCoverage": 0,
+            "animationLoopClosureCoverage": 0,
+            "animationInPlaceCoverage": 0,
+            "maximumAnimationQuaternionError": 0,
+            "deformationMovedVertices": 0,
+            "deformationMaximumMm": 0,
+            "deformationFinite": false,
+            "criticalDeformationJoints": 0,
+            "criticalWeightedJoints": 0,
+            "criticalMovingJoints": 0,
+            "criticalLocalizedJoints": 0,
+            "criticalJointWeightCoverage": 0,
+            "criticalJointMotionCoverage": 0,
+            "criticalJointLocalizationCoverage": 0,
+            "minimumCriticalJointWeightedVertices": 0,
+            "minimumCriticalJointMotionMm": 0,
+            "minimumCriticalJointLocalizationCoverage": 0,
+            "criticalUnweightedJoints": [],
+            "criticalNonMovingJoints": [],
+            "criticalMislocalizedJoints": [],
+            "gameLods": 0,
+            "lodTriangleRatio": 1,
+            "lodMonotonicTriangleReduction": false,
+            "lodSkinWeightCoverage": 0,
+            "lodSkeletonCoverage": 0,
+            "lodNeutralBoundsError": 1,
+            "lodNeutralSilhouetteEnvelopeError": 1,
+            "lodPosedBoundsError": 1,
+            "lodPosedSilhouetteEnvelopeError": 1,
+            "collisionPrimitives": 0,
+            "collisionPrimitiveValidityCoverage": 0,
+            "collisionBoneCoverage": 0,
+            "collisionBoundsOverlapCoverage": 0,
+            "collisionVerticalCoverage": 0,
+            "fingerBones": 0,
+            "fingerWeightedVertices": 0,
+            "fingerAnimationTracks": 0,
+            "facialMorphTargets": 0,
+            "facialMorphAffectedVertices": 0,
+            "facialMorphMaximumMm": 0,
+            "facialMorphLocalizedTargets": 0,
+            "minimumFacialMorphLocalizationCoverage": 0,
+            "facialMorphMislocalizedTargets": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "facialMorphSemanticTargets": 0,
+            "minimumFacialMorphSemanticRegionCoverage": 0,
+            "minimumFacialMorphBlinkSideCoverage": 0,
+            "facialMorphSemanticFailures": [
+              "jaw_open",
+              "smile",
+              "blink_L",
+              "blink_R",
+              "brow_raise"
+            ],
+            "maximumSkinWeightError": 0,
+            "maximumSkinInfluences": 0,
+            "visualHullMeshes": 0,
+            "minimumVisualHullViewIoU": 1,
+            "confidenceWeightedVisualHullIoU": 1,
+            "minimumMeshAxisMm": 43.45347546041012,
+            "declaredMinimumFeatureMm": 33.5,
+            "enclosedVolumeMm3": 10762674.26790627,
+            "surfaceAreaMm2": 636534.8951200972,
+            "volumeThicknessProxyMm": 33.816446986384435,
+            "sampledWallThicknessComplete": false,
+            "sampledWallThicknessMm": 0,
+            "sampledWallThicknessP05Mm": 0,
+            "sampledWallThicknessRays": 0,
+            "sampledWallThicknessHitCoverage": 0,
+            "sampledWallThicknessConnectedShells": 0,
+            "sampledWallThicknessWeldedVertices": 0,
+            "sampledWallThicknessComponentEdges": 0,
+            "sampledWallThicknessTriangles": 0,
+            "sampledWallThicknessTriangleLimit": 0,
+            "sampledWallThicknessTriangleTests": 0,
+            "unsupportedOverhangAreaMm2": 0,
+            "unsupportedOverhangRatio": 0,
+            "electricalPorts": 0,
+            "electricalWires": 0,
+            "electricalRequiredPortCoverage": 0,
+            "electricalPinDocumentationCoverage": 0,
+            "electricalGaugeDocumentationCoverage": 0,
+            "electricalVerificationCoverage": 0,
+            "electricalEndpointErrorMaxMm": 0,
+            "electricalLiveAnchors": false,
+            "electricalDigitalReady": false,
+            "electricalProductionReady": false,
+            "surfaceReliefPatches": 1,
+            "validSurfaceReliefPatches": 1,
+            "surfaceReliefSamples": 27985,
+            "minimumSurfaceRmsRoughnessMm": 0.9782976116843785,
+            "minimumSurfacePeakToValleyMm": 6.2001592866946424,
+            "surfaceReliefGeometryRmsErrorMm": 0.0005189581044615643,
+            "surfaceReliefGeometryPeakToValleyErrorMm": 3.1812679424092494e-7,
+            "surfaceAggregateFeatures": 6959,
+            "surfaceCoarseAggregateFeatures": 1099,
+            "surfaceFineAggregateFeatures": 5860,
+            "referenceBoundSurfaceReliefs": 0,
+            "productionContractRequired": false,
+            "partDecompositionPass": false,
+            "partFeatureCoverage": 0,
+            "partSourceViewCoverage": 0,
+            "partComponentCoverage": 0,
+            "fidelityContractPass": false,
+            "evidenceDeliveryReady": false
+          }
+        }
+      }
+    },
+    "browserValidationLifecycle": {
+      "pass": true,
+      "sameInputDeduplicated": true,
+      "maximumConcurrentTasks": 1,
+      "failureReleasedQueue": true,
+      "capacityRejected": true
+    },
+    "dimensionContract": {
+      "pass": true,
+      "baseline": {
+        "id": "wall_height",
+        "label": "Measured wall height",
+        "target": {
+          "kind": "component",
+          "componentId": "measured_wall"
+        },
+        "axis": "y",
+        "measurement": "size",
+        "expectedMm": 2700,
+        "toleranceMm": 0.1,
+        "evidence": {
+          "status": "measured",
+          "source": "deterministic benchmark fixture"
+        },
+        "space": "world",
+        "actualMm": 2700.000047683716,
+        "deviationMm": 0.0000476837158203125,
+        "pass": true
+      },
+      "regressed": {
+        "id": "wall_height",
+        "label": "Measured wall height",
+        "target": {
+          "kind": "component",
+          "componentId": "measured_wall"
+        },
+        "axis": "y",
+        "measurement": "size",
+        "expectedMm": 2700,
+        "toleranceMm": 0.1,
+        "evidence": {
+          "status": "measured",
+          "source": "deterministic benchmark fixture"
+        },
+        "space": "world",
+        "actualMm": 2400.0000953674316,
+        "deviationMm": 299.99990463256836,
+        "pass": false
+      },
+      "horizontalEnvelopeUnchanged": true
+    },
+    "anchorPitchContract": {
+      "pass": true,
+      "baseline": {
+        "id": "socket_pitch",
+        "label": "Socket centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "socket_0",
+            "anchorId": "pin_center"
+          },
+          "to": {
+            "componentId": "socket_1",
+            "anchorId": "pin_center"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "space": "world",
+        "actualMm": 25,
+        "deviationMm": 0,
+        "pass": true
+      },
+      "regressed": {
+        "id": "socket_pitch",
+        "label": "Socket centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "socket_0",
+            "anchorId": "pin_center"
+          },
+          "to": {
+            "componentId": "socket_1",
+            "anchorId": "pin_center"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "space": "world",
+        "actualMm": 24.5,
+        "deviationMm": 0.5,
+        "pass": false
+      }
+    },
+    "localAxisDimensionContract": {
+      "pass": true,
+      "worldAabbMm": 77.78174682614075,
+      "baseline": {
+        "id": "member_length",
+        "label": "Rotated member local length",
+        "target": {
+          "kind": "component",
+          "componentId": "rotated_member"
+        },
+        "axis": "x",
+        "measurement": "size",
+        "space": "component-local",
+        "expectedMm": 100,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 100.00000149011612,
+        "deviationMm": 0.0000014901161193847656,
+        "pass": true
+      },
+      "regressed": {
+        "id": "member_length",
+        "label": "Rotated member local length",
+        "target": {
+          "kind": "component",
+          "componentId": "rotated_member"
+        },
+        "axis": "x",
+        "measurement": "size",
+        "space": "component-local",
+        "expectedMm": 100,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 90.00000357627869,
+        "deviationMm": 9.999996423721313,
+        "pass": false
+      }
+    },
+    "rotatedLocalPitchContract": {
+      "pass": true,
+      "baseline": {
+        "id": "lens_pitch",
+        "label": "Rotated lens centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_left"
+          },
+          "to": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_right"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "space": "component-local",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 25,
+        "deviationMm": 0,
+        "pass": true
+      },
+      "regressed": {
+        "id": "lens_pitch",
+        "label": "Rotated lens centre pitch",
+        "target": {
+          "kind": "anchorPair",
+          "from": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_left"
+          },
+          "to": {
+            "componentId": "camera_plate",
+            "anchorId": "lens_right"
+          }
+        },
+        "axis": "x",
+        "measurement": "distance",
+        "space": "component-local",
+        "expectedMm": 25,
+        "toleranceMm": 0.05,
+        "evidence": {
+          "status": "datasheet",
+          "source": "deterministic benchmark fixture"
+        },
+        "actualMm": 24.5,
+        "deviationMm": 0.5,
+        "pass": false
+      }
+    },
+    "browserRoundTrip": {
+      "schema": "morphloom.browser-roundtrip/0.4",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
+      "generatedAt": "2026-10-03T07:00:05.113Z",
+      "receiptIntegrityPass": true,
+      "assets": [
+        {
+          "id": "asphalt-print-surface",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "f9b8c2579e0c338e",
+          "buildFingerprint": "d551a6fff505d014",
+          "preparedSceneFingerprint": "0f37aca4277b3c18"
+        },
+        {
+          "id": "cooling-service-assembly",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "67061adf88b909dd",
+          "buildFingerprint": "1105c27b29a66804",
+          "preparedSceneFingerprint": "53fd17548d495ead"
+        },
+        {
+          "id": "field-human-runtime-base",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "5a891fdcf5d3a879",
+          "buildFingerprint": "b2f078bc0e9cd087",
+          "preparedSceneFingerprint": "9ac4dab658b20d9f"
+        },
+        {
+          "id": "laurel-homes-architectural-review",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "8332d83e75c20944",
+          "buildFingerprint": "f29c5455caf31d78",
+          "preparedSceneFingerprint": "e31f630773c891a9"
+        },
+        {
+          "id": "ornate-knife-product-visualization",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "ecd85c646185ed86",
+          "buildFingerprint": "aa81c975351f2d52",
+          "preparedSceneFingerprint": "820a3de6647a4b53"
+        },
+        {
+          "id": "pinterest-concept-architectural-review",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "ed9e3957a6799c27",
+          "buildFingerprint": "d617b036941a397b",
+          "preparedSceneFingerprint": "0dd3479b3d4177f6"
+        },
+        {
+          "id": "single-view-character-previs",
+          "status": "pass",
+          "morphTargetPayloadParity": true,
+          "texturePayloadParity": true,
+          "materialPayloadParity": true,
+          "inputFingerprint": "e59c2b7bf9a54b58",
+          "buildFingerprint": "92d399300e9f3dc1",
+          "preparedSceneFingerprint": "a643566447cf76c3"
+        }
+      ],
+      "currentEngineBinding": {
+        "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
+        "pass": true,
+        "expectedAssets": 7,
+        "verifiedAssets": 7,
+        "duplicateAssetIds": [],
+        "unexpectedAssetIds": [],
+        "blockers": [],
+        "assets": [
+          {
+            "id": "ornate-knife-product-visualization",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "pinterest-concept-architectural-review",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "laurel-homes-architectural-review",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "cooling-service-assembly",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "single-view-character-previs",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "field-human-runtime-base",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "asphalt-print-surface",
+            "pass": true,
+            "blockers": []
+          }
+        ]
+      },
+      "releaseEngineBinding": {
+        "schema": "morphloom.browser-roundtrip-proof-audit/0.1",
+        "pass": true,
+        "expectedAssets": 4,
+        "verifiedAssets": 4,
+        "duplicateAssetIds": [],
+        "unexpectedAssetIds": [
+          "cooling-service-assembly",
+          "pinterest-concept-architectural-review",
+          "single-view-character-previs"
+        ],
+        "blockers": [],
+        "assets": [
+          {
+            "id": "ornate-knife-product-visualization",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "laurel-homes-architectural-review",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "field-human-runtime-base",
+            "pass": true,
+            "blockers": []
+          },
+          {
+            "id": "asphalt-print-surface",
+            "pass": true,
+            "blockers": []
+          }
+        ]
+      }
+    },
+    "gltfStandardValidation": {
+      "pass": true,
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "validFixture": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "corruptFixture": {
+        "status": "blocked",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 1,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "GLB_INVALID_MAGIC"
+        ],
+        "independentRead": {
+          "status": "not-run",
+          "parser": "glTF Transform WebIO",
+          "nodes": 0,
+          "meshes": 0,
+          "materials": 0,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    "blenderRoundTrip": {
+      "schema": "morphloom.blender-roundtrip/0.1",
+      "observedAt": "2026-09-02T03:47:38+09:00",
+      "pass": true,
+      "blenderVersion": "5.2.1 LTS",
+      "source": "laurel-homes-building-b-typical-floor.glb",
+      "sourceBytes": 18987464,
+      "sourceSha256": "e3867a0bb2359c3823c1707870f9f55ebd2fe9a9fde568c7861705ddb8509397",
+      "roundTripBytes": 18503576,
+      "roundTripSha256": "fff11ac2ec9de9449261032eead2978efd4a62ff8f7abce21395d3e24483d53e",
+      "boundsErrorMm": 0,
+      "imported": {
+        "objects": 322,
+        "meshes": 321,
+        "vertices": 566244,
+        "polygons": 188748,
+        "materials": 321,
+        "armatures": 0,
+        "bones": 0,
+        "actions": 0
+      },
+      "reopened": {
+        "objects": 322,
+        "meshes": 321,
+        "vertices": 566244,
+        "polygons": 188748,
+        "materials": 321,
+        "armatures": 0,
+        "bones": 0,
+        "actions": 0
+      },
+      "roundTripStandardValidation": {
+        "status": "pass",
+        "khronosErrors": 0,
+        "khronosWarnings": 0,
+        "independentParser": "glTF Transform WebIO",
+        "independentReadStatus": "pass",
+        "nodes": 322,
+        "meshes": 321,
+        "materials": 321
+      },
+      "scope": "Actual Blender import/export/reimport of the measured Laurel Homes architecture representative. Unity and Unreal application imports remain not run.",
+      "benchmarkAccepted": true
+    },
+    "blenderCrossDomain": {
+      "schema": "morphloom.blender-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "pass": true,
+      "benchmarkAccepted": false,
+      "blenderVersions": [
+        "5.2.1 LTS"
+      ],
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "blocked",
+          "repairApplied": true,
+          "repairedTangents": 432,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "pass",
+          "repairApplied": true,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "blocked",
+          "repairApplied": true,
+          "repairedTangents": 1408,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0.36619603633880615,
+          "boundsToleranceMm": 0.5,
+          "rawReexportStandard": "pass",
+          "repairApplied": false,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "sourceStandard": "pass",
+          "byteDeterministic": true,
+          "semanticParity": true,
+          "boundsErrorMm": 0,
+          "boundsToleranceMm": 0.1,
+          "rawReexportStandard": "pass",
+          "repairApplied": false,
+          "repairedTangents": 0,
+          "finalStandard": "pass"
+        }
+      ]
+    },
+    "blenderCrossDomainEdit": {
+      "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "pass": true,
+      "benchmarkAccepted": false,
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "component": "west_north_window_1",
+          "operation": "translation",
+          "unchangedMeshes": 320,
+          "meshCount": 321,
+          "maximumUnchangedCenterDriftMm": 0.000059604644775390625,
+          "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "component": "pommel_gem",
+          "operation": "translation",
+          "unchangedMeshes": 15,
+          "meshCount": 16,
+          "maximumUnchangedCenterDriftMm": 1.1641532182693481e-7,
+          "maximumUnchangedSizeDriftMm": 0.000014901161193847656,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "component": "power_usb_c",
+          "operation": "translation",
+          "unchangedMeshes": 321,
+          "meshCount": 322,
+          "maximumUnchangedCenterDriftMm": 0.000001862645149230957,
+          "maximumUnchangedSizeDriftMm": 0.000022351741790771484,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "component": "hair_cap",
+          "operation": "translation",
+          "unchangedMeshes": 2,
+          "meshCount": 3,
+          "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+          "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+          "runtimePreserved": true,
+          "riggedPayloadPass": true,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "component": "asphalt_core_sample",
+          "operation": "local-relief",
+          "unchangedMeshes": 0,
+          "meshCount": 1,
+          "maximumUnchangedCenterDriftMm": 0,
+          "maximumUnchangedSizeDriftMm": 0,
+          "runtimePreserved": true,
+          "riggedPayloadPass": null,
+          "finalInventoryPreserved": true,
+          "finalStandard": "pass"
+        }
+      ]
+    },
+    "unityCrossDomain": {
+      "schema": "morphloom.unity-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "pass": false,
+      "status": "not-run",
+      "blockers": [
+        {
+          "code": "no-revision-bound-report",
+          "detail": "No Unity report exists for the current compiler revision."
+        }
+      ],
+      "cases": []
+    },
+    "godotCrossDomain": {
+      "schema": "morphloom.godot-cross-domain-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "generatedAt": "2026-10-03T06:56:45.834Z",
+      "pass": true,
+      "status": "pass",
+      "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",
+      "environment": {
+        "godotVersion": "4.7.2-stable (official)",
+        "godotBinary": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/native-tools/godot/app/Godot.app/Contents/MacOS/Godot",
+        "godotBinarySha256": "c7cccbf8fb143e34e02fd6521e09be2c2b974f0d5db080b19071c9c570718ccf"
+      },
+      "cases": [
+        {
+          "id": "laurel-homes-architecture",
+          "domain": "architecture",
+          "pass": true,
+          "source": {
+            "meshes": 321,
+            "vertices": 566244,
+            "triangles": 188748,
+            "materials": 321,
+            "textures": 21,
+            "textureSlots": 642,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              42.72720001430511,
+              2.9200000232458114,
+              21.621399949932098
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/laurel-homes-architecture.glb",
+            "source_sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                21.3635997772217,
+                2.70000004768372,
+                8.27120018005371
+              ],
+              "bounds_max_nodes": [
+                "east_north_masonry_pier_6",
+                "west_north_head_wall",
+                "balcony_north_west_slab"
+              ],
+              "bounds_min_meters": [
+                -21.3635997772217,
+                -0.219999998807907,
+                -13.3501996994019
+              ],
+              "bounds_min_nodes": [
+                "west_north_masonry_pier_1",
+                "south_connector_bar_floor_slab",
+                "entrance_canopy"
+              ],
+              "bounds_size_meters": [
+                42.7271995544434,
+                2.92000007629395,
+                21.6213989257812
+              ],
+              "materials": 321,
+              "meshes": 321,
+              "nodes": 323,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 963,
+              "textures": 20,
+              "triangles": 188748,
+              "vertices": 566244
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.001024150897421805,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "ornate-knife-product",
+          "domain": "industrial-design",
+          "pass": true,
+          "source": {
+            "meshes": 16,
+            "vertices": 18617,
+            "triangles": 18930,
+            "materials": 16,
+            "textures": 13,
+            "textureSlots": 32,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.1202733686629676,
+              0.4729999982118607,
+              0.04067132624003629
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/ornate-knife-product.glb",
+            "source_sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.0601366870105267,
+                0.34400001168251,
+                0.0203356631100178
+              ],
+              "bounds_max_nodes": [
+                "guard_scroll_right",
+                "blade_core",
+                "pommel"
+              ],
+              "bounds_min_meters": [
+                -0.0601366870105267,
+                -0.12899999320507,
+                -0.0203356631100178
+              ],
+              "bounds_min_nodes": [
+                "guard_scroll_left",
+                "pommel",
+                "pommel"
+              ],
+              "bounds_size_meters": [
+                0.120273374021053,
+                0.47299998998642,
+                0.0406713262200356
+              ],
+              "materials": 16,
+              "meshes": 16,
+              "nodes": 18,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 48,
+              "textures": 12,
+              "triangles": 18930,
+              "vertices": 18615
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.00000822544066192421,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "cooling-electronics-assembly",
+          "domain": "electronics",
+          "pass": true,
+          "source": {
+            "meshes": 322,
+            "vertices": 353947,
+            "triangles": 272560,
+            "materials": 322,
+            "textures": 17,
+            "textureSlots": 598,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.3170000017285347,
+              0.1504999999962747,
+              0.20400000010430813
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/cooling-electronics-assembly.glb",
+            "source_sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.162000000476837,
+                0.12049999833107,
+                0.101999998092651
+              ],
+              "bounds_max_nodes": [
+                "md10cB",
+                "cold_plate",
+                "frame_front"
+              ],
+              "bounds_min_meters": [
+                -0.155000001192093,
+                -0.0300000011920929,
+                -0.101999998092651
+              ],
+              "bounds_min_nodes": [
+                "frame_front",
+                "frame_front",
+                "frame_rear"
+              ],
+              "bounds_size_meters": [
+                0.31700000166893,
+                0.150499999523163,
+                0.203999996185303
+              ],
+              "materials": 322,
+              "meshes": 322,
+              "nodes": 325,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "texture_slots": 897,
+              "textures": 16,
+              "triangles": 272560,
+              "vertices": 353631
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.00000391900512042298,
+            "boundsToleranceMm": 0.1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "field-human-runtime",
+          "domain": "animation-game",
+          "pass": true,
+          "source": {
+            "meshes": 3,
+            "vertices": 31735,
+            "triangles": 51934,
+            "materials": 3,
+            "textures": 4,
+            "textureSlots": 6,
+            "skins": 2,
+            "joints": 98,
+            "maximumJointsPerSkin": 49,
+            "morphTargets": 10,
+            "animationClips": 22,
+            "animationNames": [
+              "morphloom_breathe_idle",
+              "morphloom_crouch_idle",
+              "morphloom_crouch_walk",
+              "morphloom_hand_gesture",
+              "morphloom_idle_preview",
+              "morphloom_jump_air",
+              "morphloom_jump_land",
+              "morphloom_jump_start",
+              "morphloom_pick_up",
+              "morphloom_point",
+              "morphloom_pull",
+              "morphloom_push",
+              "morphloom_run_cycle",
+              "morphloom_sprint_cycle",
+              "morphloom_strafe_left",
+              "morphloom_strafe_right",
+              "morphloom_turn_in_place",
+              "morphloom_turn_left_90",
+              "morphloom_turn_right_90",
+              "morphloom_walk_backward",
+              "morphloom_walk_cycle",
+              "morphloom_wave"
+            ],
+            "boundsSizeMeters": [
+              1.1199051141738892,
+              1.79944139637053,
+              0.4468359053134918
+            ]
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/field-human-runtime.glb",
+            "source_sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+            "stats": {
+              "animation_clips": 22,
+              "animation_names": [
+                "morphloom_breathe_idle",
+                "morphloom_crouch_idle",
+                "morphloom_crouch_walk",
+                "morphloom_hand_gesture",
+                "morphloom_idle_preview",
+                "morphloom_jump_air",
+                "morphloom_jump_land",
+                "morphloom_jump_start",
+                "morphloom_pick_up",
+                "morphloom_point",
+                "morphloom_pull",
+                "morphloom_push",
+                "morphloom_run_cycle",
+                "morphloom_sprint_cycle",
+                "morphloom_strafe_left",
+                "morphloom_strafe_right",
+                "morphloom_turn_in_place",
+                "morphloom_turn_left_90",
+                "morphloom_turn_right_90",
+                "morphloom_walk_backward",
+                "morphloom_walk_cycle",
+                "morphloom_wave"
+              ],
+              "blend_shapes": 10,
+              "bones": 49,
+              "bounds_max_meters": [
+                0.559952557086945,
+                1.79944145679474,
+                0.223417952656746
+              ],
+              "bounds_max_nodes": [
+                "morphloom_human_body",
+                "hair_cap",
+                "morphloom_human_body"
+              ],
+              "bounds_min_meters": [
+                -0.559952557086945,
+                0,
+                -0.223417952656746
+              ],
+              "bounds_min_nodes": [
+                "morphloom_human_body",
+                "morphloom_human_body",
+                "morphloom_human_body"
+              ],
+              "bounds_size_meters": [
+                1.11990511417389,
+                1.79944145679474,
+                0.446835905313492
+              ],
+              "materials": 3,
+              "meshes": 3,
+              "nodes": 8,
+              "skeletons": 1,
+              "skinned_meshes": 2,
+              "texture_slots": 9,
+              "textures": 4,
+              "triangles": 51934,
+              "vertices": 28180
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.000060424210079901286,
+            "boundsToleranceMm": 1,
+            "blockers": []
+          }
+        },
+        {
+          "id": "asphalt-print-surface",
+          "domain": "3d-printing",
+          "pass": true,
+          "source": {
+            "meshes": 1,
+            "vertices": 335808,
+            "triangles": 111936,
+            "materials": 1,
+            "textures": 3,
+            "textureSlots": 3,
+            "skins": 0,
+            "joints": 0,
+            "maximumJointsPerSkin": 0,
+            "morphTargets": 0,
+            "animationClips": 0,
+            "animationNames": [],
+            "boundsSizeMeters": [
+              0.6000000238418579,
+              0.04345347546041012,
+              0.44999998807907104
+            ],
+            "surfaceRelief": {
+              "samples": 165888,
+              "rms_roughness_mm": 0.97881656978884,
+              "peak_to_valley_mm": 6.200158968567848
+            }
+          },
+          "godot": {
+            "blockers": [],
+            "godot_version": "4.7.2-stable (official)",
+            "pass": true,
+            "schema": "morphloom.godot-cross-domain-import/0.1",
+            "source": "res://fixtures/asphalt-print-surface.glb",
+            "source_sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+            "stats": {
+              "animation_clips": 0,
+              "animation_names": [],
+              "blend_shapes": 0,
+              "bones": 0,
+              "bounds_max_meters": [
+                0.300000011920929,
+                0.0234534777700901,
+                0.224999994039536
+              ],
+              "bounds_max_nodes": [
+                "asphalt_core_sample",
+                "asphalt_core_sample",
+                "asphalt_core_sample"
+              ],
+              "bounds_min_meters": [
+                -0.300000011920929,
+                -0.0199999995529652,
+                -0.224999994039536
+              ],
+              "bounds_min_nodes": [
+                "asphalt_core_sample",
+                "asphalt_core_sample",
+                "asphalt_core_sample"
+              ],
+              "bounds_size_meters": [
+                0.600000023841858,
+                0.0434534773230553,
+                0.449999988079071
+              ],
+              "materials": 1,
+              "meshes": 1,
+              "nodes": 3,
+              "skeletons": 0,
+              "skinned_meshes": 0,
+              "surface_relief": {
+                "peak_to_valley_mm": 6.20025396347046,
+                "rms_roughness_mm": 0.978816213524551,
+                "samples": 165888
+              },
+              "texture_slots": 4,
+              "textures": 3,
+              "triangles": 111936,
+              "vertices": 335808
+            }
+          },
+          "parity": {
+            "boundsErrorMm": 0.0000018626451839254266,
+            "boundsToleranceMm": 0.1,
+            "surfaceRelief": {
+              "rmsErrorMm": 3.5626428906976315e-7,
+              "peakToValleyErrorMm": 0.00009499490261166699,
+              "toleranceMm": 0.02
+            },
+            "blockers": []
+          }
+        }
+      ],
+      "blockers": [],
+      "limitation": "This proves native Godot import integrity, not gameplay quality, physics tuning, target-device performance, or final art approval.",
+      "benchmarkAccepted": true
+    },
+    "prusaSlicer": {
+      "schema": "morphloom.prusaslicer-print-proof/0.1",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+      "generatedAt": "2026-10-03T06:56:58.076Z",
+      "pass": true,
+      "status": "pass",
+      "source": {
+        "file": "asphalt-print-surface.stl",
+        "bytes": 5596884,
+        "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+        "byteDeterministic": true,
+        "coordinateUnit": "mm",
+        "axisConvention": "print-z-up",
+        "binary": {
+          "facets": 111936,
+          "minimum": [
+            -300,
+            -225,
+            -20
+          ],
+          "maximum": [
+            300,
+            225,
+            23.453475952148438
+          ],
+          "size": [
+            600,
+            450,
+            43.45347595214844
+          ]
+        }
+      },
+      "native": {
+        "application": "prusa-slicer",
+        "version": "2.9.6",
+        "binary": "/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer",
+        "binarySha256": "b79b464d2f27ce163f361eada916c3901095db02b196a665f9ac85ffbc6d7ca7",
+        "info": {
+          "size": [
+            600,
+            450,
+            43.453476
+          ],
+          "minimum": [
+            -300,
+            -225,
+            -20
+          ],
+          "maximum": [
+            300,
+            225,
+            23.453476
+          ],
+          "facets": 111936,
+          "manifold": true,
+          "parts": 1,
+          "volumeMm3": 10761761
+        },
+        "boundsErrorMm": 4.7851564488610165e-8,
+        "sliceProfile": {
+          "bedMm": [
+            650,
+            500
+          ],
+          "centeredAtMm": [
+            325,
+            250
+          ],
+          "brimWidthMm": 5,
+          "nozzleDiameterMm": 2,
+          "layerHeightMm": 1,
+          "infillPercent": 0,
+          "perimeters": 1,
+          "coarseValidationProfile": true
+        },
+        "gcode": {
+          "bytes": 7070403,
+          "sha256": "fce5b1324f8fa0ba43cb59f9bde7dd634be0eb00168ec6594fab54d33c108722",
+          "layers": 43,
+          "extrusionMoves": 190172
+        }
+      },
+      "blockers": [],
+      "limitation": "This proves native manifold reopen and bounded coarse toolpath generation under a declared generic 650 × 500 mm virtual FFF envelope. It is not a production print profile; a real printer, nozzle, filament, tolerances, supports, orientation and safety still require target-machine validation.",
+      "benchmarkAccepted": true
+    },
+    "staticDelivery": {
+      "schema": "morphloom.static-delivery-proof/0.4",
+      "generatedAt": "2026-10-03T06:35:52.436Z",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
+      "assetId": "asphalt-surface",
+      "expectedSourceTriangles": 111936,
+      "assetPack": {
+        "source": "asphalt-pack.zip",
+        "bytes": 13021998,
+        "sha256": "71af978d8e7c3e054221efca51f59d62b358fce91b6b72a40520f8b386eaed3e",
+        "compilerRevision": "morphloom-compiler/0.39.0",
+        "inputFingerprint": "f9b8c2579e0c338e",
+        "browserRoundTrip": "pass"
+      },
+      "status": "pass",
+      "blenderVersion": "5.2.1 LTS",
+      "formats": {
+        "obj": {
+          "source": "asphalt.obj",
+          "bytes": 51036132,
+          "sha256": "2db5177d9226da384ea7017943bf537d2d70da55543e9a0afafa6178bbe17176",
+          "meshes": 1,
+          "vertices": 335808,
+          "triangles": 111936,
+          "coordinateUnit": "m",
+          "coordinateScaleFromMeters": 1,
+          "axisConvention": "source-y-up",
+          "bounds": {
+            "min": [
+              -0.30000001192092896,
+              -0.22499999403953552,
+              -0.020000016316771507
+            ],
+            "max": [
+              0.30000001192092896,
+              0.22499999403953552,
+              0.023453492671251297
+            ],
+            "size": [
+              0.6000000238418579,
+              0.44999998807907104,
+              0.043453507125377655
+            ]
+          }
+        },
+        "stl": {
+          "source": "asphalt.stl",
+          "bytes": 5596884,
+          "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+          "meshes": 1,
+          "vertices": 55970,
+          "triangles": 111936,
+          "coordinateUnit": "mm",
+          "coordinateScaleFromMeters": 1000,
+          "axisConvention": "print-z-up",
+          "bounds": {
+            "min": [
+              -300,
+              -225,
+              -20
+            ],
+            "max": [
+              300,
+              225,
+              23.453475952148438
+            ],
+            "size": [
+              600,
+              450,
+              43.45347595214844
+            ]
+          }
+        },
+        "ply": {
+          "source": "asphalt.ply",
+          "bytes": 12201286,
+          "sha256": "1dbe6e98b5ff7ce7ab9717ca3cb4d77d92f073f326e484de42814015a5a65d1e",
+          "meshes": 1,
+          "vertices": 335808,
+          "triangles": 111936,
+          "coordinateUnit": "m",
+          "coordinateScaleFromMeters": 1,
+          "axisConvention": "source-y-up",
+          "bounds": {
+            "min": [
+              -0.30000001192092896,
+              -0.019999999552965164,
+              -0.22499999403953552
+            ],
+            "max": [
+              0.30000001192092896,
+              0.023453475907444954,
+              0.22499999403953552
+            ],
+            "size": [
+              0.6000000238418579,
+              0.04345347732305527,
+              0.44999998807907104
+            ]
+          }
+        }
+      },
+      "parity": {
+        "triangles": 111936,
+        "maximumAxisNormalizedEnvelopeDriftMm": 0.00003117322922019383
+      },
+      "usdz": {
+        "source": "asphalt.usdz",
+        "bytes": 37239190,
+        "sha256": "0a6942cd724c21ee3355d052c1f7554368406897b03ff7c7101b0e0a5caf7325",
+        "validator": "/usr/bin/usdchecker",
+        "status": "pass"
+      },
+      "blockers": [],
+      "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
+      "benchmarkAccepted": true,
+      "competitiveBlockers": []
+    },
+    "cameraCalibration": {
+      "status": "calibrated",
+      "azimuthDegrees": 28,
+      "pixelsPerWorldUnit": 1.7999999999999998,
+      "offsetPixels": [
+        320.00000000000006,
+        180
+      ],
+      "rmsReprojectionErrorPixels": 5.859285502108464e-14,
+      "maximumReprojectionErrorPixels": 6.355287432313019e-14,
+      "anchorCount": 5,
+      "blockers": []
+    },
+    "perspectiveCameraCalibration": {
+      "status": "calibrated",
+      "projectionMatrix": [
+        1.1533639306928414,
+        2.498001805406602e-16,
+        -0.026149091553844973,
+        0.009956384905462573,
+        -7.979727989493313e-17,
+        -1.1533639306928416,
+        -0.0008656631136260608,
+        -0.027283395518131207,
+        2.1510571102112408e-16,
+        1.3600232051658168e-15,
+        0.24100319692352426,
+        1
+      ],
+      "worldCenter": [
+        0.3125,
+        0.0625,
+        0.625
+      ],
+      "worldScale": 3.0426653611595214,
+      "imageCenter": [
+        335.8704148799726,
+        240.52538852951147
+      ],
+      "imageScale": 146.26973616656002,
+      "rmsReprojectionErrorPixels": 7.105427357601002e-14,
+      "maximumReprojectionErrorPixels": 1.1368683772161603e-13,
+      "anchorCount": 8,
+      "blockers": []
+    },
+    "multiviewExtentInference": {
+      "status": "inferred",
+      "xExtent": 119.99999999999999,
+      "zExtent": 69.99999999999997,
+      "rmsResidual": 1.0048591735576161e-14,
+      "normalizedRmsResidual": 1.0577464984817012e-16,
+      "maximumResidual": 1.4210854715202004e-14,
+      "observations": 4,
+      "blockers": []
+    },
+    "sparseSilhouetteAudit": {
+      "pass": true,
+      "mode": "sparse-structure",
+      "thresholds": {
+        "maximumSparseDensity": 0.12,
+        "maximumHybridDensity": 0.25,
+        "wholeIoU": 0.75,
+        "hybridWholeIoU": 0.7,
+        "primaryMassIoU": 0.7,
+        "thinFeatureScore": 0.8
+      },
+      "minimumWholeIoU": 0.39,
+      "minimumPrimaryMassIoU": 0.78,
+      "minimumThinFeatureScore": 0.86,
+      "blockers": []
+    }
+  },
+  "capabilityMatrix": [
+    {
+      "capability": "evidence-first semantic part contract independent of generated geometry",
+      "img2threejs": "detail inventory documented; independent pre-geometry omission receipt not established in pinned audit",
+      "morphloom": "yes—source views, observed counts, required geometry class, relationships, and component realization fail closed"
+    },
+    {
+      "capability": "measured 3D↔2D camera anchor solve with reprojection-error gate",
+      "img2threejs": "camera contract documented; numeric anchor solver not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "non-coplanar perspective-camera DLT receipt recomputed from bound anchors",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—positive projective depth and per-pixel residual gate"
+    },
+    {
+      "capability": "multi-view projected X/Z extent inference with contradictory-view rejection",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "sparse assembly proof combining primary-mass IoU and distance-aware thin-member coverage",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—every view must independently pass both body and thin-member gates"
+    },
+    {
+      "capability": "strict detail inventory",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "locked staged passes",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "per-feature thresholds",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "calibrated source-camera proof",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "fail-closed same-input visual protocol with exact full-canvas framing, pixel ratio, color/tone/light lock and hash-bound browser receipts",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes—independent foreground fitting cannot hide offset/scale errors; claims block on any protocol, receipt, scene, camera, or PNG mismatch"
+    },
+    {
+      "capability": "bounded welded visual-hull carving",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "per-view visual-hull reprojection audit and bounded calibration tolerance",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "smooth implicit Surface Nets with bounded manifold, positive-volume and outward-winding gates",
+      "img2threejs": "Surface Nets",
+      "morphloom": "yes + fail-closed manifold/winding refinement"
+    },
+    {
+      "capability": "foreground-normalized interior bands",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "deterministic material region comparator",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "reference-bound spatial PBR provenance gate",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented—visible-area-weighted base-colour, metallic, roughness, normal, and emissive response must bind to reference/measured provenance; constants and generic noise cannot satisfy fidelity"
+    },
+    {
+      "capability": "bounded reference-image de-lighting with recorded correction evidence",
+      "img2threejs": "box-blurred luminance proxy, single-image confidence capped",
+      "morphloom": "linear-light bounded field, global-exposure preservation, <=2% clipping and <=0.015 robust-luminance regression fail-closed gate"
+    },
+    {
+      "capability": "bounded correction and cost ceiling",
+      "img2threejs": "yes",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "architecture and measured assemblies",
+      "img2threejs": "roadmap",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "electrical connectivity audit",
+      "img2threejs": "not documented",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "exact-byte glTF 2.0 specification and independent parser validation",
+      "img2threejs": "Three.js factory focus",
+      "morphloom": "Khronos Validator + glTF Transform + Three.js reopen"
+    },
+    {
+      "capability": "same-input GLB byte reproducibility",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "blocked"
+    },
+    {
+      "capability": "Blender application import/export/reimport execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "blocked"
+    },
+    {
+      "capability": "DCC re-export sanitation with final-byte conformance gate",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "blocked"
+    },
+    {
+      "capability": "isolated partial editing in a production DCC with non-target geometry, UV, material, hierarchy, rig, and animation preservation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "blocked"
+    },
+    {
+      "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "111,936 triangles preserved for asphalt-surface; STL uses explicit millimetre coordinates and printer Z-up; unit-normalized envelope drift 0.000031 mm"
+    },
+    {
+      "capability": "USDZ Apple conformance validation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "pass—/usr/bin/usdchecker"
+    },
+    {
+      "capability": "Unity application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "not-run: no-revision-bound-report"
+    },
+    {
+      "capability": "Godot application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "Godot 4.7.2-stable (official): five-domain native PackedScene import parity plus delivered-vertex asphalt relief pass"
+    },
+    {
+      "capability": "PrusaSlicer manifold reopen and toolpath execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "PrusaSlicer 2.9.6: 111,936 facets, Z-up manifold reopen and 43 toolpath layers"
+    },
+    {
+      "capability": "Unreal application import execution",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "application-import-not-run"
+    },
+    {
+      "capability": "bounded serialized browser GLB validation with exact input/build/prepared-scene binding, morph-, texture-, and material-payload parity, same-input deduplication, and stale-result guard",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "4/4 release receipts exactly match the current deterministic builds across five delivery domains; stale non-release receipts are reported separately"
+    },
+    {
+      "capability": "pixel-level texture content and glTF-semantic sampler fingerprint with actual binary round-trip",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented; lossless PNG pixels, slot identity, UV channel/transform, color space, wrapping and filtering survive an actual textured GLB reopen; glTF-inexpressible mapping, format, type, anisotropy, transform or mip state fails closed while GPU-only upload state is ignored"
+    },
+    {
+      "capability": "glTF scalar and optical material fingerprint with fail-closed GLB parity",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "implemented; opacity, emission, normal/AO strength, clearcoat, transmission/volume, IOR, specular, sheen, iridescence, anisotropy, or unsupported semantics block drift"
+    },
+    {
+      "capability": "skeletal animation breadth",
+      "img2threejs": "latest showcase: 41–42 bones and 10–27 clips",
+      "morphloom": "49 bones and 22 semantic delivery clips / 185 tracks; current browser receipt bound"
+    },
+    {
+      "capability": "named editable facial controls with spatial and semantic delta localization",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "5/5 non-zero targets with >=98% head localization, >=90% semantic-region localization, and >=90% blink-side localization; current browser receipt bound"
+    },
+    {
+      "capability": "per-joint weighted deformation/localization and motion/loop/root-motion checks",
+      "img2threejs": "not established in pinned core audit",
+      "morphloom": "10/10 bilateral shoulder, elbow, hip, knee, and ankle joints measured with >=98% influence localization; current browser receipt bound"
+    },
+    {
+      "capability": "real skinned LOD1 with neutral/posed 3-axis silhouette, bounds and skin-weight preservation plus pose-aligned collision semantics",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "16-part rig: endpoint/midpoint/height/orientation/bone/body-overlap/vertical-coverage gates; current browser receipt bound"
+    },
+    {
+      "capability": "finite non-degenerate UV triangles and near-unit normal model gate",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes; current browser receipt bound"
+    },
+    {
+      "capability": "millimetre 3D-print topology, global thickness screening, connected-shell feature-space wall rays, feature and 45-degree overhang audit",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "compiled architecture top-projection IoU, over/underbuild, protected-void, shell and >=80% micro-surface gate",
+      "img2threejs": "roadmap",
+      "morphloom": "yes; current browser receipt bound"
+    },
+    {
+      "capability": "concave polygon plan contract with self-intersection rejection and protected courtyard audit",
+      "img2threejs": "roadmap",
+      "morphloom": "yes; current browser receipt bound"
+    },
+    {
+      "capability": "evidence-bound X/Y/Z size and datum remeasurement on compiled world-space geometry with GLB audit preservation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "evidence-bound hole, pin, lens and connector pitch between transformed component-local datums",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "rotation-safe component-local length, width and thickness remeasurement without world-AABB inflation",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "rotation-safe same-part hole, pin and lens pitch along component-local axes",
+      "img2threejs": "not established in pinned audit",
+      "morphloom": "yes"
+    },
+    {
+      "capability": "same-reference perceptual winner",
+      "img2threejs": "not established here",
+      "morphloom": "not established here"
+    }
+  ]
+}

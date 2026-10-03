@@ -30,7 +30,7 @@ Sceliph는 사진·도면·실측값·자연어 요구를 선언형 IR로 정리
 
 | 범위 | 확인된 결과 | 제한 |
 |---|---|---|
-| 게시본 테스트·타입 검사·벤치마크·빌드 | 110개 파일 / 799개 테스트 PASS, `check`·`benchmark`·`build` PASS | 임의 입력의 품질 인증이 아님 |
+| 게시본 테스트·타입 검사·벤치마크·빌드 | 111개 파일 / 805개 테스트 PASS, `check`·`benchmark`·`build` PASS | 임의 입력의 품질 인증이 아님 |
 | 이동 결과의 별도 editable sourceJSON | 작은·기본·큰 베어링과 기어 4사례 PASS | 단일 embedded native source, identity 부모, 선언된 평행이동만 |
 | 실제 브라우저 편집 흐름 | 저장·새 세션 재열기·GLB 반복 생성·추가 편집·Undo/Redo PASS4 | 현재 이동 GLB의 원본 참고 metadata는 수정하지 않음 |
 | 원본 결합 UV·중요 특징 검사 | 기존 24개 톱니 검사와 한 톱니 손상 FAIL 유지 | 5% 임계값 유지; 전체 평균으로 대체하지 않음 |
@@ -42,7 +42,8 @@ Sceliph는 사진·도면·실측값·자연어 요구를 선언형 IR로 정리
 
 Blender 기본 import의 normal 오차는 남아 있습니다. 별도의 선택형 source-normal import와 단일 스레드 벤치마크 프로필은 제한된 사례에서 검증했습니다. 회전·스케일 부모의 변환 지원은 확대하지 않았습니다. 기존 `releaseAllowed` 기준과 검사 임계값을 완화하지 않았습니다.
 
-- [최신 검증 경계 수정·799개 테스트·전체 gate 상태](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [이전 검증 경계 수정·799개 테스트·당시 gate 상태](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [현재 lathe 법선 편집·805개 테스트·재열기 증거와 gate 실패 범위](./docs/ASSEMBLY_LATHE_NORMAL_STATUS.ko.md)
 - [Blender tangent 결정성 검증](./docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)
 - [체크포인트·모델링 수학과 한계](./docs/CHECKPOINT_20261003_2340.ko.md)
 - [현재 작업 상태](./docs/MORPHLOOM_WORK_STATE.ko.md)

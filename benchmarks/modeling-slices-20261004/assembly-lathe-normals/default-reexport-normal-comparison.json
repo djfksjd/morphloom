@@ -1,0 +1,27 @@
+{
+  "schema": "morphloom.native-normal-payload-comparison/0.1",
+  "pass": true,
+  "meshId": "bushing",
+  "before": {
+    "sha256": "83cb41f99512f236037fb50593da7edb255bd837c0b49d2c5a3120cb3a6eed9b",
+    "kind": "actual GLB NORMAL accessor"
+  },
+  "after": {
+    "sha256": "dd57384d47910ee42f3a281f2eef3cf324431d67fe7bc4d7670c888dd17b5d2d",
+    "kind": "actual GLB NORMAL accessor"
+  },
+  "translationMm": [
+    0,
+    0,
+    0
+  ],
+  "corners": 768,
+  "worldCoordinates": 128,
+  "bidirectionalSamples": 1536,
+  "coordinateToleranceMeters": 0.000001,
+  "maxCoordinateDriftMeters": 0,
+  "maxNormalDifferenceDeg": 0.005247533705357901,
+  "worstCoordinateMicrometers": "13731,6000,2731",
+  "fixedToleranceDeg": 0.01,
+  "scope": "Raw NORMAL payload or actual first-import normals; worst per selected mesh, no quality averaging or geometry regeneration"
+}

@@ -1,0 +1,104 @@
+[
+  {
+    "geometry": {
+      "op": "lathe",
+      "profile": [
+        [
+          8,
+          -6
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          14,
+          -6
+        ],
+        [
+          8,
+          -6
+        ]
+      ],
+      "segments": 16
+    },
+    "triangles": 128,
+    "capErrorDeg": 66.8468783581192,
+    "radialErrorDeg": 32.14965461601967,
+    "positionSha256": "aae70692dd06c0df23e07afc1d47816d58d19fb5705d386f28bb03f17e13468b",
+    "uvSha256": "b440da28fdfe60be0998bef281ee8eb76a3e7d6df6565a56be2807bafc6b162e",
+    "normalSha256": "8a48c0a44cfeced301b0e10868c266bb49746fc66f5bb8d553e8f352e2db9b12"
+  },
+  {
+    "geometry": {
+      "op": "lathe",
+      "profile": [
+        [
+          8,
+          -6
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          14,
+          -6
+        ],
+        [
+          8,
+          -6
+        ]
+      ],
+      "segments": 32
+    },
+    "triangles": 256,
+    "capErrorDeg": 66.81258395730022,
+    "radialErrorDeg": 32.04087595195638,
+    "positionSha256": "45a754f41ff69f23762dc0643fc34851d77b12915c63aaa3d38dad934826a907",
+    "uvSha256": "b590c6104a4cc13b4a67346302a8969425753b124ae1c2435be59950aa1b136b",
+    "normalSha256": "9265c867e12299e764126e0a616fce69a9fdabaf10ee5a4179775e1f73a416d5"
+  },
+  {
+    "geometry": {
+      "op": "lathe",
+      "profile": [
+        [
+          8,
+          -6
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          14,
+          -6
+        ],
+        [
+          8,
+          -6
+        ]
+      ],
+      "segments": 128
+    },
+    "triangles": 1024,
+    "capErrorDeg": 66.80211012604293,
+    "radialErrorDeg": 32.00759995563472,
+    "positionSha256": "39395ce73a98df3af00305a82cb24a921ced08f04313fa04b19486502e0d22d1",
+    "uvSha256": "8021d920043f8dde9abfe20e4356ee5a87041eb33927b994eaa9fdc71f89a2b3",
+    "normalSha256": "3bce6288f544c33a41d02dab73f01822dbb5e501901b69fe0a325e8936aaf7e5"
+  }
+]

@@ -1,0 +1,362 @@
+[
+  {
+    "id": "small",
+    "pass": true,
+    "scope": "Independent WebIO actual accessor bytes, index, material values, named hierarchy and transforms; only target NORMAL differs",
+    "nodes": [
+      {
+        "name": "Authored machined bushing small",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "bushing",
+        "parent": "Authored machined bushing small",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": null,
+            "material": "raw metal bushing [raw]",
+            "attributes": {
+              "POSITION": "9ef54e634cdfef65eecf69878b7591f88389190dc226be2eb2bbaf5fd07d25cf",
+              "NORMAL": "8a48c0a44cfeced301b0e10868c266bb49746fc66f5bb8d553e8f352e2db9b12",
+              "TEXCOORD_0": "b440da28fdfe60be0998bef281ee8eb76a3e7d6df6565a56be2807bafc6b162e"
+            }
+          }
+        ]
+      },
+      {
+        "name": "preserved",
+        "parent": "Authored machined bushing small",
+        "translation": [
+          0.0125,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": "e59a7dccaf35e5cae257b0f78b1aa4f45545b18f697df139ebc290c613328fcd",
+            "material": "raw metal preserved [raw]",
+            "attributes": {
+              "POSITION": "c0401bd50fe0afd147ce54fd1a9888e981529a8629300e41500bc0a7089c1fa1",
+              "NORMAL": "a0ea0bdaf0e47f50aa47ecdf92a31fa335333e9267c0d691bea33b46e4f08684",
+              "TEXCOORD_0": "066e363e38d4a92e216c8f8154caf389481b663eb999d97ab8b4a0cb55be73e5"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "default",
+    "pass": true,
+    "scope": "Independent WebIO actual accessor bytes, index, material values, named hierarchy and transforms; only target NORMAL differs",
+    "nodes": [
+      {
+        "name": "Authored machined bushing default",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "bushing",
+        "parent": "Authored machined bushing default",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": null,
+            "material": "raw metal bushing [raw]",
+            "attributes": {
+              "POSITION": "45a754f41ff69f23762dc0643fc34851d77b12915c63aaa3d38dad934826a907",
+              "NORMAL": "9265c867e12299e764126e0a616fce69a9fdabaf10ee5a4179775e1f73a416d5",
+              "TEXCOORD_0": "b590c6104a4cc13b4a67346302a8969425753b124ae1c2435be59950aa1b136b"
+            }
+          }
+        ]
+      },
+      {
+        "name": "preserved",
+        "parent": "Authored machined bushing default",
+        "translation": [
+          0.025,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": "e59a7dccaf35e5cae257b0f78b1aa4f45545b18f697df139ebc290c613328fcd",
+            "material": "raw metal preserved [raw]",
+            "attributes": {
+              "POSITION": "f3e35aeb5e8e20dd1ad537d9e4a890830ed294d1641d72488b8c6cab715ac507",
+              "NORMAL": "a0ea0bdaf0e47f50aa47ecdf92a31fa335333e9267c0d691bea33b46e4f08684",
+              "TEXCOORD_0": "066e363e38d4a92e216c8f8154caf389481b663eb999d97ab8b4a0cb55be73e5"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "large",
+    "pass": true,
+    "scope": "Independent WebIO actual accessor bytes, index, material values, named hierarchy and transforms; only target NORMAL differs",
+    "nodes": [
+      {
+        "name": "Authored machined bushing large",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "bushing",
+        "parent": "Authored machined bushing large",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": null,
+            "material": "raw metal bushing [raw]",
+            "attributes": {
+              "POSITION": "fcb44fa553425dac523ec9146a1fc89e057359ca6af995652c5659f731be4823",
+              "NORMAL": "3bce6288f544c33a41d02dab73f01822dbb5e501901b69fe0a325e8936aaf7e5",
+              "TEXCOORD_0": "8021d920043f8dde9abfe20e4356ee5a87041eb33927b994eaa9fdc71f89a2b3"
+            }
+          }
+        ]
+      },
+      {
+        "name": "preserved",
+        "parent": "Authored machined bushing large",
+        "translation": [
+          0.05,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": "e59a7dccaf35e5cae257b0f78b1aa4f45545b18f697df139ebc290c613328fcd",
+            "material": "raw metal preserved [raw]",
+            "attributes": {
+              "POSITION": "1d7dbf49b952af8762f8a20cc9982984739ea6cc0034fc1a9f7bacbab91d0094",
+              "NORMAL": "a0ea0bdaf0e47f50aa47ecdf92a31fa335333e9267c0d691bea33b46e4f08684",
+              "TEXCOORD_0": "066e363e38d4a92e216c8f8154caf389481b663eb999d97ab8b4a0cb55be73e5"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "solid",
+    "pass": true,
+    "scope": "Independent WebIO actual accessor bytes, index, material values, named hierarchy and transforms; only target NORMAL differs",
+    "nodes": [
+      {
+        "name": "Authored machined bushing solid",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "name": "bushing",
+        "parent": "Authored machined bushing solid",
+        "translation": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": null,
+            "material": "raw metal bushing [raw]",
+            "attributes": {
+              "POSITION": "7e3d3d306060d43b839ef9d1d8e889c8756b5289e277ebe6c09ac8d2926a4989",
+              "NORMAL": "90e731e3e7a7f0ebbb9f97d1b2e88a6e406ec7085a52df2b0fb29b8432eeb7fe",
+              "TEXCOORD_0": "48b2b2f5e181a837095b29e567c9a760c802780769133c721b7ea85752e07266"
+            }
+          }
+        ]
+      },
+      {
+        "name": "preserved",
+        "parent": "Authored machined bushing solid",
+        "translation": [
+          0.025,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "primitives": [
+          {
+            "mode": 4,
+            "index": "e59a7dccaf35e5cae257b0f78b1aa4f45545b18f697df139ebc290c613328fcd",
+            "material": "raw metal preserved [raw]",
+            "attributes": {
+              "POSITION": "f3e35aeb5e8e20dd1ad537d9e4a890830ed294d1641d72488b8c6cab715ac507",
+              "NORMAL": "a0ea0bdaf0e47f50aa47ecdf92a31fa335333e9267c0d691bea33b46e4f08684",
+              "TEXCOORD_0": "066e363e38d4a92e216c8f8154caf389481b663eb999d97ab8b4a0cb55be73e5"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

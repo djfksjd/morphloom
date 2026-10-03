@@ -1,0 +1,36 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ❯ tests/assembly-lathe-normals.test.ts (2 tests | 2 failed) 8ms
+   × keeps lathe caps planar and cylindrical side normals radial under the explicit declaration 4ms
+     → expected 66.8468783581192 to be less than or equal to 0.01
+   × rejects malformed or unsupported lathe normal declarations 4ms
+     → expected [Function] to throw an error
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/assembly-lathe-normals.test.ts > keeps lathe caps planar and cylindrical side normals radial under the explicit declaration
+AssertionError: expected 66.8468783581192 to be less than or equal to 0.01
+ ❯ tests/assembly-lathe-normals.test.ts:13:149
+     11| };
+     12| it('keeps lathe caps planar and cylindrical side normals radial under …
+     13|  for(const segments of [16,32,128]){const g=compileAssemblyGeometry({.…
+       |                                                                                                                                                     ^
+     14| });
+     15| it('rejects malformed or unsupported lathe normal declarations',()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/assembly-lathe-normals.test.ts > rejects malformed or unsupported lathe normal declarations
+AssertionError: expected [Function] to throw an error
+ ❯ tests/assembly-lathe-normals.test.ts:16:273
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  04:06:22
+   Duration  270ms (transform 127ms, setup 0ms, collect 160ms, tests 8ms, environment 0ms, prepare 30ms)
+

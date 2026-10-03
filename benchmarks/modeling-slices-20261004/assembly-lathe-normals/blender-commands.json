@@ -1,0 +1,154 @@
+[
+  {
+    "case": "small",
+    "stage": "roundtrip",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-glb-roundtrip.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/small-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-blender.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-blender-roundtrip.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "small",
+    "stage": "first-import",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-normal-import-probe.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/small-after.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-first-import.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "default",
+    "stage": "roundtrip",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-glb-roundtrip.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-blender.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-blender-roundtrip.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "default",
+    "stage": "first-import",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-normal-import-probe.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-first-import.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "large",
+    "stage": "roundtrip",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-glb-roundtrip.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/large-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-blender.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-blender-roundtrip.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "large",
+    "stage": "first-import",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-normal-import-probe.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/large-after.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-first-import.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "solid",
+    "stage": "roundtrip",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-glb-roundtrip.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/solid-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-blender.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-blender-roundtrip.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "solid",
+    "stage": "first-import",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-normal-import-probe.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/solid-after.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-first-import.json"
+    ],
+    "exitCode": 0
+  }
+]

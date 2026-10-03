@@ -1,0 +1,68 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "name": "Authored machined bushing small",
+  "units": "mm",
+  "components": [
+    {
+      "id": "bushing",
+      "name": "Bushing · authored diagnostic",
+      "category": "mechanical",
+      "materialName": "raw metal",
+      "detail": "Authored geometry and optical finish; not measured/manufacturing approved",
+      "geometry": {
+        "op": "lathe",
+        "profile": [
+          [
+            4,
+            -3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            7,
+            -3
+          ],
+          [
+            4,
+            -3
+          ]
+        ],
+        "segments": 16
+      },
+      "material": {
+        "color": "#b8bec6",
+        "surface": "raw",
+        "roughness": 0.3,
+        "metalness": 0.8
+      }
+    },
+    {
+      "id": "preserved",
+      "name": "Independent brass sphere",
+      "category": "mechanical",
+      "materialName": "raw metal",
+      "detail": "Authored sentinel",
+      "geometry": {
+        "op": "sphere",
+        "radius": 1
+      },
+      "position": [
+        12.5,
+        0,
+        0
+      ],
+      "material": {
+        "color": "#bb8844",
+        "surface": "raw",
+        "roughness": 0.4,
+        "metalness": 0.7
+      }
+    }
+  ]
+}

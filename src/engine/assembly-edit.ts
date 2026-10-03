@@ -1,3 +1,4 @@
+import {migrateLatheNormalPolicy,type LatheNormalPolicy} from './lathe-normal-policy';
 import {migrateBladeSideWinding,validateBladeSideWinding} from './blade-side-winding';
 import { migrateTubeCapFinish, migrateTubeCapWinding, validateEditedTubePath, type TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { AssemblyGeometryIR, AssemblyIR, AssemblyMaterialIR } from './assembly-ir';
@@ -13,6 +14,8 @@ export interface AssemblyComponentPatch {
   rotateRadians?: Vector3;
   scaleMultiplier?: Vector3;
   geometry?:
+    | { operation: 'lathe-normal-policy'; action: 'set'; policy: LatheNormalPolicy }
+    | { operation: 'lathe-normal-policy'; action: 'clear' }
     | { operation: 'tube-quadratic-control'; action: 'set'; curve: TubeQuadraticCurveIR }
     | { operation: 'tube-quadratic-control'; action: 'clear' }
     | { operation: 'tube-cap-winding'; action: 'set' | 'clear' }
@@ -111,6 +114,10 @@ function validMaterialPatch(material: AssemblyComponentPatch['material']): boole
 function validGeometryPatch(geometry: AssemblyComponentPatch['geometry']): boolean {
   if (!geometry) return true;
   if (geometry.operation === 'tube-cap-winding' || geometry.operation === 'tube-cap-finish' || geometry.operation === 'blade-side-winding') return Object.keys(geometry).every(k => ['operation', 'action'].includes(k)) && ['set', 'clear'].includes(geometry.action);
+  if (geometry.operation === 'lathe-normal-policy') {
+    const keys=geometry.action==='set'?['operation','action','policy']:['operation','action'];
+    return Object.keys(geometry).every(k=>keys.includes(k)) && (geometry.action==='clear'||geometry.action==='set'&&geometry.policy!==undefined);
+  }
   if (geometry.operation === 'tube-quadratic-control') {
     const keys = geometry.action === 'set' ? ['operation', 'action', 'curve'] : ['operation', 'action'];
     return Object.keys(geometry).every(k => keys.includes(k))
@@ -131,6 +138,10 @@ function applyGeometryPatch(
   source: AssemblyGeometryIR,
   patch: NonNullable<AssemblyComponentPatch['geometry']>,
 ): AssemblyGeometryIR {
+  if (patch.operation === 'lathe-normal-policy') {
+    if(source.op!=='lathe')throw new Error('Normal policy edit requires lathe.');
+    return migrateLatheNormalPolicy(source,patch.action==='set'?patch.policy:undefined);
+  }
   if (patch.operation === 'blade-side-winding') {
     if (source.op !== 'bladeLoft') throw new Error('Blade winding edit requires bladeLoft.');
     return migrateBladeSideWinding(source, patch.action === 'set');
@@ -210,6 +221,7 @@ export async function applyAssemblyComponentPatch(
   ir: AssemblyIR,
   patch: AssemblyComponentPatch,
 ): Promise<{ ir: AssemblyIR; receipt: AssemblyEditReceipt }> {
+  if (patch.geometry?.operation === 'lathe-normal-policy' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Lathe normal policy requires component-patch/0.2.');
   if (patch.geometry?.operation === 'blade-side-winding' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Blade winding edit requires component-patch/0.2.');
   if (patch.geometry?.operation === 'tube-cap-finish' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Flat cap edit requires component-patch/0.2.');
   if (patch.geometry?.operation === 'tube-cap-winding' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Cap winding edit requires component-patch/0.2.');

@@ -1,3 +1,4 @@
+import type {LatheNormalPolicy} from './lathe-normal-policy';
 import type {ArchitecturalProgramDescriptor} from './architectural-program';
 import type {WireCapFinishIR} from './wire-cap-finish';
 import type {BladeSideWindingIR} from './blade-side-winding';
@@ -35,7 +36,7 @@ export type AssemblyGeometryIR =
       curve?: number;
     }>;
   }
-  | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
+  | { op: 'lathe'; profile: Array<[number, number]>; segments?: number; normalPolicy?: LatheNormalPolicy }
   | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean; capWinding?: 'outward'; capFinish?: 'flat-outward'; curve?: TubeQuadraticCurveIR }
   | {
     op: 'surfacePatch';

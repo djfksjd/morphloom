@@ -1,0 +1,106 @@
+[
+  {
+    "case": "small",
+    "stage": "first",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/small-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-first-import.json",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-first-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "small",
+    "stage": "reexport",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/small-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-blender.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/small-reexport-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "default",
+    "stage": "first",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-first-import.json",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-first-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "default",
+    "stage": "reexport",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-blender.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/default-reexport-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "large",
+    "stage": "first",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/large-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-first-import.json",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-first-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "large",
+    "stage": "reexport",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/large-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-blender.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/large-reexport-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "solid",
+    "stage": "first",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/solid-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-first-import.json",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-first-normal-comparison.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "case": "solid",
+    "stage": "reexport",
+    "command": [
+      "./node_modules/.bin/vite-node",
+      "scripts/compare-native-normal-payload.ts",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/solid-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-blender.glb",
+      "bushing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/solid-reexport-normal-comparison.json"
+    ],
+    "exitCode": 0
+  }
+]

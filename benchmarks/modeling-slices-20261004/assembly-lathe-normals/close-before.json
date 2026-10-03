@@ -1,0 +1,180 @@
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "default-before.glb",
+  "sourceBytes": 92088,
+  "sourceSha256": "05cb768dbea6f4c48e98f6189c757fcf3b4ce34812fcb74c08d6b9e2b6a980be",
+  "render": "close-before.png",
+  "renderBytes": 447776,
+  "renderSha256": "c791201b2cc974a30f0a6face43c818ed4a80ffab581ab7dc96768305d196dd1",
+  "meshes": 1,
+  "materials": 3,
+  "normalization": {
+    "method": "fixed-metre-datum",
+    "targetExtent": null,
+    "sourceBounds": {
+      "min": [
+        -0.014000000432133675,
+        -0.014000000432133675,
+        -0.006000000052154064
+      ],
+      "max": [
+        0.014000000432133675,
+        0.014000000432133675,
+        0.006000000052154064
+      ],
+      "size": [
+        0.02800000086426735,
+        0.02800000086426735,
+        0.012000000104308128
+      ]
+    },
+    "scale": 70,
+    "fixedSpaceSha256": "806b57dfc497a2f3e1ee636285c1505cb2bbd058b9545f6185385087d932638f",
+    "translationMeters": [
+      0,
+      0,
+      0
+    ],
+    "normalizedBounds": {
+      "min": [
+        -0.9800000190734863,
+        -0.9800000190734863,
+        -0.42000001668930054
+      ],
+      "max": [
+        0.9800000190734863,
+        0.9800000190734863,
+        0.42000001668930054
+      ],
+      "size": [
+        1.9600000381469727,
+        1.9600000381469727,
+        0.8400000333786011
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      -3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 2.55
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        119,
+        206
+      ],
+      "max": [
+        904,
+        817
+      ]
+    },
+    "minimumMarginPixels": 119,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "isolated-component",
+    "componentId": "bushing"
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "grazing",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        3.0,
+        -0.5,
+        0.30000001192092896
+      ],
+      "energy": 900.0,
+      "size": 1.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 70.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}

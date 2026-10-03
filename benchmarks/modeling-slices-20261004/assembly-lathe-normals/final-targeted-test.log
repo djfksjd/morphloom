@@ -1,0 +1,19 @@
+
+> sceliph@0.4.0 test
+> vitest run --run tests/assembly-lathe-normals.test.ts
+
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+stderr | tests/assembly-lathe-normals.test.ts > preserves actual expanded position/UV, dimensions and topology while changing normals
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+THREE.BufferGeometry.toNonIndexed(): BufferGeometry is already non-indexed.
+
+ ✓ tests/assembly-lathe-normals.test.ts (6 tests) 93ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  04:27:40
+   Duration  397ms (transform 146ms, setup 0ms, collect 189ms, tests 93ms, environment 0ms, prepare 38ms)
+

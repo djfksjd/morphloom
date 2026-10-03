@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ✓ tests/assembly-lathe-normals.test.ts (2 tests) 13ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  04:07:23
+   Duration  267ms (transform 132ms, setup 0ms, collect 164ms, tests 13ms, environment 0ms, prepare 29ms)
+

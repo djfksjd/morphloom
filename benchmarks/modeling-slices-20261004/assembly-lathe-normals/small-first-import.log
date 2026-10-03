@@ -1,0 +1,8 @@
+04:20:45 | INFO: Data are loaded, start creating Blender stuff
+04:20:45 | INFO: Blender create Mesh node 0
+04:20:45 | INFO: Blender create Mesh node 1
+04:20:45 | INFO: glTF import finished in 0.01s
+{"schema": "morphloom.blender-import-normal-probe/0.1", "importShading": "NORMALS", "importPolicy": "NORMALS", "sourceSha256": "1b846a47123d9e0a1ff8eca057248c390947a8e7252d7e6d98e12c93915d4f1b", "blenderVersion": "5.2.1 LTS", "stableMeshId": "bushing", "corners": 384, "uniqueSamples": 328, "hasCustomNormals": true, "coordinates": "glTF right-handed Y-up world; inverse Blender Z-up basis; meters"}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+
+Blender quit

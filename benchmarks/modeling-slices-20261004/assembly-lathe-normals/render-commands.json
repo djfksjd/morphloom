@@ -1,0 +1,126 @@
+[
+  {
+    "name": "whole-before",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-before.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/whole-before.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/whole-before.json",
+      "iso",
+      "clay"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "whole-after",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/whole-after.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/whole-after.json",
+      "iso",
+      "clay"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "close-before",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-before.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/close-before.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/close-before.json",
+      "iso",
+      "grazing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/fixed-space.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "close-after",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/close-after.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/close-after.json",
+      "iso",
+      "grazing",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/fixed-space.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "wire-before",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-before.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/wire-before.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/wire-before.json",
+      "iso",
+      "wire",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/fixed-space.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "wire-after",
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-neutral-render.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/verified/default-after.glb",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/wire-after.png",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/wire-after.json",
+      "iso",
+      "wire",
+      "/Users/danny/Documents/morphloom/outputs/lathe-shading-goal-20261004/fixed-space.json"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "cancelVerified": true,
+  "undoExactOriginal": true,
+  "redoExactSaved": true,
+  "invalid181RejectedWithoutSourceChange": true,
+  "newSessionAdditional1mmEditPreservesPolicyAndNonTarget": true,
+  "newSessionGlbByteIdentical": true,
+  "browserGlbSha256": "83cb41f99512f236037fb50593da7edb255bd837c0b49d2c5a3120cb3a6eed9b"
+}

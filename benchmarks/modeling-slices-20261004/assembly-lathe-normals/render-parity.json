@@ -1,0 +1,9 @@
+{
+  "pairs": [
+    "whole",
+    "close",
+    "wire"
+  ],
+  "settingsExact": true,
+  "scope": "Same reports, actual unchanged geometry accessors confirmed separately"
+}

@@ -1,3 +1,4 @@
+import {applyLatheNormalPolicy,validateLatheNormalPolicy} from './lathe-normal-policy';
 import {auditArchitecturalProgram,validateArchitecturalProgram} from './architectural-program';
 import {bladeLoftData,validateBladeSideWinding} from './blade-side-winding';
 import { createTubePath, validateTubeQuadraticCurve } from './tube-quadratic-curve';
@@ -217,6 +218,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       || typeof component.detail !== 'string' || component.detail.length > 500) {
       throw new Error(`Invalid component text metadata in ${component.id}.`);
     }
+    validateLatheNormalPolicy(component.geometry);
     if (component.geometry.op !== 'tube' && ('capWinding' in component.geometry || 'capFinish' in component.geometry)) throw new Error('Cap winding declaration requires a tube.');
     if (component.geometry.op !== 'bladeLoft' && 'sideWinding' in component.geometry) throw new Error('Blade winding requires bladeLoft.');
     inspect(component.geometry, `${component.id}.geometry`);
@@ -1310,7 +1312,7 @@ export function compileAssemblyGeometry(geometry: AssemblyGeometryIR): THREE.Buf
   validateAssemblyIR({ schema: 'morphloom.assembly/0.1', units: 'mm', name: 'declared part',
     components: [{ id: 'part', name: 'part', category: 'mechanical', materialName: 'raw',
       detail: 'declared part geometry', geometry, material: { color: '#808080' } }] });
-  return ensurePrimaryUv(compileGeometry(geometry));
+  return applyLatheNormalPolicy(ensurePrimaryUv(compileGeometry(geometry)),geometry);
 }
 
 /** Only engine-derived, bounded gear profiles. Raw AssemblyIR array limits stay unchanged. */
@@ -1333,7 +1335,7 @@ export function compileAssemblyIR(ir: AssemblyIR, mode: ViewMode): ProductBuild 
   const projectionStatus: ProjectionStatus = { declared: 0, loaded: 0, failed: 0, errors: [] };
   const parts: ProductPartInfo[] = [];
   for (const component of ir.components) {
-    const geometry = ensurePrimaryUv(compileGeometry(component.geometry));
+    const geometry = applyLatheNormalPolicy(ensurePrimaryUv(compileGeometry(component.geometry)),component.geometry);
     const baseMaterial = createSurfaceMaterial(component.material, {
       mode,
       category: component.category,
