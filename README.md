@@ -164,3 +164,7 @@ npm run gltf:validate -- path/to/asset.glb
 뷰어의 로컬 파일 입력은 외부 서버에 업로드하지 않습니다. 개발 에이전트나 사용자가 별도 외부 모델을 호출하는 경로는 별도로 검토해야 합니다. 메모리에서 읽은 파일과 저장소·다운로드에 저장한 파일은 다르며, 로컬 파일은 사용자가 관리합니다.
 
 코드는 [Apache-2.0](./LICENSE)입니다. 포함 데이터와 참고 코드의 출처·라이선스는 [NOTICE](./NOTICE)를 확인하세요. 선택적 외부 모델의 코드·가중치 라이선스는 별도입니다.
+
+### 선택형 Blender normal 보존 import
+
+Blender5.2.1에서 검증한 별도 로컬 도구로 원본 Float32 normal을 보존한 .blend와 SHA 영수증을 생성합니다. 기본 import 경로와 구분되며 texture·rig·animation·morph는 지원하지 않습니다. [사용법·제한·현재 증거](docs/BLENDER_FIRST_IMPORT_STATUS.ko.md)를 확인하세요. 전체 production 승인이나 DCC 편집의 IR 역변환을 뜻하지 않습니다.

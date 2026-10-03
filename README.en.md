@@ -162,3 +162,7 @@ Tests, internal scores, and format validation do not replace independent expert 
 The viewer does not upload local file inputs to external servers. External model calls made separately by development agents or users require their own review. Browser memory and saved repository/download files are distinct; users manage saved local files.
 
 Code is [Apache-2.0](./LICENSE). See [NOTICE](./NOTICE) for included data and source attribution. Optional external model code and weights have separate licenses.
+
+### Optional Blender source-normal import
+
+An explicit local tool tested in Blender 5.2.1 creates a source-normal-preserving `.blend` and SHA-bound receipt. It is separate from the default importer and rejects textures, rigs, animations and morphs. See [usage, limits and current evidence](docs/BLENDER_FIRST_IMPORT_STATUS.ko.md). This is not production approval or inverse reconstruction of DCC edits into IR.

@@ -1,0 +1,81 @@
+{
+  "schema": "morphloom.blender-source-normal-import-receipt/0.1",
+  "sourceSha256": "96eedf08795c4dde4e51ac417f5503995f7ccd2604bf1bb6683ec69dea517d30",
+  "blenderVersion": "5.2.1 LTS",
+  "fixedNormalToleranceDeg": 0.01,
+  "import": {
+    "policy": "morphloom.blender-source-normal-import/0.1",
+    "referenceReceipts": [
+      {
+        "mesh": "Mesh_0",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 25344
+      },
+      {
+        "mesh": "Mesh_1",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 25344
+      },
+      {
+        "mesh": "Mesh_2",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8532
+      },
+      {
+        "mesh": "Mesh_3",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_4",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_5",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_6",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_7",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_8",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      },
+      {
+        "mesh": "Mesh_9",
+        "storage": "FLOAT_VECTOR/CORNER",
+        "appliedMaxInputErrorDeg": 0,
+        "corners": 8928
+      }
+    ],
+    "meshCount": 10,
+    "vertices": 70525,
+    "nonNormalPayloadExact": true,
+    "hierarchyTransformsExact": true,
+    "scope": "static explicit source Float32 normals; no normal recalculation, quantization or geometry/UV/PBR/transform changes; no arbitrary DCC edit/IR inverse conversion",
+    "inputSha256": "96eedf08795c4dde4e51ac417f5503995f7ccd2604bf1bb6683ec69dea517d30"
+  },
+  "scope": "Explicit static first import/.blend preservation; GLB reexport and general delivery not certified",
+  "currentEditableIRAvailable": false,
+  "sourceSpecState": "before-edit-reference",
+  "blendSha256": "9708890786fce32b3016e27ac104bb7cd267c13b7d8f0ce1c019ace4639583ef"
+}

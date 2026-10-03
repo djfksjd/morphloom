@@ -1,0 +1,75 @@
+{
+  "schema": "morphloom.blender-first-normal-evidence/0.1",
+  "baseHead": "4b6faa1d795cb56dfa46d8f8f0fc5c6b7e391d7d",
+  "environment": {
+    "blender": "5.2.1 LTS",
+    "blenderBuild": "9e2066aef7ef",
+    "node": "24.13.1",
+    "platform": "macOS Apple M5"
+  },
+  "implementationSha256": {
+    "scripts/blender-source-normal-conformance.py": "c58449cb762e4685fdefd97c36716c9bf6f80c7e180680d6a3581bf85e6e226b",
+    "scripts/blender-source-normal-import.py": "26f14e5d068b762bb5e1e4e0f71ac278fb37e22d72413dd01feeefdab397aed0",
+    "scripts/blender-source-normal-render.py": "7fa2f257d78cbb490032cd0cbb8c32107930e135b3cbae1d29cfe1f4a55e07c6",
+    "scripts/blender-source-normal-reopen.py": "25f7107b5ca3881bfc30407f41e4442319833905cacc0ad19b3572feb9f5a547",
+    "scripts/blender_source_normal_import.py": "17a74e03590cc61cd552793f55145932ddcab31d294f96916ac48885c8848137"
+  },
+  "rows": [
+    {
+      "id": "large",
+      "sourceSha256": "e24c23c1b712ecdb61c27032c3d58eb2219092d54d3b9d6bde361a6bd6b7d0d0",
+      "blendSha256": "f1410c2b7125c32e3c626b421c94d1757e5d7247692582387722052bbb3ca8de",
+      "receiptSha256": "3443b39905a725552bc9dd0b34d5decae35eacb181f494bf23300ef1b7f60c74",
+      "blendPath": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/large.blend",
+      "firstImportMaxErrorDeg": 0
+    },
+    {
+      "id": "small",
+      "sourceSha256": "96eedf08795c4dde4e51ac417f5503995f7ccd2604bf1bb6683ec69dea517d30",
+      "blendSha256": "9708890786fce32b3016e27ac104bb7cd267c13b7d8f0ce1c019ace4639583ef",
+      "receiptSha256": "44f80100754d99ad972789977e2d7b0c248a0694bb5f3bd5d655dc8a9f8cc0ef",
+      "blendPath": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/small.blend",
+      "firstImportMaxErrorDeg": 0
+    },
+    {
+      "id": "default",
+      "sourceSha256": "70e781365720894393454d5059c8244b2eada83b3a47a71cb7721b339b4c41e9",
+      "blendSha256": "7289bf6f148c0358dd78a4b7d260555d0eb46e413c3dae8d9682ae637c0b590f",
+      "receiptSha256": "53472e3ba00e512947f7d64e8c0a209f036bc0b8ea9c52c88e77968a271862d4",
+      "blendPath": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/default.blend",
+      "firstImportMaxErrorDeg": 0
+    },
+    {
+      "id": "gear",
+      "sourceSha256": "af481099d9933883b37988796e41fafb09d58271880d7e8186b0ff1128ee37d2",
+      "blendSha256": "819e0edb7bc978aba469ac42cfa7655d32391fc4be269610ffd8745cee73c6ff",
+      "receiptSha256": "1c551192b52ca171eea561542a925a64ac10c17ad7ab592b8a32aeef04b23b23",
+      "blendPath": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/gear.blend",
+      "firstImportMaxErrorDeg": 0
+    }
+  ],
+  "normalToleranceDeg": 0.01,
+  "exportMaxErrorDeg": 0.004419423683616302,
+  "strictGlb": {
+    "files": 4,
+    "pass": true,
+    "log": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/export-standard.log"
+  },
+  "commands": {
+    "npm test": "108 files / 779 PASS",
+    "npm run check": "PASS",
+    "npm run benchmark": "PASS",
+    "npm run build": "PASS",
+    "quality:gate": "FAIL existing cross-domain cooling receipt UNUSED_OBJECT infos 23 vs 0",
+    "quality:production": "FAIL preceding quality:gate; dominance not-run"
+  },
+  "evidenceRoot": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004",
+  "scope": "Opt-in static source Float32 normals; no default importer fix, DCC-to-IR inverse conversion or production approval",
+  "hashBoundReopen": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/hash-bound-reopen",
+  "gateEvidence": {
+    "competitiveReportSha256": "12185a4f1939ef1e918265e4fa48d83dda2a19e9e9a99bba0e385eec79f44b8c",
+    "blenderCrossDomainReceiptSha256": "2ad26163b829bbf82ff66725980ea39af90d4e72485cbed5239c4b0f8820d74d",
+    "requiredDeliveryInfos": 0,
+    "currentCoolingDeliveryInfos": 23
+  }
+}

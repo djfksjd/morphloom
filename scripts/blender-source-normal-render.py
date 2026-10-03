@@ -1,0 +1,14 @@
+"""Fixed normal-channel inspection of an existing saved Blender profile."""
+import bpy,json,sys
+from pathlib import Path
+from mathutils import Vector
+args=sys.argv[sys.argv.index('--')+1:];assert len(args)==2,'profile.blend new-render-directory';blend=Path(args[0]);out=Path(args[1]);out.mkdir(exist_ok=False)
+bpy.ops.wm.open_mainfile(filepath=str(blend));scene=bpy.context.scene
+points=[o.matrix_world@Vector(c) for o in scene.objects if o.type=='MESH' for c in o.bound_box];lo=Vector([min(p[i] for p in points) for i in range(3)]);hi=Vector([max(p[i] for p in points) for i in range(3)]);center=(lo+hi)/2;size=max(hi-lo)
+meshes=[o.data for o in scene.objects if o.type=='MESH'];assert meshes and all(m.attributes.get('custom_normal') and m.attributes['custom_normal'].data_type=='FLOAT_VECTOR' for m in meshes)
+material=bpy.data.materials.new('Inspection normal channel');material.use_nodes=True;nodes=material.node_tree.nodes;nodes.clear();geometry=nodes.new('ShaderNodeNewGeometry');scale=nodes.new('ShaderNodeVectorMath');scale.operation='SCALE';scale.inputs[3].default_value=.5;add=nodes.new('ShaderNodeVectorMath');add.operation='ADD';add.inputs[1].default_value=(.5,.5,.5);emission=nodes.new('ShaderNodeEmission');output=nodes.new('ShaderNodeOutputMaterial');links=material.node_tree.links;links.new(geometry.outputs['Normal'],scale.inputs[0]);links.new(scale.outputs['Vector'],add.inputs[0]);links.new(add.outputs['Vector'],emission.inputs['Color']);links.new(emission.outputs[0],output.inputs['Surface'])
+for o in scene.objects:
+ if o.type=='MESH':o.data.materials.clear();o.data.materials.append(material)
+camera_data=bpy.data.cameras.new('Fixed inspection');camera=bpy.data.objects.new('Fixed inspection',camera_data);scene.collection.objects.link(camera);camera.location=center+Vector((size*1.2,-size*1.8,size*1.4));camera.rotation_euler=(center-camera.location).to_track_quat('-Z','Y').to_euler();camera_data.type='ORTHO';camera_data.ortho_scale=size*1.25;camera_data.lens=50;camera_data.clip_start=size/1000;camera_data.clip_end=size*10;scene.camera=camera
+scene.render.engine='CYCLES';scene.cycles.device='CPU';scene.cycles.samples=8;scene.render.resolution_x=512;scene.render.resolution_y=512;scene.render.resolution_percentage=100;scene.world=bpy.data.worlds.new('Inspection world');scene.world.color=(.03,.03,.03);scene.view_settings.view_transform='Standard';scene.render.image_settings.file_format='PNG';scene.render.filepath=str(out/'default-normal.png');bpy.ops.render.render(write_still=True)
+(out/'receipt.json').write_text(json.dumps({'blenderVersion':bpy.app.version_string,'engine':'Cycles CPU','samples':8,'resolution':[512,512],'viewTransform':'Standard','channel':'actual Geometry.Normal shader output mapped n*0.5+0.5','sourceBlend':str(blend),'scope':'normal-channel render of saved float-vector scene; no beauty/delivery approval'},indent=2)+'\n')

@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm run quality:gate",
+    "exitCode": 1,
+    "log": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/quality-gate.log",
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run quality:production",
+    "exitCode": 1,
+    "log": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/quality-production.log",
+    "externalServiceCalls": false
+  }
+]

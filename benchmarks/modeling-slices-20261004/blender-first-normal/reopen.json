@@ -1,0 +1,231 @@
+[
+  {
+    "id": "small",
+    "blendReopen": {
+      "pass": true,
+      "meshes": [
+        {
+          "mesh": "Mesh_0",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_1",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_2",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_3",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_4",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_5",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_6",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_7",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_8",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_9",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        }
+      ]
+    },
+    "source": "/Users/danny/Documents/morphloom/outputs/translated-source-goal-20261004/browser-flow/small/first/regenerated.glb",
+    "exported": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/hash-bound-reopen/small.reexport.glb",
+    "exportSha256": "2131f81b67881c5a9ed52516f89f6234fd68473eadfb6f856cf094d2a895fcbc"
+  },
+  {
+    "id": "default",
+    "blendReopen": {
+      "pass": true,
+      "meshes": [
+        {
+          "mesh": "Mesh_0",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_1",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_10",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_2",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_3",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_4",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_5",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_6",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_7",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_8",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_9",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        }
+      ]
+    },
+    "source": "/Users/danny/Documents/morphloom/outputs/translated-source-goal-20261004/browser-flow/default/first/regenerated.glb",
+    "exported": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/hash-bound-reopen/default.reexport.glb",
+    "exportSha256": "c017605be0c28ce88e568ec80eea73a5c9cfa93cf1695f288344fc7a25dce2e4"
+  },
+  {
+    "id": "large",
+    "blendReopen": {
+      "pass": true,
+      "meshes": [
+        {
+          "mesh": "Mesh_0",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_1",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_10",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_11",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_12",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_13",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_14",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_2",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_3",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_4",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_5",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_6",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_7",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_8",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        },
+        {
+          "mesh": "Mesh_9",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        }
+      ]
+    },
+    "source": "/Users/danny/Documents/morphloom/outputs/translated-source-goal-20261004/browser-flow/large/first/regenerated.glb",
+    "exported": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/hash-bound-reopen/large.reexport.glb",
+    "exportSha256": "52fe0705fde0a5d9aa0c798aa8a63b12e6109476ce6b24fa301ad64214edae8a"
+  },
+  {
+    "id": "gear",
+    "blendReopen": {
+      "pass": true,
+      "meshes": [
+        {
+          "mesh": "Mesh_0",
+          "maxNormalErrorDeg": 0,
+          "pass": true
+        }
+      ]
+    },
+    "source": "/Users/danny/Documents/morphloom/outputs/translated-source-goal-20261004/browser-flow/gear/first/regenerated.glb",
+    "exported": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/hash-bound-reopen/gear.reexport.glb",
+    "exportSha256": "fc5a6f169a6a0c5c971af16fe2342791d460beec1473914f88ab010ddbd7573c"
+  }
+]

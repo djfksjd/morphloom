@@ -1,0 +1,40 @@
+{
+  "pass": true,
+  "sourceSha256": "70e781365720894393454d5059c8244b2eada83b3a47a71cb7721b339b4c41e9",
+  "blenderVersion": "5.2.1 LTS",
+  "cases": [
+    {
+      "case": "framing",
+      "pass": true,
+      "reason": "Snapshot file budget"
+    },
+    {
+      "case": "uri",
+      "pass": true,
+      "reason": "Textured sources unsupported by this import profile"
+    },
+    {
+      "case": "nonunit-normal",
+      "pass": true,
+      "reason": "Non-finite/non-unit source attributes"
+    },
+    {
+      "case": "oversize-accessor",
+      "pass": true,
+      "reason": "Accessor budget"
+    },
+    {
+      "case": "name-collision",
+      "pass": true,
+      "reason": "Ambiguous import name"
+    },
+    {
+      "case": "controlled late preservation fault rolls back imported meshes after normal attribute writes",
+      "pass": true
+    },
+    {
+      "case": "valid static source preserves unrelated user mesh/UV/property/placement",
+      "pass": true
+    }
+  ]
+}

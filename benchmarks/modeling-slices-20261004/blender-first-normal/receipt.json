@@ -1,0 +1,13 @@
+{
+  "blenderVersion": "5.2.1 LTS",
+  "engine": "Cycles CPU",
+  "samples": 8,
+  "resolution": [
+    512,
+    512
+  ],
+  "viewTransform": "Standard",
+  "channel": "actual Geometry.Normal shader output mapped n*0.5+0.5",
+  "sourceBlend": "/Users/danny/Documents/morphloom/outputs/blender-first-normal-goal-20261004/float-vector-verified/default.blend",
+  "scope": "normal-channel render of saved float-vector scene; no beauty/delivery approval"
+}
