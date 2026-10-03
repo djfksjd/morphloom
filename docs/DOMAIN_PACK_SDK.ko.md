@@ -67,7 +67,7 @@ UV quality report0.2는 지원 가능한 static UV0의 metallic-roughness 해상
 
 ## API0.4: Pack API와 원본 표현 분리
 
-기존0.1~0.3 Pack의 계약은 유지한다. 새 metadata.version0.4 / dependencies.engineApi0.4는 native representation.id를 지원 중인 elements0.1~0.6 중 명시적으로 선언한다. 실제 generator 결과 schema가 달라지면 invalid-project다. 알려지지 않은 API/schema·다른 단위/좌표·필수 capability 누락·provider 오류를 typed 오류로 거부한다. 자동 migration이나 유사 capability 대체는 없다. 등록은 여전히 experimental이다.
+기존0.1~0.3 Pack의 계약은 유지한다. 새 metadata.version0.4 / dependencies.engineApi0.4는 native representation.id를 지원 중인 elements0.1~0.7 중 명시적으로 선언한다. 실제 generator 결과 schema가 달라지면 invalid-project다. 알려지지 않은 API/schema·다른 단위/좌표·필수 capability 누락·provider 오류를 typed 오류로 거부한다. 자동 migration이나 유사 capability 대체는 없다. 등록은 여전히 experimental이다.
 
 신규 Pack은 examples/domain-packs/surface-gear-pack.ts를 복사해 고유ID/domain/입력범위/capability를 선언하고 registry.register(pack)로 등록한다. core compiler/inspector를 바꿀 필요는 없다. UI 진입점 두 곳의 로컬 registry 등록은 필요하며 동적 파일 로딩·외부코드 sandbox는 지원하지 않는다. 예제는 기존 gear generator에 명시적 migrateElementProjectToV6·editPart uvScale/material.surface를 조합한다. metadata를0.4로 바꾸는 것만으로 원본 IR을 migration한 것으로 간주하지 않는다.
 
@@ -77,3 +77,9 @@ UV quality report0.2는 지원 가능한 static UV0의 metallic-roughness 해상
 ## 직접 generator 입력 경계 (2026-10-03)
 
 validateDomainPackInput(input, metadata)는 registry의 기존 단위/좌표/seed/유한값/치수범위/plain-record 검사를 그대로 재사용한다. 성공 반환은 input 자체이며 수정/단위추측/기본값삽입을 하지 않는다. metadata는 등록 검사를 통과한 선언 계약이어야 한다. 임의 metadata의 스키마 검증이나 provider 실행 격리를 대체하지 않는다. 실패는 DomainPackError invalid-input/packId. builtin bearing의 직접 함수도 이 경계를 사용해 null을 기본값으로 바꾸지 않는다. 누락필드만 기존 generator 기본값을 적용한다. 예전 registry 경로와 source schema/version은 그대로이며, 과거 잘못 허용한 범위 밖 직접 호출은 이제 오류다. 전체 SDK가 CAD/비메시/동적 플러그인 sandbox를 지원한다는 뜻은 아니다.
+
+## 편집 원본0.7: corner-angle normals
+
+API0.4의 native representation은 이제 명시적 elements0.7도 허용한다. 기존 Pack0.1~0.3 생성 계약과 기본 결과는 그대로다. migrateElementProjectToV7은 schema 외 기본값을 넣지 않고 이전 UV/chamfer/surface를 보존한다. Part.normalWeighting은 uniform(기존 결과) 또는 corner-angle이며 declared lathe/extrude/spur-gear에만 적용한다. sphere/비기하 part/unknown weighting/이전 schema의 옵션은 거부한다. default와 neutral migration은 생성버퍼가 동일하다. 새 source는 이전 엔진이 읽을 수 있다고 주장하지 않으며 이전 schema로 옵션이 포함된 채 다운그레이드하면 검증에서 실패한다.
+
+선택 부품의 normal buffer만 수정하고 crease threshold·shape·UV·PBR·hierarchy는 보존한다. 선택 부품 Apply/Cancel/Undo/Redo와 source reload/nativeGLB 경로를 검증한다. Blender 왕복의 non-target sphere normal drift는 기존 버전에서도 재현되어 strict normal delivery는 blocked다. CORNER_NORMAL_STATUS.ko.md와 현재 실패/통과 증거를 따른다. Pack 등록이나 새 schema 지원은 품질 승인 상태를 자동 올리지 않는다.

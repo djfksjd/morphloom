@@ -41,7 +41,7 @@ export type DomainPackMetadata = DomainPackMetadataBase & (
 
 const nativeSchemas: readonly ElementProject['schema'][] = [
   'morphloom.elements/0.1', 'morphloom.elements/0.2', 'morphloom.elements/0.3',
-  'morphloom.elements/0.4', 'morphloom.elements/0.5', 'morphloom.elements/0.6'
+  'morphloom.elements/0.4', 'morphloom.elements/0.5', 'morphloom.elements/0.6', 'morphloom.elements/0.7'
 ];
 
 export interface DomainPack {

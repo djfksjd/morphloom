@@ -9,7 +9,7 @@ import { resolveElements, validateProject, type ElementProject, type ResolvedEle
 import { compileAssemblyGeometry,compileDerivedGearGeometry } from './assembly-compiler';
 import { creasePartNormals } from './part-geometry';
 import { toothIds } from './spur-gear';
-export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.10';
+export const ELEMENT_RENDERER_REVISION = 'morphloom.element-renderer/0.11';
 
 const MAX_TRIANGLES = 2_000_000;
 const MAX_BATCHES = 128;
@@ -30,7 +30,7 @@ function rawPartGeometry(part: Part, lod: Lod): THREE.BufferGeometry {
     }
     const raw = g.op==='spur-gear'&&part.axialChamferMm!==undefined?compileGearChamfer(g,part.axialChamferMm):g.op==='spur-gear'?compileDerivedGearGeometry(g):compileAssemblyGeometry(g);
     if (g.op !== 'sphere') {
-      try { const result = creasePartNormals(raw,part.creaseAngle ?? Math.PI/6); if (result !== raw) raw.dispose(); return result; }
+      try { const result = creasePartNormals(raw,part.creaseAngle ?? Math.PI/6,part.normalWeighting); if (result !== raw) raw.dispose(); return result; }
       catch (error) { raw.dispose(); throw error; }
     }
     return raw;

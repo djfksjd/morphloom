@@ -3,8 +3,8 @@ import type { Part, Vec3 } from './engine/element-project';
 import {gearChamferMaximum} from './engine/gear-chamfer';
 import { toothIds } from './engine/spur-gear';
 
-export function PartInspector({part, version2, version4=false, version5=false, version6=false, apply, action,featureId='',onFeatureSelect,exportFeature}: {
-  part:Part; version2:boolean; version4?:boolean; version5?:boolean; version6?:boolean; apply:(patch:Partial<Part>)=>void; action:(kind:'visibility'|'lock'|'detach')=>void;featureId?:string;onFeatureSelect?:(id:string)=>void;exportFeature?:(id:string)=>void
+export function PartInspector({part, version2, version4=false, version5=false, version6=false, version7=false, apply, action,featureId='',onFeatureSelect,exportFeature}: {
+  part:Part; version2:boolean; version4?:boolean; version5?:boolean; version6?:boolean; version7?:boolean; apply:(patch:Partial<Part>)=>void; action:(kind:'visibility'|'lock'|'detach')=>void;featureId?:string;onFeatureSelect?:(id:string)=>void;exportFeature?:(id:string)=>void
 }): React.JSX.Element {
   const [draft,setDraft]=useState(()=>structuredClone(part));
   const number=(label:string,value:number,change:(n:number)=>void,min=-1_000_000,max=1_000_000,step=0.1):React.JSX.Element=>
@@ -25,6 +25,7 @@ export function PartInspector({part, version2, version4=false, version5=false, v
     </fieldset>}
     {version6 && <fieldset><legend>Authored surface appearance</legend><label>Roughness surface finish<select aria-label="Roughness surface finish" value={draft.material?.surface?.finish??'none'} disabled={part.locked} onChange={e=>setDraft(p=>{const material={roughness:p.material?.roughness??.8,metalness:p.material?.metalness??0,...p.material};if(e.target.value==='none'){delete material.surface;return {...p,material};}return {...p,material:{...material,surface:{finish:e.target.value as 'brushed-metal'|'bead-blasted-metal'|'anodized-metal',channels:'roughness-only',repeat:p.material?.surface?.repeat??[8,8]}}};})}><option value="none">No procedural surface</option><option value="brushed-metal">Directional roughness (brushed-metal recipe)</option><option value="bead-blasted-metal">Bead-blasted roughness recipe</option><option value="anodized-metal">Anodized roughness recipe</option></select></label>
     {draft.material?.surface&&(['U','V'] as const).map((axis,i)=><React.Fragment key={axis}>{number(`Surface repeat ${axis}`,draft.material!.surface!.repeat[i],n=>setDraft(p=>{if(!p.material?.surface)return p;const repeat=[...p.material.surface.repeat] as [number,number];repeat[i]=n;return {...p,material:{...p.material,surface:{...p.material.surface,repeat}}};}),.125,1024,.125)}</React.Fragment>)}<p>Actual 64px roughness map only. Normal/tangent, anisotropy and photo projection are unsupported here. Repeat is per native UV tile; physical scale depends on UV mapping. Authored appearance, not measured material properties.</p></fieldset>}
+    {version7 && <fieldset><legend>Corner normals</legend><label>Normal weighting<select aria-label="Normal weighting" value={draft.normalWeighting??'uniform'} disabled={part.locked||!draft.geometry||draft.geometry.op==='sphere'} onChange={e=>setDraft(p=>({...p,normalWeighting:e.target.value as 'uniform'|'corner-angle'}))}><option value="uniform">Legacy uniform</option><option value="corner-angle">Corner-angle weighted</option></select></label><p>{!draft.geometry||draft.geometry.op==='sphere'?'Unavailable: this part uses analytic sphere/cone normals. ':'Changes smooth normals only; crease threshold, shape and UV stay unchanged. '}</p></fieldset>}
     {version4 && <fieldset><legend>Native UV scale</legend>{number('UV scalar (dimensionless)',draft.uvScale??1,n=>setDraft(p=>({...p,uvScale:n})),.001,1000,.1)}<p>Multiplies native UV coordinates only. 1 restores native mapping; no atlas, padding or texel density guarantee.</p></fieldset>}
     {draft.geometry?.op==='sphere' && <fieldset><legend>Sphere geometry</legend>
       {number('Ball radius (mm)',draft.geometry.radius,n=>setDraft(p=>p.geometry?.op==='sphere'?{...p,geometry:{...p.geometry,radius:n}}:p),0.01,10_000,0.01)}
@@ -48,7 +49,7 @@ export function PartInspector({part, version2, version4=false, version5=false, v
     </fieldset>}
     <p>{dirty?'Pending part changes':'No pending changes'}</p>
     <button disabled={!dirty||part.locked} onClick={()=>apply({position:draft.position,rotation:draft.rotation,scale:draft.scale,color:draft.color,
-      ...(draft.axialChamferMm!==undefined?{axialChamferMm:draft.axialChamferMm}:{}),...(draft.uvScale!==undefined?{uvScale:draft.uvScale}:{}),...(draft.geometry?{geometry:draft.geometry}:{}),...(draft.material?{material:draft.material}:{})})}>Apply part edit</button>
+      ...(draft.normalWeighting!==undefined?{normalWeighting:draft.normalWeighting}:{}),...(draft.axialChamferMm!==undefined?{axialChamferMm:draft.axialChamferMm}:{}),...(draft.uvScale!==undefined?{uvScale:draft.uvScale}:{}),...(draft.geometry?{geometry:draft.geometry}:{}),...(draft.material?{material:draft.material}:{})})}>Apply part edit</button>
     <button disabled={!dirty} onClick={()=>setDraft(structuredClone(part))}>Cancel edit</button>
     <button onClick={()=>action('visibility')}>{part.visible?'Hide':'Show'}</button>
     <button onClick={()=>action('lock')}>{part.locked?'Unlock':'Lock'}</button>

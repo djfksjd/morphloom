@@ -117,3 +117,7 @@ Reuse local isolate for active asset/part/element/group; preserve datum, source,
 ## 2026-10-03 Separate Workspace editor session
 
 Add versioned source-preserving session envelope for active asset/local selection, additive save/load UI; old source policy and actual GLB/source bytes unchanged.12parser tests/native10cases/current3file export pass; pending real File.text cannot overwrite draft/Apply, Undo and non-target source preserved. Clone753/check/build pass; fresh original test result recorded in current verification. Camera/isolate/history not serialized; global blockers unchanged/not rerun. See [status](WORKSPACE_SESSION_STATUS.ko.md). Goal remains ACTIVE; next audit actual geometry/shading defects.
+
+## 2026-10-03 Opt-in corner-angle normals
+
+Actual analytic cylinder normal bias corrected only for explicitly selected schema7 parts; old source/generated buffers preserved.11 tests/native9 workflow/current3files and actual GLB non-target10 meshes pass; average compile1.054–1.104x. Fresh whole tests764/check/build pass; original result and composite gate recorded in verification. Six neutral1024 renders show small shading changes. Blender named edit/two reopen basic preservation PASS, but strict normal delivery FAIL from sphere0.039980deg>0.01; old-version control reproduces exactly. No threshold change. See [status](CORNER_NORMAL_STATUS.ko.md). Next locate sphere drift across wire normals/import/export/reimport; goal ACTIVE.

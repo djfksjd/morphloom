@@ -10,11 +10,11 @@ export type Override = { params?: Partial<Params>; position?: Vec3; rotation?: V
 export type PartSurface={finish:'brushed-metal'|'bead-blasted-metal'|'anodized-metal';channels:'roughness-only';repeat:[number,number]};
 export type PartMaterial = { roughness: number; metalness: number; surface?:PartSurface };
 export type AssemblyGroup = { id: string; name: string; axis: Vec3 };
-export type Part = { id: string; name: string; position: Vec3; rotation: Vec3; scale: Vec3; shape: 'ellipsoid' | 'beak' | 'assembly-geometry'; geometry?: PartGeometry; material?: PartMaterial; assemblyId?: string; creaseAngle?: number; uvScale?: number; axialChamferMm?: number; color: string; evidence: Evidence; visible: boolean; locked: boolean; home?: { position: Vec3; rotation: Vec3; assemblyId?: string } };
+export type Part = { id: string; name: string; position: Vec3; rotation: Vec3; scale: Vec3; shape: 'ellipsoid' | 'beak' | 'assembly-geometry'; geometry?: PartGeometry; material?: PartMaterial; assemblyId?: string; creaseAngle?: number; normalWeighting?: 'uniform' | 'corner-angle'; uvScale?: number; axialChamferMm?: number; color: string; evidence: Evidence; visible: boolean; locked: boolean; home?: { position: Vec3; rotation: Vec3; assemblyId?: string } };
 export type Region = { id: string; partId: string; name: string };
 export type Group = { id: string; regionId: string; kind: Kind; count: number; distribution?: 'volume' | 'ellipsoid-surface'; root: Vec3; spread: Vec3; rotation: Vec3; fan: number; params: Params; overrides: Record<string, Override>; deleted: string[]; evidence: Evidence };
 export type Element = { id: string; kind: Kind; partId: string; groupId?: string; position: Vec3; rotation: Vec3; params: Params; visible: boolean; locked: boolean; evidence: Evidence; original?: { groupId: string; slot: string; override?: Override } };
-export type ElementProject = { selection?: string[]; schema: 'morphloom.elements/0.1' | 'morphloom.elements/0.2' | 'morphloom.elements/0.3' | 'morphloom.elements/0.4' | 'morphloom.elements/0.5' | 'morphloom.elements/0.6'; assemblies?: AssemblyGroup[]; seed: number; units: 'mm'; coordinates: 'right-handed-y-up'; parts: Part[]; regions: Region[]; groups: Group[]; elements: Element[] };
+export type ElementProject = { selection?: string[]; schema: 'morphloom.elements/0.1' | 'morphloom.elements/0.2' | 'morphloom.elements/0.3' | 'morphloom.elements/0.4' | 'morphloom.elements/0.5' | 'morphloom.elements/0.6' | 'morphloom.elements/0.7'; assemblies?: AssemblyGroup[]; seed: number; units: 'mm'; coordinates: 'right-handed-y-up'; parts: Part[]; regions: Region[]; groups: Group[]; elements: Element[] };
 export type ResolvedElement = Omit<Element, 'original'> & { source: 'generated' | 'explicit' };
 export const DEFAULT_PARAMS: Params = { length: 28, width: 7, thickness: 2, curvature: 0, twist: 0, color: '#805b40', roughness: 0.8 };
 
@@ -94,10 +94,10 @@ function slotIndex(s: string, group: string, p: string): number {
 
 export function validateProject(value: unknown): ElementProject {
   const r = obj(value, 'project', ['schema', 'seed', 'units', 'coordinates', 'parts', 'regions', 'groups', 'elements'], ['selection','assemblies']);
-  const version2 = r.schema === 'morphloom.elements/0.2' || r.schema === 'morphloom.elements/0.3' || r.schema === 'morphloom.elements/0.4' || r.schema === 'morphloom.elements/0.5' || r.schema === 'morphloom.elements/0.6';
+  const version2 = r.schema === 'morphloom.elements/0.2' || r.schema === 'morphloom.elements/0.3' || r.schema === 'morphloom.elements/0.4' || r.schema === 'morphloom.elements/0.5' || (r.schema === 'morphloom.elements/0.6'||r.schema === 'morphloom.elements/0.7');
   if (!version2 && own(r,'assemblies')) fail('version', 'assemblies');
   if (own(r, 'selection')) { const selected = arr(r.selection, 'selection'); if (selected.length > 128 || new Set(selected).size !== selected.length) fail('selection', 'selection'); selected.forEach((value, i) => id(value, `selection[${i}]`, true)); }
-  choice(r.schema, 'schema', ['morphloom.elements/0.1','morphloom.elements/0.2','morphloom.elements/0.3','morphloom.elements/0.4','morphloom.elements/0.5','morphloom.elements/0.6']);
+  choice(r.schema, 'schema', ['morphloom.elements/0.1','morphloom.elements/0.2','morphloom.elements/0.3','morphloom.elements/0.4','morphloom.elements/0.5','morphloom.elements/0.6','morphloom.elements/0.7']);
   integer(r.seed, 'seed', Number.MAX_SAFE_INTEGER);
   choice(r.units, 'units', ['mm']);
   choice(r.coordinates, 'coordinates', ['right-handed-y-up']);
@@ -120,7 +120,7 @@ export function validateProject(value: unknown): ElementProject {
     if (Math.abs(Math.hypot(...axis)-1) > 1e-6) fail('axis',path);
   });
   parts.forEach((v, i) => {
-    const p = `parts[${i}]`, a = obj(v, p, ['id','name','position','rotation','scale','shape','color','evidence','visible','locked'], version2 ? ['home','geometry','material','assemblyId','creaseAngle',...((r.schema==='morphloom.elements/0.4'||r.schema==='morphloom.elements/0.5'||r.schema==='morphloom.elements/0.6')?['uvScale']:[]),...((r.schema==='morphloom.elements/0.5'||r.schema==='morphloom.elements/0.6')?['axialChamferMm']:[])] : ['home']);
+    const p = `parts[${i}]`, a = obj(v, p, ['id','name','position','rotation','scale','shape','color','evidence','visible','locked'], version2 ? ['home','geometry','material','assemblyId','creaseAngle',...(r.schema==='morphloom.elements/0.7'?['normalWeighting']:[]),...((r.schema==='morphloom.elements/0.4'||r.schema==='morphloom.elements/0.5'||(r.schema==='morphloom.elements/0.6'||r.schema==='morphloom.elements/0.7'))?['uvScale']:[]),...((r.schema==='morphloom.elements/0.5'||(r.schema==='morphloom.elements/0.6'||r.schema==='morphloom.elements/0.7'))?['axialChamferMm']:[])] : ['home']);
     const key = id(a.id, `${p}.id`);
     unique(key, p, partIds); unique(key, p, used);
     if (str(a.name, `${p}.name`).length > 512) fail('length', `${p}.name`);
@@ -128,16 +128,17 @@ export function validateProject(value: unknown): ElementProject {
     vec(a.scale, `${p}.scale`, 0.01, 100_000);
     choice(a.shape, `${p}.shape`, version2 ? ['ellipsoid','beak','assembly-geometry'] : ['ellipsoid','beak']);
     if (a.shape === 'assembly-geometry') {
-      try { validatePartGeometry(a.geometry, (r.schema==='morphloom.elements/0.3'||r.schema==='morphloom.elements/0.4'||r.schema==='morphloom.elements/0.5'||r.schema==='morphloom.elements/0.6'));  } catch { fail('geometry', `${p}.geometry`); }
+      try { validatePartGeometry(a.geometry, (r.schema==='morphloom.elements/0.3'||r.schema==='morphloom.elements/0.4'||r.schema==='morphloom.elements/0.5'||(r.schema==='morphloom.elements/0.6'||r.schema==='morphloom.elements/0.7')));  } catch { fail('geometry', `${p}.geometry`); }
       vec(a.scale, `${p}.scale`, 0.01, 100);
     } else if (own(a,'geometry')) fail('geometry',`${p}.geometry`);
     if (own(a,'material')) {
-      const m = obj(a.material,`${p}.material`,['roughness','metalness'],r.schema==='morphloom.elements/0.6'?['surface']:[]);
+      const m = obj(a.material,`${p}.material`,['roughness','metalness'],(r.schema==='morphloom.elements/0.6'||r.schema==='morphloom.elements/0.7')?['surface']:[]);
       if(own(m,'surface'))validatePartSurface(m.surface,`${p}.material.surface`);
       num(m.roughness,`${p}.material.roughness`,0,1); num(m.metalness,`${p}.material.metalness`,0,1);
     }
     if(own(a,'axialChamferMm')){try{if(a.shape!=='assembly-geometry'||(a.geometry as PartGeometry)?.op!=='spur-gear')throw Error();validateGearChamferAmount(a.geometry as import('./spur-gear').SpurGearGeometry,a.axialChamferMm);}catch{fail('chamfer',`${p}.axialChamferMm`);}}
     if (own(a,'uvScale')) num(a.uvScale,`${p}.uvScale`,0.001,1000);
+    if(own(a,'normalWeighting')){choice(a.normalWeighting,`${p}.normalWeighting`,['uniform','corner-angle']);if(a.shape!=='assembly-geometry'||(a.geometry as PartGeometry)?.op==='sphere')fail('normalWeighting',`${p}.normalWeighting`);}
     if (own(a,'creaseAngle')) num(a.creaseAngle,`${p}.creaseAngle`,0,Math.PI);
     if (own(a,'assemblyId') && !assemblyIds.has(id(a.assemblyId,`${p}.assemblyId`))) fail('reference',`${p}.assemblyId`);
     color(a.color, `${p}.color`); evidence(a.evidence, `${p}.evidence`);
@@ -307,11 +308,11 @@ function generatedGroup(p: ElementProject, idValue: string): Group {
 }
 const unlockOnly = (patch: Override | Record<string, unknown>): boolean =>
   Object.keys(patch).length === 1 && own(patch, 'locked') && patch.locked === false;
-export function editPart(project: ElementProject, idValue: string, patch: Partial<Pick<Part, 'position' | 'rotation' | 'scale' | 'color' | 'visible' | 'locked' | 'geometry' | 'material' | 'uvScale' | 'axialChamferMm'>>): ElementProject {
+export function editPart(project: ElementProject, idValue: string, patch: Partial<Pick<Part, 'position' | 'rotation' | 'scale' | 'color' | 'visible' | 'locked' | 'geometry' | 'material' | 'uvScale' | 'axialChamferMm' | 'normalWeighting'>>): ElementProject {
   const p = clone(project), x = find(p.parts, idValue);
-  const a = obj(patch, 'patch', [], project.schema !== 'morphloom.elements/0.1' ? ['position','rotation','scale','color','visible','locked','geometry','material',...((project.schema==='morphloom.elements/0.4'||project.schema==='morphloom.elements/0.5'||project.schema==='morphloom.elements/0.6')?['uvScale']:[]),...((project.schema==='morphloom.elements/0.5'||project.schema==='morphloom.elements/0.6')?['axialChamferMm']:[])] : ['position','rotation','scale','color','visible','locked']);
-  if (own(a,'geometry')) { try { validatePartGeometry(a.geometry,(project.schema==='morphloom.elements/0.3'||project.schema==='morphloom.elements/0.4'||project.schema==='morphloom.elements/0.5'||project.schema==='morphloom.elements/0.6')); } catch { fail('geometry','patch.geometry'); } }
-  if (own(a,'material')) { const m = obj(a.material,'patch.material',['roughness','metalness'],project.schema==='morphloom.elements/0.6'?['surface']:[]); if(own(m,'surface'))validatePartSurface(m.surface,'patch.material.surface');num(m.roughness,'material.roughness',0,1); num(m.metalness,'material.metalness',0,1); }
+  const a = obj(patch, 'patch', [], project.schema !== 'morphloom.elements/0.1' ? ['position','rotation','scale','color','visible','locked','geometry','material',...(project.schema==='morphloom.elements/0.7'?['normalWeighting']:[]),...((project.schema==='morphloom.elements/0.4'||project.schema==='morphloom.elements/0.5'||(project.schema==='morphloom.elements/0.6'||project.schema==='morphloom.elements/0.7'))?['uvScale']:[]),...((project.schema==='morphloom.elements/0.5'||(project.schema==='morphloom.elements/0.6'||project.schema==='morphloom.elements/0.7'))?['axialChamferMm']:[])] : ['position','rotation','scale','color','visible','locked']);
+  if (own(a,'geometry')) { try { validatePartGeometry(a.geometry,(project.schema==='morphloom.elements/0.3'||project.schema==='morphloom.elements/0.4'||project.schema==='morphloom.elements/0.5'||(project.schema==='morphloom.elements/0.6'||project.schema==='morphloom.elements/0.7'))); } catch { fail('geometry','patch.geometry'); } }
+  if (own(a,'material')) { const m = obj(a.material,'patch.material',['roughness','metalness'],(project.schema==='morphloom.elements/0.6'||project.schema==='morphloom.elements/0.7')?['surface']:[]); if(own(m,'surface'))validatePartSurface(m.surface,'patch.material.surface');num(m.roughness,'material.roughness',0,1); num(m.metalness,'material.metalness',0,1); }
   const checked = {
     ...(own(a, 'position') ? { position: vec(a.position, 'patch.position') } : {}),
     ...(own(a, 'rotation') ? { rotation: angles(a.rotation, 'patch.rotation') } : {}),
@@ -321,6 +322,7 @@ export function editPart(project: ElementProject, idValue: string, patch: Partia
     ...(own(a, 'locked') ? { locked: bool(a.locked, 'patch.locked') } : {}),
     ...(own(a,'geometry') ? { geometry: structuredClone(a.geometry) as PartGeometry } : {}),
     ...(own(a,'axialChamferMm')?{axialChamferMm:num(a.axialChamferMm,'patch.axialChamferMm',0,100)}:{}),
+    ...(own(a,'normalWeighting')?{normalWeighting:choice(a.normalWeighting,'patch.normalWeighting',['uniform','corner-angle']) as 'uniform'|'corner-angle'}:{}),
     ...(own(a,'uvScale') ? {uvScale:num(a.uvScale,'patch.uvScale',0.001,1000)} : {}),
     ...(own(a,'material') ? { material: structuredClone(a.material) as PartMaterial } : {})
   };
@@ -509,3 +511,6 @@ export function validatePartSurface(value:unknown,path='material.surface'):asser
  const s=obj(value,path,['finish','channels','repeat']);choice(s.finish,path+'.finish',['brushed-metal','bead-blasted-metal','anodized-metal']);choice(s.channels,path+'.channels',['roughness-only']);const values=arr(s.repeat,path+'.repeat');if(values.length!==2)fail('length',path+'.repeat');values.forEach((v,i)=>num(v,`${path}.repeat[${i}]`,.125,1024));
 }
 export function migrateElementProjectToV6(value:unknown):ElementProject{const p=structuredClone(validateProject(value));p.schema='morphloom.elements/0.6';return validateProject(p);}
+
+/** Explicit opt-in; legacy weighting and all previous edit fields are retained. */
+export function migrateElementProjectToV7(value:unknown):ElementProject{const p=structuredClone(validateProject(value));p.schema='morphloom.elements/0.7';return validateProject(p);}

@@ -1,0 +1,923 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ElementProject 0.7",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "seed",
+    "units",
+    "coordinates",
+    "parts",
+    "regions",
+    "groups",
+    "elements"
+  ],
+  "properties": {
+    "schema": {
+      "const": "morphloom.elements/0.7"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "units": {
+      "const": "mm"
+    },
+    "coordinates": {
+      "const": "right-handed-y-up"
+    },
+    "parts": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/part"
+      }
+    },
+    "regions": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/region"
+      }
+    },
+    "groups": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "elements": {
+      "type": "array",
+      "maxItems": 5000,
+      "items": {
+        "$ref": "#/$defs/element"
+      }
+    },
+    "selection": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/elementId"
+      }
+    },
+    "assemblies": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/assembly"
+      }
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^(?!(?:__proto__|prototype|constructor)$)[A-Za-z0-9_-]+$"
+    },
+    "elementId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 135,
+      "pattern": "^(?!(?:__proto__|prototype|constructor)$)[A-Za-z0-9_-]+(?:/[0-9]{6})?$"
+    },
+    "slotId": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^(?!(?:__proto__|prototype|constructor)/)[A-Za-z0-9_-]+/[0-9]{6}$"
+    },
+    "vec3": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": -1000000,
+        "maximum": 1000000
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "scale": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0.01,
+        "maximum": 100000
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "rotation": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": -6.283185307179586,
+        "maximum": 6.283185307179586
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "source"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "authored",
+            "inferred",
+            "observed"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "length",
+        "width",
+        "thickness",
+        "curvature",
+        "twist",
+        "color",
+        "roughness"
+      ],
+      "properties": {
+        "length": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "thickness": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "curvature": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "twist": {
+          "type": "number",
+          "minimum": -6.283185307179586,
+          "maximum": 6.283185307179586
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "roughness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "partialParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "length": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "thickness": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 100000
+        },
+        "curvature": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "twist": {
+          "type": "number",
+          "minimum": -6.283185307179586,
+          "maximum": 6.283185307179586
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "roughness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "override": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "params": {
+          "$ref": "#/$defs/partialParams"
+        },
+        "position": {
+          "$ref": "#/$defs/vec3"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "home": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "position",
+        "rotation"
+      ],
+      "properties": {
+        "position": {
+          "$ref": "#/$defs/vec3"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "assemblyId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "position",
+        "rotation",
+        "scale",
+        "shape",
+        "color",
+        "evidence",
+        "visible",
+        "locked"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "position": {
+          "$ref": "#/$defs/vec3"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "scale": {
+          "$ref": "#/$defs/scale"
+        },
+        "shape": {
+          "enum": [
+            "ellipsoid",
+            "beak",
+            "assembly-geometry"
+          ]
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "home": {
+          "$ref": "#/$defs/home"
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        },
+        "assemblyId": {
+          "$ref": "#/$defs/id"
+        },
+        "creaseAngle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3.141592653589793
+        },
+        "material": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "roughness",
+            "metalness"
+          ],
+          "properties": {
+            "roughness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "metalness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "surface": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "finish",
+                "channels",
+                "repeat"
+              ],
+              "properties": {
+                "finish": {
+                  "enum": [
+                    "brushed-metal",
+                    "bead-blasted-metal",
+                    "anodized-metal"
+                  ]
+                },
+                "channels": {
+                  "const": "roughness-only"
+                },
+                "repeat": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "number",
+                    "minimum": 0.125,
+                    "maximum": 1024
+                  }
+                }
+              }
+            }
+          }
+        },
+        "uvScale": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 1000,
+          "description": "Dimensionless native UV scalar; absent preserves original mapping."
+        },
+        "axialChamferMm": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.25,
+          "description": "Spur gear only. Positive minimum .001; engine checks module/width/root wall and actual topology.",
+          "anyOf": [
+            {
+              "const": 0
+            },
+            {
+              "minimum": 0.001
+            }
+          ]
+        },
+        "normalWeighting": {
+          "enum": [
+            "uniform",
+            "corner-angle"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "shape": {
+                "const": "assembly-geometry"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "geometry"
+            ],
+            "properties": {
+              "scale": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "number",
+                  "minimum": 0.01,
+                  "maximum": 100
+                }
+              }
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "geometry"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "axialChamferMm"
+            ]
+          },
+          "then": {
+            "required": [
+              "geometry"
+            ],
+            "properties": {
+              "shape": {
+                "const": "assembly-geometry"
+              },
+              "geometry": {
+                "properties": {
+                  "op": {
+                    "const": "spur-gear"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "normalWeighting"
+            ]
+          },
+          "then": {
+            "required": [
+              "geometry"
+            ],
+            "properties": {
+              "shape": {
+                "const": "assembly-geometry"
+              },
+              "geometry": {
+                "properties": {
+                  "op": {
+                    "enum": [
+                      "lathe",
+                      "extrude",
+                      "spur-gear"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "partId",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "partId": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "regionId",
+        "kind",
+        "count",
+        "root",
+        "spread",
+        "rotation",
+        "fan",
+        "params",
+        "overrides",
+        "deleted",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "regionId": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "feather",
+            "strand"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        },
+        "distribution": {
+          "enum": [
+            "volume",
+            "ellipsoid-surface"
+          ]
+        },
+        "root": {
+          "$ref": "#/$defs/vec3"
+        },
+        "spread": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/vec3"
+            },
+            {
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            }
+          ]
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "fan": {
+          "type": "number",
+          "minimum": -6.283185307179586,
+          "maximum": 6.283185307179586
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "overrides": {
+          "type": "object",
+          "maxProperties": 5000,
+          "propertyNames": {
+            "$ref": "#/$defs/slotId"
+          },
+          "patternProperties": {
+            "^(?!(?:__proto__|prototype|constructor)/)[A-Za-z0-9_-]+/[0-9]{6}$": {
+              "$ref": "#/$defs/override"
+            }
+          },
+          "additionalProperties": false
+        },
+        "deleted": {
+          "type": "array",
+          "maxItems": 5000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/slotId"
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      }
+    },
+    "original": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groupId",
+        "slot"
+      ],
+      "properties": {
+        "groupId": {
+          "$ref": "#/$defs/id"
+        },
+        "slot": {
+          "$ref": "#/$defs/slotId"
+        },
+        "override": {
+          "$ref": "#/$defs/override"
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "partId",
+        "position",
+        "rotation",
+        "params",
+        "visible",
+        "locked",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/elementId"
+        },
+        "kind": {
+          "enum": [
+            "feather",
+            "strand"
+          ]
+        },
+        "partId": {
+          "$ref": "#/$defs/id"
+        },
+        "groupId": {
+          "$ref": "#/$defs/id"
+        },
+        "position": {
+          "$ref": "#/$defs/vec3"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "params": {
+          "$ref": "#/$defs/params"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        },
+        "original": {
+          "$ref": "#/$defs/original"
+        }
+      }
+    },
+    "assembly": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "axis"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "axis": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number",
+            "minimum": -1,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "point2": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "number",
+        "minimum": -10000,
+        "maximum": 10000
+      }
+    },
+    "polygon": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/point2"
+      }
+    },
+    "geometry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "radius"
+          ],
+          "properties": {
+            "op": {
+              "const": "sphere"
+            },
+            "radius": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 10000
+            },
+            "widthSegments": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 128,
+              "multipleOf": 4
+            },
+            "heightSegments": {
+              "type": "integer",
+              "minimum": 4,
+              "maximum": 128,
+              "multipleOf": 2
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "profile"
+          ],
+          "properties": {
+            "op": {
+              "const": "lathe"
+            },
+            "profile": {
+              "type": "array",
+              "minItems": 5,
+              "maxItems": 129,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 10000
+                  },
+                  {
+                    "type": "number",
+                    "minimum": -10000,
+                    "maximum": 10000
+                  }
+                ],
+                "items": false
+              }
+            },
+            "segments": {
+              "type": "integer",
+              "minimum": 16,
+              "maximum": 128,
+              "multipleOf": 4
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "points",
+            "depth"
+          ],
+          "properties": {
+            "op": {
+              "const": "extrude"
+            },
+            "points": {
+              "$ref": "#/$defs/polygon"
+            },
+            "depth": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 10000
+            },
+            "holes": {
+              "type": "array",
+              "maxItems": 32,
+              "items": {
+                "$ref": "#/$defs/polygon"
+              }
+            },
+            "bevelSize": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "bevelThickness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "bevelSegments": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "op",
+            "moduleMm",
+            "toothCount",
+            "pressureAngleDeg",
+            "faceWidthMm",
+            "boreDiameterMm"
+          ],
+          "properties": {
+            "op": {
+              "const": "spur-gear"
+            },
+            "moduleMm": {
+              "type": "number",
+              "minimum": 0.2,
+              "maximum": 5
+            },
+            "toothCount": {
+              "type": "integer",
+              "minimum": 18,
+              "maximum": 64
+            },
+            "pressureAngleDeg": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 25
+            },
+            "faceWidthMm": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 100
+            },
+            "boreDiameterMm": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 300
+            },
+            "toothOverrides": {
+              "type": "object",
+              "maxProperties": 64,
+              "propertyNames": {
+                "pattern": "^tooth_[0-9]{4}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "addendumScale"
+                ],
+                "properties": {
+                  "addendumScale": {
+                    "type": "number",
+                    "minimum": 0.9,
+                    "maximum": 1.1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
