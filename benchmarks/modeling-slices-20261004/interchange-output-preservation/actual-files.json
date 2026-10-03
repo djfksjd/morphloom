@@ -1,0 +1,321 @@
+{
+  "inputSourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+  "files": {
+    "delivery.glb": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "raw.glb": "3f253655f1764f948ed2d116936b4cce92089a8f15d7d8d28694b528a3d119a1",
+    "reopened.glb": "0c2394ce1c33b68657ad77f6e0d3b6e50d6ced698a109b1b8beeb5931a28f628"
+  },
+  "actualBlenderReopen": {
+    "schema": "morphloom.blender-roundtrip/0.2",
+    "pass": true,
+    "exportTangentsRequiredBySource": true,
+    "blenderVersion": "5.2.1 LTS",
+    "source": "delivery.glb",
+    "sourceBytes": 16576700,
+    "sourceSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "roundTrip": "reopened.glb",
+    "roundTripBytes": 17711516,
+    "roundTripSha256": "0c2394ce1c33b68657ad77f6e0d3b6e50d6ced698a109b1b8beeb5931a28f628",
+    "boundsErrorMm": 0.0,
+    "boundsToleranceMm": 0.1,
+    "geometryParity": true,
+    "imageParity": true,
+    "skinningParity": true,
+    "lostImageDimensions": [],
+    "addedImageDimensions": [],
+    "imported": {
+      "objects": 324,
+      "excludedImporterHelpers": 0,
+      "meshes": 322,
+      "vertices": 353655,
+      "polygons": 272560,
+      "materials": 322,
+      "images": 16,
+      "imageNames": [
+        "Image_0",
+        "Image_1",
+        "Image_10",
+        "Image_11",
+        "Image_13",
+        "Image_14",
+        "Image_15",
+        "Image_16",
+        "Image_2",
+        "Image_3",
+        "Image_4",
+        "Image_5",
+        "Image_6",
+        "Image_7",
+        "Image_8",
+        "Image_9"
+      ],
+      "imageDimensions": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "shapeKeys": 0,
+      "skinnedVertices": 0,
+      "weightedVertices": 0,
+      "weightedCoverage": 1.0,
+      "armatures": 0,
+      "bones": 0,
+      "boneNames": [],
+      "actions": 0,
+      "actionNames": [],
+      "geometryMoments": {
+        "cornerCount": 817680,
+        "cornerSum": [
+          16807.50120306755,
+          -38934.96997751847,
+          13944.686152380948
+        ],
+        "cornerSumSquares": [
+          4498.673073014832,
+          3476.796351779748,
+          706.8739627344812
+        ],
+        "surfaceAreaSquareMeters": 1.1373246017783682
+      },
+      "boundsMeters": {
+        "min": [
+          -0.1550000011920929,
+          -0.10199999809265137,
+          -0.030000001192092896
+        ],
+        "max": [
+          0.16200000047683716,
+          0.10199999809265137,
+          0.12049999833106995
+        ]
+      }
+    },
+    "reopened": {
+      "objects": 324,
+      "excludedImporterHelpers": 0,
+      "meshes": 322,
+      "vertices": 353655,
+      "polygons": 272560,
+      "materials": 322,
+      "images": 16,
+      "imageNames": [
+        "Image_0",
+        "Image_1",
+        "Image_10",
+        "Image_11",
+        "Image_13",
+        "Image_14",
+        "Image_15",
+        "Image_16",
+        "Image_2",
+        "Image_3",
+        "Image_4",
+        "Image_5",
+        "Image_6",
+        "Image_7",
+        "Image_8",
+        "Image_9"
+      ],
+      "imageDimensions": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "shapeKeys": 0,
+      "skinnedVertices": 0,
+      "weightedVertices": 0,
+      "weightedCoverage": 1.0,
+      "armatures": 0,
+      "bones": 0,
+      "boneNames": [],
+      "actions": 0,
+      "actionNames": [],
+      "geometryMoments": {
+        "cornerCount": 817680,
+        "cornerSum": [
+          16807.501202718304,
+          -38934.969977359215,
+          13944.686152380948
+        ],
+        "cornerSumSquares": [
+          4498.673072721904,
+          3476.796351985434,
+          706.8739627344812
+        ],
+        "surfaceAreaSquareMeters": 1.1373246017553673
+      },
+      "boundsMeters": {
+        "min": [
+          -0.1550000011920929,
+          -0.10199999809265137,
+          -0.030000001192092896
+        ],
+        "max": [
+          0.16200000047683716,
+          0.10199999809265137,
+          0.12049999833106995
+        ]
+      }
+    }
+  },
+  "aliasRejectedWithoutPartialOutput": true,
+  "repair": {
+    "schema": "morphloom.gltf-interchange-repair/0.1",
+    "pass": true,
+    "input": "/Users/danny/Documents/morphloom/outputs/cooling-unused-object-goal-20261004/repair-current/raw.glb",
+    "output": "/Users/danny/Documents/morphloom/outputs/cooling-unused-object-goal-20261004/repair-current/delivery.glb",
+    "inputBytes": 17712160,
+    "outputBytes": 16576700,
+    "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "tangentAccessors": 299,
+    "repairedTangents": 1408,
+    "removedUnusedTangentAccessors": 23,
+    "restoredMaterials": 0,
+    "materialSourceSha256": null,
+    "validation": {
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 23,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 324,
+        "meshes": 322,
+        "materials": 322,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  },
+  "scope": "Current real CLI files and Blender geometry/material/image/skinning semantic checks; not fixed default importer normals or zero-info global gate"
+}

@@ -166,3 +166,5 @@ Code is [Apache-2.0](./LICENSE). See [NOTICE](./NOTICE) for included data and so
 ### Optional Blender source-normal import
 
 An explicit local tool tested in Blender 5.2.1 creates a source-normal-preserving `.blend` and SHA-bound receipt. It is separate from the default importer and rejects textures, rigs, animations and morphs. See [usage, limits and current evidence](docs/BLENDER_FIRST_IMPORT_STATUS.ko.md). This is not production approval or inverse reconstruction of DCC edits into IR.
+
+The interchange repair CLI rejects overwriting sources or existing outputs. Use fresh output paths when rerunning. See [preservation contract and current file checks](docs/INTERCHANGE_OUTPUT_PRESERVATION_STATUS.ko.md).

@@ -1,0 +1,534 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ❯ tests/gltf-interchange-repair.test.ts (8 tests | 7 failed) 1865ms
+   × glTF interchange material recovery > rejects report-input without overwriting input or leaving partial output 290ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-phup0L/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-phup0L/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects report-source without overwriting input or leaving partial output 229ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-pfM2JG/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-pfM2JG/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects report-output without overwriting input or leaving partial output 232ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-B8w2NB/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-B8w2NB/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects existing-output without overwriting input or leaving partial output 228ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-OuFdY9/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-OuFdY9/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects existing-report without overwriting input or leaving partial output 226ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-BGZlVA/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-BGZlVA/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects symlink-report without overwriting input or leaving partial output 227ms
+     → prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-oFpQsC/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-oFpQsC/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+   × glTF interchange material recovery > rejects missing-report-parent without overwriting input or leaving partial output 206ms
+     → promise resolved "undefined" instead of rejecting
+   ✓ glTF interchange material recovery > restores source optical PBR semantics by stable part id after a DCC rename 227ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects report-input without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-phup0L/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-phup0L/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects report-source without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-pfM2JG/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-pfM2JG/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects report-output without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-B8w2NB/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-B8w2NB/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects existing-output without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-OuFdY9/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-OuFdY9/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects existing-report without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-BGZlVA/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-BGZlVA/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects symlink-report without overwriting input or leaving partial output
+AssertionError: prune: Removed types... Accessor (1)
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-oFpQsC/input.glb",
+  "output": "/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-interchange-preserve-oFpQsC/output.glb",
+  "inputBytes": 1360,
+  "outputBytes": 1196,
+  "outputSha256": "538f79c6b03192e40f1ff55a653d91e4dfb60a59ae56e491af525bd43ce25cab",
+  "tangentAccessors": 0,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 1,
+  "restoredMaterials": 1,
+  "materialSourceSha256": "deea7e9f01c22653fa24a3623c3f891749ed88ad7705234ac08794e74d71b8fc",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 1,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}
+: expected +0 not to be +0 // Object.is equality
+ ❯ tests/gltf-interchange-repair.test.ts:62:65
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  tests/gltf-interchange-repair.test.ts > glTF interchange material recovery > rejects missing-report-parent without overwriting input or leaving partial output
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ tests/gltf-interchange-repair.test.ts:66:39
+     64|       expect(new Uint8Array(await readFile(source))).toEqual(original);
+     65|       if (kind === 'existing-output') expect(await readFile(output, 'u…
+     66|       else await expect(access(output)).rejects.toThrow();
+       |                                       ^
+     67|       if (kind === 'existing-report') expect(await readFile(report, 'u…
+     68|     } finally { await rm(directory, { recursive: true, force: true });…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 1 passed (8)
+   Start at  02:26:46
+   Duration  1.98s (transform 16ms, setup 0ms, collect 18ms, tests 1.87s, environment 0ms, prepare 33ms)

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { closeSync, fstatSync, lstatSync, openSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join, resolve } from 'node:path';
 import { WebIO, type Document, type Extension } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { copyToDocument, createDefaultPropertyResolver, prune } from '@gltf-transform/functions';
@@ -13,6 +13,22 @@ if (!inputArgument || !outputArgument) {
 const inputPath = resolve(inputArgument);
 const outputPath = resolve(outputArgument);
 const materialSourcePath = materialSourceArgument ? resolve(materialSourceArgument) : null;
+const reportPath = reportArgument ? resolve(reportArgument) : null;
+// Preflight is for clear failures; exclusive opens below also guard creation races.
+const destinations = [outputPath, ...(reportPath ? [reportPath] : [])];
+const canonical = new Set<string>();
+for (const path of destinations) {
+  const key = join(realpathSync(dirname(path)), basename(path));
+  if (canonical.has(key)) throw new Error('Output GLB and report must have distinct paths.');
+  canonical.add(key);
+  try {
+    lstatSync(path);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') continue;
+    throw error;
+  }
+  throw new Error(`Output already exists; choose a new path: ${path}`);
+}
 if (inputPath === outputPath) throw new Error('Input and output GLB paths must differ.');
 const input = readFileSync(inputPath);
 if (input.byteLength < 20 || input.byteLength > 256 * 1024 * 1024) {
@@ -157,7 +173,6 @@ const validation = await validateGlbStandard(output.buffer.slice(output.byteOffs
 if (validation.status !== 'pass') {
   throw new Error(`Repaired GLB did not pass exact-byte validation: ${validation.issueCodes.join(', ') || validation.status}`);
 }
-writeFileSync(outputPath, output);
 const report = {
   schema: 'morphloom.gltf-interchange-repair/0.1',
   pass: true,
@@ -173,5 +188,32 @@ const report = {
   materialSourceSha256,
   validation,
 };
-if (reportArgument) writeFileSync(resolve(reportArgument), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+const created: Array<{ path: string; dev: number; ino: number }> = [];
+function writeOwned(path: string, data: Uint8Array | string): void {
+  const descriptor = openSync(path, 'wx');
+  try {
+    const stat = fstatSync(descriptor);
+    created.push({ path, dev: stat.dev, ino: stat.ino });
+    writeFileSync(descriptor, data);
+  } finally {
+    closeSync(descriptor);
+  }
+}
+try {
+  writeOwned(outputPath, output);
+  if (reportPath) writeOwned(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+} catch (error) {
+  const cleanupErrors: unknown[] = [];
+  for (const owned of created.reverse()) {
+    try {
+      const stat = lstatSync(owned.path);
+      // A replacement created by another process is not ours to remove.
+      if (stat.dev === owned.dev && stat.ino === owned.ino) unlinkSync(owned.path);
+    } catch (cleanupError) {
+      if ((cleanupError as NodeJS.ErrnoException).code !== 'ENOENT') cleanupErrors.push(cleanupError);
+    }
+  }
+  if (cleanupErrors.length) throw new AggregateError([error, ...cleanupErrors], 'Output write failed; rollback incomplete.');
+  throw error;
+}
 console.log(JSON.stringify(report, null, 2));

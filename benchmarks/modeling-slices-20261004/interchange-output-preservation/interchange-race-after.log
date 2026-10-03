@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ✓ tests/gltf-interchange-repair.test.ts (11 tests) 2377ms
+   ✓ glTF interchange material recovery > rolls back only owned files after a late report conflict (output replaced: true)  328ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  02:28:42
+   Duration  2.48s (transform 15ms, setup 0ms, collect 19ms, tests 2.38s, environment 0ms, prepare 31ms)

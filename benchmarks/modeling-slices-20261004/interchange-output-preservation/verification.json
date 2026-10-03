@@ -1,0 +1,43 @@
+{
+  "schema": "morphloom.interchange-output-preservation-evidence/0.1",
+  "baseHead": "bd2f57355acdc031a992a998dbb756dbf8f155f7",
+  "filesSha256": {
+    "scripts/repair-glb-interchange.ts": "6bc9e74325c811878ca0e0056395f426cf985c86f21d58820bc1adc199e966c0",
+    "tests/gltf-interchange-repair.test.ts": "71bded1534509f0148f56a3bbc4987641217a3071a432464937682b12a5b7edc"
+  },
+  "environment": {
+    "node": "24.13.1",
+    "blender": "5.2.1 LTS 9e2066aef7ef",
+    "platform": "macOS Apple M5"
+  },
+  "before": {
+    "testsFailed": 7,
+    "testsPassed": 1
+  },
+  "after": {
+    "targetedTests": 11,
+    "fullFiles": 108,
+    "fullTests": 789,
+    "check": "PASS",
+    "benchmark": "PASS",
+    "build": "PASS"
+  },
+  "gateRegression": {
+    "falsePathsUnchanged": true,
+    "qualityGateExit": 1,
+    "qualityProductionExit": 1,
+    "productionDominance": "not-run",
+    "existingCoolingDeliveryInfos": 23,
+    "requiredInfos": 0
+  },
+  "actualFileEvidence": "/Users/danny/Documents/morphloom/outputs/cooling-unused-object-goal-20261004/repair-current/evidence.json",
+  "evidenceRoot": "/Users/danny/Documents/morphloom/outputs/cooling-unused-object-goal-20261004",
+  "scope": "CLI original preservation and transactional output; geometry/UV/material repair unchanged; not global delivery approval",
+  "archivedLogFormatting": {
+    "change": "Trailing whitespace only; raw logs remain in evidenceRoot",
+    "rawSha256": {
+      "interchange-before.log": "eded3a295b7e0fba8c458d6ad1bc46e7efad26afbbdf35b5e872c2e368cdca03",
+      "interchange-race-after.log": "dab53daec68de424214c67274b9bcc3ebc9221d9e261a266bdd6713b2bda00e7"
+    }
+  }
+}
