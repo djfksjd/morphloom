@@ -1,0 +1,146 @@
+{
+  "schema": "morphloom.bound-reference-uv-ui-evidence/0.1",
+  "baseCommit": "d0c3deba48aec5ddc8f330d382abb38e42335420",
+  "codeHashes": {
+    "src/ElementEditor.tsx": "0a70955efed78e9d0b4b70d3c0f166c84825312760612ba8b6c2e87498911e87",
+    "src/BoundReferenceUvPanel.tsx": "8ebaf9ef73d27ab0b41d39f1501faeb6e348851d247b6930b311d7c1d0726cc8",
+    "scripts/bound-reference-uv-ui-regression.py": "a7cf6c93af997d80ad2d0906ef3f4c6e71eacfba9ab738754adba7b5a88219dc",
+    "scripts/bound-reference-uv-async-regression.py": "afd2a4678aff6ab5c2d9e1d51f2b6e007560b0bcd4b6aa0e8021604f127f5dcc"
+  },
+  "native": {
+    "pass": true,
+    "cases": [
+      "native pair upload/PASS",
+      "24 connected tooth results",
+      "actual downloaded receipt/IR false",
+      "new file invalidates receipt",
+      "wrong original BIN BLOCKED",
+      "damaged tooth FAIL and displayed",
+      "failure recovery",
+      "source project bytes preserved"
+    ],
+    "method": "native UI/file/DOM only"
+  },
+  "async": {
+    "pass": true,
+    "cases": [
+      "stale completion discarded after native file replacement",
+      "stale rejection discarded after native file replacement",
+      "ordinary inspection recovers after controlled stale reads"
+    ],
+    "unmount": "not-run",
+    "method": "native uploads, controlled File.arrayBuffer only; no application state injection"
+  },
+  "checks": {
+    "publishedTests": 770,
+    "check": "pass",
+    "build": "pass",
+    "originalTests": "not-run UI; previous engine789 pass",
+    "unmount": "not-run",
+    "globalGate": "not-run current; prior FAIL"
+  },
+  "manifest": [
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/async-final/failure.txt",
+      "sha256": "7cb6e7c707d7aa8cf37703dbaf8a6ebf5edcac0bd04bf86bd59224f2075ed322",
+      "bytes": 323,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/async-final/failure.txt.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/async-v2/evidence.json",
+      "sha256": "7926ace17a2aa00d97e729f24d5acdc7b8588a62a2d5a8e284ec1657545d725f",
+      "bytes": 348,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/async-v2/evidence.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/before.elements.json",
+      "sha256": "45d02aa47d157d69208954740b8aec6755f01966b2bf552c81c52c32d5a46bd7",
+      "bytes": 5847,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/before.elements.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/build.log",
+      "sha256": "cd5ff9449e26ac3a3878c77198c31a4adcf7b7d63651468497b99b1ebc4cabf0",
+      "bytes": 1478,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/build.log.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/check.log",
+      "sha256": "d363f30d20065b6ed149e70fdc6802945c43586e7d70206744cfe9902c162cc1",
+      "bytes": 50,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/check.log.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/failure-snapshot.txt",
+      "sha256": "378a11f7aee343b0496161773e9d37b09e7ce3a9e85a726df1b68a9b20275886",
+      "bytes": 2788,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/failure-snapshot.txt.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/failure.txt",
+      "sha256": "5c1328ef449f84ca76f2d035406a99c65821bb35c72e4ff1b35954fca1b34522",
+      "bytes": 201,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/failure.txt.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/healthy.json",
+      "sha256": "e2f59f1c097c25962d252fafc4dc4a8e72d8ca2b697c6f6e66015711fe5585af",
+      "bytes": 2839178,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/healthy.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/healthy.png",
+      "sha256": "a5d9fca6f2bfffcb68233ce60e42c49f29079cee8523576450b651ed5ed4366d",
+      "bytes": 222870,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/healthy.png"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/after.elements.json",
+      "sha256": "45d02aa47d157d69208954740b8aec6755f01966b2bf552c81c52c32d5a46bd7",
+      "bytes": 5847,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/after.elements.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/before.elements.json",
+      "sha256": "45d02aa47d157d69208954740b8aec6755f01966b2bf552c81c52c32d5a46bd7",
+      "bytes": 5847,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/before.elements.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/browser-evidence.json",
+      "sha256": "c58724f8a542193d517d1aadec4375ccdaafa6b21b58a62192d16302dd92fb0a",
+      "bytes": 354,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/browser-evidence.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/damaged.json",
+      "sha256": "7f66a9d9ac66403cb75c196599ce357e5da730adbec928b95feabe0c60d92c04",
+      "bytes": 2836850,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/damaged.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/damaged.png",
+      "sha256": "f5430c9923f8755587665deecc248fa2091ed3b0c54555f372d80d479ef22be0",
+      "bytes": 376898,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/damaged.png"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/healthy.json",
+      "sha256": "75fcffa265038ce9ece1768d44c7dba17760b47824ab9efb2cf35a3ccfcca5c2",
+      "bytes": 2839165,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/healthy.json.gz"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/native-final/healthy.png",
+      "sha256": "8deff0ee4e01f21b89171c25e9116e8f24f92cc914eacc941b4e39ee8d8025d8",
+      "bytes": 222890,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/native-final/healthy.png"
+    },
+    {
+      "local": "/Users/danny/Documents/morphloom/outputs/bound-reference-uv-ui-20261003/npm-test.log",
+      "sha256": "17bce2d34ce048cebfa5d47bec75da15e19e5856fff44937b55c037f410d17ea",
+      "bytes": 12579,
+      "archive": "benchmarks/modeling-slices-20261003/bound-reference-uv-ui/npm-test.log.gz"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {BoundReferenceUvPanel} from './BoundReferenceUvPanel';
 import { surfaceGearPack } from '../examples/domain-packs/surface-gear-pack';
 import './element-editor.css';
 import {attachUvChecker} from './engine/uv-checker';
@@ -258,6 +259,7 @@ export default function ElementEditor({initialProject,workspace,activeAsset,onAs
     <label><input type="checkbox" disabled={!!workspace} checked={explode} onChange={e => setExplode(e.target.checked)} /> Explode preview</label>
     {workspace&&<p>Isolate selection shows the active part, element or group at its assembly placement. Explode across assets is unavailable. Source JSON/GLB actions below apply to the active asset; use workspace actions for combined delivery.</p>}
     <p role="status">{error || `${metrics} · ${actualCalls} measured render calls · ${pickMs.toFixed(1)} ms last pick · ${glbBytes} bytes last GLB · ${sceneRef.current ? 'viewport ready' : 'viewport unavailable'}`}</p>
+    <BoundReferenceUvPanel />
     <details aria-label="UV quality"><summary>UV quality: {uvPending?'checking':uvError?'blocked':uvReceipt?.report.integrityPass?'integrity PASS':'integrity FAIL'}</summary>
       <p>Inspection uses baked source geometry; isolate/explode preview does not alter it. {workspace&&'This panel covers the active source asset; workspace export reports the combined scene.'} An integrity pass does not verify an atlas or texel density. Exports include a UV report and may still fail production readiness.</p>
       {uvError&&<p role="alert">{uvError}</p>}

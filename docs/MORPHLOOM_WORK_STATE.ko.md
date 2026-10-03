@@ -130,3 +130,6 @@ Actual analytic cylinder normal bias corrected only for explicitly selected sche
 
 
 2026-10-03 Bound original/current reference UV: exact SHA/BIN/JSON/declared-transform binding permits inspection-only source geometry context, never editableIR promotion.8actual file pairs/24gear feature checks PASS; real UV byte damage24/294 on one tooth FAIL despite aggregate0.286%≤5%. Initial12/294 fixture below5% excluded with reason. Publish770/original789/check/build/schema8 PASS. No render/geometry change, no fresh8DCC or whole delivery claim; required extension/time/skin/morph/URI unsupported.30min contract exceeded to about36min at23:22KST. Next UI reachability for original/current inspection; goal ACTIVE. See BOUND_REFERENCE_UV_STATUS.ko.md.
+
+
+2026-10-03 Bound reference UV UI: native8/controlled File.arrayBuffer3 cases PASS, exact report hashes24gear features and actual damageFAIL displayed, sourceJSON byteexact. Publish770/check/build PASS; original whole suite/UI unmount/globalgate not-run current. ExistingIR/history unchanged, no remote/API0. See BOUND_REFERENCE_UV_UI_STATUS.ko.md. Next actual shape/shading bottleneck audit; goal ACTIVE.
