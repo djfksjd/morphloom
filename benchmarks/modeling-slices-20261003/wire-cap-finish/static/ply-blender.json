@@ -1,0 +1,31 @@
+{
+  "schema": "morphloom.blender-static-mesh-audit/0.1",
+  "status": "pass",
+  "blenderVersion": "5.2.1 LTS",
+  "format": "ply",
+  "source": "asphalt.ply",
+  "sourceBytes": 12201286,
+  "sourceSha256": "1dbe6e98b5ff7ce7ab9717ca3cb4d77d92f073f326e484de42814015a5a65d1e",
+  "objects": 1,
+  "meshes": 1,
+  "vertices": 335808,
+  "triangles": 111936,
+  "bounds": {
+    "min": [
+      -0.30000001192092896,
+      -0.019999999552965164,
+      -0.22499999403953552
+    ],
+    "max": [
+      0.30000001192092896,
+      0.023453475907444954,
+      0.22499999403953552
+    ],
+    "size": [
+      0.6000000238418579,
+      0.04345347732305527,
+      0.44999998807907104
+    ]
+  },
+  "scope": "Independent Blender application import of a Morphloom static-mesh download. Materials, rigging and animation are outside OBJ/STL/PLY parity."
+}

@@ -1,0 +1,7730 @@
+{
+  "cold_plate": {
+    "attributes": {
+      "position": "f865d07fe7fcbdded45c4157c66021a0d715713c1cf1b4c393524afb1685241e",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "370c810d1a2a05928603d3e0ef98a0309b3d801ab81bfeaa4d4054e9bf23e2c7"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.118,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "contact_pad": {
+    "attributes": {
+      "position": "d12f5a2d8f5052c94019a3e3d680c3cf55fea6519324fa363df3557f9f3d2f2a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "3428ffe8d6a1ef5eeb245c3ac69962d03a1ccbb201fc9c09a57f1baa2437cdab"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.101,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tec": {
+    "attributes": {
+      "position": "6e836635ddc7432a32848d4c1a191edcaf503f7c9127296e3b1dadb6e1d3e126",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "05d6060ef9b9f95b747b81e50bf88cf845c5fb79c84c9f9bbc5a7ef12789baff"
+    },
+    "index": null,
+    "position": [
+      -0.045,
+      0.082,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tecB": {
+    "attributes": {
+      "position": "6e836635ddc7432a32848d4c1a191edcaf503f7c9127296e3b1dadb6e1d3e126",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "05d6060ef9b9f95b747b81e50bf88cf845c5fb79c84c9f9bbc5a7ef12789baff"
+    },
+    "index": null,
+    "position": [
+      0.045,
+      0.082,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tf1": {
+    "attributes": {
+      "position": "5be9dca69e2b8d9b15c50859b05f9cb8a001f5f62ef17e9a6ae14a31199c43bb",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "27e8c88435b2d7ab5a586cf13bd9f60d006287cd45969d4b04af8f071776b7ae"
+    },
+    "index": null,
+    "position": [
+      -0.045,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "tf1B": {
+    "attributes": {
+      "position": "5be9dca69e2b8d9b15c50859b05f9cb8a001f5f62ef17e9a6ae14a31199c43bb",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "27e8c88435b2d7ab5a586cf13bd9f60d006287cd45969d4b04af8f071776b7ae"
+    },
+    "index": null,
+    "position": [
+      0.045,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "copper_base": {
+    "attributes": {
+      "position": "48efc3086b6196f74613c35053cf105f4febe971acb0a6cfe7a64bc4b219ec4d",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "ef29b6a346760e62a849d79c66c03d6440ff3c791d36f2b621a9fed9265a1b0a"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.063,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_base": {
+    "attributes": {
+      "position": "89222c39672b41562b441182139e4eca6e4d6186bd0342b8e16664ecd450f6e1",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "d9cb62660cf59c4ffe71a6148b8fb754be630bb6a1625dd268b1ea0ab4d2ba11"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.05,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_housing": {
+    "attributes": {
+      "position": "169b5c67fc68a63915ff6e9bdf548c9beff9aa4518a81e36c93c7deb6870716f",
+      "normal": "4ebec0e60e112b1e6440ddfea4ca06b94c59c0d33b03836e8d76d0015f6242c8",
+      "uv": "d2448cd560501778680de7bf3c576dbb641386b39c81e65bb75daa65641e647d"
+    },
+    "index": "5a344925049e2f70cc0213beda3bb7973c7b99983a7e2ae5b0cac40eaceed169",
+    "position": [
+      0,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0.7071067811865475,
+      0,
+      0,
+      0.7071067811865476
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_hub": {
+    "attributes": {
+      "position": "bbe9b0f47238cc420e85561c9a7587a6ee52f418f7f7afdacc61025ab7181258",
+      "normal": "b022cde5cb6de50a9993938bdf4bf457b0eb20273f0d7c765b64a58398e34948",
+      "uv": "a289f89d2fd9a414de9554fc59a6252b157f3363cbfb21d786b65bf70f2efbe9"
+    },
+    "index": "0d7705d965916b71298da1ad2c271ba96d3b71b1453d0a5f32d3320e70057d65",
+    "position": [
+      0,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_connector": {
+    "attributes": {
+      "position": "9e964d52071e39d1bf1f71915ea1ab2eff777a518fc2437a859c3f704619d547",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "7c24b8659a6761fbb2d5b3b8145c5aa6e105b5c699399be1350394e15fdf7b3d"
+    },
+    "index": null,
+    "position": [
+      0.057,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "frame_front": {
+    "attributes": {
+      "position": "e0d39a1aa9e7a4d5f01b793315ed5bd3a1208877886de79938cba1a6fb337dbf",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "9b2fd017bd3af44ac4fcf6f77280573da1d21ab2ba92ad0277f95794b67d1105"
+    },
+    "index": null,
+    "position": [
+      0,
+      -0.024,
+      0.096
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "frame_rear": {
+    "attributes": {
+      "position": "e0d39a1aa9e7a4d5f01b793315ed5bd3a1208877886de79938cba1a6fb337dbf",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "9b2fd017bd3af44ac4fcf6f77280573da1d21ab2ba92ad0277f95794b67d1105"
+    },
+    "index": null,
+    "position": [
+      0,
+      -0.024,
+      -0.096
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "frame_left": {
+    "attributes": {
+      "position": "e8eeabe9b7c6244bb3a7c04206b53e99581327a2842c7316ab58792c55951b60",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5a8b80d0fcd5649a3a55bb177d6b1125c36cf5aadb802d46301a7ece2ee17840"
+    },
+    "index": null,
+    "position": [
+      -0.149,
+      -0.024,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "frame_right": {
+    "attributes": {
+      "position": "e8eeabe9b7c6244bb3a7c04206b53e99581327a2842c7316ab58792c55951b60",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5a8b80d0fcd5649a3a55bb177d6b1125c36cf5aadb802d46301a7ece2ee17840"
+    },
+    "index": null,
+    "position": [
+      0.149,
+      -0.024,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "controller_pcb": {
+    "attributes": {
+      "position": "42464e65c08488594079cce98534c191bcd9efd03d63cd122d223486428450f2",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "c4689d3bcdee83d1cc5f4ad194cd5c03c492f4188533a83098e190612df38661"
+    },
+    "index": null,
+    "position": [
+      0,
+      -0.013,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "power": {
+    "attributes": {
+      "position": "4d860505745991cb30fdda87d4d56760411eec5ab035b8bd99de130a3a144b45",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "962d79e40a4f0077be8e487ae52cc60bab7a342f956554f259957efdef3487eb"
+    },
+    "index": null,
+    "position": [
+      -0.104,
+      -0.005,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "esp32": {
+    "attributes": {
+      "position": "39d0b1d4496ccef6c49e6fca18821d965844429e4e71ea08f6722a12bda4421c",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "b569626898066042a3935513e1809006ad446fa7b9af43a0eb7607aa1b5acc38"
+    },
+    "index": null,
+    "position": [
+      0.092,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ads1115": {
+    "attributes": {
+      "position": "bab0026965123feeb60e9e93360fbd35483d094d08c57dc389120d1224363b23",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "7f7cffb203289d7642016914725f8ff0ac02db5e8fe4134c4ba240b7bbbc9787"
+    },
+    "index": null,
+    "position": [
+      -0.072,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "mux": {
+    "attributes": {
+      "position": "7c78e6d2931f00b594c3c488fc09bc6115b63582a5de93b8546e2a5e5c0fe939",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "70147c2e96750b1df3fae03acc0babf9266c4dfeed0ac89bedac8a87adaf4b0c"
+    },
+    "index": null,
+    "position": [
+      -0.029,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface": {
+    "attributes": {
+      "position": "7b614dbd35530a3dc902bd49d0f1fb0ef0991cbec5e45dad7678dea2bf20393e",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "35de8c6d7f2178db325e6eab289625391d38a5e0f375214e9be9a881fe3be750"
+    },
+    "index": null,
+    "position": [
+      0.025,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "sensors": {
+    "attributes": {
+      "position": "4e11d6bc826780971e5d15f51e38c3866eb886cb4677a794c30efd0b9ff3a9e7",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "d57baf81a8496b301a50d0e5bd507900e526b2cb1ba65b439221d8d04f9679c3"
+    },
+    "index": null,
+    "position": [
+      -0.125,
+      0.007,
+      -0.07
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "sensorsB": {
+    "attributes": {
+      "position": "4e11d6bc826780971e5d15f51e38c3866eb886cb4677a794c30efd0b9ff3a9e7",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "d57baf81a8496b301a50d0e5bd507900e526b2cb1ba65b439221d8d04f9679c3"
+    },
+    "index": null,
+    "position": [
+      0.125,
+      0.007,
+      -0.07
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ina260": {
+    "attributes": {
+      "position": "3a3d0eef254d85f684939237103db2cd4025047dcb6a7faa10aaf7cd0045d444",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "6e941bd6707b75f0e3f20160e02a165af5fc96f0e7df7df8964071f646144f55"
+    },
+    "index": null,
+    "position": [
+      0.072,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ina260B": {
+    "attributes": {
+      "position": "3a3d0eef254d85f684939237103db2cd4025047dcb6a7faa10aaf7cd0045d444",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "6e941bd6707b75f0e3f20160e02a165af5fc96f0e7df7df8964071f646144f55"
+    },
+    "index": null,
+    "position": [
+      0.112,
+      -0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "md10c": {
+    "attributes": {
+      "position": "158e6284a427cb0e7b5d685a1611e544e69e764604c037fd78c5f77ea3e3ae96",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "ea3d3cf0340fb8834ad764953d6d08b760b45a500b3560cf7e174e463d7abe95"
+    },
+    "index": null,
+    "position": [
+      0.078,
+      -0.004,
+      0.012
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "md10cB": {
+    "attributes": {
+      "position": "158e6284a427cb0e7b5d685a1611e544e69e764604c037fd78c5f77ea3e3ae96",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "ea3d3cf0340fb8834ad764953d6d08b760b45a500b3560cf7e174e463d7abe95"
+    },
+    "index": null,
+    "position": [
+      0.136,
+      -0.004,
+      0.012
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_0": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      -0.055,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_1": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      0.055,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_2": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      -0.055,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_3": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      0.055,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_4": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      -0.112,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_5": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      0.112,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_6": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      0,
+      0.056,
+      -0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ntc_7": {
+    "attributes": {
+      "position": "d0f41f5392604ff1ff591efdc5a11409381bc78462812faceb6b59dc1200d243",
+      "normal": "b383560e70809c9f3a393877247a1493a351f894e615fe2d192c6739ca713f2f",
+      "uv": "0bf046e22f0d47b92a5495aef59eaab3b21e6330e9a814f1d0e631a86751ae66"
+    },
+    "index": "b10141e9a357ca15ec8f3035f543bbdb5dd1041b173d81a57102b2790dea3928",
+    "position": [
+      0,
+      0.056,
+      0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatpipe_1": {
+    "attributes": {
+      "position": "3c0346b4949a5561e7011ad89248769be5381fc61a9846b736c17b7429d48333",
+      "normal": "93d053cd3bdeaf3b4d832d90492ae61779cbdde8cb38d62fe25c43624f29758f",
+      "uv": "71ef1e5dc667253d5b5b9e42f6738de577cee515746f4f90123705672f6c78c4"
+    },
+    "index": "d689f713ef22bc6d1b4186e739ac379a9e4fc0abe9be57381e6dc05a31fc20ec",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatpipe_2": {
+    "attributes": {
+      "position": "be25829cdba2b72df39fa271dc06d451f5e2bd6bcc163290bdf82005db8fba24",
+      "normal": "93d053cd3bdeaf3b4d832d90492ae61779cbdde8cb38d62fe25c43624f29758f",
+      "uv": "71ef1e5dc667253d5b5b9e42f6738de577cee515746f4f90123705672f6c78c4"
+    },
+    "index": "d689f713ef22bc6d1b4186e739ac379a9e4fc0abe9be57381e6dc05a31fc20ec",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatpipe_3": {
+    "attributes": {
+      "position": "4ee861d7af379b12fcf10036df6f86757dc41133f63a62ccbfe4e1f564f04d9e",
+      "normal": "93d053cd3bdeaf3b4d832d90492ae61779cbdde8cb38d62fe25c43624f29758f",
+      "uv": "71ef1e5dc667253d5b5b9e42f6738de577cee515746f4f90123705672f6c78c4"
+    },
+    "index": "d689f713ef22bc6d1b4186e739ac379a9e4fc0abe9be57381e6dc05a31fc20ec",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatpipe_4": {
+    "attributes": {
+      "position": "c4e63d20bea198404cbc17726f41cb2f05006755e769137b9f5963b09619fcea",
+      "normal": "93d053cd3bdeaf3b4d832d90492ae61779cbdde8cb38d62fe25c43624f29758f",
+      "uv": "71ef1e5dc667253d5b5b9e42f6738de577cee515746f4f90123705672f6c78c4"
+    },
+    "index": "d689f713ef22bc6d1b4186e739ac379a9e4fc0abe9be57381e6dc05a31fc20ec",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_01": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.027,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_02": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.02802,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_03": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.02904,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_04": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_05": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03108,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_06": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.032100000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_07": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03312,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_08": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.034140000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_09": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03516,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_10": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03618,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_11": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.037200000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_12": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.03822,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_13": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.039240000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_14": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.04026,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_15": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.041280000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_16": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.0423,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_17": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.04332,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_18": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.044340000000000004,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_19": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.04536,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_20": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.04638,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_21": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.0474,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "heatsink_fin_22": {
+    "attributes": {
+      "position": "39f78072f8ebf30f5bb12679b318e9d11d30f6c32ea07f930a2d9264da3d1d8b",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "14217823618718a4735d98488415366fa1398f162ad43d9bf26b0ba9eedb0499"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.048420000000000005,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_1": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      0.032,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0.17410813759359595,
+      0,
+      0.9847265389049334
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_2": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      0.024513422179807298,
+      0.02,
+      0.020569203509969256
+    ],
+    "quaternion": [
+      0,
+      -0.17318817985737534,
+      0,
+      0.9848887522749407
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_3": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      0.005556741685341773,
+      0.02,
+      0.031513848096390656
+    ],
+    "quaternion": [
+      0,
+      -0.49959544683223256,
+      0,
+      0.8662588467106711
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_4": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      -0.015999999999999993,
+      0.02,
+      0.027712812921102038
+    ],
+    "quaternion": [
+      0,
+      -0.7657441296755997,
+      0,
+      0.6431453396141174
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_5": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      -0.030070163865149067,
+      0.02,
+      0.010944644586421404
+    ],
+    "quaternion": [
+      0,
+      -0.939532769300345,
+      0,
+      0.342459012745795
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_6": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      -0.03007016386514907,
+      0.02,
+      -0.010944644586421397
+    ],
+    "quaternion": [
+      0,
+      -0.9999998909205673,
+      0,
+      0.00046707478358437853
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_7": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      -0.016000000000000014,
+      0.02,
+      -0.02771281292110203
+    ],
+    "quaternion": [
+      0,
+      -0.9398522672691958,
+      0,
+      -0.34158119929081593
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_8": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      0.005556741685341759,
+      0.02,
+      -0.03151384809639066
+    ],
+    "quaternion": [
+      0,
+      -0.7663445894429698,
+      0,
+      -0.6424297395291457
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "fan_blade_9": {
+    "attributes": {
+      "position": "63dedaf5dfb6c32649009bf1c91deb156d62d858d9415dd7bbf9efd800fe2db5",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "2fdd288923dd6ffc77f3134a22d4d5634d9329ceb14fe13a4ccbc1313f293bf2"
+    },
+    "index": null,
+    "position": [
+      0.02451342217980729,
+      0.02,
+      -0.020569203509969266
+    ],
+    "quaternion": [
+      0,
+      -0.5004044440883347,
+      0,
+      -0.8657917719270868
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "power_usb_c": {
+    "attributes": {
+      "position": "1c4fd522b92843f59b2dcbf289956c8a00accc887b53be43123f611e08638f44",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "d60f05b9366241bf054cdca2d6991045072826ddbf36bd8b35ce5c6d223e77dc"
+    },
+    "index": null,
+    "position": [
+      -0.121,
+      0.003,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "power_inductor": {
+    "attributes": {
+      "position": "493b01407d21a5561a280195a460c95d0c84fefd45f24b0c17c124e5264ddeec",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "b95a7ce1ac3d5ccbbdfa1ee45ec06227c9a24ca7554046d34e5072ec7408e553"
+    },
+    "index": null,
+    "position": [
+      -0.105,
+      0.004,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "power_efuse": {
+    "attributes": {
+      "position": "aaeaa1e3c201f621aa4f6dd8fb375d4979109b03d3bda0635462019e15e25b3e",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "1b30312336fec4be368d181c6bc179dacaf6988b863fa541a8d14c6ad03d8005"
+    },
+    "index": null,
+    "position": [
+      -0.091,
+      0.003,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "esp32_rf_can": {
+    "attributes": {
+      "position": "b499385c5dc6ddb0b197ad71cd6dfc83198ebba1af989dbc3395c0820d323315",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "a3727609b090a0973d3bd94652dbafba19b4c0e2707d01bb6cfba78e8de8336d"
+    },
+    "index": null,
+    "position": [
+      0.082,
+      0.001,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "esp32_soc": {
+    "attributes": {
+      "position": "baed5e84b8d4d57666f8dee473cd48e65153faeaab7e008d939ce62d21f1083a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "db1e21d3f29803304ad5eea128cd476144aad9c5cb1f39cc8cf6e94aa0cbe796"
+    },
+    "index": null,
+    "position": [
+      0.103,
+      0.001,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "mux_package": {
+    "attributes": {
+      "position": "ba3a9d684b93879519766303ec8be21527bd2009be57a863f660b3e5a09f0489",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "e30b0036ce3ed51a789aeea2f039d6f60402d1cd0ceca86dee0a89eec003aadf"
+    },
+    "index": null,
+    "position": [
+      -0.029,
+      0.001,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_q1": {
+    "attributes": {
+      "position": "847b6ee55d3d74db7343e25e27aafc72934ef3cbe8615192b7d928123cdd9885",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "c7eef2f27dce181c4d4d7ee79b41fe5300894feede90a7dfe5ad372d15d9ce72"
+    },
+    "index": null,
+    "position": [
+      0.004,
+      0.001,
+      0.069
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ina260_shunt_a": {
+    "attributes": {
+      "position": "200dfeb0aeab3a48b728803aeb3f42c755c9476f956558d3974ddab0d99ddca2",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "1ce05b348695f370902a80800122b3d40bf4871861d555f30a1ae1c8a1763400"
+    },
+    "index": null,
+    "position": [
+      0.072,
+      0.001,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "ina260_shunt_b": {
+    "attributes": {
+      "position": "200dfeb0aeab3a48b728803aeb3f42c755c9476f956558d3974ddab0d99ddca2",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "1ce05b348695f370902a80800122b3d40bf4871861d555f30a1ae1c8a1763400"
+    },
+    "index": null,
+    "position": [
+      0.112,
+      0.001,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "md10c_mosfet_a": {
+    "attributes": {
+      "position": "2675c1cc1003522190582b579ce506f3f92cf0cb97e9fede8929e2766e4947b8",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "645f185bfb6a50614b49fefe587667c65029b33d8bb7c3f7ace28380244e1213"
+    },
+    "index": null,
+    "position": [
+      0.078,
+      0.004,
+      0.012
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "md10c_mosfet_b": {
+    "attributes": {
+      "position": "2675c1cc1003522190582b579ce506f3f92cf0cb97e9fede8929e2766e4947b8",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "645f185bfb6a50614b49fefe587667c65029b33d8bb7c3f7ace28380244e1213"
+    },
+    "index": null,
+    "position": [
+      0.136,
+      0.004,
+      0.012
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_01": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_02": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0072,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_03": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0144,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_04": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0216,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_05": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0288,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_06": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.036,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_07": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0432,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_res_08": {
+    "attributes": {
+      "position": "276b82453d8f10722990ee0f14d1224a494e005159be5f16983001438ba9963a",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "903da6ee5c74e193adc57a7c1d2af65170f1189ed40f6a8f67e9c6356d5d90eb"
+    },
+    "index": null,
+    "position": [
+      0.0504,
+      0.001,
+      0.061
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_01": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_02": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0072,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_03": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0144,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_04": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0216,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_05": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0288,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_06": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.036,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_07": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0432,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "interface_cap_08": {
+    "attributes": {
+      "position": "3e6c4320959937c590643cb76b5de10852ec8ba4dd4aa568a6b44ed505ff6a59",
+      "normal": "92a17761c951ebc673689f0c1f86bb6656675aafaf7ad95c90aa91453acb29d5",
+      "uv": "5adaa52ea20e97bff565755587c9437e1a3f0f3bb95330a9e2c5e08ebeb4701e"
+    },
+    "index": null,
+    "position": [
+      0.0504,
+      0.001,
+      0.072
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_a_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.12,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_a_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.06199999999999999,
+      0,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_a": {
+    "attributes": {
+      "position": "a264ad8f5d0c21e3d8739924a427dbde35a2d89f3d718470f6e5e34f5bcd5750",
+      "normal": "4b436e15706b9836c95236f70b147eae194c48c0723b60c381feeccf48ab6af7",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_a_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.08199999999999999,
+      0,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_a_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.061,
+      0.002,
+      0.022
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_a": {
+    "attributes": {
+      "position": "3293475b5384e756e80e3506c20363e7fe90bfdc8a93a914a47fe3c7774ecdc0",
+      "normal": "608c9810bc86415fad354cdce1b22d2fab34ea01c6b1c9658f2706dec9a16a37",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_a_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.11199999999999999,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_a_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.095,
+      0.002,
+      0.022
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_a": {
+    "attributes": {
+      "position": "44f9c9053b5cb4bdfeb29150f4ccb49c3a610e084a70df394d4d4cb8ba2ecee0",
+      "normal": "4ef5b3a1a79060d3fdba448c0db46de045d20170caef321351ad5f95e423e7d1",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_a_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.061,
+      0.002,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_a_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.052,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_a": {
+    "attributes": {
+      "position": "30c1a01925080b67214a742c0ac64fe13deae3218d3ce731ab0305989542a265",
+      "normal": "98810ab9d48e9b03410d8db72730a5de5ebbd06be0a4cb6b9cab1282c9ba7d14",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_a_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.038,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_a_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.028999999999999998,
+      0.08,
+      0.015
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_a": {
+    "attributes": {
+      "position": "b0c5bc758a182b914328015e373e81c1370f8228846105cb15485b44d71fe18f",
+      "normal": "91985d255e9814c99dfacda79dc1d413255380730024181a8278ba812c49b8b9",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_a_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.095,
+      0.002,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_a_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.028999999999999998,
+      0.08,
+      0.011
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_a": {
+    "attributes": {
+      "position": "d537f4b1edcb087c05674336be5868f91a30540b6828f9de0ea13903ffc02e5e",
+      "normal": "1f9fc0546b8830120f4d1969810cffaf7deed3c6e5a6dcc4bd5fb7afd0d16b66",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_a_terminal_1": {
+    "attributes": {
+      "position": "8f531dd752ffe6e2b1b9b7553df2c4765b331ed2e49b478cc730b678ab4835f9",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.074,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_a_terminal_2": {
+    "attributes": {
+      "position": "8f531dd752ffe6e2b1b9b7553df2c4765b331ed2e49b478cc730b678ab4835f9",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.072,
+      0.002,
+      -0.005000000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_a": {
+    "attributes": {
+      "position": "ac551d45deb88fb1fe6c3da3f51b9e035be97e0564cfbb012ab2ca991ac74907",
+      "normal": "29f658a0343448168052e83456236ccb6aa5b5521a17db2895276cbb874fa3f0",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_b_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.11199999999999999,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_b_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.10200000000000001,
+      0,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_mon_b": {
+    "attributes": {
+      "position": "0dfa8f09fae7cbbe0bcbdb65de197b1f9181c08c21e6cf6d5686fc37fd741619",
+      "normal": "26f684c849201bb3628c34be1691102c0fcdabfe576bb0fda7fd32e9067641ea",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_b_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.122,
+      0,
+      0.066
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_b_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11900000000000001,
+      0.002,
+      0.022
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_12v_drive_b": {
+    "attributes": {
+      "position": "b32dc7f69fceb4e37c0fa300134b586ba1f5b409a51fc62de14b1e2b4099596e",
+      "normal": "e30e018b564af8d8a28922c21561c6c27a5ee89b14445a117f3d28f158edab5c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_b_terminal_1": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.104,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_b_terminal_2": {
+    "attributes": {
+      "position": "5d6a646bd3236c964755753967c528874e0984e6341ba00cb4c72ec79b3d148e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.15300000000000002,
+      0.002,
+      0.022
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_drive_gnd_b": {
+    "attributes": {
+      "position": "3bff5dd0a726f4642bbdec493473bb191243926f10f983aac455eca95650a94b",
+      "normal": "bcd337b08eb8ef1ce46eced6f76dfee3ddddb1db0d2c4c561833a6cef3aa6350",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_b_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11900000000000001,
+      0.002,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_b_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.038,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pre_fuse_b": {
+    "attributes": {
+      "position": "1a1f95c0a99c196d0cddd4f606def7f383207449c3ebf8acba437365e77a8b63",
+      "normal": "9b60a499f472f738463e7f8c059a1af91b76a40799c05c8a13c966229253c5bb",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_b_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.052,
+      0.072,
+      0.032
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_b_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.061,
+      0.08,
+      0.015
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pos_b": {
+    "attributes": {
+      "position": "7486070e9f3d04678a2c854f7c4a41e46a0ea2d6b21b5e89214fefb035e99a8a",
+      "normal": "74b26b6009b55aac06896fd89ee81bd8e7fb13c33cfe65db0c388160b8599d39",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_b_terminal_1": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.15300000000000002,
+      0.002,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_b_terminal_2": {
+    "attributes": {
+      "position": "a956e98d35f31174a51dc2359fda7c3d905600dd94f9ddbc4a6437ee7992905e",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.061,
+      0.08,
+      0.011
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_neg_b": {
+    "attributes": {
+      "position": "c76131b9746ff0e05926e813fba77d7e7e93a4caffd5df8b25408f1dec90d75f",
+      "normal": "8ec29715af21243e81e1a76eb7b308ae6be875a1756e28674fb7bcd78b713ed8",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_b_terminal_1": {
+    "attributes": {
+      "position": "8f531dd752ffe6e2b1b9b7553df2c4765b331ed2e49b478cc730b678ab4835f9",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.079,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_b_terminal_2": {
+    "attributes": {
+      "position": "8f531dd752ffe6e2b1b9b7553df2c4765b331ed2e49b478cc730b678ab4835f9",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.13,
+      0.002,
+      -0.005000000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_tec_pwm_b": {
+    "attributes": {
+      "position": "1283caf7c73ade62508fa775fe51310727ccb90240234170e25c09f8499fe52e",
+      "normal": "750af9304b63f0c6323896c2367b9bffac7604a578b7bcc61d4255ccf6cecda1",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_12v_terminal_1": {
+    "attributes": {
+      "position": "36c7d809976823e76658ac2940ed3935e4ec7e20b7fb14e726df1ac8436f1cd1",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.102,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_12v_terminal_2": {
+    "attributes": {
+      "position": "36c7d809976823e76658ac2940ed3935e4ec7e20b7fb14e726df1ac8436f1cd1",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.054,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_12v": {
+    "attributes": {
+      "position": "cfa837b5f23f918a24b13ce49cbd4900477b1733dfd414a18860044d6c36f646",
+      "normal": "7d7f85c465e98461068338e80ec78adfc3223245d1b7e7daee05c3b270b7fc42",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_gnd_terminal_1": {
+    "attributes": {
+      "position": "36c7d809976823e76658ac2940ed3935e4ec7e20b7fb14e726df1ac8436f1cd1",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.09899999999999999,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_gnd_terminal_2": {
+    "attributes": {
+      "position": "36c7d809976823e76658ac2940ed3935e4ec7e20b7fb14e726df1ac8436f1cd1",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.056,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_gnd": {
+    "attributes": {
+      "position": "738c7752f184c7e8a6efa0436be8499aa8d2922d5c4d2710eee0591aafff7de8",
+      "normal": "124ef3fd733d4f4378e1a24c4e790674c4fc036a0becd02d9a04dadec746f9f3",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_in_terminal_1": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.112,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_in_terminal_2": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.007000000000000003,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_in": {
+    "attributes": {
+      "position": "777b06f58053c80533ed88bb5f7178022f11e0f30696e10b46ecb5c759e845bb",
+      "normal": "c7dcd03c4ff59ad4791947fd5cc1689783034481d358f05184280322a15eba55",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_oc_terminal_1": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.015000000000000001,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_oc_terminal_2": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.060000000000000005,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_pwm_oc": {
+    "attributes": {
+      "position": "7005a827112260e6e320cb8220a36f424931584ecfe455f02ba707003ff1bb01",
+      "normal": "4963a47371b1b53b13c310647dbe66b2cf22239e3cd801128341b2cfef56a286",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_in_terminal_1": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.058,
+      0.02,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_in_terminal_2": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.025,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_in": {
+    "attributes": {
+      "position": "6d0e32f094e29875c48bbdec1cb7b2f2542e7cc075ddc8b87ea6bbd8eb75018f",
+      "normal": "f4a4a4a2d7412495000c78f03c12dde11b4583b5da161fecd1b4cb90c3b6b9ca",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_out_terminal_1": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.030000000000000002,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_out_terminal_2": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11699999999999999,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_tach_out": {
+    "attributes": {
+      "position": "ee6e4248bb975de5d6a62d4db51af8ac25d5d35dfaff9325a8379ac75d089338",
+      "normal": "a1e86522c1ed00a6824c3d57a860b66163fd3c92c31ecbe103fba63214e3c2d2",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_5v_terminal_1": {
+    "attributes": {
+      "position": "80136f28a44feb5ef20d71d891935326153096b8514b445451e268d6c9b83157",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.09,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_5v_terminal_2": {
+    "attributes": {
+      "position": "80136f28a44feb5ef20d71d891935326153096b8514b445451e268d6c9b83157",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.067,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_5v": {
+    "attributes": {
+      "position": "a3ab352b618b47dbcf084769221d79665f09937ec21a603af70f641df2392b42",
+      "normal": "610b9ed83942da9eeca856e33045ed135d3597cbc26a937f8c15657903072fba",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_gnd_terminal_1": {
+    "attributes": {
+      "position": "80136f28a44feb5ef20d71d891935326153096b8514b445451e268d6c9b83157",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.08499999999999999,
+      0.002,
+      0.07100000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_gnd_terminal_2": {
+    "attributes": {
+      "position": "80136f28a44feb5ef20d71d891935326153096b8514b445451e268d6c9b83157",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.072,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_logic_gnd": {
+    "attributes": {
+      "position": "cbdcd2f6eaf7ba79f7fa6fb7f5da38b8e0933798ca0a37dffd87c357e13ee7ad",
+      "normal": "8c112e52bec227969d9cd9267327cc751a4ad2424794b2634f95a60c18d7396e",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.078,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.08199999999999999,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_3v3": {
+    "attributes": {
+      "position": "ebcb2ca5f4fd289c14622b6abbbedca89250cbbd9b1763cb1b18df57e2880dd3",
+      "normal": "de8796b9c984c6f5fc2e5ee54b9b31336989361c7528c15317b2f605f0e27972",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.081,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.077,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ads1115_gnd": {
+    "attributes": {
+      "position": "d28233876772a491961368f50e0bae3ac6103656f93be46b08e30c4807c06ea3",
+      "normal": "114e62138fc87b3fac862d36b98d5467402aac0f7a45cef4f19a94af32f708b4",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.08499999999999999,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.043000000000000003,
+      0,
+      0.07300000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_3v3": {
+    "attributes": {
+      "position": "bb94b34faa56a011827efa7afb70f371ee883ddc9daddddf7d444759341c3ab8",
+      "normal": "502a7d699689598438b407c4fb7f6f1f14736e6ce9c9077d88d17022f3a0cd75",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.088,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.038,
+      0,
+      0.07300000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_gnd": {
+    "attributes": {
+      "position": "39da5c809eb0b9f67961831b9c9379e0a5fc4a21b571f1f812bba369dd0b0a66",
+      "normal": "7310859a45b3a031c0579a21369f094ebb425354bb6b9ca4d7304c50a1a0536c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.092,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.133,
+      0.01,
+      -0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_3v3": {
+    "attributes": {
+      "position": "6eb02a742fe036ee5ec1ab3fc953a1a5a4e114f7b1e896a58c9335c4659f52db",
+      "normal": "be2e93ba10beb94770e4731e5e63f28b3dffe4f994a943af364a578a0f2d1165",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.095,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.128,
+      0.01,
+      -0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_gnd": {
+    "attributes": {
+      "position": "42089957611b5c0e3581b03e5e0636fe6486d6a9640a6c988a4f7d0a94b13487",
+      "normal": "f74958c0280ebeb4b87601a2206c998ac55248eeff5283f82b27465352131f58",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.099,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11699999999999999,
+      0.01,
+      -0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_3v3": {
+    "attributes": {
+      "position": "c875141794e6ffb654a7bde4077aba75e0859da1990c5fe00d82f866e9035044",
+      "normal": "9f1ae9cfe94c99496d80873e73e0e7a2ec7b4d78ea442db8f619163587e6d426",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.102,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.122,
+      0.01,
+      -0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_gnd": {
+    "attributes": {
+      "position": "139ff86d7a0dd565b8c1e328ad4ff03b88b4b46ba1352a6dc9ff1de9b4977119",
+      "normal": "b4aeb849477d4e0d6c4e0525a9026492b04b119e68c686438ff281c9d0782f97",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.106,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.06499999999999999,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_3v3": {
+    "attributes": {
+      "position": "8c1d4fc4a7609930b821dd587b3fff2ee3b20a16f8f1a85509919ea5cb893b38",
+      "normal": "5b819db20633fc346d48e481be8b39c3d3c9df2931b5e9871250c5526079bc93",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.109,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.079,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_gnd": {
+    "attributes": {
+      "position": "9db7cd7688a34c37e9d23304531cc0920f35a539be1fac8bbe029707f081ed2e",
+      "normal": "d5587dd7fca12c94d4c93e17cc90824c8531759224f6ae5bc10072582ab99a30",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.113,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.105,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_3v3": {
+    "attributes": {
+      "position": "d2e07f7ab3c1912b093e5c3b6e8bfecb4492a06ce619b3c06f750745645602d6",
+      "normal": "b489240605a7478616e622c69d6a452fce87ac92f4ce0d90b2fc5314e94a5d52",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11599999999999999,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11900000000000001,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_gnd": {
+    "attributes": {
+      "position": "bb8356ec738afa610c65285148b2489f0c6a4672fa23fe74798a98c554f5b272",
+      "normal": "3d4852f424470ff666de3442641bec7c5aae5a723a8360a954355d83d1cbde56",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_sda_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.082,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_sda_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.131,
+      0.01,
+      -0.07700000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_sda": {
+    "attributes": {
+      "position": "b447b6bce5a6769589cdfeeea7e08593c87f33fa9b2b4bfea63dbe5ceaaec869",
+      "normal": "7b3019e6deda1690413d7d3fdd6c056d295185e4cac40e7a2dac44fed7c64f5c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_scl_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.086,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_scl_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.119,
+      0.01,
+      -0.07700000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensors_scl": {
+    "attributes": {
+      "position": "5d4fcfee50b4b6a813169b8c9a7977ae2a69e3453b0fc1b049e70fc235bb4695",
+      "normal": "422142ed5c6c9452ee4baa2741ef0f8d2280e1effa5c26af8a5442df9c006ef5",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_sda_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.089,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_sda_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.06899999999999999,
+      0,
+      0.056
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_sda": {
+    "attributes": {
+      "position": "f7609af1e5077c50e06a846c1b1357b66d15f7537b57098d4cfe5ffe43e6f3a7",
+      "normal": "707b96c10ba0113e3d9cc7aa6ccffd256eb44380ac29f379cbc5a5747eb0339d",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_scl_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.093,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_scl_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.075,
+      0,
+      0.056
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260_scl": {
+    "attributes": {
+      "position": "7619b0a9a67cc9b70481dc3e67418162325796faf178dc8a69cae58bcad34477",
+      "normal": "ee7fc8d0b092bbfac53f8cd4428201ca639a2bf8f0801eb7183c91512380a8f0",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_sda_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.096,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_sda_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.109,
+      0,
+      0.056
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_sda": {
+    "attributes": {
+      "position": "683e64c9829107246e7dafb48189387df5b474f4c1cbe49742deb851b24db1e7",
+      "normal": "33879e10ce9777388b14ae2e7c73efec87ca7f9bc16b849a20860d09fc407aa0",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_scl_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.1,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_scl_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.115,
+      0,
+      0.056
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ina260B_scl": {
+    "attributes": {
+      "position": "e75864f042a5c978588e70124d3f305dc05eaa5175a12448700f93b3b6a82f36",
+      "normal": "0ac2f9ff264a31e5dc2725d9520fb940d0792307539c2133af2207b7cb25466f",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_sda_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.103,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_sda_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.119,
+      0.01,
+      -0.07700000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_sda": {
+    "attributes": {
+      "position": "a3528c0dcc1bf725ecd038409365154d0d486a25862532f22dd6d6546cc12cc2",
+      "normal": "d0b8681f0c8254334ed2dc9aa0947fd34caf2d0c69b79f5b7a2a41803e7fa00b",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_scl_terminal_1": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.107,
+      0,
+      0.076
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_scl_terminal_2": {
+    "attributes": {
+      "position": "2efef8256a1f82bb6ee4db753e31016a9319e5b6875ff7bc4216b7caf06f006b",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.131,
+      0.01,
+      -0.07700000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_sensorsB_scl": {
+    "attributes": {
+      "position": "a47e100b2b3a4bcd922c06ccdbf545a73f7f420f41c8656a31438df70c1a75ad",
+      "normal": "ce61dcdf4b94846d298785e16b2e2d1efda18bb916920ca09ece85bb259a146c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s0_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.1,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s0_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.041,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s0": {
+    "attributes": {
+      "position": "168f0a77eac5f7effd23470be1ed9ee4d983754519265e734290a5a92968a263",
+      "normal": "b1cb753c0acaf0f4aeba866e6c929b03755bc3aa30c7339660f1296f3bc4e26f",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s1_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.105,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s1_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.033,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s1": {
+    "attributes": {
+      "position": "7e159d204a2262ac716f6a3d78f7c568bd42912a110fffdc1815bbf46c3b0dcb",
+      "normal": "83a0d71f7a322faf7795b62413e58fc64b7c9d6d5565a080b2fff1689e12d72b",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s2_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s2_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.025,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s2": {
+    "attributes": {
+      "position": "a08e4dff7cf5b0a4a9ead022d8a61e432d0b16705afb55aac894a65c1ba14d30",
+      "normal": "eadadacfe349bdff588ddce16d1493a6bb57de35871df4090a44f60a5ca7e359",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s3_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11499999999999999,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s3_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.017,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_s3": {
+    "attributes": {
+      "position": "4cacabd9229989dbededc3b358af71d67501b48c918b424f45740603eebbf92b",
+      "normal": "e09f3755dc68a0e7c45b25734b93d5f7f0f7a14065fb427f5504b06775a8bf57",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_adc_terminal_1": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.029,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_adc_terminal_2": {
+    "attributes": {
+      "position": "029db2d6541bf288ca9d2d9db795f6132de64a1143e476e9da5274cc59f8ce8c",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.092,
+      0,
+      0.075
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_adc": {
+    "attributes": {
+      "position": "1af781a9299c425bbd3b56c1e04904f26f4ae7398c594a3d22215e519325df04",
+      "normal": "9ac91097188367fe136348f665345a40abe417655d632ad26c89cfe7c9a87ac5",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_en_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.041,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_en_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.011000000000000003,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_mux_en": {
+    "attributes": {
+      "position": "2822ee104cf41b0e4ff828a11b9754e1409693b9e7c54eb28112cb7ad7c6f487",
+      "normal": "dac35a1a9d863cff9b05f10b5cccefbe933964f21aac3c1a96c190d1df0e46a7",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_q_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.019000000000000003,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_q_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.087,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_fan_q_gnd": {
+    "attributes": {
+      "position": "a81836004f71a0965b02c111f3f24effdf40b6df8fab3f0d820a52a73f349cc2",
+      "normal": "27523452a33224599622eb68a98522608fcaac0eb75d844b9098df568c48fc87",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_3v3_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.106,
+      0,
+      0.057
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_3v3_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.036000000000000004,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_3v3": {
+    "attributes": {
+      "position": "1987a71bbb176fa67e4e3a849564c20d3dbbb4fbad5a681bf32255b6ec6e0afc",
+      "normal": "fb7202a0eed93c8434e5506b9aa84fd4c57a0f49d80f8219688504bea05b743c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_gnd_terminal_1": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.093,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_gnd_terminal_2": {
+    "attributes": {
+      "position": "0512024c01c3ec8fa108b3166cbbd5bb98424da6784733fe518bc9870af6bf2d",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.031,
+      0,
+      0.058
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_interface_gnd": {
+    "attributes": {
+      "position": "e5d1c482461c183280cc0b7d02489cfd74b434926d9c6c4593b04a44b8baaacf",
+      "normal": "1e767cf4f393ae9d8cadb4409f4cf9e5860e166132ac19b4b486c93725d54e20",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0562,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.002999999999999999,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_probe": {
+    "attributes": {
+      "position": "39235492d26030752342dd26dc2e8119b60ca4857ec280102c691baf5cae0589",
+      "normal": "0bb5dc3d3b258644f32880d88b8b3a01315d9bfe6a080ea27ed250583cb671de",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.002999999999999999,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.057,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_mux": {
+    "attributes": {
+      "position": "a0686b345791672930080dad36a4a6137ee3c5e71ccb4eb9eaad088ab38f9e86",
+      "normal": "caad9b179d47a90a0517eec9e1c370e361d6cd459fbcdcd0194b98aab3d8e975",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0538,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.109,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_0_gnd": {
+    "attributes": {
+      "position": "dd50928f15f1e6a59a1915cb1a055d3d3b3016d2d0babac0bdb1e6f6d308c0b6",
+      "normal": "28b487b35e63a31a4e8697bdd5dedb958c087a152d44b5acdd13cf9be0857da1",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0538,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.005000000000000001,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_probe": {
+    "attributes": {
+      "position": "8edc6a12d7023ef0196ed43c7c6c5e9a1bf8a835defb5b78782947df4b191b8a",
+      "normal": "92a0892885fb388d863def74cb1c6862e665734d3f8379638719e7f2d72deace",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.005000000000000001,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.049,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_mux": {
+    "attributes": {
+      "position": "8ff31249db9d1c7a96740d37273b78c87ec203de11ab4752b0437c4a7d7c2cb7",
+      "normal": "59ab5c8847a2a5ef4baba7ea9093d42a3cb5dac01a8e458c1be78f76cf3a9198",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0562,
+      0.0538,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.105,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_1_gnd": {
+    "attributes": {
+      "position": "93ecb43ada2619e77a834278c6bdb756639e05339535d651465a78bc9a4a6bbd",
+      "normal": "6509095ac93eca84b838ca54f4416b9d0377cdef32be6387d56f0a61d8fb0c3c",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0562,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.013000000000000001,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_probe": {
+    "attributes": {
+      "position": "373fad0a2e15f3c0b21605fc458327c8eb938da48cd435765e23f74ac6f86261",
+      "normal": "d0f80c727df7f363dff82db2c92a6cf405d218f44323c5329151d9f74c85b7f5",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.013000000000000001,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.041,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_mux": {
+    "attributes": {
+      "position": "c3bf9c72f809193c71459894272272f1e55ca5aa8588f78d34255c86dd322f44",
+      "normal": "1bbb7d91ad7249d4033ea32e9fc1760090b5cb83f2152eb0fc3f7d55d9f24822",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0538,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.10099999999999999,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_2_gnd": {
+    "attributes": {
+      "position": "212b52da289171089b8b04c9a796b3950c98d0a3e41c5461a074cdd09746b763",
+      "normal": "1b699fd701720792cad56bc70950896f0de18cefa7e8891bb91d9511dffbeef7",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0538,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.021,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_probe": {
+    "attributes": {
+      "position": "115616470b18e8cdde61acff1cfe8d061cd218d4386ca0120ce062a301638729",
+      "normal": "9580ad13884f82d770ce65566ac72a45467c6f11a864cb56cbe9fdf3d79dabd7",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.021,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.033,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_mux": {
+    "attributes": {
+      "position": "22dd3fccda92ef0b184ae656eeb793d4d693ee387136096751697222ff9ba0b0",
+      "normal": "182f9cb2a0065ab97431ed644aa137a154106e02d6581a5e47bb38afaed0e362",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0562,
+      0.047200000000000006,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.09699999999999999,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_3_gnd": {
+    "attributes": {
+      "position": "073368f81b0ac086393a45aeb1d0f97bbb1e533701b0bded1752fb1da9086905",
+      "normal": "5ee334c6a39c4408dca709979881634ab15d32aec0930b131603c249a119c8cc",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.11320000000000001,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.029,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_probe": {
+    "attributes": {
+      "position": "4cb4fd260891560b4e9bb6e34861826e0c374e92b924e835a9ed8396ca845eed",
+      "normal": "c7959fed2eddf55167bfad848500bd4942d9cffd8f53e0df5e29f07db746d484",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.029,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.025,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_mux": {
+    "attributes": {
+      "position": "ce6f4f6a793cd4eb054424cb30e91838f3dce3e5eae7a781b906a74a21afe0d7",
+      "normal": "8dbcb6282db431703c2e60645c5de93e8506235d766d8fd52cf88833ad9d1204",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.1108,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.093,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_4_gnd": {
+    "attributes": {
+      "position": "79db1746bd685559072e55f235d5bd83858152f40550b4166f9f4c7ad286aa69",
+      "normal": "e872e2048e7f6c7080b677392f97d890ac64b85502396f4a3570ed9cd0d818c8",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.1108,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.037000000000000005,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_probe": {
+    "attributes": {
+      "position": "6f75d8d987dc7fbc1453948392540a88f21d17452eb3a32369a3f546729a70d7",
+      "normal": "ed52ccadd51636f14bb8350671f098684fbf103c36952ee35ba7fb35248ab823",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.037000000000000005,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.017,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_mux": {
+    "attributes": {
+      "position": "927746755be6f663369bef14fe788f7249289134556cb1a54e8cae34fbf985df",
+      "normal": "177abf7ed5b96969b9da7517fdb6a4b9c193aa3a6cc5ad81eff4008298901244",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.11320000000000001,
+      0.056,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.089,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_5_gnd": {
+    "attributes": {
+      "position": "bebda7e7aeb7795a7553891efc0fe5f99b5e1ca67006d2ffb81fbee858f7b56f",
+      "normal": "3a43700c5830edd718563ca49dcad8c22a4f75828341982ec2ddaadeec9031ff",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0012,
+      0.056,
+      -0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.045,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_probe": {
+    "attributes": {
+      "position": "4b515b955386d6cf26fa4a77218d85e5de3197c2be5723c0b2454126b6f691cf",
+      "normal": "9a951bc27022eb23c90b9435a5bc47bdadef4af90ac79c7025c879739c6c68e7",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.045,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.009000000000000001,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_mux": {
+    "attributes": {
+      "position": "f167ec1b91a5cd81edc5cc7e7cffa1e23d3f44f38871f907a22a29a813caa408",
+      "normal": "885957a003dcebef1a838c57d3afb111371683743b04fb98939650c4915333fe",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0012,
+      0.056,
+      -0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.08499999999999999,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_6_gnd": {
+    "attributes": {
+      "position": "61911d43ea915cc2e2bc4ddf8e9f69fd71f935ba1f769b8bf3ce089ceebbc4e6",
+      "normal": "debfefa6e8297029d7ad43df6af89b96c25aa14483b263889d1174d955b5c3a8",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_probe_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0012,
+      0.056,
+      0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_probe_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.053000000000000005,
+      0,
+      0.068
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_probe": {
+    "attributes": {
+      "position": "c1af3c91dfb9352be9188f36a7163c927c423a0772fc0ab7205878a06df8aee4",
+      "normal": "07051afa00153912ac88572e33811ac0c5bab1db552ae20ac4c0f4128febe2cb",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_mux_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.053000000000000005,
+      0,
+      0.064
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_mux_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.0010000000000000009,
+      0,
+      0.07400000000000001
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_mux": {
+    "attributes": {
+      "position": "945f4bb691809bf403369262937efe8f3d03f364e287f64bf5afe334d77f1176",
+      "normal": "283c3246593fdd9781da0a25f57cbcdca97b4df287cc8ee9a562de8fbf492686",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_gnd_terminal_1": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      0.0012,
+      0.056,
+      0.065
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_gnd_terminal_2": {
+    "attributes": {
+      "position": "b9162c2fecc3980fd159f51d14aa56adcd2b68b9ba3e9385fb1f9e46da94cd61",
+      "normal": "78f239f9253653aad0722faefaee42c7e07bcecdb7429e7e7e664158e7bdc404",
+      "uv": "4ea1c1caad953605403e83093462bd65bf0a889f446a09d351075b1914e28a39"
+    },
+    "index": "33ddb247630b6858d2ccf5abdab37a298a2b60b8e9bf8d3d45c97b490f80724f",
+    "position": [
+      -0.08099999999999999,
+      0.002,
+      0.062
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  "w_ntc_7_gnd": {
+    "attributes": {
+      "position": "0e2fc299dfe5731b3286ed8f04d2e675076feea3547a80d257d64578f8928404",
+      "normal": "212f4b74cf7d51a29704bb13181ae1c57fcff83a99e7b9e162b94aba08741ad5",
+      "uv": "c30fa5c707792c4c105f3fb38c13d2f7ad77459c90ae9acf05b153e76844efd7"
+    },
+    "index": "7ee731b37a87dd8912f9816506ee6e142528d2e6274c5203d72fe199d434e364",
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "quaternion": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  }
+}

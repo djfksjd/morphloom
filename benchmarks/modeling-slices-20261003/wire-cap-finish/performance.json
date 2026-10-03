@@ -1,0 +1,24 @@
+{
+  "method": "five warm paired current-version compiles; MacM5/Node24.13.1",
+  "samples": {
+    "legacy": [
+      288.0515419999999,
+      281.3760830000001,
+      280.5569580000001,
+      261.4549579999998,
+      281.83691699999963
+    ],
+    "candidate": [
+      283.54708299999993,
+      285.17724999999973,
+      271.5327910000001,
+      260.6536669999996,
+      263.8781250000002
+    ]
+  },
+  "beforeCodeMedianMs": 285.77816699999994,
+  "currentLegacyMedianMs": 281.3760830000001,
+  "candidateMedianMs": 271.5327910000001,
+  "ratioToFrozenBefore": 0.95015232916656,
+  "pass": true
+}

@@ -67,7 +67,7 @@ function createCoolingHarness(): ElectricalHarnessIR {
     shielded = signal === 'data' || signal === 'sensor',
     gauge = '24AWG',
     verification: ElectricalWireIR['verification'] = 'datasheet',
-  ) => wires.push({ id, name: net, net, signal, from, to, color, diameter, shielded, gauge, verification });
+  ) => wires.push({ id, name: net, net, signal, from, to, color, diameter, shielded, gauge, verification, capFinish: {schema:'morphloom.wire-cap-finish/0.1',finish:'flat-outward'} });
 
   const zones = [
     { suffix: 'a', monitor: 'ina260', driver: 'md10c', fuse: 'tf1', tec: 'tec', pwm: 4 },
@@ -224,7 +224,7 @@ for (let pipe = 0; pipe < 4; pipe += 1) {
     id: `heatpipe_${pipe + 1}`, name: `Ø6 히트파이프 ${pipe + 1}`, category: 'mechanical', materialName: '니켈도금 구리',
     detail: 'AXP90 베이스와 핀스택을 잇는 개별 히트파이프 · 경로 inferred',
     geometry: {
-      op: 'tube', radius: 3, radialSegments: 12, tubularSegments: 72,
+      op: 'tube', capFinish: 'flat-outward', radius: 3, radialSegments: 12, tubularSegments: 72,
       points: [[-56, 57, -30 + pipe * 20], [-24, 46, -30 + pipe * 20], [22, 42, -30 + pipe * 20], [58, 48, -30 + pipe * 20]],
     },
     material: { ...material('#b9a27b', 0.86, 0.28), surface: 'machined-copper', anisotropy: 0.52 },

@@ -1,3 +1,4 @@
+import {validateWireCapFinish} from './wire-cap-finish';
 import * as THREE from 'three';
 import type { ViewMode } from '../types';
 import type {
@@ -105,6 +106,7 @@ export function inspectElectricalHarness(
       errors.push('Electrical harness contains an invalid wire record.');
       continue;
     }
+    try { validateWireCapFinish(wire.capFinish,wire.diameter); } catch { errors.push(`Wire ${wire.id} has an unsupported cap finish declaration.`); }
     if (!SAFE_ID.test(wire.id) || wireIds.has(wire.id)) errors.push(`Invalid or duplicate wire id: ${wire.id}`);
     wireIds.add(wire.id);
     if (!wire.name || wire.name.length > 120) errors.push(`Wire ${wire.id} has an invalid name.`);
@@ -291,7 +293,7 @@ function snapFloat32Geometry(values: Float32Array, scale: number): void {
   }
 }
 
-function createCappedTube(points: THREE.Vector3[], radius: number): THREE.BufferGeometry {
+function createCappedTube(points: THREE.Vector3[], radius: number, flatCaps = false): THREE.BufferGeometry {
   const curve = stabilizeCurveTangents(createRoundedRoute(points, radius));
   const tubularSegments = Math.max(36, Math.min(192, points.length * 14));
   const radialSegments = 10;
@@ -299,9 +301,10 @@ function createCappedTube(points: THREE.Vector3[], radius: number): THREE.Buffer
   const sourcePosition = tube.getAttribute('position');
   const sourceNormal = tube.getAttribute('normal');
   const sourceUv = tube.getAttribute('uv');
-  const position = new Float32Array((sourcePosition.count + 2) * 3);
-  const normal = new Float32Array((sourceNormal.count + 2) * 3);
-  const uv = new Float32Array((sourceUv.count + 2) * 2);
+  const extraVertices = flatCaps ? 2 * (radialSegments + 1) : 0;
+  const position = new Float32Array((sourcePosition.count + 2 + extraVertices) * 3);
+  const normal = new Float32Array((sourceNormal.count + 2 + extraVertices) * 3);
+  const uv = new Float32Array((sourceUv.count + 2 + extraVertices) * 2);
   position.set(sourcePosition.array as Float32Array);
   normal.set(sourceNormal.array as Float32Array);
   uv.set(sourceUv.array as Float32Array);
@@ -322,15 +325,35 @@ function createCappedTube(points: THREE.Vector3[], radius: number): THREE.Buffer
   const indices = tube.getIndex() ? Array.from(tube.getIndex()!.array) : [];
   const ring = radialSegments + 1;
   const endRing = tubularSegments * ring;
+  let startCapRing = 0, endCapRing = endRing;
+  if (flatCaps) {
+    startCapRing = sourcePosition.count + 2; endCapRing = startCapRing + ring;
+    for (const [from, to, centerIndex, frame] of [[0,startCapRing,startCenter,0],[endRing,endCapRing,endCenter,tubularSegments]] as const) {
+      const center = new THREE.Vector3().fromArray(position, centerIndex * 3);
+      const capNormal = new THREE.Vector3().fromArray(normal, centerIndex * 3);
+      const basisNormal = tube.normals[frame]!, basisBinormal = tube.binormals[frame]!;
+      if (![...center.toArray(),...capNormal.toArray(),...basisNormal.toArray(),...basisBinormal.toArray()].every(Number.isFinite)
+        || [capNormal,basisNormal,basisBinormal].some(v=>Math.abs(v.length()-1)>2e-6)
+        || [capNormal.dot(basisNormal),capNormal.dot(basisBinormal),basisNormal.dot(basisBinormal)].some(v=>Math.abs(v)>2e-6)) {tube.dispose();throw Error('Wire cap endpoint frame is singular.');}
+      for (let j=0;j<ring;j++) {
+        // Copy the snapped side position exactly so cap/side seams cannot separate.
+        const point = new THREE.Vector3().fromArray(position,(from+j)*3);
+        position.set(point.toArray(),(to+j)*3); normal.set(capNormal.toArray(),(to+j)*3);
+        const delta=point.sub(center);
+        uv.set([THREE.MathUtils.clamp(.5+delta.dot(basisNormal)/(2*radius),0,1),THREE.MathUtils.clamp(.5+delta.dot(basisBinormal)/(2*radius),0,1)],(to+j)*2);
+      }
+    }
+  }
   for (let segment = 0; segment < radialSegments; segment += 1) {
-    indices.push(startCenter, segment + 1, segment);
-    indices.push(endCenter, endRing + segment, endRing + segment + 1);
+    if(flatCaps){indices.push(startCenter,startCapRing+segment,startCapRing+segment+1);indices.push(endCenter,endCapRing+segment+1,endCapRing+segment);}
+    else {indices.push(startCenter, segment + 1, segment);indices.push(endCenter, endRing + segment, endRing + segment + 1);}
   }
   const result = new THREE.BufferGeometry();
   result.setAttribute('position', new THREE.BufferAttribute(position, 3));
   result.setAttribute('normal', new THREE.BufferAttribute(normal, 3));
   result.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
   result.setIndex(indices);
+  if (flatCaps) result.userData.morphloomWireCapFinish = {schema:'morphloom.wire-cap-finish/0.1',finish:'flat-outward',capUv:'intentionally-overlapping-planar-charts',centerIndices:[startCenter,endCenter]};
   tube.dispose();
   return result;
 }
@@ -389,7 +412,7 @@ function routeCollisionSafeWire(
     [0, 1], [0.006, 1], [0.012, 0.5], [0.024, 0.25],
   ] as const) {
     const points = routeWire(root, components, ports, wire, routeIndex, clearanceLift, leadScale);
-    const geometry = createCappedTube(points, radius);
+    const geometry = createCappedTube(points, radius, wire.capFinish?.finish === 'flat-outward');
     const report = analyzeSelfIntersections(geometry);
     attempted.push(report.intersections);
     if (report.complete && report.intersections === 0) {
@@ -458,8 +481,9 @@ export function compileElectricalHarness(
   for (const [wireIndex, wire] of harness.wires.entries()) {
     const { points, geometry } = routeCollisionSafeWire(root, components, ports, wire, wireIndex);
     const positions = geometry.getAttribute('position');
-    const startCap = new THREE.Vector3().fromBufferAttribute(positions, positions.count - 2);
-    const endCap = new THREE.Vector3().fromBufferAttribute(positions, positions.count - 1);
+    const centers = wire.capFinish ? geometry.userData.morphloomWireCapFinish.centerIndices as [number,number] : [positions.count - 2,positions.count - 1];
+    const startCap = new THREE.Vector3().fromBufferAttribute(positions, centers[0]!);
+    const endCap = new THREE.Vector3().fromBufferAttribute(positions, centers[1]!);
     const endpointErrorMm = Math.max(
       startCap.distanceTo(points[0]),
       endCap.distanceTo(points[points.length - 1]),

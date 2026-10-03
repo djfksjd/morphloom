@@ -1,0 +1,210 @@
+{
+  "schema": "morphloom.cross-domain-glb-fixtures/0.1",
+  "compilerRevision": "morphloom-compiler/0.38.0",
+  "generatedAt": "2026-10-03T05:49:39.391Z",
+  "pass": true,
+  "fixtureCount": 5,
+  "results": [
+    {
+      "id": "laurel-homes-architecture",
+      "domain": "architecture",
+      "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/laurel-homes-architecture.glb",
+      "bytes": 29584528,
+      "sha256": "fb08853431d3ba8ac4568890a8b33f3d4f973c7e284588cb425ca71237b228e8",
+      "repeatSha256": "fb08853431d3ba8ac4568890a8b33f3d4f973c7e284588cb425ca71237b228e8",
+      "byteDeterministic": true,
+      "preparation": {
+        "visibleMeshes": 321,
+        "stableNodeIdsAssigned": 321,
+        "normalizedNormalAttributes": 0,
+        "normalizedSheenMaterials": 18,
+        "tangentSpacesGenerated": 321,
+        "indexedForTangents": 321,
+        "unresolvedNormalMappedMeshes": []
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 322,
+          "meshes": 321,
+          "materials": 321,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "id": "ornate-knife-product",
+      "domain": "industrial-design",
+      "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/ornate-knife-product.glb",
+      "bytes": 1154560,
+      "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+      "repeatSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+      "byteDeterministic": true,
+      "preparation": {
+        "visibleMeshes": 16,
+        "stableNodeIdsAssigned": 16,
+        "normalizedNormalAttributes": 0,
+        "normalizedSheenMaterials": 2,
+        "tangentSpacesGenerated": 16,
+        "indexedForTangents": 6,
+        "unresolvedNormalMappedMeshes": []
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 17,
+          "meshes": 16,
+          "materials": 16,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "id": "cooling-electronics-assembly",
+      "domain": "electronics",
+      "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/cooling-electronics-assembly.glb",
+      "bytes": 18622544,
+      "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+      "repeatSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+      "byteDeterministic": true,
+      "preparation": {
+        "visibleMeshes": 322,
+        "stableNodeIdsAssigned": 322,
+        "normalizedNormalAttributes": 0,
+        "normalizedSheenMaterials": 76,
+        "tangentSpacesGenerated": 299,
+        "indexedForTangents": 60,
+        "unresolvedNormalMappedMeshes": []
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 23,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [
+          "UNUSED_OBJECT"
+        ],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 324,
+          "meshes": 322,
+          "materials": 322,
+          "skins": 0,
+          "animations": 0
+        }
+      }
+    },
+    {
+      "id": "field-human-runtime",
+      "domain": "animation-game",
+      "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/field-human-runtime.glb",
+      "bytes": 5065808,
+      "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+      "repeatSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+      "byteDeterministic": true,
+      "preparation": {
+        "visibleMeshes": 3,
+        "stableNodeIdsAssigned": 3,
+        "normalizedNormalAttributes": 0,
+        "normalizedSheenMaterials": 3,
+        "tangentSpacesGenerated": 3,
+        "indexedForTangents": 0,
+        "unresolvedNormalMappedMeshes": []
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 53,
+          "meshes": 3,
+          "materials": 3,
+          "skins": 2,
+          "animations": 22
+        }
+      }
+    },
+    {
+      "id": "asphalt-print-surface",
+      "domain": "3d-printing",
+      "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/asphalt-print-surface.glb",
+      "bytes": 17745400,
+      "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+      "repeatSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+      "byteDeterministic": true,
+      "preparation": {
+        "visibleMeshes": 1,
+        "stableNodeIdsAssigned": 1,
+        "normalizedNormalAttributes": 0,
+        "normalizedSheenMaterials": 0,
+        "tangentSpacesGenerated": 1,
+        "indexedForTangents": 1,
+        "unresolvedNormalMappedMeshes": []
+      },
+      "validation": {
+        "status": "pass",
+        "validator": "Khronos glTF Validator",
+        "validatorVersion": "2.0.0-dev.3.10",
+        "errors": 0,
+        "warnings": 0,
+        "infos": 0,
+        "hints": 0,
+        "truncated": false,
+        "issueCodes": [],
+        "independentRead": {
+          "status": "pass",
+          "parser": "glTF Transform WebIO",
+          "nodes": 2,
+          "meshes": 1,
+          "materials": 1,
+          "skins": 0,
+          "animations": 0
+        }
+      },
+      "printDelivery": {
+        "file": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/outputs/native-038-final-20261003/fixtures/asphalt-print-surface.stl",
+        "bytes": 5596884,
+        "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+        "repeatSha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+        "byteDeterministic": true,
+        "coordinateUnit": "mm",
+        "axisConvention": "print-z-up"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2909 @@
+{
+  "schema": "morphloom.blender-mesh-orientation/0.1",
+  "blenderVersion": "5.2.1 LTS",
+  "sourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+  "requireClosed": true,
+  "weldPrecisionMetres": 1e-07,
+  "pass": true,
+  "rows": [
+    {
+      "name": "ads1115",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "cold_plate",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "contact_pad",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "controller_pcb",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "copper_base",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "esp32",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "esp32_rf_can",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "esp32_soc",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_1",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_2",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_3",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_4",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_5",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_6",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_7",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_8",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_blade_9",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_connector",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_housing",
+      "triangles": 3072,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "fan_hub",
+      "triangles": 384,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "frame_front",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "frame_left",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "frame_rear",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "frame_right",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatpipe_1",
+      "triangles": 1752,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatpipe_2",
+      "triangles": 1752,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatpipe_3",
+      "triangles": 1752,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatpipe_4",
+      "triangles": 1752,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_base",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_01",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_02",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_03",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_04",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_05",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_06",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_07",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_08",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_09",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_10",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_11",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_12",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_13",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_14",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_15",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_16",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_17",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_18",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_19",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_20",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_21",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "heatsink_fin_22",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ina260",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ina260B",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ina260_shunt_a",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ina260_shunt_b",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_01",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_02",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_03",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_04",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_05",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_06",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_07",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_cap_08",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_q1",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_01",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_02",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_03",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_04",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_05",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_06",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_07",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "interface_res_08",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "md10c",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "md10cB",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "md10c_mosfet_a",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "md10c_mosfet_b",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "mux",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "mux_package",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_0",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_1",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_2",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_3",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_4",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_5",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_6",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "ntc_7",
+      "triangles": 440,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "power",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "power_efuse",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "power_inductor",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "power_usb_c",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "sensors",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "sensorsB",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "tec",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "tecB",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "tf1",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "tf1B",
+      "triangles": 972,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_drive_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_12v_mon_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ads1115_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_drive_gnd_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_12v",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_12v_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_12v_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_in",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_in_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_in_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_oc",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_oc_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_pwm_oc_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_q_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_q_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_q_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_in",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_in_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_in_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_out",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_out_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_fan_tach_out_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_scl",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_scl_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_scl_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_sda",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_sda_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260B_sda_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_scl",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_scl_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_scl_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_sda",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_sda_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ina260_sda_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_interface_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_5v",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_5v_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_5v_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_logic_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_adc",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_adc_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_adc_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_en",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_en_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_en_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s0",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s0_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s0_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s1",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s1_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s1_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s2",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s2_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s2_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_mux_s3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_0_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_1_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_2_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_3_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_4_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_5_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_6_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_mux",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_mux_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_mux_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_probe",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_probe_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_ntc_7_probe_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_scl",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_scl_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_scl_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_sda",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_sda_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensorsB_sda_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_3v3",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_3v3_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_3v3_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_gnd",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_gnd_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_gnd_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_scl",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_scl_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_scl_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_sda",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_sda_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_sensors_sda_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_neg_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pos_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pre_fuse_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_a",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_a_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_a_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_b",
+      "triangles": 1980,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_b_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "w_tec_pwm_b_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    }
+  ],
+  "scope": "actual imported local directed edges; whole volume/outward orientation, UV, self-intersection, artistic/source/CAD approval not certified"
+}

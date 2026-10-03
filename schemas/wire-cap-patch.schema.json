@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Morphloom wire cap patch0.1; minimum engine0.38",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "operationId",
+    "wireId",
+    "expectedInputFingerprint",
+    "action"
+  ],
+  "properties": {
+    "schema": {
+      "const": "morphloom.wire-cap-patch/0.1"
+    },
+    "operationId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]{1,80}$"
+    },
+    "wireId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]{1,80}$"
+    },
+    "expectedInputFingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "action": {
+      "enum": [
+        "set",
+        "clear"
+      ]
+    }
+  }
+}

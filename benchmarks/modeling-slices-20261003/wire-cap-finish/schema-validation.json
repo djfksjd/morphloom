@@ -1,0 +1,46 @@
+{
+  "pass": true,
+  "cases": [
+    {
+      "case": "valid",
+      "valid": true,
+      "expected": true
+    },
+    {
+      "case": "legacy",
+      "valid": true,
+      "expected": true
+    },
+    {
+      "case": "below-quantization",
+      "valid": false,
+      "expected": false
+    },
+    {
+      "case": "unknown-version",
+      "valid": false,
+      "expected": false
+    },
+    {
+      "case": "unknown-key",
+      "valid": false,
+      "expected": false
+    },
+    {
+      "case": "patch-set",
+      "valid": true,
+      "expected": true
+    },
+    {
+      "case": "patch-clear",
+      "valid": true,
+      "expected": true
+    },
+    {
+      "case": "patch-other",
+      "valid": false,
+      "expected": false
+    }
+  ],
+  "initialDiagnostic": "Validator fragment was initially composed with unrelated root constraints; rerun uses only defs/ref. No schema weakened."
+}

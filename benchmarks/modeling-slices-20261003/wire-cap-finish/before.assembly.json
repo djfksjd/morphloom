@@ -1,0 +1,7008 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "name": "Image-derived TEC cooling assembly",
+  "units": "mm",
+  "components": [
+    {
+      "id": "cold_plate",
+      "name": "AL6061 냉각판",
+      "category": "mechanical",
+      "materialName": "AL6061 알루미늄",
+      "detail": "참조 이미지에 표기된 280×180×5 mm 냉각판",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          280,
+          5,
+          180
+        ],
+        "radius": 2.2,
+        "segments": 4
+      },
+      "position": [
+        0,
+        118,
+        0
+      ],
+      "material": {
+        "color": "#aeb9c0",
+        "metalness": 0.82,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "measured"
+      }
+    },
+    {
+      "id": "contact_pad",
+      "name": "TP-3 접촉패드",
+      "category": "mechanical",
+      "materialName": "열전도 실리콘",
+      "detail": "참조 이미지에 표기된 1.0 mm 비전도 열 인터페이스 패드",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          150,
+          1,
+          100
+        ],
+        "radius": 0.42,
+        "segments": 4
+      },
+      "position": [
+        0,
+        101,
+        0
+      ],
+      "material": {
+        "color": "#6d9f9b",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "rubber"
+      },
+      "evidence": {
+        "status": "measured"
+      }
+    },
+    {
+      "id": "tec",
+      "name": "TEC1-12706 A",
+      "category": "power",
+      "materialName": "알루미나/비스무트 텔루라이드",
+      "detail": "좌측 12 V TEC · 냉면 방향은 실물 극성 시험 필요",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          40,
+          4,
+          40
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -45,
+        82,
+        0
+      ],
+      "material": {
+        "color": "#e5e3dd",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "tecB",
+      "name": "TEC1-12706 B",
+      "category": "power",
+      "materialName": "알루미나/비스무트 텔루라이드",
+      "detail": "우측 12 V TEC · 냉면 방향은 실물 극성 시험 필요",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          40,
+          4,
+          40
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        45,
+        82,
+        0
+      ],
+      "material": {
+        "color": "#e5e3dd",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "tf1",
+      "name": "84°C 열퓨즈 A",
+      "category": "power",
+      "materialName": "세라믹/가용합금",
+      "detail": "TEC-A 양극 가지의 비복귀 과열 차단기",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          16,
+          5,
+          6
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -45,
+        72,
+        32
+      ],
+      "material": {
+        "color": "#d5c8a4",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "tf1B",
+      "name": "84°C 열퓨즈 B",
+      "category": "power",
+      "materialName": "세라믹/가용합금",
+      "detail": "TEC-B 양극 가지의 비복귀 과열 차단기",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          16,
+          5,
+          6
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        45,
+        72,
+        32
+      ],
+      "material": {
+        "color": "#d5c8a4",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "copper_base",
+      "name": "C1100 공용 열확산판",
+      "category": "mechanical",
+      "materialName": "C1100 무산소동",
+      "detail": "두 TEC 열면을 4개 히트파이프로 분산하는 공용 베이스 · 외곽은 추정",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          150,
+          3,
+          118
+        ],
+        "radius": 1.35,
+        "segments": 4
+      },
+      "position": [
+        0,
+        63,
+        0
+      ],
+      "material": {
+        "color": "#b86637",
+        "metalness": 0.88,
+        "roughness": 0.48,
+        "surface": "machined-copper"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "heatsink_base",
+      "name": "핀스택 베이스 레일",
+      "category": "mechanical",
+      "materialName": "니켈도금 구리",
+      "detail": "히트파이프와 알루미늄 핀을 결합하는 하부 레일",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          150,
+          3,
+          118
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        0,
+        50,
+        0
+      ],
+      "material": {
+        "color": "#a9ada9",
+        "metalness": 0.82,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "fan_housing",
+      "name": "120 mm 슬림 팬 하우징",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 핀스택용 비폐쇄형 링 하우징 · 내부 유로 치수는 inferred",
+      "geometry": {
+        "op": "torus",
+        "radius": 53,
+        "tube": 4,
+        "radialSegments": 16,
+        "tubularSegments": 96
+      },
+      "position": [
+        0,
+        20,
+        0
+      ],
+      "rotation": [
+        1.5707963267948966,
+        0,
+        0
+      ],
+      "material": {
+        "color": "#343c42",
+        "metalness": 0.12,
+        "roughness": 0.62,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred",
+        "notes": [
+          "Housing detail is not visible in the supplied exploded reference."
+        ]
+      }
+    },
+    {
+      "id": "fan_hub",
+      "name": "팬 모터 허브",
+      "category": "mechanical",
+      "materialName": "PBT/베어링 스틸",
+      "detail": "PWM 모터와 베어링을 수용하는 중앙 허브",
+      "geometry": {
+        "op": "cylinder",
+        "radiusTop": 18,
+        "radiusBottom": 18,
+        "depth": 16,
+        "radialSegments": 64
+      },
+      "position": [
+        0,
+        20,
+        0
+      ],
+      "material": {
+        "color": "#272c31",
+        "metalness": 0.18,
+        "roughness": 0.52,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "fan_connector",
+      "name": "4핀 PWM 팬 커넥터",
+      "category": "interconnect",
+      "materialName": "LCP/주석도금 구리",
+      "detail": "PIN1 GND · PIN2 +12V · PIN3 TACH · PIN4 PWM",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          6,
+          4
+        ],
+        "radius": 0.8,
+        "segments": 4
+      },
+      "position": [
+        57,
+        20,
+        0
+      ],
+      "material": {
+        "color": "#e2ded1",
+        "metalness": 0.22,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "frame_front",
+      "name": "서비스 프레임 전면 레일",
+      "category": "enclosure",
+      "materialName": "ASA",
+      "detail": "M3 인서트를 갖는 개방형 서비스 프레임",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          310,
+          12,
+          12
+        ],
+        "radius": 3,
+        "segments": 4
+      },
+      "position": [
+        0,
+        -24,
+        96
+      ],
+      "material": {
+        "color": "#38434a",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "frame_rear",
+      "name": "서비스 프레임 후면 레일",
+      "category": "enclosure",
+      "materialName": "ASA",
+      "detail": "M3 인서트를 갖는 개방형 서비스 프레임",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          310,
+          12,
+          12
+        ],
+        "radius": 3,
+        "segments": 4
+      },
+      "position": [
+        0,
+        -24,
+        -96
+      ],
+      "material": {
+        "color": "#38434a",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "frame_left",
+      "name": "서비스 프레임 좌측 레일",
+      "category": "enclosure",
+      "materialName": "ASA",
+      "detail": "전자부와 흡배기를 가리지 않는 측면 레일",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          12,
+          180
+        ],
+        "radius": 3,
+        "segments": 4
+      },
+      "position": [
+        -149,
+        -24,
+        0
+      ],
+      "material": {
+        "color": "#38434a",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "frame_right",
+      "name": "서비스 프레임 우측 레일",
+      "category": "enclosure",
+      "materialName": "ASA",
+      "detail": "전자부와 흡배기를 가리지 않는 측면 레일",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          12,
+          180
+        ],
+        "radius": 3,
+        "segments": 4
+      },
+      "position": [
+        149,
+        -24,
+        0
+      ],
+      "material": {
+        "color": "#38434a",
+        "metalness": 0.04,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "controller_pcb",
+      "name": "AER-01 4층 제어 PCB",
+      "category": "logic",
+      "materialName": "FR-4/2oz 구리",
+      "detail": "전력·제어·센서 모듈의 기준 PCB · 회로 배치는 engineering estimate",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          260,
+          1.6,
+          52
+        ],
+        "radius": 0.7,
+        "segments": 4
+      },
+      "position": [
+        0,
+        -13,
+        66
+      ],
+      "material": {
+        "color": "#174839",
+        "metalness": 0.12,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "power",
+      "name": "USB-C PD·보호·DC/DC",
+      "category": "power",
+      "materialName": "FR-4/구리/자성체",
+      "detail": "20V PD 입력을 12V TEC 버스와 5V/3.3V 제어 전원으로 변환",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          48,
+          14,
+          34
+        ],
+        "radius": 2,
+        "segments": 4
+      },
+      "position": [
+        -104,
+        -5,
+        66
+      ],
+      "material": {
+        "color": "#253f37",
+        "metalness": 0.12,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "esp32",
+      "name": "ESP32-S3-WROOM-1 N8R8",
+      "category": "logic",
+      "materialName": "FR-4/실리콘/RF 실드",
+      "detail": "안전 제어와 로컬 추론을 수행하는 주 제어 모듈",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          62,
+          8,
+          28
+        ],
+        "radius": 2,
+        "segments": 4
+      },
+      "position": [
+        92,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#21463b",
+        "metalness": 0.12,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "ads1115",
+      "name": "ADC 입력 필터 뱅크",
+      "category": "logic",
+      "materialName": "FR-4/실리콘",
+      "detail": "MUX 출력을 ESP32 ADC1으로 전달하는 RC 필터 영역",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          30,
+          8,
+          24
+        ],
+        "radius": 1.5,
+        "segments": 4
+      },
+      "position": [
+        -72,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#255044",
+        "metalness": 0.1,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "mux",
+      "name": "CD74HC4067 MUX",
+      "category": "logic",
+      "materialName": "FR-4/실리콘",
+      "detail": "NTC CH0…7 아날로그 멀티플렉서",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          66,
+          8,
+          24
+        ],
+        "radius": 1.5,
+        "segments": 4
+      },
+      "position": [
+        -29,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#244c40",
+        "metalness": 0.1,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "interface",
+      "name": "팬·NTC 인터페이스",
+      "category": "logic",
+      "materialName": "FR-4/수동소자",
+      "detail": "Q1 팬 PWM·TACH 풀업·8개 NTC 분압과 필터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          80,
+          8,
+          30
+        ],
+        "radius": 1.5,
+        "segments": 4
+      },
+      "position": [
+        25,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#204b3e",
+        "metalness": 0.1,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "sensors",
+      "name": "SHT40-A 온습도",
+      "category": "logic",
+      "materialName": "FR-4/MEMS",
+      "detail": "I2C0 0x44 흡기 온습도 센서",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          24,
+          6,
+          18
+        ],
+        "radius": 1.2,
+        "segments": 4
+      },
+      "position": [
+        -125,
+        7,
+        -70
+      ],
+      "material": {
+        "color": "#275348",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "sensorsB",
+      "name": "SHT40-B 온습도",
+      "category": "logic",
+      "materialName": "FR-4/MEMS",
+      "detail": "I2C1 0x44 흡기 온습도 센서",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          24,
+          6,
+          18
+        ],
+        "radius": 1.2,
+        "segments": 4
+      },
+      "position": [
+        125,
+        7,
+        -70
+      ],
+      "material": {
+        "color": "#275348",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "ina260",
+      "name": "INA226-A 전력 감시",
+      "category": "logic",
+      "materialName": "FR-4/실리콘/션트",
+      "detail": "TEC-A high-side 전압·전류·전력 측정",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          32,
+          8,
+          25
+        ],
+        "radius": 1.5,
+        "segments": 4
+      },
+      "position": [
+        72,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#244c40",
+        "metalness": 0.1,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "ina260B",
+      "name": "INA226-B 전력 감시",
+      "category": "logic",
+      "materialName": "FR-4/실리콘/션트",
+      "detail": "TEC-B high-side 전압·전류·전력 측정",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          32,
+          8,
+          25
+        ],
+        "radius": 1.5,
+        "segments": 4
+      },
+      "position": [
+        112,
+        -4,
+        66
+      ],
+      "material": {
+        "color": "#244c40",
+        "metalness": 0.1,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "datasheet"
+      }
+    },
+    {
+      "id": "md10c",
+      "name": "N-MOSFET 전력단 A",
+      "category": "power",
+      "materialName": "FR-4/MOSFET/구리",
+      "detail": "TEC-A 2.5–3A 제한 PWM 전력단",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          52,
+          12,
+          41
+        ],
+        "radius": 2,
+        "segments": 4
+      },
+      "position": [
+        78,
+        -4,
+        12
+      ],
+      "material": {
+        "color": "#263f38",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "md10cB",
+      "name": "N-MOSFET 전력단 B",
+      "category": "power",
+      "materialName": "FR-4/MOSFET/구리",
+      "detail": "TEC-B 2.5–3A 제한 PWM 전력단",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          52,
+          12,
+          41
+        ],
+        "radius": 2,
+        "segments": 4
+      },
+      "position": [
+        136,
+        -4,
+        12
+      ],
+      "material": {
+        "color": "#263f38",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "pcb-soldermask"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_0",
+      "name": "NTC 10K B3950 센서 0",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH0 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        -55,
+        53.8,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_1",
+      "name": "NTC 10K B3950 센서 1",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH1 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        55,
+        53.8,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_2",
+      "name": "NTC 10K B3950 센서 2",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH2 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        -55,
+        47.2,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_3",
+      "name": "NTC 10K B3950 센서 3",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH3 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        55,
+        47.2,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_4",
+      "name": "NTC 10K B3950 센서 4",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH4 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        -112,
+        56,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_5",
+      "name": "NTC 10K B3950 센서 5",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH5 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        112,
+        56,
+        0
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_6",
+      "name": "NTC 10K B3950 센서 6",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH6 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        0,
+        56,
+        -65
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ntc_7",
+      "name": "NTC 10K B3950 센서 7",
+      "category": "logic",
+      "materialName": "에폭시/구리",
+      "detail": "냉각판 표면 채널 TH7 · 배치 위치는 열분포 기준 engineering estimate",
+      "geometry": {
+        "op": "sphere",
+        "radius": 2.2,
+        "widthSegments": 20,
+        "heightSegments": 12
+      },
+      "position": [
+        0,
+        56,
+        65
+      ],
+      "material": {
+        "color": "#28363a",
+        "metalness": 0.18,
+        "roughness": 0.4,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "heatpipe_1",
+      "name": "Ø6 히트파이프 1",
+      "category": "mechanical",
+      "materialName": "니켈도금 구리",
+      "detail": "AXP90 베이스와 핀스택을 잇는 개별 히트파이프 · 경로 inferred",
+      "geometry": {
+        "op": "tube",
+        "radius": 3,
+        "radialSegments": 12,
+        "tubularSegments": 72,
+        "points": [
+          [
+            -56,
+            57,
+            -30
+          ],
+          [
+            -24,
+            46,
+            -30
+          ],
+          [
+            22,
+            42,
+            -30
+          ],
+          [
+            58,
+            48,
+            -30
+          ]
+        ]
+      },
+      "material": {
+        "color": "#b9a27b",
+        "metalness": 0.86,
+        "roughness": 0.28,
+        "surface": "machined-copper",
+        "anisotropy": 0.52
+      },
+      "evidence": {
+        "status": "inferred",
+        "notes": [
+          "Only heatpipe count and nominal diameter are visible in the reference."
+        ]
+      }
+    },
+    {
+      "id": "heatpipe_2",
+      "name": "Ø6 히트파이프 2",
+      "category": "mechanical",
+      "materialName": "니켈도금 구리",
+      "detail": "AXP90 베이스와 핀스택을 잇는 개별 히트파이프 · 경로 inferred",
+      "geometry": {
+        "op": "tube",
+        "radius": 3,
+        "radialSegments": 12,
+        "tubularSegments": 72,
+        "points": [
+          [
+            -56,
+            57,
+            -10
+          ],
+          [
+            -24,
+            46,
+            -10
+          ],
+          [
+            22,
+            42,
+            -10
+          ],
+          [
+            58,
+            48,
+            -10
+          ]
+        ]
+      },
+      "material": {
+        "color": "#b9a27b",
+        "metalness": 0.86,
+        "roughness": 0.28,
+        "surface": "machined-copper",
+        "anisotropy": 0.52
+      },
+      "evidence": {
+        "status": "inferred",
+        "notes": [
+          "Only heatpipe count and nominal diameter are visible in the reference."
+        ]
+      }
+    },
+    {
+      "id": "heatpipe_3",
+      "name": "Ø6 히트파이프 3",
+      "category": "mechanical",
+      "materialName": "니켈도금 구리",
+      "detail": "AXP90 베이스와 핀스택을 잇는 개별 히트파이프 · 경로 inferred",
+      "geometry": {
+        "op": "tube",
+        "radius": 3,
+        "radialSegments": 12,
+        "tubularSegments": 72,
+        "points": [
+          [
+            -56,
+            57,
+            10
+          ],
+          [
+            -24,
+            46,
+            10
+          ],
+          [
+            22,
+            42,
+            10
+          ],
+          [
+            58,
+            48,
+            10
+          ]
+        ]
+      },
+      "material": {
+        "color": "#b9a27b",
+        "metalness": 0.86,
+        "roughness": 0.28,
+        "surface": "machined-copper",
+        "anisotropy": 0.52
+      },
+      "evidence": {
+        "status": "inferred",
+        "notes": [
+          "Only heatpipe count and nominal diameter are visible in the reference."
+        ]
+      }
+    },
+    {
+      "id": "heatpipe_4",
+      "name": "Ø6 히트파이프 4",
+      "category": "mechanical",
+      "materialName": "니켈도금 구리",
+      "detail": "AXP90 베이스와 핀스택을 잇는 개별 히트파이프 · 경로 inferred",
+      "geometry": {
+        "op": "tube",
+        "radius": 3,
+        "radialSegments": 12,
+        "tubularSegments": 72,
+        "points": [
+          [
+            -56,
+            57,
+            30
+          ],
+          [
+            -24,
+            46,
+            30
+          ],
+          [
+            22,
+            42,
+            30
+          ],
+          [
+            58,
+            48,
+            30
+          ]
+        ]
+      },
+      "material": {
+        "color": "#b9a27b",
+        "metalness": 0.86,
+        "roughness": 0.28,
+        "surface": "machined-copper",
+        "anisotropy": 0.52
+      },
+      "evidence": {
+        "status": "inferred",
+        "notes": [
+          "Only heatpipe count and nominal diameter are visible in the reference."
+        ]
+      }
+    },
+    {
+      "id": "heatsink_fin_01",
+      "name": "알루미늄 방열핀 1",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        27,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_02",
+      "name": "알루미늄 방열핀 2",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        28.02,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_03",
+      "name": "알루미늄 방열핀 3",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        29.04,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_04",
+      "name": "알루미늄 방열핀 4",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        30.06,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_05",
+      "name": "알루미늄 방열핀 5",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        31.08,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_06",
+      "name": "알루미늄 방열핀 6",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        32.1,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_07",
+      "name": "알루미늄 방열핀 7",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        33.12,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_08",
+      "name": "알루미늄 방열핀 8",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        34.14,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_09",
+      "name": "알루미늄 방열핀 9",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        35.16,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_10",
+      "name": "알루미늄 방열핀 10",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        36.18,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_11",
+      "name": "알루미늄 방열핀 11",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        37.2,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_12",
+      "name": "알루미늄 방열핀 12",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        38.22,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_13",
+      "name": "알루미늄 방열핀 13",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        39.24,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_14",
+      "name": "알루미늄 방열핀 14",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        40.26,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_15",
+      "name": "알루미늄 방열핀 15",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        41.28,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_16",
+      "name": "알루미늄 방열핀 16",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        42.3,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_17",
+      "name": "알루미늄 방열핀 17",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        43.32,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_18",
+      "name": "알루미늄 방열핀 18",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        44.34,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_19",
+      "name": "알루미늄 방열핀 19",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        45.36,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_20",
+      "name": "알루미늄 방열핀 20",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        46.379999999999995,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_21",
+      "name": "알루미늄 방열핀 21",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        47.4,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "heatsink_fin_22",
+      "name": "알루미늄 방열핀 22",
+      "category": "mechanical",
+      "materialName": "프레스 알루미늄",
+      "detail": "공용 핀스택의 독립 박판 · 피치와 개수는 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          146,
+          1.05,
+          116
+        ],
+        "radius": 0.18,
+        "segments": 4
+      },
+      "position": [
+        0,
+        48.42,
+        0
+      ],
+      "material": {
+        "color": "#b6b9b6",
+        "metalness": 0.78,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "inferred"
+      }
+    },
+    {
+      "id": "fan_blade_1",
+      "name": "팬 블레이드 1",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        32,
+        20,
+        0
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        0.35,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_2",
+      "name": "팬 블레이드 2",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        24.513422179807296,
+        20,
+        20.569203509969256
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -0.3481317007977318,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_3",
+      "name": "팬 블레이드 3",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        5.556741685341773,
+        20,
+        31.513848096390657
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -1.0462634015954637,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_4",
+      "name": "팬 블레이드 4",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -15.999999999999993,
+        20,
+        27.71281292110204
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -1.7443951023931952,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_5",
+      "name": "팬 블레이드 5",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -30.070163865149066,
+        20,
+        10.944644586421404
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -2.442526803190927,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_6",
+      "name": "팬 블레이드 6",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -30.07016386514907,
+        20,
+        -10.944644586421397
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -3.140658503988659,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_7",
+      "name": "팬 블레이드 7",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        -16.000000000000014,
+        20,
+        -27.71281292110203
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -3.8387902047863904,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_8",
+      "name": "팬 블레이드 8",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        5.556741685341759,
+        20,
+        -31.51384809639066
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -4.536921905584123,
+        0
+      ]
+    },
+    {
+      "id": "fan_blade_9",
+      "name": "팬 블레이드 9",
+      "category": "mechanical",
+      "materialName": "PBT-GF30",
+      "detail": "공용 팬 로터의 개별 곡면 근사 블레이드 · 형상 inferred",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          38,
+          2.2,
+          11
+        ],
+        "radius": 1,
+        "segments": 4
+      },
+      "position": [
+        24.51342217980729,
+        20,
+        -20.569203509969267
+      ],
+      "material": {
+        "color": "#2c3136",
+        "metalness": 0.08,
+        "roughness": 0.48,
+        "surface": "molded-polymer"
+      },
+      "evidence": {
+        "status": "inferred"
+      },
+      "rotation": [
+        0,
+        -5.235053606381855,
+        0
+      ]
+    },
+    {
+      "id": "power_usb_c",
+      "name": "USB-C PD 입력 커넥터",
+      "category": "power",
+      "materialName": "금속/패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          13,
+          6,
+          9
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        -121,
+        3,
+        66
+      ],
+      "material": {
+        "color": "#a7abad",
+        "metalness": 0.82,
+        "roughness": 0.48,
+        "surface": "polished-metal"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "power_inductor",
+      "name": "DC/DC 차폐 인덕터",
+      "category": "power",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          7,
+          12
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        -105,
+        4,
+        66
+      ],
+      "material": {
+        "color": "#3a3d3d",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "power_efuse",
+      "name": "10A eFuse 패키지",
+      "category": "power",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          9,
+          3,
+          8
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        -91,
+        3,
+        66
+      ],
+      "material": {
+        "color": "#1c1d1e",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "esp32_rf_can",
+      "name": "ESP32 RF 실드 캔",
+      "category": "radio",
+      "materialName": "금속/패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          24,
+          2.2,
+          18
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        82,
+        1,
+        66
+      ],
+      "material": {
+        "color": "#b7bab8",
+        "metalness": 0.82,
+        "roughness": 0.48,
+        "surface": "brushed-metal"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "esp32_soc",
+      "name": "ESP32-S3 SiP",
+      "category": "logic",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          10,
+          2,
+          10
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        103,
+        1,
+        66
+      ],
+      "material": {
+        "color": "#191b1d",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "mux_package",
+      "name": "CD74HC4067 TSSOP",
+      "category": "logic",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          20,
+          2,
+          7
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        -29,
+        1,
+        66
+      ],
+      "material": {
+        "color": "#191b1d",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_q1",
+      "name": "Q1 오픈컬렉터 트랜지스터",
+      "category": "logic",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          6,
+          5,
+          6
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        4,
+        1,
+        69
+      ],
+      "material": {
+        "color": "#202326",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ina260_shunt_a",
+      "name": "TEC-A 전류 션트",
+      "category": "logic",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          2,
+          5
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        72,
+        1,
+        66
+      ],
+      "material": {
+        "color": "#c5b7a1",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "ina260_shunt_b",
+      "name": "TEC-B 전류 션트",
+      "category": "logic",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          12,
+          2,
+          5
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        112,
+        1,
+        66
+      ],
+      "material": {
+        "color": "#c5b7a1",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "md10c_mosfet_a",
+      "name": "TEC-A N-MOSFET",
+      "category": "power",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          14,
+          5,
+          12
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        78,
+        4,
+        12
+      ],
+      "material": {
+        "color": "#202326",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "md10c_mosfet_b",
+      "name": "TEC-B N-MOSFET",
+      "category": "power",
+      "materialName": "전자부품 패키지",
+      "detail": "보드에서 분리 선택 가능한 주요 실장 부품",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          14,
+          5,
+          12
+        ],
+        "radius": 0.6,
+        "segments": 4
+      },
+      "position": [
+        136,
+        4,
+        12
+      ],
+      "material": {
+        "color": "#202326",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "semiconductor"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_01",
+      "name": "NTC 분압 저항 R10",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        0,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_02",
+      "name": "NTC 분압 저항 R11",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        7.2,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_03",
+      "name": "NTC 분압 저항 R12",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        14.4,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_04",
+      "name": "NTC 분압 저항 R13",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        21.6,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_05",
+      "name": "NTC 분압 저항 R14",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        28.8,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_06",
+      "name": "NTC 분압 저항 R15",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        36,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_07",
+      "name": "NTC 분압 저항 R16",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        43.2,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_res_08",
+      "name": "NTC 분압 저항 R17",
+      "category": "logic",
+      "materialName": "알루미나/저항막",
+      "detail": "10 kΩ 0.1% NTC 분압 저항",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          4,
+          1.4,
+          1.8
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        50.4,
+        1,
+        61
+      ],
+      "material": {
+        "color": "#34363a",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_01",
+      "name": "NTC 필터 커패시터 C3",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        0,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_02",
+      "name": "NTC 필터 커패시터 C4",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        7.2,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_03",
+      "name": "NTC 필터 커패시터 C5",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        14.4,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_04",
+      "name": "NTC 필터 커패시터 C6",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        21.6,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_05",
+      "name": "NTC 필터 커패시터 C7",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        28.8,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_06",
+      "name": "NTC 필터 커패시터 C8",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        36,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_07",
+      "name": "NTC 필터 커패시터 C9",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        43.2,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    },
+    {
+      "id": "interface_cap_08",
+      "name": "NTC 필터 커패시터 C10",
+      "category": "logic",
+      "materialName": "MLCC/니켈",
+      "detail": "100 nF 로컬 저역통과 커패시터",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          3.2,
+          1.4,
+          2
+        ],
+        "radius": 0.3,
+        "segments": 4
+      },
+      "position": [
+        50.4,
+        1,
+        72
+      ],
+      "material": {
+        "color": "#cdbd99",
+        "metalness": 0.18,
+        "roughness": 0.48,
+        "surface": "raw"
+      },
+      "evidence": {
+        "status": "estimated"
+      }
+    }
+  ],
+  "electrical": {
+    "ports": [
+      {
+        "id": "power_12v_sw_a",
+        "componentId": "power",
+        "pin": "12v_sw_a",
+        "physicalPin": "F2 7.5A OUT",
+        "signal": "power",
+        "position": [
+          -16,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_vin_plus",
+        "componentId": "ina260",
+        "pin": "vin_plus",
+        "physicalPin": "VIN+",
+        "signal": "power",
+        "position": [
+          -10,
+          4,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_vin_minus",
+        "componentId": "ina260",
+        "pin": "vin_minus",
+        "physicalPin": "VIN-",
+        "signal": "power",
+        "position": [
+          10,
+          4,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10c_vm_plus",
+        "componentId": "md10c",
+        "pin": "vm_plus",
+        "physicalPin": "VM+",
+        "signal": "power",
+        "position": [
+          -17,
+          6,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_drive_gnd_a",
+        "componentId": "power",
+        "pin": "drive_gnd_a",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          -8,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10c_gnd",
+        "componentId": "md10c",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          17,
+          6,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10c_m_plus",
+        "componentId": "md10c",
+        "pin": "m_plus",
+        "physicalPin": "M+",
+        "signal": "power",
+        "position": [
+          -17,
+          6,
+          -12
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tf1_input",
+        "componentId": "tf1",
+        "pin": "input",
+        "physicalPin": "LEAD 1",
+        "signal": "power",
+        "position": [
+          -7,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tf1_output",
+        "componentId": "tf1",
+        "pin": "output",
+        "physicalPin": "LEAD 2",
+        "signal": "power",
+        "position": [
+          7,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tec_positive",
+        "componentId": "tec",
+        "pin": "positive",
+        "physicalPin": "RED/+",
+        "signal": "power",
+        "position": [
+          16,
+          -2,
+          15
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10c_m_minus",
+        "componentId": "md10c",
+        "pin": "m_minus",
+        "physicalPin": "M-",
+        "signal": "ground",
+        "position": [
+          17,
+          6,
+          -12
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tec_negative",
+        "componentId": "tec",
+        "pin": "negative",
+        "physicalPin": "BLACK/-",
+        "signal": "ground",
+        "position": [
+          16,
+          -2,
+          11
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gpio4",
+        "componentId": "esp32",
+        "pin": "gpio4",
+        "physicalPin": "GPIO4",
+        "signal": "control",
+        "position": [
+          -18,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10c_pwm",
+        "componentId": "md10c",
+        "pin": "pwm",
+        "physicalPin": "PWM",
+        "signal": "control",
+        "position": [
+          -6,
+          6,
+          -17
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_12v_sw_b",
+        "componentId": "power",
+        "pin": "12v_sw_b",
+        "physicalPin": "F3 7.5A OUT",
+        "signal": "power",
+        "position": [
+          -8,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_vin_plus",
+        "componentId": "ina260B",
+        "pin": "vin_plus",
+        "physicalPin": "VIN+",
+        "signal": "power",
+        "position": [
+          -10,
+          4,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_vin_minus",
+        "componentId": "ina260B",
+        "pin": "vin_minus",
+        "physicalPin": "VIN-",
+        "signal": "power",
+        "position": [
+          10,
+          4,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10cB_vm_plus",
+        "componentId": "md10cB",
+        "pin": "vm_plus",
+        "physicalPin": "VM+",
+        "signal": "power",
+        "position": [
+          -17,
+          6,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_drive_gnd_b",
+        "componentId": "power",
+        "pin": "drive_gnd_b",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          0,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10cB_gnd",
+        "componentId": "md10cB",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          17,
+          6,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10cB_m_plus",
+        "componentId": "md10cB",
+        "pin": "m_plus",
+        "physicalPin": "M+",
+        "signal": "power",
+        "position": [
+          -17,
+          6,
+          -12
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tf1B_input",
+        "componentId": "tf1B",
+        "pin": "input",
+        "physicalPin": "LEAD 1",
+        "signal": "power",
+        "position": [
+          -7,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tf1B_output",
+        "componentId": "tf1B",
+        "pin": "output",
+        "physicalPin": "LEAD 2",
+        "signal": "power",
+        "position": [
+          7,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tecB_positive",
+        "componentId": "tecB",
+        "pin": "positive",
+        "physicalPin": "RED/+",
+        "signal": "power",
+        "position": [
+          16,
+          -2,
+          15
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10cB_m_minus",
+        "componentId": "md10cB",
+        "pin": "m_minus",
+        "physicalPin": "M-",
+        "signal": "ground",
+        "position": [
+          17,
+          6,
+          -12
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "tecB_negative",
+        "componentId": "tecB",
+        "pin": "negative",
+        "physicalPin": "BLACK/-",
+        "signal": "ground",
+        "position": [
+          16,
+          -2,
+          11
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gpio5",
+        "componentId": "esp32",
+        "pin": "gpio5",
+        "physicalPin": "GPIO5",
+        "signal": "control",
+        "position": [
+          -13,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "md10cB_pwm",
+        "componentId": "md10cB",
+        "pin": "pwm",
+        "physicalPin": "PWM",
+        "signal": "control",
+        "position": [
+          -6,
+          6,
+          -17
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_fan_12v",
+        "componentId": "power",
+        "pin": "fan_12v",
+        "physicalPin": "12V FAN OUT",
+        "signal": "power",
+        "position": [
+          2,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "fan_connector_vdd",
+        "componentId": "fan_connector",
+        "pin": "vdd",
+        "physicalPin": "PIN2 +12V",
+        "signal": "power",
+        "position": [
+          -3,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_fan_gnd",
+        "componentId": "power",
+        "pin": "fan_gnd",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          5,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "fan_connector_gnd",
+        "componentId": "fan_connector",
+        "pin": "gnd",
+        "physicalPin": "PIN1 GND",
+        "signal": "ground",
+        "position": [
+          -1,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gpio6",
+        "componentId": "esp32",
+        "pin": "gpio6",
+        "physicalPin": "GPIO6",
+        "signal": "control",
+        "position": [
+          20,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_q1_base_in",
+        "componentId": "interface",
+        "pin": "q1_base_in",
+        "physicalPin": "R1 IN",
+        "signal": "control",
+        "position": [
+          -18,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_q1_collector",
+        "componentId": "interface",
+        "pin": "q1_collector",
+        "physicalPin": "Q1 COLLECTOR",
+        "signal": "control",
+        "position": [
+          -10,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "fan_connector_pwm",
+        "componentId": "fan_connector",
+        "pin": "pwm",
+        "physicalPin": "PIN4 PWM",
+        "signal": "control",
+        "position": [
+          3,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "fan_connector_tach",
+        "componentId": "fan_connector",
+        "pin": "tach",
+        "physicalPin": "PIN3 TACH",
+        "signal": "sensor",
+        "position": [
+          1,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_tach_in",
+        "componentId": "interface",
+        "pin": "tach_in",
+        "physicalPin": "TACH NODE",
+        "signal": "sensor",
+        "position": [
+          0,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_tach_out",
+        "componentId": "interface",
+        "pin": "tach_out",
+        "physicalPin": "TACH OUT",
+        "signal": "sensor",
+        "position": [
+          5,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gpio7",
+        "componentId": "esp32",
+        "pin": "gpio7",
+        "physicalPin": "GPIO7",
+        "signal": "sensor",
+        "position": [
+          25,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_logic_5v",
+        "componentId": "power",
+        "pin": "logic_5v",
+        "physicalPin": "BUCK 5V OUT",
+        "signal": "power",
+        "position": [
+          14,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_vin",
+        "componentId": "esp32",
+        "pin": "vin",
+        "physicalPin": "J1-21 5V",
+        "signal": "power",
+        "position": [
+          -25,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_logic_gnd",
+        "componentId": "power",
+        "pin": "logic_gnd",
+        "physicalPin": "BUCK GND",
+        "signal": "ground",
+        "position": [
+          19,
+          7,
+          5
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd",
+        "componentId": "esp32",
+        "pin": "gnd",
+        "physicalPin": "J1-22 GND",
+        "signal": "ground",
+        "position": [
+          -20,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_0",
+        "componentId": "esp32",
+        "pin": "3v3_0",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          -14,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ads1115_vdd",
+        "componentId": "ads1115",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -10,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_0",
+        "componentId": "esp32",
+        "pin": "gnd_0",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -11,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ads1115_gnd",
+        "componentId": "ads1115",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -5,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_1",
+        "componentId": "esp32",
+        "pin": "3v3_1",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          -7,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_vdd",
+        "componentId": "mux",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -14,
+          4,
+          7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_1",
+        "componentId": "esp32",
+        "pin": "gnd_1",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -4,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_gnd",
+        "componentId": "mux",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -9,
+          4,
+          7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_2",
+        "componentId": "esp32",
+        "pin": "3v3_2",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          0,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensors_vdd",
+        "componentId": "sensors",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -8,
+          3,
+          6
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_2",
+        "componentId": "esp32",
+        "pin": "gnd_2",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          3,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensors_gnd",
+        "componentId": "sensors",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -3,
+          3,
+          6
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_3",
+        "componentId": "esp32",
+        "pin": "3v3_3",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          7,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensorsB_vdd",
+        "componentId": "sensorsB",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -8,
+          3,
+          6
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_3",
+        "componentId": "esp32",
+        "pin": "gnd_3",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          10,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensorsB_gnd",
+        "componentId": "sensorsB",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          -3,
+          3,
+          6
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_4",
+        "componentId": "esp32",
+        "pin": "3v3_4",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          14,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_vdd",
+        "componentId": "ina260",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -7,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_4",
+        "componentId": "esp32",
+        "pin": "gnd_4",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          17,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_gnd",
+        "componentId": "ina260",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          7,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_5",
+        "componentId": "esp32",
+        "pin": "3v3_5",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          21,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_vdd",
+        "componentId": "ina260B",
+        "pin": "vdd",
+        "physicalPin": "VCC/VDD",
+        "signal": "power",
+        "position": [
+          -7,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_gnd_5",
+        "componentId": "esp32",
+        "pin": "gnd_5",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          24,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_gnd",
+        "componentId": "ina260B",
+        "pin": "gnd",
+        "physicalPin": "GND",
+        "signal": "ground",
+        "position": [
+          7,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_sda_0",
+        "componentId": "esp32",
+        "pin": "sda_0",
+        "physicalPin": "GPIO8",
+        "signal": "data",
+        "position": [
+          -10,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensors_sda",
+        "componentId": "sensors",
+        "pin": "sda",
+        "physicalPin": "SDA",
+        "signal": "data",
+        "position": [
+          -6,
+          3,
+          -7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_scl_0",
+        "componentId": "esp32",
+        "pin": "scl_0",
+        "physicalPin": "GPIO9",
+        "signal": "data",
+        "position": [
+          -6,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensors_scl",
+        "componentId": "sensors",
+        "pin": "scl",
+        "physicalPin": "SCL",
+        "signal": "data",
+        "position": [
+          6,
+          3,
+          -7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_sda_1",
+        "componentId": "esp32",
+        "pin": "sda_1",
+        "physicalPin": "GPIO8",
+        "signal": "data",
+        "position": [
+          -3,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_sda",
+        "componentId": "ina260",
+        "pin": "sda",
+        "physicalPin": "SDA",
+        "signal": "data",
+        "position": [
+          -3,
+          4,
+          -10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_scl_1",
+        "componentId": "esp32",
+        "pin": "scl_1",
+        "physicalPin": "GPIO9",
+        "signal": "data",
+        "position": [
+          1,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260_scl",
+        "componentId": "ina260",
+        "pin": "scl",
+        "physicalPin": "SCL",
+        "signal": "data",
+        "position": [
+          3,
+          4,
+          -10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_sda_2",
+        "componentId": "esp32",
+        "pin": "sda_2",
+        "physicalPin": "GPIO8",
+        "signal": "data",
+        "position": [
+          4,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_sda",
+        "componentId": "ina260B",
+        "pin": "sda",
+        "physicalPin": "SDA",
+        "signal": "data",
+        "position": [
+          -3,
+          4,
+          -10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_scl_2",
+        "componentId": "esp32",
+        "pin": "scl_2",
+        "physicalPin": "GPIO9",
+        "signal": "data",
+        "position": [
+          8,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ina260B_scl",
+        "componentId": "ina260B",
+        "pin": "scl",
+        "physicalPin": "SCL",
+        "signal": "data",
+        "position": [
+          3,
+          4,
+          -10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_sda_3",
+        "componentId": "esp32",
+        "pin": "sda_3",
+        "physicalPin": "GPIO17",
+        "signal": "data",
+        "position": [
+          11,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensorsB_sda",
+        "componentId": "sensorsB",
+        "pin": "sda",
+        "physicalPin": "SDA",
+        "signal": "data",
+        "position": [
+          -6,
+          3,
+          -7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_scl_3",
+        "componentId": "esp32",
+        "pin": "scl_3",
+        "physicalPin": "GPIO18",
+        "signal": "data",
+        "position": [
+          15,
+          4,
+          10
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "sensorsB_scl",
+        "componentId": "sensorsB",
+        "pin": "scl",
+        "physicalPin": "SCL",
+        "signal": "data",
+        "position": [
+          6,
+          3,
+          -7
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_mux_s0",
+        "componentId": "esp32",
+        "pin": "mux_s0",
+        "physicalPin": "J1-16 GPIO10",
+        "signal": "control",
+        "position": [
+          8,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_s0",
+        "componentId": "mux",
+        "pin": "s0",
+        "physicalPin": "S0",
+        "signal": "control",
+        "position": [
+          -12,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_mux_s1",
+        "componentId": "esp32",
+        "pin": "mux_s1",
+        "physicalPin": "J1-17 GPIO11",
+        "signal": "control",
+        "position": [
+          13,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_s1",
+        "componentId": "mux",
+        "pin": "s1",
+        "physicalPin": "S1",
+        "signal": "control",
+        "position": [
+          -4,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_mux_s2",
+        "componentId": "esp32",
+        "pin": "mux_s2",
+        "physicalPin": "J1-18 GPIO12",
+        "signal": "control",
+        "position": [
+          18,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_s2",
+        "componentId": "mux",
+        "pin": "s2",
+        "physicalPin": "S2",
+        "signal": "control",
+        "position": [
+          4,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_mux_s3",
+        "componentId": "esp32",
+        "pin": "mux_s3",
+        "physicalPin": "J1-19 GPIO13",
+        "signal": "control",
+        "position": [
+          23,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_s3",
+        "componentId": "mux",
+        "pin": "s3",
+        "physicalPin": "S3",
+        "signal": "control",
+        "position": [
+          12,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_common",
+        "componentId": "mux",
+        "pin": "common",
+        "physicalPin": "SIG/COMMON",
+        "signal": "sensor",
+        "position": [
+          0,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_adc1",
+        "componentId": "esp32",
+        "pin": "adc1",
+        "physicalPin": "ADC1",
+        "signal": "sensor",
+        "position": [
+          0,
+          4,
+          9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_mux_en_low",
+        "componentId": "interface",
+        "pin": "mux_en_low",
+        "physicalPin": "EN LOW STRAP",
+        "signal": "ground",
+        "position": [
+          16,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_enable",
+        "componentId": "mux",
+        "pin": "enable",
+        "physicalPin": "EN/E",
+        "signal": "ground",
+        "position": [
+          18,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_q_emitter",
+        "componentId": "interface",
+        "pin": "q_emitter",
+        "physicalPin": "Q1 EMITTER",
+        "signal": "ground",
+        "position": [
+          -6,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_q_ground",
+        "componentId": "power",
+        "pin": "q_ground",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          17,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "esp32_3v3_interface",
+        "componentId": "esp32",
+        "pin": "3v3_interface",
+        "physicalPin": "J1-1 3V3",
+        "signal": "power",
+        "position": [
+          14,
+          4,
+          -9
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_bias_3v3",
+        "componentId": "interface",
+        "pin": "bias_3v3",
+        "physicalPin": "3V3 BUS",
+        "signal": "power",
+        "position": [
+          11,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_interface_gnd",
+        "componentId": "power",
+        "pin": "interface_gnd",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          11,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_filter_gnd",
+        "componentId": "interface",
+        "pin": "filter_gnd",
+        "physicalPin": "GND BUS",
+        "signal": "ground",
+        "position": [
+          6,
+          4,
+          -8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_0_sense",
+        "componentId": "ntc_0",
+        "pin": "sense",
+        "physicalPin": "TH0 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_0",
+        "componentId": "interface",
+        "pin": "ntc_probe_0",
+        "physicalPin": "TH0 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          -28,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_0",
+        "componentId": "interface",
+        "pin": "ntc_mux_0",
+        "physicalPin": "TH0 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          -28,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch0",
+        "componentId": "mux",
+        "pin": "ch0",
+        "physicalPin": "C0",
+        "signal": "sensor",
+        "position": [
+          -28,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_0_gnd",
+        "componentId": "ntc_0",
+        "pin": "gnd",
+        "physicalPin": "TH0 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_0",
+        "componentId": "power",
+        "pin": "ntc_gnd_0",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          -5,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_1_sense",
+        "componentId": "ntc_1",
+        "pin": "sense",
+        "physicalPin": "TH1 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_1",
+        "componentId": "interface",
+        "pin": "ntc_probe_1",
+        "physicalPin": "TH1 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          -20,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_1",
+        "componentId": "interface",
+        "pin": "ntc_mux_1",
+        "physicalPin": "TH1 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          -20,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch1",
+        "componentId": "mux",
+        "pin": "ch1",
+        "physicalPin": "C1",
+        "signal": "sensor",
+        "position": [
+          -20,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_1_gnd",
+        "componentId": "ntc_1",
+        "pin": "gnd",
+        "physicalPin": "TH1 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_1",
+        "componentId": "power",
+        "pin": "ntc_gnd_1",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          -1,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_2_sense",
+        "componentId": "ntc_2",
+        "pin": "sense",
+        "physicalPin": "TH2 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_2",
+        "componentId": "interface",
+        "pin": "ntc_probe_2",
+        "physicalPin": "TH2 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          -12,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_2",
+        "componentId": "interface",
+        "pin": "ntc_mux_2",
+        "physicalPin": "TH2 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          -12,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch2",
+        "componentId": "mux",
+        "pin": "ch2",
+        "physicalPin": "C2",
+        "signal": "sensor",
+        "position": [
+          -12,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_2_gnd",
+        "componentId": "ntc_2",
+        "pin": "gnd",
+        "physicalPin": "TH2 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_2",
+        "componentId": "power",
+        "pin": "ntc_gnd_2",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          3,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_3_sense",
+        "componentId": "ntc_3",
+        "pin": "sense",
+        "physicalPin": "TH3 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_3",
+        "componentId": "interface",
+        "pin": "ntc_probe_3",
+        "physicalPin": "TH3 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          -4,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_3",
+        "componentId": "interface",
+        "pin": "ntc_mux_3",
+        "physicalPin": "TH3 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          -4,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch3",
+        "componentId": "mux",
+        "pin": "ch3",
+        "physicalPin": "C3",
+        "signal": "sensor",
+        "position": [
+          -4,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_3_gnd",
+        "componentId": "ntc_3",
+        "pin": "gnd",
+        "physicalPin": "TH3 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_3",
+        "componentId": "power",
+        "pin": "ntc_gnd_3",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          7,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_4_sense",
+        "componentId": "ntc_4",
+        "pin": "sense",
+        "physicalPin": "TH4 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_4",
+        "componentId": "interface",
+        "pin": "ntc_probe_4",
+        "physicalPin": "TH4 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          4,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_4",
+        "componentId": "interface",
+        "pin": "ntc_mux_4",
+        "physicalPin": "TH4 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          4,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch4",
+        "componentId": "mux",
+        "pin": "ch4",
+        "physicalPin": "C4",
+        "signal": "sensor",
+        "position": [
+          4,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_4_gnd",
+        "componentId": "ntc_4",
+        "pin": "gnd",
+        "physicalPin": "TH4 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_4",
+        "componentId": "power",
+        "pin": "ntc_gnd_4",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          11,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_5_sense",
+        "componentId": "ntc_5",
+        "pin": "sense",
+        "physicalPin": "TH5 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_5",
+        "componentId": "interface",
+        "pin": "ntc_probe_5",
+        "physicalPin": "TH5 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          12,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_5",
+        "componentId": "interface",
+        "pin": "ntc_mux_5",
+        "physicalPin": "TH5 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          12,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch5",
+        "componentId": "mux",
+        "pin": "ch5",
+        "physicalPin": "C5",
+        "signal": "sensor",
+        "position": [
+          12,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_5_gnd",
+        "componentId": "ntc_5",
+        "pin": "gnd",
+        "physicalPin": "TH5 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_5",
+        "componentId": "power",
+        "pin": "ntc_gnd_5",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          15,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_6_sense",
+        "componentId": "ntc_6",
+        "pin": "sense",
+        "physicalPin": "TH6 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_6",
+        "componentId": "interface",
+        "pin": "ntc_probe_6",
+        "physicalPin": "TH6 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          20,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_6",
+        "componentId": "interface",
+        "pin": "ntc_mux_6",
+        "physicalPin": "TH6 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          20,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch6",
+        "componentId": "mux",
+        "pin": "ch6",
+        "physicalPin": "C6",
+        "signal": "sensor",
+        "position": [
+          20,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_6_gnd",
+        "componentId": "ntc_6",
+        "pin": "gnd",
+        "physicalPin": "TH6 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_6",
+        "componentId": "power",
+        "pin": "ntc_gnd_6",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          19,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_7_sense",
+        "componentId": "ntc_7",
+        "pin": "sense",
+        "physicalPin": "TH7 SIGNAL",
+        "signal": "sensor",
+        "position": [
+          -1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_probe_7",
+        "componentId": "interface",
+        "pin": "ntc_probe_7",
+        "physicalPin": "TH7 DIVIDER NODE",
+        "signal": "sensor",
+        "position": [
+          28,
+          4,
+          2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "interface_ntc_mux_7",
+        "componentId": "interface",
+        "pin": "ntc_mux_7",
+        "physicalPin": "TH7 FILTER OUT",
+        "signal": "sensor",
+        "position": [
+          28,
+          4,
+          -2
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "mux_ch7",
+        "componentId": "mux",
+        "pin": "ch7",
+        "physicalPin": "C7",
+        "signal": "sensor",
+        "position": [
+          28,
+          4,
+          8
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "ntc_7_gnd",
+        "componentId": "ntc_7",
+        "pin": "gnd",
+        "physicalPin": "TH7 RETURN",
+        "signal": "ground",
+        "position": [
+          1.2,
+          0,
+          0
+        ],
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "required": true,
+        "maxConnections": 1
+      },
+      {
+        "id": "power_ntc_gnd_7",
+        "componentId": "power",
+        "pin": "ntc_gnd_7",
+        "physicalPin": "STAR GND",
+        "signal": "ground",
+        "position": [
+          23,
+          7,
+          -4
+        ],
+        "direction": [
+          0,
+          1,
+          0
+        ],
+        "required": true,
+        "maxConnections": 1
+      }
+    ],
+    "wires": [
+      {
+        "id": "w_12v_mon_a",
+        "name": "P12V_TEC_A",
+        "net": "P12V_TEC_A",
+        "signal": "power",
+        "from": "power_12v_sw_a",
+        "to": "ina260_vin_plus",
+        "color": "#e45442",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_12v_drive_a",
+        "name": "P12V_TEC_A_MON",
+        "net": "P12V_TEC_A_MON",
+        "signal": "power",
+        "from": "ina260_vin_minus",
+        "to": "md10c_vm_plus",
+        "color": "#f0644e",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_drive_gnd_a",
+        "name": "GND_DRIVE_A",
+        "net": "GND_DRIVE_A",
+        "signal": "ground",
+        "from": "power_drive_gnd_a",
+        "to": "md10c_gnd",
+        "color": "#252a31",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_tec_pre_fuse_a",
+        "name": "TEC_A_POS_PRE_TF",
+        "net": "TEC_A_POS_PRE_TF",
+        "signal": "power",
+        "from": "md10c_m_plus",
+        "to": "tf1_input",
+        "color": "#f0644e",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_pos_a",
+        "name": "TEC_A_POS_FUSED",
+        "net": "TEC_A_POS_FUSED",
+        "signal": "power",
+        "from": "tf1_output",
+        "to": "tec_positive",
+        "color": "#f0644e",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_neg_a",
+        "name": "TEC_A_NEG",
+        "net": "TEC_A_NEG",
+        "signal": "ground",
+        "from": "md10c_m_minus",
+        "to": "tec_negative",
+        "color": "#26313a",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_pwm_a",
+        "name": "TEC_PWM_A",
+        "net": "TEC_PWM_A",
+        "signal": "control",
+        "from": "esp32_gpio4",
+        "to": "md10c_pwm",
+        "color": "#bd89dc",
+        "diameter": 0.36,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_12v_mon_b",
+        "name": "P12V_TEC_B",
+        "net": "P12V_TEC_B",
+        "signal": "power",
+        "from": "power_12v_sw_b",
+        "to": "ina260B_vin_plus",
+        "color": "#e45442",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_12v_drive_b",
+        "name": "P12V_TEC_B_MON",
+        "net": "P12V_TEC_B_MON",
+        "signal": "power",
+        "from": "ina260B_vin_minus",
+        "to": "md10cB_vm_plus",
+        "color": "#f0644e",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_drive_gnd_b",
+        "name": "GND_DRIVE_B",
+        "net": "GND_DRIVE_B",
+        "signal": "ground",
+        "from": "power_drive_gnd_b",
+        "to": "md10cB_gnd",
+        "color": "#252a31",
+        "diameter": 1,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_tec_pre_fuse_b",
+        "name": "TEC_B_POS_PRE_TF",
+        "net": "TEC_B_POS_PRE_TF",
+        "signal": "power",
+        "from": "md10cB_m_plus",
+        "to": "tf1B_input",
+        "color": "#f0644e",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_pos_b",
+        "name": "TEC_B_POS_FUSED",
+        "net": "TEC_B_POS_FUSED",
+        "signal": "power",
+        "from": "tf1B_output",
+        "to": "tecB_positive",
+        "color": "#f0644e",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_neg_b",
+        "name": "TEC_B_NEG",
+        "net": "TEC_B_NEG",
+        "signal": "ground",
+        "from": "md10cB_m_minus",
+        "to": "tecB_negative",
+        "color": "#26313a",
+        "diameter": 1.15,
+        "shielded": false,
+        "gauge": "16AWG",
+        "verification": "bench-required"
+      },
+      {
+        "id": "w_tec_pwm_b",
+        "name": "TEC_PWM_B",
+        "net": "TEC_PWM_B",
+        "signal": "control",
+        "from": "esp32_gpio5",
+        "to": "md10cB_pwm",
+        "color": "#bd89dc",
+        "diameter": 0.36,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_12v",
+        "name": "P12V_FAN",
+        "net": "P12V_FAN",
+        "signal": "power",
+        "from": "power_fan_12v",
+        "to": "fan_connector_vdd",
+        "color": "#d95744",
+        "diameter": 0.72,
+        "shielded": false,
+        "gauge": "22AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_gnd",
+        "name": "GND_FAN",
+        "net": "GND_FAN",
+        "signal": "ground",
+        "from": "power_fan_gnd",
+        "to": "fan_connector_gnd",
+        "color": "#252a31",
+        "diameter": 0.72,
+        "shielded": false,
+        "gauge": "22AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_pwm_in",
+        "name": "FAN_PWM_GPIO",
+        "net": "FAN_PWM_GPIO",
+        "signal": "control",
+        "from": "esp32_gpio6",
+        "to": "interface_q1_base_in",
+        "color": "#bd89dc",
+        "diameter": 0.38,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_pwm_oc",
+        "name": "FAN_PWM_OC",
+        "net": "FAN_PWM_OC",
+        "signal": "control",
+        "from": "interface_q1_collector",
+        "to": "fan_connector_pwm",
+        "color": "#bd89dc",
+        "diameter": 0.38,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_tach_in",
+        "name": "FAN_TACH_RAW",
+        "net": "FAN_TACH_RAW",
+        "signal": "sensor",
+        "from": "fan_connector_tach",
+        "to": "interface_tach_in",
+        "color": "#61c8a5",
+        "diameter": 0.38,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_fan_tach_out",
+        "name": "FAN_TACH_3V3",
+        "net": "FAN_TACH_3V3",
+        "signal": "sensor",
+        "from": "interface_tach_out",
+        "to": "esp32_gpio7",
+        "color": "#61c8a5",
+        "diameter": 0.38,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_logic_5v",
+        "name": "P5V_CTRL",
+        "net": "P5V_CTRL",
+        "signal": "power",
+        "from": "power_logic_5v",
+        "to": "esp32_vin",
+        "color": "#e06c42",
+        "diameter": 0.62,
+        "shielded": false,
+        "gauge": "22AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_logic_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "power_logic_gnd",
+        "to": "esp32_gnd",
+        "color": "#252a31",
+        "diameter": 0.62,
+        "shielded": false,
+        "gauge": "22AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ads1115_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_0",
+        "to": "ads1115_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ads1115_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_0",
+        "to": "ads1115_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_1",
+        "to": "mux_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_1",
+        "to": "mux_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensors_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_2",
+        "to": "sensors_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensors_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_2",
+        "to": "sensors_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensorsB_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_3",
+        "to": "sensorsB_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensorsB_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_3",
+        "to": "sensorsB_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_4",
+        "to": "ina260_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_4",
+        "to": "ina260_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260B_3v3",
+        "name": "P3V3_SENSOR",
+        "net": "P3V3_SENSOR",
+        "signal": "power",
+        "from": "esp32_3v3_5",
+        "to": "ina260B_vdd",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260B_gnd",
+        "name": "GND_CTRL",
+        "net": "GND_CTRL",
+        "signal": "ground",
+        "from": "esp32_gnd_5",
+        "to": "ina260B_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensors_sda",
+        "name": "I2C0_SDA",
+        "net": "I2C0_SDA",
+        "signal": "data",
+        "from": "esp32_sda_0",
+        "to": "sensors_sda",
+        "color": "#62aee6",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensors_scl",
+        "name": "I2C0_SCL",
+        "net": "I2C0_SCL",
+        "signal": "data",
+        "from": "esp32_scl_0",
+        "to": "sensors_scl",
+        "color": "#e5c957",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260_sda",
+        "name": "I2C0_SDA",
+        "net": "I2C0_SDA",
+        "signal": "data",
+        "from": "esp32_sda_1",
+        "to": "ina260_sda",
+        "color": "#62aee6",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260_scl",
+        "name": "I2C0_SCL",
+        "net": "I2C0_SCL",
+        "signal": "data",
+        "from": "esp32_scl_1",
+        "to": "ina260_scl",
+        "color": "#e5c957",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260B_sda",
+        "name": "I2C0_SDA",
+        "net": "I2C0_SDA",
+        "signal": "data",
+        "from": "esp32_sda_2",
+        "to": "ina260B_sda",
+        "color": "#62aee6",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_ina260B_scl",
+        "name": "I2C0_SCL",
+        "net": "I2C0_SCL",
+        "signal": "data",
+        "from": "esp32_scl_2",
+        "to": "ina260B_scl",
+        "color": "#e5c957",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensorsB_sda",
+        "name": "I2C1_SDA",
+        "net": "I2C1_SDA",
+        "signal": "data",
+        "from": "esp32_sda_3",
+        "to": "sensorsB_sda",
+        "color": "#62aee6",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_sensorsB_scl",
+        "name": "I2C1_SCL",
+        "net": "I2C1_SCL",
+        "signal": "data",
+        "from": "esp32_scl_3",
+        "to": "sensorsB_scl",
+        "color": "#e5c957",
+        "diameter": 0.32,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_s0",
+        "name": "MUX_S0",
+        "net": "MUX_S0",
+        "signal": "control",
+        "from": "esp32_mux_s0",
+        "to": "mux_s0",
+        "color": "#bd89dc",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_s1",
+        "name": "MUX_S1",
+        "net": "MUX_S1",
+        "signal": "control",
+        "from": "esp32_mux_s1",
+        "to": "mux_s1",
+        "color": "#bd89dc",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_s2",
+        "name": "MUX_S2",
+        "net": "MUX_S2",
+        "signal": "control",
+        "from": "esp32_mux_s2",
+        "to": "mux_s2",
+        "color": "#bd89dc",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_s3",
+        "name": "MUX_S3",
+        "net": "MUX_S3",
+        "signal": "control",
+        "from": "esp32_mux_s3",
+        "to": "mux_s3",
+        "color": "#bd89dc",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "datasheet"
+      },
+      {
+        "id": "w_mux_adc",
+        "name": "NTC_MUX_OUT",
+        "net": "NTC_MUX_OUT",
+        "signal": "sensor",
+        "from": "mux_common",
+        "to": "esp32_adc1",
+        "color": "#63c7a5",
+        "diameter": 0.38,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_mux_en",
+        "name": "MUX_ENABLE_LOW",
+        "net": "MUX_ENABLE_LOW",
+        "signal": "ground",
+        "from": "interface_mux_en_low",
+        "to": "mux_enable",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_fan_q_gnd",
+        "name": "GND_CTRL_Q1",
+        "net": "GND_CTRL_Q1",
+        "signal": "ground",
+        "from": "interface_q_emitter",
+        "to": "power_q_ground",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_interface_3v3",
+        "name": "P3V3_BIAS",
+        "net": "P3V3_BIAS",
+        "signal": "power",
+        "from": "esp32_3v3_interface",
+        "to": "interface_bias_3v3",
+        "color": "#d96b43",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_interface_gnd",
+        "name": "GND_CTRL_INTERFACE",
+        "net": "GND_CTRL_INTERFACE",
+        "signal": "ground",
+        "from": "power_interface_gnd",
+        "to": "interface_filter_gnd",
+        "color": "#252a31",
+        "diameter": 0.42,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_0_probe",
+        "name": "NTC_NODE_0",
+        "net": "NTC_NODE_0",
+        "signal": "sensor",
+        "from": "ntc_0_sense",
+        "to": "interface_ntc_probe_0",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_0_mux",
+        "name": "NTC_CH0",
+        "net": "NTC_CH0",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_0",
+        "to": "mux_ch0",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_0_gnd",
+        "name": "GND_NTC_0",
+        "net": "GND_NTC_0",
+        "signal": "ground",
+        "from": "ntc_0_gnd",
+        "to": "power_ntc_gnd_0",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_1_probe",
+        "name": "NTC_NODE_1",
+        "net": "NTC_NODE_1",
+        "signal": "sensor",
+        "from": "ntc_1_sense",
+        "to": "interface_ntc_probe_1",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_1_mux",
+        "name": "NTC_CH1",
+        "net": "NTC_CH1",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_1",
+        "to": "mux_ch1",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_1_gnd",
+        "name": "GND_NTC_1",
+        "net": "GND_NTC_1",
+        "signal": "ground",
+        "from": "ntc_1_gnd",
+        "to": "power_ntc_gnd_1",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_2_probe",
+        "name": "NTC_NODE_2",
+        "net": "NTC_NODE_2",
+        "signal": "sensor",
+        "from": "ntc_2_sense",
+        "to": "interface_ntc_probe_2",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_2_mux",
+        "name": "NTC_CH2",
+        "net": "NTC_CH2",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_2",
+        "to": "mux_ch2",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_2_gnd",
+        "name": "GND_NTC_2",
+        "net": "GND_NTC_2",
+        "signal": "ground",
+        "from": "ntc_2_gnd",
+        "to": "power_ntc_gnd_2",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_3_probe",
+        "name": "NTC_NODE_3",
+        "net": "NTC_NODE_3",
+        "signal": "sensor",
+        "from": "ntc_3_sense",
+        "to": "interface_ntc_probe_3",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_3_mux",
+        "name": "NTC_CH3",
+        "net": "NTC_CH3",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_3",
+        "to": "mux_ch3",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_3_gnd",
+        "name": "GND_NTC_3",
+        "net": "GND_NTC_3",
+        "signal": "ground",
+        "from": "ntc_3_gnd",
+        "to": "power_ntc_gnd_3",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_4_probe",
+        "name": "NTC_NODE_4",
+        "net": "NTC_NODE_4",
+        "signal": "sensor",
+        "from": "ntc_4_sense",
+        "to": "interface_ntc_probe_4",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_4_mux",
+        "name": "NTC_CH4",
+        "net": "NTC_CH4",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_4",
+        "to": "mux_ch4",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_4_gnd",
+        "name": "GND_NTC_4",
+        "net": "GND_NTC_4",
+        "signal": "ground",
+        "from": "ntc_4_gnd",
+        "to": "power_ntc_gnd_4",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_5_probe",
+        "name": "NTC_NODE_5",
+        "net": "NTC_NODE_5",
+        "signal": "sensor",
+        "from": "ntc_5_sense",
+        "to": "interface_ntc_probe_5",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_5_mux",
+        "name": "NTC_CH5",
+        "net": "NTC_CH5",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_5",
+        "to": "mux_ch5",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_5_gnd",
+        "name": "GND_NTC_5",
+        "net": "GND_NTC_5",
+        "signal": "ground",
+        "from": "ntc_5_gnd",
+        "to": "power_ntc_gnd_5",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_6_probe",
+        "name": "NTC_NODE_6",
+        "net": "NTC_NODE_6",
+        "signal": "sensor",
+        "from": "ntc_6_sense",
+        "to": "interface_ntc_probe_6",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_6_mux",
+        "name": "NTC_CH6",
+        "net": "NTC_CH6",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_6",
+        "to": "mux_ch6",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_6_gnd",
+        "name": "GND_NTC_6",
+        "net": "GND_NTC_6",
+        "signal": "ground",
+        "from": "ntc_6_gnd",
+        "to": "power_ntc_gnd_6",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_7_probe",
+        "name": "NTC_NODE_7",
+        "net": "NTC_NODE_7",
+        "signal": "sensor",
+        "from": "ntc_7_sense",
+        "to": "interface_ntc_probe_7",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_7_mux",
+        "name": "NTC_CH7",
+        "net": "NTC_CH7",
+        "signal": "sensor",
+        "from": "interface_ntc_mux_7",
+        "to": "mux_ch7",
+        "color": "#e18058",
+        "diameter": 0.34,
+        "shielded": true,
+        "gauge": "24AWG",
+        "verification": "design"
+      },
+      {
+        "id": "w_ntc_7_gnd",
+        "name": "GND_NTC_7",
+        "net": "GND_NTC_7",
+        "signal": "ground",
+        "from": "ntc_7_gnd",
+        "to": "power_ntc_gnd_7",
+        "color": "#252a31",
+        "diameter": 0.34,
+        "shielded": false,
+        "gauge": "24AWG",
+        "verification": "design"
+      }
+    ],
+    "endpointToleranceMm": 0.05,
+    "portToleranceMm": 0.25,
+    "verificationScope": "digital graph + live 3D endpoint anchoring; real polarity and continuity remain bench-gated",
+    "passiveNodes": [
+      {
+        "ref": "PD1/F1/F2/F3 + TF-A/B",
+        "node": "USB-C PD -> eFuse -> 12V DC/DC -> branch fuses -> monitors -> MOSFETs -> thermal fuses -> TECs",
+        "detail": "두 TEC 전력 가지를 독립 보호합니다.",
+        "verification": "bench-required"
+      },
+      {
+        "ref": "Q1 + R1/R2",
+        "node": "GPIO6 -> 4.7k -> Q1; 100k pull-down; collector -> FAN PWM",
+        "detail": "부팅 중 팬 PWM이 정의되지 않는 상태를 방지합니다.",
+        "verification": "design"
+      },
+      {
+        "ref": "R3",
+        "node": "3V3 -> 10k -> FAN_TACH -> GPIO7",
+        "detail": "오픈 컬렉터 TACH를 ESP32 전압으로 풀업합니다.",
+        "verification": "datasheet"
+      },
+      {
+        "ref": "R10-R17 + C3-C10",
+        "node": "3V3 -> 10k -> NTC_NODE_0..7 -> NTC -> GND; node -> 100nF -> GND",
+        "detail": "8개 온도 분압과 로컬 저역통과 필터입니다.",
+        "verification": "design"
+      },
+      {
+        "ref": "U7 EN",
+        "node": "CD74HC4067 EN -> GND",
+        "detail": "active-low MUX enable을 고정합니다.",
+        "verification": "datasheet"
+      },
+      {
+        "ref": "ADC1 + C11",
+        "node": "MUX SIG -> 1k -> ESP32 ADC1; ADC1 -> 100nF -> GND",
+        "detail": "생산 보정 대상 아날로그 입력 필터입니다.",
+        "verification": "design"
+      },
+      {
+        "ref": "TEC-A/B POLARITY",
+        "node": "MOSFET OUT -> TF-A/B -> TEC red; TEC black -> GND",
+        "detail": "냉면 방향은 1A 제한 펄스로 실물 확인해야 합니다.",
+        "verification": "bench-required"
+      }
+    ],
+    "benchChecks": [
+      {
+        "id": "power_short",
+        "instruction": "전원 차단 상태에서 12V와 GND 사이 단락을 검사합니다.",
+        "status": "required"
+      },
+      {
+        "id": "ground_continuity",
+        "instruction": "모든 GND 귀환의 연속성과 인접 핀 단락 부재를 검사합니다.",
+        "status": "required"
+      },
+      {
+        "id": "logic_rails",
+        "instruction": "TEC를 분리하고 5V·3.3V·I2C 주소를 확인합니다.",
+        "status": "required"
+      },
+      {
+        "id": "tec_polarity",
+        "instruction": "채널별 1A 제한 1초 펄스로 냉면 방향을 확인합니다.",
+        "status": "required"
+      },
+      {
+        "id": "failsafe",
+        "instruction": "팬 정지·NTC 단락/단선·SHT40 버스 장애 시 두 TEC 차단을 확인합니다.",
+        "status": "required"
+      }
+    ]
+  },
+  "metadata": {
+    "source": "user-supplied exploded electronics reference",
+    "sourceWidth": 2038,
+    "sourceHeight": 1268,
+    "evidencePolicy": "visible labels measured; hidden geometry and routes marked inferred"
+  }
+}

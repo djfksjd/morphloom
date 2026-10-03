@@ -1,0 +1,173 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "units": "mm",
+  "name": "WIRE CAP EDIT AUDIT XY",
+  "components": [
+    {
+      "id": "block-left",
+      "name": "block-left",
+      "category": "interconnect",
+      "materialName": "polymer",
+      "detail": "authored generic port fixture",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          20,
+          20,
+          20
+        ],
+        "radius": 1,
+        "segments": 3
+      },
+      "position": [
+        -60,
+        0,
+        0
+      ],
+      "material": {
+        "color": "#444444"
+      }
+    },
+    {
+      "id": "block-right",
+      "name": "block-right",
+      "category": "interconnect",
+      "materialName": "polymer",
+      "detail": "authored generic port fixture",
+      "geometry": {
+        "op": "roundedBox",
+        "size": [
+          20,
+          20,
+          20
+        ],
+        "radius": 1,
+        "segments": 3
+      },
+      "position": [
+        60,
+        0,
+        0
+      ],
+      "material": {
+        "color": "#444444"
+      }
+    }
+  ],
+  "electrical": {
+    "ports": [
+      {
+        "id": "wire-alpha-from",
+        "componentId": "block-left",
+        "pin": "from-wire-alpha",
+        "physicalPin": "from-wire-alpha",
+        "signal": "data",
+        "position": [
+          10,
+          0,
+          0
+        ],
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "required": true
+      },
+      {
+        "id": "wire-alpha-to",
+        "componentId": "block-right",
+        "pin": "to-wire-alpha",
+        "physicalPin": "to-wire-alpha",
+        "signal": "data",
+        "position": [
+          -10,
+          0,
+          0
+        ],
+        "direction": [
+          -1,
+          0,
+          0
+        ],
+        "required": true
+      },
+      {
+        "id": "wire-beta-from",
+        "componentId": "block-left",
+        "pin": "from-wire-beta",
+        "physicalPin": "from-wire-beta",
+        "signal": "data",
+        "position": [
+          10,
+          8,
+          0
+        ],
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "required": true
+      },
+      {
+        "id": "wire-beta-to",
+        "componentId": "block-right",
+        "pin": "to-wire-beta",
+        "physicalPin": "to-wire-beta",
+        "signal": "data",
+        "position": [
+          -10,
+          8,
+          0
+        ],
+        "direction": [
+          -1,
+          0,
+          0
+        ],
+        "required": true
+      }
+    ],
+    "wires": [
+      {
+        "id": "wire-alpha",
+        "name": "wire-alpha",
+        "net": "wire-alpha-net",
+        "signal": "data",
+        "from": "wire-alpha-from",
+        "to": "wire-alpha-to",
+        "diameter": 3,
+        "color": "#c76545",
+        "waypoints": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "verification": "design"
+      },
+      {
+        "id": "wire-beta",
+        "name": "wire-beta",
+        "net": "wire-beta-net",
+        "signal": "data",
+        "from": "wire-beta-from",
+        "to": "wire-beta-to",
+        "diameter": 3,
+        "color": "#c76545",
+        "waypoints": [
+          [
+            0,
+            8,
+            0
+          ]
+        ],
+        "verification": "design"
+      }
+    ],
+    "endpointToleranceMm": 0.05,
+    "verificationScope": "visual route fixture only"
+  }
+}

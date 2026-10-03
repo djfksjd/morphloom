@@ -1,3 +1,4 @@
+import {applyWireCapPatch} from './engine/wire-cap-finish';
 import {useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {createLatestIntentGate} from './engine/latest-intent';
 import type {AssemblyIR,AssemblyComponentIR} from './engine/assembly-ir';
@@ -13,14 +14,16 @@ function draftFor(c:AssemblyComponentIR):Draft {
  return {bladeOutward:c.geometry.op==='bladeLoft'&&Boolean(c.geometry.sideWinding),capFlat:tube?.capFinish==='flat-outward',capOutward:tube?.capWinding==='outward',curveEnabled:Boolean(tube?.curve),controlPoint:control.map(String),position:(c.position??[0,0,0]).map(String),scale:(c.scale??[1,1,1]).map(String),roughness:String(c.material.roughness??recipe.roughness),metalness:String(c.material.metalness??recipe.metalness),direction:orientation?.direction??'legacy',flipU:orientation?.flipU??false};
 }
 export default function AssemblyComponentEditor({ir,selectedId,onCommit}:{ir:AssemblyIR;selectedId?:string;onCommit:(next:AssemblyIR)=>void}) {
+ const wire=ir.electrical?.wires.find(w=>w.id===selectedId);
  const component=ir.components.find(c=>c.id===selectedId),latest=useRef(ir),alive=useRef(true),expected=useRef(ir),inFlight=useRef(false),selected=useRef(selectedId),history=useRef<AssemblyIR[]>([ir]),cursor=useRef(0);
  latest.current=ir;selected.current=selectedId;
  const draftSource=useRef<{ir:AssemblyIR;id?:string}>({ir, id:undefined});
  const [intentGate]=useState(createLatestIntentGate);
  useLayoutEffect(()=>{intentGate.cancel();return()=>intentGate.cancel();},[intentGate,ir,selectedId]);
+ const [wireFlat,setWireFlat]=useState(false);
  const [draft,setDraft]=useState<Draft>(),[busy,setBusy]=useState(false),[error,setError]=useState(''),[,refresh]=useState(0);
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
- useEffect(()=>{if(ir!==expected.current){history.current=[ir];cursor.current=0;expected.current=ir;}draftSource.current={ir,id:component?.id};setDraft(component?draftFor(component):undefined);setError('');},[ir,component]);
+ useEffect(()=>{if(ir!==expected.current){history.current=[ir];cursor.current=0;expected.current=ir;}draftSource.current={ir,id:component?.id??wire?.id};setDraft(component?draftFor(component):undefined);setWireFlat(wire?.capFinish?.finish==='flat-outward');setError('');},[ir,component,wire]);
  const commit=(next:AssemblyIR)=>{expected.current=next;history.current=history.current.slice(0,cursor.current+1);history.current.push(next);if(history.current.length>33)history.current.shift();cursor.current=history.current.length-1;onCommit(next);refresh(n=>n+1);};
  const move=(step:number)=>{const index=cursor.current+step;if(busy||index<0||index>=history.current.length)return;cursor.current=index;expected.current=history.current[index]!;onCommit(expected.current);refresh(n=>n+1);};
  const apply=async()=>{
@@ -57,10 +60,19 @@ export default function AssemblyComponentEditor({ir,selectedId,onCommit}:{ir:Ass
    if(next!==source)commit(next);
   }catch(e){if(ownsResult())setError(e instanceof Error?e.message:'Component edit failed');}finally{inFlight.current=false;if(alive.current)setBusy(false);}
  };
+ const applyWire=async()=>{
+  if(!wire||inFlight.current)return;
+  if(draftSource.current.ir!==ir||draftSource.current.id!==wire.id){setError('선택한 배선의 원본이 바뀌었습니다. 다시 확인하세요.');return;}
+  inFlight.current=true;const source=ir,intent=intentGate.begin();
+  const ownsResult=()=>alive.current&&intentGate.isCurrent(intent)&&latest.current===source&&selected.current===wire.id;setBusy(true);setError('');
+  try{const result=await applyWireCapPatch(source,{schema:'morphloom.wire-cap-patch/0.1',operationId:'ui-wire-cap',wireId:wire.id,expectedInputFingerprint:await fingerprintAssemblyIR(source),action:wireFlat?'set':'clear'});validateAssemblyIR(result.ir);if(ownsResult())commit(result.ir);}
+  catch(e){if(ownsResult())setError(e instanceof Error?e.message:'배선 편집 실패');}
+  finally{inFlight.current=false;if(alive.current)setBusy(false);}
+ };
  const dirty=component&&draft&&JSON.stringify(draft)!==JSON.stringify(draftFor(component));
  return <section className="selected-part-card" aria-label="Assembly component editor"><span className="eyebrow">COMPONENT EDIT · MM</span>
  <button disabled={busy||cursor.current===0} onClick={()=>move(-1)}>Undo component edit</button><button disabled={busy||cursor.current>=history.current.length-1} onClick={()=>move(1)}>Redo component edit</button>
- {!component||!draft?<p>부품을 선택하면 수치와 사진 투영 방향을 편집할 수 있습니다.</p>:<><p>Stable ID: <b>{component.id}</b></p>
+ {wire&&!component?<><p>Stable ID: <b>{wire.id}</b> · {wire.name}</p><label><input aria-label="Wire flat cap finish" type="checkbox" disabled={busy} checked={wireFlat} onChange={e=>setWireFlat(e.target.checked)}/>배선 끝면을 평평하게 마감</label><p>끝면 방향·노멀·UV를 교정합니다. 경로와 단자 위치는 유지됩니다.</p><button disabled={busy||wireFlat===(wire.capFinish?.finish==='flat-outward')} onClick={()=>void applyWire()}>Apply wire cap edit</button><button disabled={busy||wireFlat===(wire.capFinish?.finish==='flat-outward')} onClick={()=>{setWireFlat(wire.capFinish?.finish==='flat-outward');setError('');}}>Cancel wire cap edit</button></>:!component||!draft?<p>부품을 선택하면 수치와 사진 투영 방향을 편집할 수 있습니다.</p>:<><p>Stable ID: <b>{component.id}</b></p>
  {(['position','scale'] as const).map(key=><fieldset key={key}><legend>{key==='position'?'위치 (mm)':'크기 배율 (원래 부품 기준)'}</legend>{['X','Y','Z'].map((axis,i)=><label key={axis}>{key} {axis}<input aria-label={`Component ${key} ${axis}`} type="number" step={key==='position'?1:.01} value={draft[key][i]} disabled={busy} onChange={e=>setDraft(d=>d?{...d,[key]:d[key].map((n,j)=>i===j?e.target.value:n)}:d)}/></label>)}</fieldset>)}
  {(['roughness','metalness'] as const).map(key=><label key={key}>{key} (추정 appearance)<input aria-label={`Component ${key}`} type="number" min="0" max="1" step="0.01" disabled={busy} value={draft[key]} onChange={e=>setDraft(d=>d?{...d,[key]:e.target.value}:d)}/></label>)}
  {component.geometry.op==='tube'&&component.geometry.points.length===2&&!component.geometry.closed&&<fieldset><legend>Wire 곡선 · 부품 로컬 좌표 (mm)</legend><label><input aria-label="Enable quadratic tube curve" type="checkbox" checked={draft.curveEnabled} disabled={busy} onChange={e=>setDraft(d=>d?{...d,curveEnabled:e.target.checked}:d)}/>2차 Bezier 곡선 사용</label>{draft.curveEnabled&&['X','Y','Z'].map((axis,i)=><label key={axis}>제어점 {axis}<input aria-label={`Tube control ${axis} mm`} type="number" step="0.1" disabled={busy} value={draft.controlPoint[i]} onChange={e=>setDraft(d=>d?{...d,controlPoint:d.controlPoint.map((v,j)=>i===j?e.target.value:v)}:d)}/></label>)}<p>양 끝점은 유지됩니다. 제어점은 곡선이 통과하는 점이 아닙니다. 연결된 링·부품은 자동 이동하지 않습니다.</p></fieldset>}

@@ -58,7 +58,7 @@ describe('browser proof recorder', () => {
       errors: 1, warnings: 2, samples: ['ERROR · example'],
     }, '2026-09-02T00:00:00.000Z');
     expect(report.schema).toBe('morphloom.browser-roundtrip/0.4');
-    expect(report.compilerRevision).toBe('morphloom-compiler/0.37.0');
+    expect(report.compilerRevision).toBe('morphloom-compiler/0.38.0');
     expect(report.fingerprintRevision).toBe('morphloom-scene-fingerprint/0.6.0');
     expect(report.console).toEqual({ errors: 1, warnings: 2, samples: ['ERROR · example'] });
     expect(report.assets).toHaveLength(1);

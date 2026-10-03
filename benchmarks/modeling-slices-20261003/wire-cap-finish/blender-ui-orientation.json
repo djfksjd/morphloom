@@ -1,0 +1,83 @@
+{
+  "schema": "morphloom.blender-mesh-orientation/0.1",
+  "blenderVersion": "5.2.1 LTS",
+  "sourceSha256": "e7de1083b7fce7b9c14649d64904315abfdaa28ac073f927b1808a1ee1636931",
+  "requireClosed": true,
+  "weldPrecisionMetres": 1e-07,
+  "pass": false,
+  "rows": [
+    {
+      "name": "block-left",
+      "triangles": 588,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "block-right",
+      "triangles": 588,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "wire-alpha",
+      "triangles": 1420,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "wire-alpha_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "wire-alpha_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "wire-beta",
+      "triangles": 1420,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 20,
+      "pass": false
+    },
+    {
+      "name": "wire-beta_terminal_1",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    },
+    {
+      "name": "wire-beta_terminal_2",
+      "triangles": 196,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "pass": true
+    }
+  ],
+  "scope": "actual imported local directed edges; whole volume/outward orientation, UV, self-intersection, artistic/source/CAD approval not certified"
+}

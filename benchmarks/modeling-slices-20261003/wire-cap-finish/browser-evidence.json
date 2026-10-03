@@ -1,0 +1,15 @@
+{
+  "pass": true,
+  "cases": [
+    "real SHA completion and native selection A/B/A cancel stale commit/no stale error",
+    "Cancel preserves IR",
+    "Apply one wire40\u219220 total, remaining wire20 remains blocker",
+    "other wires/ports/components exact",
+    "Undo40",
+    "Redo20",
+    "saved IR reopen exact",
+    "regular GLB export"
+  ],
+  "method": "native canvas/input/real digest/save/reopen; no state injection",
+  "glbSha256": "e7de1083b7fce7b9c14649d64904315abfdaa28ac073f927b1808a1ee1636931"
+}

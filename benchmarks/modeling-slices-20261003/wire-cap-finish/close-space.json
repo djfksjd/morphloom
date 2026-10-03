@@ -1,0 +1,10 @@
+{
+  "schema": "morphloom.fixed-neutral-space/0.1",
+  "scale": 17.32071626026217,
+  "translationMeters": [
+    -0.0007589813321828842,
+    -0.030000001192092896,
+    -0.04936359077692032
+  ],
+  "inspectionComponent": "heatpipe_1"
+}

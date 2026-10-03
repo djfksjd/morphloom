@@ -1,0 +1,180 @@
+{
+  "schema": "morphloom.neutral-glb-render/0.3",
+  "protocol": "morphloom-neutral-glb-v2",
+  "viewId": "front-iso",
+  "blenderVersion": "5.2.1 LTS",
+  "source": "legacy.glb",
+  "sourceBytes": 18495928,
+  "sourceSha256": "279c65178f0194bd0af5ecbcd4e2551fb599b23bb790e7a39d2cf232d54fcf96",
+  "render": "legacy-close.png",
+  "renderBytes": 256056,
+  "renderSha256": "cff33e0c5391d38ff65d6027981263ccfaaefbab9dc7ad4f42c3ea12a227581f",
+  "meshes": 1,
+  "materials": 323,
+  "normalization": {
+    "method": "fixed-metre-datum",
+    "targetExtent": null,
+    "sourceBounds": {
+      "min": [
+        -0.0569753497838974,
+        0.027000000700354576,
+        0.03889016434550285
+      ],
+      "max": [
+        0.05849331244826317,
+        0.032999999821186066,
+        0.05983702093362808
+      ],
+      "size": [
+        0.11546866595745087,
+        0.0059999991208314896,
+        0.02094685658812523
+      ]
+    },
+    "scale": 17.32071626026217,
+    "fixedSpaceSha256": "a9b569dc9e2fdbc2f6922673f3ac07ea10218475870a307af65583f8b339507b",
+    "translationMeters": [
+      -0.0007589813321828842,
+      -0.030000001192092896,
+      -0.04936359077692032
+    ],
+    "normalizedBounds": {
+      "min": [
+        -1.0,
+        -0.051962196826934814,
+        -0.18140727281570435
+      ],
+      "max": [
+        1.0000001192092896,
+        0.051962077617645264,
+        0.18140733242034912
+      ],
+      "size": [
+        2.0,
+        0.10392427444458008,
+        0.36281460523605347
+      ]
+    }
+  },
+  "camera": {
+    "projection": "orthographic",
+    "position": [
+      2.8,
+      3.4,
+      1.8
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "orthographicHeight": 3.2
+  },
+  "framing": {
+    "alphaBoundsPixels": {
+      "min": [
+        255,
+        411
+      ],
+      "max": [
+        766,
+        641
+      ]
+    },
+    "minimumMarginPixels": 255,
+    "touchesBorder": false
+  },
+  "inspectionScope": {
+    "kind": "isolated-component",
+    "componentId": "heatpipe_1"
+  },
+  "renderSettings": {
+    "engine": "BLENDER_EEVEE",
+    "width": 1024,
+    "height": 1024,
+    "transparent": true,
+    "viewTransform": "AgX",
+    "look": "AgX - Medium High Contrast"
+  },
+  "studio": {
+    "world": {
+      "color": [
+        0.12,
+        0.12,
+        0.12,
+        1
+      ],
+      "strength": 0.28
+    },
+    "lights": [
+      {
+        "name": "Neutral key",
+        "location": [
+          -2.5,
+          -3.0,
+          3.5
+        ],
+        "energy": 900,
+        "size": 4.0
+      },
+      {
+        "name": "Neutral fill",
+        "location": [
+          3.0,
+          -2.0,
+          1.2
+        ],
+        "energy": 500,
+        "size": 3.0
+      },
+      {
+        "name": "Neutral rim",
+        "location": [
+          0.5,
+          2.5,
+          2.5
+        ],
+        "energy": 700,
+        "size": 2.5
+      }
+    ]
+  },
+  "inspectionMode": "grazing",
+  "actualLights": [
+    {
+      "name": "Neutral key",
+      "position": [
+        3.0,
+        -0.5,
+        0.30000001192092896
+      ],
+      "energy": 900.0,
+      "size": 1.0
+    },
+    {
+      "name": "Neutral fill",
+      "position": [
+        3.0,
+        -2.0,
+        1.2000000476837158
+      ],
+      "energy": 70.0,
+      "size": 3.0
+    },
+    {
+      "name": "Neutral rim",
+      "position": [
+        0.5,
+        2.5,
+        2.5
+      ],
+      "energy": 700.0,
+      "size": 2.5
+    }
+  ]
+}

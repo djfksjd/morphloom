@@ -1,3 +1,4 @@
+import type {WireCapFinishIR} from './wire-cap-finish';
 import type {BladeSideWindingIR} from './blade-side-winding';
 import type { TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { FidelityContract } from './fidelity-pipeline';
@@ -214,6 +215,8 @@ export interface ElectricalPortIR {
 }
 
 export interface ElectricalWireIR {
+  /** Absent preserves historical wire buffers; explicit versioned endpoint finish. */
+  capFinish?: WireCapFinishIR;
   id: string;
   name: string;
   net: string;
