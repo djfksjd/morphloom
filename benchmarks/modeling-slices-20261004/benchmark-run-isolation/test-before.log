@@ -1,0 +1,26 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/benchmark-run-isolation.test.ts [ tests/benchmark-run-isolation.test.ts ]
+Error: Cannot find module '../scripts/lib/benchmark-run-directory' imported from '/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/tests/benchmark-run-isolation.test.ts'
+ ❯ tests/benchmark-run-isolation.test.ts:5:1
+      3| import { join } from 'node:path';
+      4| import { describe, it, expect } from 'vitest';
+      5| import { createBenchmarkRunDirectory } from '../scripts/lib/benchmark-…
+       | ^
+      6|
+      7| describe('Blender benchmark run ownership', () => {
+
+Caused by: Error: Failed to load url ../scripts/lib/benchmark-run-directory (resolved id: ../scripts/lib/benchmark-run-directory) in /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/tests/benchmark-run-isolation.test.ts. Does the file exist?
+ ❯ loadAndTransform ../../../../../../../../Users/danny/Documents/morphloom/node_modules/vite/dist/node/chunks/config.js:22739:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  02:37:45
+   Duration  99ms (transform 11ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 31ms)

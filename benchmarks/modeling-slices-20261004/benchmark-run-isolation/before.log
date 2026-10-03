@@ -1,0 +1,30 @@
+/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-cross-domain-benchmark.ts:67
+    throw new Error([
+          ^
+
+Error: Interchange repair failed for laurel-homes-architecture (status 1, signal null).
+stdout:
+
+stderr:
+/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/repair-glb-interchange.ts:35
+  throw new Error(`Output already exists; choose a new path: ${path}`);
+        ^
+
+Error: Output already exists; choose a new path: /Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/laurel-homes-architecture.blender.repaired.glb
+    at /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/repair-glb-interchange.ts:30:9
+    at ViteNodeRunner.runModule (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:397:4)
+    at ViteNodeRunner.directRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:375:3)
+    at ViteNodeRunner.cachedRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:189:11)
+    at ViteNodeRunner.executeFile (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:162:10)
+    at CAC.run (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/cli.mjs:102:28)
+
+Node.js v24.13.1
+
+    at /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/blender-cross-domain-benchmark.ts:92:11
+    at ViteNodeRunner.runModule (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:397:4)
+    at ViteNodeRunner.directRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:375:3)
+    at ViteNodeRunner.cachedRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:189:11)
+    at ViteNodeRunner.executeFile (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:162:10)
+    at CAC.run (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/cli.mjs:102:28)
+
+Node.js v24.13.1

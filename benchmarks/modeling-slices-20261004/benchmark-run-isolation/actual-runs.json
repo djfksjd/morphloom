@@ -1,0 +1,1264 @@
+[
+  {
+    "kind": "roundtrip",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/roundtrip-1-published.json",
+    "reportSha256": "df5d1efa3bdc863bd97ce57627ea3f6a6640af1ebc6012d14874a4de57d065ad",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-BAn9nu",
+    "pass": true,
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "source": {
+          "bytes": 29636712,
+          "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 322,
+              "meshes": 321,
+              "materials": 321,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 321
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "source": {
+          "bytes": 1154560,
+          "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 17,
+              "meshes": 16,
+              "materials": 16,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 16
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "source": {
+          "bytes": 18622544,
+          "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 23,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 324,
+              "meshes": 322,
+              "materials": 322,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 299
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "source": {
+          "bytes": 5065808,
+          "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 53,
+              "meshes": 3,
+              "materials": 3,
+              "skins": 2,
+              "animations": 22
+            }
+          },
+          "portableTangents": 3
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0.36619603633880615,
+        "outputSha256": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "source": {
+          "bytes": 17745400,
+          "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 1
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "roundtrip",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/roundtrip-2-published.json",
+    "reportSha256": "216aa9301ef8515d802e5303d1b497c4cca8571daf54ed7d0da942faab4f3df5",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-5k3Nux",
+    "pass": true,
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "source": {
+          "bytes": 29636712,
+          "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 322,
+              "meshes": 321,
+              "materials": 321,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 321
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 322,
+            "meshes": 321,
+            "materials": 321,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "source": {
+          "bytes": 1154560,
+          "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 17,
+              "meshes": 16,
+              "materials": 16,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 16
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 17,
+            "meshes": 16,
+            "materials": 16,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "source": {
+          "bytes": 18622544,
+          "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 23,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 324,
+              "meshes": 322,
+              "materials": 322,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 299
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 23,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [
+            "UNUSED_OBJECT"
+          ],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 324,
+            "meshes": 322,
+            "materials": 322,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "source": {
+          "bytes": 5065808,
+          "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 53,
+              "meshes": 3,
+              "materials": 3,
+              "skins": 2,
+              "animations": 22
+            }
+          },
+          "portableTangents": 3
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0.36619603633880615,
+        "outputSha256": "567f99b164592f9ac856845f1daf67701a13ebb46be5975d6a230f4ea766e402",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 53,
+            "meshes": 3,
+            "materials": 3,
+            "skins": 1,
+            "animations": 22
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "source": {
+          "bytes": 17745400,
+          "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+          "byteDeterministic": true,
+          "standard": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          },
+          "portableTangents": 1
+        },
+        "blenderVersion": "5.2.1 LTS",
+        "geometryParity": true,
+        "imageParity": true,
+        "skinningParity": true,
+        "boundsErrorMm": 0,
+        "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+        "finalStandard": {
+          "status": "pass",
+          "validator": "Khronos glTF Validator",
+          "validatorVersion": "2.0.0-dev.3.10",
+          "errors": 0,
+          "warnings": 0,
+          "infos": 0,
+          "hints": 0,
+          "truncated": false,
+          "issueCodes": [],
+          "independentRead": {
+            "status": "pass",
+            "parser": "glTF Transform WebIO",
+            "nodes": 2,
+            "meshes": 1,
+            "materials": 1,
+            "skins": 0,
+            "animations": 0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "edit",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/edit-1-published.json",
+    "reportSha256": "f687e2968ef4b2533748ca258afae658c1b2f55e94e92aa7389f251deac20f7c",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-3H9F9h",
+    "pass": true,
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "source": {
+          "file": "laurel-homes-architecture.glb",
+          "bytes": 29636712,
+          "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+        },
+        "edit": {
+          "component": "west_north_window_1",
+          "kind": "translation",
+          "translationMm": [
+            50,
+            0,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 321,
+          "unchangedMeshes": 320,
+          "maximumUnchangedCenterDriftMm": 5.9604644775390625e-05,
+          "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+          "topologyChangeCount": 0,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "laurel-homes-architecture.edited.delivery.glb",
+          "bytes": 28343380,
+          "sha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 432,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 321,
+            "materialSourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 322,
+              "meshes": 321,
+              "materials": 321,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "source": {
+          "file": "ornate-knife-product.glb",
+          "bytes": 1154560,
+          "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+        },
+        "edit": {
+          "component": "pommel_gem",
+          "kind": "translation",
+          "translationMm": [
+            0,
+            5,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 16,
+          "unchangedMeshes": 15,
+          "maximumUnchangedCenterDriftMm": 1.1641532182693481e-07,
+          "maximumUnchangedSizeDriftMm": 1.4901161193847656e-05,
+          "topologyChangeCount": 2,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "ornate-knife-product.edited.delivery.glb",
+          "bytes": 1105300,
+          "sha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 16,
+            "materialSourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 17,
+              "meshes": 16,
+              "materials": 16,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "source": {
+          "file": "cooling-electronics-assembly.glb",
+          "bytes": 18622544,
+          "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+        },
+        "edit": {
+          "component": "power_usb_c",
+          "kind": "translation",
+          "translationMm": [
+            3,
+            0,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 322,
+          "unchangedMeshes": 321,
+          "maximumUnchangedCenterDriftMm": 1.862645149230957e-06,
+          "maximumUnchangedSizeDriftMm": 2.2351741790771484e-05,
+          "topologyChangeCount": 4,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "cooling-electronics-assembly.edited.delivery.glb",
+          "bytes": 17017324,
+          "sha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 1408,
+            "removedUnusedTangentAccessors": 23,
+            "restoredMaterials": 322,
+            "materialSourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 23,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 324,
+              "meshes": 322,
+              "materials": 322,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "source": {
+          "file": "field-human-runtime.glb",
+          "bytes": 5065808,
+          "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+        },
+        "edit": {
+          "component": "hair_cap",
+          "kind": "translation",
+          "translationMm": [
+            0,
+            5,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 3,
+          "unchangedMeshes": 2,
+          "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+          "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+          "topologyChangeCount": 1,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 1,
+          "actions": 22,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "field-human-runtime.edited.delivery.glb",
+          "bytes": 3167100,
+          "sha256": "14a2d1fed9a59d548f5e4c5b3938ae7394b3bb46829946149c0caa242f00f7d0",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 3,
+            "materialSourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 53,
+              "meshes": 3,
+              "materials": 3,
+              "skins": 1,
+              "animations": 22
+            }
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "source": {
+          "file": "asphalt-print-surface.glb",
+          "bytes": 17745400,
+          "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+        },
+        "edit": {
+          "component": "asphalt_core_sample",
+          "kind": "local-relief",
+          "amplitudeMm": 1.5,
+          "radiusFraction": 0.18,
+          "centerUv": [
+            0.57,
+            0.43
+          ],
+          "heightAxis": 2,
+          "changedVertices": 16782,
+          "totalVertices": 335808,
+          "maximumDisplacementMm": 1.499485192349417
+        },
+        "isolation": {
+          "meshCount": 1,
+          "unchangedMeshes": 0,
+          "maximumUnchangedCenterDriftMm": 0,
+          "maximumUnchangedSizeDriftMm": 0,
+          "topologyChangeCount": 0,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "asphalt-print-surface.edited.delivery.glb",
+          "bytes": 17744372,
+          "sha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 1,
+            "materialSourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "kind": "edit",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/edit-2-published.json",
+    "reportSha256": "04d0a20eac35f0f3c646f262d99f6d94ec9c98dab99aadbaa2fcb8f28c1e511c",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-X0cXKZ",
+    "pass": true,
+    "cases": [
+      {
+        "id": "laurel-homes-architecture",
+        "pass": true,
+        "source": {
+          "file": "laurel-homes-architecture.glb",
+          "bytes": 29636712,
+          "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+        },
+        "edit": {
+          "component": "west_north_window_1",
+          "kind": "translation",
+          "translationMm": [
+            50,
+            0,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 321,
+          "unchangedMeshes": 320,
+          "maximumUnchangedCenterDriftMm": 5.9604644775390625e-05,
+          "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+          "topologyChangeCount": 0,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "laurel-homes-architecture.edited.delivery.glb",
+          "bytes": 28343380,
+          "sha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 432,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 321,
+            "materialSourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 322,
+              "meshes": 321,
+              "materials": 321,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "ornate-knife-product",
+        "pass": true,
+        "source": {
+          "file": "ornate-knife-product.glb",
+          "bytes": 1154560,
+          "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+        },
+        "edit": {
+          "component": "pommel_gem",
+          "kind": "translation",
+          "translationMm": [
+            0,
+            5,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 16,
+          "unchangedMeshes": 15,
+          "maximumUnchangedCenterDriftMm": 1.1641532182693481e-07,
+          "maximumUnchangedSizeDriftMm": 1.4901161193847656e-05,
+          "topologyChangeCount": 2,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "ornate-knife-product.edited.delivery.glb",
+          "bytes": 1105300,
+          "sha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 16,
+            "materialSourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 17,
+              "meshes": 16,
+              "materials": 16,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cooling-electronics-assembly",
+        "pass": true,
+        "source": {
+          "file": "cooling-electronics-assembly.glb",
+          "bytes": 18622544,
+          "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+        },
+        "edit": {
+          "component": "power_usb_c",
+          "kind": "translation",
+          "translationMm": [
+            3,
+            0,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 322,
+          "unchangedMeshes": 321,
+          "maximumUnchangedCenterDriftMm": 1.862645149230957e-06,
+          "maximumUnchangedSizeDriftMm": 2.2351741790771484e-05,
+          "topologyChangeCount": 4,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "cooling-electronics-assembly.edited.delivery.glb",
+          "bytes": 17017324,
+          "sha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 1408,
+            "removedUnusedTangentAccessors": 23,
+            "restoredMaterials": 322,
+            "materialSourceSha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 23,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [
+              "UNUSED_OBJECT"
+            ],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 324,
+              "meshes": 322,
+              "materials": 322,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "field-human-runtime",
+        "pass": true,
+        "source": {
+          "file": "field-human-runtime.glb",
+          "bytes": 5065808,
+          "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+        },
+        "edit": {
+          "component": "hair_cap",
+          "kind": "translation",
+          "translationMm": [
+            0,
+            5,
+            0
+          ]
+        },
+        "isolation": {
+          "meshCount": 3,
+          "unchangedMeshes": 2,
+          "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+          "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+          "topologyChangeCount": 1,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 1,
+          "actions": 22,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "field-human-runtime.edited.delivery.glb",
+          "bytes": 3167100,
+          "sha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 3,
+            "materialSourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 53,
+              "meshes": 3,
+              "materials": 3,
+              "skins": 1,
+              "animations": 22
+            }
+          }
+        }
+      },
+      {
+        "id": "asphalt-print-surface",
+        "pass": true,
+        "source": {
+          "file": "asphalt-print-surface.glb",
+          "bytes": 17745400,
+          "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+        },
+        "edit": {
+          "component": "asphalt_core_sample",
+          "kind": "local-relief",
+          "amplitudeMm": 1.5,
+          "radiusFraction": 0.18,
+          "centerUv": [
+            0.57,
+            0.43
+          ],
+          "heightAxis": 2,
+          "changedVertices": 16782,
+          "totalVertices": 335808,
+          "maximumDisplacementMm": 1.499485192349417
+        },
+        "isolation": {
+          "meshCount": 1,
+          "unchangedMeshes": 0,
+          "maximumUnchangedCenterDriftMm": 0,
+          "maximumUnchangedSizeDriftMm": 0,
+          "topologyChangeCount": 0,
+          "stabilityChangeCount": 0
+        },
+        "runtime": {
+          "armatures": 0,
+          "actions": 0,
+          "preserved": true
+        },
+        "finalDelivery": {
+          "file": "asphalt-print-surface.edited.delivery.glb",
+          "bytes": 17744372,
+          "sha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb",
+          "repairApplied": true,
+          "repair": {
+            "repairedTangents": 0,
+            "removedUnusedTangentAccessors": 0,
+            "restoredMaterials": 1,
+            "materialSourceSha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+          },
+          "inventoryPreserved": true,
+          "validation": {
+            "status": "pass",
+            "validator": "Khronos glTF Validator",
+            "validatorVersion": "2.0.0-dev.3.10",
+            "errors": 0,
+            "warnings": 0,
+            "infos": 0,
+            "hints": 0,
+            "truncated": false,
+            "issueCodes": [],
+            "independentRead": {
+              "status": "pass",
+              "parser": "glTF Transform WebIO",
+              "nodes": 2,
+              "meshes": 1,
+              "materials": 1,
+              "skins": 0,
+              "animations": 0
+            }
+          }
+        }
+      }
+    ]
+  }
+]

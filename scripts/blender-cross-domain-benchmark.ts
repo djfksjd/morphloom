@@ -1,8 +1,9 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
+import { createBenchmarkRunDirectory, writeBenchmarkReport } from './lib/benchmark-run-directory';
 
 interface FixtureManifest {
   pass: boolean;
@@ -58,6 +59,12 @@ if (new Set(manifest.results.map((result) => result.domain)).size !== requiredDo
   throw new Error('Cross-domain fixture coverage is incomplete.');
 }
 
+if (manifest.results.some((fixture) => !/^[a-z0-9-]{1,80}$/.test(fixture.id))) throw new Error('Unsafe fixture id.');
+const protectedInputs = [
+  resolve(fixtureDirectory, 'manifest.json'),
+  ...manifest.results.map((fixture) => resolve(fixtureDirectory, `${fixture.id}.glb`)),
+];
+const artifactDirectory = createBenchmarkRunDirectory(fixtureDirectory, reportPath, protectedInputs);
 const blenderScript = resolve('scripts/blender-glb-roundtrip.py');
 const viteNode = resolve('node_modules/vite-node/vite-node.mjs');
 const repairScript = resolve('scripts/repair-glb-interchange.ts');
@@ -66,10 +73,10 @@ const cases = [];
 for (const fixture of manifest.results) {
   if (!/^[a-z0-9-]{1,80}$/.test(fixture.id)) throw new Error(`Unsafe fixture id: ${fixture.id}`);
   const source = resolve(fixtureDirectory, `${fixture.id}.glb`);
-  const rawRoundTrip = resolve(fixtureDirectory, `${fixture.id}.blender.glb`);
-  const blenderReportPath = resolve(fixtureDirectory, `${fixture.id}.blender.json`);
-  const repaired = resolve(fixtureDirectory, `${fixture.id}.blender.repaired.glb`);
-  const repairReportPath = resolve(fixtureDirectory, `${fixture.id}.repair.json`);
+  const rawRoundTrip = resolve(artifactDirectory, `${fixture.id}.blender.glb`);
+  const blenderReportPath = resolve(artifactDirectory, `${fixture.id}.blender.json`);
+  const repaired = resolve(artifactDirectory, `${fixture.id}.blender.repaired.glb`);
+  const repairReportPath = resolve(artifactDirectory, `${fixture.id}.repair.json`);
   const blender = spawnSync(blenderBinary, [
     '--background', '--python-exit-code', '1', '--python', blenderScript, '--',
     source, rawRoundTrip, blenderReportPath,
@@ -113,6 +120,7 @@ for (const fixture of manifest.results) {
     },
     blender: {
       version: blenderReport.blenderVersion,
+      artifactPaths: { rawRoundTrip, blenderReportPath, repaired, repairReportPath },
       semanticRoundTrip: {
         pass: blenderReport.pass,
         geometryParity: blenderReport.geometryParity,
@@ -140,9 +148,10 @@ const report = {
   schema: 'morphloom.blender-cross-domain-proof/0.1',
   compilerRevision: manifest.compilerRevision,
   generatedAt: new Date().toISOString(),
+  artifactDirectory,
   pass: cases.length === 5 && cases.every((item) => item.pass),
   scope: 'actual Blender import, export, reopen, semantic parity, and exact repaired-byte validation',
   cases,
 };
-writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+writeBenchmarkReport(reportPath, `${JSON.stringify(report, null, 2)}\n`, protectedInputs);
 console.log(`Wrote ${reportPath}`);

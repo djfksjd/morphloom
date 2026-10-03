@@ -1,10 +1,11 @@
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { basename, resolve, sep } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { validateGlbStandard, type GltfStandardValidation } from '../src/engine/gltf-standard-validation';
 import { DELIVERY_PIPELINE_REVISION } from '../src/engine/delivery-validation';
 import { auditRiggedGlbPayload } from './lib/rigged-payload-audit';
+import { createBenchmarkRunDirectory, writeBenchmarkReport } from './lib/benchmark-run-directory';
 
 type Domain = 'architecture' | 'industrial-design' | 'electronics' | 'animation-game' | '3d-printing';
 
@@ -103,7 +104,6 @@ if (!fixtureDirectoryArgument) {
 }
 const fixtureDirectory = resolve(fixtureDirectoryArgument);
 const reportPath = resolve(process.argv[3] ?? 'benchmarks/blender-cross-domain-edit-latest.json');
-const editDirectory = resolve(fixtureDirectory, 'component-edits');
 const blenderBinary = process.env.MORPHLOOM_BLENDER_BINARY || 'blender';
 const blenderScript = resolve('scripts/blender-component-edit-audit.py');
 const viteNode = resolve('node_modules/vite-node/vite-node.mjs');
@@ -143,7 +143,8 @@ if (!manifest.pass || manifest.compilerRevision !== DELIVERY_PIPELINE_REVISION) 
 if (EDIT_CASES.length !== 5 || new Set(EDIT_CASES.map((item) => item.domain)).size !== 5) {
   throw new Error('The edit benchmark must contain exactly one case for every required domain.');
 }
-mkdirSync(editDirectory, { recursive: true });
+const protectedInputs = [manifestPath, ...EDIT_CASES.map((item) => resolve(fixtureDirectory, `${item.fixtureId}.glb`))];
+const editDirectory = createBenchmarkRunDirectory(fixtureDirectory, reportPath, protectedInputs);
 
 const results: Array<Record<string, unknown>> = [];
 for (const editCase of EDIT_CASES) {
@@ -269,11 +270,12 @@ const report = {
   schema: 'morphloom.blender-cross-domain-edit-proof/0.1',
   compilerRevision: manifest.compilerRevision,
   generatedAt: new Date().toISOString(),
+  artifactDirectory: editDirectory,
   pass: results.length === EDIT_CASES.length && results.every((item) => item.pass === true),
   scope: 'five-domain named or bounded-local edits, two Blender reopen cycles, non-target semantic invariants, and exact final GLB validation',
   cases: results,
   claimBoundary: 'This proves these five concrete edits. It does not prove arbitrary sculpting, CAD feature history, shader graph parity, or artistic approval.',
 };
-writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
+writeBenchmarkReport(reportPath, `${JSON.stringify(report, null, 2)}\n`, protectedInputs);
 console.log(`Wrote ${reportPath}`);
 if (!report.pass) process.exitCode = 1;

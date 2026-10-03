@@ -1,0 +1,30 @@
+[
+  {
+    "script": "scripts/blender-cross-domain-benchmark.ts",
+    "input": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/manifest.json",
+    "sha256": "56a7f666a515d1472afe5e5b6beb3ed721e181fcc1e0f5147597bc33fe103e97",
+    "rejectedBeforeAppLaunch": true,
+    "pass": true
+  },
+  {
+    "script": "scripts/blender-cross-domain-benchmark.ts",
+    "input": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/cooling-electronics-assembly.glb",
+    "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+    "rejectedBeforeAppLaunch": true,
+    "pass": true
+  },
+  {
+    "script": "scripts/blender-cross-domain-edit-benchmark.ts",
+    "input": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/manifest.json",
+    "sha256": "56a7f666a515d1472afe5e5b6beb3ed721e181fcc1e0f5147597bc33fe103e97",
+    "rejectedBeforeAppLaunch": true,
+    "pass": true
+  },
+  {
+    "script": "scripts/blender-cross-domain-edit-benchmark.ts",
+    "input": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/cooling-electronics-assembly.glb",
+    "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+    "rejectedBeforeAppLaunch": true,
+    "pass": true
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "sameInputSha256": "7da5448c84832c028aaf8562b949d57cc9705748cc7b5a850d117e8804f75f83",
+  "secondBlenderInputSha256": "76bd638e413761ad926bb3d28fe71ce3e95ff7ff40204526d413f812de5555f0",
+  "sameRawRepairRepeatExact": true,
+  "outputs": [
+    {
+      "sha256": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+      "path": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixed-human-raw-1.glb"
+    },
+    {
+      "sha256": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+      "path": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixed-human-raw-2.glb"
+    }
+  ],
+  "scope": "Fixed raw GLB repair determinism only; different Blender raw outputs remain separate failure"
+}

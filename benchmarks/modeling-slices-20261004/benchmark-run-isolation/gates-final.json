@@ -1,0 +1,27 @@
+[
+  {
+    "command": "npm run check",
+    "exitCode": 0,
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run benchmark",
+    "exitCode": 0,
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run build",
+    "exitCode": 0,
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run quality:gate",
+    "exitCode": 1,
+    "externalServiceCalls": false
+  },
+  {
+    "command": "npm run quality:production",
+    "exitCode": 1,
+    "externalServiceCalls": false
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "roundtrip": {
+    "first": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-BAn9nu/field-human-runtime.blender.repaired.glb",
+    "second": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-5k3Nux/field-human-runtime.blender.repaired.glb",
+    "jsonByteSemanticsExact": true,
+    "changedAccessors": [
+      {
+        "accessor": 48,
+        "type": "VEC4",
+        "componentType": 5126,
+        "count": 14517,
+        "bindings": [
+          {
+            "mesh": 2,
+            "nodeNames": [
+              "Mesh_0"
+            ],
+            "attribute": "TANGENT"
+          }
+        ],
+        "byteDifferences": 24,
+        "floatDifferences": 12,
+        "maxAbsoluteFloatDifference": 5.0961971282958984e-05
+      }
+    ],
+    "status": "FAIL repeat whole-file bytes; numerical diagnostics do not promote PASS"
+  },
+  "edit": {
+    "first": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-3H9F9h/field-human-runtime.edited.delivery.glb",
+    "second": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-X0cXKZ/field-human-runtime.edited.delivery.glb",
+    "jsonByteSemanticsExact": true,
+    "changedAccessors": [
+      {
+        "accessor": 10,
+        "type": "VEC4",
+        "componentType": 5126,
+        "count": 10992,
+        "bindings": [
+          {
+            "mesh": 1,
+            "nodeNames": [
+              "LOD1_morphloom_human_body"
+            ],
+            "attribute": "TANGENT"
+          }
+        ],
+        "byteDifferences": 12,
+        "floatDifferences": 6,
+        "maxAbsoluteFloatDifference": 3.039836883544922e-05
+      }
+    ],
+    "status": "FAIL repeat whole-file bytes; numerical diagnostics do not promote PASS"
+  }
+}

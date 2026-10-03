@@ -1,0 +1,62 @@
+[
+  {
+    "kind": "roundtrip",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/roundtrip-1.json",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-BAn9nu",
+    "priorFilesPreserved": 9,
+    "pass": true,
+    "deliverySha256": {
+      "laurel-homes-architecture": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+      "ornate-knife-product": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+      "cooling-electronics-assembly": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+      "field-human-runtime": "1c7edb05eae552cb33e2f442bf653e761d2217f2f972f7ed4823605a0151f6c5",
+      "asphalt-print-surface": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b"
+    }
+  },
+  {
+    "kind": "roundtrip",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/roundtrip-2.json",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-5k3Nux",
+    "priorFilesPreserved": 29,
+    "pass": true,
+    "deliverySha256": {
+      "laurel-homes-architecture": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+      "ornate-knife-product": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+      "cooling-electronics-assembly": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+      "field-human-runtime": "567f99b164592f9ac856845f1daf67701a13ebb46be5975d6a230f4ea766e402",
+      "asphalt-print-surface": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b"
+    }
+  },
+  {
+    "kind": "edit",
+    "iteration": 1,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/edit-1.json",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-3H9F9h",
+    "priorFilesPreserved": 49,
+    "pass": true,
+    "deliverySha256": {
+      "laurel-homes-architecture": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+      "ornate-knife-product": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+      "cooling-electronics-assembly": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+      "field-human-runtime": "14a2d1fed9a59d548f5e4c5b3938ae7394b3bb46829946149c0caa242f00f7d0",
+      "asphalt-print-surface": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb"
+    }
+  },
+  {
+    "kind": "edit",
+    "iteration": 2,
+    "reportPath": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/edit-2.json",
+    "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004/fixtures/blender-run-X0cXKZ",
+    "priorFilesPreserved": 74,
+    "pass": true,
+    "deliverySha256": {
+      "laurel-homes-architecture": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+      "ornate-knife-product": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383",
+      "cooling-electronics-assembly": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69",
+      "field-human-runtime": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd",
+      "asphalt-print-surface": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb"
+    }
+  }
+]

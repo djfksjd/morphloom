@@ -1,0 +1,53 @@
+{
+  "schema": "morphloom.benchmark-run-isolation-evidence/0.1",
+  "baseHead": "397be3ecd7f250a3f58572de0e30aaa69ce54a7e",
+  "implementationSha256": {
+    "scripts/lib/benchmark-run-directory.ts": "7add791284745d83026b62bb1252d1ab095b39dcbc77b8864fe2c9cd4d8c58e8",
+    "scripts/blender-cross-domain-benchmark.ts": "958d7aad01edd4927711c43f409995babdac16d2cc368a34a7e5e024e1aca08d",
+    "scripts/blender-cross-domain-edit-benchmark.ts": "8f2b6c684eff73e0906f69de4196616d8e67e1ffccc299be6907e4d4fe3f730c",
+    "tests/benchmark-run-isolation.test.ts": "25a1d4647aaae8239e46633ece1b5a27702a3feefde5a8656392e1812aa32e46"
+  },
+  "environment": {
+    "node": "24.13.1",
+    "blender": "5.2.1 LTS 9e2066aef7ef",
+    "platform": "macOS Apple M5",
+    "typeCheckAdditionalLocalDefinitions": {
+      "name": "@types/node",
+      "version": "22.20.4",
+      "license": "MIT",
+      "path": "/Users/danny/.nvm/versions/node/v24.13.1/lib/node_modules/pptxgenjs/node_modules/@types/node/package.json",
+      "packageSha256": "f24c6b704fa4fdb2633cd4787fb0533cdca3cd15ab4a02b031c6c2e462cd380a",
+      "repositoryDependencyAdded": false
+    }
+  },
+  "sourceSha256": {
+    "laurel-homes-architecture": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+    "ornate-knife-product": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+    "cooling-electronics-assembly": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+    "field-human-runtime": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+    "asphalt-print-surface": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+  },
+  "results": {
+    "fullTests": 794,
+    "files": 109,
+    "boundaryTests": 5,
+    "actualBlenderBenchmarks": 4,
+    "casesPerRun": 5,
+    "priorSourcesAndOutputsPreserved": true,
+    "check": 0,
+    "strictCliTypeCheckUsingLocalDeclarations": 0,
+    "benchmark": 0,
+    "build": 0,
+    "qualityGate": 1,
+    "qualityProduction": 1,
+    "globalFalsePathsUnchanged": true,
+    "normalAndUvThresholdsChanged": false,
+    "blenderHumanRepeatBytes": "FAIL; TANGENT only; different raw inputs",
+    "sameRawRepairRepeatBytes": "PASS",
+    "outputDiskMiB": 753,
+    "diskBudgetMiB": 2048,
+    "externalApiCalls": 0
+  },
+  "evidenceRoot": "/Users/danny/Documents/morphloom/outputs/benchmark-rerun-goal-20261004",
+  "scope": "Repeated benchmark execution and source/prior artifact safety; not Blender byte-deterministic animation export or global production approval"
+}

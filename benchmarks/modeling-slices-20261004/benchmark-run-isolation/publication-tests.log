@@ -1,0 +1,9 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+ ✓ tests/benchmark-run-isolation.test.ts (5 tests) 5ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  02:47:43
+   Duration  103ms (transform 14ms, setup 0ms, collect 12ms, tests 5ms, environment 0ms, prepare 29ms)
