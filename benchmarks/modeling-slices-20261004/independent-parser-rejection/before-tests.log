@@ -1,0 +1,58 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+stderr | tests/gltf-standard-validation.test.ts > Khronos glTF delivery validation > allows an optional unknown extension only when independent reading actually succeeds
+Missing optional extension, "VENDOR_unimplemented".
+
+ ❯ tests/gltf-standard-validation.test.ts (7 tests | 2 failed) 36ms
+   ✓ Khronos glTF delivery validation > accepts a valid GLB and reports the validator identity 19ms
+   ✓ Khronos glTF delivery validation > rejects corrupted GLB bytes before they can be marked deliverable 1ms
+   × Khronos glTF delivery validation > reports a required extension rejected by the independent parser without losing the Khronos result 10ms
+     → Missing required extension, "VENDOR_unimplemented".
+   ✓ Khronos glTF delivery validation > allows an optional unknown extension only when independent reading actually succeeds 1ms
+   ✓ Khronos glTF delivery validation > blocks external image resources without making a network request 1ms
+   × Khronos glTF delivery validation > does not award delivery parity to a supplied unexecuted independent read 2ms
+     → expected 'pass' to be 'blocked' // Object.is equality
+   ✓ Khronos glTF delivery validation > surfaces specification warnings instead of awarding an exact 100 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/gltf-standard-validation.test.ts > Khronos glTF delivery validation > reports a required extension rejected by the independent parser without losing the Khronos result
+Error: Missing required extension, "VENDOR_unimplemented".
+ ❯ GLTFReader.validate ../../../../../../../../Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/reader.ts:564:12
+ ❯ GLTFReader.read ../../../../../../../../Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/reader.ts:47:8
+ ❯ WebIO.readJSON ../../../../../../../../Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/platform-io.ts:107:21
+ ❯ WebIO.readBinary ../../../../../../../../Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/platform-io.ts:132:15
+ ❯ validateGlbStandard src/engine/gltf-standard-validation.ts:61:22
+     59|       import('@gltf-transform/extensions'),
+     60|     ]);
+     61|     const document = await new WebIO().registerExtensions(ALL_EXTENSIO…
+       |                      ^
+     62|     const root = document.getRoot();
+     63|     independentRead = {
+ ❯ tests/gltf-standard-validation.test.ts:60:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/gltf-standard-validation.test.ts > Khronos glTF delivery validation > does not award delivery parity to a supplied unexecuted independent read
+AssertionError: expected 'pass' to be 'blocked' // Object.is equality
+
+Expected: "blocked"
+Received: "pass"
+
+ ❯ tests/gltf-standard-validation.test.ts:99:26
+     97|     const snapshot = snapshotScene(new THREE.Group());
+     98|     const audit = compareGlbRoundTrip(snapshot, structuredClone(snapsh…
+     99|     expect(audit.status).toBe('blocked');
+       |                          ^
+    100|     expect(audit.exactParity).toBe(false);
+    101|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  03:39:18
+   Duration  178ms (transform 39ms, setup 0ms, collect 52ms, tests 36ms, environment 0ms, prepare 28ms)
+

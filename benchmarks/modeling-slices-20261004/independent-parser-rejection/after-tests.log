@@ -1,0 +1,13 @@
+
+ RUN  v3.2.7 /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo
+
+stderr | tests/gltf-standard-validation.test.ts > Khronos glTF delivery validation > allows an optional unknown extension only when independent reading actually succeeds
+Missing optional extension, "VENDOR_unimplemented".
+
+ ✓ tests/gltf-standard-validation.test.ts (7 tests) 25ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  03:40:03
+   Duration  144ms (transform 33ms, setup 0ms, collect 45ms, tests 25ms, environment 0ms, prepare 25ms)
+

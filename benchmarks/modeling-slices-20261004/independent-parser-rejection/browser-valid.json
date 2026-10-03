@@ -1,0 +1,20 @@
+{
+  "status": "pass",
+  "validator": "Khronos glTF Validator",
+  "validatorVersion": "2.0.0-dev.3.10",
+  "errors": 0,
+  "warnings": 0,
+  "infos": 0,
+  "hints": 0,
+  "truncated": false,
+  "issueCodes": [],
+  "independentRead": {
+    "status": "pass",
+    "parser": "glTF Transform WebIO",
+    "nodes": 0,
+    "meshes": 0,
+    "materials": 0,
+    "skins": 0,
+    "animations": 0
+  }
+}

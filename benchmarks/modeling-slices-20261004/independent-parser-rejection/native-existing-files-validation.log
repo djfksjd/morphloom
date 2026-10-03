@@ -1,0 +1,122 @@
+
+> morphloom@0.4.0 gltf:validate
+> vite-node scripts/validate-glb.ts /Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.repaired.glb /Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.repaired.glb /Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.repaired.glb /Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.repaired.glb /Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.repaired.glb
+
+{
+  "schema": "morphloom.khronos-gltf-validation/0.1",
+  "pass": true,
+  "reports": [
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.repaired.glb",
+      "bytes": 17740400,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 2,
+        "meshes": 1,
+        "materials": 1,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.repaired.glb",
+      "bytes": 16576700,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 23,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNUSED_OBJECT"
+      ],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 324,
+        "meshes": 322,
+        "materials": 322,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.repaired.glb",
+      "bytes": 3856752,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 53,
+        "meshes": 3,
+        "materials": 3,
+        "skins": 1,
+        "animations": 22
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.repaired.glb",
+      "bytes": 27797708,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 322,
+        "meshes": 321,
+        "materials": 321,
+        "skins": 0,
+        "animations": 0
+      }
+    },
+    {
+      "path": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.repaired.glb",
+      "bytes": 1083848,
+      "status": "pass",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 0,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [],
+      "independentRead": {
+        "status": "pass",
+        "parser": "glTF Transform WebIO",
+        "nodes": 17,
+        "meshes": 16,
+        "materials": 16,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  ]
+}

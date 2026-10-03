@@ -1,0 +1,33 @@
+[
+  {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "benchmark"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "baseCommit": "5794d7cf4efdbadbdfc4f82156c590854c6baa63",
+  "environment": {
+    "os": "macOS-26.4.1-arm64-arm-64bit",
+    "node": "v24.13.1"
+  },
+  "fixtureSha256": {
+    "externalImage.glb": "3a116db6f5504884cbf951f07189b51c5bee6fecad59d1d20304d8acd12a3a21",
+    "optional.glb": "e98c8fb0866248189fd373cd5f5343be0db4ced520b82f2a356ac96398f17f8a",
+    "valid.glb": "3522cd64f98b150c43db6174f5fa1ae5ca148bfc802ad33d4d41d0233a478706",
+    "unknownRequired.glb": "880ed31072639849ef4d2f3204a777555820e36bed9899bb340c3836eaca6c32"
+  },
+  "existingNativeFilesSha256": {
+    "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.repaired.glb": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+    "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.repaired.glb": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+    "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.repaired.glb": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1",
+    "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.repaired.glb": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e",
+    "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.repaired.glb": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53"
+  },
+  "freshValidationOnExistingFiles": true,
+  "nativeReimport": "not-run: no geometry, exporter or Blender change in this phase",
+  "browserScope": "inspection harness with current production validator, not native-elements editing UI",
+  "tests": 799,
+  "wholePlatformProductionReady": false,
+  "apiCalls": 0
+}

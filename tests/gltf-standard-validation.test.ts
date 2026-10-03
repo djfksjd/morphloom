@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { compareGlbRoundTrip, snapshotScene } from '../src/engine/delivery-validation';
 import { validateGlbStandard } from '../src/engine/gltf-standard-validation';
 import * as THREE from 'three';
 
-function minimalGlb(): ArrayBuffer {
-  const json = JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{}] });
+function minimalGlb(document: object = { asset: { version: '2.0' }, scene: 0, scenes: [{}] }): ArrayBuffer {
+  const json = JSON.stringify(document);
   const paddedLength = Math.ceil(json.length / 4) * 4;
   const bytes = new Uint8Array(12 + 8 + paddedLength);
   const view = new DataView(bytes.buffer);
@@ -49,6 +49,56 @@ describe('Khronos glTF delivery validation', () => {
     expect(audit.platformNotes.gltf20).toBe('khronos-validator-blocked');
     expect(audit.blockers.join(' ')).toMatch(/Khronos glTF validation errors/);
     expect(audit.platformNotes.blender).toBe('application-import-not-run');
+  });
+
+  it('reports a required extension rejected by the independent parser without losing the Khronos result', async () => {
+    const bytes = minimalGlb({
+      asset: { version: '2.0' }, scene: 0, scenes: [{}],
+      extensionsUsed: ['VENDOR_unimplemented'], extensionsRequired: ['VENDOR_unimplemented'],
+      extensions: { VENDOR_unimplemented: {} },
+    });
+    const result = await validateGlbStandard(bytes);
+    expect(result).toMatchObject({
+      status: 'blocked', errors: 0, warnings: 0, infos: 1,
+      issueCodes: ['UNSUPPORTED_EXTENSION'],
+      independentRead: { status: 'blocked', meshes: 0, reason: 'Missing required extension, "VENDOR_unimplemented".' },
+    });
+    const snapshot = snapshotScene(new THREE.Group());
+    const audit = compareGlbRoundTrip(snapshot, structuredClone(snapshot), bytes.byteLength, 1, undefined, undefined, result);
+    expect(audit.status).toBe('blocked');
+    expect(audit.blockers.join(' ')).toMatch(/independent GLB read blocked/);
+    expect(audit.platformNotes.gltf20).toBe('khronos-validator-blocked');
+  });
+
+  it('allows an optional unknown extension only when independent reading actually succeeds', async () => {
+    const result = await validateGlbStandard(minimalGlb({
+      asset: { version: '2.0' }, scene: 0, scenes: [{}],
+      extensionsUsed: ['VENDOR_unimplemented'], extensions: { VENDOR_unimplemented: {} },
+    }));
+    expect(result).toMatchObject({ status: 'pass', errors: 0, infos: 1, independentRead: { status: 'pass' } });
+  });
+
+  it('blocks external image resources without making a network request', async () => {
+    const fetch = vi.fn(() => { throw new Error('network must not be called'); });
+    vi.stubGlobal('fetch', fetch);
+    try {
+      const result = await validateGlbStandard(minimalGlb({
+        asset: { version: '2.0' }, scene: 0, scenes: [{}], images: [{ uri: 'https://example.invalid/image.png' }],
+      }));
+      expect(result).toMatchObject({ status: 'blocked', independentRead: { status: 'not-run' } });
+      expect(result.issueCodes).toContain('IO_ERROR');
+      expect(fetch).not.toHaveBeenCalled();
+    } finally { vi.unstubAllGlobals(); }
+  });
+
+  it('does not award delivery parity to a supplied unexecuted independent read', async () => {
+    const result = await validateGlbStandard(minimalGlb());
+    result.independentRead.status = 'not-run';
+    const snapshot = snapshotScene(new THREE.Group());
+    const audit = compareGlbRoundTrip(snapshot, structuredClone(snapshot), 128, 1, undefined, undefined, result);
+    expect(audit.status).toBe('blocked');
+    expect(audit.score).toBeLessThan(100);
+    expect(audit.blockers.join(' ')).toContain('independent GLB read not-run');
   });
 
   it('surfaces specification warnings instead of awarding an exact 100', () => {

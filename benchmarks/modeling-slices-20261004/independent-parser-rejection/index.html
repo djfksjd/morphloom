@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><title>Independent GLB rejection inspection</title><style>body{font:16px system-ui;max-width:900px;margin:40px auto}pre{white-space:pre-wrap}</style>
+<h1>GLB 독립 파서 검수</h1><p>검증용 화면 — 제품 편집 UI가 아님</p><input type="file" id="file"><button id="check">실제 바이트 검사</button><pre id="result">파일을 선택하세요.</pre>
+<script type="module">
+import {validateGlbStandard} from '/src/engine/gltf-standard-validation.ts';
+document.querySelector('#check').onclick=async()=>{
+ const file=document.querySelector('#file').files[0];if(!file)return;
+ try{document.querySelector('#result').textContent=JSON.stringify(await validateGlbStandard(await file.arrayBuffer()),null,2)}catch(e){document.querySelector('#result').textContent='exception: '+e.message}
+};
+</script>

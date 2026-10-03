@@ -1,0 +1,62 @@
+
+> morphloom@0.4.0 gltf:validate
+> vite-node scripts/validate-glb.ts work/parser-rejection/unknownRequired.glb work/parser-rejection/externalImage.glb
+
+{
+  "schema": "morphloom.khronos-gltf-validation/0.1",
+  "pass": false,
+  "reports": [
+    {
+      "path": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/work/parser-rejection/unknownRequired.glb",
+      "bytes": 200,
+      "status": "blocked",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 0,
+      "warnings": 0,
+      "infos": 1,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "UNSUPPORTED_EXTENSION"
+      ],
+      "independentRead": {
+        "status": "blocked",
+        "parser": "glTF Transform WebIO",
+        "nodes": 0,
+        "meshes": 0,
+        "materials": 0,
+        "skins": 0,
+        "animations": 0,
+        "reason": "Missing required extension, \"VENDOR_unimplemented\"."
+      }
+    },
+    {
+      "path": "/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/work/parser-rejection/externalImage.glb",
+      "bytes": 128,
+      "status": "blocked",
+      "validator": "Khronos glTF Validator",
+      "validatorVersion": "2.0.0-dev.3.10",
+      "errors": 1,
+      "warnings": 1,
+      "infos": 2,
+      "hints": 0,
+      "truncated": false,
+      "issueCodes": [
+        "IO_ERROR",
+        "NON_RELATIVE_URI",
+        "UNUSED_OBJECT",
+        "URI_GLB"
+      ],
+      "independentRead": {
+        "status": "not-run",
+        "parser": "glTF Transform WebIO",
+        "nodes": 0,
+        "meshes": 0,
+        "materials": 0,
+        "skins": 0,
+        "animations": 0
+      }
+    }
+  ]
+}

@@ -941,6 +941,9 @@ export function compareGlbRoundTrip(
   if (standardValidation?.errors) {
     blockers.push(`Khronos glTF validation errors ${standardValidation.errors}: ${standardValidation.issueCodes.join(', ') || 'unspecified'}`);
   }
+  if (standardValidation && standardValidation.independentRead.status !== 'pass') {
+    blockers.push(`independent GLB read ${standardValidation.independentRead.status}: ${standardValidation.independentRead.reason ?? 'no successful parser evidence'}`);
+  }
   if (standardValidation?.warnings) {
     warnings.push(`Khronos glTF validation warnings ${standardValidation.warnings}: ${standardValidation.issueCodes.join(', ') || 'unspecified'}`);
   }

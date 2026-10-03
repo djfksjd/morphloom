@@ -1,0 +1,21 @@
+
+> morphloom@0.4.0 gltf:validate
+> vite-node scripts/validate-glb.ts work/parser-rejection/unknownRequired.glb work/parser-rejection/externalImage.glb
+
+file:///Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/dist/index.modern.js:4664
+          throw new Error(`Missing required extension, "${extensionName}".`);
+                ^
+
+Error: Missing required extension, "VENDOR_unimplemented".
+    at GLTFReader.validate (file:///Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/reader.ts:564:12)
+    at GLTFReader.read (file:///Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/reader.ts:47:8)
+    at WebIO.readJSON (file:///Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/platform-io.ts:107:21)
+    at WebIO.readBinary (file:///Users/danny/Documents/morphloom/node_modules/@gltf-transform/core/src/io/platform-io.ts:132:15)
+    at validateGlbStandard (/private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/src/engine/gltf-standard-validation.ts:61:22)
+    at /private/var/folders/z4/_txy7z5d7hb83mc592z_cq540000gn/T/morphloom-publish-w4nfo7ko/repo/scripts/validate-glb.ts:15:24
+    at ViteNodeRunner.runModule (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:397:4)
+    at ViteNodeRunner.directRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:375:3)
+    at ViteNodeRunner.cachedRequest (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:189:11)
+    at ViteNodeRunner.executeFile (file:///Users/danny/Documents/morphloom/node_modules/vite-node/dist/client.mjs:162:10)
+
+Node.js v24.13.1

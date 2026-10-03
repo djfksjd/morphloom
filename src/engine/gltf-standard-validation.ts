@@ -9,7 +9,8 @@ export interface GltfStandardValidation {
   truncated: boolean;
   issueCodes: string[];
   independentRead: {
-    status: 'pass' | 'not-run';
+    status: 'pass' | 'not-run' | 'blocked';
+    reason?: string;
     parser: 'glTF Transform WebIO';
     nodes: number;
     meshes: number;
@@ -58,21 +59,31 @@ export async function validateGlbStandard(bytes: ArrayBuffer): Promise<GltfStand
       import('@gltf-transform/core'),
       import('@gltf-transform/extensions'),
     ]);
-    const document = await new WebIO().registerExtensions(ALL_EXTENSIONS).readBinary(new Uint8Array(bytes));
-    const root = document.getRoot();
-    independentRead = {
-      status: 'pass',
-      parser: 'glTF Transform WebIO',
-      nodes: root.listNodes().length,
-      meshes: root.listMeshes().length,
-      materials: root.listMaterials().length,
-      skins: root.listSkins().length,
-      animations: root.listAnimations().length,
-    };
+    try {
+      const document = await new WebIO().registerExtensions(ALL_EXTENSIONS).readBinary(new Uint8Array(bytes));
+      const root = document.getRoot();
+      independentRead = {
+        status: 'pass',
+        parser: 'glTF Transform WebIO',
+        nodes: root.listNodes().length,
+        meshes: root.listMeshes().length,
+        materials: root.listMaterials().length,
+        skins: root.listSkins().length,
+        animations: root.listAnimations().length,
+      };
+    } catch (error) {
+      // A valid specification report does not imply this parser supports the
+      // payload. Preserve that report, but never award delivery on a failed read.
+      independentRead = {
+        ...independentRead,
+        status: 'blocked',
+        reason: error instanceof Error ? error.message.slice(0, 512) : 'Independent GLB parser rejected the payload.',
+      };
+    }
   }
 
   return {
-    status: errors > 0 ? 'blocked' : warnings > 0 || issues.truncated === true ? 'warn' : 'pass',
+    status: errors > 0 || independentRead.status !== 'pass' ? 'blocked' : warnings > 0 || issues.truncated === true ? 'warn' : 'pass',
     validator: 'Khronos glTF Validator',
     validatorVersion: String(report.validatorVersion ?? 'unknown'),
     errors,

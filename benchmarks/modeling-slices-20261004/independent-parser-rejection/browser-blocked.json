@@ -1,0 +1,23 @@
+{
+  "status": "blocked",
+  "validator": "Khronos glTF Validator",
+  "validatorVersion": "2.0.0-dev.3.10",
+  "errors": 0,
+  "warnings": 0,
+  "infos": 1,
+  "hints": 0,
+  "truncated": false,
+  "issueCodes": [
+    "UNSUPPORTED_EXTENSION"
+  ],
+  "independentRead": {
+    "status": "blocked",
+    "parser": "glTF Transform WebIO",
+    "nodes": 0,
+    "meshes": 0,
+    "materials": 0,
+    "skins": 0,
+    "animations": 0,
+    "reason": "Missing required extension, \"VENDOR_unimplemented\"."
+  }
+}
