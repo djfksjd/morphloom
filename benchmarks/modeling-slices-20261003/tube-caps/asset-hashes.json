@@ -1,0 +1,21 @@
+{
+  "demo-before.assembly.json": "6293f16266419367528796a020a804a39acd5ab438b794e339156e2741958311",
+  "demo-before.glb": "69c8640d1b917e3ca1eaf8d95f958bc7697c4073c1c6e267641795a3b2987475",
+  "demo-after.assembly.json": "1e2ae1a0657cd4d087c9917c99af1ddfab07c48be3ee288cce417c8e1de31bcf",
+  "demo-after.glb": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+  "fan-before.assembly.json": "abcb03f5fb59112b27e72490fe81528429e004718b7792b8a8e8972cafcb1069",
+  "fan-before.glb": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+  "fan-after.assembly.json": "f8d489fe0400b2f4c4106e2dc4471586d9569c25a99ac50420dcd4c435bd1301",
+  "fan-after.glb": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+  "ui-original.assembly.json": "ec4a6bf4806c1d7be0072d6be8d88529158a7b63917dc08db454126ee6c7fca6",
+  "ui-reopened.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-cancel.assembly.json": "ec4a6bf4806c1d7be0072d6be8d88529158a7b63917dc08db454126ee6c7fca6",
+  "ui-edited.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-undo.assembly.json": "ec4a6bf4806c1d7be0072d6be8d88529158a7b63917dc08db454126ee6c7fca6",
+  "ui-failed-combined.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-redo.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-combined.assembly.json": "a4550b7089d8b9100ecdc41ab3204e17ca64dc78279020954e9ab42b90f73b20",
+  "ui-combined-undo.assembly.json": "f01a32bf4fcac4451d71c6ac8dd0272c9f6daafa0ad84efbc88984f8e080af92",
+  "ui-edited.glb": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+  "SOURCE_LICENSE.md": "d456789fd7a2b454aa77ca2bd582bcc1e5c2184f7828151a585705a6e7acb20e"
+}

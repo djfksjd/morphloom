@@ -1,0 +1,11 @@
+{
+  "schema": "morphloom.cap-ui/0.1",
+  "selection": "actual viewport click",
+  "cancel": true,
+  "undo": true,
+  "redo": true,
+  "nativeReopen": true,
+  "capDeclaration": "outward",
+  "combinedFailureZeroCommit": true,
+  "combinedCurveCapPositionSingleUndo": true
+}

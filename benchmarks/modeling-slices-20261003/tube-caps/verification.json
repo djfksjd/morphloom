@@ -1,0 +1,168 @@
+{
+  "schema": "morphloom.tube-cap-verification/0.1",
+  "baselineCommit": "6dec419069a6b863439aa48d94d4e0b6e742c8c0",
+  "compilerRevision": "0.34.0",
+  "status": "explicit cap orientation verified; full quality release blocked",
+  "releaseAllowed": false,
+  "sourceCodeSha256": {
+    "schemas/assembly-ir.schema.json": "2bc87a888438c74a10c3f834d0410e4e2a67389ee8ad0e153cb7e19f9e005d02",
+    "src/AssemblyComponentEditor.tsx": "382e88d10ba6ae3dd7e0c31890a134278f5dc21f6a6482046dc1909a505d0c57",
+    "src/engine/assembly-compiler.ts": "ffd61d80ae0afa09ed7059c4ee71906fd0215caab3afb896d33d9a5415254527",
+    "src/engine/assembly-edit.ts": "23d168ac0d82d67ac72db41fcb3183fe6715ed1d8d67711f67ac65e7e7177d5e",
+    "src/engine/assembly-ir.ts": "7484aa318840579c925d88d89bc84ec9d4eadd2e247ad87c320038f9ccc3b616",
+    "src/engine/delivery-validation.ts": "f926f732ff42af66329679bb11e198e7a9e90fd5a4702b3b0c4e9d152ac71d8e",
+    "src/engine/tube-quadratic-curve.ts": "9d661424742acd6bcb30654032b1e60ee4cb9c9710c233c6711ff792a82c20e5",
+    "tests/browser-proof-recorder.test.ts": "f7424dcc6bd8f0effff60ed1939ce93dd37f41fd63ef68843bc01ac9a7176284",
+    "tests/tube-cap-winding.test.ts": "79a00835cd3635d31fbbc2a791308f10a1b3fdecc20568e87a61853472749f7e",
+    "scripts/tube-cap-pilot.ts": "5c552b92a8bbf8bdbf3745206a6f7b149354f99e2b10eb7a49bd9c0d63ea4c92",
+    "scripts/tube-cap-browser-evidence.js": "a0e0474b3ec6a3f8de23533edec5b6de6cbdd076652e69bb2f516f80a15f142c",
+    "scripts/blender-tube-cap-audit.py": "81b533b8b7adbad0c06e712857f8582729c2274019f994047ed8046f8712b5a7",
+    "docs/TUBE_CAP_CONTRACT.ko.md": "1620c9cbaad0b5afa8a385f904b437fd159a4444304fb4e5043018eebfb93c37",
+    "docs/TUBE_CAP_STATUS.ko.md": "2fbdb23521ec6327a21f066d43dccbc4592a8b47cccd94313d03e312a2fe0cca"
+  },
+  "cases": [
+    {
+      "name": "demo-before",
+      "inputSha256": "c25cebcc17bf3f562acece54d9b280122bb23c02bb3a5d43d190a45beace17f9",
+      "outputSha256": "69c8640d1b917e3ca1eaf8d95f958bc7697c4073c1c6e267641795a3b2987475",
+      "compileMs": 8.599999964237213,
+      "glbBytes": 54688,
+      "triangles": 1056,
+      "textureBytes": 43680,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "6293f16266419367528796a020a804a39acd5ab438b794e339156e2741958311"
+    },
+    {
+      "name": "demo-after",
+      "inputSha256": "b71c07d2465234fc3bca29a3eec1318f178fb95b603cc39011acf2f150c2acc9",
+      "outputSha256": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+      "compileMs": 4.299999952316284,
+      "glbBytes": 54708,
+      "triangles": 1056,
+      "textureBytes": 43680,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "1e2ae1a0657cd4d087c9917c99af1ddfab07c48be3ee288cce417c8e1de31bcf"
+    },
+    {
+      "name": "fan-before",
+      "inputSha256": "ae0d348630baa52dc5d14026f0ab68f287b185437e0038ea2cabe74dcc9b9cc7",
+      "outputSha256": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+      "compileMs": 189.69999998807907,
+      "glbBytes": 3611084,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "abcb03f5fb59112b27e72490fe81528429e004718b7792b8a8e8972cafcb1069"
+    },
+    {
+      "name": "fan-after",
+      "inputSha256": "e4cbaffb8d7fcd206e7c3f640837a69a142be5392118e99d9812ed5031f9a217",
+      "outputSha256": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+      "compileMs": 70.80000001192093,
+      "glbBytes": 3611108,
+      "triangles": 59152,
+      "textureBytes": 592152,
+      "inputHashEncoding": "JSON.stringify(parsed IR), UTF-8",
+      "inputFileSha256": "f8d489fe0400b2f4c4106e2dc4471586d9569c25a99ac50420dcd4c435bd1301"
+    }
+  ],
+  "publishedTests": {
+    "files": 93,
+    "tests": 666,
+    "pass": true
+  },
+  "userWorkspaceTests": {
+    "files": 96,
+    "tests": 685,
+    "pass": true
+  },
+  "nativeOrientation": {
+    "demo-before": {
+      "schema": "morphloom.blender-cap-orientation/0.1",
+      "blenderVersion": "5.2.1 LTS",
+      "sourceSha256": "69c8640d1b917e3ca1eaf8d95f958bc7697c4073c1c6e267641795a3b2987475",
+      "target": "tube",
+      "triangles": 1056,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 32,
+      "orientationPass": false,
+      "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+    },
+    "demo-after": {
+      "schema": "morphloom.blender-cap-orientation/0.1",
+      "blenderVersion": "5.2.1 LTS",
+      "sourceSha256": "05b6f5b99e86aad1df72fbfe9a2f3d08fbac9319bf1e65046343323f7946712c",
+      "target": "tube",
+      "triangles": 1056,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "orientationPass": true,
+      "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+    },
+    "fan-before": {
+      "schema": "morphloom.blender-cap-orientation/0.1",
+      "blenderVersion": "5.2.1 LTS",
+      "sourceSha256": "60ca2d84192688687382087a65c859f87ea122c7ef1ab04f21d8e31b46de374b",
+      "target": "cage-rear-spoke-1",
+      "triangles": 228,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 12,
+      "orientationPass": false,
+      "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+    },
+    "fan-after": {
+      "schema": "morphloom.blender-cap-orientation/0.1",
+      "blenderVersion": "5.2.1 LTS",
+      "sourceSha256": "57173f82886148b953a6f36b6a5bda635b60121294214dc510bea16b2b2abae2",
+      "target": "cage-rear-spoke-1",
+      "triangles": 228,
+      "boundaryEdges": 0,
+      "nonManifoldEdges": 0,
+      "degenerateTriangles": 0,
+      "inconsistentDirectedEdges": 0,
+      "orientationPass": true,
+      "scope": "actual imported target triangle orientation; cap shading and whole asset source fidelity not certified"
+    }
+  },
+  "ui": {
+    "schema": "morphloom.cap-ui/0.1",
+    "selection": "actual viewport click",
+    "cancel": true,
+    "undo": true,
+    "redo": true,
+    "nativeReopen": true,
+    "capDeclaration": "outward",
+    "combinedFailureZeroCommit": true,
+    "combinedCurveCapPositionSingleUndo": true
+  },
+  "checks": {
+    "checkBuildBenchmark": "PASS",
+    "khronosFiveFiles": "PASS, errors0/warnings0",
+    "blenderFourVariantAndUiImports": "PASS",
+    "browserSevenCurrentCases": "PASS",
+    "101LegacyGeometryByteParity": "PASS",
+    "noOptionFanFullGlbParityWith6dec419": true,
+    "nonTarget100MeshPreservation": true,
+    "qualityProduction": "FAIL; old cooling UV info23 remains; current cross-domain native receipts still0.33 and must be refreshed, not relabelled"
+  },
+  "uniai": {
+    "model": "gpt-6-astra",
+    "completionCalls": 2,
+    "totalTokens": 16006,
+    "scope": "public code proposals only; no key/photo transfer"
+  },
+  "notVerified": [
+    "Shared cap rim normals/flat shading (next step)",
+    "Other unmigrated legacy tube orientation",
+    "Full fan source fidelity/calibrated dimensions",
+    "Current0.34 native cross-domain app receipt matrix",
+    "CAD/manufacturing/independent expert validation"
+  ],
+  "assetZipSha256": "6f4848c8bca252ab15e513b88e13956bb57c7e457868a8930d1b91e978155b55"
+}

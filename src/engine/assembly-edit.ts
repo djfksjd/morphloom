@@ -1,4 +1,4 @@
-import { validateEditedTubePath, type TubeQuadraticCurveIR } from './tube-quadratic-curve';
+import { migrateTubeCapWinding, validateEditedTubePath, type TubeQuadraticCurveIR } from './tube-quadratic-curve';
 import type { AssemblyGeometryIR, AssemblyIR, AssemblyMaterialIR } from './assembly-ir';
 
 type Vector3 = [number, number, number];
@@ -14,6 +14,7 @@ export interface AssemblyComponentPatch {
   geometry?:
     | { operation: 'tube-quadratic-control'; action: 'set'; curve: TubeQuadraticCurveIR }
     | { operation: 'tube-quadratic-control'; action: 'clear' }
+    | { operation: 'tube-cap-winding'; action: 'set' | 'clear' }
     | { operation: 'tube-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: Vector3 }> }
     | { operation: 'extrude-point-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
     | { operation: 'lathe-profile-deltas'; deltas: Array<{ pointIndex: number; deltaMm: [number, number] }> }
@@ -106,6 +107,7 @@ function validMaterialPatch(material: AssemblyComponentPatch['material']): boole
 
 function validGeometryPatch(geometry: AssemblyComponentPatch['geometry']): boolean {
   if (!geometry) return true;
+  if (geometry.operation === 'tube-cap-winding') return Object.keys(geometry).every(k => ['operation', 'action'].includes(k)) && ['set', 'clear'].includes(geometry.action);
   if (geometry.operation === 'tube-quadratic-control') {
     const keys = geometry.action === 'set' ? ['operation', 'action', 'curve'] : ['operation', 'action'];
     return Object.keys(geometry).every(k => keys.includes(k))
@@ -126,6 +128,10 @@ function applyGeometryPatch(
   source: AssemblyGeometryIR,
   patch: NonNullable<AssemblyComponentPatch['geometry']>,
 ): AssemblyGeometryIR {
+  if (patch.operation === 'tube-cap-winding') {
+    if (source.op !== 'tube' || source.closed) throw new Error('Cap winding edit requires an open tube.');
+    return migrateTubeCapWinding(source, patch.action === 'set');
+  }
   if (patch.operation === 'tube-quadratic-control') {
     if (source.op !== 'tube' || source.points.length !== 2 || source.closed) throw new Error('Quadratic Bezier patch requires an open two-endpoint tube.');
     const result = structuredClone(source);
@@ -191,6 +197,7 @@ export async function applyAssemblyComponentPatch(
   ir: AssemblyIR,
   patch: AssemblyComponentPatch,
 ): Promise<{ ir: AssemblyIR; receipt: AssemblyEditReceipt }> {
+  if (patch.geometry?.operation === 'tube-cap-winding' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Cap winding edit requires component-patch/0.2.');
   if (patch.geometry?.operation === 'tube-quadratic-control' && patch.schema !== 'morphloom.component-patch/0.2') throw new Error('Quadratic curve edit requires component-patch/0.2.');
   if (!['morphloom.component-patch/0.1', 'morphloom.component-patch/0.2'].includes(patch.schema)
     || !SAFE_ID.test(patch.operationId) || !SAFE_ID.test(patch.componentId)

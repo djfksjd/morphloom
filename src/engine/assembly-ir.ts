@@ -33,7 +33,7 @@ export type AssemblyGeometryIR =
     }>;
   }
   | { op: 'lathe'; profile: Array<[number, number]>; segments?: number }
-  | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean; curve?: TubeQuadraticCurveIR }
+  | { op: 'tube'; points: Array<[number, number, number]>; radius: number; tubularSegments?: number; radialSegments?: number; closed?: boolean; capWinding?: 'outward'; curve?: TubeQuadraticCurveIR }
   | {
     op: 'surfacePatch';
     /** Horizontal X×Z size in millimetres. */

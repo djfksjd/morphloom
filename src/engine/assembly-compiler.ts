@@ -214,6 +214,7 @@ export function validateAssemblyIR(value: unknown): asserts value is AssemblyIR 
       || typeof component.detail !== 'string' || component.detail.length > 500) {
       throw new Error(`Invalid component text metadata in ${component.id}.`);
     }
+    if (component.geometry.op !== 'tube' && 'capWinding' in component.geometry) throw new Error('Cap winding declaration requires a tube.');
     inspect(component.geometry, `${component.id}.geometry`);
     switch (component.geometry.op) {
       case 'roundedBox': {
@@ -627,8 +628,8 @@ function compileGeometry(geometry: AssemblyGeometryIR, insetChamferMm=0): THREE.
       const ring = radialSegments + 1;
       const endRing = tubularSegments * ring;
       for (let segment = 0; segment < radialSegments; segment += 1) {
-        if (geometry.curve) {
-          // Quadratic paths opt into outward cap winding; legacy buffers stay byte-identical.
+        if (geometry.curve || geometry.capWinding === 'outward') {
+          // Explicit correction or quadratic path; undeclared legacy buffers stay byte-identical.
           indices.push(startCenter, segment, segment + 1);
           indices.push(endCenter, endRing + segment + 1, endRing + segment);
         } else {

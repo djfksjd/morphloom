@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-10-03T02:03:58.900Z",
+  "generatedAt": "2026-10-03T02:33:27.779Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -2318,9 +2318,9 @@
     },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.4",
-      "compilerRevision": "morphloom-compiler/0.33.0",
+      "compilerRevision": "morphloom-compiler/0.34.0",
       "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
-      "generatedAt": "2026-10-03T01:57:23.337Z",
+      "generatedAt": "2026-10-03T02:32:12.420Z",
       "receiptIntegrityPass": true,
       "assets": [
         {
@@ -2329,7 +2329,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "acab73058294d364",
+          "inputFingerprint": "c7cc24dc8fa6831f",
           "buildFingerprint": "d551a6fff505d014",
           "preparedSceneFingerprint": "0f37aca4277b3c18"
         },
@@ -2339,7 +2339,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "50eee3f461702c82",
+          "inputFingerprint": "370b669d59463d25",
           "buildFingerprint": "641337a60bd3f86d",
           "preparedSceneFingerprint": "c45e5c2ac92069d7"
         },
@@ -2349,7 +2349,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "1ac62f8a7b2c558b",
+          "inputFingerprint": "4670ea514c527dde",
           "buildFingerprint": "b2f078bc0e9cd087",
           "preparedSceneFingerprint": "9ac4dab658b20d9f"
         },
@@ -2359,7 +2359,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "a1974cec10db0495",
+          "inputFingerprint": "07b499151904f3f2",
           "buildFingerprint": "b61c2f9175fe7ae4",
           "preparedSceneFingerprint": "75e95c2b8eb1e525"
         },
@@ -2369,7 +2369,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "3afc38ee96225d4c",
+          "inputFingerprint": "1054b2ed9ad9df11",
           "buildFingerprint": "8defd19c3bbac42f",
           "preparedSceneFingerprint": "d70d1ebe673fd2d3"
         },
@@ -2379,7 +2379,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "a090ea05a29a92b9",
+          "inputFingerprint": "bbb19bdcdae36af6",
           "buildFingerprint": "d617b036941a397b",
           "preparedSceneFingerprint": "0dd3479b3d4177f6"
         },
@@ -2389,7 +2389,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "1db8de31735cb122",
+          "inputFingerprint": "0fcabe4654c1668f",
           "buildFingerprint": "92d399300e9f3dc1",
           "preparedSceneFingerprint": "a643566447cf76c3"
         }
@@ -2733,7 +2733,7 @@
     },
     "unityCrossDomain": {
       "schema": "morphloom.unity-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.33.0",
+      "compilerRevision": "morphloom-compiler/0.34.0",
       "pass": false,
       "status": "not-run",
       "blockers": [
@@ -3206,7 +3206,7 @@
       ],
       "blockers": [],
       "limitation": "This proves native Godot import integrity, not gameplay quality, physics tuning, target-device performance, or final art approval.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": false
     },
     "prusaSlicer": {
       "schema": "morphloom.prusaslicer-print-proof/0.1",
@@ -3293,7 +3293,7 @@
       },
       "blockers": [],
       "limitation": "This proves native manifold reopen and bounded coarse toolpath generation under a declared generic 650 × 500 mm virtual FFF envelope. It is not a production print profile; a real printer, nozzle, filament, tolerances, supports, orientation and safety still require target-machine validation.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": false
     },
     "staticDelivery": {
       "schema": "morphloom.static-delivery-proof/0.4",
@@ -3411,8 +3411,12 @@
       },
       "blockers": [],
       "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
-      "benchmarkAccepted": true,
-      "competitiveBlockers": []
+      "benchmarkAccepted": false,
+      "competitiveBlockers": [
+        "Asset pack compiler revision morphloom-compiler/0.33.0 does not match morphloom-compiler/0.34.0.",
+        "Asset-pack compiler revision is stale.",
+        "No matching release-ready current browser receipt preserves all GLB payload classes."
+      ]
     },
     "cameraCalibration": {
       "status": "calibrated",
@@ -3615,12 +3619,12 @@
     {
       "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "111,936 triangles preserved for asphalt-surface; STL uses explicit millimetre coordinates and printer Z-up; unit-normalized envelope drift 0.000031 mm"
+      "morphloom": "blocked"
     },
     {
       "capability": "USDZ Apple conformance validation",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "pass—/usr/bin/usdchecker"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unity application import execution",
@@ -3630,12 +3634,12 @@
     {
       "capability": "Godot application import execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "Godot 4.7.2-stable (official): five-domain native PackedScene import parity plus delivered-vertex asphalt relief pass"
+      "morphloom": "blocked"
     },
     {
       "capability": "PrusaSlicer manifold reopen and toolpath execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "PrusaSlicer 2.9.6: 111,936 facets, Z-up manifold reopen and 43 toolpath layers"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unreal application import execution",

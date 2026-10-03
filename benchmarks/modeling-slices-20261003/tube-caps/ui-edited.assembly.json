@@ -1,0 +1,39 @@
+{
+  "schema": "morphloom.assembly/0.1",
+  "units": "mm",
+  "name": "authored open tube cap inspection",
+  "components": [
+    {
+      "id": "tube",
+      "name": "Tube cap inspection",
+      "category": "mechanical",
+      "materialName": "clean steel",
+      "detail": "Authored diagnostic, not measured product",
+      "geometry": {
+        "op": "tube",
+        "points": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            80
+          ]
+        ],
+        "radius": 20,
+        "tubularSegments": 32,
+        "radialSegments": 16,
+        "capWinding": "outward"
+      },
+      "material": {
+        "color": "#999999",
+        "roughness": 0.45,
+        "metalness": 0.2,
+        "surface": "brushed-metal"
+      }
+    }
+  ]
+}

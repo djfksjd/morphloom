@@ -1,0 +1,513 @@
+{
+  "schema": "morphloom.guard-legacy-parity/0.1",
+  "baselineCommit": "c9fcc5bf00ae3a6189ee612508c0d7c311d6fece",
+  "scope": "actual geometry position/normal/UV/index/groups; no legacy curve opt-in",
+  "pass": true,
+  "rows": [
+    {
+      "id": "cage-front-outer",
+      "sha256": "9d81f2155d8c42c1ec7d5b5b900797af334eac3f42fb68ff140b621c3fb058d2",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-1",
+      "sha256": "8046d8b2877f116e22889b5c1ec30c35a615122ed47b8768a354fb861f0bb0a9",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-2",
+      "sha256": "ba31e0a801741d2a3e917063fe9084848eaa3259987b1b6027939b4afc85568f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-3",
+      "sha256": "4cfc0ddd4f51a27e825498485baff8d1e038bd931052760e8b2d16381f8b1cc6",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-4",
+      "sha256": "87d3ed633c6bcf9f9ec96416c998774cb7b848c3237538c5f8499bd66a70ae36",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-5",
+      "sha256": "50927d1df6ee60aa2bc2840f4e17fa1d237dbf8b1481b8dd1da7054cd91ce482",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-6",
+      "sha256": "7fcb46e8f62d71ae3e8c2052ddfc2e408f0e48b73155477b605e8e739741455a",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-7",
+      "sha256": "81d46bdd12a58bde1ee00ba1cb9e8e95ceddc62da7ce2c9236f47d031393c9d1",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-8",
+      "sha256": "2401b7b25ed50646a1abd1f81b9787e4c7ea643e7e04575e50e8f0f5c53896eb",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-9",
+      "sha256": "00c0834aa4e9ad3894620ecfd7ad8f7397494b73f74a71725b6fcb69dc105eaa",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-10",
+      "sha256": "563fd91d30b01ab14490e3a74bfb47bd8f493d8b86e9174f72e3d2de640a2f2f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-11",
+      "sha256": "4e00c59da1bfb9a2e696c8844c7f6d212c82d94d8ad3aa9ccba54dba2b4489c1",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-12",
+      "sha256": "a7d94e3f7f9be5749e71a689ff1cadfcca0067c048035c7d891f5a43a7398032",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-13",
+      "sha256": "cb24e04e9a0ee32a281f2088eaa1cb38a91e98ea09627e16f1b6944d9489812b",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-14",
+      "sha256": "f17d034a00be5186caea277d1791d9ffc1a9ae80d5c10e71794d5205a452c6cf",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-15",
+      "sha256": "8799381317c23496f5279b4877eab0229b82fa72d079f6f02d0eb6e1d5863b41",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-16",
+      "sha256": "b0ca7ab54c67bb9fb069bc5fc61c123a5f65a06d0c1cdf1b279344983ba1657d",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-17",
+      "sha256": "37367f6d5231ef5656beb70ed804a522506af88d31d5d1a87966daf5ee8a6814",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-ring-18",
+      "sha256": "01d21b3c19a2162ca60029caf00b8401b7ac2b0c8205215e64a5acda72cc5a80",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-1",
+      "sha256": "1c12c3ca3335f0acbc1c76bfa0b2e2b4064765204ecdb9abb557fd6c4f5b336f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-2",
+      "sha256": "4a06eebff835ed99be4279b89714e5598f5ef99b273ce0496f70ab7b1c240f60",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-3",
+      "sha256": "ce5a3f3820c9455d7ac4801dfcb34996b58519ca14e773eface17be139389c44",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-4",
+      "sha256": "1e28699e8c3a3559a356278340d320f055886c603a36ee0d5c83c6a39d7aa30b",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-5",
+      "sha256": "d4d4d09f2899db95a1fb10c15d7930e5e26f52a9baa25e0fe62fe75f4760755f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-6",
+      "sha256": "078979b8447feb5d344f8b0041919245a216abe58003adde125a89937a146fb1",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-7",
+      "sha256": "04edc2600773ab165a8c1a0c132a619f34ca86e54f0653ad51e6076b4096f223",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-8",
+      "sha256": "86744eedd53e1a73d17e4e4e846eb60c98369c2da9feb0f9fd58a88990c69c26",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-9",
+      "sha256": "3752542ee33367301fe4280170cbc839c87daf478bb486d1fe828b172a053b1e",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-10",
+      "sha256": "4bc756bd80171c3a29426796d9b2a674d1ebc9fa0adc066d509f43c49e0c7f6b",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-11",
+      "sha256": "287b97f5f54f94f09acf6c22fa8bd08d996cd0973a640e777c9f4c860918d315",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-front-spoke-12",
+      "sha256": "f3be9eebddc9cb57fe610e8622240951af0d89e41fc52723d2cf131a8fe6741e",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-outer",
+      "sha256": "9d81f2155d8c42c1ec7d5b5b900797af334eac3f42fb68ff140b621c3fb058d2",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-1",
+      "sha256": "8046d8b2877f116e22889b5c1ec30c35a615122ed47b8768a354fb861f0bb0a9",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-2",
+      "sha256": "ba31e0a801741d2a3e917063fe9084848eaa3259987b1b6027939b4afc85568f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-3",
+      "sha256": "4cfc0ddd4f51a27e825498485baff8d1e038bd931052760e8b2d16381f8b1cc6",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-4",
+      "sha256": "87d3ed633c6bcf9f9ec96416c998774cb7b848c3237538c5f8499bd66a70ae36",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-5",
+      "sha256": "50927d1df6ee60aa2bc2840f4e17fa1d237dbf8b1481b8dd1da7054cd91ce482",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-6",
+      "sha256": "7fcb46e8f62d71ae3e8c2052ddfc2e408f0e48b73155477b605e8e739741455a",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-7",
+      "sha256": "81d46bdd12a58bde1ee00ba1cb9e8e95ceddc62da7ce2c9236f47d031393c9d1",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-8",
+      "sha256": "2401b7b25ed50646a1abd1f81b9787e4c7ea643e7e04575e50e8f0f5c53896eb",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-9",
+      "sha256": "00c0834aa4e9ad3894620ecfd7ad8f7397494b73f74a71725b6fcb69dc105eaa",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-10",
+      "sha256": "563fd91d30b01ab14490e3a74bfb47bd8f493d8b86e9174f72e3d2de640a2f2f",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-11",
+      "sha256": "4e00c59da1bfb9a2e696c8844c7f6d212c82d94d8ad3aa9ccba54dba2b4489c1",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-12",
+      "sha256": "a7d94e3f7f9be5749e71a689ff1cadfcca0067c048035c7d891f5a43a7398032",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-13",
+      "sha256": "cb24e04e9a0ee32a281f2088eaa1cb38a91e98ea09627e16f1b6944d9489812b",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-14",
+      "sha256": "f17d034a00be5186caea277d1791d9ffc1a9ae80d5c10e71794d5205a452c6cf",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-15",
+      "sha256": "8799381317c23496f5279b4877eab0229b82fa72d079f6f02d0eb6e1d5863b41",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-16",
+      "sha256": "b0ca7ab54c67bb9fb069bc5fc61c123a5f65a06d0c1cdf1b279344983ba1657d",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-17",
+      "sha256": "37367f6d5231ef5656beb70ed804a522506af88d31d5d1a87966daf5ee8a6814",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-ring-18",
+      "sha256": "01d21b3c19a2162ca60029caf00b8401b7ac2b0c8205215e64a5acda72cc5a80",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-1",
+      "sha256": "081478eb0370981a001851d7c83429c894a03972d8d54ba2e849c1b25735eef2",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-2",
+      "sha256": "8c5da6213394d71a62be1cee6e67fe6caff5db236162bb17748563807a327455",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-3",
+      "sha256": "86a285d950db28097ab1afe1f410d8f000cd0d8632eac71b1e790d30fc917ad6",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-4",
+      "sha256": "0876246bfb818c6f262bc8895528aafb90ece2956b801e83fbff69962b89f9ab",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-5",
+      "sha256": "53fe1f41385ae21f5db762651612d31c01bcd6ad0e8cb678c972d4bc608a1379",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-6",
+      "sha256": "2413ced45af17fdeed66b12fa268d9806296d548df7b7cb7d8441a3aa1f199d3",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-7",
+      "sha256": "d7a51fcea032543db43f5af96aea97aaeebc813c8be4360acae9c5902e14d210",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-8",
+      "sha256": "f7c60d4b2e21d03ec4b87423e512a9cf030924c9d83a32a508884b609dcb20b7",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-9",
+      "sha256": "7ae2756085563e96a58d5ced9c8a5831b744fed71ee87601c916f3c41b60814a",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-10",
+      "sha256": "3023d6431dd1b628ee16c06b4aead477d738228a222ee14b820b905687698305",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-11",
+      "sha256": "25fec2999bad8d8ce39040983d20492182331fcc66b7a405fa7caf0c0b7015b7",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-rear-spoke-12",
+      "sha256": "69a5303fd453ea61b0a403637e85f3a85d270684f0a69da6529a3065c58abb1d",
+      "legacyParity": true
+    },
+    {
+      "id": "cage-depth-rim",
+      "sha256": "77c63362e0b771365c05a1e03545ffad7b3f5ec73c0f51ee0f694ca269a5933a",
+      "legacyParity": true
+    },
+    {
+      "id": "front-hub-cap",
+      "sha256": "f2faf8d7876fcbfdeefa2cf3183311a1e77297344fbfecb59920b3ac341c24b7",
+      "legacyParity": true
+    },
+    {
+      "id": "blade-spider",
+      "sha256": "fa016da65b3a0b378df68182ce3463f0cad99e3a06faf49e08af6dff17fe888d",
+      "legacyParity": true
+    },
+    {
+      "id": "blade-1",
+      "sha256": "23861a1330207923c1d5e95eb5ee2987d2767499d68cf509d57a6badb9ad999f",
+      "legacyParity": true
+    },
+    {
+      "id": "blade-2",
+      "sha256": "23861a1330207923c1d5e95eb5ee2987d2767499d68cf509d57a6badb9ad999f",
+      "legacyParity": true
+    },
+    {
+      "id": "blade-3",
+      "sha256": "23861a1330207923c1d5e95eb5ee2987d2767499d68cf509d57a6badb9ad999f",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-shell",
+      "sha256": "beb7e38b8a2fa98bd2e9e5f0812974fa26f066cb93f048ba0514f7f2bfcced8c",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-rear-cap",
+      "sha256": "4237503ad1fccd2d8f120704784f0e7e41b24f3a34fcb5be09d6b3e985824f8e",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-1",
+      "sha256": "799f1543a0ee2fdad90127313eae53d1855cf344e5b423d4d7562e7fd6ae974a",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-2",
+      "sha256": "ce7a56cf5a6ff3ce8049b7ab8bdba05bcaa23f9e963a3a5f9758bbe9d50af9a6",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-3",
+      "sha256": "a06278de0c40e9100b6c34b73d66b3140c4dc22196d0da697d8648b8402377c9",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-4",
+      "sha256": "6d03e37ec10b173d6ed3335225be9ef76be94e91b3b9ac4a6ca0595a0297f791",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-5",
+      "sha256": "d46b46ef294ae4bb91c89bb0e5ad76f5dca8d682fb4ed3d89ac3fb6fb4f7bb98",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-6",
+      "sha256": "2506ca7224e1803b2732a9a4f6259ff3d08ad80193cd6f07f1f2765a634dfb9b",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-7",
+      "sha256": "299ad057657a10a1def53ac92e3899723f5c9e2445d2afa8b4d48b2a1fb7c352",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-8",
+      "sha256": "f5a4fc0cf399e3d60c4ad86960ee6938e4bd94dd0abf90c3cdaeb5326e78f744",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-9",
+      "sha256": "b66aa21b94bef8d58f0133cb5f6b9c50efca1d8a227fe1ed52175afc9a7b4873",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-10",
+      "sha256": "134512bc86a407b76ec64286dbe10a427f854cd1a47e8e77171117abce458bd8",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-11",
+      "sha256": "b71d7a5d990f5383a1e4ff47455d57160b6cd3820c51d8a4c34efb44c1f15a38",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-12",
+      "sha256": "9d21d1180a23d23cd31cd036bed8a5ed19195bbd74bf7a67bb2d67a30e6537be",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-13",
+      "sha256": "80497d74e3046f7260f57a6ab461826ea83e6b70c97259ef2014249f2ca2b83f",
+      "legacyParity": true
+    },
+    {
+      "id": "motor-vent-14",
+      "sha256": "14e512389f5de5ecf0978d85d8c2af2ffca68635c3ebb1348e8f8ce30c7f5854",
+      "legacyParity": true
+    },
+    {
+      "id": "switch-post",
+      "sha256": "b1d5c7500d8e71229bec41ad3efc5b52ba0d7f0de4fb288cc46ba489295407c3",
+      "legacyParity": true
+    },
+    {
+      "id": "switch-box",
+      "sha256": "7175410c56cb0a8e8d11b1e03064c249868294d0fdc89a30d20708ac9a62fda5",
+      "legacyParity": true
+    },
+    {
+      "id": "speed-knob",
+      "sha256": "cea6f2dd75f1f5fcae8004bf86a07f2024b468ff75cec84d093bb28a2631a904",
+      "legacyParity": true
+    },
+    {
+      "id": "pivot-left",
+      "sha256": "1b9296562fb0572b3ecadc3c18c6639bcef0d5c2bac71fd5470013363cd3d3e2",
+      "legacyParity": true
+    },
+    {
+      "id": "pivot-right",
+      "sha256": "1b9296562fb0572b3ecadc3c18c6639bcef0d5c2bac71fd5470013363cd3d3e2",
+      "legacyParity": true
+    },
+    {
+      "id": "stand-left",
+      "sha256": "c5d2cef6c5c83445bf26512dfab48232cd1b93ce346a59c6952efd31fb16c82b",
+      "legacyParity": true
+    },
+    {
+      "id": "stand-right",
+      "sha256": "b482393ad0cdb681f924846a64f73946ab3c708ce019c9fb1811b4272b99e69c",
+      "legacyParity": true
+    },
+    {
+      "id": "base-front-rail",
+      "sha256": "8af12835aeb64ca50a21ccad4beed9c8f6e1fa08669765d1aead86654d046b88",
+      "legacyParity": true
+    },
+    {
+      "id": "base-rear-rail",
+      "sha256": "2922290dcb7f67e573b587bff7bca4e8011bf4c11ceb373ac21bb6881f0a8288",
+      "legacyParity": true
+    },
+    {
+      "id": "base-left-link",
+      "sha256": "6a869f6f7a2edb29f07f73e9ac4f2d3b8ab32e9d19992019a623643d59ce5492",
+      "legacyParity": true
+    },
+    {
+      "id": "base-right-link",
+      "sha256": "355d511f51b6025ee71ba6a551d80cfa04971e36a8355c3190d421152c36107a",
+      "legacyParity": true
+    },
+    {
+      "id": "foot-left-front",
+      "sha256": "e6ab83112fa977e7dca590893dce9ba07b043e190f92a45142904693fec15051",
+      "legacyParity": true
+    },
+    {
+      "id": "foot-right-front",
+      "sha256": "e6ab83112fa977e7dca590893dce9ba07b043e190f92a45142904693fec15051",
+      "legacyParity": true
+    },
+    {
+      "id": "foot-left-rear",
+      "sha256": "e6ab83112fa977e7dca590893dce9ba07b043e190f92a45142904693fec15051",
+      "legacyParity": true
+    },
+    {
+      "id": "foot-right-rear",
+      "sha256": "e6ab83112fa977e7dca590893dce9ba07b043e190f92a45142904693fec15051",
+      "legacyParity": true
+    },
+    {
+      "id": "power-cable",
+      "sha256": "8c63e5ba963727baef192d95bffc74303a8fa553915d1ff228e8ab77e781926d",
+      "legacyParity": true
+    },
+    {
+      "id": "power-plug",
+      "sha256": "6eb7516de39ff755692374dd658f8e9d73b6f0b3db8fd0ada23c2672225d0f61",
+      "legacyParity": true
+    }
+  ]
+}

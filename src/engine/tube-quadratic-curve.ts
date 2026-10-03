@@ -8,6 +8,20 @@ export interface TubeQuadraticCurveIR {
 }
 const vector = (v: unknown): v is [number, number, number] => Array.isArray(v) && v.length === 3
   && v.every(x => typeof x === 'number' && Number.isFinite(x) && Math.abs(x) <= 100_000);
+/** Opt-in cap correction; absence retains legacy index bytes. */
+export function validateTubeCapWinding(geometry: TubeGeometryIR): void {
+  if (geometry.capWinding === undefined) return;
+  if (geometry.capWinding !== 'outward' || geometry.closed !== undefined && geometry.closed !== false) {
+    throw new Error('Outward cap winding requires an open tube and a supported declaration.');
+  }
+}
+export function migrateTubeCapWinding(geometry: TubeGeometryIR, outward: boolean): TubeGeometryIR {
+  if (typeof outward !== 'boolean' || geometry.closed) throw new Error('Cap migration requires an open tube and a boolean choice.');
+  const result = structuredClone(geometry);
+  if (outward) result.capWinding = 'outward'; else delete result.capWinding;
+  validateTubeCapWinding(result);
+  return result;
+}
 /** Patch results must remain valid even when the source uses the legacy path. */
 export function validateEditedTubePath(geometry: TubeGeometryIR): void {
   if (!Array.isArray(geometry.points) || geometry.points.length < 2 || geometry.points.length > 4096
@@ -19,6 +33,7 @@ export function validateEditedTubePath(geometry: TubeGeometryIR): void {
 }
 /** Strict, bounded opt-in. No legacy path is rewritten or camera inferred. */
 export function validateTubeQuadraticCurve(geometry: TubeGeometryIR): void {
+  validateTubeCapWinding(geometry);
   const value: unknown = geometry.curve;
   if (value === undefined) return;
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid quadratic Bezier declaration.');

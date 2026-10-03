@@ -270,11 +270,7 @@
       "type": "object", "required": ["op", "profile"], "additionalProperties": false,
       "properties": { "op": { "const": "lathe" }, "profile": { "type": "array", "minItems": 3, "maxItems": 4096, "items": { "$ref": "#/$defs/vec2" } }, "segments": { "type": "integer", "minimum": 3, "maximum": 512 } }
     },
-    "tube": {
-      "type": "object", "required": ["op", "points", "radius"], "additionalProperties": false,
-      "properties": { "op": { "const": "tube" }, "points": { "type": "array", "minItems": 2, "maxItems": 4096, "items": { "$ref": "#/$defs/vec3" } }, "radius": { "type": "number", "exclusiveMinimum": 0 }, "tubularSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "radialSegments": { "type": "integer", "minimum": 3, "maximum": 512 }, "closed": { "type": "boolean" }, "curve": { "type": "object", "additionalProperties": false, "required": ["schema", "controlPointMm"], "properties": { "schema": { "const": "morphloom.tube-quadratic-bezier/0.1" }, "controlPointMm": { "$ref": "#/$defs/vec3" } } } },
-      "allOf": [{ "if": { "required": ["curve"] }, "then": { "properties": { "points": { "minItems": 2, "maxItems": 2 }, "closed": { "const": false } } } }]
-    },
+    "tube": {"type": "object", "required": ["op", "points", "radius"], "additionalProperties": false, "properties": {"op": {"const": "tube"}, "points": {"type": "array", "minItems": 2, "maxItems": 4096, "items": {"$ref": "#/$defs/vec3"}}, "radius": {"type": "number", "exclusiveMinimum": 0}, "tubularSegments": {"type": "integer", "minimum": 3, "maximum": 512}, "radialSegments": {"type": "integer", "minimum": 3, "maximum": 512}, "closed": {"type": "boolean"}, "curve": {"type": "object", "additionalProperties": false, "required": ["schema", "controlPointMm"], "properties": {"schema": {"const": "morphloom.tube-quadratic-bezier/0.1"}, "controlPointMm": {"$ref": "#/$defs/vec3"}}}, "capWinding": {"const": "outward"}}, "allOf": [{"if": {"required": ["curve"]}, "then": {"properties": {"points": {"minItems": 2, "maxItems": 2}, "closed": {"const": false}}}}, {"if": {"required": ["capWinding"]}, "then": {"properties": {"closed": {"const": false}}}}]},
     "surfacePatch": {
       "type": "object",
       "required": ["op", "size", "baseThickness", "segments", "seed", "macroAmplitude", "aggregateAmplitude", "aggregateScale"],
