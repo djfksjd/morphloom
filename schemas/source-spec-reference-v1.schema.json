@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lossless sourceSpec reference; not verified against current geometry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "state", "sourceSha256", "sourceSpec"],
+  "properties": {
+    "schema": { "const": "morphloom.source-spec-reference/0.1" },
+    "state": { "const": "before-edit-reference" },
+    "sourceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sourceSpec": {}
+  }
+}

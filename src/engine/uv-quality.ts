@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {textureDensityContext,triangleTexelRange,addTexelMeasurement,type TexelDensitySummary} from './texel-density';
 import {makeGearToothPicker} from './gear-picking';
 import {toothIds,type SpurGearGeometry} from './spur-gear';
-export const UV_QUALITY_REVISION='morphloom.uv-quality/0.2';
+export const UV_QUALITY_REVISION='morphloom.uv-quality/0.3';
 export const UV_DOUBLE_AREA_EPSILON=1e-10; // Existing domain-readiness threshold; unchanged.
 export const WORLD_DOUBLE_AREA_EPSILON=1e-14;
 type Attribute=THREE.BufferAttribute|THREE.InterleavedBufferAttribute;
@@ -61,12 +61,20 @@ function nativeId(object:THREE.Object3D,fallback:string):string{
  const local=feature??object.userData.sourceId??object.userData.sourceLocalName,asset=object.userData.assetId;
  return typeof local==='string'&&local?typeof asset==='string'&&asset?`${asset}::${local}`:local:fallback;
 }
-function authoredGear(mesh:THREE.Mesh):SpurGearGeometry|undefined{
+function authoredGear(mesh:THREE.Mesh):{geometry?:SpurGearGeometry;referenceOnly:boolean}{
  let owner:THREE.Object3D|null=mesh;
- while(owner){const spec=owner.userData.sourceSpec;if(Array.isArray(spec?.parts)){
+ while(owner){
+  // A reference may label connected features, but cannot certify their current
+  // geometry. Missing binding must fail instead of silently losing tooth checks.
+  const reference=owner.userData.morphloomSourceSpecReference?.sourceSpec;
+  if(Array.isArray(reference?.parts)){
+   const p=reference.parts.find((p:{id?:unknown})=>p.id===(mesh.userData.sourceId??mesh.name));
+   if(p?.geometry?.op==='spur-gear')return {referenceOnly:true};
+  }
+  const spec=owner.userData.sourceSpec;if(Array.isArray(spec?.parts)){
   const p=spec.parts.find((p:{id?:unknown})=>p.id===(mesh.userData.sourceId??mesh.name));
-  if(p?.geometry?.op==='spur-gear')return p.geometry as SpurGearGeometry;
- }owner=owner.parent;}return undefined;
+  if(p?.geometry?.op==='spur-gear')return {geometry:p.geometry as SpurGearGeometry,referenceOnly:false};
+ }owner=owner.parent;}return {referenceOnly:false};
 }
 function canonicalAttribute(a:Attribute):Uint8Array{
  const values=new Float64Array(a.count*a.itemSize);for(let i=0;i<a.count;i++)for(let c=0;c<a.itemSize;c++)values[i*a.itemSize+c]=a.getComponent(i,c);
@@ -89,7 +97,9 @@ export async function inspectUvQuality(root:THREE.Object3D,options:{includeTrian
   for(const k of ['position','uv','normal']){const a=geometry.getAttribute(k);if(a&&a.count<=300_000)fingerprintParts.push(canonicalAttribute(a));}
   if(geometry.index)fingerprintParts.push(canonicalAttribute(geometry.index));
   let featurePicker:ReturnType<typeof makeGearToothPicker>|undefined;
-  const gear=authoredGear(object);if(gear){try{featurePicker=makeGearToothPicker(gear);r.features=toothIds(gear).map(id=>({id:`${r.id}/${id}`,triangles:0,degenerateUvTriangles:0,integrityPass:false}));}catch{ /* Unknown/invalid native source cannot certify a connected feature. */ }}
+  const source=authoredGear(object),gear=source.geometry;
+  if(source.referenceOnly){r.criticalFeatures='fail';r.blocked='Connected feature reference is not bound to current geometry; use the original editable source for feature validation';}
+  if(gear){try{featurePicker=makeGearToothPicker(gear);r.features=toothIds(gear).map(id=>({id:`${r.id}/${id}`,triangles:0,degenerateUvTriangles:0,integrityPass:false}));}catch{ /* Unknown/invalid native source cannot certify a connected feature. */ }}
   const rows:UvTriangle[]=[],candidates:Candidate[]=[];let minScale=Infinity,maxScale=0,maxAnisotropy=0,singular=false,anisotropyMeasurements=0;
   const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3(),e1=new THREE.Vector3(),e2=new THREE.Vector3(),cross=new THREE.Vector3();
   const count=geometry.index?.count??p.count;r.triangleCount=Math.floor(count/3);
@@ -120,6 +130,7 @@ export async function inspectUvQuality(root:THREE.Object3D,options:{includeTrian
   r.overlap=overlaps(candidates,budget);r.overlap.intent=mappingIntent(object);
   if(count%3!==0)r.invalidWorldTriangles++;
   r.integrityPass=attr.valid&&r.invalidUvVertices===0&&r.invalidWorldTriangles===0&&r.eligibleUvTriangles>0&&r.degenerateUvTriangles/r.eligibleUvTriangles<=0.05;
+  if(source.referenceOnly)r.integrityPass=false;
   if(r.features.length){for(const f of r.features)f.integrityPass=f.triangles>0&&f.degenerateUvTriangles/f.triangles<=0.05;r.criticalFeatures=r.features.every(f=>f.integrityPass)?'pass':'fail';r.integrityPass=r.integrityPass&&r.criticalFeatures==='pass';}
   r.triangleSamples=[...rows].sort((a,b)=>Number(b.legacyDegenerate)-Number(a.legacyDegenerate)||(b.anisotropy??Infinity)-(a.anisotropy??Infinity)||a.index-b.index).slice(0,32);
   if(options.includeTriangles)r.triangles=rows;

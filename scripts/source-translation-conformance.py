@@ -61,9 +61,29 @@ for case in cases:
     old = [n for n in before['nodes'] if n.get('name') == node][0]
     new = [n for n in after['nodes'] if n.get('name') == node][0]
     assert old != new
-    # Independently ensure only transform was patched, not embedded IR or attributes.
+    # Independently whitelist transform plus the declared reference metadata.
     normalized = copy.deepcopy(after)
-    normalized['nodes'][after['nodes'].index(new)] = old
+    proof = normalized['asset']['extras'].pop('morphloomBakedTransform')
+    assert proof['schema'] == 'morphloom.baked-transform/0.1' and proof['currentEditableIRAvailable'] is False
+    assert proof['sourceSha256'] == hashlib.sha256(source.read_bytes()).hexdigest() and proof['node'] == node
+    assert proof['translationMm'] == delta
+    if 'extras' not in before['asset'] and not normalized['asset']['extras']:
+        normalized['asset'].pop('extras')
+    for i in proof['referenceNodes']:
+        extra = normalized['nodes'][i]['extras']
+        reference = extra.pop('morphloomSourceSpecReference')
+        assert reference == {'schema': 'morphloom.source-spec-reference/0.1', 'state': 'before-edit-reference',
+                             'sourceSha256': proof['sourceSha256'], 'sourceSpec': before['nodes'][i]['extras']['sourceSpec']}
+        extra['sourceSpec'] = reference['sourceSpec']
+    target_index = after['nodes'].index(new)
+    current = normalized['nodes'][target_index]
+    if 'matrix' in old:
+        assert all(current['matrix'][i] == old['matrix'][i] for i in range(16) if i not in (12, 13, 14))
+        current['matrix'] = old['matrix']
+    elif 'translation' in old:
+        current['translation'] = old['translation']
+    else:
+        current.pop('translation')
     assert normalized == before
     report = out/(label+'-normals.json')
     audit = subprocess.run([blender, '--background', '--python-exit-code', '1', '--python', str(root/'blender-corner-normal-audit.py'), '--', str(source), str(edited), str(stabilized), str(report)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=90)
@@ -71,7 +91,7 @@ for case in cases:
     assert audit.returncode == 0
     normals = json.loads(report.read_text())
     assert normals['pass']
-    results.append({'id': label, 'translationMm': delta, 'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(), 'editedSha256': hashlib.sha256(edited.read_bytes()).hexdigest(), 'stabilitySha256': hashlib.sha256(stabilized.read_bytes()).hexdigest(), 'binExact': True, 'onlyTargetTransformChanged': True, 'normalWorstDeg': max(row['maxNormalDifferenceDeg'] for pair in normals['pairs'] for row in pair)})
+    results.append({'id': label, 'translationMm': delta, 'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(), 'editedSha256': hashlib.sha256(edited.read_bytes()).hexdigest(), 'stabilitySha256': hashlib.sha256(stabilized.read_bytes()).hexdigest(), 'binExact': True, 'onlyDeclaredTransformAndProvenanceChanged': True, 'sourceSpecOriginalValuesExact': True, 'normalWorstDeg': max(row['maxNormalDifferenceDeg'] for pair in normals['pairs'] for row in pair)})
 
 source, node = Path(cases[0]['source']), cases[0]['node']
 document, tail = decode(source)
@@ -94,6 +114,30 @@ for label, mutation in [
     rejects.append(label)
 for label, selected, delta, exists in [('missing-node', 'absent', (2, 0, 0), False), ('delta-range', node, (1001, 0, 0), False), ('overwrite', node, (2, 0, 0), True)]:
     run(label, source, selected, delta, expected=1, existing=exists)
+    rejects.append(label)
+translated = out/(cases[0]['id']+'.glb')
+run('edit-chain', translated, node, expected=1)
+rejects.append('edit-chain')
+adapted, adapted_tail = decode(translated)
+def conflicting_reference(value):
+    proof = value['asset']['extras']['morphloomBakedTransform']
+    if not proof['referenceNodes']:
+        i = next(i for i, n in enumerate(value['nodes']) if n.get('name') == proof['node'])
+        proof['referenceNodes'] = [i]
+        value['nodes'][i].setdefault('extras', {})['morphloomSourceSpecReference'] = {
+            'schema': 'morphloom.source-spec-reference/0.1', 'state': 'before-edit-reference',
+            'sourceSha256': proof['sourceSha256'], 'sourceSpec': {}}
+    value['nodes'][proof['referenceNodes'][0]].setdefault('extras', {})['sourceSpec'] = {}
+
+for label, mutation in [
+    ('unknown-provenance-version', lambda v: v['asset']['extras']['morphloomBakedTransform'].update(schema='morphloom.baked-transform/99')),
+    ('conflicting-reference', conflicting_reference),
+]:
+    value = copy.deepcopy(adapted)
+    mutation(value)
+    fixture = out/(label+'-input.glb')
+    fixture.write_bytes(encode(value, adapted_tail))
+    run(label, fixture, node, (0, 0, 0), expected=1)
     rejects.append(label)
 (out/'verification.json').write_text(json.dumps({'pass': True, 'cases': results, 'rejections': rejects, 'normalToleranceDeg': .01, 'scope': 'Declared source translation only; original IR is before-edit reference. Raw first-import normal approximation and ordinary native DCC re-export remain separately blocked.'}, indent=2)+'\n')
 print('PASS', len(results), 'actual Blender cases,', len(rejects), 'atomic rejection cases')

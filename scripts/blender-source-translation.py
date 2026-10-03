@@ -137,19 +137,84 @@ for key, obj in objects.items():
     require(max(abs(a-b) for ra, rb in zip(wanted, obj.matrix_world) for a, b in zip(ra, rb)) <= 1e-7, 'Actual world transform changed outside declaration')
 local_delta = parent.to_3x3().inverted() @ Vector([v/1000 for v in delta])
 node = nodes[index]
-if 'matrix' in node:
+if not any(delta):
+    pass
+elif 'matrix' in node:
     for axis in range(3):
         node['matrix'][12+axis] += local_delta[axis]
 else:
     node['translation'] = [v+d for v, d in zip(node.get('translation', [0, 0, 0]), local_delta)]
+
+# A reference IR is not the edited baked geometry. Change only ancestors of the
+# target, leaving unrelated asset metadata untouched. Original IR values survive.
+asset = document['asset']
+asset_extras = asset.get('extras', {})
+require(isinstance(asset_extras, dict), 'Asset extras must be an object')
+proof = asset_extras.get('morphloomBakedTransform')
+if proof is not None:
+    require(isinstance(proof, dict) and set(proof) == {'schema', 'sourceSha256', 'node', 'translationMm', 'coordinates', 'currentEditableIRAvailable', 'sourceSpecState', 'referenceNodes'}, 'Unknown transform provenance fields')
+    require(proof.get('schema') == 'morphloom.baked-transform/0.1' and proof.get('currentEditableIRAvailable') is False
+            and proof.get('coordinates') == 'glTF right-handed Y-up world, millimeters'
+            and proof.get('sourceSpecState') == 'before-edit-reference', 'Unsupported provenance contract/version')
+    require(isinstance(proof.get('sourceSha256'), str) and len(proof['sourceSha256']) == 64
+            and all(v in '0123456789abcdef' for v in proof['sourceSha256']), 'Invalid provenance source SHA')
+    require(isinstance(proof.get('translationMm'), list) and len(proof['translationMm']) == 3
+            and all(type(v) in (int, float) and math.isfinite(v) and abs(v) <= 1000 for v in proof['translationMm']), 'Invalid provenance translation')
+    require(isinstance(proof.get('node'), str) and 0 < len(proof['node']) <= 256
+            and sum(n.get('name') == proof['node'] for n in nodes) == 1, 'Unknown provenance target')
+    require(isinstance(proof.get('referenceNodes'), list) and len(proof['referenceNodes']) <= len(nodes)
+            and all(type(v) is int and 0 <= v < len(nodes) for v in proof['referenceNodes'])
+            and len(set(proof['referenceNodes'])) == len(proof['referenceNodes']), 'Invalid reference nodes')
+    proof_index = next(i for i, n in enumerate(nodes) if n.get('name') == proof['node'])
+    require('mesh' in nodes[proof_index] and not nodes[proof_index].get('children'), 'Provenance target must be a leaf mesh')
+    proof_path, current = set(), proof_index
+    while True:
+        proof_path.add(current)
+        if current not in parents:
+            break
+        current = parents[current]
+    require(set(proof['referenceNodes']).issubset(proof_path), 'Reference is outside edited source ancestry')
+    require(all('sourceSpec' not in nodes[i].get('extras', {}) for i in proof_path), 'Active stale sourceSpec conflicts with provenance')
+    require(set(proof['referenceNodes']) == {i for i in proof_path if 'morphloomSourceSpecReference' in nodes[i].get('extras', {})}, 'Missing reference in provenance')
+    for i in proof['referenceNodes']:
+        extra = nodes[i].get('extras', {})
+        reference = extra.get('morphloomSourceSpecReference')
+        require('sourceSpec' not in extra and isinstance(reference, dict)
+                and set(reference) == {'schema', 'state', 'sourceSha256', 'sourceSpec'}
+                and reference['schema'] == 'morphloom.source-spec-reference/0.1'
+                and reference['state'] == 'before-edit-reference'
+                and reference['sourceSha256'] == proof['sourceSha256'], 'Conflicting source reference')
+    require(not any(delta), 'Additional nonzero edit chaining unsupported; use original source and a new declared transform')
+else:
+    path, current = [], index
+    while True:
+        path.append(current)
+        if current not in parents:
+            break
+        current = parents[current]
+    references = []
+    for i in path:
+        extra = nodes[i].get('extras', {})
+        require(isinstance(extra, dict), 'Node extras must be an object')
+        require('morphloomSourceSpecReference' not in extra, 'Existing source reference requires valid provenance')
+        if 'sourceSpec' in extra:
+            original_spec = extra.pop('sourceSpec')
+            extra['morphloomSourceSpecReference'] = {'schema': 'morphloom.source-spec-reference/0.1',
+                'state': 'before-edit-reference', 'sourceSha256': sha(raw), 'sourceSpec': original_spec}
+            references.append(i)
+    asset['extras'] = {**asset_extras, 'morphloomBakedTransform': {
+        'schema': 'morphloom.baked-transform/0.1', 'sourceSha256': sha(raw), 'node': name,
+        'translationMm': delta, 'coordinates': 'glTF right-handed Y-up world, millimeters',
+        'currentEditableIRAvailable': False, 'sourceSpecState': 'before-edit-reference', 'referenceNodes': references}}
 encoded = json.dumps(document, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()
 encoded += b' ' * ((-len(encoded)) % 4)
 result = b'glTF' + struct.pack('<II', 2, 20+len(encoded)+len(tail)) + struct.pack('<II', len(encoded), 0x4e4f534a) + encoded + tail
-report = {'schema': 'morphloom.source-translation/0.1', 'pass': True,
+report = {'schema': 'morphloom.source-translation/0.2', 'pass': True,
           'sourceSha256': sha(raw), 'outputSha256': sha(result), 'binChunkSha256': sha(tail),
+          'adapterRevisionSha256': sha(Path(__file__).read_bytes()),
           'blenderVersion': bpy.app.version_string, 'node': name, 'translationMm': delta,
           'coordinates': 'glTF right-handed Y-up world, millimeters', 'unchangedMeshPayloads': len(objects),
-          'preserved': 'Original BIN and all JSON except the declared target node transform',
+          'preserved': 'Original BIN; target transform and versioned reference/provenance metadata are the only JSON changes',
           'limitations': 'Baked translation adapter, not Blender native re-export. Embedded procedural/source metadata is BEFORE-edit reference; IR is not synchronized. Arbitrary DCC edits are unsupported.'}
 output.parent.mkdir(parents=True, exist_ok=True)
 receipt.parent.mkdir(parents=True, exist_ok=True)

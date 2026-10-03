@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Declared baked transform provenance (not current editable IR)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "sourceSha256", "node", "translationMm", "coordinates", "currentEditableIRAvailable", "sourceSpecState", "referenceNodes"],
+  "properties": {
+    "schema": { "const": "morphloom.baked-transform/0.1" },
+    "sourceSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "node": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "translationMm": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number", "minimum": -1000, "maximum": 1000 } },
+    "coordinates": { "const": "glTF right-handed Y-up world, millimeters" },
+    "currentEditableIRAvailable": { "const": false },
+    "sourceSpecState": { "const": "before-edit-reference" },
+    "referenceNodes": { "type": "array", "maxItems": 10000, "uniqueItems": true, "items": { "type": "integer", "minimum": 0, "maximum": 9999 } }
+  }
+}
