@@ -1,8 +1,8 @@
 {
   "schema": "morphloom.blender-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.40.0",
-  "generatedAt": "2026-10-03T19:36:57.356Z",
-  "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN",
+  "compilerRevision": "morphloom-compiler/0.39.0",
+  "generatedAt": "2026-10-03T18:05:11.707Z",
+  "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi",
   "executionProfile": {
     "schema": "morphloom.blender-execution-profile/0.1",
     "name": "background-single-thread",
@@ -48,12 +48,12 @@
           "name": "background-single-thread",
           "threads": 1
         },
-        "elapsedMs": 6385.526375,
+        "elapsedMs": 4786.441834,
         "artifactPaths": {
-          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.glb",
-          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.json",
-          "repaired": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.repaired.glb",
-          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/laurel-homes-architecture.repair.json"
+          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.glb",
+          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.json",
+          "repaired": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.blender.repaired.glb",
+          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/laurel-homes-architecture.repair.json"
         },
         "semanticRoundTrip": {
           "pass": true,
@@ -452,12 +452,12 @@
           "name": "background-single-thread",
           "threads": 1
         },
-        "elapsedMs": 1002.529625000001,
+        "elapsedMs": 805.5076669999999,
         "artifactPaths": {
-          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.glb",
-          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.json",
-          "repaired": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.repaired.glb",
-          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.repair.json"
+          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.glb",
+          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.json",
+          "repaired": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.blender.repaired.glb",
+          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/ornate-knife-product.repair.json"
         },
         "semanticRoundTrip": {
           "pass": true,
@@ -777,12 +777,12 @@
           "name": "background-single-thread",
           "threads": 1
         },
-        "elapsedMs": 5694.663791000001,
+        "elapsedMs": 4742.061083,
         "artifactPaths": {
-          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.glb",
-          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.json",
-          "repaired": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.repaired.glb",
-          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.repair.json"
+          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.glb",
+          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.json",
+          "repaired": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.blender.repaired.glb",
+          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/cooling-electronics-assembly.repair.json"
         },
         "semanticRoundTrip": {
           "pass": true,
@@ -1144,12 +1144,12 @@
           "name": "background-single-thread",
           "threads": 1
         },
-        "elapsedMs": 3608.8542499999985,
+        "elapsedMs": 3190.8622079999986,
         "artifactPaths": {
-          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.blender.glb",
-          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.blender.json",
-          "repaired": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.blender.repaired.glb",
-          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.repair.json"
+          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.glb",
+          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.json",
+          "repaired": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.blender.repaired.glb",
+          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/field-human-runtime.repair.json"
         },
         "semanticRoundTrip": {
           "pass": true,
@@ -1526,12 +1526,12 @@
           "name": "background-single-thread",
           "threads": 1
         },
-        "elapsedMs": 2332.140875000001,
+        "elapsedMs": 2115.8906659999993,
         "artifactPaths": {
-          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.glb",
-          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.json",
-          "repaired": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.repaired.glb",
-          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.repair.json"
+          "rawRoundTrip": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.glb",
+          "blenderReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.json",
+          "repaired": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.blender.repaired.glb",
+          "repairReportPath": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-xKCXEi/asphalt-print-surface.repair.json"
         },
         "semanticRoundTrip": {
           "pass": true,

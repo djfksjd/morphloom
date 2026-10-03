@@ -36,13 +36,14 @@ Sceliph는 사진·도면·실측값·자연어 요구를 선언형 IR로 정리
 | 원본 결합 UV·중요 특징 검사 | 기존 24개 톱니 검사와 한 톱니 손상 FAIL 유지 | 5% 임계값 유지; 전체 평균으로 대체하지 않음 |
 | 파일 교체·지연·읽기 실패·unmount | 수정 source 생성 6사례, 기존 검사 지연 3사례 PASS | 이전 결과·다운로드를 새 선택에 재사용하지 않음 |
 | 실제 파일 | 원본·이동본·재생성본 12 GLB 엄격 검사 PASS, Blender 첫 import 대응 PASS4 | Blender raw normal 충실도는 별도 FAIL |
-| 전체 납품·production | **미충족** | 현재 `quality:gate`·`quality:production` exit 1, 기존 전역 영수증 수락 실패 유지 |
+| 전체 납품·production | **미충족** | 현재 내부 quality·release 대응 통과; 전체 명령은 cooling UV infos 23의 strict competitive 기준에서 exit 1 |
 
 [구현 범위·현재 해시·실행 증거](./docs/TRANSLATED_SOURCE_STATUS.ko.md)를 확인하세요. renderer 0.12는 corner-angle normal의 실행 환경 차이를 제거했으며, 검증하지 않은 이전 버전 결과를 성공으로 승격하지 않습니다.
 
 Blender 기본 import의 normal 오차는 남아 있습니다. 별도의 선택형 source-normal import와 단일 스레드 벤치마크 프로필은 제한된 사례에서 검증했습니다. 회전·스케일 부모의 변환 지원은 확대하지 않았습니다. 기존 `releaseAllowed` 기준과 검사 임계값을 완화하지 않았습니다.
 
 - [이전 검증 경계 수정·799개 테스트·당시 gate 상태](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [현재 0.40 브라우저·Blender·Godot·정적 납품 재실행과 실패 경계](./docs/CURRENT_DELIVERY_040_STATUS.ko.md)
 - [현재 lathe 법선 편집·805개 테스트·재열기 증거와 gate 실패 범위](./docs/ASSEMBLY_LATHE_NORMAL_STATUS.ko.md)
 - [Blender tangent 결정성 검증](./docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)
 - [체크포인트·모델링 수학과 한계](./docs/CHECKPOINT_20261003_2340.ko.md)

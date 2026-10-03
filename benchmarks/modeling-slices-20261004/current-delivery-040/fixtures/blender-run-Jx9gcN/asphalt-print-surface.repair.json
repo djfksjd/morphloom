@@ -1,0 +1,34 @@
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.glb",
+  "output": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.repaired.glb",
+  "inputBytes": 17740484,
+  "outputBytes": 17740400,
+  "outputSha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b",
+  "tangentAccessors": 1,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 0,
+  "restoredMaterials": 0,
+  "materialSourceSha256": null,
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 0,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 2,
+      "meshes": 1,
+      "materials": 1,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}

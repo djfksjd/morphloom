@@ -1,0 +1,34 @@
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited.glb",
+  "output": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited.delivery.glb",
+  "inputBytes": 28420456,
+  "outputBytes": 28343380,
+  "outputSha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526",
+  "tangentAccessors": 321,
+  "repairedTangents": 432,
+  "removedUnusedTangentAccessors": 0,
+  "restoredMaterials": 321,
+  "materialSourceSha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 0,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 322,
+      "meshes": 321,
+      "materials": 321,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}

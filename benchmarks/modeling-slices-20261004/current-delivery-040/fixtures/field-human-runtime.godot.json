@@ -1,0 +1,71 @@
+{
+  "blockers": [],
+  "godot_version": "4.7.2-stable (official)",
+  "pass": true,
+  "schema": "morphloom.godot-cross-domain-import/0.1",
+  "source": "res://fixtures/field-human-runtime.glb",
+  "source_sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+  "stats": {
+    "animation_clips": 22,
+    "animation_names": [
+      "morphloom_breathe_idle",
+      "morphloom_crouch_idle",
+      "morphloom_crouch_walk",
+      "morphloom_hand_gesture",
+      "morphloom_idle_preview",
+      "morphloom_jump_air",
+      "morphloom_jump_land",
+      "morphloom_jump_start",
+      "morphloom_pick_up",
+      "morphloom_point",
+      "morphloom_pull",
+      "morphloom_push",
+      "morphloom_run_cycle",
+      "morphloom_sprint_cycle",
+      "morphloom_strafe_left",
+      "morphloom_strafe_right",
+      "morphloom_turn_in_place",
+      "morphloom_turn_left_90",
+      "morphloom_turn_right_90",
+      "morphloom_walk_backward",
+      "morphloom_walk_cycle",
+      "morphloom_wave"
+    ],
+    "blend_shapes": 10,
+    "bones": 49,
+    "bounds_max_meters": [
+      0.559952557086945,
+      1.79944145679474,
+      0.223417952656746
+    ],
+    "bounds_max_nodes": [
+      "morphloom_human_body",
+      "hair_cap",
+      "morphloom_human_body"
+    ],
+    "bounds_min_meters": [
+      -0.559952557086945,
+      0.0,
+      -0.223417952656746
+    ],
+    "bounds_min_nodes": [
+      "morphloom_human_body",
+      "morphloom_human_body",
+      "morphloom_human_body"
+    ],
+    "bounds_size_meters": [
+      1.11990511417389,
+      1.79944145679474,
+      0.446835905313492
+    ],
+    "materials": 3,
+    "meshes": 3,
+    "nodes": 8,
+    "skeletons": 1,
+    "skinned_meshes": 2,
+    "texture_slots": 9,
+    "textures": 4,
+    "triangles": 51934,
+    "vertices": 28180
+  }
+}

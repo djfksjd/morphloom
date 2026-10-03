@@ -1,16 +1,16 @@
 {
   "schema": "morphloom.static-delivery-proof/0.4",
-  "generatedAt": "2026-10-03T19:39:19.446Z",
-  "compilerRevision": "morphloom-compiler/0.40.0",
+  "generatedAt": "2026-10-03T06:35:52.436Z",
+  "compilerRevision": "morphloom-compiler/0.39.0",
   "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
   "assetId": "asphalt-surface",
   "expectedSourceTriangles": 111936,
   "assetPack": {
     "source": "asphalt-pack.zip",
-    "bytes": 13022011,
-    "sha256": "6f02f6389def9461648d2675f360d4b4c12cec53f67f1b94cbf35254866cf2e5",
-    "compilerRevision": "morphloom-compiler/0.40.0",
-    "inputFingerprint": "38eaf26f21674f68",
+    "bytes": 13021998,
+    "sha256": "71af978d8e7c3e054221efca51f59d62b358fce91b6b72a40520f8b386eaed3e",
+    "compilerRevision": "morphloom-compiler/0.39.0",
+    "inputFingerprint": "f9b8c2579e0c338e",
     "browserRoundTrip": "pass"
   },
   "status": "pass",
@@ -108,7 +108,7 @@
   "usdz": {
     "source": "asphalt.usdz",
     "bytes": 37239190,
-    "sha256": "12604174276c7f65d7174cfa5bd795738db6a36674d393b115926bc3e24a31d5",
+    "sha256": "0a6942cd724c21ee3355d052c1f7554368406897b03ff7c7101b0e0a5caf7325",
     "validator": "/usr/bin/usdchecker",
     "status": "pass"
   },

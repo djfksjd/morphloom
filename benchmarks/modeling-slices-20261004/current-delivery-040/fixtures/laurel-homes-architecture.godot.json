@@ -1,0 +1,48 @@
+{
+  "blockers": [],
+  "godot_version": "4.7.2-stable (official)",
+  "pass": true,
+  "schema": "morphloom.godot-cross-domain-import/0.1",
+  "source": "res://fixtures/laurel-homes-architecture.glb",
+  "source_sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2",
+  "stats": {
+    "animation_clips": 0,
+    "animation_names": [],
+    "blend_shapes": 0,
+    "bones": 0,
+    "bounds_max_meters": [
+      21.3635997772217,
+      2.70000004768372,
+      8.27120018005371
+    ],
+    "bounds_max_nodes": [
+      "east_north_masonry_pier_6",
+      "west_north_head_wall",
+      "balcony_north_west_slab"
+    ],
+    "bounds_min_meters": [
+      -21.3635997772217,
+      -0.219999998807907,
+      -13.3501996994019
+    ],
+    "bounds_min_nodes": [
+      "west_north_masonry_pier_1",
+      "south_connector_bar_floor_slab",
+      "entrance_canopy"
+    ],
+    "bounds_size_meters": [
+      42.7271995544434,
+      2.92000007629395,
+      21.6213989257812
+    ],
+    "materials": 321,
+    "meshes": 321,
+    "nodes": 323,
+    "skeletons": 0,
+    "skinned_meshes": 0,
+    "texture_slots": 963,
+    "textures": 20,
+    "triangles": 188748,
+    "vertices": 566244
+  }
+}

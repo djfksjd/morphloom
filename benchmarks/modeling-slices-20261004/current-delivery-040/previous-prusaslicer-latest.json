@@ -1,8 +1,8 @@
 {
   "schema": "morphloom.prusaslicer-print-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.40.0",
+  "compilerRevision": "morphloom-compiler/0.39.0",
   "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
-  "generatedAt": "2026-10-03T19:37:42.321Z",
+  "generatedAt": "2026-10-03T06:56:58.076Z",
   "pass": true,
   "status": "pass",
   "source": {
@@ -75,10 +75,10 @@
       "coarseValidationProfile": true
     },
     "gcode": {
-      "bytes": 7070485,
-      "sha256": "a5b53097589c5e5d194e4f6baa2b279fdbecea25dbcd98f0dcaabcc2c65b435c",
+      "bytes": 7070403,
+      "sha256": "fce5b1324f8fa0ba43cb59f9bde7dd634be0eb00168ec6594fab54d33c108722",
       "layers": 43,
-      "extrusionMoves": 190170
+      "extrusionMoves": 190172
     }
   },
   "blockers": [],

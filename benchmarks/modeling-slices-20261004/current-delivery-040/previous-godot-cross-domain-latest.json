@@ -1,7 +1,7 @@
 {
   "schema": "morphloom.godot-cross-domain-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.40.0",
-  "generatedAt": "2026-10-03T19:38:09.698Z",
+  "compilerRevision": "morphloom-compiler/0.39.0",
+  "generatedAt": "2026-10-03T06:56:45.834Z",
   "pass": true,
   "status": "pass",
   "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",

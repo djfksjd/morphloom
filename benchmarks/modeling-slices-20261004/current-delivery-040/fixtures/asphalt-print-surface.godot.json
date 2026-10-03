@@ -1,0 +1,53 @@
+{
+  "blockers": [],
+  "godot_version": "4.7.2-stable (official)",
+  "pass": true,
+  "schema": "morphloom.godot-cross-domain-import/0.1",
+  "source": "res://fixtures/asphalt-print-surface.glb",
+  "source_sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8",
+  "stats": {
+    "animation_clips": 0,
+    "animation_names": [],
+    "blend_shapes": 0,
+    "bones": 0,
+    "bounds_max_meters": [
+      0.300000011920929,
+      0.0234534777700901,
+      0.224999994039536
+    ],
+    "bounds_max_nodes": [
+      "asphalt_core_sample",
+      "asphalt_core_sample",
+      "asphalt_core_sample"
+    ],
+    "bounds_min_meters": [
+      -0.300000011920929,
+      -0.0199999995529652,
+      -0.224999994039536
+    ],
+    "bounds_min_nodes": [
+      "asphalt_core_sample",
+      "asphalt_core_sample",
+      "asphalt_core_sample"
+    ],
+    "bounds_size_meters": [
+      0.600000023841858,
+      0.0434534773230553,
+      0.449999988079071
+    ],
+    "materials": 1,
+    "meshes": 1,
+    "nodes": 3,
+    "skeletons": 0,
+    "skinned_meshes": 0,
+    "surface_relief": {
+      "peak_to_valley_mm": 6.20025396347046,
+      "rms_roughness_mm": 0.978816213524551,
+      "samples": 165888
+    },
+    "texture_slots": 4,
+    "textures": 3,
+    "triangles": 111936,
+    "vertices": 335808
+  }
+}

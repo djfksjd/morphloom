@@ -1,0 +1,36 @@
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.glb",
+  "output": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.repaired.glb",
+  "inputBytes": 17712160,
+  "outputBytes": 16576700,
+  "outputSha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4",
+  "tangentAccessors": 299,
+  "repairedTangents": 1408,
+  "removedUnusedTangentAccessors": 23,
+  "restoredMaterials": 0,
+  "materialSourceSha256": null,
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 23,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [
+      "UNUSED_OBJECT"
+    ],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 324,
+      "meshes": 322,
+      "materials": 322,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}

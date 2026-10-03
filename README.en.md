@@ -43,6 +43,7 @@ See [current evidence and hashes](./docs/TRANSLATED_SOURCE_STATUS.ko.md). Render
 Default Blender import normal drift remains. An optional source-normal importer and a single-thread benchmark profile have been verified on scoped cases. Rotated/scaled parent support has not been expanded. Existing `releaseAllowed` rules and thresholds were not weakened.
 
 - [Previous validation fixes, 799 tests and then-current gate status](./docs/INDEPENDENT_PARSER_REJECTION_STATUS.ko.md)
+- [Current 0.40 browser, Blender, Godot and static-delivery rerun evidence and gate limitations](./docs/CURRENT_DELIVERY_040_STATUS.ko.md)
 - [Current opt-in lathe normals, 805 tests, actual reopen evidence and gate limitations](./docs/ASSEMBLY_LATHE_NORMAL_STATUS.ko.md)
 - [Blender tangent determinism](./docs/BLENDER_TANGENT_DETERMINISM_STATUS.ko.md)
 - [Checkpoint, modeling mathematics, and limits (Korean)](./docs/CHECKPOINT_20261003_2340.ko.md)

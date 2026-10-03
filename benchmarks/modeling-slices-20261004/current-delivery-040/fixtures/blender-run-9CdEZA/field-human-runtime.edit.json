@@ -1,0 +1,63 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/field-human-runtime.glb",
+    "bytes": 5065808,
+    "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/field-human-runtime.edited.glb",
+    "bytes": 3180356,
+    "sha256": "1eec62944b3796fb387d9ba9b814066af905abe87304f329e38ca8b968a40cc8"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/field-human-runtime.edited-stability.glb",
+    "bytes": 3183424,
+    "sha256": "20c50290231639dd0d5720c1608f1ff66ec4646fa6404681addde60994341c5b"
+  },
+  "edit": {
+    "component": "hair_cap",
+    "kind": "translation",
+    "translationMm": [
+      0.0,
+      5.0,
+      0.0
+    ]
+  },
+  "meshCount": 3,
+  "unchangedMeshes": 2,
+  "maximumUnchangedCenterDriftMm": 0.18309801816940308,
+  "maximumUnchangedSizeDriftMm": 0.36619603633880615,
+  "topologyChanges": [
+    {
+      "component": "LOD1_morphloom_human_body",
+      "before": {
+        "vertices": 10963,
+        "edges": 31023,
+        "polygons": 20066
+      },
+      "after": {
+        "vertices": 10992,
+        "edges": 31050,
+        "polygons": 20066
+      }
+    }
+  ],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 1,
+    "actions": 22,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [
+    "LOD1_morphloom_human_body",
+    "morphloom_human_body"
+  ],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}

@@ -1,0 +1,166 @@
+[
+  {
+    "command": [
+      "python3",
+      "work/current-browser-040/current-browser-proof-regression.py",
+      "current-browser-040",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/export-cross-domain-fixtures.ts",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/blender-cross-domain-benchmark.ts",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/blender-cross-domain.json"
+    ],
+    "exitCode": 0,
+    "configuredBinary": "/Applications/Blender.app/Contents/MacOS/Blender"
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/blender-cross-domain-edit-benchmark.ts",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/blender-edit.json"
+    ],
+    "exitCode": 0,
+    "configuredBinary": "/Applications/Blender.app/Contents/MacOS/Blender"
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/godot-cross-domain-benchmark.ts",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/godot.json"
+    ],
+    "exitCode": 0,
+    "configuredBinary": "/Users/danny/Documents/Codex/2026-08-30/g/tmp/native-tools/godot/app/Godot.app/Contents/MacOS/Godot"
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/prusaslicer-print-benchmark.ts",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/prusaslicer.json"
+    ],
+    "exitCode": 0,
+    "configuredBinary": "/Applications/PrusaSlicer.app/Contents/MacOS/PrusaSlicer"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/current-static-browser-delivery.py",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-static-mesh-audit.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.obj",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/obj-report.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-static-mesh-audit.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.stl",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/stl-report.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "/Applications/Blender.app/Contents/MacOS/Blender",
+      "--background",
+      "--threads",
+      "1",
+      "--python-exit-code",
+      "1",
+      "--python",
+      "scripts/blender-static-mesh-audit.py",
+      "--",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.ply",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/ply-report.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npx",
+      "vite-node",
+      "scripts/static-delivery-benchmark.ts",
+      "--obj-report",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/obj-report.json",
+      "--obj-file",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.obj",
+      "--stl-report",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/stl-report.json",
+      "--stl-file",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.stl",
+      "--ply-report",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/ply-report.json",
+      "--ply-file",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.ply",
+      "--asset-id",
+      "asphalt-surface",
+      "--asset-pack",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt-pack.zip",
+      "--usdz-file",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static/asphalt.usdz",
+      "--output",
+      "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/static-delivery.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "quality:gate"
+    ],
+    "exitCode": 1,
+    "phase": "browser refreshed, native old"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "quality:production"
+    ],
+    "exitCode": 1,
+    "phase": "current browser/native receipts"
+  }
+]

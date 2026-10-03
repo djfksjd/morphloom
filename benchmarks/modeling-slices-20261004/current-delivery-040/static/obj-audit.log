@@ -1,0 +1,35 @@
+{
+  "schema": "morphloom.blender-static-mesh-audit/0.1",
+  "status": "pass",
+  "blenderVersion": "5.2.1 LTS",
+  "format": "obj",
+  "source": "asphalt.obj",
+  "sourceBytes": 51036132,
+  "sourceSha256": "2db5177d9226da384ea7017943bf537d2d70da55543e9a0afafa6178bbe17176",
+  "objects": 1,
+  "meshes": 1,
+  "vertices": 335808,
+  "triangles": 111936,
+  "bounds": {
+    "min": [
+      -0.30000001192092896,
+      -0.22499999403953552,
+      -0.020000016316771507
+    ],
+    "max": [
+      0.30000001192092896,
+      0.22499999403953552,
+      0.023453492671251297
+    ],
+    "size": [
+      0.6000000238418579,
+      0.44999998807907104,
+      0.043453507125377655
+    ]
+  },
+  "scope": "Independent Blender application import of a Morphloom static-mesh download. Materials, rigging and animation are outside OBJ/STL/PLY parity."
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+OBJ import of 'asphalt.obj' took 210.59 ms
+
+Blender quit

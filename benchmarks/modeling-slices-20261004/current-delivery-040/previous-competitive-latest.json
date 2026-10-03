@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-10-03T19:40:03.879Z",
+  "generatedAt": "2026-10-03T08:35:58.414Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -2326,9 +2326,9 @@
     },
     "browserRoundTrip": {
       "schema": "morphloom.browser-roundtrip/0.4",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "fingerprintRevision": "morphloom-scene-fingerprint/0.6.0",
-      "generatedAt": "2026-10-03T19:35:16.160Z",
+      "generatedAt": "2026-10-03T07:00:05.113Z",
       "receiptIntegrityPass": true,
       "assets": [
         {
@@ -2337,7 +2337,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "38eaf26f21674f68",
+          "inputFingerprint": "f9b8c2579e0c338e",
           "buildFingerprint": "d551a6fff505d014",
           "preparedSceneFingerprint": "0f37aca4277b3c18"
         },
@@ -2347,7 +2347,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "084cd707e3311877",
+          "inputFingerprint": "67061adf88b909dd",
           "buildFingerprint": "1105c27b29a66804",
           "preparedSceneFingerprint": "53fd17548d495ead"
         },
@@ -2357,7 +2357,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "3efa8d1064462277",
+          "inputFingerprint": "5a891fdcf5d3a879",
           "buildFingerprint": "b2f078bc0e9cd087",
           "preparedSceneFingerprint": "9ac4dab658b20d9f"
         },
@@ -2367,7 +2367,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "fc91284a66863806",
+          "inputFingerprint": "8332d83e75c20944",
           "buildFingerprint": "f29c5455caf31d78",
           "preparedSceneFingerprint": "e31f630773c891a9"
         },
@@ -2377,7 +2377,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "cee300a4b1d74e10",
+          "inputFingerprint": "ecd85c646185ed86",
           "buildFingerprint": "aa81c975351f2d52",
           "preparedSceneFingerprint": "820a3de6647a4b53"
         },
@@ -2387,7 +2387,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "2cd0696f691ce271",
+          "inputFingerprint": "ed9e3957a6799c27",
           "buildFingerprint": "d617b036941a397b",
           "preparedSceneFingerprint": "0dd3479b3d4177f6"
         },
@@ -2397,7 +2397,7 @@
           "morphTargetPayloadParity": true,
           "texturePayloadParity": true,
           "materialPayloadParity": true,
-          "inputFingerprint": "4916e71fa09aa2d6",
+          "inputFingerprint": "e59c2b7bf9a54b58",
           "buildFingerprint": "92d399300e9f3dc1",
           "preparedSceneFingerprint": "a643566447cf76c3"
         }
@@ -2577,7 +2577,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "pass": true,
       "benchmarkAccepted": false,
       "blenderVersions": [
@@ -2658,7 +2658,7 @@
     },
     "blenderCrossDomainEdit": {
       "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "pass": true,
       "benchmarkAccepted": false,
       "cases": [
@@ -2741,7 +2741,7 @@
     },
     "unityCrossDomain": {
       "schema": "morphloom.unity-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "pass": false,
       "status": "not-run",
       "blockers": [
@@ -2754,8 +2754,8 @@
     },
     "godotCrossDomain": {
       "schema": "morphloom.godot-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
-      "generatedAt": "2026-10-03T19:38:09.698Z",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "generatedAt": "2026-10-03T06:56:45.834Z",
       "pass": true,
       "status": "pass",
       "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",
@@ -3218,9 +3218,9 @@
     },
     "prusaSlicer": {
       "schema": "morphloom.prusaslicer-print-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
-      "generatedAt": "2026-10-03T19:37:42.321Z",
+      "generatedAt": "2026-10-03T06:56:58.076Z",
       "pass": true,
       "status": "pass",
       "source": {
@@ -3293,10 +3293,10 @@
           "coarseValidationProfile": true
         },
         "gcode": {
-          "bytes": 7070485,
-          "sha256": "a5b53097589c5e5d194e4f6baa2b279fdbecea25dbcd98f0dcaabcc2c65b435c",
+          "bytes": 7070403,
+          "sha256": "fce5b1324f8fa0ba43cb59f9bde7dd634be0eb00168ec6594fab54d33c108722",
           "layers": 43,
-          "extrusionMoves": 190170
+          "extrusionMoves": 190172
         }
       },
       "blockers": [],
@@ -3305,17 +3305,17 @@
     },
     "staticDelivery": {
       "schema": "morphloom.static-delivery-proof/0.4",
-      "generatedAt": "2026-10-03T19:39:19.446Z",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "generatedAt": "2026-10-03T06:35:52.436Z",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
       "assetId": "asphalt-surface",
       "expectedSourceTriangles": 111936,
       "assetPack": {
         "source": "asphalt-pack.zip",
-        "bytes": 13022011,
-        "sha256": "6f02f6389def9461648d2675f360d4b4c12cec53f67f1b94cbf35254866cf2e5",
-        "compilerRevision": "morphloom-compiler/0.40.0",
-        "inputFingerprint": "38eaf26f21674f68",
+        "bytes": 13021998,
+        "sha256": "71af978d8e7c3e054221efca51f59d62b358fce91b6b72a40520f8b386eaed3e",
+        "compilerRevision": "morphloom-compiler/0.39.0",
+        "inputFingerprint": "f9b8c2579e0c338e",
         "browserRoundTrip": "pass"
       },
       "status": "pass",
@@ -3413,7 +3413,7 @@
       "usdz": {
         "source": "asphalt.usdz",
         "bytes": 37239190,
-        "sha256": "12604174276c7f65d7174cfa5bd795738db6a36674d393b115926bc3e24a31d5",
+        "sha256": "0a6942cd724c21ee3355d052c1f7554368406897b03ff7c7101b0e0a5caf7325",
         "validator": "/usr/bin/usdchecker",
         "status": "pass"
       },

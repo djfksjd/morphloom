@@ -1,8 +1,8 @@
 {
   "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
-  "compilerRevision": "morphloom-compiler/0.40.0",
-  "generatedAt": "2026-10-03T19:38:08.210Z",
-  "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA",
+  "compilerRevision": "morphloom-compiler/0.39.0",
+  "generatedAt": "2026-10-03T18:06:51.090Z",
+  "artifactDirectory": "/Users/danny/Documents/morphloom/outputs/tangent-determinism-goal-20261004/fixtures/blender-run-yfAJ9X",
   "executionProfile": {
     "schema": "morphloom.blender-execution-profile/0.1",
     "name": "background-single-thread",
@@ -48,7 +48,7 @@
         "name": "background-single-thread",
         "threads": 1
       },
-      "elapsedMs": 14339.768750000001,
+      "elapsedMs": 15955.055790999999,
       "riggedPayload": null,
       "rawValidation": {
         "status": "blocked",
@@ -168,7 +168,7 @@
         "name": "background-single-thread",
         "threads": 1
       },
-      "elapsedMs": 1590.1351250000007,
+      "elapsedMs": 1872.8214590000025,
       "riggedPayload": null,
       "rawValidation": {
         "status": "pass",
@@ -285,7 +285,7 @@
         "name": "background-single-thread",
         "threads": 1
       },
-      "elapsedMs": 17144.240500000004,
+      "elapsedMs": 18537.253875,
       "riggedPayload": null,
       "rawValidation": {
         "status": "blocked",
@@ -410,7 +410,7 @@
         "name": "background-single-thread",
         "threads": 1
       },
-      "elapsedMs": 3858.0999999999985,
+      "elapsedMs": 3825.8677499999976,
       "riggedPayload": {
         "schema": "morphloom.rigged-payload-audit/0.1",
         "pass": true,
@@ -542,7 +542,7 @@
         "name": "background-single-thread",
         "threads": 1
       },
-      "elapsedMs": 9559.321041999996,
+      "elapsedMs": 6787.542999999998,
       "riggedPayload": null,
       "rawValidation": {
         "status": "pass",

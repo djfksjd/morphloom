@@ -1,0 +1,34 @@
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.glb",
+  "output": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.repaired.glb",
+  "inputBytes": 1087040,
+  "outputBytes": 1083848,
+  "outputSha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53",
+  "tangentAccessors": 16,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 0,
+  "restoredMaterials": 0,
+  "materialSourceSha256": null,
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 0,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 17,
+      "meshes": 16,
+      "materials": 16,
+      "skins": 0,
+      "animations": 0
+    }
+  }
+}

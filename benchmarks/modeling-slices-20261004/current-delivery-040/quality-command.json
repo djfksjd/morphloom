@@ -1,0 +1,6 @@
+{
+  "command": "npm run quality:gate",
+  "exitCode": 1,
+  "browserReceipts": "7 current native downloads, 4/4 release binding passed",
+  "competitive": "ran and failed; native/asset-pack stale revision and existing cooling UV infos conflict remain"
+}

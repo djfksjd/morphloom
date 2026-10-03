@@ -1,0 +1,301 @@
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": true,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "field-human-runtime.glb",
+  "sourceBytes": 5065808,
+  "sourceSha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9",
+  "roundTrip": "field-human-runtime.blender.glb",
+  "roundTripBytes": 3923288,
+  "roundTripSha256": "9da21935d6a20a862e31b006fe7f9004a9742f44da7fa334bdf48c82a343c708",
+  "boundsErrorMm": 0.36619603633880615,
+  "boundsToleranceMm": 0.5,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 5,
+    "excludedImporterHelpers": 1,
+    "meshes": 3,
+    "vertices": 28180,
+    "polygons": 51934,
+    "materials": 3,
+    "images": 4,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2",
+      "Image_3"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 10,
+    "skinnedVertices": 25480,
+    "weightedVertices": 25480,
+    "weightedCoverage": 1.0,
+    "armatures": 1,
+    "bones": 49,
+    "boneNames": [
+      "ankle_L",
+      "ankle_R",
+      "chest",
+      "elbow_L",
+      "elbow_R",
+      "head",
+      "hip_L",
+      "hip_R",
+      "hips",
+      "index_01_L",
+      "index_01_R",
+      "index_02_L",
+      "index_02_R",
+      "index_03_L",
+      "index_03_R",
+      "knee_L",
+      "knee_R",
+      "little_01_L",
+      "little_01_R",
+      "little_02_L",
+      "little_02_R",
+      "little_03_L",
+      "little_03_R",
+      "middle_01_L",
+      "middle_01_R",
+      "middle_02_L",
+      "middle_02_R",
+      "middle_03_L",
+      "middle_03_R",
+      "neck",
+      "ring_01_L",
+      "ring_01_R",
+      "ring_02_L",
+      "ring_02_R",
+      "ring_03_L",
+      "ring_03_R",
+      "shoulder_L",
+      "shoulder_R",
+      "spine",
+      "thumb_01_L",
+      "thumb_01_R",
+      "thumb_02_L",
+      "thumb_02_R",
+      "thumb_03_L",
+      "thumb_03_R",
+      "toe_L",
+      "toe_R",
+      "wrist_L",
+      "wrist_R"
+    ],
+    "actions": 22,
+    "actionNames": [
+      "morphloom_breathe_idle",
+      "morphloom_crouch_idle",
+      "morphloom_crouch_walk",
+      "morphloom_hand_gesture",
+      "morphloom_idle_preview",
+      "morphloom_jump_air",
+      "morphloom_jump_land",
+      "morphloom_jump_start",
+      "morphloom_pick_up",
+      "morphloom_point",
+      "morphloom_pull",
+      "morphloom_push",
+      "morphloom_run_cycle",
+      "morphloom_sprint_cycle",
+      "morphloom_strafe_left",
+      "morphloom_strafe_right",
+      "morphloom_turn_in_place",
+      "morphloom_turn_left_90",
+      "morphloom_turn_right_90",
+      "morphloom_walk_backward",
+      "morphloom_walk_cycle",
+      "morphloom_wave"
+    ],
+    "geometryMoments": {
+      "cornerCount": 155802,
+      "cornerSum": [
+        101.80184065628691,
+        844.2959749151269,
+        175372.91234208032
+      ],
+      "cornerSumSquares": [
+        12235.722161220536,
+        1691.6767631612731,
+        249626.3515428137
+      ],
+      "surfaceAreaSquareMeters": 3.6367970292691463
+    },
+    "boundsMeters": {
+      "min": [
+        -0.5599526166915894,
+        -0.22326228022575378,
+        0.00018545985221862793
+      ],
+      "max": [
+        0.5599525570869446,
+        0.2234179526567459,
+        1.7994414567947388
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 5,
+    "excludedImporterHelpers": 1,
+    "meshes": 3,
+    "vertices": 28209,
+    "polygons": 51934,
+    "materials": 3,
+    "images": 4,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_2",
+      "Image_3"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 10,
+    "skinnedVertices": 25509,
+    "weightedVertices": 25509,
+    "weightedCoverage": 1.0,
+    "armatures": 1,
+    "bones": 49,
+    "boneNames": [
+      "ankle_L",
+      "ankle_R",
+      "chest",
+      "elbow_L",
+      "elbow_R",
+      "head",
+      "hip_L",
+      "hip_R",
+      "hips",
+      "index_01_L",
+      "index_01_R",
+      "index_02_L",
+      "index_02_R",
+      "index_03_L",
+      "index_03_R",
+      "knee_L",
+      "knee_R",
+      "little_01_L",
+      "little_01_R",
+      "little_02_L",
+      "little_02_R",
+      "little_03_L",
+      "little_03_R",
+      "middle_01_L",
+      "middle_01_R",
+      "middle_02_L",
+      "middle_02_R",
+      "middle_03_L",
+      "middle_03_R",
+      "neck",
+      "ring_01_L",
+      "ring_01_R",
+      "ring_02_L",
+      "ring_02_R",
+      "ring_03_L",
+      "ring_03_R",
+      "shoulder_L",
+      "shoulder_R",
+      "spine",
+      "thumb_01_L",
+      "thumb_01_R",
+      "thumb_02_L",
+      "thumb_02_R",
+      "thumb_03_L",
+      "thumb_03_R",
+      "toe_L",
+      "toe_R",
+      "wrist_L",
+      "wrist_R"
+    ],
+    "actions": 22,
+    "actionNames": [
+      "morphloom_breathe_idle",
+      "morphloom_crouch_idle",
+      "morphloom_crouch_walk",
+      "morphloom_hand_gesture",
+      "morphloom_idle_preview",
+      "morphloom_jump_air",
+      "morphloom_jump_land",
+      "morphloom_jump_start",
+      "morphloom_pick_up",
+      "morphloom_point",
+      "morphloom_pull",
+      "morphloom_push",
+      "morphloom_run_cycle",
+      "morphloom_sprint_cycle",
+      "morphloom_strafe_left",
+      "morphloom_strafe_right",
+      "morphloom_turn_in_place",
+      "morphloom_turn_left_90",
+      "morphloom_turn_right_90",
+      "morphloom_walk_backward",
+      "morphloom_walk_cycle",
+      "morphloom_wave"
+    ],
+    "geometryMoments": {
+      "cornerCount": 155802,
+      "cornerSum": [
+        101.80195514190336,
+        844.2955802694887,
+        175372.9168266359
+      ],
+      "cornerSumSquares": [
+        12235.722161220336,
+        1691.6767232840807,
+        249626.3665478375
+      ],
+      "surfaceAreaSquareMeters": 3.6367971512714354
+    },
+    "boundsMeters": {
+      "min": [
+        -0.5601059794425964,
+        -0.2236284762620926,
+        6.955850403755903e-05
+      ],
+      "max": [
+        0.5601060390472412,
+        0.2234179526567459,
+        1.7994414567947388
+      ]
+    }
+  }
+}

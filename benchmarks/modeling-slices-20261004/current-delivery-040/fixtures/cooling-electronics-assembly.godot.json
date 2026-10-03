@@ -1,0 +1,48 @@
+{
+  "blockers": [],
+  "godot_version": "4.7.2-stable (official)",
+  "pass": true,
+  "schema": "morphloom.godot-cross-domain-import/0.1",
+  "source": "res://fixtures/cooling-electronics-assembly.glb",
+  "source_sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7",
+  "stats": {
+    "animation_clips": 0,
+    "animation_names": [],
+    "blend_shapes": 0,
+    "bones": 0,
+    "bounds_max_meters": [
+      0.162000000476837,
+      0.12049999833107,
+      0.101999998092651
+    ],
+    "bounds_max_nodes": [
+      "md10cB",
+      "cold_plate",
+      "frame_front"
+    ],
+    "bounds_min_meters": [
+      -0.155000001192093,
+      -0.0300000011920929,
+      -0.101999998092651
+    ],
+    "bounds_min_nodes": [
+      "frame_front",
+      "frame_front",
+      "frame_rear"
+    ],
+    "bounds_size_meters": [
+      0.31700000166893,
+      0.150499999523163,
+      0.203999996185303
+    ],
+    "materials": 322,
+    "meshes": 322,
+    "nodes": 325,
+    "skeletons": 0,
+    "skinned_meshes": 0,
+    "texture_slots": 897,
+    "textures": 16,
+    "triangles": 272560,
+    "vertices": 353631
+  }
+}

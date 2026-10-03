@@ -1,0 +1,245 @@
+{
+  "schema": "morphloom.blender-roundtrip/0.2",
+  "pass": true,
+  "exportTangentsRequiredBySource": true,
+  "blenderVersion": "5.2.1 LTS",
+  "source": "ornate-knife-product.glb",
+  "sourceBytes": 1154560,
+  "sourceSha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+  "roundTrip": "ornate-knife-product.blender.glb",
+  "roundTripBytes": 1087040,
+  "roundTripSha256": "5f3be40c6f06b784679c96d7e558434ab3e5e08145ba677b7ab944289b196dc4",
+  "boundsErrorMm": 0.0,
+  "boundsToleranceMm": 0.1,
+  "geometryParity": true,
+  "imageParity": true,
+  "skinningParity": true,
+  "lostImageDimensions": [
+    [
+      1,
+      1
+    ]
+  ],
+  "addedImageDimensions": [],
+  "imported": {
+    "objects": 17,
+    "excludedImporterHelpers": 0,
+    "meshes": 16,
+    "vertices": 18615,
+    "polygons": 18930,
+    "materials": 16,
+    "images": 13,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_10",
+      "Image_11",
+      "Image_12",
+      "Image_2",
+      "Image_3",
+      "Image_4",
+      "Image_5",
+      "Image_6",
+      "Image_7",
+      "Image_8",
+      "Image_9"
+    ],
+    "imageDimensions": [
+      [
+        1,
+        1
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 56790,
+      "cornerSum": [
+        -43.372169675974874,
+        -106.80115146712342,
+        -1759.782912106748
+      ],
+      "cornerSumSquares": [
+        30.207984370926816,
+        5.476091619412457,
+        353.02578348031625
+      ],
+      "surfaceAreaSquareMeters": 0.0639210715329539
+    },
+    "boundsMeters": {
+      "min": [
+        -0.06013668701052666,
+        -0.020335663110017776,
+        -0.1289999932050705
+      ],
+      "max": [
+        0.06013668701052666,
+        0.020335663110017776,
+        0.3440000116825104
+      ]
+    }
+  },
+  "reopened": {
+    "objects": 17,
+    "excludedImporterHelpers": 0,
+    "meshes": 16,
+    "vertices": 18620,
+    "polygons": 18930,
+    "materials": 16,
+    "images": 12,
+    "imageNames": [
+      "Image_0",
+      "Image_1",
+      "Image_10",
+      "Image_11",
+      "Image_2",
+      "Image_3",
+      "Image_4",
+      "Image_5",
+      "Image_6",
+      "Image_7",
+      "Image_8",
+      "Image_9"
+    ],
+    "imageDimensions": [
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        64,
+        64
+      ]
+    ],
+    "shapeKeys": 0,
+    "skinnedVertices": 0,
+    "weightedVertices": 0,
+    "weightedCoverage": 1.0,
+    "armatures": 0,
+    "bones": 0,
+    "boneNames": [],
+    "actions": 0,
+    "actionNames": [],
+    "geometryMoments": {
+      "cornerCount": 56790,
+      "cornerSum": [
+        -43.372169664275134,
+        -106.80115773119905,
+        -1759.782912110939
+      ],
+      "cornerSumSquares": [
+        30.2079843507962,
+        5.476091098935738,
+        353.02578349645887
+      ],
+      "surfaceAreaSquareMeters": 0.06392107150945599
+    },
+    "boundsMeters": {
+      "min": [
+        -0.06013668701052666,
+        -0.020335663110017776,
+        -0.1289999932050705
+      ],
+      "max": [
+        0.06013668701052666,
+        0.020335663110017776,
+        0.3440000116825104
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/asphalt-print-surface.glb",
+    "bytes": 17745400,
+    "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/asphalt-print-surface.edited.glb",
+    "bytes": 17744564,
+    "sha256": "5c8bd67e6fd23d86e74cc67f039db96c784f4795933b026ad7684a45ff7141f1"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/asphalt-print-surface.edited-stability.glb",
+    "bytes": 17744564,
+    "sha256": "5c8bd67e6fd23d86e74cc67f039db96c784f4795933b026ad7684a45ff7141f1"
+  },
+  "edit": {
+    "component": "asphalt_core_sample",
+    "kind": "local-relief",
+    "amplitudeMm": 1.5,
+    "radiusFraction": 0.18,
+    "centerUv": [
+      0.57,
+      0.43
+    ],
+    "heightAxis": 2,
+    "changedVertices": 16782,
+    "totalVertices": 335808,
+    "maximumDisplacementMm": 1.499485192349417
+  },
+  "meshCount": 1,
+  "unchangedMeshes": 0,
+  "maximumUnchangedCenterDriftMm": 0.0,
+  "maximumUnchangedSizeDriftMm": 0.0,
+  "topologyChanges": [],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 0,
+    "actions": 0,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}

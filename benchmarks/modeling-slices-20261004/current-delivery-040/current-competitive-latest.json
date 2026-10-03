@@ -1,6 +1,6 @@
 {
   "schema": "morphloom.competitive-benchmark/0.1",
-  "generatedAt": "2026-10-03T19:40:03.879Z",
+  "generatedAt": "2026-10-03T19:35:45.600Z",
   "comparisonPolicy": "Capability and executable-gate comparison. This does not claim perceptual superiority without a same-reference blind visual evaluation.",
   "visualSuperiorityPolicy": {
     "status": "not-established",
@@ -2577,7 +2577,7 @@
     },
     "blenderCrossDomain": {
       "schema": "morphloom.blender-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "pass": true,
       "benchmarkAccepted": false,
       "blenderVersions": [
@@ -2658,7 +2658,7 @@
     },
     "blenderCrossDomainEdit": {
       "schema": "morphloom.blender-cross-domain-edit-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "pass": true,
       "benchmarkAccepted": false,
       "cases": [
@@ -2754,8 +2754,8 @@
     },
     "godotCrossDomain": {
       "schema": "morphloom.godot-cross-domain-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
-      "generatedAt": "2026-10-03T19:38:09.698Z",
+      "compilerRevision": "morphloom-compiler/0.39.0",
+      "generatedAt": "2026-10-03T06:56:45.834Z",
       "pass": true,
       "status": "pass",
       "scope": "Actual Godot native PackedScene import with source-byte, geometry, material, texture, rig, animation, axis-normalized bounds, and delivered-vertex surface-relief parity.",
@@ -3214,13 +3214,13 @@
       ],
       "blockers": [],
       "limitation": "This proves native Godot import integrity, not gameplay quality, physics tuning, target-device performance, or final art approval.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": false
     },
     "prusaSlicer": {
       "schema": "morphloom.prusaslicer-print-proof/0.1",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
-      "generatedAt": "2026-10-03T19:37:42.321Z",
+      "generatedAt": "2026-10-03T06:56:58.076Z",
       "pass": true,
       "status": "pass",
       "source": {
@@ -3293,29 +3293,29 @@
           "coarseValidationProfile": true
         },
         "gcode": {
-          "bytes": 7070485,
-          "sha256": "a5b53097589c5e5d194e4f6baa2b279fdbecea25dbcd98f0dcaabcc2c65b435c",
+          "bytes": 7070403,
+          "sha256": "fce5b1324f8fa0ba43cb59f9bde7dd634be0eb00168ec6594fab54d33c108722",
           "layers": 43,
-          "extrusionMoves": 190170
+          "extrusionMoves": 190172
         }
       },
       "blockers": [],
       "limitation": "This proves native manifold reopen and bounded coarse toolpath generation under a declared generic 650 × 500 mm virtual FFF envelope. It is not a production print profile; a real printer, nozzle, filament, tolerances, supports, orientation and safety still require target-machine validation.",
-      "benchmarkAccepted": true
+      "benchmarkAccepted": false
     },
     "staticDelivery": {
       "schema": "morphloom.static-delivery-proof/0.4",
-      "generatedAt": "2026-10-03T19:39:19.446Z",
-      "compilerRevision": "morphloom-compiler/0.40.0",
+      "generatedAt": "2026-10-03T06:35:52.436Z",
+      "compilerRevision": "morphloom-compiler/0.39.0",
       "staticDeliveryRevision": "morphloom-static-delivery/0.6.0",
       "assetId": "asphalt-surface",
       "expectedSourceTriangles": 111936,
       "assetPack": {
         "source": "asphalt-pack.zip",
-        "bytes": 13022011,
-        "sha256": "6f02f6389def9461648d2675f360d4b4c12cec53f67f1b94cbf35254866cf2e5",
-        "compilerRevision": "morphloom-compiler/0.40.0",
-        "inputFingerprint": "38eaf26f21674f68",
+        "bytes": 13021998,
+        "sha256": "71af978d8e7c3e054221efca51f59d62b358fce91b6b72a40520f8b386eaed3e",
+        "compilerRevision": "morphloom-compiler/0.39.0",
+        "inputFingerprint": "f9b8c2579e0c338e",
         "browserRoundTrip": "pass"
       },
       "status": "pass",
@@ -3413,14 +3413,18 @@
       "usdz": {
         "source": "asphalt.usdz",
         "bytes": 37239190,
-        "sha256": "12604174276c7f65d7174cfa5bd795738db6a36674d393b115926bc3e24a31d5",
+        "sha256": "0a6942cd724c21ee3355d052c1f7554368406897b03ff7c7101b0e0a5caf7325",
         "validator": "/usr/bin/usdchecker",
         "status": "pass"
       },
       "blockers": [],
       "limitation": "OBJ/STL/PLY are static mesh handoffs, not STEP/BREP, rig or PBR interchange. USDZ is Apple AR scene interchange.",
-      "benchmarkAccepted": true,
-      "competitiveBlockers": []
+      "benchmarkAccepted": false,
+      "competitiveBlockers": [
+        "Asset pack compiler revision morphloom-compiler/0.39.0 does not match morphloom-compiler/0.40.0.",
+        "Asset-pack compiler revision is stale.",
+        "No matching release-ready current browser receipt preserves all GLB payload classes."
+      ]
     },
     "cameraCalibration": {
       "status": "calibrated",
@@ -3623,12 +3627,12 @@
     {
       "capability": "OBJ/STL/PLY browser export, loader reopen and independent Blender import parity",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "111,936 triangles preserved for asphalt-surface; STL uses explicit millimetre coordinates and printer Z-up; unit-normalized envelope drift 0.000031 mm"
+      "morphloom": "blocked"
     },
     {
       "capability": "USDZ Apple conformance validation",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "pass—/usr/bin/usdchecker"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unity application import execution",
@@ -3638,12 +3642,12 @@
     {
       "capability": "Godot application import execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "Godot 4.7.2-stable (official): five-domain native PackedScene import parity plus delivered-vertex asphalt relief pass"
+      "morphloom": "blocked"
     },
     {
       "capability": "PrusaSlicer manifold reopen and toolpath execution",
       "img2threejs": "not established in pinned audit",
-      "morphloom": "PrusaSlicer 2.9.6: 111,936 facets, Z-up manifold reopen and 43 toolpath layers"
+      "morphloom": "blocked"
     },
     {
       "capability": "Unreal application import execution",

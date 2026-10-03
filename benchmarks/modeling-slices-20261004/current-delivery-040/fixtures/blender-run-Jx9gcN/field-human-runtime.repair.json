@@ -1,0 +1,34 @@
+{
+  "schema": "morphloom.gltf-interchange-repair/0.1",
+  "pass": true,
+  "input": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.blender.glb",
+  "output": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-Jx9gcN/field-human-runtime.blender.repaired.glb",
+  "inputBytes": 3923288,
+  "outputBytes": 3856752,
+  "outputSha256": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1",
+  "tangentAccessors": 3,
+  "repairedTangents": 0,
+  "removedUnusedTangentAccessors": 0,
+  "restoredMaterials": 0,
+  "materialSourceSha256": null,
+  "validation": {
+    "status": "pass",
+    "validator": "Khronos glTF Validator",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0,
+    "infos": 0,
+    "hints": 0,
+    "truncated": false,
+    "issueCodes": [],
+    "independentRead": {
+      "status": "pass",
+      "parser": "glTF Transform WebIO",
+      "nodes": 53,
+      "meshes": 3,
+      "materials": 3,
+      "skins": 1,
+      "animations": 22
+    }
+  }
+}

@@ -1,0 +1,1509 @@
+{
+  "head": "0e94ded5097e6fc364c5771b7f836ab698024fb2",
+  "compiler": "morphloom-compiler/0.40.0",
+  "createdUtc": "2026-10-03T19:43:05.024847+00:00",
+  "files": {
+    "current-quality-latest.json": {
+      "bytes": 72055,
+      "sha256": "642a7e971748d4d4b9c04d9e92c6be42bcc8325927eb7623930814e24243b08a"
+    },
+    "quality-command.json": {
+      "bytes": 250,
+      "sha256": "8fc55c13652e80992d3ae3c5a8c967fbc4e1982e45822b21cb0843168d9a37d3"
+    },
+    "stale-single-report-diagnosis.json": {
+      "bytes": 461,
+      "sha256": "c1bf20ec0044f8f7cb4e524afbaac8adaa345d6bc343faa7b633d8f59abad573"
+    },
+    "previous-competitive-latest.json": {
+      "bytes": 132219,
+      "sha256": "7556c57e5918505aed2a01c78d7a26e77ee22dc65bbec40f07257abb7e3d22d6"
+    },
+    "browser.log": {
+      "bytes": 67,
+      "sha256": "207b41f34ae66814999a39464dc370dd2aafb3a3edca745934a4ecbb84ea2717"
+    },
+    "blender-edit.log": {
+      "bytes": 457,
+      "sha256": "f587800e5a1c57d52eb2971c2d46c1a204b65c2837cb0a9b99d0bc82824a998b"
+    },
+    "previous-static-delivery-latest.json": {
+      "bytes": 3186,
+      "sha256": "917cb383fbebd394357da4c55d14fa9645d6cba5416526168084f97bf2c1ab7b"
+    },
+    "quality-gate.log": {
+      "bytes": 204307,
+      "sha256": "3e2f8ace6650f31df3fe9bcbd43b4ce80be591ce835da4489c59f20790819269"
+    },
+    "blender-cross-domain.log": {
+      "bytes": 445,
+      "sha256": "66e290a16f6049458ec30e2cd7c8581385cf58564a715686ac1afc64719a2cdf"
+    },
+    "static-browser.log": {
+      "bytes": 37,
+      "sha256": "7f0b6b442057d95f2fdbf6982da974a113490709b619433152a0b2f541e35da4"
+    },
+    "final-competitive-latest.json": {
+      "bytes": 132219,
+      "sha256": "71aa66a8d767c1fa10579c31d4f43c63dc399e8ff4d3fabe8f292f3938ef11a0"
+    },
+    "web-hero-proof.json": {
+      "bytes": 3766,
+      "sha256": "34715dabdc2a572ba2620b50415ffb6166948c755a66fd405340a7dcd90f9b91"
+    },
+    "quality-production-current-native.log": {
+      "bytes": 204497,
+      "sha256": "8abe2a790e91a3e2625fad7a728590f29e67fd3a9779fe556085167095a32e0d"
+    },
+    "final-quality-latest.json": {
+      "bytes": 72055,
+      "sha256": "729dcf882ccecfd184d584df4697d2b93892a8cc7c5fcea946c34bff60640c9e"
+    },
+    "cooler-proof.json": {
+      "bytes": 3189,
+      "sha256": "f65a394f6dd6e1c4e378dc46ba22f2e28ca06de4849a6ccdd7e510b4a602897a"
+    },
+    "godot.log": {
+      "bytes": 335,
+      "sha256": "ea38e8d86632922beedcd2393228deb2beda5496ef7a7984f74dde8a6fbdda1e"
+    },
+    "blender-edit.json": {
+      "bytes": 20990,
+      "sha256": "8effe507c940a0ad2f91e3c66cc3b55a9000160418ae7204e3c59ec4f93e550b"
+    },
+    "moderncat-concept-proof.json": {
+      "bytes": 2612,
+      "sha256": "b642ed8e04105530c788c08652b7f713a4ec46f67ee8174b332517c983012cf4"
+    },
+    "previous-quality-latest.json": {
+      "bytes": 72055,
+      "sha256": "2958af98ff0b61a3a9c25443a2d077055d28ed954645cd160d6161df6229905b"
+    },
+    "previous-blender-cross-domain-latest.json": {
+      "bytes": 47768,
+      "sha256": "7d84a8fb48f50021b5807633ca7ee12e233f40b09a2b1a8988df280d982fbfa0"
+    },
+    "laurel-homes-proof.json": {
+      "bytes": 874,
+      "sha256": "2187554031321c4a5ad0094196ec3ce5f18b514a0e25a76d9eba49ba2f370629"
+    },
+    "static-delivery.json": {
+      "bytes": 3186,
+      "sha256": "26c3147acfc1beeaabdb457e2183407c3f06424352ba12a731f706c412003a7e"
+    },
+    "blender-cross-domain.json": {
+      "bytes": 47668,
+      "sha256": "988d1aaba48d9d606c153deca0f150cc61b90a8ae973acf32f01727607d1dfca"
+    },
+    "asphalt-surface-proof.json": {
+      "bytes": 2032,
+      "sha256": "e181ef5f0f58d3104efa5374ceb0bfaf9d85596197cd1c21a6c8e2e76097198c"
+    },
+    "CONTRACT.md": {
+      "bytes": 831,
+      "sha256": "044d240ef495db7009650cd44869e8095e25904c423e957c645b44c4e30428e2"
+    },
+    "field-human-proof.json": {
+      "bytes": 4332,
+      "sha256": "d370832674bbf452ee8bae20686dd50f1d5d73516d400c844a483a28c75914bb"
+    },
+    "commands.json": {
+      "bytes": 5289,
+      "sha256": "3a9a6f47ccdcd78cd2735afdae1d37da55630ef02856928f847831b57ef4805c"
+    },
+    "browser-observed-quality.json": {
+      "bytes": 14418,
+      "sha256": "599dd58ffe657e27a3bda420707b49114f43977f0cf6764d6db5b15a348fe48f"
+    },
+    "static-delivery.log": {
+      "bytes": 3186,
+      "sha256": "26c3147acfc1beeaabdb457e2183407c3f06424352ba12a731f706c412003a7e"
+    },
+    "blade-proof.json": {
+      "bytes": 1465,
+      "sha256": "6e28072dbcfb32b2f9c3a84661009f85535df5ee0c39453c0f5032833537aa41"
+    },
+    "previous-browser-roundtrip.json": {
+      "bytes": 4332,
+      "sha256": "aec31883cc9c7acf6acb6fad37626402c183574d1cdaf31b9bf86e0761464504"
+    },
+    "prusaslicer.log": {
+      "bytes": 578,
+      "sha256": "a92312c3a77d5bb069528341e1e474e262312fbd4447570add79e3889403944c"
+    },
+    "fixtures.log": {
+      "bytes": 7276,
+      "sha256": "4e86889f2d58558a144188e7d6e6e7d6a42f7b3171a0fd17bd5bc493704fbcdc"
+    },
+    "prusaslicer.json": {
+      "bytes": 2203,
+      "sha256": "eab97da2f7f13ef0ec6d6051b7a4eb764dda38dde06d70db3f83952ce671f803"
+    },
+    "current-competitive-latest.json": {
+      "bytes": 132139,
+      "sha256": "4abeba210ae8356e15251fe34aace85a654c9027c4a8e4bcce58a8496bbfaf80"
+    },
+    "godot.json": {
+      "bytes": 13589,
+      "sha256": "7a76352f62c03284b99f4916ddd473d6d2ca638ee830172f194f0be950d8af1d"
+    },
+    "previous-godot-cross-domain-latest.json": {
+      "bytes": 13589,
+      "sha256": "e88546a48b5fa49d80c44ed449af6e33dfd46aff44125fbd83497dbb4b18d12f"
+    },
+    "previous-blender-cross-domain-edit-latest.json": {
+      "bytes": 20989,
+      "sha256": "18c10198edd4d3e0bad04e7ca3dc6ba394196311644993062fbdfdbd660b4d25"
+    },
+    "previous-prusaslicer-latest.json": {
+      "bytes": 2203,
+      "sha256": "887f6438eee46737ffbfbcee092b472e27e92bbf7e38010a021f353733e24088"
+    },
+    "static/obj-report.json": {
+      "bytes": 825,
+      "sha256": "a6511f3fb6c6098644ad4d1fe351bc081916430f94c37aebafe818166df08852"
+    },
+    "static/ply-audit.log": {
+      "bytes": 944,
+      "sha256": "4185e9cfc510b1d53837697e42a6d08df817dab43b76b4e6ea59e007a26fef1d"
+    },
+    "static/asphalt.stl": {
+      "bytes": 5596884,
+      "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00"
+    },
+    "static/browser-downloads.json": {
+      "bytes": 279,
+      "sha256": "6c993fef944874df5eddb15a8dd1c2aaabb8ce43ea24b48ab223f674319de8ad"
+    },
+    "static/ply-report.json": {
+      "bytes": 824,
+      "sha256": "08005ceca4bb15f08eae3c39ab663aab4bfd4b7277994319e0868bffbd515b5b"
+    },
+    "static/obj-audit.log": {
+      "bytes": 946,
+      "sha256": "8ffa1725991b88d541380d6675902ef9db23216dba4e95adca177893cb5a3918"
+    },
+    "static/asphalt.usdz": {
+      "bytes": 37239190,
+      "sha256": "12604174276c7f65d7174cfa5bd795738db6a36674d393b115926bc3e24a31d5"
+    },
+    "static/asphalt-pack.zip": {
+      "bytes": 13022011,
+      "sha256": "6f02f6389def9461648d2675f360d4b4c12cec53f67f1b94cbf35254866cf2e5"
+    },
+    "static/stl-audit.log": {
+      "bytes": 830,
+      "sha256": "f337b2ec0aef5369b019d99085660a0cb945c68f499e3fcd2037a6161bc6ef17"
+    },
+    "static/asphalt.obj": {
+      "bytes": 51036132,
+      "sha256": "2db5177d9226da384ea7017943bf537d2d70da55543e9a0afafa6178bbe17176"
+    },
+    "static/stl-report.json": {
+      "bytes": 719,
+      "sha256": "7a02572fc4fb2e36095a536776900ce1e784dae480590ed214946e8cc6b5343b"
+    },
+    "static/asphalt.ply": {
+      "bytes": 12201286,
+      "sha256": "1dbe6e98b5ff7ce7ab9717ca3cb4d77d92f073f326e484de42814015a5a65d1e"
+    },
+    "fixtures/asphalt-print-surface.stl": {
+      "bytes": 5596884,
+      "sha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00"
+    },
+    "fixtures/laurel-homes-architecture.glb": {
+      "bytes": 29636712,
+      "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+    },
+    "fixtures/laurel-homes-architecture.godot.json": {
+      "bytes": 1175,
+      "sha256": "31656b9411feedd481d3dc941d901807cbf651da823a5bb5efefa4a8e542a5ee"
+    },
+    "fixtures/ornate-knife-product.glb": {
+      "bytes": 1154560,
+      "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+    },
+    "fixtures/field-human-runtime.godot.json": {
+      "bytes": 1779,
+      "sha256": "ba0d817e156f7ae77de459625770a4dada839824d3d569478c27433755d322a4"
+    },
+    "fixtures/cooling-electronics-assembly.godot.json": {
+      "bytes": 1106,
+      "sha256": "d7555717346e7f1b11118b22554d646bfc4a17b3c049de49e3565e6f74af3cbf"
+    },
+    "fixtures/field-human-runtime.glb": {
+      "bytes": 5065808,
+      "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+    },
+    "fixtures/cooling-electronics-assembly.glb": {
+      "bytes": 18622544,
+      "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+    },
+    "fixtures/asphalt-print-surface.glb": {
+      "bytes": 17745400,
+      "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+    },
+    "fixtures/ornate-knife-product.godot.json": {
+      "bytes": 1099,
+      "sha256": "4810eae43bcf022ce72648a720b081a6505d303ebb2d84b73681433cf322eb31"
+    },
+    "fixtures/manifest.json": {
+      "bytes": 6980,
+      "sha256": "e3245f342e8e7c625a50b00135b3ad7f71547a963ff5c0d9a86551e68168fc1e"
+    },
+    "fixtures/asphalt-print-surface.godot.json": {
+      "bytes": 1294,
+      "sha256": "ef56e134ad0463e009ecee3d5be2e088070d6caded781178bf2e7c70bd007215"
+    },
+    "fixtures/godot-import.log": {
+      "bytes": 5310,
+      "sha256": "95420c397ee16b615554ec3cb48244883254a6e45b661fe08388b5fb533d5e52"
+    },
+    "fixtures/asphalt-print-surface.gcode": {
+      "bytes": 7070485,
+      "sha256": "a5b53097589c5e5d194e4f6baa2b279fdbecea25dbcd98f0dcaabcc2c65b435c"
+    },
+    "fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.json": {
+      "bytes": 4651,
+      "sha256": "d37faa46a465c738e604dc7d0aea03d79c016dc19f630fb711d01c6da5a33dfa"
+    },
+    "fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.glb": {
+      "bytes": 1087040,
+      "sha256": "5f3be40c6f06b784679c96d7e558434ab3e5e08145ba677b7ab944289b196dc4"
+    },
+    "fixtures/blender-run-Jx9gcN/ornate-knife-product.repair.json": {
+      "bytes": 1097,
+      "sha256": "d3e828caf52a00cdaa3ac1cfc2e9d5c6f5eb9f084ca54825fadd27d9b13806b9"
+    },
+    "fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.repaired.glb": {
+      "bytes": 17740400,
+      "sha256": "fbea92d7a1032a08650f01cfa8577efa38f0b1959bec07415d4a7142c2cc738b"
+    },
+    "fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.repaired.glb": {
+      "bytes": 16576700,
+      "sha256": "a556db26b662741a52aec69e80ae8b85674f283fe4a3d798e52be8a68fa35df4"
+    },
+    "fixtures/blender-run-Jx9gcN/field-human-runtime.blender.glb": {
+      "bytes": 3923288,
+      "sha256": "9da21935d6a20a862e31b006fe7f9004a9742f44da7fa334bdf48c82a343c708"
+    },
+    "fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.repaired.glb": {
+      "bytes": 27797708,
+      "sha256": "c9338a90672d2261b549e74c4167dcd6d3f0b09b6e617cf9040fa02b8df8782e"
+    },
+    "fixtures/blender-run-Jx9gcN/field-human-runtime.repair.json": {
+      "bytes": 1093,
+      "sha256": "9f0db8d88d8a5247604f46882bdfb9702b772ccdd4fafd454653f584e162b54e"
+    },
+    "fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.repaired.glb": {
+      "bytes": 1083848,
+      "sha256": "aad830bc27e1777b7fc92a9008863568e13b0551cafb0c60ccf12e19bebb5d53"
+    },
+    "fixtures/blender-run-Jx9gcN/field-human-runtime.blender.json": {
+      "bytes": 6329,
+      "sha256": "da3a54f63b9256e285115101591618c31c2f260f0fab767972e4492fce551749"
+    },
+    "fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.repair.json": {
+      "bytes": 1151,
+      "sha256": "c63670d53e6f7d1e1d477e801018aec9c9501fb1429cf1b252b220e3a13afc3b"
+    },
+    "fixtures/blender-run-Jx9gcN/cooling-electronics-assembly.blender.glb": {
+      "bytes": 17712160,
+      "sha256": "3f253655f1764f948ed2d116936b4cce92089a8f15d7d8d28694b528a3d119a1"
+    },
+    "fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.json": {
+      "bytes": 5092,
+      "sha256": "f49f3adea21d03872adad48c3deeb9d56294e5acceea6179978f19d8bc88d881"
+    },
+    "fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.json": {
+      "bytes": 3004,
+      "sha256": "32614d444595dd797ef15f05b39ef5218ca5610f3bdae2bcb74b86d51b771dcc"
+    },
+    "fixtures/blender-run-Jx9gcN/ornate-knife-product.blender.json": {
+      "bytes": 4167,
+      "sha256": "eaf7ad43356741996891aad5efe24de58dac11d1ea39cdb0211712471b600948"
+    },
+    "fixtures/blender-run-Jx9gcN/asphalt-print-surface.repair.json": {
+      "bytes": 1097,
+      "sha256": "88dbc643fe67564279a1d7d264067dd1a100c8a359d2da98a3fdef267f19b43b"
+    },
+    "fixtures/blender-run-Jx9gcN/laurel-homes-architecture.repair.json": {
+      "bytes": 1115,
+      "sha256": "6eb02ec059ebe83eaa6bb72eedb6c5b306e6915bc3a0e8a423a5a9543cdb6bc4"
+    },
+    "fixtures/blender-run-Jx9gcN/asphalt-print-surface.blender.glb": {
+      "bytes": 17740484,
+      "sha256": "81009455308fb0b72b4e79f2cf987a739e7615900efba2e06e19de091b9c76e7"
+    },
+    "fixtures/blender-run-Jx9gcN/laurel-homes-architecture.blender.glb": {
+      "bytes": 27856404,
+      "sha256": "cd6395a371fb192f684b22835b55dd07696ac25f54eeeff6fb4e81ba63822c77"
+    },
+    "fixtures/blender-run-Jx9gcN/field-human-runtime.blender.repaired.glb": {
+      "bytes": 3856752,
+      "sha256": "c7be582eccdcf1d70d535d99895e52994ab3ac4f3a96ec193e933599c6612bb1"
+    },
+    "fixtures/.morphloom-godot-project/import_proof.gd.uid": {
+      "bytes": 20,
+      "sha256": "26efe744918e1adf79011c40e6316ef8f8070bd4ac0385af60517ebddedab334"
+    },
+    "fixtures/.morphloom-godot-project/import_proof.gd": {
+      "bytes": 8078,
+      "sha256": "ed17e3c2b589e8fe5424197bbeeae3a36534ac7e04194c15a6245077947393c3"
+    },
+    "fixtures/.morphloom-godot-project/project.godot": {
+      "bytes": 240,
+      "sha256": "7b0880b7cf5d63c1aa564610f524142d1e75e333bc1f14cbc33d60c17c9a6633"
+    },
+    "fixtures/.morphloom-godot-project/.godot/uid_cache.bin": {
+      "bytes": 3640,
+      "sha256": "0118366f85a32724e72154cdee3e182b146df0156fa46e306f15756597e4e218"
+    },
+    "fixtures/.morphloom-godot-project/.godot/.gdignore": {
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "fixtures/.morphloom-godot-project/.godot/global_script_class_cache.cfg": {
+      "bytes": 8,
+      "sha256": "f61aa7ad3097022d6a9d110ca3f73fa7bb348ec2cf9a6e7c9523574dc75f5a16"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_10.png-c1cfee2604257c21a2be28e908b94e2a.ctex": {
+      "bytes": 11460,
+      "sha256": "52b225fe60bb5bbc9a33e662f9ea47dff5c5af3ae456f3f2476798eba269bbab"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_2.png-5b965ce85c303bd50099a3895db05624.md5": {
+      "bytes": 91,
+      "sha256": "29d2be532cfd485adeb27bff651f0759638b858cc946c75c91909a3994de1ebe"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_16.png-b004bea031496b3c6a4c473bbd36ce28.ctex": {
+      "bytes": 11998,
+      "sha256": "7fb9b723c8bdb1ea0a4ded357b171bb5b0d581e9d241d5c6d1ea3fad982bcee3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_14.png-2800c39cdc6a0f97f21bdfc1c6849b6f.ctex": {
+      "bytes": 11600,
+      "sha256": "666ba5e5d88348ae8567b9200b0655142afb1d177381eeea842c0a6943e9b8cb"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_2.png-fc3a3db6ace6d59ceb365d993dc6d763.ctex": {
+      "bytes": 3698,
+      "sha256": "44107f5f272e98e99aec1834af56543c128abe9f3935c131fdab012b6dcd83b3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_2.png-3d6a67e3413a3cff96cf4542057a22c3.ctex": {
+      "bytes": 3792,
+      "sha256": "edf60181747c1d276b236b1805c26ef7fdee405faa59012fab882a2aaf9c31b1"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime.glb-acfb87733050847e47752a63d0c3c093.md5": {
+      "bytes": 91,
+      "sha256": "83831d6c362cb58001692ec5df56aa528f2cab27a20f7695348b00fe03c582f9"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_0.png-df6fda9506bc0b64924eaf754c545007.md5": {
+      "bytes": 91,
+      "sha256": "631eb87ee5e1f005e686215d34b98418f1d501505d47fb9c78c16c859f823e86"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_12.png-9bbe8ab4fd8c42ea69ed16b6c39d69c3.md5": {
+      "bytes": 91,
+      "sha256": "065e234f3a4d62631fb600946278cc38fb21baf6c2a29e45fd6e9bcfb9442525"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_10.png-4ce14a21987ed1b17cbffa6ccb20ebe1.md5": {
+      "bytes": 91,
+      "sha256": "bd7e23ee1104ea2849965e527acc5a34dafc142bf11c60c65024a450fa66f624"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_0.png-f768b4480e38cdedcbfadb027aa5dc28.ctex": {
+      "bytes": 3792,
+      "sha256": "6437ee2bcd0c1a12d73928bcb0f91cea92c2d1ac085bb9d3c6c68236438e48b9"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_1.png-9c3a8a2b2c043607c05307833c3075e6.md5": {
+      "bytes": 91,
+      "sha256": "1932e32d73a09b7d39bd7532a5ef32f468d2fc7199183b7964b486d8c881c7f9"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_14.png-2800c39cdc6a0f97f21bdfc1c6849b6f.md5": {
+      "bytes": 91,
+      "sha256": "47c3d53052efce463bddec6c04047d1c648a0a0ae83c37229964bc4271fea81f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_13.png-a72ddf7975916726468a9bf09682f65f.md5": {
+      "bytes": 91,
+      "sha256": "29d2be532cfd485adeb27bff651f0759638b858cc946c75c91909a3994de1ebe"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_19.png-384e41fe89573ef1996b2776436c8470.md5": {
+      "bytes": 91,
+      "sha256": "29d2be532cfd485adeb27bff651f0759638b858cc946c75c91909a3994de1ebe"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_5.png-2704ffad11cfb4052ce7473931b1e776.ctex": {
+      "bytes": 11608,
+      "sha256": "452d5f57751a17bc6d1e09f4710eab1708100e4d9347238e937628f652a53fa8"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_4.png-78b4d07189a0081222f535184d60e0e8.md5": {
+      "bytes": 91,
+      "sha256": "631eb87ee5e1f005e686215d34b98418f1d501505d47fb9c78c16c859f823e86"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_7.png-3c16bb5770f1db869712ffdfc9dcc906.ctex": {
+      "bytes": 3804,
+      "sha256": "ff1b8d3b2dadbc4e57350588e1375d81f57e81c906c59aaf7850ea5d0f15c73e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_17.png-8db121c2359d209789feb0ae70e5bad9.md5": {
+      "bytes": 91,
+      "sha256": "29d2be532cfd485adeb27bff651f0759638b858cc946c75c91909a3994de1ebe"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_4.png-25a3a52acdcd44cd54dd45a557afe5d9.md5": {
+      "bytes": 91,
+      "sha256": "0a7b4baa105a594ebcbc757d9005f8a1043a3bd6cb0db0c5c2da5bc336c862e7"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_15.png-da1e678c46db918835e1125ec60c0594.md5": {
+      "bytes": 91,
+      "sha256": "a1d553687ed7e2cf5fa235730dfcfafabdbd25bca7abce2c0739499221efd382"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_0.png-c6ca2b9154fa048e1974cffdda48c30e.md5": {
+      "bytes": 91,
+      "sha256": "7b658917bb26cca33876a6097905874066f8ba7ae241793f3788be42e5f14c2d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_1.png-2176205e54b6ef85a6ac6de873dc0658.ctex": {
+      "bytes": 11548,
+      "sha256": "056f8f023329abf9454d02a5e5b0dae4d7fcd926e947c26dee0aaa51c7f3ee13"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_10.png-c1cfee2604257c21a2be28e908b94e2a.md5": {
+      "bytes": 91,
+      "sha256": "065e234f3a4d62631fb600946278cc38fb21baf6c2a29e45fd6e9bcfb9442525"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_2.png-466aea225481c488f16ba6651e646e6f.md5": {
+      "bytes": 91,
+      "sha256": "7985e4c5bbd2bee28529c706e9769ba691d2131a365ca5f5d5ae0082f6c615c3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_13.png-aaa6bc4b8d2f6fb919e53ef15ef54801.ctex": {
+      "bytes": 3792,
+      "sha256": "6437ee2bcd0c1a12d73928bcb0f91cea92c2d1ac085bb9d3c6c68236438e48b9"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly.glb-91b000106b5d4e39a338e8eef46000f4.scn": {
+      "bytes": 5662501,
+      "sha256": "5fd9969753e136e38d4d26e50727918e9303717f3043cea0faef69c0a91ca102"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_9.png-74c7b54923ae2313c64fcabf4be8c453.ctex": {
+      "bytes": 11470,
+      "sha256": "67a170093c96f41c30bbade61542c8656baede2f26f3e2956b4c9ada9ec7dd3d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_11.png-db77af91f8f23dd446ed2544526e5b78.md5": {
+      "bytes": 91,
+      "sha256": "04dfcf43df5f0086b5b664d89079f8cf2182277f5f238ce43c42113070dd8751"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_0.png-c6ca2b9154fa048e1974cffdda48c30e.ctex": {
+      "bytes": 3698,
+      "sha256": "c63bc61958e35eb736d9f71fc537c2ff2af7eea484becc6061dde96130f62c38"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_1.png-2176205e54b6ef85a6ac6de873dc0658.md5": {
+      "bytes": 91,
+      "sha256": "1222a67d271669cf38c6b2acd3b4bf30862b7a845ceab2fa7c5a55cc8d7c5022"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_2.png-ee66ddd92b94fbec3acf0ccf3a2238da.ctex": {
+      "bytes": 191128,
+      "sha256": "3e1e464d8a81df76b14cd96e8d5ab483d8f77a5c001f175f0eb050ec973481e7"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_5.png-2704ffad11cfb4052ce7473931b1e776.md5": {
+      "bytes": 91,
+      "sha256": "8c151c9527251a5659df9af7ecee80b2c4cf16e4486e6ab0203e549927e54e97"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_2.png-466aea225481c488f16ba6651e646e6f.ctex": {
+      "bytes": 3824,
+      "sha256": "361b07ef39835e6d70f93b82b5b88dab9736597463d1b1bb2f6c8f164af86acc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_3.png-9d1a4a1bb5c5e061843cf13678dd8498.ctex": {
+      "bytes": 11934,
+      "sha256": "df3b9c009cba237a91b942adb0a5ae1eb8b12a837305c2340d05e2d53913d2ed"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_18.png-dca04c562b9df8e712396fd8efc0e0af.ctex": {
+      "bytes": 11934,
+      "sha256": "df3b9c009cba237a91b942adb0a5ae1eb8b12a837305c2340d05e2d53913d2ed"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_1.png-c2ac99d7242d8500187bdbc06da1df15.md5": {
+      "bytes": 91,
+      "sha256": "3585b43142d9af63ffe251cd73bacd130e4df71e77895391ce089b21b4bc9d3e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime.glb-acfb87733050847e47752a63d0c3c093.scn": {
+      "bytes": 3467684,
+      "sha256": "82fd6aeaea255bd72b12169e019aa25f0bb285d12f43fdc8653d7cefad31b4b1"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_5.png-4a303484a9b355bf807f642d30f6ca32.md5": {
+      "bytes": 91,
+      "sha256": "81341f514caea238a83a4a315e7e63294794b24500f7ca55f4613aeff8879484"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_5.png-a830209efb0b62e3f1fb448efaea6f51.md5": {
+      "bytes": 91,
+      "sha256": "1222a67d271669cf38c6b2acd3b4bf30862b7a845ceab2fa7c5a55cc8d7c5022"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_2.png-ee66ddd92b94fbec3acf0ccf3a2238da.md5": {
+      "bytes": 91,
+      "sha256": "04ba94c036099ee7b44dca2882f2b7c8dc619d993e68335a227001ab9546c876"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_8.png-e8c356df8a017646332d435f9cb5af6e.md5": {
+      "bytes": 91,
+      "sha256": "7cb65da40254eb5e3e9c4b371ed15c62b5da9bf013ce06c0e73417ce40a7444b"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_7.png-3c16bb5770f1db869712ffdfc9dcc906.md5": {
+      "bytes": 91,
+      "sha256": "631eb87ee5e1f005e686215d34b98418f1d501505d47fb9c78c16c859f823e86"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_9.png-74c7b54923ae2313c64fcabf4be8c453.md5": {
+      "bytes": 91,
+      "sha256": "0cb3136402fceb50b2683dc571d3851c62f3f532f4c5f7d72d1b9f97e26f641c"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_3.png-d3642313c9e9f1f5be7dcc15f1f336ac.md5": {
+      "bytes": 91,
+      "sha256": "6f5e5803babd95e43a48b449d3412955475d37d707dc18b5ea51afa5b002561d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_12.png-9bbe8ab4fd8c42ea69ed16b6c39d69c3.ctex": {
+      "bytes": 11460,
+      "sha256": "52b225fe60bb5bbc9a33e662f9ea47dff5c5af3ae456f3f2476798eba269bbab"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_19.png-384e41fe89573ef1996b2776436c8470.ctex": {
+      "bytes": 3804,
+      "sha256": "d5f5a6ed097e6323236ff0997db79bba9ec8f38e7dbf6a3872c7c2413187d1bc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_9.png-ab055f30c7c83ff62c86701bf207b67a.ctex": {
+      "bytes": 11890,
+      "sha256": "be9b7003ad8c4634e80371b642e531a89b367828aeec7446b5b2ac128c77b206"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_4.png-78b4d07189a0081222f535184d60e0e8.ctex": {
+      "bytes": 3804,
+      "sha256": "ff1b8d3b2dadbc4e57350588e1375d81f57e81c906c59aaf7850ea5d0f15c73e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_10.png-4ce14a21987ed1b17cbffa6ccb20ebe1.ctex": {
+      "bytes": 3812,
+      "sha256": "fe66fbe3b885b5948210e063da40a0c491666a2126c675ad332487ac9bd79fa5"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_16.png-b004bea031496b3c6a4c473bbd36ce28.md5": {
+      "bytes": 91,
+      "sha256": "955f8ec91cddefd3cfd9cf5d9d79db8466443e47ae84dbb9383af02327e3d39f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_3.png-677069398032c8d98573afd869fae311.ctex": {
+      "bytes": 11814,
+      "sha256": "92849cc5f0d7fe4f1ddb6213e869034b7321f9941bbc2f4f2b210a2e85de00f3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_12.png-e2080b8d1ac8201e2cfe1cef705628ed.md5": {
+      "bytes": 91,
+      "sha256": "c023de82df5acb2afca48366254639cbdf4d63420a31a24f8e5497a4a100708d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_18.png-dca04c562b9df8e712396fd8efc0e0af.md5": {
+      "bytes": 91,
+      "sha256": "3585b43142d9af63ffe251cd73bacd130e4df71e77895391ce089b21b4bc9d3e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_14.png-b9931f5659da8be526d790dd7e3d32d0.md5": {
+      "bytes": 91,
+      "sha256": "3585b43142d9af63ffe251cd73bacd130e4df71e77895391ce089b21b4bc9d3e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_16.png-c825fe4f431916f9edb89647598db2c4.md5": {
+      "bytes": 91,
+      "sha256": "38697cc17f8a8ca41365bb78bf39b7764cd7ac8c5176c4a534978fb7568496c0"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_7.png-1e0c5e0577bb58daa9924ab650b1d711.md5": {
+      "bytes": 91,
+      "sha256": "065e234f3a4d62631fb600946278cc38fb21baf6c2a29e45fd6e9bcfb9442525"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly.glb-91b000106b5d4e39a338e8eef46000f4.md5": {
+      "bytes": 91,
+      "sha256": "602cdd1bc2609d98008014e144eaeddad67665f2ef5adc9d40bffbb7cfb75bd1"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_6.png-29824494dffb96074bd12808f5c1508b.md5": {
+      "bytes": 91,
+      "sha256": "04dfcf43df5f0086b5b664d89079f8cf2182277f5f238ce43c42113070dd8751"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_13.png-a72ddf7975916726468a9bf09682f65f.ctex": {
+      "bytes": 3804,
+      "sha256": "d5f5a6ed097e6323236ff0997db79bba9ec8f38e7dbf6a3872c7c2413187d1bc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_3.png-d3642313c9e9f1f5be7dcc15f1f336ac.ctex": {
+      "bytes": 11582,
+      "sha256": "44a61d6854296f860b162105839d899ce5405ac23d74d9f124d7618dbd85411c"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_13.png-aaa6bc4b8d2f6fb919e53ef15ef54801.md5": {
+      "bytes": 91,
+      "sha256": "d902f3b8306c322cdc23dcf5e6afcb38132844f5471ccc1298c36ba052dfa355"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_20.png-6b298db71970f8c864a76fe3b0bf4a61.ctex": {
+      "bytes": 11934,
+      "sha256": "df3b9c009cba237a91b942adb0a5ae1eb8b12a837305c2340d05e2d53913d2ed"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_2.png-5b965ce85c303bd50099a3895db05624.ctex": {
+      "bytes": 3804,
+      "sha256": "d5f5a6ed097e6323236ff0997db79bba9ec8f38e7dbf6a3872c7c2413187d1bc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_11.png-db77af91f8f23dd446ed2544526e5b78.ctex": {
+      "bytes": 3828,
+      "sha256": "edbd6dd9453f57ed9df6829cfbc4548f2908929450349f67f84d91574902f52f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_6.png-cf8ffc2381cc144a4ed15c4527f2269f.md5": {
+      "bytes": 91,
+      "sha256": "f3a7cf42c578aeaa2dc20acf5da15e14f1e30e4b9c621b2c9b0615c08761909a"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_6.png-29824494dffb96074bd12808f5c1508b.ctex": {
+      "bytes": 3828,
+      "sha256": "edbd6dd9453f57ed9df6829cfbc4548f2908929450349f67f84d91574902f52f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_9.png-6847047047e01be8d9641ed3cb9ccd3e.ctex": {
+      "bytes": 3828,
+      "sha256": "edbd6dd9453f57ed9df6829cfbc4548f2908929450349f67f84d91574902f52f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_8.png-4ebb8df1451a10793967c9d5a7e88fa2.ctex": {
+      "bytes": 11548,
+      "sha256": "056f8f023329abf9454d02a5e5b0dae4d7fcd926e947c26dee0aaa51c7f3ee13"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_2.png-fc3a3db6ace6d59ceb365d993dc6d763.md5": {
+      "bytes": 91,
+      "sha256": "d7245a9a3656bb495dc1c7b98de025daa31ce9fb391862d073c33ccebd2f25e7"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_5.png-a830209efb0b62e3f1fb448efaea6f51.ctex": {
+      "bytes": 11548,
+      "sha256": "056f8f023329abf9454d02a5e5b0dae4d7fcd926e947c26dee0aaa51c7f3ee13"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product.glb-f98f37224698e0947e7517960d0c6bba.scn": {
+      "bytes": 565473,
+      "sha256": "2aecaca4b6c049eb6c46a3e234b69f131f4454fef4efec0bacb0496f2de34681"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface.glb-17697fdea6584436a681faeb68461f80.scn": {
+      "bytes": 2876788,
+      "sha256": "e9be02184e8253773c27af26652323a05fe5f48c495646cad63c0b1b77e4ac52"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_1.png-5ebf3604a2f22c00e0decfbb9a5afc4d.ctex": {
+      "bytes": 11600,
+      "sha256": "666ba5e5d88348ae8567b9200b0655142afb1d177381eeea842c0a6943e9b8cb"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_0.png-f768b4480e38cdedcbfadb027aa5dc28.md5": {
+      "bytes": 91,
+      "sha256": "d902f3b8306c322cdc23dcf5e6afcb38132844f5471ccc1298c36ba052dfa355"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_6.png-cf8ffc2381cc144a4ed15c4527f2269f.ctex": {
+      "bytes": 3712,
+      "sha256": "bf42b1a26be8a409884c980e1d9acec3bd40ea1a7299d16ae56f8aca135ee779"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/field-human-runtime_1.png-9c3a8a2b2c043607c05307833c3075e6.ctex": {
+      "bytes": 11862,
+      "sha256": "887623a8d62a50e570079b9b3c24809c7d31ae535743654c87bff336a24fc0b0"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_8.png-4ebb8df1451a10793967c9d5a7e88fa2.md5": {
+      "bytes": 91,
+      "sha256": "1222a67d271669cf38c6b2acd3b4bf30862b7a845ceab2fa7c5a55cc8d7c5022"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture.glb-809262ab089a5564b5c96222fc3e3792.scn": {
+      "bytes": 7454351,
+      "sha256": "fbc0d7762a4db84ee10b2e3396f42af8db11165aca0aa37cb28e52793a461bcd"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_10.png-1ae20d0c851290dcb51f2050c12245c8.md5": {
+      "bytes": 91,
+      "sha256": "6524bed4d4a34f579467934615e2a9f43779e18abacb1e76899c4cbaad4a1862"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_15.png-75c05be7b7c2c97add59f73a4922f912.md5": {
+      "bytes": 91,
+      "sha256": "d7245a9a3656bb495dc1c7b98de025daa31ce9fb391862d073c33ccebd2f25e7"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_0.png-df6fda9506bc0b64924eaf754c545007.ctex": {
+      "bytes": 3804,
+      "sha256": "ff1b8d3b2dadbc4e57350588e1375d81f57e81c906c59aaf7850ea5d0f15c73e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_16.png-c825fe4f431916f9edb89647598db2c4.ctex": {
+      "bytes": 11814,
+      "sha256": "92849cc5f0d7fe4f1ddb6213e869034b7321f9941bbc2f4f2b210a2e85de00f3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_15.png-da1e678c46db918835e1125ec60c0594.ctex": {
+      "bytes": 3800,
+      "sha256": "6068878d484fcdd5f1192f0cc734953834da67f316ccfcd11f7d82089709463e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_8.png-e8c356df8a017646332d435f9cb5af6e.ctex": {
+      "bytes": 3842,
+      "sha256": "d71d28adb502c9b0e074bcaefbe1b99ff4983293c3d5c59fea9b18e9fdff511d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_1.png-c2ac99d7242d8500187bdbc06da1df15.ctex": {
+      "bytes": 11934,
+      "sha256": "df3b9c009cba237a91b942adb0a5ae1eb8b12a837305c2340d05e2d53913d2ed"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_3.png-9d1a4a1bb5c5e061843cf13678dd8498.md5": {
+      "bytes": 91,
+      "sha256": "3585b43142d9af63ffe251cd73bacd130e4df71e77895391ce089b21b4bc9d3e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_8.png-6dc40ca293dcb583b171839e9ecfc74d.ctex": {
+      "bytes": 3698,
+      "sha256": "0434e54eb1bda4bd3f8849bd40e20dda1e701f45e1af54ed6630e0dbe5cce175"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_17.png-8db121c2359d209789feb0ae70e5bad9.ctex": {
+      "bytes": 3804,
+      "sha256": "d5f5a6ed097e6323236ff0997db79bba9ec8f38e7dbf6a3872c7c2413187d1bc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_4.png-25a3a52acdcd44cd54dd45a557afe5d9.ctex": {
+      "bytes": 3822,
+      "sha256": "8d791ef4070c09066f21a3905d22bd8c550793c74f54ce3cbf6ef13f38033a42"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_3.png-99fb48a7520e93f8ce019be68d95464e.ctex": {
+      "bytes": 11958,
+      "sha256": "aefd7be9669e8bb41ca6fd94b01f85e1d205bdc2ad635fa53946d1f0ecac977e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_11.png-703d7d877a824032d2c6c01292363d3b.ctex": {
+      "bytes": 11996,
+      "sha256": "8b04f3eed9b9caa3f2b6a52feb4d3f33ecb4c04f7848576787f022521965544b"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_4.png-ecb20993d03686ef74ed2209e6dc7d43.ctex": {
+      "bytes": 3794,
+      "sha256": "66771fddb9d7a2d79f652b084f480129a7f69b169511ec7a54e1af3c0157e612"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_12.png-e2080b8d1ac8201e2cfe1cef705628ed.ctex": {
+      "bytes": 92,
+      "sha256": "e6c03edcb40ee1166cc1e35a0213227f0872554c895a3f4c37f5a7d0b5008f3a"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_11.png-fe96b89f1d9331f83811f73702a69381.md5": {
+      "bytes": 91,
+      "sha256": "d62210376eb8437b417f19a7bed64085daaee181a1d4473668921e58f2a39753"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_8.png-6dc40ca293dcb583b171839e9ecfc74d.md5": {
+      "bytes": 91,
+      "sha256": "404251d3ccc9ccefe82b39274251db92445897c8ba7a89ec29ab88b700dab938"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_10.png-1ae20d0c851290dcb51f2050c12245c8.ctex": {
+      "bytes": 3814,
+      "sha256": "5a156b62814acdb72006a14171f416839cfa6d36e2e46a85e3371b0ea0e92d32"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_20.png-6b298db71970f8c864a76fe3b0bf4a61.md5": {
+      "bytes": 91,
+      "sha256": "3585b43142d9af63ffe251cd73bacd130e4df71e77895391ce089b21b4bc9d3e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_3.png-677069398032c8d98573afd869fae311.md5": {
+      "bytes": 91,
+      "sha256": "38697cc17f8a8ca41365bb78bf39b7764cd7ac8c5176c4a534978fb7568496c0"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface.glb-17697fdea6584436a681faeb68461f80.md5": {
+      "bytes": 91,
+      "sha256": "a414330f378961e6dc954eda037db4c1a43ce7c829568fa055f61a3d2a13e1fb"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_7.png-1e0c5e0577bb58daa9924ab650b1d711.ctex": {
+      "bytes": 11460,
+      "sha256": "52b225fe60bb5bbc9a33e662f9ea47dff5c5af3ae456f3f2476798eba269bbab"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product.glb-f98f37224698e0947e7517960d0c6bba.md5": {
+      "bytes": 91,
+      "sha256": "69b6758a09ccbfc8d4f57d55c7c0ccd89e3fe7c8f3907ede421084ad030e5e0e"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_12.png-05002e95823f2e96295dd6360418b356.md5": {
+      "bytes": 91,
+      "sha256": "c023de82df5acb2afca48366254639cbdf4d63420a31a24f8e5497a4a100708d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_2.png-3d6a67e3413a3cff96cf4542057a22c3.md5": {
+      "bytes": 91,
+      "sha256": "db79f252601c2205ddc168cef9dffda2b94f5b0c4114d9466c19d3e9a3784b6f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_11.png-fe96b89f1d9331f83811f73702a69381.ctex": {
+      "bytes": 11952,
+      "sha256": "b0cc4bda71ad0934d4505109cc7543fe48befe42f78689419b16652099f8db00"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_0.png-cc8763abd39cf8d19aa9cd8dae75f8a9.ctex": {
+      "bytes": 32332,
+      "sha256": "24ce4b4c88551b29881429969a66e41ff69934fba83437fce514d565e90b3428"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_6.png-ff219ea3d34541e5294b0f88287053df.md5": {
+      "bytes": 91,
+      "sha256": "c023de82df5acb2afca48366254639cbdf4d63420a31a24f8e5497a4a100708d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_14.png-b9931f5659da8be526d790dd7e3d32d0.ctex": {
+      "bytes": 11934,
+      "sha256": "df3b9c009cba237a91b942adb0a5ae1eb8b12a837305c2340d05e2d53913d2ed"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_1.png-5ebf3604a2f22c00e0decfbb9a5afc4d.md5": {
+      "bytes": 91,
+      "sha256": "47c3d53052efce463bddec6c04047d1c648a0a0ae83c37229964bc4271fea81f"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture.glb-809262ab089a5564b5c96222fc3e3792.md5": {
+      "bytes": 91,
+      "sha256": "1ad77df1fa5a274b5955e467e7b1ff95d9a9ffaca835c10d568f1c7bb255f781"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_6.png-ff219ea3d34541e5294b0f88287053df.ctex": {
+      "bytes": 92,
+      "sha256": "e6c03edcb40ee1166cc1e35a0213227f0872554c895a3f4c37f5a7d0b5008f3a"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_0.png-da28c95f45c96440bcf111d3b015ae08.md5": {
+      "bytes": 91,
+      "sha256": "29d2be532cfd485adeb27bff651f0759638b858cc946c75c91909a3994de1ebe"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_9.png-ab055f30c7c83ff62c86701bf207b67a.md5": {
+      "bytes": 91,
+      "sha256": "a0af94362888bbfe2ccc9c736027516ca2744605f9c4f941b503322b558ba6dd"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_7.png-74e460e6310a92cc51b0dbc3040e11bb.md5": {
+      "bytes": 91,
+      "sha256": "d71f0468e8f0f627bd27d4feefc8ba5b3e4b8567276491be67051e8a5a45a03d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_5.png-4a303484a9b355bf807f642d30f6ca32.ctex": {
+      "bytes": 11920,
+      "sha256": "ac7e0add785067f39e25801d158fd301293739f28c24a166c6f2c1c8e9b89834"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_15.png-75c05be7b7c2c97add59f73a4922f912.ctex": {
+      "bytes": 3698,
+      "sha256": "44107f5f272e98e99aec1834af56543c128abe9f3935c131fdab012b6dcd83b3"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_11.png-703d7d877a824032d2c6c01292363d3b.md5": {
+      "bytes": 91,
+      "sha256": "67b28d573eabadeed66b6a2f1285d136413ccf3508822408b8d6027a9fb0f47d"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_9.png-6847047047e01be8d9641ed3cb9ccd3e.md5": {
+      "bytes": 91,
+      "sha256": "04dfcf43df5f0086b5b664d89079f8cf2182277f5f238ce43c42113070dd8751"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_12.png-05002e95823f2e96295dd6360418b356.ctex": {
+      "bytes": 92,
+      "sha256": "e6c03edcb40ee1166cc1e35a0213227f0872554c895a3f4c37f5a7d0b5008f3a"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/cooling-electronics-assembly_7.png-74e460e6310a92cc51b0dbc3040e11bb.ctex": {
+      "bytes": 11920,
+      "sha256": "ab8a87b2a67079231596f046ad70359fc4ea560c9103ea3170838e826a22e27a"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_1.png-892d366849788ae26e025dce82c8e0cc.md5": {
+      "bytes": 91,
+      "sha256": "e414d311ba899b3bd009c9b05b004daf312e4a7f88822b149b092487b767acf2"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/ornate-knife-product_3.png-99fb48a7520e93f8ce019be68d95464e.md5": {
+      "bytes": 91,
+      "sha256": "4daaec1fc356588b9e90f8842579ed00ac4cc6683840ef5fcae46305212c4bb2"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_0.png-cc8763abd39cf8d19aa9cd8dae75f8a9.md5": {
+      "bytes": 91,
+      "sha256": "f41a242e784d0128a3de03b21398e186bbd80b6f007200eacf6cb7bb1b6a5df2"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/asphalt-print-surface_1.png-892d366849788ae26e025dce82c8e0cc.ctex": {
+      "bytes": 55238,
+      "sha256": "844fa7f339b3345fb96597cc0c764e9f022bdd2ef27aa292cfbc56db703067c9"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_4.png-ecb20993d03686ef74ed2209e6dc7d43.md5": {
+      "bytes": 91,
+      "sha256": "7f414a5cdb0e4b0ad112cc75caa3ea151dccbafe6ee5de83506130e0b86839bf"
+    },
+    "fixtures/.morphloom-godot-project/.godot/imported/laurel-homes-architecture_0.png-da28c95f45c96440bcf111d3b015ae08.ctex": {
+      "bytes": 3804,
+      "sha256": "d5f5a6ed097e6323236ff0997db79bba9ec8f38e7dbf6a3872c7c2413187d1bc"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/project_metadata.cfg": {
+      "bytes": 165,
+      "sha256": "750f78a13272a9f1eef00a01c5b57141ed425f047ac0f8d0e8f98fb1156f8193"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/cooling-electronics-assembly.glb-91b000106b5d4e39a338e8eef46000f4.scn-folding-990ab4db55d01acedbe333e0800b9db3.cfg": {
+      "bytes": 49,
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/ornate-knife-product.glb-f98f37224698e0947e7517960d0c6bba.scn-folding-6388e4fc96675b1ec57b21cbf070f6e9.cfg": {
+      "bytes": 49,
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/laurel-homes-architecture.glb-809262ab089a5564b5c96222fc3e3792.scn-folding-73adfe76420abc89983e3f5634260946.cfg": {
+      "bytes": 49,
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/filesystem_cache10": {
+      "bytes": 19250,
+      "sha256": "d95e1753e832f89eea0ec6d6cd2aaa59909b9fb7ec18a2895e1d526b8950e4db"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/asphalt-print-surface.glb-17697fdea6584436a681faeb68461f80.scn-folding-301c746de550005721a292efe7a21c60.cfg": {
+      "bytes": 49,
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    "fixtures/.morphloom-godot-project/.godot/editor/field-human-runtime.glb-acfb87733050847e47752a63d0c3c093.scn-folding-c0a655bdc8435f6e7791be6e8227052c.cfg": {
+      "bytes": 49,
+      "sha256": "fa44dfbae9b3b64980c44d9922acdad9b34ea46c85cce8a917708577229c27f6"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_10.png": {
+      "bytes": 10632,
+      "sha256": "e0ec84d1cb58f15363738d84e4e46c2ac03ae926605c850a3229852e2de1ee7f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_2.png.import": {
+      "bytes": 1060,
+      "sha256": "3977c208709cd8b3c283bae9910a667dd126e758211b9ac082ada3946751eea3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_10.png": {
+      "bytes": 4604,
+      "sha256": "d0ff419b2dbea13070406888804d5c745c7d4535f72184a3a6e923fca3fe68a2"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface.glb.import": {
+      "bytes": 1191,
+      "sha256": "94dcb53634f7950bff8a33c2d070a037d01edd643bbc2acc230a699d654b3fca"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_9.png.import": {
+      "bytes": 1069,
+      "sha256": "11992145f608a71a737e8dd172f67aa885170c2b78406cb2f520643d680a45ef"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_11.png": {
+      "bytes": 12076,
+      "sha256": "b0f79fd910582ada03241d7ab45c18512094c5f5df88a0775fe04047542048bc"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_0.png.import": {
+      "bytes": 1042,
+      "sha256": "961d93fa2aa47a1612403510a18635e13c32ef962fe5ff58aedd552a35fa4241"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_11.png": {
+      "bytes": 3920,
+      "sha256": "645461096b5503c800c0aa00cc303255c3c84d020a11dbb9180ec8b9b4c1738b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_13.png": {
+      "bytes": 4584,
+      "sha256": "62f6069142aae2338c86ed5d6728ac5f1a30c47471b434b63d8f39670fe1d668"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_12.png.import": {
+      "bytes": 1063,
+      "sha256": "be828ed7701f57bdec2a9d3034362f97597127a88ca29b0a6bdbbe3378439bf4"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_13.png": {
+      "bytes": 3764,
+      "sha256": "cc4ff84bd75f3d3d0ab8a05029fdfe7b14ccedcb05a2d1ce11bc6a6fee6f1334"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product.glb.import": {
+      "bytes": 1188,
+      "sha256": "4c2533d43c5864215a785f5d71f136d327c32f571c608ff782178d877a5b82fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_7.png.import": {
+      "bytes": 1045,
+      "sha256": "1db342e231d67034f850ddac2fbad5c60cdf1a9d7ff57d5cdf8f24fcd9687b06"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_12.png": {
+      "bytes": 100,
+      "sha256": "0c818b2231e2ccd15a9bbb5f3ce028fca76885a282e553117794f7d84ee81384"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_4.png.import": {
+      "bytes": 1069,
+      "sha256": "25c7a9360cbad4fb54a1dead628b1f0e0ee7ad513bb3fd570b82be4539b85a62"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_12.png": {
+      "bytes": 10632,
+      "sha256": "e0ec84d1cb58f15363738d84e4e46c2ac03ae926605c850a3229852e2de1ee7f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_2.png.import": {
+      "bytes": 1047,
+      "sha256": "ef0a6d2a10077ec09bcb548ed532dc1b7bb96ba117c3c0100a0f28798caa79d9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_16.png.import": {
+      "bytes": 1072,
+      "sha256": "6955f6d86a142a4df77901ad2d62b31489c6f7d572a8b9ed091b4f02bfd19120"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_16.png": {
+      "bytes": 12092,
+      "sha256": "64c36321ca2ebc046e9c8c06547abb3c78efa868c98c4c016ef669b5a7d5abe8"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_20.png.import": {
+      "bytes": 1063,
+      "sha256": "11ceb9219125916989067fe281b3ee2121998fc48d59eedbadbfe5dd358086d6"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_17.png.import": {
+      "bytes": 1063,
+      "sha256": "cbed072b771cbe132fcde087317444e3a815a9b119d68d367cfaccc3ec9a8169"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_16.png": {
+      "bytes": 11876,
+      "sha256": "ceb04dc2c5e7dbba7c11adb152a9d51587a7ac7ef8c2fb08811df22eaac3f364"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_1.png.import": {
+      "bytes": 1069,
+      "sha256": "4fd90094ff963167b5596b65dbfc5123baae1e976e147d726bc79f13ea122c91"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_13.png.import": {
+      "bytes": 1072,
+      "sha256": "49ac8751a99dc447a0cabf6aa232d83b9d7008fbe068546d2dd778e97e5c266b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_2.png.import": {
+      "bytes": 1044,
+      "sha256": "fcdb23ee2cec4a9647af5c3b2af52ea1778a41e28fffe24e5fab0bbad5d794d5"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_17.png": {
+      "bytes": 4584,
+      "sha256": "62f6069142aae2338c86ed5d6728ac5f1a30c47471b434b63d8f39670fe1d668"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_11.png.import": {
+      "bytes": 1048,
+      "sha256": "cd69beb29d908cf406a0e0ccc419ea018762dd0223be1aeb4ee1f70129c6f860"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_15.png": {
+      "bytes": 4560,
+      "sha256": "22b69b74aa0c04a1240b8d8f394b2979b39534dcfe1a3fcdf39a13f88a3628b2"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_15.png": {
+      "bytes": 4476,
+      "sha256": "fdc11af67a405d8074c8ec7f9ad08b3b0ecea7a154d2cfbac080390d6a75bf0f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_7.png.import": {
+      "bytes": 1059,
+      "sha256": "dbf23ce66c6a67c622cacbf166b6ffbaebb0e435ab421801b53b062516aebf3a"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_14.png": {
+      "bytes": 10216,
+      "sha256": "350cb54cc379fc5da116d1990dff9c99565ec90f7283a5cf923494da34c80504"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly.glb.import": {
+      "bytes": 1212,
+      "sha256": "99d83a40f2405b749192afc24efd64ef24f334bc83fb4ba32a521acad7829d2e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_14.png": {
+      "bytes": 12064,
+      "sha256": "5694e0ce5295d837524b95376a09c50c65db96a87d7c3d7ae43b4e3b8a2906fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_3.png": {
+      "bytes": 12056,
+      "sha256": "78de45c6a47b3f6e0e4292254cd5509b22097bf468737c8736302065ee0f2851"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_3.png": {
+      "bytes": 12064,
+      "sha256": "5694e0ce5295d837524b95376a09c50c65db96a87d7c3d7ae43b4e3b8a2906fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_2.png": {
+      "bytes": 175100,
+      "sha256": "854267c636e18d5e648be9fe87457e2ca712ad916e5532fe388fd495aa57bd1e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_6.png": {
+      "bytes": 4472,
+      "sha256": "27c172bcefbe6ea599f8169193d90f8677b9faf73b39a5e3fb82021dcd5649d3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_2.png.import": {
+      "bytes": 1042,
+      "sha256": "48177c422b70b6288ab379ecc7ddb81ed5c57d6c9b5d535116aeca009de72850"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture.glb": {
+      "bytes": 29636712,
+      "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_8.png.import": {
+      "bytes": 1045,
+      "sha256": "905adbb65a909416a9c9fc4af4aef56ae7c53295edfd3905f76f9f490d21a6e3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_0.png.import": {
+      "bytes": 1060,
+      "sha256": "d056d7dd51aec3801f93f5df4cdcf5b47b37c38490ac267131f0f2b35f9a405e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_7.png": {
+      "bytes": 11948,
+      "sha256": "ac4329c8c2032be1d7b5c7288da95b5c1a66ffd9f8c2871ecb4ea386eff12d6e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_2.png": {
+      "bytes": 4584,
+      "sha256": "62f6069142aae2338c86ed5d6728ac5f1a30c47471b434b63d8f39670fe1d668"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_2.png": {
+      "bytes": 4580,
+      "sha256": "9d2cc153ec12ee32cb5b65ef62e0a4afdca04628a9d2364d083690a66f8a6226"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_5.png.import": {
+      "bytes": 1044,
+      "sha256": "f5bae8a66f41bae62f577f7557fc844ce59cfdca6932060b3550f5996cb8ad2e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_0.png": {
+      "bytes": 3764,
+      "sha256": "cc4ff84bd75f3d3d0ab8a05029fdfe7b14ccedcb05a2d1ce11bc6a6fee6f1334"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_1.png": {
+      "bytes": 66872,
+      "sha256": "e71040a31857bb02ace5b18750a022bb63c3bc7aa2ecced81e75f62428175de0"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_0.png": {
+      "bytes": 4584,
+      "sha256": "62f6069142aae2338c86ed5d6728ac5f1a30c47471b434b63d8f39670fe1d668"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_5.png": {
+      "bytes": 10236,
+      "sha256": "4499912a0cf2fb45003c81c01d732f491e2f51e960080fd0b66a62b91a191635"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_6.png.import": {
+      "bytes": 1068,
+      "sha256": "c343c45c701e97a4289ec2781a703d0284065ef771ed26d49f7bfc480822ac89"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_14.png.import": {
+      "bytes": 1072,
+      "sha256": "d43186e4ecec164b744b5b0f8a7a8c2fb921bec253aaa9f4b2a07767de324023"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_0.png.import": {
+      "bytes": 1048,
+      "sha256": "d239f267d84cb5a49064bfc321d13ec2e8f2bf9e8ca988578c2d5197dcfcb833"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_4.png": {
+      "bytes": 3748,
+      "sha256": "bcb9418b6c9d426d989b4b7f63ab4763478d59f47d989f8fe0e5c8fc5bc34d40"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_0.png": {
+      "bytes": 33940,
+      "sha256": "95eb953ecff2ffd06162b7c8b34217c7072205c862c004ef70a20f661e9c10c6"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_1.png": {
+      "bytes": 12064,
+      "sha256": "5694e0ce5295d837524b95376a09c50c65db96a87d7c3d7ae43b4e3b8a2906fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_10.png.import": {
+      "bytes": 1063,
+      "sha256": "9ea977b9cb8f37123e46e675dda77663f007caa96216ad8d4c5a228ff46625c0"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_1.png": {
+      "bytes": 10216,
+      "sha256": "350cb54cc379fc5da116d1990dff9c99565ec90f7283a5cf923494da34c80504"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product.glb": {
+      "bytes": 1154560,
+      "sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_3.png.import": {
+      "bytes": 1069,
+      "sha256": "b79b340b00a51914bffe03213ec7b052dbacffc70caa4660bdbeacaebd05edfa"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_5.png": {
+      "bytes": 10224,
+      "sha256": "50ab48418e09dbc3c180b626496c6da0935f26e129fca6de5f071fa9f04a6fe9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_11.png.import": {
+      "bytes": 1071,
+      "sha256": "98748d7424bc0705d58fc5fa7f117f5d44cb6ede1f69a50d233f61d1bafbb9c5"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_5.png": {
+      "bytes": 12028,
+      "sha256": "f4a0c2336e3dc99febe47c53f74ded6d26ef72b6a240e57b82ebdb4042bd4aaf"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_0.png.import": {
+      "bytes": 1044,
+      "sha256": "8d10d50929761bd6115aa92f316114277cad053b60ca4d61e5dc56679e796ac7"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_0.png": {
+      "bytes": 3720,
+      "sha256": "86edbcecc34f1812b4e7e2f25e8a7ab327b6d5a86d05fd907f16ebbd0fcfc2b3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_15.png.import": {
+      "bytes": 1062,
+      "sha256": "9748e8aa5e71ab7960f4d42ddde8c0c4ef552e1a502ab1652e41e70a4dc45cea"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_8.png.import": {
+      "bytes": 1060,
+      "sha256": "3bb2c4b4d20d55dc9c4a7d0495cd0de42ccb6d3bffcb8f4f787010e1a3eae007"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_1.png": {
+      "bytes": 10224,
+      "sha256": "50ab48418e09dbc3c180b626496c6da0935f26e129fca6de5f071fa9f04a6fe9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_4.png": {
+      "bytes": 4576,
+      "sha256": "c239722ec38b344524649cac853b4c6b90fd242942fea9a529c6d41756b9605b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_4.png": {
+      "bytes": 3720,
+      "sha256": "86edbcecc34f1812b4e7e2f25e8a7ab327b6d5a86d05fd907f16ebbd0fcfc2b3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_6.png": {
+      "bytes": 3920,
+      "sha256": "645461096b5503c800c0aa00cc303255c3c84d020a11dbb9180ec8b9b4c1738b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_6.png": {
+      "bytes": 100,
+      "sha256": "0c818b2231e2ccd15a9bbb5f3ce028fca76885a282e553117794f7d84ee81384"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_3.png": {
+      "bytes": 11876,
+      "sha256": "ceb04dc2c5e7dbba7c11adb152a9d51587a7ac7ef8c2fb08811df22eaac3f364"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_2.png": {
+      "bytes": 4476,
+      "sha256": "fdc11af67a405d8074c8ec7f9ad08b3b0ecea7a154d2cfbac080390d6a75bf0f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_7.png": {
+      "bytes": 3720,
+      "sha256": "86edbcecc34f1812b4e7e2f25e8a7ab327b6d5a86d05fd907f16ebbd0fcfc2b3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_7.png": {
+      "bytes": 10632,
+      "sha256": "e0ec84d1cb58f15363738d84e4e46c2ac03ae926605c850a3229852e2de1ee7f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_18.png.import": {
+      "bytes": 1063,
+      "sha256": "fa715797144877fd95d712989b56e683379d2343781fccfe33effc6180450fc8"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_5.png.import": {
+      "bytes": 1060,
+      "sha256": "74b0ffc508fd4e562719ca648ff5be3591776fec3c59cf2f9fc076a79460ba0e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_16.png.import": {
+      "bytes": 1063,
+      "sha256": "94e5926a13ecc44143697a3310de6b329dd9d52540d28b458d98b33d9057872d"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime.glb": {
+      "bytes": 5065808,
+      "sha256": "1835c245ffac5988edacf1bfc8ca619c84de96c0627e0433836952a23ec6cef9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_3.png.import": {
+      "bytes": 1044,
+      "sha256": "185924f66408630004560226cda3f26f864e5894a4478d9a2425dd4c16ffc1f6"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_0.png.import": {
+      "bytes": 1069,
+      "sha256": "41b4bb9babca7c33dc6c7c5cda83442bd6980a34c7c0d718fbf9297054a922bd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_12.png.import": {
+      "bytes": 1072,
+      "sha256": "623a85fafc83c68ad36646ba14fa3dc016c97665987bd626d8d23506abba4c06"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly.glb": {
+      "bytes": 18622544,
+      "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_9.png": {
+      "bytes": 10668,
+      "sha256": "47b0ab62df315a8d01d9d7a13499c58d0fd2908ceb522d4c0fa60fceaa83bed7"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_9.png": {
+      "bytes": 3920,
+      "sha256": "645461096b5503c800c0aa00cc303255c3c84d020a11dbb9180ec8b9b4c1738b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_6.png.import": {
+      "bytes": 1060,
+      "sha256": "1a04142057345fceebec0944269ae21174e607b30d7276d8e66f752b1515e98e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_10.png.import": {
+      "bytes": 1048,
+      "sha256": "26567d05fadf75f26e966605d426e7033e202726edab063e6d1fbf58bc5e28dd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface.glb": {
+      "bytes": 17745400,
+      "sha256": "421e9091be553f25f1e52faed6c621396634c79b40cefbc3030ffa847d7aaae8"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_8.png": {
+      "bytes": 10224,
+      "sha256": "50ab48418e09dbc3c180b626496c6da0935f26e129fca6de5f071fa9f04a6fe9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_8.png": {
+      "bytes": 3892,
+      "sha256": "d94817e890e9972e4e3448c0404b1eed87a5b79fdec1ae81603a7e2c872b48a7"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_9.png": {
+      "bytes": 11888,
+      "sha256": "51d050d7396dd1caae935f70a75192129692ffbcf78e573cb2aae7973bebee6e"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_3.png.import": {
+      "bytes": 1060,
+      "sha256": "805a19544c43bf0c6e8b11f0d74a1975fa5d31612ee493b93dd4d8773610add1"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_0.png": {
+      "bytes": 4512,
+      "sha256": "33827d02f11a996a919fd94252748a8e14e8a2fb91ea44898c16ff50d9daa21c"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_1.png": {
+      "bytes": 11856,
+      "sha256": "683bb5a41677eebe4e5bf878622485a4e8116d0b7951df4d32779dfd082a0216"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_1.png.import": {
+      "bytes": 1041,
+      "sha256": "ec285b8e804077ec29c7207ad6f1e414275d3f5dea6e522bff4a5dfd94a093c3"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_8.png": {
+      "bytes": 4464,
+      "sha256": "f0964640ab49a0b71a8eaf5f08b53bbe5d76626c9b3d858f54c9dc4d360530fc"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_8.png.import": {
+      "bytes": 1069,
+      "sha256": "e1bf67d72f8b0776df247f425c325d5a194562c185c1a1a08a3403501f229dbc"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_13.png.import": {
+      "bytes": 1063,
+      "sha256": "65d7a28cf520765d4411cb3a84804d6d3b7f232d619f3b943245990bd4c33b33"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_3.png": {
+      "bytes": 10224,
+      "sha256": "e733ed299905d880dac7283f72a618b80ab6d1f303805c3595b6853f97c1d0c9"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_2.png": {
+      "bytes": 3712,
+      "sha256": "fe105a6fded749a33b88f36751a595bf9c46c4a26614fa70e1c383bd6e3e5a17"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_5.png.import": {
+      "bytes": 1069,
+      "sha256": "99a59ae8015480af4aafbf06af8fb4a70ebbabeddade84c85daffaae41edc5d6"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_6.png.import": {
+      "bytes": 1045,
+      "sha256": "482dd26a69f14ed2382e4cdb6434721150658cb54288d53115ff68e767fbfd86"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_1.png.import": {
+      "bytes": 1045,
+      "sha256": "921be810bbfe4a52014db932f24c9e64ce9ca0617f460bc0f89c7d7919a237ae"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_19.png": {
+      "bytes": 4584,
+      "sha256": "62f6069142aae2338c86ed5d6728ac5f1a30c47471b434b63d8f39670fe1d668"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_11.png": {
+      "bytes": 12048,
+      "sha256": "b89f0431733c6d5c4d99d26b2d7209c39af85c44911c8d4762e69c5d13f32bf8"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_2.png.import": {
+      "bytes": 1069,
+      "sha256": "0bc9e6558afc9232c4459276fa536124fc5806591a6554f0c9d8be22bc66283c"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime.glb.import": {
+      "bytes": 1185,
+      "sha256": "143c15269351542a6eb5c67f820e0b9f8cefdca7edf5950f69532fffaff45677"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_10.png.import": {
+      "bytes": 1071,
+      "sha256": "0a1544f3aea790992ed19d278736108f67ab7825f9468e57062e700cbdc6bf28"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_14.png.import": {
+      "bytes": 1063,
+      "sha256": "78a990652b4fe034e43865e828f2a6b8c140e88ec8d77d7ed277407fd24bad5f"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_9.png.import": {
+      "bytes": 1060,
+      "sha256": "f7f2ecb1f762facb55f062ea5b914e63416d2732216e921ad6e21034e7d5f62b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_10.png": {
+      "bytes": 4564,
+      "sha256": "ac3a00b1c58dcdfe87f2fe47a3bc9110c53efdea2ed1fb0d7e4b6655b539bb61"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_18.png": {
+      "bytes": 12064,
+      "sha256": "5694e0ce5295d837524b95376a09c50c65db96a87d7c3d7ae43b4e3b8a2906fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_12.png": {
+      "bytes": 100,
+      "sha256": "0c818b2231e2ccd15a9bbb5f3ce028fca76885a282e553117794f7d84ee81384"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_19.png.import": {
+      "bytes": 1063,
+      "sha256": "046f1ee9983332791e25d7db9e2c9aa35ea082977206f8cac4fd2d1a12bccd88"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_4.png.import": {
+      "bytes": 1060,
+      "sha256": "55be572b4e3327e076f87cad6101beedf3811a4753ed519e8dbe5ba1bed9017b"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_12.png.import": {
+      "bytes": 1047,
+      "sha256": "2cb08a9ff4c041884ff17493fa15818866b0c207fb15fbed232e4cc6931ce286"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/field-human-runtime_3.png.import": {
+      "bytes": 1042,
+      "sha256": "0871f41c35c729e96ab3cceec9bee6a23b284531f4308f369851669f97f690bf"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_9.png.import": {
+      "bytes": 1045,
+      "sha256": "57767bb3d3e0c2cfff70b0ece18569b8b4c1ade82337fa4bc89170489d57c567"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture.glb.import": {
+      "bytes": 1201,
+      "sha256": "c431d5ca0213f29b7daa3c4d9df5fcbafdf52936b77bee24ffeabd6be0e26dde"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_1.png.import": {
+      "bytes": 1060,
+      "sha256": "d915406370e3ca47110ead2b572092a9575a8a804200c662c557f670cbdc22fe"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_7.png.import": {
+      "bytes": 1069,
+      "sha256": "02c7ee8970b7ad05402a34ac68f4710909656680b93c7f6d3b557db75daa5d43"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_20.png": {
+      "bytes": 12064,
+      "sha256": "5694e0ce5295d837524b95376a09c50c65db96a87d7c3d7ae43b4e3b8a2906fd"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/asphalt-print-surface_1.png.import": {
+      "bytes": 1048,
+      "sha256": "1d58669a67a7005a714c683cafc1937f535a9d639481a16ba464ec1ef21af96c"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/cooling-electronics-assembly_15.png.import": {
+      "bytes": 1072,
+      "sha256": "86c0ecc6dce955e39619051eb6b4342aa0069c4fcbc2125f017d0d02380ee4ac"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/ornate-knife-product_4.png.import": {
+      "bytes": 1045,
+      "sha256": "4b48bbcbb61a5558cba9724b4d508c33052da12d7159d27c26ca19d4b33c64e5"
+    },
+    "fixtures/.morphloom-godot-project/fixtures/laurel-homes-architecture_11.png.import": {
+      "bytes": 1062,
+      "sha256": "70a1b4453504083cd04eae0081220c83f1caf6181ffc3ad29dffe20548d7c6bb"
+    },
+    "fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited.glb": {
+      "bytes": 28420456,
+      "sha256": "dc37405aeaa9c8e9282782bb920b9d651ac01465d3467cf043943a2770e6fd44"
+    },
+    "fixtures/blender-run-9CdEZA/asphalt-print-surface.edited.delivery.glb": {
+      "bytes": 17744372,
+      "sha256": "08522c297133be77669e3e486470a27ea6a7fe78143aedcffb66c7739607d1fb"
+    },
+    "fixtures/blender-run-9CdEZA/ornate-knife-product.edited.delivery.glb": {
+      "bytes": 1105300,
+      "sha256": "ff605dce4f1739e9fa90d6e64a32736733c3c8fd0a7b08182a6a40bee8c3d383"
+    },
+    "fixtures/blender-run-9CdEZA/ornate-knife-product.repair.json": {
+      "bytes": 1158,
+      "sha256": "ab29208061fcc5828e01b89be20389a35fe05a5b955e1008b705895ec01c081a"
+    },
+    "fixtures/blender-run-9CdEZA/asphalt-print-surface.edited-stability.glb": {
+      "bytes": 17744564,
+      "sha256": "5c8bd67e6fd23d86e74cc67f039db96c784f4795933b026ad7684a45ff7141f1"
+    },
+    "fixtures/blender-run-9CdEZA/field-human-runtime.edited.glb": {
+      "bytes": 3180356,
+      "sha256": "1eec62944b3796fb387d9ba9b814066af905abe87304f329e38ca8b968a40cc8"
+    },
+    "fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edited-stability.glb": {
+      "bytes": 18205080,
+      "sha256": "c5dc6da946d68602aee555a7b502e4e4e144625227cb6fec354b01a5d7e36a58"
+    },
+    "fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited-stability.glb": {
+      "bytes": 28418988,
+      "sha256": "9f59a823378f5147b74a463e5b8f6a33215f4f28beafa57ae4b349b17d3537ed"
+    },
+    "fixtures/blender-run-9CdEZA/field-human-runtime.repair.json": {
+      "bytes": 1153,
+      "sha256": "27cf8088a2598477fd8e2a3c0eaa98e20c3034e2970e6fdc1fc7c31003328273"
+    },
+    "fixtures/blender-run-9CdEZA/field-human-runtime.edit.json": {
+      "bytes": 2472,
+      "sha256": "b732a8ef6c84833111750fb1a5fb416eac704d192488fbb9b49e5dcd6c65c0b4"
+    },
+    "fixtures/blender-run-9CdEZA/laurel-homes-architecture.edit.json": {
+      "bytes": 2181,
+      "sha256": "83605f5e8c1a05840c5920b701cc0e6edc4972632929226c628e22548c8865be"
+    },
+    "fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited.delivery.glb": {
+      "bytes": 28343380,
+      "sha256": "86db09cdcf59dad99f12a0805016abeb70106abbe4be9798cd133b1ac8452526"
+    },
+    "fixtures/blender-run-9CdEZA/ornate-knife-product.edited-stability.glb": {
+      "bytes": 1112136,
+      "sha256": "5653aa31b402a07d270f67102b720ed59c183c05d69710c5635e6064e09a9652"
+    },
+    "fixtures/blender-run-9CdEZA/cooling-electronics-assembly.repair.json": {
+      "bytes": 1213,
+      "sha256": "01e2e603530e1f11f14dae2f3d7dcbcd6e32925f5590ba4717e68836f472823a"
+    },
+    "fixtures/blender-run-9CdEZA/ornate-knife-product.edit.json": {
+      "bytes": 2648,
+      "sha256": "3f869ccc0a09f8b22f19aaa8655fbc3ed421de8ae7eb4f76da76d5473a50e558"
+    },
+    "fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edit.json": {
+      "bytes": 3175,
+      "sha256": "99dcccb09624720f8b710249fe348f09c6f79c44879d57d0557d1960ea9bd653"
+    },
+    "fixtures/blender-run-9CdEZA/asphalt-print-surface.edit.json": {
+      "bytes": 2294,
+      "sha256": "2ecac4ca5818b67c8d5a03d34b5bdcc09020d1acbcdfa08ebf77500d44908024"
+    },
+    "fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edited.glb": {
+      "bytes": 18205720,
+      "sha256": "d71bd52409295b7f3e918eb36d1ae896d372888498c9a7a16fcdaa1efec3f5f3"
+    },
+    "fixtures/blender-run-9CdEZA/asphalt-print-surface.edited.glb": {
+      "bytes": 17744564,
+      "sha256": "5c8bd67e6fd23d86e74cc67f039db96c784f4795933b026ad7684a45ff7141f1"
+    },
+    "fixtures/blender-run-9CdEZA/field-human-runtime.edited.delivery.glb": {
+      "bytes": 3167100,
+      "sha256": "b27678bf355cbe38d6146f4db51bfa30164b0100546230edf8b4ecdd317f44bd"
+    },
+    "fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edited.delivery.glb": {
+      "bytes": 17017324,
+      "sha256": "f63be2831fb61ffe490d9f65c0bc20090cf527128ae1d11fa465351de54b7a69"
+    },
+    "fixtures/blender-run-9CdEZA/asphalt-print-surface.repair.json": {
+      "bytes": 1157,
+      "sha256": "99bd90653ac0143d6861a001940dfd94b9f9a5160b1f66452f9fa7153d070ff3"
+    },
+    "fixtures/blender-run-9CdEZA/laurel-homes-architecture.repair.json": {
+      "bytes": 1177,
+      "sha256": "2ed2ddb9230befcac98d8c130258dbba81438618f49204c121cb8817c7fd3d3d"
+    },
+    "fixtures/blender-run-9CdEZA/ornate-knife-product.edited.glb": {
+      "bytes": 1112436,
+      "sha256": "ac2de6de8710fad2ea329a48fb408892eecd9ec5bf7a6a4044418c01e280d596"
+    },
+    "fixtures/blender-run-9CdEZA/field-human-runtime.edited-stability.glb": {
+      "bytes": 3183424,
+      "sha256": "20c50290231639dd0d5720c1608f1ff66ec4646fa6404681addde60994341c5b"
+    }
+  },
+  "testsThisRefresh": "not-run; product code unchanged from 0e94ded 805 PASS",
+  "quality": "internal pass, whole competitive fail, dominance not-run"
+}

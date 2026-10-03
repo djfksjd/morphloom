@@ -145,3 +145,8 @@ Actual analytic cylinder normal bias corrected only for explicitly selected sche
 ## 2026-10-04 Sceliph · Assembly lathe normal policy
 
 Compiler0.40 opt-in corner-angle normals preserve actual POSITION/UV/index/material/hierarchy and all non-target buffers. Authored 4 fixtures, real browser save/fresh reopen/Undo/Redo/additional1mm edit and Blender selected first-import/reexport PASS. 111files805tests/check/benchmark/build PASS; final6/check/build PASS. Whole quality gate/production FAIL at stale0.39 browser receipts; later competitive/dominance not-run. Preserved sphere Blender first-import normal drift0.02968046° remains FAIL. No API calls, threshold changes or UV removal. See [current evidence](ASSEMBLY_LATHE_NORMAL_STATUS.ko.md). Next actually refresh current-revision cross-domain browser receipts; Goal active.
+
+
+## 2026-10-04 compiler0.40 actual delivery receipt refresh
+
+Actual browser7/current release4of4, deterministic5GLBs, native Blender5import/reexport and5edits, Godot5, Prusa/coarse toolpath and actual static browser downloads/BlenderOBJ-STL-PLY/USDchecker PASS. First quality now100%; whole production exit1 due competitive cooling UV infos23, strict Blender native/edit not accepted. No UV removal or threshold changes. Tests not repeated because product code remains0e94ded/805PASS. [Current evidence](CURRENT_DELIVERY_040_STATUS.ko.md). Next reproduce competitive acceptance of historical2026-09-02 single Blender report without current source binding. Goal active.

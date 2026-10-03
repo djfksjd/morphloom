@@ -1,0 +1,35 @@
+{
+  "schema": "morphloom.blender-static-mesh-audit/0.1",
+  "status": "pass",
+  "blenderVersion": "5.2.1 LTS",
+  "format": "stl",
+  "source": "asphalt.stl",
+  "sourceBytes": 5596884,
+  "sourceSha256": "01657f9c3b9c36eb58a3a17d14b7ea28947361b00aea3d76d7a26b935fdc1d00",
+  "objects": 1,
+  "meshes": 1,
+  "vertices": 55970,
+  "triangles": 111936,
+  "bounds": {
+    "min": [
+      -300.0,
+      -225.0,
+      -20.0
+    ],
+    "max": [
+      300.0,
+      225.0,
+      23.453475952148438
+    ],
+    "size": [
+      600.0,
+      450.0,
+      43.45347595214844
+    ]
+  },
+  "scope": "Independent Blender application import of a Morphloom static-mesh download. Materials, rigging and animation are outside OBJ/STL/PLY parity."
+}
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-08-25 01:35:57)
+Timer 'STL Import' took 19.75 ms
+
+Blender quit

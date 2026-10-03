@@ -1,0 +1,48 @@
+{
+  "blockers": [],
+  "godot_version": "4.7.2-stable (official)",
+  "pass": true,
+  "schema": "morphloom.godot-cross-domain-import/0.1",
+  "source": "res://fixtures/ornate-knife-product.glb",
+  "source_sha256": "5ac1b5922f0ec53bdacfffe393a0a4a1f7946a4523eb824bd65148054c54eb7d",
+  "stats": {
+    "animation_clips": 0,
+    "animation_names": [],
+    "blend_shapes": 0,
+    "bones": 0,
+    "bounds_max_meters": [
+      0.0601366870105267,
+      0.34400001168251,
+      0.0203356631100178
+    ],
+    "bounds_max_nodes": [
+      "guard_scroll_right",
+      "blade_core",
+      "pommel"
+    ],
+    "bounds_min_meters": [
+      -0.0601366870105267,
+      -0.12899999320507,
+      -0.0203356631100178
+    ],
+    "bounds_min_nodes": [
+      "guard_scroll_left",
+      "pommel",
+      "pommel"
+    ],
+    "bounds_size_meters": [
+      0.120273374021053,
+      0.47299998998642,
+      0.0406713262200356
+    ],
+    "materials": 16,
+    "meshes": 16,
+    "nodes": 18,
+    "skeletons": 0,
+    "skinned_meshes": 0,
+    "texture_slots": 48,
+    "textures": 12,
+    "triangles": 18930,
+    "vertices": 18615
+  }
+}

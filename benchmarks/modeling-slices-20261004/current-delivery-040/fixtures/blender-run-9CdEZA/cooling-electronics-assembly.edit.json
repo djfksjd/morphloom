@@ -1,0 +1,99 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/cooling-electronics-assembly.glb",
+    "bytes": 18622544,
+    "sha256": "a75d2d3401189becd548f76ee1c54e609938c4af06c8802f619c33f37f0845a7"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edited.glb",
+    "bytes": 18205720,
+    "sha256": "d71bd52409295b7f3e918eb36d1ae896d372888498c9a7a16fcdaa1efec3f5f3"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/cooling-electronics-assembly.edited-stability.glb",
+    "bytes": 18205080,
+    "sha256": "c5dc6da946d68602aee555a7b502e4e4e144625227cb6fec354b01a5d7e36a58"
+  },
+  "edit": {
+    "component": "power_usb_c",
+    "kind": "translation",
+    "translationMm": [
+      3.0,
+      0.0,
+      0.0
+    ]
+  },
+  "meshCount": 322,
+  "unchangedMeshes": 321,
+  "maximumUnchangedCenterDriftMm": 1.862645149230957e-06,
+  "maximumUnchangedSizeDriftMm": 2.2351741790771484e-05,
+  "topologyChanges": [
+    {
+      "component": "w_ntc_6_gnd",
+      "before": {
+        "vertices": 1113,
+        "edges": 3090,
+        "polygons": 1980
+      },
+      "after": {
+        "vertices": 1119,
+        "edges": 3094,
+        "polygons": 1980
+      }
+    },
+    {
+      "component": "w_ntc_6_probe",
+      "before": {
+        "vertices": 1113,
+        "edges": 3090,
+        "polygons": 1980
+      },
+      "after": {
+        "vertices": 1119,
+        "edges": 3094,
+        "polygons": 1980
+      }
+    },
+    {
+      "component": "w_ntc_7_gnd",
+      "before": {
+        "vertices": 1113,
+        "edges": 3090,
+        "polygons": 1980
+      },
+      "after": {
+        "vertices": 1119,
+        "edges": 3094,
+        "polygons": 1980
+      }
+    },
+    {
+      "component": "w_ntc_7_probe",
+      "before": {
+        "vertices": 1113,
+        "edges": 3090,
+        "polygons": 1980
+      },
+      "after": {
+        "vertices": 1119,
+        "edges": 3094,
+        "polygons": 1980
+      }
+    }
+  ],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 0,
+    "actions": 0,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}

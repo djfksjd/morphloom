@@ -1,0 +1,31 @@
+{
+  "reportPath": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/prusaslicer.json",
+  "pass": true,
+  "native": {
+    "size": [
+      600,
+      450,
+      43.453476
+    ],
+    "minimum": [
+      -300,
+      -225,
+      -20
+    ],
+    "maximum": [
+      300,
+      225,
+      23.453476
+    ],
+    "facets": 111936,
+    "manifold": true,
+    "parts": 1,
+    "volumeMm3": 10761761
+  },
+  "gcode": {
+    "bytes": 7070485,
+    "sha256": "a5b53097589c5e5d194e4f6baa2b279fdbecea25dbcd98f0dcaabcc2c65b435c",
+    "layers": 43,
+    "extrusionMoves": 190170
+  }
+}

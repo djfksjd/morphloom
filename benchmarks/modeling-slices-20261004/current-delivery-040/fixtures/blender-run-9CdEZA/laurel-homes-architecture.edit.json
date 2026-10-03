@@ -1,0 +1,46 @@
+{
+  "schema": "morphloom.blender-component-edit-audit/0.2",
+  "application": "Blender",
+  "version": "5.2.1 LTS",
+  "input": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/laurel-homes-architecture.glb",
+    "bytes": 29636712,
+    "sha256": "a7ea7dc3300d8d261b50e925ce586ffb4c2580981bc05b98b91900f0c329cca2"
+  },
+  "output": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited.glb",
+    "bytes": 28420456,
+    "sha256": "dc37405aeaa9c8e9282782bb920b9d651ac01465d3467cf043943a2770e6fd44"
+  },
+  "stabilityOutput": {
+    "path": "/Users/danny/Documents/morphloom/outputs/current-browser-040-20261004/fixtures/blender-run-9CdEZA/laurel-homes-architecture.edited-stability.glb",
+    "bytes": 28418988,
+    "sha256": "9f59a823378f5147b74a463e5b8f6a33215f4f28beafa57ae4b349b17d3537ed"
+  },
+  "edit": {
+    "component": "west_north_window_1",
+    "kind": "translation",
+    "translationMm": [
+      50.0,
+      0.0,
+      0.0
+    ]
+  },
+  "meshCount": 321,
+  "unchangedMeshes": 320,
+  "maximumUnchangedCenterDriftMm": 5.9604644775390625e-05,
+  "maximumUnchangedSizeDriftMm": 0.0002384185791015625,
+  "topologyChanges": [],
+  "topologyInterpretation": "Polygon counts, canonical face geometry, UVs, PBR factors, hierarchy, and modifier bindings are blocking. A one-time seam vertex/edge re-index is reported only when those semantic invariants remain stable.",
+  "runtime": {
+    "armatures": 0,
+    "actions": 0,
+    "preserved": true
+  },
+  "skinnedSemanticDeferrals": [],
+  "stabilityChanges": [],
+  "warnings": [],
+  "pass": true,
+  "blockers": [],
+  "limitation": "This proves one requested object transform or bounded local-relief edit, canonical face/UV/PBR-slot/hierarchy preservation, bounded non-target drift, and armature/action inventory preservation through two Blender round trips. Vertex/edge indices at UV or normal seams are not promised to remain identical. It does not prove artistic usability, native CAD feature history, bone-weight editing, shader-node parity beyond exported PBR factors, or every possible edit operation."
+}
